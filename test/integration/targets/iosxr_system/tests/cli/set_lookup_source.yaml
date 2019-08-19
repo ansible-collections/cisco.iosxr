@@ -1,0 +1,38 @@
+---
+- debug: msg="START cli/set_lookup_source.yaml on connection={{ ansible_connection }}"
+
+- name: setup
+  cisco.iosxr.iosxr_config:
+    lines: no domain lookup source-interface Loopback10
+    match: none
+    provider: "{{ cli }}"
+
+- name: configure lookup_source
+  cisco.iosxr.iosxr_system:
+    lookup_source: Loopback10
+    provider: "{{ cli }}"
+  register: result
+
+- assert:
+    that:
+      - result.changed == true
+      - "'domain lookup source-interface Loopback10' in result.commands"
+
+- name: verify lookup_source
+  cisco.iosxr.iosxr_system:
+    lookup_source: Loopback10
+    provider: "{{ cli }}"
+  register: result
+
+- assert:
+    that:
+      - result.changed == false
+
+- name: teardown
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no domain lookup source-interface Loopback10
+    match: none
+    provider: "{{ cli }}"
+
+- debug: msg="END cli/set_lookup_source.yaml on connection={{ ansible_connection }}"
