@@ -19,6 +19,7 @@ __metaclass__ = type
 from ansible.module_utils.network.common.cfg.base import ConfigBase
 from ansible.module_utils.network.common.utils import (
     to_list,
+    search_obj_in_list,
     dict_diff,
     remove_empties,
 )
@@ -27,7 +28,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.fa
 )
 from ansible.module_utils.six import iteritems
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    search_obj_in_list,
     dict_delete,
     pad_commands,
     flatten_dict,

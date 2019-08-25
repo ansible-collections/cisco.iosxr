@@ -23,8 +23,8 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.fa
 )
 from ansible.module_utils.network.common.utils import dict_diff, remove_empties
 from ansible.module_utils.six import iteritems
+from ansible.module_utils.network.common.utils import search_obj_in_list
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    search_obj_in_list,
     dict_delete,
     pad_commands,
     flatten_dict,

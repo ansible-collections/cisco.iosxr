@@ -30,6 +30,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ll
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.lldp_interfaces.lldp_interfaces import (
     Lldp_interfacesFacts,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.interfaces.interfaces import (
+    InterfacesFacts,
+)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.legacy.base import (
     Default,
     Hardware,
@@ -46,6 +49,7 @@ FACT_RESOURCE_SUBSETS = dict(
     lacp_interfaces=Lacp_interfacesFacts,
     lldp_global=Lldp_globalFacts,
     lldp_interfaces=Lldp_interfacesFacts,
+    interfaces=InterfacesFacts,
 )
 
 
