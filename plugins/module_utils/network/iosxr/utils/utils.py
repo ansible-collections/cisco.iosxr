@@ -27,11 +27,29 @@ def add_command_to_config_list(interface, cmd, commands):
     commands.append(cmd)
 
 
-def dict_diff(sample_dict):
+def dict_to_set(sample_dict):
     # Generate a set with passed dictionary for comparison
     test_dict = {}
     for k, v in iteritems(sample_dict):
         if v is not None:
+            if isinstance(v, list):
+                if isinstance(v[0], dict):
+                    li = []
+                    for each in v:
+                        for key, value in iteritems(each):
+                            if isinstance(value, list):
+                                each[key] = tuple(value)
+                        li.extend(tuple(each.items()))
+                    v = tuple(li)
+                else:
+                    v = tuple(v)
+            elif isinstance(v, dict):
+                li = []
+                for key, value in iteritems(v):
+                    if isinstance(value, list):
+                        v[key] = tuple(value)
+                li.extend(tuple(v.items()))
+                v = tuple(li)
             test_dict.update({k: v})
     return_set = set(tuple(test_dict.items()))
     return return_set
@@ -42,6 +60,9 @@ def filter_dict_having_none_value(want, have):
     test_dict = dict()
     test_dict["name"] = want.get("name")
     for k, v in iteritems(want):
+        if k == "l2protocol":
+            if want[k] != have.get("l2protocol") and have.get("l2protocol"):
+                test_dict.update({k: v})
         if v is None:
             val = have.get(k)
             test_dict.update({k: val})
@@ -106,6 +127,27 @@ def pad_commands(commands, interface):
     commands.insert(0, "interface {0}".format(interface))
 
 
+def diff_list_of_dicts(w, h):
+    """
+    Returns a list containing diff between
+    two list of dictionaries
+    """
+    if not w:
+        w = []
+    if not h:
+        h = []
+
+    diff = []
+    set_w = set(tuple(d.items()) for d in w)
+    set_h = set(tuple(d.items()) for d in h)
+    difference = set_w.difference(set_h)
+
+    for element in difference:
+        diff.append(dict((x, y) for x, y in element))
+
+    return diff
+
+
 def normalize_interface(name):
     """Return the normalized interface name
     """
@@ -125,20 +167,20 @@ def normalize_interface(name):
         if_type = "FastEthernet"
     elif name.lower().startswith("fo"):
         if_type = "FortyGigE"
-    elif name.lower().startswith("et"):
-        if_type = "Ethernet"
-    elif name.lower().startswith("vl"):
-        if_type = "Vlan"
-    elif name.lower().startswith("lo"):
-        if_type = "loopback"
-    elif name.lower().startswith("po"):
-        if_type = "port-channel"
-    elif name.lower().startswith("nv"):
-        if_type = "nve"
+    elif name.lower().startswith("te"):
+        if_type = "TenGigE"
     elif name.lower().startswith("twe"):
         if_type = "TwentyFiveGigE"
     elif name.lower().startswith("hu"):
         if_type = "HundredGigE"
+    elif name.lower().startswith("vl"):
+        if_type = "Vlan"
+    elif name.lower().startswith("lo"):
+        if_type = "Loopback"
+    elif name.lower().startswith("be"):
+        if_type = "Bundle-Ether"
+    elif name.lower().startswith("bp"):
+        if_type = "Bundle-POS"
     else:
         if_type = None
 
@@ -168,12 +210,10 @@ def get_interface_type(interface):
         return "FortyGigE"
     elif interface.upper().startswith("ET"):
         return "Ethernet"
-    elif interface.upper().startswith("VL"):
-        return "Vlan"
     elif interface.upper().startswith("LO"):
-        return "loopback"
-    elif interface.upper().startswith("PO"):
-        return "port-channel"
+        return "Loopback"
+    elif interface.upper().startswith("BE"):
+        return "Bundle-Ether"
     elif interface.upper().startswith("NV"):
         return "nve"
     elif interface.upper().startswith("TWE"):
