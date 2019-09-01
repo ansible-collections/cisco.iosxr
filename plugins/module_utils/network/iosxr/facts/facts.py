@@ -18,6 +18,12 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
     FactsArgs,
 )
 from ansible.module_utils.network.common.facts.facts import FactsBase
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.legacy.base import (
+    Default,
+    Hardware,
+    Interfaces,
+    Config,
+)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.lacp.lacp import (
     LacpFacts,
 )
@@ -36,14 +42,11 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.in
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.lag_interfaces.lag_interfaces import (
     Lag_interfacesFacts,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.legacy.base import (
-    Default,
-    Hardware,
-    Interfaces,
-    Config,
-)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l2_interfaces.l2_interfaces import (
     L2_InterfacesFacts,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l3_interfaces.l3_interfaces import (
+    L3_InterfacesFacts,
 )
 
 
@@ -58,6 +61,7 @@ FACT_RESOURCE_SUBSETS = dict(
     interfaces=InterfacesFacts,
     l2_interfaces=L2_InterfacesFacts,
     lag_interfaces=Lag_interfacesFacts,
+    l3_interfaces=L3_InterfacesFacts,
 )
 
 
