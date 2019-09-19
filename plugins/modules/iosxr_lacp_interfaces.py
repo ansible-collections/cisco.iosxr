@@ -349,7 +349,7 @@ EXAMPLES = """
 #
 #
 
- - name: Overridde all interface LACP configuration with provided configuration
+ - name: Override all interface LACP configuration with provided configuration
    iosxr_lacp_interfaces:
     config:
       - name: Bundle-Ether12
