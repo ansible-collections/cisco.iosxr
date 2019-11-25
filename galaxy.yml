@@ -6,4 +6,3 @@ name: iosxr
 namespace: cisco
 readme: README.rst
 repository: https://github.com/ansible-network/ansible_collections.cisco.iosxr
-version: 0.0.1
