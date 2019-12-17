@@ -36,15 +36,14 @@ ANSIBLE_METADATA = {
     "supported_by": "network",
 }
 
-DOCUMENTATION = """
-module: iosxr_interfaces
-version_added: 2.9
+DOCUMENTATION = """module: iosxr_interfaces
 short_description: Manage interface attributes on Cisco IOS-XR network devices
-description: This module manages the interface attributes on Cisco IOS-XR network devices.
+description: This module manages the interface attributes on Cisco IOS-XR network
+  devices.
 author: Sumit Jaiswal (@justjais)
 notes:
-  - Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
-  - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
+- Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
+- This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 options:
   config:
     description: A dictionary of interface options
@@ -55,31 +54,37 @@ options:
         description:
         - Full name of the interface to configure in C(type + path) format. e.g. C(GigabitEthernet0/0/0/0)
         type: str
-        required: True
+        required: true
       description:
         description:
         - Interface description.
         type: str
       enabled:
-        default: True
+        default: true
         description:
         - Administrative state of the interface.
-        - Set the value to C(True) to administratively enable the interface or C(False) to disable it.
+        - Set the value to C(True) to administratively enable the interface or C(False)
+          to disable it.
         type: bool
       speed:
         description:
-        - Configure the speed for an interface. Default is auto-negotiation when not configured.
+        - Configure the speed for an interface. Default is auto-negotiation when not
+          configured.
         type: int
       mtu:
         description:
-        - Sets the MTU value for the interface. Applicable for Ethernet interfaces only.
+        - Sets the MTU value for the interface. Applicable for Ethernet interfaces
+          only.
         - Refer to vendor documentation for valid values.
         type: int
       duplex:
         description:
-        - Configures the interface duplex mode. Default is auto-negotiation when not configured.
+        - Configures the interface duplex mode. Default is auto-negotiation when not
+          configured.
         type: str
-        choices: ['full', 'half']
+        choices:
+        - full
+        - half
   state:
     choices:
     - merged

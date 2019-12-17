@@ -15,64 +15,73 @@ ANSIBLE_METADATA = {
     "supported_by": "network",
 }
 
-DOCUMENTATION = """
----
-module: iosxr_logging
-version_added: "2.4"
+DOCUMENTATION = """module: iosxr_logging
 author:
-    - "Trishna Guha (@trishnaguha)"
-    - "Kedar Kekan (@kedarX)"
-short_description: Configuration management of system logging services on network devices
+- Trishna Guha (@trishnaguha)
+- Kedar Kekan (@kedarX)
+short_description: Configuration management of system logging services on network
+  devices
 description:
-  - This module provides declarative management configuration of system logging (syslog)
-    on Cisco IOS XR devices.
+- This module provides declarative management configuration of system logging (syslog)
+  on Cisco IOS XR devices.
 requirements:
-    - ncclient >= 0.5.3 when using netconf
-    - lxml >= 4.1.1 when using netconf
+- ncclient >= 0.5.3 when using netconf
+- lxml >= 4.1.1 when using netconf
 notes:
-  - This module works with connection C(network_cli) and C(netconf). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
-  - Tested against IOS XRv 6.1.3
+- This module works with connection C(network_cli) and C(netconf). See L(the IOS-XR
+  Platform Options,../network/user_guide/platform_iosxr.html).
+- Tested against IOS XRv 6.1.3
 options:
   dest:
     description:
-      - Destination for system logging (syslog) messages.
-    choices: ['host', 'console', 'monitor', 'buffered', 'file']
+    - Destination for system logging (syslog) messages.
+    choices:
+    - host
+    - console
+    - monitor
+    - buffered
+    - file
   name:
     description:
-      - When C(dest) = I(file) name indicates file-name
-      - When C(dest) = I(host) name indicates the host-name or ip-address of syslog server.
+    - When C(dest) = I(file) name indicates file-name
+    - When C(dest) = I(host) name indicates the host-name or ip-address of syslog
+      server.
   vrf:
     description:
-      - vrf name when syslog server is configured, C(dest) = C(host)
+    - vrf name when syslog server is configured, C(dest) = C(host)
     default: default
-    version_added: 2.5
   size:
     description:
-      - Size of buffer when C(dest) = C(buffered). The acceptable value is in the range I(307200 to 125000000 bytes). Default 307200
-      - Size of file when C(dest) = C(file). The acceptable value is in the range I(1 to 2097152)KB. Default 2 GB
+    - Size of buffer when C(dest) = C(buffered). The acceptable value is in the range
+      I(307200 to 125000000 bytes). Default 307200
+    - Size of file when C(dest) = C(file). The acceptable value is in the range I(1
+      to 2097152)KB. Default 2 GB
   facility:
     description:
-      - To configure the type of syslog facility in which system logging (syslog) messages are sent to syslog servers
-        Optional config for C(dest) = C(host)
+    - To configure the type of syslog facility in which system logging (syslog) messages
+      are sent to syslog servers Optional config for C(dest) = C(host)
     default: local7
   hostnameprefix:
     description:
-      - To append a hostname prefix to system logging (syslog) messages logged to syslog servers.
-        Optional config for C(dest) = C(host)
-    version_added: 2.5
+    - To append a hostname prefix to system logging (syslog) messages logged to syslog
+      servers. Optional config for C(dest) = C(host)
   level:
     description:
-      - Specifies the severity level for the logging.
+    - Specifies the severity level for the logging.
     default: debugging
-    aliases: ['severity']
+    aliases:
+    - severity
   aggregate:
     description: List of syslog logging configuration definitions.
   state:
     description:
-      - Existential state of the logging configuration on the node.
+    - Existential state of the logging configuration on the node.
     default: present
-    choices: ['present', 'absent']
-extends_documentation_fragment: iosxr
+    choices:
+    - present
+    - absent
+extends_documentation_fragment:
+- cisco.iosxr.iosxr
 """
 
 EXAMPLES = """
@@ -190,7 +199,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     is_cliconf,
     etree_find,
 )
-from ansible.module_utils.network.common.utils import remove_default_spec
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    remove_default_spec,
+)
 
 
 severity_level = {

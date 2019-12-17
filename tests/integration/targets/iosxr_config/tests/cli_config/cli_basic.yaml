@@ -1,33 +1,31 @@
 ---
-- debug: msg="START cli_config/cli_basic.yaml on connection={{ ansible_connection }}"
+- debug: msg="START cli_config/cli_basic.yaml on connection={{ ansible_connection
+    }}"
 
 - name: setup
-  network.cli.cli_config: &rm
-    config: |
-      interface Loopback999
-       no description
-       no shutdown
-  become: yes
+  become: true
+  ansible.netcommon.cli_config: &id002
+    config: "interface Loopback999\n no description\n no shutdown\n"
 
 - name: configure device with config
-  network.cli.cli_config: &conf
-    config: "{{ lookup('template', 'basic/config.j2') }}"
   register: result
-  become: yes
+  become: true
+  ansible.netcommon.cli_config: &id001
+    config: '{{ lookup(''template'', ''basic/config.j2'') }}'
 
 - assert:
     that:
-      - "result.changed == true"
+      - result.changed == true
 
 - name: Idempotence
-  network.cli.cli_config: *conf
   register: result
+  ansible.netcommon.cli_config: *id001
 
 - assert:
     that:
-      - "result.changed == false"
+      - result.changed == false
 
 - name: teardown
-  network.cli.cli_config: *rm
+  ansible.netcommon.cli_config: *id002
 
 - debug: msg="END cli_config/cli_basic.yaml on connection={{ ansible_connection }}"

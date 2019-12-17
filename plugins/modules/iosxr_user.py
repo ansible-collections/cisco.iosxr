@@ -15,120 +15,112 @@ ANSIBLE_METADATA = {
     "supported_by": "network",
 }
 
-DOCUMENTATION = """
----
-module: iosxr_user
-version_added: "2.4"
+DOCUMENTATION = """module: iosxr_user
 author:
-  - "Trishna Guha (@trishnaguha)"
-  - "Sebastiaan van Doesselaar (@sebasdoes)"
-  - "Kedar Kekan (@kedarX)"
+- Trishna Guha (@trishnaguha)
+- Sebastiaan van Doesselaar (@sebasdoes)
+- Kedar Kekan (@kedarX)
 short_description: Manage the aggregate of local users on Cisco IOS XR device
 description:
-  - This module provides declarative management of the local usernames
-    configured on network devices. It allows playbooks to manage
-    either individual usernames or the aggregate of usernames in the
-    current running config. It also supports purging usernames from the
-    configuration that are not explicitly defined.
-extends_documentation_fragment: iosxr
+- This module provides declarative management of the local usernames configured on
+  network devices. It allows playbooks to manage either individual usernames or the
+  aggregate of usernames in the current running config. It also supports purging usernames
+  from the configuration that are not explicitly defined.
+extends_documentation_fragment:
+- cisco.iosxr.iosxr
 notes:
-  - This module works with connection C(network_cli) and C(netconf). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
-  - Tested against IOS XRv 6.1.3
+- This module works with connection C(network_cli) and C(netconf). See L(the IOS-XR
+  Platform Options,../network/user_guide/platform_iosxr.html).
+- Tested against IOS XRv 6.1.3
 options:
   aggregate:
     description:
-      - The set of username objects to be configured on the remote
-        Cisco IOS XR device. The list entries can either be the username
-        or a hash of username and properties. This argument is mutually
-        exclusive with the C(name) argument.
-    aliases: ['users', 'collection']
+    - The set of username objects to be configured on the remote Cisco IOS XR device.
+      The list entries can either be the username or a hash of username and properties.
+      This argument is mutually exclusive with the C(name) argument.
+    aliases:
+    - users
+    - collection
   name:
     description:
-      - The username to be configured on the Cisco IOS XR device.
-        This argument accepts a string value and is mutually exclusive
-        with the C(aggregate) argument.
-        Please note that this option is not same as C(provider username).
+    - The username to be configured on the Cisco IOS XR device. This argument accepts
+      a string value and is mutually exclusive with the C(aggregate) argument. Please
+      note that this option is not same as C(provider username).
   configured_password:
     description:
-      - The password to be configured on the Cisco IOS XR device. The password
-        needs to be provided in clear text. Password is encrypted on the device
-        when used with I(cli) and by Ansible when used with I(netconf)
-        using the same MD5 hash technique with salt size of 3.
-        Please note that this option is not same as C(provider password).
+    - The password to be configured on the Cisco IOS XR device. The password needs
+      to be provided in clear text. Password is encrypted on the device when used
+      with I(cli) and by Ansible when used with I(netconf) using the same MD5 hash
+      technique with salt size of 3. Please note that this option is not same as C(provider
+      password).
   update_password:
     description:
-      - Since passwords are encrypted in the device running config, this
-        argument will instruct the module when to change the password.  When
-        set to C(always), the password will always be updated in the device
-        and when set to C(on_create) the password will be updated only if
-        the username is created.
+    - Since passwords are encrypted in the device running config, this argument will
+      instruct the module when to change the password.  When set to C(always), the
+      password will always be updated in the device and when set to C(on_create) the
+      password will be updated only if the username is created.
     default: always
-    choices: ['on_create', 'always']
+    choices:
+    - on_create
+    - always
   group:
     description:
-      - Configures the group for the username in the
-        device running configuration. The argument accepts a string value
-        defining the group name. This argument does not check if the group
-        has been configured on the device.
-    aliases: ['role']
+    - Configures the group for the username in the device running configuration. The
+      argument accepts a string value defining the group name. This argument does
+      not check if the group has been configured on the device.
+    aliases:
+    - role
   groups:
-    version_added: "2.5"
     description:
-      - Configures the groups for the username in the device running
-        configuration. The argument accepts a list of group names.
-        This argument does not check if the group has been configured
-        on the device. It is similar to the aggregate command for
-        usernames, but lets you configure multiple groups for the user(s).
+    - Configures the groups for the username in the device running configuration.
+      The argument accepts a list of group names. This argument does not check if
+      the group has been configured on the device. It is similar to the aggregate
+      command for usernames, but lets you configure multiple groups for the user(s).
   purge:
     description:
-      - Instructs the module to consider the
-        resource definition absolute. It will remove any previously
-        configured usernames on the device with the exception of the
-        `admin` user and the current defined set of users.
+    - Instructs the module to consider the resource definition absolute. It will remove
+      any previously configured usernames on the device with the exception of the
+      `admin` user and the current defined set of users.
     type: bool
     default: false
   admin:
     description:
-      - Enters into administration configuration mode for making config
-        changes to the device.
-      - Applicable only when using network_cli transport
+    - Enters into administration configuration mode for making config changes to the
+      device.
+    - Applicable only when using network_cli transport
     type: bool
     default: false
-    version_added: "2.8"
   state:
     description:
-      - Configures the state of the username definition
-        as it relates to the device operational configuration. When set
-        to I(present), the username(s) should be configured in the device active
-        configuration and when set to I(absent) the username(s) should not be
-        in the device active configuration
+    - Configures the state of the username definition as it relates to the device
+      operational configuration. When set to I(present), the username(s) should be
+      configured in the device active configuration and when set to I(absent) the
+      username(s) should not be in the device active configuration
     default: present
-    choices: ['present', 'absent']
+    choices:
+    - present
+    - absent
   public_key:
-    version_added: "2.5"
     description:
-      - Configures the contents of the public keyfile to upload to the IOS-XR node.
-        This enables users to login using the accompanying private key. IOS-XR
-        only accepts base64 decoded files, so this will be decoded and uploaded
-        to the node. Do note that this requires an OpenSSL public key file,
-        PuTTy generated files will not work! Mutually exclusive with
-        public_key_contents. If used with multiple users in aggregates, then the
-        same key file is used for all users.
+    - Configures the contents of the public keyfile to upload to the IOS-XR node.
+      This enables users to login using the accompanying private key. IOS-XR only
+      accepts base64 decoded files, so this will be decoded and uploaded to the node.
+      Do note that this requires an OpenSSL public key file, PuTTy generated files
+      will not work! Mutually exclusive with public_key_contents. If used with multiple
+      users in aggregates, then the same key file is used for all users.
   public_key_contents:
-    version_added: "2.5"
     description:
-      - Configures the contents of the public keyfile to upload to the IOS-XR node.
-        This enables users to login using the accompanying private key. IOS-XR
-        only accepts base64 decoded files, so this will be decoded and uploaded
-        to the node. Do note that this requires an OpenSSL public key file,
-        PuTTy generated files will not work! Mutually exclusive with
-        public_key.If used with multiple users in aggregates, then the
-        same key file is used for all users.
+    - Configures the contents of the public keyfile to upload to the IOS-XR node.
+      This enables users to login using the accompanying private key. IOS-XR only
+      accepts base64 decoded files, so this will be decoded and uploaded to the node.
+      Do note that this requires an OpenSSL public key file, PuTTy generated files
+      will not work! Mutually exclusive with public_key.If used with multiple users
+      in aggregates, then the same key file is used for all users.
 requirements:
-  - ncclient >= 0.5.3 when using netconf
-  - lxml >= 4.1.1 when using netconf
-  - base64 when using I(public_key_contents) or I(public_key)
-  - paramiko when using I(public_key_contents) or I(public_key)
+- ncclient >= 0.5.3 when using netconf
+- lxml >= 4.1.1 when using netconf
+- base64 when using I(public_key_contents) or I(public_key)
+- paramiko when using I(public_key_contents) or I(public_key)
 """
 
 EXAMPLES = """
@@ -213,7 +205,9 @@ import collections
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.compat.paramiko import paramiko
-from ansible.module_utils.network.common.utils import remove_default_spec
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    remove_default_spec,
+)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     get_config,
     load_config,

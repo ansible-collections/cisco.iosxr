@@ -19,48 +19,39 @@ ANSIBLE_METADATA = {
 }
 
 
-DOCUMENTATION = """
----
-module: iosxr_facts
-version_added: 2.2
+DOCUMENTATION = """module: iosxr_facts
 short_description: Get facts about iosxr devices.
-extends_documentation_fragment: iosxr
+extends_documentation_fragment:
+- cisco.iosxr.iosxr
 description:
-  - Collects facts from network devices running the iosxr operating
-    system. This module places the facts gathered in the fact tree keyed by the
-    respective resource name.  The facts module will always collect a
-    base set of facts from the device and can enable or disable
-    collection of additional facts.
+- Collects facts from network devices running the iosxr operating system. This module
+  places the facts gathered in the fact tree keyed by the respective resource name.  The
+  facts module will always collect a base set of facts from the device and can enable
+  or disable collection of additional facts.
 notes:
-  - Tested against IOS-XR 6.1.3.
-  - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
+- Tested against IOS-XR 6.1.3.
+- This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 author:
-  - Ricardo Carrillo Cruz (@rcarrillocruz)
-  - Nilashish Chakraborty (@Nilashishc)
+- Ricardo Carrillo Cruz (@rcarrillocruz)
+- Nilashish Chakraborty (@Nilashishc)
 options:
   gather_subset:
     description:
-      - When supplied, this argument will restrict the facts collected
-        to a given subset.  Possible values for this argument include
-        all, hardware, config, and interfaces.  Can specify a list of
-        values to include a larger subset.  Values can also be used
-        with an initial C(M(!)) to specify that a specific subset should
-        not be collected.
+    - When supplied, this argument will restrict the facts collected to a given subset.  Possible
+      values for this argument include all, hardware, config, and interfaces.  Can
+      specify a list of values to include a larger subset.  Values can also be used
+      with an initial C(M(!)) to specify that a specific subset should not be collected.
     required: false
     default: '!config'
   gather_network_resources:
     description:
-      - When supplied, this argument will restrict the facts collected
-        to a given subset. Possible values for this argument include
-        all and the resources like interfaces, lacp etc.
-        Can specify a list of values to include a larger subset. Values
-        can also be used with an initial C(M(!)) to specify that a
-        specific subset should not be collected.
-        Valid subsets are 'all', 'lacp', 'lacp_interfaces', 'lldp_global',
-        'lldp_interfaces', 'interfaces', 'l2_interfaces', 'l3_interfaces',
-        'lag_interfaces'.
+    - When supplied, this argument will restrict the facts collected to a given subset.
+      Possible values for this argument include all and the resources like interfaces,
+      lacp etc. Can specify a list of values to include a larger subset. Values can
+      also be used with an initial C(M(!)) to specify that a specific subset should
+      not be collected. Valid subsets are 'all', 'lacp', 'lacp_interfaces', 'lldp_global',
+      'lldp_interfaces', 'interfaces', 'l2_interfaces', 'l3_interfaces', 'lag_interfaces'.
     required: false
-    version_added: "2.9"
 """
 
 EXAMPLES = """

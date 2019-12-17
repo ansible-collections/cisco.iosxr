@@ -1,5 +1,6 @@
 ---
-- debug: msg="START cli/set_domain_search.yaml on connection={{ ansible_connection }}"
+- debug: msg="START cli/set_domain_search.yaml on connection={{ ansible_connection
+    }}"
 
 - name: setup
   cisco.iosxr.iosxr_config:
@@ -7,104 +8,104 @@
       - no domain list ansible.com
       - no domain list redhat.com
     match: none
-    provider: "{{ cli }}"
+    provider: '{{ cli }}'
 
 - name: configure domain_search
+  register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
       - redhat.com
-    provider: "{{ cli }}"
-  register: result
+    provider: '{{ cli }}'
 
 - assert:
     that:
       - result.changed == true
-      - "'domain list ansible.com' in result.commands"
-      - "'domain list redhat.com' in result.commands"
+      - '''domain list ansible.com'' in result.commands'
+      - '''domain list redhat.com'' in result.commands'
 
 - name: verify domain_search
+  register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
       - redhat.com
-    provider: "{{ cli }}"
-  register: result
+    provider: '{{ cli }}'
 
 - assert:
     that:
       - result.changed == false
 
 - name: remove one entry
+  register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
-    provider: "{{ cli }}"
-  register: result
+    provider: '{{ cli }}'
 
 - assert:
     that:
       - result.changed == true
-      - "'no domain list redhat.com' in result.commands"
+      - '''no domain list redhat.com'' in result.commands'
 
 - name: verify remove one entry
+  register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
-    provider: "{{ cli }}"
-  register: result
+    provider: '{{ cli }}'
 
 - assert:
     that:
       - result.changed == false
 
 - name: add one entry
+  register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
       - redhat.com
-    provider: "{{ cli }}"
-  register: result
+    provider: '{{ cli }}'
 
 - assert:
     that:
       - result.changed == true
-      - "'domain list redhat.com' in result.commands"
+      - '''domain list redhat.com'' in result.commands'
 
 - name: verify add one entry
+  register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
       - redhat.com
-    provider: "{{ cli }}"
-  register: result
+    provider: '{{ cli }}'
 
 - assert:
     that:
       - result.changed == false
 
 - name: add and remove one entry
+  register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
       - eng.ansible.com
-    provider: "{{ cli }}"
-  register: result
+    provider: '{{ cli }}'
 
 - assert:
     that:
       - result.changed == true
-      - "'no domain list redhat.com' in result.commands"
-      - "'domain list eng.ansible.com' in result.commands"
+      - '''no domain list redhat.com'' in result.commands'
+      - '''domain list eng.ansible.com'' in result.commands'
       - result.commands|length == 2
 
 - name: verify add and remove one entry
+  register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
       - eng.ansible.com
-    provider: "{{ cli }}"
-  register: result
+    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -116,6 +117,6 @@
       - no domain list ansible.com
       - no domain list eng.ansible.com
     match: none
-    provider: "{{ cli }}"
+    provider: '{{ cli }}'
 
 - debug: msg="END cli/set_domain_search.yaml on connection={{ ansible_connection }}"

@@ -2,18 +2,18 @@
 - debug: msg="START cli/bad_operator.yaml on connection={{ ansible_connection }}"
 
 - name: test bad operator
+  register: result
+  ignore_errors: true
   cisco.iosxr.iosxr_command:
     commands:
       - show version
       - show interfaces GigabitEthernet 0/0
     wait_for:
-      - "result[0] contains 'Description: Foo'"
-  register: result
-  ignore_errors: yes
+      - 'result[0] contains ''Description: Foo'''
 
 - assert:
     that:
-      - "result.failed == true"
-      - "result.msg is defined"
+      - result.failed == true
+      - result.msg is defined
 
 - debug: msg="END cli/bad_operator.yaml on connection={{ ansible_connection }}"

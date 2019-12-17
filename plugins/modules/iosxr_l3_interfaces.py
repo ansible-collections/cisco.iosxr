@@ -38,16 +38,14 @@ ANSIBLE_METADATA = {
 }
 
 
-DOCUMENTATION = """
-module: iosxr_l3_interfaces
-version_added: 2.9
+DOCUMENTATION = """module: iosxr_l3_interfaces
 short_description: Manage Layer-3 interface on Cisco IOS-XR devices.
-description: This module provides declarative management of Layer-3 interface on Cisco IOS-XR devices.
+description: This module provides declarative management of Layer-3 interface on Cisco
+  IOS-XR devices.
 author: Sumit Jaiswal (@justjais)
 notes:
-  - Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
-  - This module works with connection C(network_cli).
-    See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
+- Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
+- This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 options:
   config:
     description: A dictionary of Layer-3 interface options
@@ -58,12 +56,12 @@ options:
         description:
         - Full name of the interface excluding any logical unit number, i.e. GigabitEthernet0/1.
         type: str
-        required: True
+        required: true
       ipv4:
         description:
         - IPv4 address to be set for the Layer-3 interface mentioned in I(name) option.
-        - The address format is <ipv4 address>/<mask>, the mask is number in range 0-32
-          eg. 192.168.0.1/24
+        - The address format is <ipv4 address>/<mask>, the mask is number in range
+          0-32 eg. 192.168.0.1/24
         type: list
         suboptions:
           address:
@@ -77,8 +75,8 @@ options:
       ipv6:
         description:
         - IPv6 address to be set for the Layer-3 interface mentioned in I(name) option.
-        - The address format is <ipv6 address>/<mask>, the mask is number in range 0-128
-          eg. fd5d:12c9:2201:1::1/64
+        - The address format is <ipv6 address>/<mask>, the mask is number in range
+          0-128 eg. fd5d:12c9:2201:1::1/64
         type: list
         suboptions:
           address:

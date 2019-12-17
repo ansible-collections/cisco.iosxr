@@ -5,32 +5,32 @@
   cisco.iosxr.iosxr_config:
     lines: hostname switch
     match: none
-    provider: "{{ cli }}"
+    provider: '{{ cli }}'
 
 - name: configure hostname
+  register: result
   cisco.iosxr.iosxr_system:
     hostname: foo
-    provider: "{{ cli }}"
-  register: result
+    provider: '{{ cli }}'
 
 - assert:
     that:
-      - "result.changed == true"
+      - result.changed == true
 
 - name: verify hostname
+  register: result
   cisco.iosxr.iosxr_system:
     hostname: foo
-    provider: "{{ cli }}"
-  register: result
+    provider: '{{ cli }}'
 
 - assert:
     that:
-      - "result.changed == false"
+      - result.changed == false
 
 - name: teardown
   cisco.iosxr.iosxr_config:
-    lines: "hostname {{ inventory_hostname }}"
+    lines: hostname {{ inventory_hostname }}
     match: none
-    provider: "{{ cli }}"
+    provider: '{{ cli }}'
 
 - debug: msg="END cli/set_hostname.yaml on connection={{ ansible_connection }}"
