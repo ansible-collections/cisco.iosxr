@@ -1,9 +1,10 @@
 ---
 - name: Setup
-  network.cli.cli_config:
-    config: "{{ lines }}"
   vars:
-    lines: |
-      lacp system priority 12
+    lines: 'lacp system priority 12
+
       lacp system mac 00c1.4c00.bd16
-      
+
+      '
+  ansible.netcommon.cli_config:
+    config: '{{ lines }}'

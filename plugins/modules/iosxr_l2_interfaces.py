@@ -39,17 +39,14 @@ ANSIBLE_METADATA = {
 }
 
 
-DOCUMENTATION = """
----
-module: iosxr_l2_interfaces
-version_added: 2.9
+DOCUMENTATION = """module: iosxr_l2_interfaces
 short_description: Manage Layer-2 interface on Cisco IOS-XR devices
-description: This module manages the Layer-2 interface attributes on Cisco IOS-XR devices.
+description: This module manages the Layer-2 interface attributes on Cisco IOS-XR
+  devices.
 author: Sumit Jaiswal (@justjais)
 notes:
-  - Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
-  - This module works with connection C(network_cli).
-    See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
+- Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
+- This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 options:
   config:
     description: A dictionary of Layer-2 interface options
@@ -61,7 +58,7 @@ options:
         - Full name of the interface/sub-interface excluding any logical unit number,
           e.g. GigabitEthernet0/0/0/1 or GigabitEthernet0/0/0/1.100.
         type: str
-        required: True
+        required: true
       native_vlan:
         description:
         - Configure a native VLAN ID for the trunk
@@ -72,39 +69,55 @@ options:
         type: bool
       l2protocol:
         description:
-        - Configures Layer 2 protocol tunneling and protocol data unit (PDU) filtering on an interface.
+        - Configures Layer 2 protocol tunneling and protocol data unit (PDU) filtering
+          on an interface.
         type: list
         suboptions:
           cdp:
             description:
             - Cisco Discovery Protocol (CDP) tunneling and data unit parameters.
-            choices: ['drop','forward', 'tunnel']
+            choices:
+            - drop
+            - forward
+            - tunnel
             type: str
           pvst:
             description:
-            - Configures the per-VLAN Spanning Tree Protocol (PVST) tunneling and data unit parameters.
-            choices: ['drop','forward', 'tunnel']
+            - Configures the per-VLAN Spanning Tree Protocol (PVST) tunneling and
+              data unit parameters.
+            choices:
+            - drop
+            - forward
+            - tunnel
             type: str
           stp:
             description:
             - Spanning Tree Protocol (STP) tunneling and data unit parameters.
-            choices: ['drop','forward', 'tunnel']
+            choices:
+            - drop
+            - forward
+            - tunnel
             type: str
           vtp:
             description:
             - VLAN Trunk Protocol (VTP) tunneling and data unit parameters.
-            choices: ['drop','forward', 'tunnel']
+            choices:
+            - drop
+            - forward
+            - tunnel
             type: str
       q_vlan:
         description:
-        - 802.1Q VLAN configuration. Note that it can accept either 2 VLAN IDs when configuring Q-in-Q VLAN,
-          or it will accept 1 VLAN ID and 'any' as input list when configuring Q-in-any vlan as input. Note, that
-          this option is valid only with respect to Sub-Interface and is not valid when configuring for Interface.
+        - 802.1Q VLAN configuration. Note that it can accept either 2 VLAN IDs when
+          configuring Q-in-Q VLAN, or it will accept 1 VLAN ID and 'any' as input
+          list when configuring Q-in-any vlan as input. Note, that this option is
+          valid only with respect to Sub-Interface and is not valid when configuring
+          for Interface.
         type: list
       propagate:
         description:
-        - Propagate Layer 2 transport events. Note that it will work only when the I(l2tranport) option is set
-          to TRUE
+        - Propagate Layer 2 transport events. Note that it will work only when the
+          I(l2tranport) option is set to TRUE
         type: bool
   state:
     choices:

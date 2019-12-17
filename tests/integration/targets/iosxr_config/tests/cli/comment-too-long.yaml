@@ -1,5 +1,6 @@
 ---
-- debug: msg="START cli/comment-too-long.yaml on connection={{ ansible_connection }}"
+- debug: msg="START cli/comment-too-long.yaml on connection={{ ansible_connection
+    }}"
 
 - name: setup
   cisco.iosxr.iosxr_config:
@@ -10,21 +11,17 @@
       - interface Loopback999
     match: none
 
-# Defend against https://github.com/ansible/ansible-modules-core/issues/5146
 - name: Commit message too long
-  cisco.iosxr.iosxr_config:
-    src: basic/config.j2
-    comment: "this is a really long message  aaaaabbbbbbcdde end-of-message"
   register: result
   ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    src: basic/config.j2
+    comment: this is a really long message  aaaaabbbbbbcdde end-of-message
 
 - assert:
     that:
-      - "result.changed == false"
-      - "result.updates is not defined"
-# Defend https://github.com/ansible/ansible-modules-core/issues/5146
-      - "'comment argument cannot be more than 60 characters' in result.msg"
-# Check for the correct error message (and not a generic "Invalid input detected") once fixed
-
+      - result.changed == false
+      - result.updates is not defined
+      - '''comment argument cannot be more than 60 characters'' in result.msg'
 
 - debug: msg="END cli/comment-too-long.yaml on connection={{ ansible_connection }}"

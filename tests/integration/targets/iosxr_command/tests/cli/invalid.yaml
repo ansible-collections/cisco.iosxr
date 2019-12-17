@@ -2,25 +2,30 @@
 - debug: msg="START cli/invalid.yaml on connection={{ ansible_connection }}"
 
 - name: run invalid command
-  cisco.iosxr.iosxr_command:
-    commands: {command: 'show foo', prompt: 'fooprompt', answer: 'yes'}
   register: result
-  ignore_errors: yes
+  ignore_errors: true
+  cisco.iosxr.iosxr_command:
+    commands:
+      command: show foo
+      prompt: fooprompt
+      answer: 'yes'
 
 - assert:
     that:
-      - "result.failed"
+      - result.failed
 
 - name: run commands that include invalid command
+  register: result
+  ignore_errors: true
   cisco.iosxr.iosxr_command:
     commands:
       - show version
-      - {command: 'show foo', prompt: 'fooprompt', answer: 'yes'}
-  register: result
-  ignore_errors: yes
+      - command: show foo
+        prompt: fooprompt
+        answer: 'yes'
 
 - assert:
     that:
-      - "result.failed"
+      - result.failed
 
 - debug: msg="END cli/invalid.yaml on connection={{ ansible_connection }}"

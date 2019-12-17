@@ -18,7 +18,9 @@ __metaclass__ = type
 import re
 from copy import deepcopy
 
-from ansible.module_utils.network.common import utils
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
+    utils,
+)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lag_interfaces.lag_interfaces import (
     Lag_interfacesArgs,
 )

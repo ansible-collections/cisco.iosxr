@@ -1,7 +1,8 @@
 ---
 - name: Remove Config
-  network.cli.cli_config:
-    config: "{{ lines }}"
   vars:
-    lines: |
-      no lldp
+    lines: 'no lldp
+
+      '
+  ansible.netcommon.cli_config:
+    config: '{{ lines }}'

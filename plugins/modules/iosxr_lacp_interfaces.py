@@ -36,16 +36,15 @@ ANSIBLE_METADATA = {
     "supported_by": "network",
 }
 
-DOCUMENTATION = """
----
-module: iosxr_lacp_interfaces
-version_added: 2.9
-short_description: Manage Link Aggregation Control Protocol (LACP) attributes of interfaces on IOS-XR devices.
+DOCUMENTATION = """module: iosxr_lacp_interfaces
+short_description: Manage Link Aggregation Control Protocol (LACP) attributes of interfaces
+  on IOS-XR devices.
 description:
-  - This module manages Link Aggregation Control Protocol (LACP) attributes of interfaces on IOS-XR devices.
+- This module manages Link Aggregation Control Protocol (LACP) attributes of interfaces
+  on IOS-XR devices.
 notes:
-  - Tested against IOS-XR 6.1.3.
-  - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
+- Tested against IOS-XR 6.1.3.
+- This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 author: Nilashish Chakraborty (@nilashishc)
 options:
   config:
@@ -54,57 +53,57 @@ options:
     suboptions:
       name:
         description:
-          - Name/Identifier of the interface or Ether-Bundle.
+        - Name/Identifier of the interface or Ether-Bundle.
         type: str
       churn_logging:
         description:
-          - Specifies the parameter for logging of LACP churn events.
-          - Valid only for ether-bundles.
-          - Mode 'actor' logs actor churn events only.
-          - Mode 'partner' logs partner churn events only.
-          - Mode 'both' logs actor and partner churn events only.
+        - Specifies the parameter for logging of LACP churn events.
+        - Valid only for ether-bundles.
+        - Mode 'actor' logs actor churn events only.
+        - Mode 'partner' logs partner churn events only.
+        - Mode 'both' logs actor and partner churn events only.
         type: str
-        choices: ['actor', 'partner', 'both']
+        choices:
+        - actor
+        - partner
+        - both
       collector_max_delay:
         description:
-          - Specifies the collector max delay to be signaled to the LACP partner.
-          - Valid only for ether-bundles.
-          - Refer to vendor documentation for valid values.
+        - Specifies the collector max delay to be signaled to the LACP partner.
+        - Valid only for ether-bundles.
+        - Refer to vendor documentation for valid values.
         type: int
       period:
         description:
-          - Specifies the rate at which packets are sent or received.
-          - For ether-bundles, this specifies the period to be used
-            by its member links.
-          - Refer to vendor documentation for valid values.
+        - Specifies the rate at which packets are sent or received.
+        - For ether-bundles, this specifies the period to be used by its member links.
+        - Refer to vendor documentation for valid values.
         type: int
       switchover_suppress_flaps:
         description:
-          - Specifies the time for which to suppress flaps during
-            a LACP switchover.
-          - Valid only for ether-bundles.
-          - Refer to vendor documentation for valid values.
+        - Specifies the time for which to suppress flaps during a LACP switchover.
+        - Valid only for ether-bundles.
+        - Refer to vendor documentation for valid values.
         type: int
       system:
         description:
-          - This dict object contains configurable options related to LACP
-            system parameters for ether-bundles.
+        - This dict object contains configurable options related to LACP system parameters
+          for ether-bundles.
         type: dict
         suboptions:
           priority:
             description:
-              - Specifies the system priority to use in LACP negotiations for
-                the bundle.
-              - Refer to vendor documentation for valid values.
+            - Specifies the system priority to use in LACP negotiations for the bundle.
+            - Refer to vendor documentation for valid values.
             type: int
           mac:
             description:
-              - Specifies the system ID to use in LACP negotiations for
-                the bundle, encoded as a MAC address.
+            - Specifies the system ID to use in LACP negotiations for the bundle,
+              encoded as a MAC address.
             type: str
   state:
     description:
-      - The state of the configuration after module completion.
+    - The state of the configuration after module completion.
     type: str
     choices:
     - merged

@@ -17,11 +17,13 @@ __metaclass__ = type
 
 from copy import deepcopy
 from ansible.module_utils.six import iteritems
-from ansible.module_utils.network.common.cfg.base import ConfigBase
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
+    ConfigBase,
+)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
     Facts,
 )
-from ansible.module_utils.network.common.utils import (
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     to_list,
     dict_diff,
     remove_empties,

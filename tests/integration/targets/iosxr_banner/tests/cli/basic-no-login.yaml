@@ -2,40 +2,37 @@
 - name: Setup
   cisco.iosxr.iosxr_banner:
     banner: login
-    text: |
-      Junk login banner
+    text: 'Junk login banner
+
       over multiple lines
-    provider: "{{ cli }}"
+
+      '
+    provider: '{{ cli }}'
     state: present
 
 - name: remove login
+  register: result
   cisco.iosxr.iosxr_banner:
     banner: login
     state: absent
-    provider: "{{ cli }}"
-  register: result
+    provider: '{{ cli }}'
 
 - debug:
-    msg: "{{ result }}"
+    msg: '{{ result }}'
 
 - assert:
     that:
-      - "result.changed == true"
-      - "'no banner login' in result.commands[0]"
+      - result.changed == true
+      - '''no banner login'' in result.commands[0]'
 
 - name: remove login (idempotent)
+  register: result
   cisco.iosxr.iosxr_banner:
     banner: login
     state: absent
-    provider: "{{ cli }}"
-  register: result
+    provider: '{{ cli }}'
 
 - assert:
     that:
-      - "result.changed == false"
-      - "result.commands | length == 0"
-
-
-# FIXME add in tests for everything defined in docs
-# FIXME Test state:absent + test:
-# FIXME Without powers ensure "privileged mode required"
+      - result.changed == false
+      - result.commands | length == 0

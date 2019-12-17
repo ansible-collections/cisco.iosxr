@@ -12,18 +12,18 @@
 
 - name: get a unique and valid label
   set_fact:
-    label: "ansible_{{ 1001 | random | to_uuid | truncate(20, true, '_') }}"
+    label: ansible_{{ 1001 | random | to_uuid | truncate(20, true, '_') }}
 
 - name: configure device with a label and a comment
+  register: result
   cisco.iosxr.iosxr_config:
     src: basic/config.j2
-    comment: "this is sensible commit message"
-    label: "{{ label }}"
-  register: result
+    comment: this is sensible commit message
+    label: '{{ label }}'
 
 - assert:
     that:
-      - "result.changed == true"
+      - result.changed == true
 
 - name: setup
   cisco.iosxr.iosxr_config:
@@ -35,16 +35,16 @@
     match: none
 
 - name: Try to commit with old label, fail with a msg that label is alreay used
-  cisco.iosxr.iosxr_config:
-    src: basic/config.j2
-    label: "{{ label }}"
   register: result
   ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    src: basic/config.j2
+    label: '{{ label }}'
 
 - assert:
     that:
-      - "result.changed == false"
-      - "'already used' in result.msg"
+      - result.changed == false
+      - '''already used'' in result.msg'
 
 - name: setup
   cisco.iosxr.iosxr_config:
@@ -56,15 +56,15 @@
     match: none
 
 - name: Try to commit with invalid chars($) in label
-  cisco.iosxr.iosxr_config:
-    src: basic/config.j2
-    label: 'ansible_iosxr_config_$'
   register: result
   ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    src: basic/config.j2
+    label: ansible_iosxr_config_$
 
 - assert:
     that:
-      - "result.changed == false"
-      - "'only contain alphabets' in result.msg"
+      - result.changed == false
+      - '''only contain alphabets'' in result.msg'
 
 - debug: msg="END cli/commit_label.yaml on connection={{ ansible_connection }}"

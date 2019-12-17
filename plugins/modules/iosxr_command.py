@@ -15,66 +15,57 @@ ANSIBLE_METADATA = {
 }
 
 
-DOCUMENTATION = """
----
-module: iosxr_command
-version_added: "2.1"
-author: "Ricardo Carrillo Cruz (@rcarrillocruz)"
+DOCUMENTATION = """module: iosxr_command
+author: Ricardo Carrillo Cruz (@rcarrillocruz)
 short_description: Run commands on remote devices running Cisco IOS XR
 description:
-  - Sends arbitrary commands to an IOS XR node and returns the results
-    read from the device. This module includes an
-    argument that will cause the module to wait for a specific condition
-    before returning or timing out if the condition is not met.
-  - This module does not support running commands in configuration mode.
-    Please use M(iosxr_config) to configure iosxr devices.
-extends_documentation_fragment: iosxr
+- Sends arbitrary commands to an IOS XR node and returns the results read from the
+  device. This module includes an argument that will cause the module to wait for
+  a specific condition before returning or timing out if the condition is not met.
+- This module does not support running commands in configuration mode. Please use
+  M(iosxr_config) to configure iosxr devices.
+extends_documentation_fragment:
+- cisco.iosxr.iosxr
 notes:
-  - This module works with C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
-  - This module does not support C(netconf) connection.
-  - Tested against IOS XR 6.1.3
+- This module works with C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
+- This module does not support C(netconf) connection.
+- Tested against IOS XR 6.1.3
 options:
   commands:
     description:
-      - List of commands to send to the remote iosxr device over the
-        configured provider. The resulting output from the command
-        is returned. If the I(wait_for) argument is provided, the
-        module is not returned until the condition is satisfied or
-        the number of retries has expired.
+    - List of commands to send to the remote iosxr device over the configured provider.
+      The resulting output from the command is returned. If the I(wait_for) argument
+      is provided, the module is not returned until the condition is satisfied or
+      the number of retries has expired.
     required: true
   wait_for:
     description:
-      - List of conditions to evaluate against the output of the
-        command. The task will wait for each condition to be true
-        before moving forward. If the conditional is not true
-        within the configured number of retries, the task fails.
-        See examples.
-    aliases: ['waitfor']
-    version_added: "2.2"
+    - List of conditions to evaluate against the output of the command. The task will
+      wait for each condition to be true before moving forward. If the conditional
+      is not true within the configured number of retries, the task fails. See examples.
+    aliases:
+    - waitfor
   match:
     description:
-      - The I(match) argument is used in conjunction with the
-        I(wait_for) argument to specify the match policy.  Valid
-        values are C(all) or C(any).  If the value is set to C(all)
-        then all conditionals in the wait_for must be satisfied.  If
-        the value is set to C(any) then only one of the values must be
-        satisfied.
+    - The I(match) argument is used in conjunction with the I(wait_for) argument to
+      specify the match policy.  Valid values are C(all) or C(any).  If the value
+      is set to C(all) then all conditionals in the wait_for must be satisfied.  If
+      the value is set to C(any) then only one of the values must be satisfied.
     default: all
-    choices: ['any', 'all']
-    version_added: "2.2"
+    choices:
+    - any
+    - all
   retries:
     description:
-      - Specifies the number of retries a command should by tried
-        before it is considered failed. The command is run on the
-        target device every retry and evaluated against the
-        I(wait_for) conditions.
+    - Specifies the number of retries a command should by tried before it is considered
+      failed. The command is run on the target device every retry and evaluated against
+      the I(wait_for) conditions.
     default: 10
   interval:
     description:
-      - Configures the interval in seconds to wait between retries
-        of the command. If the command does not pass the specified
-        conditions, the interval indicates how long to wait before
-        trying the command again.
+    - Configures the interval in seconds to wait between retries of the command. If
+      the command does not pass the specified conditions, the interval indicates how
+      long to wait before trying the command again.
     default: 1
 """
 
@@ -127,8 +118,12 @@ import time
 
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.network.common.parsing import Conditional
-from ansible.module_utils.network.common.utils import to_lines
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.parsing import (
+    Conditional,
+)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    to_lines,
+)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     run_commands,
     iosxr_argument_spec,
