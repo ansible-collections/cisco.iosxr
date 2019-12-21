@@ -1,10 +1,6 @@
 ---
 - name: Remove Config
   vars:
-    lines: 'no lacp system priority
-
-      no lacp system mac
-
-      '
+    lines: "no lacp system priority\nno lacp system mac\n"
   ansible.netcommon.cli_config:
     config: '{{ lines }}'

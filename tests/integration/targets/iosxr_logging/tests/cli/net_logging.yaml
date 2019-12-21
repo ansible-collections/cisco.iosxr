@@ -3,19 +3,19 @@
     }}"
 
 - name: Remove host logging - setup
-  net_logging:
+  ansible.netcommon.net_logging:
     dest: host
     name: 172.16.0.1
     state: absent
     provider: '{{ cli }}'
 
 - name: Set up host logging using platform agnostic module
-  net_logging:
+  register: result
+  ansible.netcommon.net_logging:
     dest: host
     name: 172.16.0.1
     state: present
     provider: '{{ cli }}'
-  register: result
 
 - assert:
     that:
@@ -23,10 +23,11 @@
       - '"logging 172.16.0.1 vrf default severity info" in result.commands'
 
 - name: Remove host logging - teardown
-  net_logging:
+  ansible.netcommon.net_logging:
     dest: host
     name: 172.16.0.1
     state: absent
     provider: '{{ cli }}'
 
-- debug: msg="END iosxr cli/net_logging.yaml on connection={{ ansible_connection }}"
+- debug: msg="END iosxr cli/net_logging.yaml on connection={{ ansible_connection
+    }}"

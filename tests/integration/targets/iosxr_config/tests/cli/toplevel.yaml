@@ -16,7 +16,7 @@
 - assert:
     that:
       - result.changed == true
-      - '''hostname foo'' in result.commands'
+      - "'hostname foo' in result.commands"
 
 - name: configure top level command idempotent check
   register: result

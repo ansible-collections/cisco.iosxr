@@ -4,7 +4,9 @@
       }}
 
 - block:
+
     - include_tasks: _remove_config.yaml
+
     - name: Apply the provided configuration (base config)
       register: base_config
       cisco.iosxr.iosxr_lacp:
@@ -14,6 +16,7 @@
             mac:
               address: 00c1.4c00.bd16
         state: merged
+
     - name: Gather interfaces facts
       cisco.iosxr.iosxr_facts:
         gather_subset:
@@ -21,6 +24,7 @@
           - '!min'
         gather_network_resources:
           - lacp
+
     - name: Apply the provided configuration (config to be reverted)
       register: result
       cisco.iosxr.iosxr_lacp:
@@ -30,16 +34,20 @@
             mac:
               address: 00c1.4c00.bd10
         state: merged
+
     - name: Assert that changes were applied
       assert:
-        that: '{{ round_trip[''after''] == result[''after''] }}'
+        that: "{{ round_trip['after'] == result['after'] }}"
+
     - name: Revert back to base config using facts round trip
       register: revert
       cisco.iosxr.iosxr_lacp:
-        config: '{{ ansible_facts[''network_resources''][''lacp''] }}'
+        config: "{{ ansible_facts['network_resources']['lacp'] }}"
         state: replaced
+
     - name: Assert that config was reverted
       assert:
-        that: '{{ base_config[''after''] == revert[''after''] }}'
+        that: "{{ base_config['after'] == revert['after'] }}"
   always:
+
     - include_tasks: _remove_config.yaml

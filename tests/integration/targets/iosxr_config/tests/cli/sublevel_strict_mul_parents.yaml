@@ -29,8 +29,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''set precedence 5'' in result.commands'
-      - '''police rate percent 10'' in result.commands'
+      - "'set precedence 5' in result.commands"
+      - "'police rate percent 10' in result.commands"
 
 - name: change sub level command order and config with strict match
   register: result
@@ -46,8 +46,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''set precedence 5'' in result.commands'
-      - '''police rate percent 10'' in result.commands'
+      - "'set precedence 5' in result.commands"
+      - "'police rate percent 10' in result.commands"
 
 - name: Config sub level command with strict match (Idempotency)
   register: result

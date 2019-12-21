@@ -8,6 +8,7 @@
 - include_tasks: _populate.yaml
 
 - block:
+
     - name: Replace LACP configuration with provided configurations
       register: result
       cisco.iosxr.iosxr_lacp: &id001
@@ -15,30 +16,37 @@
           system:
             priority: 11
         state: replaced
+
     - name: Assert that correct set of commands were generated
       assert:
         that:
-          - '{{ replaced[''commands''] | symmetric_difference(result[''commands'']) |length
-            == 0 }}'
+          - "{{ replaced['commands'] | symmetric_difference(result['commands'])\
+            \ |length == 0 }}"
+
     - name: Assert that before dicts are correctly generated
       assert:
         that:
-          - '{{ populate == result[''before''] }}'
+          - "{{ populate == result['before'] }}"
+
     - name: Assert that after dict is correctly generated
       assert:
         that:
-          - '{{ replaced[''after''] == result[''after''] }}'
+          - "{{ replaced['after'] == result['after'] }}"
+
     - name: Replace device configurations of listed interfaces with provided configurarions
         (IDEMPOTENT)
       register: result
       cisco.iosxr.iosxr_lacp: *id001
+
     - name: Assert that task was idempotent
       assert:
         that:
           - result['changed'] == false
+
     - name: Assert that before dict is correctly generated
       assert:
         that:
-          - '{{ replaced[''after''] == result[''before''] }}'
+          - "{{ replaced['after'] == result['before'] }}"
   always:
+
     - include_tasks: _remove_config.yaml

@@ -27,8 +27,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''ansible.com'' in result.xml[0]'
-      - '''redhat.com'' in result.xml[0]'
+      - "'ansible.com' in result.xml[0]"
+      - "'redhat.com' in result.xml[0]"
 
 - name: configure domain_search with vrf
   connection: netconf
@@ -43,9 +43,9 @@
 - assert:
     that:
       - result.changed == true
-      - '''ansiblevrf'' in result.xml[0]'
-      - '''ansible.com'' in result.xml[0]'
-      - '''redhat.com'' in result.xml[0]'
+      - "'ansiblevrf' in result.xml[0]"
+      - "'ansible.com' in result.xml[0]"
+      - "'redhat.com' in result.xml[0]"
 
 - name: verify domain_search with vrf
   connection: netconf
@@ -68,8 +68,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''ansiblevrf'' in result.xml[0]'
-      - '''ansible.com'' in result.xml[0]'
+      - "'ansiblevrf' in result.xml[0]"
+      - "'ansible.com' in result.xml[0]"
 
 - name: verify delete domain_search with vrf
   connection: netconf
@@ -91,7 +91,7 @@
 - assert:
     that:
       - result.changed == true
-      - '''redhat.com'' in result.xml[0]'
+      - "'redhat.com' in result.xml[0]"
 
 - name: verify remove one entry
   connection: netconf
@@ -117,7 +117,7 @@
 - assert:
     that:
       - result.changed == true
-      - '''redhat.com'' in result.xml[0]'
+      - "'redhat.com' in result.xml[0]"
 
 - name: verify add one entry
   connection: netconf
@@ -144,8 +144,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''redhat.com'' in result.xml[1]'
-      - '''eng.ansible.com'' in result.xml[0]'
+      - "'redhat.com' in result.xml[1]"
+      - "'eng.ansible.com' in result.xml[0]"
       - result.xml|length == 2
 
 - name: verify add and remove one entry
@@ -175,4 +175,5 @@
     provider: '{{ cli }}'
 
 - debug:
-    msg: END netconf/set_domain_search.yaml on connection={{ ansible_connection }}
+    msg: END netconf/set_domain_search.yaml on connection={{ ansible_connection
+      }}

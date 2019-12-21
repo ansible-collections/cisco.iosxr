@@ -1,13 +1,8 @@
 ---
 - name: Remove Bundles
   vars:
-    lines: 'no interface Bundle-Ether10
-
-      no interface Bundle-Ether11
-
-      no interface Bundle-Ether12
-
-      '
+    lines: "no interface Bundle-Ether10\nno interface Bundle-Ether11\nno interface\
+      \ Bundle-Ether12\n"
   ansible.netcommon.cli_config:
     config: '{{ lines }}'
 

@@ -1,7 +1,7 @@
 ---
 - debug:
-    msg: START iosxr_lldp_global empty_config integration tests on connection={{ ansible_connection
-      }}
+    msg: START iosxr_lldp_global empty_config integration tests on connection={{
+      ansible_connection }}
 
 - name: Merged with empty config should give appropriate error message
   register: result

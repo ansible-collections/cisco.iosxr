@@ -23,9 +23,9 @@
 - assert:
     that:
       - result.changed == true
-      - '''domain name-server 192.0.2.1'' in result.commands'
-      - '''domain name-server 192.0.2.2'' in result.commands'
-      - '''domain name-server 192.0.2.3'' in result.commands'
+      - "'domain name-server 192.0.2.1' in result.commands"
+      - "'domain name-server 192.0.2.2' in result.commands"
+      - "'domain name-server 192.0.2.3' in result.commands"
 
 - name: verify name_servers
   register: result
@@ -52,7 +52,7 @@
     that:
       - result.changed == true
       - result.commands|length == 1
-      - '''no domain name-server 192.0.2.3'' in result.commands'
+      - "'no domain name-server 192.0.2.3' in result.commands"
 
 - name: setup
   cisco.iosxr.iosxr_config:
@@ -62,4 +62,5 @@
     match: none
     provider: '{{ cli }}'
 
-- debug: msg="END cli/set_name_servers.yaml on connection={{ ansible_connection }}"
+- debug: msg="END cli/set_name_servers.yaml on connection={{ ansible_connection
+    }}"
