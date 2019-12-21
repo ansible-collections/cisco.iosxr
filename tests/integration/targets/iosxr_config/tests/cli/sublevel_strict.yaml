@@ -1,5 +1,6 @@
 ---
-- debug: msg="START cli/sublevel_strict.yaml on connection={{ ansible_connection }}"
+- debug: msg="START cli/sublevel_strict.yaml on connection={{ ansible_connection
+    }}"
 
 - name: setup
   cisco.iosxr.iosxr_config:
@@ -33,12 +34,12 @@
 - assert:
     that:
       - result.changed == true
-      - '''ipv4 access-list test'' in result.commands'
-      - '''10 permit ipv4 host 192.0.2.1 any log'' in result.commands'
-      - '''20 permit ipv4 host 192.0.2.2 any log'' in result.commands'
-      - '''30 permit ipv4 host 192.0.2.3 any log'' in result.commands'
-      - '''40 permit ipv4 host 192.0.2.4 any log'' in result.commands'
-      - '''50 permit ipv4 host 192.0.2.5 any log'' not in result.commands'
+      - "'ipv4 access-list test' in result.commands"
+      - "'10 permit ipv4 host 192.0.2.1 any log' in result.commands"
+      - "'20 permit ipv4 host 192.0.2.2 any log' in result.commands"
+      - "'30 permit ipv4 host 192.0.2.3 any log' in result.commands"
+      - "'40 permit ipv4 host 192.0.2.4 any log' in result.commands"
+      - "'50 permit ipv4 host 192.0.2.5 any log' not in result.commands"
 
 - name: check sub level command using strict match
   register: result

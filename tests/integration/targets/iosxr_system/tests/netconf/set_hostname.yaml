@@ -3,31 +3,37 @@
     msg: START netconf/set_hostname.yaml on connection={{ ansible_connection }}
 
 - block:
+
     - name: setup
       connection: ansible.netcommon.network_cli
       cisco.iosxr.iosxr_config:
         lines: hostname switch
         match: none
         provider: '{{ cli }}'
+
     - name: configure hostname
       connection: netconf
       register: result
       cisco.iosxr.iosxr_system:
         hostname: foo
         provider: '{{ netconf }}'
+
     - assert:
         that:
           - result.changed == true
+
     - name: verify hostname
       connection: netconf
       register: result
       cisco.iosxr.iosxr_system:
         hostname: foo
         provider: '{{ netconf }}'
+
     - assert:
         that:
           - result.changed == false
   always:
+
     - name: teardown
       connection: ansible.netcommon.network_cli
       cisco.iosxr.iosxr_config:

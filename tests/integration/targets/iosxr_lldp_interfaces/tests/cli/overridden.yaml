@@ -8,39 +8,49 @@
 - include_tasks: _populate.yaml
 
 - block:
+
     - name: Overridde all interface LLDP configuration with provided configuration
       register: result
       cisco.iosxr.iosxr_lldp_interfaces: &id001
         config:
+
           - name: GigabitEthernet0/0/0/0
             transmit: false
         state: overridden
+
     - name: Assert that correct set of commands were generated
       assert:
         that:
-          - '{{ overridden[''commands''] | symmetric_difference(result[''commands''])
-            |length == 0 }}'
+          - "{{ overridden['commands'] | symmetric_difference(result['commands'])\
+            \ |length == 0 }}"
+
     - name: Assert that before dicts are correctly generated
       assert:
         that:
-          - '{{ populate | symmetric_difference(result[''before'']) |length == 0 }}'
+          - "{{ populate | symmetric_difference(result['before']) |length == 0 }}"
+
     - name: Assert that after dict is correctly generated
       assert:
         that:
-          - '{{ overridden[''after''] | symmetric_difference(result[''after'']) |length
-            == 0 }}'
-    - name: Overridde all interface LACP configuration with provided configuration (IDEMPOTENT)
+          - "{{ overridden['after'] | symmetric_difference(result['after']) |length\
+            \ == 0 }}"
+
+    - name: Overridde all interface LACP configuration with provided configuration
+        (IDEMPOTENT)
       register: result
       cisco.iosxr.iosxr_lldp_interfaces: *id001
+
     - name: Assert that task was idempotent
       assert:
         that:
           - result['changed'] == false
           - result.commands|length == 0
+
     - name: Assert that before dict is correctly generated
       assert:
         that:
-          - '{{ overridden[''after''] | symmetric_difference(result[''before'']) |length
-            == 0 }}'
+          - "{{ overridden['after'] | symmetric_difference(result['before']) |length\
+            \ == 0 }}"
   always:
+
     - include_tasks: _remove_config.yaml

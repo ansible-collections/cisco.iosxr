@@ -9,13 +9,7 @@
   register: result
   cisco.iosxr.iosxr_banner:
     banner: login
-    text: 'this is my login banner
-
-      that has a multiline
-
-      string
-
-      '
+    text: "this is my login banner\nthat has a multiline\nstring\n"
     provider: '{{ netconf }}'
     state: present
 
@@ -25,20 +19,14 @@
 - assert:
     that:
       - result.changed == true
-      - '''this is my login banner'' in result.xml'
-      - '''that has a multiline'' in result.xml'
+      - "'this is my login banner' in result.xml"
+      - "'that has a multiline' in result.xml"
 
 - name: Set login again (idempotent)
   register: result
   cisco.iosxr.iosxr_banner:
     banner: login
-    text: 'this is my login banner
-
-      that has a multiline
-
-      string
-
-      '
+    text: "this is my login banner\nthat has a multiline\nstring\n"
     provider: '{{ netconf }}'
     state: present
 

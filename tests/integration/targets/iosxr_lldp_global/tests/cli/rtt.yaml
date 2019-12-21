@@ -4,7 +4,9 @@
       }}
 
 - block:
+
     - include_tasks: _remove_config.yaml
+
     - name: Apply the provided configuration (base config)
       register: base_config
       cisco.iosxr.iosxr_lldp_global:
@@ -12,6 +14,7 @@
           holdtime: 200
           timer: 500
         state: merged
+
     - name: Gather interfaces facts
       cisco.iosxr.iosxr_facts:
         gather_subset:
@@ -19,6 +22,7 @@
           - '!min'
         gather_network_resources:
           - lldp_global
+
     - name: Apply the provided configuration (config to be reverted)
       register: result
       cisco.iosxr.iosxr_lldp_global:
@@ -28,16 +32,20 @@
           subinterfaces: true
           timer: 3000
         state: merged
+
     - name: Assert that changes were applied
       assert:
-        that: '{{ round_trip[''after''] == result[''after''] }}'
+        that: "{{ round_trip['after'] == result['after'] }}"
+
     - name: Revert back to base config using facts round trip
       register: revert
       cisco.iosxr.iosxr_lldp_global:
-        config: '{{ ansible_facts[''network_resources''][''lldp_global''] }}'
+        config: "{{ ansible_facts['network_resources']['lldp_global'] }}"
         state: replaced
+
     - name: Assert that config was reverted
       assert:
-        that: '{{ base_config[''after''] == revert[''after''] }}'
+        that: "{{ base_config['after'] == revert['after'] }}"
   always:
+
     - include_tasks: _remove_config.yaml

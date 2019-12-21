@@ -24,7 +24,7 @@
 - assert:
     that:
       - result.changed == true
-      - '''Loopback10'' in result.xml[0]'
+      - "'Loopback10' in result.xml[0]"
 
 - name: verify lookup_source
   connection: netconf
@@ -45,7 +45,7 @@
 - assert:
     that:
       - result.changed == true
-      - '''lookup'' in result.xml[0]'
+      - "'lookup' in result.xml[0]"
 
 - name: verify disable lookup
   connection: netconf
@@ -67,7 +67,7 @@
 - assert:
     that:
       - result.changed == true
-      - '''Loopback10'' in result.xml[0]'
+      - "'Loopback10' in result.xml[0]"
 
 - name: verify lookup_source
   connection: netconf
@@ -89,8 +89,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''Loopback10'' in result.xml[0]'
-      - '''ansiblevrf'' in result.xml[0]'
+      - "'Loopback10' in result.xml[0]"
+      - "'ansiblevrf' in result.xml[0]"
 
 - name: verify lookup_source
   connection: netconf
@@ -112,8 +112,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''lookup'' in result.xml[0]'
-      - '''ansiblevrf'' in result.xml[0]'
+      - "'lookup' in result.xml[0]"
+      - "'ansiblevrf' in result.xml[0]"
 
 - name: verify disable lookup
   connection: netconf
@@ -136,8 +136,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''Loopback10'' in result.xml[0]'
-      - '''ansiblevrf'' in result.xml[0]'
+      - "'Loopback10' in result.xml[0]"
+      - "'ansiblevrf' in result.xml[0]"
 
 - name: verify lookup_source
   connection: netconf
@@ -158,4 +158,5 @@
     provider: '{{ cli }}'
 
 - debug:
-    msg: END netconf/set_lookup_source.yaml on connection={{ ansible_connection }}
+    msg: END netconf/set_lookup_source.yaml on connection={{ ansible_connection
+      }}

@@ -1,6 +1,7 @@
 ---
 - debug:
-    msg: START netconf/set_name_servers.yaml on connection={{ ansible_connection }}
+    msg: START netconf/set_name_servers.yaml on connection={{ ansible_connection
+      }}
 
 - name: setup
   connection: ansible.netcommon.network_cli
@@ -39,9 +40,9 @@
     that:
       - result.changed == true
       - result.xml|length == 1
-      - '''192.0.2.1'' in result.xml[0]'
-      - '''192.0.2.2'' in result.xml[0]'
-      - '''192.0.2.3'' in result.xml[0]'
+      - "'192.0.2.1' in result.xml[0]"
+      - "'192.0.2.2' in result.xml[0]"
+      - "'192.0.2.3' in result.xml[0]"
 
 - name: verify name_servers
   connection: netconf
@@ -72,10 +73,10 @@
     that:
       - result.changed == true
       - result.xml|length == 1
-      - '''ansible'' in result.xml[0]'
-      - '''192.0.2.1'' in result.xml[0]'
-      - '''192.0.2.2'' in result.xml[0]'
-      - '''192.0.2.3'' in result.xml[0]'
+      - "'ansible' in result.xml[0]"
+      - "'192.0.2.1' in result.xml[0]"
+      - "'192.0.2.2' in result.xml[0]"
+      - "'192.0.2.3' in result.xml[0]"
 
 - name: verify change to vrf
   connection: netconf
@@ -99,7 +100,7 @@
     that:
       - result.changed == true
       - result.xml|length == 1
-      - '''192.0.2.3'' in result.xml[0]'
+      - "'192.0.2.3' in result.xml[0]"
 
 - name: remove one with vrf
   connection: netconf

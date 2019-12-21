@@ -11,7 +11,7 @@
   register: result
   become: true
   ansible.netcommon.cli_config: &id001
-    config: '{{ lookup(''template'', ''basic/config.j2'') }}'
+    config: "{{ lookup('template', 'basic/config.j2') }}"
 
 - assert:
     that:
@@ -28,4 +28,5 @@
 - name: teardown
   ansible.netcommon.cli_config: *id002
 
-- debug: msg="END cli_config/cli_basic.yaml on connection={{ ansible_connection }}"
+- debug: msg="END cli_config/cli_basic.yaml on connection={{ ansible_connection
+    }}"

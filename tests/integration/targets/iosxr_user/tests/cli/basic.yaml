@@ -85,7 +85,9 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
+
       - name: ansibletest2
+
       - name: ansibletest3
     configured_password: test
     state: present
@@ -106,7 +108,9 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
+
       - name: ansibletest2
+
       - name: ansibletest3
     configured_password: test
     state: present
@@ -125,7 +129,9 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
+
       - name: ansibletest2
+
       - name: ansibletest3
     configured_password: test
     update_password: on_create
@@ -142,8 +148,11 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
+
       - name: ansibletest1
+
       - name: ansibletest2
+
       - name: ansibletest3
     state: absent
     provider: '{{ cli }}'
@@ -158,8 +167,11 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
+
       - name: ansibletest1
+
       - name: ansibletest2
+
       - name: ansibletest3
     state: absent
     provider: '{{ cli }}'

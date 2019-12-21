@@ -126,8 +126,10 @@
   register: result
   cisco.iosxr.iosxr_logging:
     aggregate:
+
       - dest: console
         level: notifications
+
       - dest: buffered
         size: 4700000
     state: present
@@ -143,8 +145,10 @@
   register: result
   cisco.iosxr.iosxr_logging:
     aggregate:
+
       - dest: console
         level: notifications
+
       - dest: buffered
         size: 4700000
     state: absent

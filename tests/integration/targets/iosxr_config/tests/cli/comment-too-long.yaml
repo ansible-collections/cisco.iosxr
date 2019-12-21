@@ -22,6 +22,7 @@
     that:
       - result.changed == false
       - result.updates is not defined
-      - '''comment argument cannot be more than 60 characters'' in result.msg'
+      - "'comment argument cannot be more than 60 characters' in result.msg"
 
-- debug: msg="END cli/comment-too-long.yaml on connection={{ ansible_connection }}"
+- debug: msg="END cli/comment-too-long.yaml on connection={{ ansible_connection
+    }}"

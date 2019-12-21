@@ -8,7 +8,7 @@
     commands:
       command: show foo
       prompt: fooprompt
-      answer: 'yes'
+      answer: yes
 
 - assert:
     that:
@@ -20,9 +20,10 @@
   cisco.iosxr.iosxr_command:
     commands:
       - show version
+
       - command: show foo
         prompt: fooprompt
-        answer: 'yes'
+        answer: yes
 
 - assert:
     that:

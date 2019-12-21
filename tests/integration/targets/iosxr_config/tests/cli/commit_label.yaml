@@ -44,7 +44,7 @@
 - assert:
     that:
       - result.changed == false
-      - '''already used'' in result.msg'
+      - "'already used' in result.msg"
 
 - name: setup
   cisco.iosxr.iosxr_config:
@@ -65,6 +65,6 @@
 - assert:
     that:
       - result.changed == false
-      - '''only contain alphabets'' in result.msg'
+      - "'only contain alphabets' in result.msg"
 
 - debug: msg="END cli/commit_label.yaml on connection={{ ansible_connection }}"

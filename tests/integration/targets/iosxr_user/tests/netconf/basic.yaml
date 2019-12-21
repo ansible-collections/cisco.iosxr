@@ -92,7 +92,9 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
+
       - name: ansible2
+
       - name: ansible3
     configured_password: password
     state: present
@@ -114,7 +116,9 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
+
       - name: ansible2
+
       - name: ansible3
     configured_password: password
     state: present
@@ -133,7 +137,9 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
+
       - name: ansible2
+
       - name: ansible3
     configured_password: password
     update_password: on_create
@@ -151,8 +157,11 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
+
       - name: ansible1
+
       - name: ansible2
+
       - name: ansible3
     state: absent
     provider: '{{ netconf }}'
@@ -169,8 +178,11 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
+
       - name: ansible1
+
       - name: ansible2
+
       - name: ansible3
     state: absent
     provider: '{{ netconf }}'

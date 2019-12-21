@@ -1,60 +1,53 @@
 ---
 merged:
   before:
-  - name: GigabitEthernet0/0/0/0
-  - name: GigabitEthernet0/0/0/1
+    - name: GigabitEthernet0/0/0/0
+    - name: GigabitEthernet0/0/0/1
   commands:
-  - interface GigabitEthernet0/0/0/0
-  - lldp transmit disable
-  - interface GigabitEthernet0/0/0/1
-  - lldp receive disable
+    - interface GigabitEthernet0/0/0/0
+    - lldp transmit disable
+    - interface GigabitEthernet0/0/0/1
+    - lldp receive disable
   after:
+    - name: GigabitEthernet0/0/0/0
+      transmit: false
+    - name: GigabitEthernet0/0/0/1
+      receive: false
+populate:
   - name: GigabitEthernet0/0/0/0
     transmit: false
   - name: GigabitEthernet0/0/0/1
     receive: false
-
-populate:
-
-- name: GigabitEthernet0/0/0/0
-  transmit: false
-
-- name: GigabitEthernet0/0/0/1
-  receive: false
-
 replaced:
   commands:
-  - interface GigabitEthernet0/0/0/1
-  - no lldp receive disable
-  - lldp transmit disable
+    - interface GigabitEthernet0/0/0/1
+    - no lldp receive disable
+    - lldp transmit disable
   after:
-  - name: GigabitEthernet0/0/0/0
-    transmit: false
-  - name: GigabitEthernet0/0/0/1
-    transmit: false
-
+    - name: GigabitEthernet0/0/0/0
+      transmit: false
+    - name: GigabitEthernet0/0/0/1
+      transmit: false
 overridden:
   commands:
-  - interface GigabitEthernet0/0/0/1
-  - no lldp receive disable
+    - interface GigabitEthernet0/0/0/1
+    - no lldp receive disable
   after:
-  - name: GigabitEthernet0/0/0/0
-    transmit: false
-  - name: GigabitEthernet0/0/0/1
-
+    - name: GigabitEthernet0/0/0/0
+      transmit: false
+    - name: GigabitEthernet0/0/0/1
 deleted:
   commands:
-  - interface GigabitEthernet0/0/0/0
-  - no lldp transmit disable
-  - interface GigabitEthernet0/0/0/1
-  - no lldp receive disable
+    - interface GigabitEthernet0/0/0/0
+    - no lldp transmit disable
+    - interface GigabitEthernet0/0/0/1
+    - no lldp receive disable
   after:
-  - name: GigabitEthernet0/0/0/0
-  - name: GigabitEthernet0/0/0/1
-
+    - name: GigabitEthernet0/0/0/0
+    - name: GigabitEthernet0/0/0/1
 round_trip:
   after:
-  - name: GigabitEthernet0/0/0/0
-    receive: false
-  - name: GigabitEthernet0/0/0/1
-    transmit: false
+    - name: GigabitEthernet0/0/0/0
+      receive: false
+    - name: GigabitEthernet0/0/0/1
+      transmit: false
