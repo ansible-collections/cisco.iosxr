@@ -27,6 +27,8 @@ description:
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 notes:
+- Make sure the user has been authorized to execute commands terminal length 0, terminal
+  width 512 and terminal exec prompt no-timestamp.
 - This module works with C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 - This module does not support C(netconf) connection.
 - Tested against IOS XR 6.1.3

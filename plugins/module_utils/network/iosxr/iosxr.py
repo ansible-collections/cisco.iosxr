@@ -111,7 +111,9 @@ iosxr_provider_spec = {
 }
 
 iosxr_argument_spec = {
-    "provider": dict(type="dict", options=iosxr_provider_spec)
+    "provider": dict(
+        type="dict", options=iosxr_provider_spec, removed_in_version=2.14
+    )
 }
 
 command_spec = {
