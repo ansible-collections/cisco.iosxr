@@ -14,7 +14,7 @@
     provider: '{{ cli }}'
 
 - name: setup
-  connection: netconf
+  connection: ansible.netcommon.netconf
   ignore_errors: true
   register: result
   cisco.iosxr.iosxr_system:
@@ -27,7 +27,7 @@
     state: absent
 
 - name: configure name_servers
-  connection: netconf
+  connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system:
     name_servers:
@@ -45,7 +45,7 @@
       - "'192.0.2.3' in result.xml[0]"
 
 - name: verify name_servers
-  connection: netconf
+  connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system:
     name_servers:
@@ -59,7 +59,7 @@
       - result.changed == false
 
 - name: add name servers with vrf
-  connection: netconf
+  connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id001
     vrf: ansible
@@ -79,7 +79,7 @@
       - "'192.0.2.3' in result.xml[0]"
 
 - name: verify change to vrf
-  connection: netconf
+  connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id001
 
@@ -88,7 +88,7 @@
       - result.changed == false
 
 - name: remove one
-  connection: netconf
+  connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system:
     name_servers:
@@ -103,7 +103,7 @@
       - "'192.0.2.3' in result.xml[0]"
 
 - name: remove one with vrf
-  connection: netconf
+  connection: ansible.netcommon.netconf
   ignore_errors: true
   register: result
   cisco.iosxr.iosxr_system:
@@ -123,7 +123,7 @@
     provider: '{{ cli }}'
 
 - name: teardown
-  connection: netconf
+  connection: ansible.netcommon.netconf
   ignore_errors: true
   register: result
   cisco.iosxr.iosxr_system:

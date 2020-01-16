@@ -12,7 +12,7 @@
         provider: '{{ cli }}'
 
     - name: configure hostname
-      connection: netconf
+      connection: ansible.netcommon.netconf
       register: result
       cisco.iosxr.iosxr_system:
         hostname: foo
@@ -23,7 +23,7 @@
           - result.changed == true
 
     - name: verify hostname
-      connection: netconf
+      connection: ansible.netcommon.netconf
       register: result
       cisco.iosxr.iosxr_system:
         hostname: foo

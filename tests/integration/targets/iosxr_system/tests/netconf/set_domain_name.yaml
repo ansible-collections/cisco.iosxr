@@ -13,7 +13,7 @@
     provider: '{{ cli }}'
 
 - name: configure domain_name
-  connection: netconf
+  connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id001
     domain_name: eng.ansible.com
@@ -24,7 +24,7 @@
       - result.changed == true
 
 - name: verify domain_name
-  connection: netconf
+  connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id001
 
@@ -33,7 +33,7 @@
       - result.changed == false
 
 - name: configure domain_name
-  connection: netconf
+  connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id002
     domain_name: eng.ansible.com
@@ -45,7 +45,7 @@
       - result.changed == true
 
 - name: verify domain_name
-  connection: netconf
+  connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id002
 
@@ -54,7 +54,7 @@
       - result.changed == false
 
 - name: configure domain_name with vrf
-  connection: netconf
+  connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id003
     domain_name: eng.ansible.com
@@ -66,7 +66,7 @@
       - result.changed == true
 
 - name: verify domain_name with vrf
-  connection: netconf
+  connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id003
 
