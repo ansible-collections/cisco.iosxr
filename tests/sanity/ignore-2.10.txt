@@ -18,6 +18,7 @@ plugins/modules/iosxr_banner.py validate-modules:parameter-type-not-in-doc
 plugins/modules/iosxr_banner.py validate-modules:undocumented-parameter
 plugins/modules/iosxr_bgp.py validate-modules:doc-missing-type
 plugins/modules/iosxr_bgp.py validate-modules:doc-required-mismatch
+plugins/modules/iosxr_bgp.py validate-modules:invalid-ansiblemodule-schema
 plugins/modules/iosxr_bgp.py validate-modules:nonexistent-parameter-documented
 plugins/modules/iosxr_bgp.py validate-modules:parameter-type-not-in-doc
 plugins/modules/iosxr_bgp.py validate-modules:undocumented-parameter
@@ -38,6 +39,8 @@ plugins/modules/iosxr_facts.py validate-modules:doc-default-does-not-match-spec
 plugins/modules/iosxr_facts.py validate-modules:doc-required-mismatch
 plugins/modules/iosxr_facts.py validate-modules:parameter-type-not-in-doc
 plugins/modules/iosxr_facts.py validate-modules:undocumented-parameter
+plugins/modules/iosxr_l2_interfaces.py validate-modules:invalid-ansiblemodule-schema
+plugins/modules/iosxr_l3_interfaces.py validate-modules:invalid-ansiblemodule-schema
 plugins/modules/iosxr_logging.py validate-modules:doc-choices-do-not-match-spec
 plugins/modules/iosxr_logging.py validate-modules:doc-default-does-not-match-spec
 plugins/modules/iosxr_logging.py validate-modules:doc-missing-type
