@@ -1,0 +1,114 @@
+---
+- debug:
+    msg: START iosxr_acl_interfaces round trip integration tests on connection={{
+      ansible_connection }}
+
+- block:
+
+    - include_tasks: _remove_config.yaml
+
+    - name: Populate the device with ACLs
+      cisco.iosxr.iosxr_config:
+        lines: "ipv4 access-list acl_1\n10 permit ipv4 any any\nipv4 access-list\
+          \ acl_2\n10 permit ipv4 any any\nipv4 access-list acl_3\n10 permit ipv4\
+          \ any any\nipv6 access-list acl6_1\n10 permit ipv6 any any\nipv6 access-list\
+          \ acl6_2\n10 permit ipv6 any any\nipv6 access-list acl6_3\n10 permit ipv6\
+          \ any any\n"
+
+    - name: Apply the provided configuration (base config)
+      cisco.iosxr.iosxr_acl_interfaces:
+        config:
+
+          - name: GigabitEthernet0/0/0/0
+            access_groups:
+
+              - afi: ipv4
+                acls:
+
+                  - name: acl_1
+                    direction: in
+
+                  - name: acl_2
+                    direction: out
+
+              - afi: ipv6
+                acls:
+
+                  - name: acl6_1
+                    direction: in
+
+                  - name: acl6_2
+                    direction: out
+
+          - name: GigabitEthernet0/0/0/1
+            access_groups:
+
+              - afi: ipv4
+                acls:
+
+                  - name: acl_1
+                    direction: out
+        state: merged
+
+    - name: Gather interfaces facts
+      cisco.iosxr.iosxr_facts:
+        gather_subset:
+          - '!all'
+          - '!min'
+        gather_network_resources:
+          - acl_interfaces
+
+    - name: Apply the provided configuration (config to be reverted)
+      register: result
+      cisco.iosxr.iosxr_acl_interfaces:
+        config:
+
+          - name: GigabitEthernet0/0/0/1
+            access_groups:
+
+              - afi: ipv4
+                acls:
+
+                  - name: acl_1
+                    direction: in
+
+                  - name: acl_2
+                    direction: out
+
+              - afi: ipv6
+                acls:
+
+                  - name: acl6_1
+                    direction: in
+
+                  - name: acl6_2
+                    direction: out
+
+          - name: GigabitEthernet0/0/0/0
+            access_groups:
+
+              - afi: ipv4
+                acls:
+
+                  - name: acl_1
+                    direction: out
+        state: overridden
+
+    - name: Assert that changes were applied
+      assert:
+        that: "{{ round_trip['after'] | symmetric_difference(result['after']) |length\
+          \ == 0  }}"
+
+    - name: Revert back to base config using facts round trip
+      register: revert
+      cisco.iosxr.iosxr_acl_interfaces:
+        config: "{{ ansible_facts['network_resources']['acl_interfaces'] }}"
+        state: overridden
+
+    - name: Assert that config was reverted
+      assert:
+        that: "{{ merged['after'] | symmetric_difference(revert['after']) |length\
+          \ == 0 }}"
+  always:
+
+    - include_tasks: _remove_config.yaml

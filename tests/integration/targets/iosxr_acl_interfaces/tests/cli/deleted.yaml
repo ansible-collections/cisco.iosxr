@@ -1,0 +1,93 @@
+---
+- debug:
+    msg: Start iosxr_acl_interfaces deleted integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: Delete ACL attributes of GigabitEthernet0/0/0/1
+      register: result
+      cisco.iosxr.iosxr_acl_interfaces: &id001
+        config:
+
+          - name: GigabitEthernet0/0/0/1
+        state: deleted
+
+    - assert:
+        that:
+          - "'interface GigabitEthernet0/0/0/1' in result.commands"
+          - "'no ipv4 access-group acl_1 egress' in result.commands"
+          - result.commands|length == 2
+
+    - name: Delete ACL attributes of GigabitEthernet0/0/0/1 (IDEMPOTENT)
+      register: result
+      cisco.iosxr.iosxr_acl_interfaces: *id001
+
+    - assert:
+        that:
+          - result.changed == False
+          - result.commands|length == 0
+
+    - name: Delete a single ACL attached to GigabitEthernet0/0/0/0
+      register: result
+      cisco.iosxr.iosxr_acl_interfaces: &id002
+        config:
+
+          - name: GigabitEthernet0/0/0/0
+            access_groups:
+
+              - afi: ipv4
+                acls:
+
+                  - name: acl_2
+                    direction: out
+        state: deleted
+
+    - assert:
+        that:
+          - "'interface GigabitEthernet0/0/0/0' in result.commands"
+          - "'no ipv4 access-group acl_2 egress' in result.commands"
+          - result.commands|length == 2
+
+    - name: Delete a single ACL attached to GigabitEthernet0/0/0/0 (IDEMPOTENT)
+      register: result
+      cisco.iosxr.iosxr_acl_interfaces: *id002
+
+    - assert:
+        that:
+          - result.changed == False
+          - result.commands|length == 0
+
+    - name: Delete all IPv6 ACLs attached to GigabitEthernet0/0/0/0
+      register: result
+      cisco.iosxr.iosxr_acl_interfaces: &id003
+        config:
+
+          - name: GigabitEthernet0/0/0/0
+            access_groups:
+
+              - afi: ipv6
+        state: deleted
+
+    - assert:
+        that:
+          - "'interface GigabitEthernet0/0/0/0' in result.commands"
+          - "'no ipv6 access-group acl6_1 ingress' in result.commands"
+          - "'no ipv6 access-group acl6_2 egress' in result.commands"
+          - result.commands|length == 3
+
+    - name: Delete all IPv6 ACLs attached to GigabitEthernet0/0/0/0 (IDEMPOTENT)
+      register: result
+      cisco.iosxr.iosxr_acl_interfaces: *id003
+
+    - assert:
+        that:
+          - result.changed == False
+          - result.commands|length == 0
+  always:
+
+    - include_tasks: _remove_config.yaml

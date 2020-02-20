@@ -75,6 +75,7 @@ plugins/modules/iosxr_user.py validate-modules:doc-elements-mismatch
 plugins/modules/iosxr_user.py validate-modules:doc-missing-type
 plugins/modules/iosxr_user.py validate-modules:doc-required-mismatch
 plugins/modules/iosxr_user.py validate-modules:missing-suboption-docs
+plugins/modules/iosxr_user.py validate-modules:mutually_exclusive-unknown
 plugins/modules/iosxr_user.py validate-modules:parameter-type-not-in-doc
 plugins/modules/iosxr_user.py validate-modules:undocumented-parameter
 plugins/action/iosxr.py action-plugin-docs # base class for deprecated network platform modules using `connection: local`
