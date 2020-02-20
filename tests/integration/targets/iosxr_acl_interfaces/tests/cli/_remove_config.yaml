@@ -1,0 +1,27 @@
+---
+- name: Remove/Default Resources
+  vars:
+    lines: "default interface GigabitEthernet0/0/0/0\ndefault interface GigabitEthernet0/0/0/1\n\
+      no ipv4 access-list acl_1\nno ipv4 access-list acl_2\nno ipv6 access-list\
+      \ acl6_1\nno ipv6 access-list acl6_2\nno ipv6 access-list acl6_3\n"
+  ansible.netcommon.cli_config:
+    config: '{{ lines }}'
+
+- name: Initialize interfaces
+  loop:
+    - interface GigabitEthernet0/0/0/0
+    - interface GigabitEthernet0/0/0/1
+  cisco.iosxr.iosxr_config:
+    lines: shutdown
+    parents: '{{ item }}'
+
+- name: Remove unwanted interfaces from config
+  loop:
+    - 0/0/0/2
+    - 0/0/0/3
+    - 0/0/0/4
+    - 0/0/0/5
+  ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no interface GigabitEthernet{{ item }}

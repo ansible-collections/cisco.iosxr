@@ -177,7 +177,7 @@ def pad_commands(commands, interface):
     commands.insert(0, "interface {0}".format(interface))
 
 
-def diff_list_of_dicts(w, h):
+def diff_list_of_dicts(w, h, key="member"):
     """
     Returns a list containing diff between
     two list of dictionaries
@@ -189,11 +189,11 @@ def diff_list_of_dicts(w, h):
 
     diff = []
     for w_item in w:
-        h_item = search_obj_in_list(w_item["member"], h, key="member") or {}
+        h_item = search_obj_in_list(w_item[key], h, key=key) or {}
         d = dict_diff(h_item, w_item)
         if d:
-            if "member" not in d.keys():
-                d["member"] = w_item["member"]
+            if key not in d.keys():
+                d[key] = w_item[key]
             diff.append(d)
 
     return diff
