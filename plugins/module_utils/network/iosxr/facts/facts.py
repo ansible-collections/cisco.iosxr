@@ -50,6 +50,10 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l3
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.acl_interfaces.acl_interfaces import (
     Acl_interfacesFacts,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.acls.acls import (
+    AclsFacts,
+)
+
 
 FACT_LEGACY_SUBSETS = dict(
     default=Default, hardware=Hardware, interfaces=Interfaces, config=Config
@@ -64,6 +68,7 @@ FACT_RESOURCE_SUBSETS = dict(
     lag_interfaces=Lag_interfacesFacts,
     l3_interfaces=L3_InterfacesFacts,
     acl_interfaces=Acl_interfacesFacts,
+    acls=AclsFacts,
 )
 
 
