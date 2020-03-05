@@ -8,7 +8,7 @@
     commands:
       command: show foo
       prompt: fooprompt
-      answer: yes
+      answer: "yes"
 
 - assert:
     that:
@@ -23,7 +23,7 @@
 
       - command: show foo
         prompt: fooprompt
-        answer: yes
+        answer: "yes"
 
 - assert:
     that:
