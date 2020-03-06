@@ -8,3 +8,4 @@ name: iosxr
 namespace: cisco
 readme: README.rst
 repository: https://github.com/ansible-collections/iosxr
+tags: [cisco, iosxr, networking, netconf]
