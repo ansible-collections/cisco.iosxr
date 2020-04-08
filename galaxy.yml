@@ -7,5 +7,5 @@ license_file: LICENSE
 name: iosxr
 namespace: cisco
 readme: README.rst
-repository: https://github.com/ansible-collections/iosxr
+repository: https://github.com/ansible-collections/cisco.iosxr
 tags: [cisco, iosxr, networking, netconf]
