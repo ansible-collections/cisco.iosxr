@@ -238,23 +238,26 @@ class PublicKeyManager(object):
         """
 
         params = {
-            'host': None,
-            'username': None,
-            'password': None,
-            'ssh_keyfile': None,
+            "host": None,
+            "username": None,
+            "password": None,
+            "ssh_keyfile": None,
         }
 
         for key in params:
             if self._module.params[key] is not None:
                 params[key] = self._module.params[key]
             else:
-                if self._module.params['provider'] and self._module.params['provider'][key] is not None:
-                    params[key] = self._module.params['provider'][key]
+                if (
+                    self._module.params["provider"]
+                    and self._module.params["provider"][key] is not None
+                ):
+                    params[key] = self._module.params["provider"][key]
 
-        if not params['host'] or not params['username']:
+        if not params["host"] or not params["username"]:
             return None
 
-        if not params['password'] and not params['ssh_keyfile']:
+        if not params["password"] and not params["ssh_keyfile"]:
             return None
 
         return params
@@ -352,9 +355,11 @@ class PublicKeyManager(object):
         return readmsg
 
     def run(self):
-        warning_message = ("Operation with key file failed, please setup provider argument "
-                           "or pass its arguments directly to module in case of using "
-                           "network_cli or netconf plugin before running this playbook")
+        warning_message = (
+            "Operation with key file failed, please setup provider argument "
+            "or pass its arguments directly to module in case of using "
+            "network_cli or netconf plugin before running this playbook"
+        )
 
         if self._module.params["state"] == "present":
             if not self._module.check_mode:
@@ -487,7 +492,7 @@ class CliConfiguration(ConfigBase):
     def map_config_to_obj(self):
         data = get_config(self._module, config_filter="username")
 
-        if 'No such configuration item' in data:
+        if "No such configuration item" in data:
             return
 
         users = data.strip().rstrip("!").split("!")
