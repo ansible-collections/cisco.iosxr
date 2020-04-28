@@ -354,7 +354,7 @@ class PublicKeyManager(object):
     def run(self):
         warning_message = ("Operation with key file failed, please setup provider argument "
                            "or pass its arguments directly to module in case of using "
-                           "network_cli plugin before running this playbook")
+                           "network_cli or netconf plugin before running this playbook")
 
         if self._module.params["state"] == "present":
             if not self._module.check_mode:
