@@ -233,6 +233,32 @@ class PublicKeyManager(object):
         self._module = module
         self._result = result
 
+    def get_connection_params(self):
+        """ This is hepler for getting connection parameters
+        """
+
+        params = {
+            'host': None,
+            'username': None,
+            'password': None,
+            'ssh_keyfile': None,
+        }
+
+        for key in params:
+            if self._module.params[key] is not None:
+                params[key] = self._module.params[key]
+            else:
+                if self._module.params['provider'] and self._module.params['provider'][key] is not None:
+                    params[key] = self._module.params['provider'][key]
+
+        if not params['host'] or not params['username']:
+            return None
+
+        if not params['password'] and not params['ssh_keyfile']:
+            return None
+
+        return params
+
     def convert_key_to_base64(self):
         """ IOS-XR only accepts base64 decoded files, this converts the public key to a temp file.
         """
@@ -258,17 +284,15 @@ class PublicKeyManager(object):
     def copy_key_to_node(self, base64keyfile):
         """ Copy key to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well.
         """
-        provider = self._module.params.get("provider") or {}
-        node = provider.get("host")
-        if node is None:
+        params = self.get_connection_params()
+
+        if not params:
             return False
 
-        user = provider.get("username")
-        if user is None:
-            return False
-
-        password = provider.get("password")
-        ssh_keyfile = provider.get("ssh_keyfile")
+        user = params.get("username")
+        node = params.get("host")
+        password = params.get("password")
+        ssh_keyfile = params.get("ssh_keyfile")
 
         if self._module.params["aggregate"]:
             name = "aggregate"
@@ -292,17 +316,15 @@ class PublicKeyManager(object):
     def addremovekey(self, command):
         """ Add or remove key based on command
         """
-        provider = self._module.params.get("provider") or {}
-        node = provider.get("host")
-        if node is None:
+        params = self.get_connection_params()
+
+        if not params:
             return False
 
-        user = provider.get("username")
-        if user is None:
-            return False
-
-        password = provider.get("password")
-        ssh_keyfile = provider.get("ssh_keyfile")
+        user = params.get("username")
+        node = params.get("host")
+        password = params.get("password")
+        ssh_keyfile = params.get("ssh_keyfile")
 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -317,9 +339,9 @@ class PublicKeyManager(object):
             100
         )  # We need to read a bit to actually apply for some reason
         if (
-            ("already" in readmsg)
-            or ("removed" in readmsg)
-            or ("really" in readmsg)
+            (b"already" in readmsg)
+            or (b"removed" in readmsg)
+            or (b"really" in readmsg)
         ):
             ssh_stdin.write("yes\r")
         ssh_stdout.read(
@@ -330,14 +352,16 @@ class PublicKeyManager(object):
         return readmsg
 
     def run(self):
+        warning_message = ("Operation with key file failed, please setup provider argument "
+                           "or pass its arguments directly to module in case of using "
+                           "network_cli plugin before running this playbook")
+
         if self._module.params["state"] == "present":
             if not self._module.check_mode:
                 key = self.convert_key_to_base64()
                 copykeys = self.copy_key_to_node(key)
                 if copykeys is False:
-                    self._result["warnings"].append(
-                        "Please set up your provider before running this playbook"
-                    )
+                    self._result["warnings"].append(warning_message)
 
                 if self._module.params["aggregate"]:
                     for user in self._module.params["aggregate"]:
@@ -347,9 +371,7 @@ class PublicKeyManager(object):
                         )
                         addremove = self.addremovekey(cmdtodo)
                         if addremove is False:
-                            self._result["warnings"].append(
-                                "Please set up your provider before running this playbook"
-                            )
+                            self._result["warnings"].append(warning_message)
                 else:
                     cmdtodo = (
                         "admin crypto key import authentication rsa username %s harddisk:/publickey_%s.b64"
@@ -360,9 +382,7 @@ class PublicKeyManager(object):
                     )
                     addremove = self.addremovekey(cmdtodo)
                     if addremove is False:
-                        self._result["warnings"].append(
-                            "Please set up your provider before running this playbook"
-                        )
+                        self._result["warnings"].append(warning_message)
         elif self._module.params["state"] == "absent":
             if not self._module.check_mode:
                 if self._module.params["aggregate"]:
@@ -373,9 +393,7 @@ class PublicKeyManager(object):
                         )
                         addremove = self.addremovekey(cmdtodo)
                         if addremove is False:
-                            self._result["warnings"].append(
-                                "Please set up your provider before running this playbook"
-                            )
+                            self._result["warnings"].append(warning_message)
                 else:
                     cmdtodo = (
                         "admin crypto key zeroize authentication rsa username %s"
@@ -383,17 +401,13 @@ class PublicKeyManager(object):
                     )
                     addremove = self.addremovekey(cmdtodo)
                     if addremove is False:
-                        self._result["warnings"].append(
-                            "Please set up your provider before running this playbook"
-                        )
+                        self._result["warnings"].append(warning_message)
         elif self._module.params["purge"] is True:
             if not self._module.check_mode:
                 cmdtodo = "admin crypto key zeroize authentication rsa all"
                 addremove = self.addremovekey(cmdtodo)
                 if addremove is False:
-                    self._result["warnings"].append(
-                        "Please set up your provider before running this playbook"
-                    )
+                    self._result["warnings"].append(warning_message)
 
         return self._result
 
@@ -472,6 +486,10 @@ class CliConfiguration(ConfigBase):
 
     def map_config_to_obj(self):
         data = get_config(self._module, config_filter="username")
+
+        if 'No such configuration item' in data:
+            return
+
         users = data.strip().rstrip("!").split("!")
 
         for user in users:
