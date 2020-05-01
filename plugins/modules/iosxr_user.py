@@ -245,14 +245,14 @@ class PublicKeyManager(object):
         }
 
         for key in params:
-            if self._module.params[key] is not None:
-                params[key] = self._module.params[key]
+            if self._module.params.get(key) is not None:
+                params[key] = self._module.params.get(key)
             else:
                 if (
-                    self._module.params["provider"]
-                    and self._module.params["provider"][key] is not None
+                    self._module.params.get("provider")
+                    and self._module.params["provider"].get(key) is not None
                 ):
-                    params[key] = self._module.params["provider"][key]
+                    params[key] = self._module.params["provider"].get(key)
 
         if not params["host"] or not params["username"]:
             return None
