@@ -25,5 +25,5 @@
 - name: Assert that correct set of commands were rendered
   assert:
     that:
-      - "{{ merged['commands'] | symmetric_difference(result['rendered']) |length\
+      - "{{ rendered['commands'] | symmetric_difference(result['rendered']) |length\
         \ == 0 }}"

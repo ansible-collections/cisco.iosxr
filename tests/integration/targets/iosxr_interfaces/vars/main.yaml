@@ -95,6 +95,19 @@ replaced:
       enabled: true
       name: GigabitEthernet0/0/0/1
       speed: 100
+rendered:
+  commands:
+    - interface GigabitEthernet0/0/0/0
+    - description Configured and Merged by Ansible-Network
+    - mtu 110
+    - duplex half
+    - no shutdown
+    - interface GigabitEthernet0/0/0/1
+    - description Configured and Merged by Ansible-Network
+    - mtu 2800
+    - speed 100
+    - duplex full
+    - shutdown
 overridden:
   before:
     - enabled: true
