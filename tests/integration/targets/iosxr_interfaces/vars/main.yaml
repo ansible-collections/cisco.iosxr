@@ -43,6 +43,20 @@ merged:
       mtu: 2800
       name: GigabitEthernet0/0/0/1
       speed: 100
+parsed:
+  after:
+    - description: test for ansible
+      enabled: false
+      name: Loopback888
+    - description: Configured and Merged by Ansible-Network
+      duplex: half
+      enabled: true
+      mtu: 110
+      name: GigabitEthernet0/0/0/0
+    - enabled: false
+      name: GigabitEthernet0/0/0/3
+    - enabled: false
+      name: GigabitEthernet0/0/0/4
 replaced:
   before:
     - enabled: true
