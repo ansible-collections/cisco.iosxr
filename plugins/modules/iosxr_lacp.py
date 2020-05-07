@@ -30,21 +30,19 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
+ANSIBLE_METADATA = {"metadata_version": "1.1", "supported_by": "Ansible"}
 
 DOCUMENTATION = """module: iosxr_lacp
-short_description: Manage Global Link Aggregation Control Protocol (LACP) on IOS-XR
-  devices.
+short_description: LACP resource module
 description:
 - This module manages Global Link Aggregation Control Protocol (LACP) on IOS-XR devices.
+version_added: 1.0.0
+author:
+- Nilashish Chakraborty (@nilashishc)
+- Rohit Thakur (@rohitthakur2590)
 notes:
 - Tested against IOS-XR 6.1.3.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
-author: Nilashish Chakraborty (@nilashishc)
 options:
   config:
     description: The provided configurations.
@@ -69,6 +67,15 @@ options:
                 description:
                 - The system ID to use in LACP negotiations.
                 type: str
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the IOS-XR device by executing
+        the command B(show running-config lacp).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
   state:
     description:
     - The state of the configuration after module completion.
@@ -77,6 +84,10 @@ options:
     - merged
     - replaced
     - deleted
+    - parsed
+    - rendered
+    - gathered
+    
     default: merged
 """
 EXAMPLES = """
@@ -95,7 +106,7 @@ EXAMPLES = """
 #
 
 - name: Merge provided configuration with device configuration
-  iosxr_lacp:
+  cisco.iosxr.iosxr_lacp:
     config:
       system:
         priority: 10
@@ -154,7 +165,7 @@ EXAMPLES = """
 #
 
 - name: Replace device global lacp configuration with the given configuration
-  iosxr_lacp:
+  cisco.iosxr.iosxr_lacp:
     config:
       system:
         priority: 11
@@ -213,7 +224,7 @@ EXAMPLES = """
 #
 
 - name: Delete global LACP configurations from the device
-  iosxr_lacp:
+  cisco.iosxr.iosxr_lacp:
     state: deleted
 
 #
@@ -249,6 +260,75 @@ EXAMPLES = """
 # % No such configuration item(s)
 #
 #
+
+
+# Using parsed
+# parsed.cfg
+# ------------
+#
+# lacp system mac 00c1.4c00.bd15
+# lacp system priority 11
+# - name: Convert LACP config to argspec without connecting to the appliance
+#   cisco.iosxr.iosxr_lacp:
+#     running_config: "{{ lookup('file', './parsed.cfg') }}"
+#     state: parsed
+# Task Output (redacted)
+# -----------------------
+# "parsed": {
+#         "system": {
+#             "mac": {
+#                 "address": "00c1.4c00.bd15"
+#             },
+#             "priority": 11
+#         }
+#     }
+
+
+# Using rendered
+- name: Render platform specific commands from task input using rendered state
+  cisco.iosxr.iosxr_lacp:
+    config:
+          system:
+            priority: 11
+            mac:
+              address: 00c1.4c00.bd15
+    state: rendered
+# Task Output (redacted)
+# -----------------------
+# "rendered": [
+#         "lacp system priority 11",
+#         "lacp system mac 00c1.4c00.bd15"
+#     ]
+
+
+# Using gathered
+# Before state:
+# ------------
+#
+# RP/0/0/CPU0:an-iosxr-02#show running-config lacp
+# lacp system mac 00c1.4c00.bd15
+# lacp system priority 11
+- name: Gather IOSXR LACP configuration
+  cisco.iosxr.iosxr_lacp:
+    config:
+    state: gathered
+# Task Output (redacted)
+# -----------------------
+#
+# "gathered": {
+#         "system": {
+#             "mac": {
+#                 "address": "00c1.4c00.bd15"
+#             },
+#             "priority": 11
+#         }
+#     }
+# After state:
+# ------------
+#
+# RP/0/0/CPU0:an-iosxr-02#show running-config lacp
+# lacp system mac 00c1.4c00.bd15
+# lacp system priority 
 
 
 """
@@ -293,11 +373,16 @@ def main():
     required_if = [
         ("state", "merged", ("config",)),
         ("state", "replaced", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
     ]
+
+    mutually_exclusive = [("config", "running_config")]
     module = AnsibleModule(
         argument_spec=LacpArgs.argument_spec,
         required_if=required_if,
         supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = Lacp(module).execute_module()
