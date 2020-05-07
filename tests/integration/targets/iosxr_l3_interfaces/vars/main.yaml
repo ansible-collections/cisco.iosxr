@@ -96,7 +96,7 @@ rendered:
 parsed:
   after:
     - ipv6:
-      - address: 2001:db8:0:3::/64
+        - address: 2001:db8:0:3::/64
       ipv4:
         - address: 192.0.2.1 255.255.255.0
         - address: 192.0.2.2 255.255.255.0

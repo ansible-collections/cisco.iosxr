@@ -5,8 +5,6 @@
 
 - include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_config.yaml
-
 - block:
 
     - name: Gather the provided configuration with the existing running configuration
