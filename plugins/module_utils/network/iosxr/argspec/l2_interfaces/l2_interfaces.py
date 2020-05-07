@@ -38,16 +38,9 @@ class L2_InterfacesArgs(object):
         "config": {
             "elements": "dict",
             "options": {
-                "name": {
-                    "type": "str",
-                    "required": True
-                },
-                "native_vlan": {
-                    "type": "int"
-                },
-                "l2transport": {
-                    "type": "bool"
-                },
+                "name": {"type": "str", "required": True},
+                "native_vlan": {"type": "int"},
+                "l2transport": {"type": "bool"},
                 "l2protocol": {
                     "element": "dict",
                     "type": "list",
@@ -70,26 +63,23 @@ class L2_InterfacesArgs(object):
                         },
                     },
                 },
-                "q_vlan": {
-                    "type": "list"
-                },
-                "propagate": {
-                    "type": "bool"
-                },
+                "q_vlan": {"type": "list"},
+                "propagate": {"type": "bool"},
             },
             "type": "list",
         },
-        "running_config": {
-            "type": "str"
-        },
+        "running_config": {"type": "str"},
         "state": {
             "choices": [
-                "merged", "replaced", "overridden", "deleted", "gathered",
-                "parsed", "rendered"
+                "merged",
+                "replaced",
+                "overridden",
+                "deleted",
+                "gathered",
+                "parsed",
+                "rendered",
             ],
-            "default":
-            "merged",
-            "type":
-            "str",
+            "default": "merged",
+            "type": "str",
         },
     }

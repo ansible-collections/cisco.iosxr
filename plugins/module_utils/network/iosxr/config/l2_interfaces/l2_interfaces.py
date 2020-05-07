@@ -135,7 +135,10 @@ class L2_Interfaces(ConfigBase):
         """
         commands = []
 
-        if self.state in ("overridden", "merged", "replaced", "rendered") and not want:
+        if (
+            self.state in ("overridden", "merged", "replaced", "rendered")
+            and not want
+        ):
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
                     self.state
@@ -214,19 +217,6 @@ class L2_Interfaces(ConfigBase):
         commands = remove_duplicate_interface(commands)
 
         return commands
-    '''
-    def _state_rendered(self, want):
-        """ The command generator when state is rendered
-        :rtype: A list
-        :returns: the commands generated for provided configuration
-        """
-        commands = []
-
-        for interface in want:
-            commands.extend(self._set_config(interface, interface["name"]))
-
-        return commands
-    '''
 
     def _state_merged(self, want, have, module):
         """ The command generator when state is merged
