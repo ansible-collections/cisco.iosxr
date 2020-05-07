@@ -25,7 +25,6 @@
 The arg spec for the ios_l3_interfaces module
 """
 
-
 from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
@@ -56,8 +55,17 @@ class L3_InterfacesArgs(object):
             },
             "type": "list",
         },
+        "running_config": {"type": "str"},
         "state": {
-            "choices": ["merged", "replaced", "overridden", "deleted"],
+            "choices": [
+                "merged",
+                "replaced",
+                "overridden",
+                "deleted",
+                "gathered",
+                "parsed",
+                "rendered",
+            ],
             "default": "merged",
             "type": "str",
         },
