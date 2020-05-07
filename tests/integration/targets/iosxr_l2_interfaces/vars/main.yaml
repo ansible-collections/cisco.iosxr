@@ -99,6 +99,23 @@ overridden:
       l2transport: true
       name: GigabitEthernet0/0/0/4
       native_vlan: 40
+parsed:
+  after:
+    - name: GigabitEthernet0/0/0/0
+    - l2protocol:
+        - cdp: forward
+        - pvst: tunnel
+      l2transport: true
+      name: GigabitEthernet0/0/0/1
+      native_vlan: 10
+      propagate: true
+    - name: GigabitEthernet0/0/0/3
+    - name: GigabitEthernet0/0/0/3.900
+      q_vlan:
+        - 20
+        - 40
+    - name: GigabitEthernet0/0/0/4
+      native_vlan: 40
 deleted:
   before:
     - l2protocol:

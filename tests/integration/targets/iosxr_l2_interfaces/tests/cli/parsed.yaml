@@ -1,0 +1,16 @@
+---
+- debug:
+    msg: START iosxr_l2_interfaces parsed integration tests on connection={{ ansible_connection
+      }}
+
+- name: Parse externally provided L2 interfaces config to agnostic model
+  register: result
+  cisco.iosxr.iosxr_l2_interfaces:
+    running_config: "{{ lookup('file', './fixtures/parsed.cfg') }}"
+    state: parsed
+
+- name: Assert that config was correctly parsed
+  assert:
+    that:
+      - "{{ parsed['after'] | symmetric_difference(result['parsed']) |length ==\
+        \ 0 }}"
