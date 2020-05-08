@@ -50,14 +50,14 @@ class Lacp(ConfigBase):
     def __init__(self, module):
         super(Lacp, self).__init__(module)
 
-    def get_lacp_facts(self):
+    def get_lacp_facts(self, data=None):
         """ Get the 'facts' (the current configuration)
 
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources
+            self.gather_subset, self.gather_network_resources, data=data
         )
         lacp_facts = facts["ansible_network_resources"].get("lacp")
         if not lacp_facts:
@@ -71,22 +71,46 @@ class Lacp(ConfigBase):
         :returns: The result from module execution
         """
         result = {"changed": False}
-        commands = list()
         warnings = list()
+        commands = list()
 
-        existing_lacp_facts = self.get_lacp_facts()
-        commands.extend(self.set_config(existing_lacp_facts))
-        if commands:
+        if self.state in self.ACTION_STATES:
+            existing_lacp_facts = self.get_lacp_facts()
+        else:
+            existing_lacp_facts = {}
+
+        if self.state in self.ACTION_STATES or self.state == "rendered":
+            commands.extend(self.set_config(existing_lacp_facts))
+
+        if commands and self.state in self.ACTION_STATES:
             if not self._module.check_mode:
                 self._connection.edit_config(commands)
             result["changed"] = True
-        result["commands"] = commands
 
-        changed_lacp_facts = self.get_lacp_facts()
+        if self.state in self.ACTION_STATES:
+            result["commands"] = commands
 
-        result["before"] = existing_lacp_facts
-        if result["changed"]:
-            result["after"] = changed_lacp_facts
+        if self.state in self.ACTION_STATES or self.state == "gathered":
+            changed_lacp_facts = self.get_lacp_facts()
+
+        elif self.state == "rendered":
+            result["rendered"] = commands
+
+        elif self.state == "parsed":
+            running_config = self._module.params["running_config"]
+            if not running_config:
+                self._module.fail_json(
+                    msg="value of running_config parameter must not be empty for state parsed"
+                )
+            result["parsed"] = self.get_lacp_facts(data=running_config)
+
+        if self.state in self.ACTION_STATES:
+            result["before"] = existing_lacp_facts
+            if result["changed"]:
+                result["after"] = changed_lacp_facts
+
+        elif self.state == "gathered":
+            result["gathered"] = changed_lacp_facts
 
         result["warnings"] = warnings
         return result
@@ -115,25 +139,23 @@ class Lacp(ConfigBase):
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
         """
-        state = self._module.params["state"]
-        if state in ("merged", "replaced") and not want:
+        if self.state in ("merged", "replaced", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    state
+                    self.state
                 )
             )
 
-        if state == "deleted":
+        if self.state == "deleted":
             commands = self._state_deleted(want, have)
-        elif state == "merged":
+        elif self.state in ("merged", "rendered"):
             commands = self._state_merged(want, have)
-        elif state == "replaced":
+        elif self.state == "replaced":
             commands = self._state_replaced(want, have)
 
         return commands
 
-    @staticmethod
-    def _state_replaced(want, have):
+    def _state_replaced(self, want, have):
         """ The command generator when state is replaced
 
         :rtype: A list
@@ -142,14 +164,13 @@ class Lacp(ConfigBase):
         """
         commands = []
 
-        commands.extend(Lacp._state_deleted(want, have))
+        commands.extend(self._state_deleted(want, have))
 
-        commands.extend(Lacp._state_merged(want, have))
+        commands.extend(self._state_merged(want, have))
 
         return commands
 
-    @staticmethod
-    def _state_merged(want, have):
+    def _state_merged(self, want, have):
         """ The command generator when state is merged
 
         :rtype: A list
@@ -159,6 +180,8 @@ class Lacp(ConfigBase):
         commands = []
 
         updates = dict_diff(have, want)
+        if self.state == "rendered":
+            updates = want
         if updates:
             for key, value in iteritems(
                 flatten_dict(remove_empties(updates["system"]))
@@ -171,8 +194,7 @@ class Lacp(ConfigBase):
 
         return commands
 
-    @staticmethod
-    def _state_deleted(want, have):
+    def _state_deleted(self, want, have):
         """ The command generator when state is deleted
 
         :rtype: A list
