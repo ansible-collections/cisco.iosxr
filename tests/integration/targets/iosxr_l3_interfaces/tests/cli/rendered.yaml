@@ -1,0 +1,32 @@
+---
+- debug:
+    msg: START iosxr_l3_interfaces rendered integration tests on connection={{
+      ansible_connection }}
+
+- name: Render platform specific commands from task input using rendered state
+  register: result
+  cisco.iosxr.iosxr_l3_interfaces:
+    config:
+
+      - name: GigabitEthernet0/0/0/0
+        ipv4:
+
+          - address: 198.51.100.1/24
+
+      - name: GigabitEthernet0/0/0/1
+        ipv6:
+
+          - address: 2001:db8:0:3::/64
+        ipv4:
+
+          - address: 192.0.2.1/24
+
+          - address: 192.0.2.2/24
+            secondary: true
+    state: rendered
+
+- name: Assert that correct set of commands were rendered
+  assert:
+    that:
+      - "{{ rendered['commands'] | symmetric_difference(result['rendered']) |length\
+        \ == 0 }}"
