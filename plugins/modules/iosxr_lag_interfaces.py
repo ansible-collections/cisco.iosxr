@@ -37,9 +37,10 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: iosxr_lag_interfaces
-short_description: Manages attributes of LAG/Ether-Bundle interfaces on IOS-XR devices.
+short_description: Lag Interfaces resiurce module.
 description:
 - This module manages the attributes of LAG/Ether-Bundle interfaces on IOS-XR devices.
+version_added: 1.0.0
 notes:
 - Tested against IOS-XR 6.1.3.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
@@ -115,6 +116,15 @@ options:
         choices:
         - dst-ip
         - src-ip
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the IOS-XR device by executing
+        the command B(show running-config int).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
   state:
     description:
     - The state of the configuration after module completion.
@@ -124,6 +134,9 @@ options:
     - replaced
     - overridden
     - deleted
+    - parsed
+    - rendered
+    - gathered
     default: merged
 """
 EXAMPLES = """
@@ -158,7 +171,7 @@ EXAMPLES = """
 #
 #
 - name: Merge provided configuration with device configuration
-  iosxr_lag_interfaces:
+  cisco.iosxr.iosxr_lag_interfaces:
     config:
       - name: Bundle-Ether10
         members:
@@ -268,7 +281,7 @@ EXAMPLES = """
 #
 #
 - name: Replace device configuration of listed Bundles with provided configurations
-  iosxr_lag_interfaces:
+  cisco.iosxr.iosxr_lag_interfaces:
     config:
       - name: Bundle-Ether12
         members:
@@ -377,7 +390,7 @@ EXAMPLES = """
 #
 
 - name: Overrides all device configuration with provided configuration
-  iosxr_lag_interfaces:
+  cisco.iosxr.iosxr_lag_interfaces:
     config:
       - name: Bundle-Ether10
         members:
@@ -478,7 +491,7 @@ EXAMPLES = """
 #
 
 - name: Delete attributes of given bundles and removes member interfaces from them (Note - This won't delete the bundles themselves)
-  iosxr_lag_interfaces:
+  cisco.iosxr.iosxr_lag_interfaces:
     config:
       - name: Bundle-Ether10
       - name: Bundle-Ether11
@@ -564,7 +577,7 @@ EXAMPLES = """
 #
 
 - name: Delete attributes of all bundles and removes member interfaces from them (Note - This won't delete the bundles themselves)
-  iosxr_lag_interfaces:
+  cisco.iosxr.iosxr_lag_interfaces:
     state: deleted
 
 #
@@ -598,6 +611,197 @@ EXAMPLES = """
 # interface GigabitEthernet0/0/0/4
 #  shutdown
 # !
+
+# Using parsed:
+
+# parsed.cfg
+
+# interface Bundle-Ether10
+#  lacp mode active
+#  bundle load-balancing hash src-ip
+#  bundle maximum-active links 5
+#  bundle minimum-active links 2
+# !
+# interface Bundle-Ether12
+#  bundle load-balancing hash dst-ip
+# !
+# interface Loopback888
+#  description test for ansible
+#  shutdown
+# !
+# interface MgmtEth0/0/CPU0/0
+#  ipv4 address 192.0.2.11 255.255.255.0
+# !
+# interface GigabitEthernet0/0/0/1
+#  description 'GigabitEthernet - 1"
+#  bundle id 10 mode inherit
+# !
+# interface GigabitEthernet0/0/0/2
+#  description "GigabitEthernet - 2"
+#   bundle id 12 mode passive
+# !
+# interface GigabitEthernet0/0/0/3
+#  description "GigabitEthernet - 3"
+#  bundle id 10 mode inherit
+# !
+# interface GigabitEthernet0/0/0/4
+#  description "GigabitEthernet - 4"
+#  bundle id 12 mode passive
+# !
+#
+- name: Convert lag interfaces config to argspec without connecting to the appliance
+    cisco.iosxr.iosxr_lag_interfaces:
+      running_config: "{{ lookup('file', './parsed.cfg') }}"
+
+# --------------
+# Output
+# --------------
+#   parsed:
+#     - name: Bundle-Ether10
+#       members:
+#         - member: GigabitEthernet0/0/0/1
+#           mode: inherit
+#         - member: GigabitEthernet0/0/0/3
+#           mode: inherit
+#       mode: active
+#       links:
+#         max_active: 5
+#         min_active: 2
+#       load_balancing_hash: src-ip
+
+#     - name: Bundle-Ether12
+#       members:
+#         - member: GigabitEthernet0/0/0/2
+#           mode: passive
+#         - member: GigabitEthernet0/0/0/4
+#           mode: passive
+#       load_balancing_hash: dst-ip
+
+# using gathered
+
+# Device Config:
+# -------------
+
+# interface Bundle-Ether10
+#  lacp mode active
+#  bundle load-balancing hash src-ip
+#  bundle maximum-active links 5
+#  bundle minimum-active links 2
+# !
+# interface Bundle-Ether12
+#  bundle load-balancing hash dst-ip
+# !
+# interface Loopback888
+#  description test for ansible
+#  shutdown
+# !
+# interface MgmtEth0/0/CPU0/0
+#  ipv4 address 192.0.2.11 255.255.255.0
+# !
+# interface GigabitEthernet0/0/0/1
+#  description 'GigabitEthernet - 1"
+#  bundle id 10 mode inherit
+# !
+# interface GigabitEthernet0/0/0/2
+#  description "GigabitEthernet - 2"
+#   bundle id 12 mode passive
+# !
+# interface GigabitEthernet0/0/0/3
+#  description "GigabitEthernet - 3"
+#  bundle id 10 mode inherit
+# !
+# interface GigabitEthernet0/0/0/4
+#  description "GigabitEthernet - 4"
+#  bundle id 12 mode passive
+# !
+#
+
+- name: Gather IOSXR lag interfaces configuration
+  cisco.iosxr.iosxr_lag_interfaces:
+    config:
+    state: gathered
+
+# --------------
+# Output
+# --------------
+#   gathered:
+#     - name: Bundle-Ether10
+#       members:
+#         - member: GigabitEthernet0/0/0/1
+#           mode: inherit
+#         - member: GigabitEthernet0/0/0/3
+#           mode: inherit
+#       mode: active
+#       links:
+#         max_active: 5
+#         min_active: 2
+#       load_balancing_hash: src-ip
+
+#     - name: Bundle-Ether12
+#       members:
+#         - member: GigabitEthernet0/0/0/2
+#           mode: passive
+#         - member: GigabitEthernet0/0/0/4
+#           mode: passive
+#       load_balancing_hash: dst-ip
+
+# Using rendered:
+- name: Render platform specific commands from task input using rendered state
+  cisco.iosxr.iosxr_lag_interfaces:
+    config:
+        - name: Bundle-Ether10
+          members:
+          - member: GigabitEthernet0/0/0/1
+            mode: inherit
+          - member: GigabitEthernet0/0/0/3
+            mode: inherit
+        mode: active
+        links:
+          max_active: 5
+          min_active: 2
+        load_balancing_hash: src-ip
+
+      - name: Bundle-Ether12
+        members:
+          - member: GigabitEthernet0/0/0/2
+            mode: passive
+          - member: GigabitEthernet0/0/0/4
+            mode: passive
+        load_balancing_hash: dst-ip
+    state: rendered
+
+# Output:
+
+# rendered:
+#    [
+#         - "interface Bundle-Ether10"
+#         - " lacp mode active"
+#         - " bundle load-balancing hash src-ip"
+#         - " bundle maximum-active links 5"
+#         - " bundle minimum-active links 2"
+#         - "interface Bundle-Ether12"
+#         - " bundle load-balancing hash dst-ip"
+#         - "interface Loopback888"
+#         - " description test for ansible"
+#         - " shutdown"
+#         - "interface MgmtEth0/0/CPU0/0"
+#         - " ipv4 address 192.0.2.11 255.255.255.0"
+#         - "interface GigabitEthernet0/0/0/1"
+#         - " description 'GigabitEthernet - 1""
+#         - " bundle id 10 mode inherit"
+#         - "interface GigabitEthernet0/0/0/2"
+#         - " description "GigabitEthernet - 2""
+#         - "  bundle id 12 mode passive"
+#         - "interface GigabitEthernet0/0/0/3"
+#         - " description "GigabitEthernet - 3""
+#         - " bundle id 10 mode inherit"
+#         - "interface GigabitEthernet0/0/0/4"
+#         - " description "GigabitEthernet - 4""
+#         - " bundle id 12 mode passive"
+#    ]
+#
+#
+
 
 """
 RETURN = """
@@ -642,11 +846,16 @@ def main():
         ("state", "merged", ("config",)),
         ("state", "replaced", ("config",)),
         ("state", "overridden", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
     ]
+
+    mutually_exclusive = [("config", "running_config")]
     module = AnsibleModule(
         argument_spec=Lag_interfacesArgs.argument_spec,
         required_if=required_if,
         supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = Lag_interfaces(module).execute_module()
