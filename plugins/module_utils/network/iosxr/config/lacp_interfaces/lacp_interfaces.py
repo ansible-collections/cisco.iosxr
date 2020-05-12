@@ -79,12 +79,12 @@ class Lacp_interfaces(ConfigBase):
         warnings = list()
 
         if self.state in self.ACTION_STATES:
-            existing_lag_interfaces_facts = self.get_lag_interfaces_facts()
+            existing_lacp_interfaces_facts = self.get_lacp_interfaces_facts()
         else:
-            existing_lag_interfaces_facts = {}
+            existing_lacp_interfaces_facts = {}
 
         if self.state in self.ACTION_STATES or self.state == "rendered":
-            commands.extend(self.set_config(existing_lag_interfaces_facts))
+            commands.extend(self.set_config(existing_lacp_interfaces_facts))
 
         if commands and self.state in self.ACTION_STATES:
             if not self._module.check_mode:
@@ -95,7 +95,7 @@ class Lacp_interfaces(ConfigBase):
             result["commands"] = commands
 
         if self.state in self.ACTION_STATES or self.state == "gathered":
-            changed_lag_interfaces_facts = self.get_lag_interfaces_facts()
+            changed_lacp_interfaces_facts = self.get_lacp_interfaces_facts()
 
         elif self.state == "rendered":
             result["rendered"] = commands
@@ -106,14 +106,14 @@ class Lacp_interfaces(ConfigBase):
                 self._module.fail_json(
                     msg="value of running_config parameter must not be empty for state parsed"
                 )
-            result["parsed"] = self.get_lag_interfaces_facts(data=running_config)
+            result["parsed"] = self.get_lacp_interfaces_facts(data=running_config)
 
         if self.state in self.ACTION_STATES:
-            result["before"] = existing_lag_interfaces_facts
+            result["before"] = existing_lacp_interfaces_facts
             if result["changed"]:
-                result["after"] = changed_lag_interfaces_facts
+                result["after"] = changed_lacp_interfaces_facts
         elif self.state == "gathered":
-            result["gathered"] = changed_lag_interfaces_facts
+            result["gathered"] = changed_lacp_interfaces_facts
 
         result["warnings"] = warnings
         return result

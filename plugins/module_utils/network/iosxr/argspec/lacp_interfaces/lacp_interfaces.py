@@ -66,6 +66,7 @@ class Lacp_interfacesArgs(object):  # pylint: disable=R0903
                 "merged",
                 "replaced",
                 "deleted",
+                "overridden",
                 "parsed",
                 "rendered",
                 "gathered",

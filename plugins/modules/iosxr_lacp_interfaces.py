@@ -488,7 +488,7 @@ EXAMPLES = """
 # !
 #
 
-- name: Convert lag interfaces config to argspec without connecting to the appliance
+- name: Convert lacp interfaces config to argspec without connecting to the appliance
     cisco.iosxr.iosxr_lacp_interfaces:
       running_config: "{{ lookup('file', './parsed.cfg') }}"
 
