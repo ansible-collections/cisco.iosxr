@@ -23,7 +23,7 @@
 #############################################
 
 """
-The module file for iosxr_lacp_interfaces
+The module file for cisco.iosxr.iosxr_lacp_interfaces
 """
 
 from __future__ import absolute_import, division, print_function
@@ -36,12 +36,12 @@ ANSIBLE_METADATA = {
     "supported_by": "network",
 }
 
-DOCUMENTATION = """module: iosxr_lacp_interfaces
-short_description: Manage Link Aggregation Control Protocol (LACP) attributes of interfaces
-  on IOS-XR devices.
+DOCUMENTATION = """module: cisco.iosxr.iosxr_lacp_interfaces
+short_description: LACP interfaces resource module.
 description:
 - This module manages Link Aggregation Control Protocol (LACP) attributes of interfaces
   on IOS-XR devices.
+version_added: 1.0.0
 notes:
 - Tested against IOS-XR 6.1.3.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
@@ -101,6 +101,15 @@ options:
             - Specifies the system ID to use in LACP negotiations for the bundle,
               encoded as a MAC address.
             type: str
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the IOS-XR device by executing
+        the command B(show running-config int).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
   state:
     description:
     - The state of the configuration after module completion.
@@ -153,7 +162,7 @@ EXAMPLES = """
 #
 
  - name: Merge provided configuration with device configuration
-   iosxr_lacp_interfaces:
+   cisco.iosxr.iosxr_lacp_interfaces:
     config:
       - name: Bundle-Ether10
         churn_logging: actor
@@ -253,7 +262,7 @@ EXAMPLES = """
 #
 
  - name: Replace LACP configuration of listed interfaces with provided configuration
-   iosxr_lacp_interfaces:
+   cisco.iosxr.iosxr_lacp_interfaces:
     config:
       - name: Bundle-Ether10
         churn_logging: partner
@@ -349,7 +358,7 @@ EXAMPLES = """
 #
 
  - name: Override all interface LACP configuration with provided configuration
-   iosxr_lacp_interfaces:
+   cisco.iosxr.iosxr_lacp_interfaces:
     config:
       - name: Bundle-Ether12
         churn_logging: both
@@ -445,7 +454,7 @@ EXAMPLES = """
 #
 
  - name: Deleted LACP configurations of provided interfaces (Note - This won't delete the interface itself)
-   iosxr_lacp_interfaces:
+   cisco.iosxr.iosxr_lacp_interfaces:
     config:
       - name: Bundle-Ether10
       - name: Bundle-Ether11
@@ -460,33 +469,120 @@ EXAMPLES = """
 # -----------
 #
 #
-# RP/0/0/CPU0:an-iosxr#sh run int
-# Sun Jul 21 19:51:03.499 UTC
+# Using parsed:
+
+# parsed.cfg
 # interface Bundle-Ether10
+#  lacp churn logging actor
+#  lacp switchover suppress-flaps 500
+#  lacp collector-max-delay 100
 # !
 # interface Bundle-Ether11
-# !
-# interface Bundle-Ether12
-# !
-# interface Loopback888
-#  description test for ansible
-#  shutdown
+#  lacp system mac 00c2.4c00.bd15
 # !
 # interface MgmtEth0/0/CPU0/0
 #  ipv4 address 192.0.2.11 255.255.255.0
 # !
 # interface GigabitEthernet0/0/0/1
-#  description 'GigabitEthernet - 1"
+#  lacp period 200
 # !
-# interface GigabitEthernet0/0/0/2
-#  description "GigabitEthernet - 2"
+#
+
+- name: Convert lag interfaces config to argspec without connecting to the appliance
+    cisco.iosxr.iosxr_lacp_interfaces:
+      running_config: "{{ lookup('file', './parsed.cfg') }}"
+
+# --------------
+# Output:
+# --------------
+
+#    parsed:
+#      - name: Bundle-Ether10
+#        churn_logging: actor
+#        collector_max_delay: 100
+#        switchover_suppress_flaps: 500
+#
+#      - name: Bundle-Ether11
+#        system:
+#          mac: 00c2.4c00.bd15
+#
+#      - name: GigabitEthernet0/0/0/1
+#        period: 200
+#
+#
+
+# Using gathered:
+
+# Native config:
+# interface Bundle-Ether10
+#  lacp churn logging actor
+#  lacp switchover suppress-flaps 500
+#  lacp collector-max-delay 100
 # !
-# interface GigabitEthernet0/0/0/3
-#  description "GigabitEthernet - 3"
+# interface Bundle-Ether11
+#  lacp system mac 00c2.4c00.bd15
 # !
-# interface GigabitEthernet0/0/0/4
-#  description "GigabitEthernet - 4"
+# interface MgmtEth0/0/CPU0/0
+#  ipv4 address 192.0.2.11 255.255.255.0
 # !
+# interface GigabitEthernet0/0/0/1
+#  lacp period 200
+# !
+#
+
+- name: Gather IOSXR lacp interfaces configuration
+  cisco.iosxr.iosxr_lacp_interfaces:
+    config:
+    state: gathered
+
+# ----------
+# Output
+# ---------
+#    gathered:
+#      - name: Bundle-Ether10
+#        churn_logging: actor
+#        collector_max_delay: 100
+#        switchover_suppress_flaps: 500
+#
+#      - name: Bundle-Ether11
+#        system:
+#          mac: 00c2.4c00.bd15
+#
+#      - name: GigabitEthernet0/0/0/1
+#        period: 200
+
+# Using rendered:
+
+ - name: Render platform specific commands from task input using rendered state
+   cisco.iosxr.iosxr_lacp_interfaces:
+    config:
+      - name: Bundle-Ether10
+        churn_logging: actor
+        collector_max_delay: 100
+        switchover_suppress_flaps: 500
+
+      - name: Bundle-Ether11
+        system:
+          mac: 00c2.4c00.bd15
+
+      - name: GigabitEthernet0/0/0/1
+        period: 200
+    state: rendered
+
+# -------------
+# Output
+# -------------
+# rendered: [
+#     - "interface Bundle-Ether10"
+#     - " lacp churn logging actor"
+#     - " lacp switchover suppress-flaps 500"
+#     - " lacp collector-max-delay 100"
+#     - "interface Bundle-Ether11"
+#     - " lacp system mac 00c2.4c00.bd15"
+#     - "interface MgmtEth0/0/CPU0/0"
+#     - " ipv4 address 192.0.2.11 255.255.255.0"
+#     - "interface GigabitEthernet0/0/0/1"
+#     - " lacp period 200"
 #
 
 
@@ -533,11 +629,16 @@ def main():
         ("state", "merged", ("config",)),
         ("state", "replaced", ("config",)),
         ("state", "overridden", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
     ]
+
+    mutually_exclusive = [("config", "running_config")]
     module = AnsibleModule(
         argument_spec=Lacp_interfacesArgs.argument_spec,
         required_if=required_if,
         supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = Lacp_interfaces(module).execute_module()
