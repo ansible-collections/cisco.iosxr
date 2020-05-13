@@ -51,3 +51,23 @@ round_trip:
       receive: false
     - name: GigabitEthernet0/0/0/1
       transmit: false
+parsed:
+  config:
+    - name: TenGigE0/0/0/0
+    - name: GigabitEthernet0/0/0/2
+      destination:
+        mac_address: ieee-nearest-non-tmpr-bridge
+      transmit: False
+
+    - name: GigabitEthernet0/0/0/1
+      destination:
+        mac_address: ieee-nearest-bridge
+      receive: False
+rendered:
+  commands:
+   - "interface GigabitEthernet0/0/0/2"
+   - "lldp destination mac-address ieee-nearest-non-tmpr-bridge"
+   - "lldp transmit disable"
+   - "interface GigabitEthernet0/0/0/1"
+   - "lldp receive disable"
+   - "lldp destination mac-address ieee-nearest-bridge"

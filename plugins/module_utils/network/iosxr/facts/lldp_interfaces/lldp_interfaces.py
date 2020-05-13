@@ -55,7 +55,7 @@ class Lldp_interfacesFacts(object):
 
         if not data:
             data = connection.get_config(flags="interface")
-            interfaces = data.split("interface ")
+        interfaces = data.split("interface ")
 
         objs = []
         for interface in interfaces:

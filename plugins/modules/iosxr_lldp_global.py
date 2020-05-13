@@ -37,11 +37,11 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: iosxr_lldp_global
-short_description: Manage Global Link Layer Discovery Protocol (LLDP) settings on
-  IOS-XR devices.
+short_description: LACP global resource module.
 description:
 - This module manages Global Link Layer Discovery Protocol (LLDP) settings on IOS-XR
   devices.
+version_added: 1.0.0
 notes:
 - Tested against IOS-XR 6.1.3.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
@@ -92,6 +92,15 @@ options:
             description:
             - Enable or disable system name TLV.
             type: bool
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the IOS-XR device by executing
+        the command B(show running-config lldp).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
   state:
     description:
     - The state of the configuration after module completion.
@@ -100,6 +109,9 @@ options:
     - merged
     - replaced
     - deleted
+    - parsed
+    - gathered
+    - rendered
     default: merged
 """
 EXAMPLES = """
@@ -118,7 +130,7 @@ EXAMPLES = """
 #
 
 - name: Merge provided LLDP configuration with the existing configuration
-  iosxr_lldp_global:
+  cisco.iosxr.iosxr_lldp_global:
     config:
       holdtime: 100
       reinit: 2
@@ -202,7 +214,7 @@ EXAMPLES = """
 #
 
 - name: Replace existing LLDP device configuration with provided configuration
-  iosxr_lldp_global:
+  cisco.iosxr.iosxr_lldp_global:
     config:
       holdtime: 100
       tlv_select:
@@ -284,7 +296,7 @@ EXAMPLES = """
 #
 
 - name: Deleted existing LLDP configurations from the device
-  iosxr_lldp_global:
+  cisco.iosxr.iosxr_lldp_global:
     state: deleted
 
 #
@@ -325,7 +337,97 @@ EXAMPLES = """
 # lldp
 # !
 #
+# Using parsed:
+
+# parsed.cfg
+# lldp
+#  timer 3000
+#  reinit 2
+#  subinterfaces enable
+#  holdtime 100
+#  tlv-select
+#   management-address disable
+#   system-description disable
+#  !
+# !
+
+- name: Convert lldp global config to argspec without connecting to the appliance
+    cisco.iosxr.iosxr_lldp_global:
+      running_config: "{{ lookup('file', './parsed.cfg') }}"
+
+# ------------------------
+# Module Execution Result
+# ------------------------
+# parsed:
+#     holdtime: 100
+#     reinit: 2
+#     timer: 3000
+#     subinterfaces: True
+#     tlv_select:
+#       management_address: False
+#       system_description: False
+
+# using gathered:
+
+# Device config:
+# lldp
+#  timer 3000
+#  reinit 2
+#  subinterfaces enable
+#  holdtime 100
+#  tlv-select
+#   management-address disable
+#   system-description disable
+#  !
+# !
+
+- name: Gather IOSXR lldp global configuration
+  cisco.iosxr.iosxr_lldp_global:
+    config:
+    state: gathered
+
+
+# ------------------------
+# Module Execution Result
+# ------------------------
+# gathered:
+#     holdtime: 100
+#     reinit: 2
+#     timer: 3000
+#     subinterfaces: True
+#     tlv_select:
+#       management_address: False
+#       system_description: False
+
+# using rendered:
+
+- name: Render platform specific commands from task input using rendered state
+  cisco.iosxr.iosxr_lldp_global:
+    config:
+      holdtime: 100
+      reinit: 2
+      timer: 3000
+      subinterfaces: True
+      tlv_select:
+        management_address: False
+        system_description: False
+    state: rendered
+
 #
+#
+# ------------------------
+# Module Execution Result
+# ------------------------
+#
+#  "rendered": [
+#        "lldp subinterfaces enable",
+#        "lldp holdtime 100",
+#        "lldp reinit 2",
+#        "lldp tlv-select system-description disable",
+#        "lldp tlv-select management-address disable",
+#        "lldp timer 3000"
+#  ]
+
 
 
 """
@@ -370,11 +472,15 @@ def main():
     required_if = [
         ("state", "merged", ("config",)),
         ("state", "replaced", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
     ]
+    mutually_exclusive = [("config", "running_config")]
     module = AnsibleModule(
         argument_spec=Lldp_globalArgs.argument_spec,
         required_if=required_if,
         supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = Lldp_global(module).execute_module()

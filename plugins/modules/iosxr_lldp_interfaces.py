@@ -23,7 +23,7 @@
 #############################################
 
 """
-The module file for iosxr_lldp_interfaces
+The module file for cisco.iosxr.iosxr_lldp_interfaces
 """
 
 from __future__ import absolute_import, division, print_function
@@ -36,12 +36,12 @@ ANSIBLE_METADATA = {
     "supported_by": "network",
 }
 
-DOCUMENTATION = """module: iosxr_lldp_interfaces
-short_description: Manage Link Layer Discovery Protocol (LLDP) attributes of interfaces
-  on IOS-XR devices.
+DOCUMENTATION = """module: cisco.iosxr.iosxr_lldp_interfaces
+short_description: Lldp interfaces resource module.
 description:
 - This module manages Link Layer Discovery Protocol (LLDP) attributes of interfaces
   on IOS-XR devices.
+version_added: 1.0.0
 notes:
 - Tested against IOS-XR 6.1.3.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
@@ -76,6 +76,15 @@ options:
         description:
         - Enable/disable LLDP TX on an interface.
         type: bool
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the IOS-XR device by executing
+        the command B(show running-config int).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
   state:
     description:
     - The state of the configuration after module completion.
@@ -85,6 +94,9 @@ options:
     - replaced
     - overridden
     - deleted
+    - parsed
+    - rendered
+    - gathered
     default: merged
 """
 EXAMPLES = """
@@ -109,7 +121,7 @@ EXAMPLES = """
 #
 
 - name: Merge provided configuration with running configuration
-  iosxr_lldp_interfaces:
+  cisco.iosxr.iosxr_lldp_interfaces:
     config:
       - name: GigabitEthernet0/0/0/1
         destination:
@@ -234,7 +246,7 @@ EXAMPLES = """
 #
 
 - name: Replace existing LLDP configurations of specified interfaces with provided configuration
-  iosxr_lldp_interfaces:
+  cisco.iosxr.iosxr_lldp_interfaces:
     config:
       - name: GigabitEthernet0/0/0/1
         destination:
@@ -357,7 +369,7 @@ EXAMPLES = """
 #
 
 - name: Override the LLDP configurations of all the interfaces with provided configurations
-  iosxr_lldp_interfaces:
+  cisco.iosxr.iosxr_lldp_interfaces:
     config:
       - name: GigabitEthernet0/0/0/1
         transmit: False
@@ -469,7 +481,7 @@ EXAMPLES = """
 #
 
 - name: Delete LLDP configurations of all interfaces (Note - This won't delete the interfaces themselves)
-  iosxr_lldp_interfaces:
+  cisco.iosxr.iosxr_lldp_interfaces:
     state: deleted
 
 #
@@ -540,6 +552,115 @@ EXAMPLES = """
 # !
 #
 #
+# Using parsed:
+# parsed.cfg
+
+# interface TenGigE0/0/0/0
+#  ipv4 address 192.0.2.11 255.255.255.192
+# !
+# interface preconfigure GigabitEthernet0/0/0/1
+#  lldp
+#   receive disable
+#   destination mac-address
+#    ieee-nearest-bridge
+#   !
+#  !
+# !
+# interface preconfigure GigabitEthernet0/0/0/2
+#  lldp
+#   transmit disable
+#   destination mac-address
+#    ieee-nearest-non-tmpr-bridge
+
+- name: Convert lacp interfaces config to argspec without connecting to the appliance
+    cisco.iosxr.iosxr_lldp_interfaces:
+      running_config: "{{ lookup('file', './parsed.cfg') }}"
+
+# ------------------------
+# Module Execution Result
+# ------------------------
+
+# parsed: [
+#   - name: GigabitEthernet0/0/0/1
+#       destination:
+#         mac_address: ieee-nearest-non-tmpr-bridge
+#       transmit: False
+
+#     - name: GigabitEthernet0/0/0/2
+#       destination:
+#         mac_address: ieee-nearest-bridge
+#       receive: False
+#   ]
+
+# Using gathered:
+# Device config:
+
+# RP/0/RP0/CPU0:ios#sh run int
+# Mon Aug 12 12:49:51.517 UTC
+# interface TenGigE0/0/0/0
+#  ipv4 address 192.0.2.11 255.255.255.192
+# !
+# interface preconfigure GigabitEthernet0/0/0/1
+#  lldp
+#   receive disable
+#   destination mac-address
+#    ieee-nearest-bridge
+#   !
+#  !
+# !
+# interface preconfigure GigabitEthernet0/0/0/2
+#  lldp
+#   transmit disable
+#   destination mac-address
+#    ieee-nearest-non-tmpr-bridge
+
+- name: Gather IOSXR lldp interfaces configuration
+  cisco.iosxr.iosxr_lldp_interfaces:
+    config:
+    state: gathered
+
+# ------------------------
+# Module Execution Result
+# ------------------------
+
+#   gathered:
+#     - name: GigabitEthernet0/0/0/1
+#       destination:
+#         mac_address: ieee-nearest-non-tmpr-bridge
+#       transmit: False
+
+#     - name: GigabitEthernet0/0/0/2
+#       destination:
+#         mac_address: ieee-nearest-bridge
+#       receive: False
+
+# Using rendred:
+- name: Render platform specific commands from task input using rendered state
+  cisco.iosxr.iosxr_lldp_interfaces:
+    config:
+      - name: GigabitEthernet0/0/0/1
+        destination:
+          mac_address: ieee-nearest-non-tmpr-bridge
+        transmit: False
+
+      - name: GigabitEthernet0/0/0/2
+        destination:
+          mac_address: ieee-nearest-bridge
+        receive: False
+    state: rendered
+
+# ------------------------
+# Module Execution Result
+# ------------------------
+
+# "rendered": [
+#        "interface GigabitEthernet0/0/0/2",
+#        "lldp destination mac-address ieee-nearest-non-tmpr-bridge",
+#        "lldp transmit disable",
+#        "interface GigabitEthernet0/0/0/1",
+#        "lldp receive disable",
+#        "lldp destination mac-address ieee-nearest-bridge"
+# ]
 
 """
 RETURN = """
@@ -584,11 +705,15 @@ def main():
         ("state", "merged", ("config",)),
         ("state", "replaced", ("config",)),
         ("state", "overridden", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
     ]
+    mutually_exclusive = [("config", "running_config")]
     module = AnsibleModule(
         argument_spec=Lldp_interfacesArgs.argument_spec,
         required_if=required_if,
         supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = Lldp_interfaces(module).execute_module()
