@@ -9,7 +9,7 @@
 
     - name: Merge the provided configuration with the exisiting running configuration
       register: result
-      cisco.iosxr.iosxr_lacp_interfaces: &id001
+      cisco.iosxr.iosxr_lacp_interfaces:
         config:
 
           - name: Bundle-Ether10
@@ -25,39 +25,15 @@
             period: 100
         state: merged
 
-    - name: Assert that before dicts were correctly generated
-      assert:
-        that: "{{ merged['before'] | symmetric_difference(result['before']) |length\
-          \ == 0 }}"
-
-    - name: Assert that correct set of commands were generated
-      assert:
-        that:
-          - "{{ merged['commands'] | symmetric_difference(result['commands']) |length\
-            \ == 0 }}"
-
-    - name: Assert that after dicts was correctly generated
-      assert:
-        that:
-          - "{{ merged['after'] | symmetric_difference(result['after']) |length\
-            \ == 0 }}"
-
-    - name: Merge the provided configuration with the existing running configuration
-        (IDEMPOTENT)
+    - name: Gather interfaces facts using gathered state
       register: result
-      cisco.iosxr.iosxr_lacp_interfaces: *id001
+      cisco.iosxr.iosxr_lacp_interfaces:
+        state: gathered
 
-    - name: Assert that the previous task was idempotent
+    - name: Assert that facts were correctly generated
       assert:
-        that:
-          - result['changed'] == false
-          - result.commands|length == 0
-
-    - name: Assert that before dicts were correctly generated
-      assert:
-        that:
-          - "{{ merged['after'] | symmetric_difference(result['before']) |length\
-            \ == 0 }}"
+        that: "{{ merged['after'] | symmetric_difference(result['gathered']) |length\
+          \ == 0 }}"
   always:
 
     - include_tasks: _remove_config.yaml
