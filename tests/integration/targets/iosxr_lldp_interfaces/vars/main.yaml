@@ -57,17 +57,17 @@ parsed:
     - name: GigabitEthernet0/0/0/2
       destination:
         mac_address: ieee-nearest-non-tmpr-bridge
-      transmit: False
+      transmit: false
 
     - name: GigabitEthernet0/0/0/1
       destination:
         mac_address: ieee-nearest-bridge
-      receive: False
+      receive: false
 rendered:
   commands:
-   - "interface GigabitEthernet0/0/0/2"
-   - "lldp destination mac-address ieee-nearest-non-tmpr-bridge"
-   - "lldp transmit disable"
-   - "interface GigabitEthernet0/0/0/1"
-   - "lldp receive disable"
-   - "lldp destination mac-address ieee-nearest-bridge"
+    - "interface GigabitEthernet0/0/0/2"
+    - "lldp destination mac-address ieee-nearest-non-tmpr-bridge"
+    - "lldp transmit disable"
+    - "interface GigabitEthernet0/0/0/1"
+    - "lldp receive disable"
+    - "lldp destination mac-address ieee-nearest-bridge"

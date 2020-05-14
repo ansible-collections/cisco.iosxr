@@ -14,4 +14,3 @@
     that:
       - "{{ parsed['config'] | symmetric_difference(result['parsed']) |length\
         \ == 0 }}"
-

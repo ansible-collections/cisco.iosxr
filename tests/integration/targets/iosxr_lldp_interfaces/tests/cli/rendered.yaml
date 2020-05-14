@@ -12,12 +12,12 @@
           - name: GigabitEthernet0/0/0/1
             destination:
               mac_address: ieee-nearest-non-tmpr-bridge
-            transmit: False
+            transmit: false
 
           - name: GigabitEthernet0/0/0/2
             destination:
               mac_address: ieee-nearest-bridge
-            receive: False
+            receive: false
         state: rendered
 
     - name: Assert that correct set of commands were rendered
