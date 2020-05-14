@@ -277,21 +277,6 @@ class TestIosxrAclsModule(TestIosxrModule):
         )
         self.execute_module(changed=False, commands=[])
 
-    def test_iosxr_acls_deletedaces(self):
-        set_module_args(
-            dict(
-                config=[
-                    dict(
-                        afi="ipv4",
-                        acls=[dict(name="acl_2", aces=[dict(sequence="20")])],
-                    )
-                ],
-                state="deleted",
-            )
-        )
-        commands = ["ipv4 access-list acl_2", "no 20"]
-        self.execute_module(changed=True, commands=commands)
-
     def test_iosxr_acls_deletedacls(self):
         set_module_args(
             dict(
@@ -307,7 +292,7 @@ class TestIosxrAclsModule(TestIosxrModule):
         commands = ["no ipv4 access-list acl_2"]
         self.execute_module(changed=True, commands=commands)
 
-    def test_eos_acls_rendered(self):
+    def test_iosxr_acls_rendered(self):
         set_module_args(
             dict(
                 config=[
