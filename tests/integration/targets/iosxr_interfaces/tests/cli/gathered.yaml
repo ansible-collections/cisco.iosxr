@@ -9,6 +9,26 @@
 
 - block:
 
+    - name: Merge provided configuration with device configuration
+      register: result
+      cisco.iosxr.iosxr_interfaces: &id001
+        config:
+
+          - name: GigabitEthernet0/0/0/0
+            description: Configured and Merged by Ansible-Network
+            mtu: 110
+            enabled: true
+            duplex: half
+
+          - name: GigabitEthernet0/0/0/1
+            description: Configured and Merged by Ansible-Network
+            mtu: 2800
+            enabled: false
+            speed: 100
+            duplex: full
+        state: merged
+
+
     - name: Gather interfaces facts using gathered state
       register: result
       cisco.iosxr.iosxr_interfaces:
