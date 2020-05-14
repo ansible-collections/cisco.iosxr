@@ -30,18 +30,14 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: iosxr_lldp_interfaces
-short_description: Manage Link Layer Discovery Protocol (LLDP) attributes of interfaces
-  on IOS-XR devices.
+DOCUMENTATION = """
+module: iosxr_lldp_interfaces
+short_description: LLDP interfaces resource module
 description:
 - This module manages Link Layer Discovery Protocol (LLDP) attributes of interfaces
   on IOS-XR devices.
+version_added: 1.0.0
 notes:
 - Tested against IOS-XR 6.1.3.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
@@ -86,6 +82,7 @@ options:
     - overridden
     - deleted
     default: merged
+
 """
 EXAMPLES = """
 # Using merged
@@ -109,17 +106,17 @@ EXAMPLES = """
 #
 
 - name: Merge provided configuration with running configuration
-  iosxr_lldp_interfaces:
+  cisco.iosxr.iosxr_lldp_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/1
-        destination:
-          mac_address: ieee-nearest-non-tmpr-bridge
-        transmit: False
+    - name: GigabitEthernet0/0/0/1
+      destination:
+        mac_address: ieee-nearest-non-tmpr-bridge
+      transmit: false
 
-      - name: GigabitEthernet0/0/0/2
-        destination:
-          mac_address: ieee-nearest-bridge
-        receive: False
+    - name: GigabitEthernet0/0/0/2
+      destination:
+        mac_address: ieee-nearest-bridge
+      receive: false
     state: merged
 
 #
@@ -233,12 +230,13 @@ EXAMPLES = """
 #
 #
 
-- name: Replace existing LLDP configurations of specified interfaces with provided configuration
-  iosxr_lldp_interfaces:
+- name: Replace existing LLDP configurations of specified interfaces with provided
+    configuration
+  cisco.iosxr.iosxr_lldp_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/1
-        destination:
-          mac_address: ieee-nearest-non-tmpr-bridge
+    - name: GigabitEthernet0/0/0/1
+      destination:
+        mac_address: ieee-nearest-non-tmpr-bridge
     state: replaced
 
 #
@@ -357,10 +355,10 @@ EXAMPLES = """
 #
 
 - name: Override the LLDP configurations of all the interfaces with provided configurations
-  iosxr_lldp_interfaces:
+  cisco.iosxr.iosxr_lldp_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/1
-        transmit: False
+    - name: GigabitEthernet0/0/0/1
+      transmit: false
     state: overridden
 
 #
@@ -468,8 +466,9 @@ EXAMPLES = """
 #
 #
 
-- name: Delete LLDP configurations of all interfaces (Note - This won't delete the interfaces themselves)
-  iosxr_lldp_interfaces:
+- name: Delete LLDP configurations of all interfaces (Note - This won't delete the
+    interfaces themselves)
+  cisco.iosxr.iosxr_lldp_interfaces:
     state: deleted
 
 #

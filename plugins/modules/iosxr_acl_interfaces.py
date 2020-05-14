@@ -30,18 +30,14 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: iosxr_acl_interfaces
-short_description: Manage Access Control Lists (ACLs) configuration for interfaces
-  in IOS-XR.
+DOCUMENTATION = """
+module: iosxr_acl_interfaces
+short_description: ACL interfaces resource module
 description:
 - This module manages adding and removing Access Control Lists (ACLs) from interfaces
   on devices running IOS-XR software.
+version_added: 1.0.0
 author: Nilashish Chakraborty (@NilashishC)
 options:
   config:
@@ -111,6 +107,7 @@ options:
     - parsed
     - rendered
     default: merged
+
 """
 EXAMPLES = """
 # Using merged
@@ -131,29 +128,29 @@ EXAMPLES = """
 # !
 
 - name: Merge the provided configuration with the existing running configuration
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/0
-        access_groups:
-          - afi: ipv4
-            acls:
-              - name: acl_1
-                direction: in
-              - name: acl_2
-                direction: out
-          - afi: ipv6
-            acls:
-              - name: acl6_1
-                direction: in
-              - name: acl6_2
-                direction: out
+    - name: GigabitEthernet0/0/0/0
+      access_groups:
+      - afi: ipv4
+        acls:
+        - name: acl_1
+          direction: in
+        - name: acl_2
+          direction: out
+      - afi: ipv6
+        acls:
+        - name: acl6_1
+          direction: in
+        - name: acl6_2
+          direction: out
 
-      - name: GigabitEthernet0/0/0/1
-        access_groups:
-          - afi: ipv4
-            acls:
-              - name: acl_1
-                direction: out
+    - name: GigabitEthernet0/0/0/1
+      access_groups:
+      - afi: ipv4
+        acls:
+        - name: acl_1
+          direction: out
     state: merged
 
 # After state:
@@ -200,16 +197,16 @@ EXAMPLES = """
 #
 
 - name: Update acl_interfaces configuration using merged
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/1
-        access_groups:
-          - afi: ipv4
-            acls:
-              - name: acl_2
-                direction: out
-              - name: acl_1
-                direction: in
+    - name: GigabitEthernet0/0/0/1
+      access_groups:
+      - afi: ipv4
+        acls:
+        - name: acl_2
+          direction: out
+        - name: acl_1
+          direction: in
     state: merged
 
 # After state:
@@ -257,14 +254,14 @@ EXAMPLES = """
 # !
 
 - name: Replace device configurations of listed interface with provided configurations
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/0
-        access_groups:
-          - afi: ipv6
-            acls:
-              - name: acl6_3
-                direction: in
+    - name: GigabitEthernet0/0/0/0
+      access_groups:
+      - afi: ipv6
+        acls:
+        - name: acl6_3
+          direction: in
     state: replaced
 
 # After state:
@@ -309,18 +306,18 @@ EXAMPLES = """
 #
 
 - name: Overridde all interface ACL configuration with provided configuration
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/1
-        access_groups:
-          - afi: ipv4
-            acls:
-              - name: acl_2
-                direction: in
-          - afi: ipv6
-            acls:
-              - name: acl6_3
-                direction: out
+    - name: GigabitEthernet0/0/0/1
+      access_groups:
+      - afi: ipv4
+        acls:
+        - name: acl_2
+          direction: in
+      - afi: ipv6
+        acls:
+        - name: acl6_3
+          direction: out
     state: overridden
 
 # After state:
@@ -365,9 +362,9 @@ EXAMPLES = """
 #
 
 - name: Delete all ACL attributes of GigabitEthernet0/0/0/1
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/1
+    - name: GigabitEthernet0/0/0/1
     state: deleted
 
 # After state:
@@ -414,14 +411,14 @@ EXAMPLES = """
 #
 
 - name: Delete a single ACL attached to GigabitEthernet0/0/0/0
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/0
-        access_groups:
-          - afi: ipv4
-            acls:
-              - name: acl_2
-                direction: out
+    - name: GigabitEthernet0/0/0/0
+      access_groups:
+      - afi: ipv4
+        acls:
+        - name: acl_2
+          direction: out
     state: deleted
 
 # After state:
@@ -467,11 +464,11 @@ EXAMPLES = """
 #
 
 - name: Delete all IPv6 ACLs attached to GigabitEthernet0/0/0/0
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/0
-        access_groups:
-          - afi: ipv6
+    - name: GigabitEthernet0/0/0/0
+      access_groups:
+      - afi: ipv6
     state: deleted
 
 # After state:
@@ -516,7 +513,7 @@ EXAMPLES = """
 #
 
 - name: Delete all ACL interfaces configuration from the device
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     state: deleted
 
 # After state:
@@ -556,7 +553,7 @@ EXAMPLES = """
 # !
 
 # - name: Convert ACL interfaces config to argspec without connecting to the appliance
-#   iosxr_acl_interfaces:
+#   cisco.iosxr.iosxr_acl_interfaces:
 #     running_config: "{{ lookup('file', './parsed.cfg') }}"
 #     state: parsed
 
@@ -620,7 +617,7 @@ EXAMPLES = """
 # Using gathered
 
 - name: Gather ACL interfaces facts using gathered state
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     state: gathered
 
 
@@ -667,16 +664,16 @@ EXAMPLES = """
 # Using rendered
 
 - name: Render platform specific commands from task input using rendered state
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/0
-        access_groups:
-          - afi: ipv4
-            acls:
-              - name: acl_1
-                direction: in
-              - name: acl_2
-                direction: out
+    - name: GigabitEthernet0/0/0/0
+      access_groups:
+      - afi: ipv4
+        acls:
+        - name: acl_1
+          direction: in
+        - name: acl_2
+          direction: out
     state: rendered
 
 # Task Output (redacted)

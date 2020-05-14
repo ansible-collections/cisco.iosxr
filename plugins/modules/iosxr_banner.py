@@ -9,13 +9,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: iosxr_banner
+DOCUMENTATION = """
+module: iosxr_banner
 author:
 - Trishna Guha (@trishnaguha)
 - Kedar Kekan (@kedarX)
@@ -23,6 +18,7 @@ short_description: Manage multiline banners on Cisco IOS XR devices
 description:
 - This module will configure both exec and motd banners on remote device running Cisco
   IOS XR. It allows playbooks to add or remove banner text from the running configuration.
+version_added: 1.0.0
 requirements:
 - ncclient >= 0.5.3 when using netconf
 - lxml >= 4.1.1 when using netconf
@@ -55,7 +51,7 @@ options:
 
 EXAMPLES = """
 - name: configure the login banner
-  iosxr_banner:
+  cisco.iosxr.iosxr_banner:
     banner: login
     text: |
       this is my login banner
@@ -63,12 +59,12 @@ EXAMPLES = """
       string
     state: present
 - name: remove the motd banner
-  iosxr_banner:
+  cisco.iosxr.iosxr_banner:
     banner: motd
     state: absent
 - name: Configure banner from file
-  iosxr_banner:
-    banner:  motd
+  cisco.iosxr.iosxr_banner:
+    banner: motd
     text: "{{ lookup('file', './config_partial/raw_banner.cfg') }}"
     state: present
 """
@@ -152,16 +148,12 @@ class CliConfiguration(ConfigBase):
             if self._have.get("state") != "absent" and (
                 "text" in self._have.keys() and self._have["text"]
             ):
-                commands.append(
-                    "no banner {0!s}".format(self._module.params["banner"])
-                )
+                commands.append("no banner {0!s}".format(self._module.params["banner"]))
         elif state == "present":
             if self._want["text"] and self._want["text"].encode().decode(
                 "unicode_escape"
             ).strip("'") != self._have.get("text"):
-                banner_cmd = "banner {0!s} ".format(
-                    self._module.params["banner"]
-                )
+                banner_cmd = "banner {0!s} ".format(self._module.params["banner"])
                 banner_cmd += self._want["text"].strip()
                 commands.append(banner_cmd)
         self._result["commands"] = commands
@@ -202,17 +194,10 @@ class NCConfiguration(ConfigBase):
             [
                 (
                     "banner",
-                    {
-                        "xpath": "banners/banner",
-                        "tag": True,
-                        "attrib": "operation",
-                    },
+                    {"xpath": "banners/banner", "tag": True, "attrib": "operation",},
                 ),
                 ("a:banner", {"xpath": "banner/banner-name"}),
-                (
-                    "a:text",
-                    {"xpath": "banner/banner-text", "operation": "edit"},
-                ),
+                ("a:text", {"xpath": "banner/banner-text", "operation": "edit"},),
             ]
         )
 
@@ -225,9 +210,7 @@ class NCConfiguration(ConfigBase):
             opcode="filter",
         )
 
-        running = get_config(
-            self._module, source="running", config_filter=_get_filter
-        )
+        running = get_config(self._module, source="running", config_filter=_get_filter)
 
         banner_name = None
         banner_text = None
@@ -292,9 +275,7 @@ def main():
     required_if = [("state", "present", ("text",))]
 
     module = AnsibleModule(
-        argument_spec=argument_spec,
-        required_if=required_if,
-        supports_check_mode=True,
+        argument_spec=argument_spec, required_if=required_if, supports_check_mode=True,
     )
 
     config_object = None

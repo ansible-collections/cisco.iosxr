@@ -30,16 +30,13 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: iosxr_acls
-short_description: Manage Access Control Lists (ACLs) on devices running IOS-XR.
+DOCUMENTATION = """
+module: iosxr_acls
+short_description: ACLs resource module
 description:
 - This module manages Access Control Lists (ACLs) on devices running IOS-XR.
+version_added: 1.0.0
 author: Nilashish Chakraborty (@NilashishC)
 options:
   config:
@@ -679,6 +676,7 @@ options:
     - rendered
     - parsed
     default: merged
+
 """
 EXAMPLES = """
 # Using merged to add new ACLs
@@ -691,87 +689,87 @@ EXAMPLES = """
 # RP/0/RP0/CPU0:ios#
 
 - name: Merge the provided configuration with the exisiting running configuration
-  iosxr_acls:
+  cisco.iosxr.iosxr_acls:
     config:
-      - afi: ipv6
-        acls:
-          - name: acl6_1
-            aces:
-              - sequence: 10
-                grant: deny
-                protocol: tcp
-                source:
-                  prefix: 2001:db8:1234::/48
-                  port_protocol:
-                    range:
-                      start: ftp
-                      end: telnet
-                destination:
-                  any: True
-                protocol_options:
-                  tcp:
-                    syn: True
-                ttl:
-                  range:
-                    start: 180
-                    end: 250
-                routing: True
-                authen: True
-                log: True
+    - afi: ipv6
+      acls:
+      - name: acl6_1
+        aces:
+        - sequence: 10
+          grant: deny
+          protocol: tcp
+          source:
+            prefix: 2001:db8:1234::/48
+            port_protocol:
+              range:
+                start: ftp
+                end: telnet
+          destination:
+            any: true
+          protocol_options:
+            tcp:
+              syn: true
+          ttl:
+            range:
+              start: 180
+              end: 250
+          routing: true
+          authen: true
+          log: true
 
-              - sequence: 20
-                grant: permit
-                protocol: icmpv6
-                source:
-                  any: True
-                destination:
-                  any: True
-                protocol_options:
-                  icmpv6:
-                    router_advertisement: True
-                precedence: network
-                destopts: True
+        - sequence: 20
+          grant: permit
+          protocol: icmpv6
+          source:
+            any: true
+          destination:
+            any: true
+          protocol_options:
+            icmpv6:
+              router_advertisement: true
+          precedence: network
+          destopts: true
 
-      - afi: ipv4
-        acls:
-          - name: acl_1
-            aces:
-              - sequence: 16
-                remark: TEST_ACL_1_REMARK
+    - afi: ipv4
+      acls:
+      - name: acl_1
+        aces:
+        - sequence: 16
+          remark: TEST_ACL_1_REMARK
 
-              - sequence: 21
-                grant: permit
-                protocol: tcp
-                source:
-                  host: 192.0.2.10
-                  port_protocol:
-                    range:
-                      start: pop3
-                      end: 121
-                destination:
-                  address: 198.51.100.0
-                  wildcard_bits: 0.0.0.15
-                protocol_options:
-                  tcp:
-                    rst: True
+        - sequence: 21
+          grant: permit
+          protocol: tcp
+          source:
+            host: 192.0.2.10
+            port_protocol:
+              range:
+                start: pop3
+                end: 121
+          destination:
+            address: 198.51.100.0
+            wildcard_bits: 0.0.0.15
+          protocol_options:
+            tcp:
+              rst: true
 
-              - sequence: 23
-                grant: deny
-                protocol: icmp
-                source:
-                  any: True
-                destination:
-                  prefix: 198.51.100.0/28
-                protocol_options:
-                  icmp:
-                    reassembly_timeout: True
-                dscp:
-                  lt: af12
+        - sequence: 23
+          grant: deny
+          protocol: icmp
+          source:
+            any: true
+          destination:
+            prefix: 198.51.100.0/28
+          protocol_options:
+            icmp:
+              reassembly_timeout: true
+          dscp:
+            lt: af12
 
-          - name: acl_2
-            aces:
-              - sequence: 10
-                remark: TEST_ACL_2_REMARK
+      - name: acl_2
+        aces:
+        - sequence: 10
+          remark: TEST_ACL_2_REMARK
     state: merged
 
 # After state:
@@ -807,29 +805,29 @@ EXAMPLES = """
 #  20 permit icmpv6 any any router-advertisement precedence network destopts
 
 - name: Update existing ACEs
-  iosxr_acls:
+  cisco.iosxr.iosxr_acls:
     config:
-      - afi: ipv4
-        acls:
-          - name: acl_1
-            aces:
-              - sequence: 21
-                source:
-                  prefix: 198.51.100.32/28
-                  port_protocol:
-                    range:
-                      start: pop3
-                      end: 121
-                protocol_options:
-                  tcp:
-                    syn: True
+    - afi: ipv4
+      acls:
+      - name: acl_1
+        aces:
+        - sequence: 21
+          source:
+            prefix: 198.51.100.32/28
+            port_protocol:
+              range:
+                start: pop3
+                end: 121
+          protocol_options:
+            tcp:
+              syn: true
 
-              - sequence: 23
-                protocol_options:
-                  icmp:
-                    router_advertisement: True
-                dscp:
-                  eq: af23
+        - sequence: 23
+          protocol_options:
+            icmp:
+              router_advertisement: true
+          dscp:
+            eq: af23
 
 # After state:
 # -------------
@@ -864,29 +862,29 @@ EXAMPLES = """
 #  20 permit icmpv6 any any router-advertisement precedence network destopts
 
 - name: Replace device configurations of listed ACL with provided configurations
-  iosxr_acls:
+  cisco.iosxr.iosxr_acls:
     config:
-      - afi: ipv4
-        acls:
-          - name: acl_2
-            aces:
-              - sequence: 11
-                grant: permit
-                protocol: igmp
-                source:
-                  host: 198.51.100.130
-                destination:
-                  any: True
-                ttl:
-                  eq: 100
+    - afi: ipv4
+      acls:
+      - name: acl_2
+        aces:
+        - sequence: 11
+          grant: permit
+          protocol: igmp
+          source:
+            host: 198.51.100.130
+          destination:
+            any: true
+          ttl:
+            eq: 100
 
-              - sequence: 12
-                grant: deny
-                source:
-                  any: True
-                destination:
-                  any: True
-                protocol: icmp
+        - sequence: 12
+          grant: deny
+          source:
+            any: true
+          destination:
+            any: true
+          protocol: icmp
     state: replaced
 
 # After state:
@@ -923,29 +921,29 @@ EXAMPLES = """
 #  20 permit icmpv6 any any router-advertisement precedence network destopts
 
 - name: Overridde all ACLs configuration with provided configuration
-  iosxr_acls:
+  cisco.iosxr.iosxr_acls:
     config:
-      - afi: ipv4
-        acls:
-          - name: acl_1
-            aces:
-              - sequence: 10
-                grant: permit
-                source:
-                  any: True
-                destination:
-                  any: True
-                protocol: tcp
+    - afi: ipv4
+      acls:
+      - name: acl_1
+        aces:
+        - sequence: 10
+          grant: permit
+          source:
+            any: true
+          destination:
+            any: true
+          protocol: tcp
 
-          - name: acl_2
-            aces:
-              - sequence: 20
-                grant: permit
-                source:
-                  any: True
-                destination:
-                  any: True
-                protocol: igmp
+      - name: acl_2
+        aces:
+        - sequence: 20
+          grant: permit
+          source:
+            any: true
+          destination:
+            any: true
+          protocol: igmp
     state: overridden
 
 # After state:
@@ -976,13 +974,13 @@ EXAMPLES = """
 #  20 permit icmpv6 any any router-advertisement precedence network destopts
 
 - name: Delete a single ACE
-  iosxr_acls:
+  cisco.iosxr.iosxr_acls:
     config:
-      - afi: ipv4
-        acls:
-          - name: acl_1
-            aces:
-              - sequence: 23
+    - afi: ipv4
+      acls:
+      - name: acl_1
+        aces:
+        - sequence: 23
     state: deleted
 
 # After state:
@@ -1017,11 +1015,11 @@ EXAMPLES = """
 #  20 permit icmpv6 any any router-advertisement precedence network destopts
 
 - name: Delete a single ACL
-  iosxr_acls:
+  cisco.iosxr.iosxr_acls:
     config:
-      - afi: ipv6
-        acls:
-          - name: acl6_1
+    - afi: ipv6
+      acls:
+      - name: acl6_1
     state: deleted
 
 # After state:
@@ -1054,9 +1052,9 @@ EXAMPLES = """
 #  20 permit icmpv6 any any router-advertisement precedence network destopts
 
 - name: Delete all ACLs under one AFI
-  iosxr_acls:
+  cisco.iosxr.iosxr_acls:
     config:
-      - afi: ipv4
+    - afi: ipv4
     state: deleted
 
 # After state:
@@ -1086,7 +1084,7 @@ EXAMPLES = """
 #  20 permit icmpv6 any any router-advertisement precedence network destopts
 
 - name: Delete all ACLs from the device
-  iosxr_acls:
+  cisco.iosxr.iosxr_acls:
     state: deleted
 
 # After state:
@@ -1099,7 +1097,7 @@ EXAMPLES = """
 # Using gathered to gather ACL facts from the device
 
 - name: Gather ACL interfaces facts using gathered state
-  iosxr_acls:
+  cisco.iosxr.iosxr_acls:
     state: gathered
 
 # Task Output (redacted)
@@ -1237,29 +1235,29 @@ EXAMPLES = """
 # Using rendered
 
 - name: Render platform specific commands (without connecting to the device)
-  iosxr_acls:
+  cisco.iosxr.iosxr_acls:
     config:
-      - afi: ipv4
-        acls:
-          - name: acl_2
-            aces:
-              - sequence: 11
-                grant: permit
-                protocol: igmp
-                source:
-                  host: 198.51.100.130
-                destination:
-                  any: True
-                ttl:
-                  eq: 100
+    - afi: ipv4
+      acls:
+      - name: acl_2
+        aces:
+        - sequence: 11
+          grant: permit
+          protocol: igmp
+          source:
+            host: 198.51.100.130
+          destination:
+            any: true
+          ttl:
+            eq: 100
 
-              - sequence: 12
-                grant: deny
-                source:
-                  any: True
-                destination:
-                  any: True
-                protocol: icmp
+        - sequence: 12
+          grant: deny
+          source:
+            any: true
+          destination:
+            any: true
+          protocol: icmp
     state: rendered
 
 # Task Output (redacted)
@@ -1285,7 +1283,7 @@ EXAMPLES = """
 #  20 permit icmpv6 any any router-advertisement precedence network packet-length eq 576 destopts
 
 - name: Parse externally provided ACL config to agnostic model
-  iosxr_acls:
+  cisco.iosxr.iosxr_acls:
     running_config: "{{ lookup('file', 'parsed.cfg') }}"
     state: parsed
 

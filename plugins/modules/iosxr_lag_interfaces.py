@@ -30,16 +30,13 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: iosxr_lag_interfaces
-short_description: Manages attributes of LAG/Ether-Bundle interfaces on IOS-XR devices.
+DOCUMENTATION = """
+module: iosxr_lag_interfaces
+short_description: LAG interfaces resource module
 description:
 - This module manages the attributes of LAG/Ether-Bundle interfaces on IOS-XR devices.
+version_added: 1.0.0
 notes:
 - Tested against IOS-XR 6.1.3.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
@@ -73,7 +70,7 @@ options:
             - Mode 'passive' runs LACP in passive mode over the port.
             - Mode 'inherit' runs LACP as configured in the bundle.
             choices:
-            - 'on'
+            - on
             - active
             - passive
             - inherit
@@ -85,7 +82,7 @@ options:
         - Mode 'on' does not run LACP over the port.
         - Mode 'passive' runs LACP in passive mode over the port.
         choices:
-        - 'on'
+        - on
         - active
         - passive
         type: str
@@ -125,6 +122,7 @@ options:
     - overridden
     - deleted
     default: merged
+
 """
 EXAMPLES = """
 # Using merged
@@ -158,27 +156,27 @@ EXAMPLES = """
 #
 #
 - name: Merge provided configuration with device configuration
-  iosxr_lag_interfaces:
+  cisco.iosxr.iosxr_lag_interfaces:
     config:
-      - name: Bundle-Ether10
-        members:
-          - member: GigabitEthernet0/0/0/1
-            mode: inherit
-          - member: GigabitEthernet0/0/0/3
-            mode: inherit
-        mode: active
-        links:
-          max_active: 5
-          min_active: 2
-        load_balancing_hash: src-ip
+    - name: Bundle-Ether10
+      members:
+      - member: GigabitEthernet0/0/0/1
+        mode: inherit
+      - member: GigabitEthernet0/0/0/3
+        mode: inherit
+      mode: active
+      links:
+        max_active: 5
+        min_active: 2
+      load_balancing_hash: src-ip
 
-      - name: Bundle-Ether12
-        members:
-          - member: GigabitEthernet0/0/0/2
-            mode: passive
-          - member: GigabitEthernet0/0/0/4
-            mode: passive
-        load_balancing_hash: dst-ip
+    - name: Bundle-Ether12
+      members:
+      - member: GigabitEthernet0/0/0/2
+        mode: passive
+      - member: GigabitEthernet0/0/0/4
+        mode: passive
+      load_balancing_hash: dst-ip
     state: merged
 #
 #
@@ -268,17 +266,17 @@ EXAMPLES = """
 #
 #
 - name: Replace device configuration of listed Bundles with provided configurations
-  iosxr_lag_interfaces:
+  cisco.iosxr.iosxr_lag_interfaces:
     config:
-      - name: Bundle-Ether12
-        members:
-          - name: GigabitEthernet0/0/0/2
-        mode: passive
+    - name: Bundle-Ether12
+      members:
+      - name: GigabitEthernet0/0/0/2
+      mode: passive
 
-      - name: Bundle-Ether11
-        members:
-          - name: GigabitEthernet0/0/0/4
-        load_balancing_hash: src-ip
+    - name: Bundle-Ether11
+      members:
+      - name: GigabitEthernet0/0/0/4
+      load_balancing_hash: src-ip
     state: replaced
 #
 #
@@ -377,16 +375,16 @@ EXAMPLES = """
 #
 
 - name: Overrides all device configuration with provided configuration
-  iosxr_lag_interfaces:
+  cisco.iosxr.iosxr_lag_interfaces:
     config:
-      - name: Bundle-Ether10
-        members:
-          - member: GigabitEthernet0/0/0/1
-            mode: inherit
-          - member: GigabitEthernet0/0/0/2
-            mode: inherit
-        mode: active
-        load_balancing_hash: dst-ip
+    - name: Bundle-Ether10
+      members:
+      - member: GigabitEthernet0/0/0/1
+        mode: inherit
+      - member: GigabitEthernet0/0/0/2
+        mode: inherit
+      mode: active
+      load_balancing_hash: dst-ip
     state: overridden
 #
 #
@@ -477,12 +475,13 @@ EXAMPLES = """
 #
 #
 
-- name: Delete attributes of given bundles and removes member interfaces from them (Note - This won't delete the bundles themselves)
-  iosxr_lag_interfaces:
+- name: Delete attributes of given bundles and removes member interfaces from them
+    (Note - This won't delete the bundles themselves)
+  cisco.iosxr.iosxr_lag_interfaces:
     config:
-      - name: Bundle-Ether10
-      - name: Bundle-Ether11
-      - name: Bundle-Ether12
+    - name: Bundle-Ether10
+    - name: Bundle-Ether11
+    - name: Bundle-Ether12
     state: deleted
 
 #
@@ -563,8 +562,9 @@ EXAMPLES = """
 # !
 #
 
-- name: Delete attributes of all bundles and removes member interfaces from them (Note - This won't delete the bundles themselves)
-  iosxr_lag_interfaces:
+- name: Delete attributes of all bundles and removes member interfaces from them (Note
+    - This won't delete the bundles themselves)
+  cisco.iosxr.iosxr_lag_interfaces:
     state: deleted
 
 #

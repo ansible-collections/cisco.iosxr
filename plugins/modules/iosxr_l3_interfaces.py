@@ -31,8 +31,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {"metadata_version": "1.1", "supported_by": "Ansible"}
-DOCUMENTATION = """module: iosxr_l3_interfaces
+DOCUMENTATION = """
+module: iosxr_l3_interfaces
 short_description: L3 interfaces resource module
 description: This module provides declarative management of Layer-3 interface on Cisco
   IOS-XR devices.
@@ -82,12 +82,12 @@ options:
             type: str
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the IOS-XR device by executing
-        the command B(show running-config interface).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the IOS-XR device
+      by executing the command B(show running-config interface).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     choices:
@@ -105,7 +105,6 @@ options:
 """
 
 EXAMPLES = """
----
 # Using merged
 
 # Before state:
@@ -132,13 +131,13 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration
   cisco.iosxr.iosxr_l3_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/2
-        ipv4:
-        - address: 192.168.0.1/24
-      - name: GigabitEthernet0/0/0/3
-        ipv4:
-        - address: 192.168.2.1/24
-          secondary: True
+    - name: GigabitEthernet0/0/0/2
+      ipv4:
+      - address: 192.168.0.1/24
+    - name: GigabitEthernet0/0/0/3
+      ipv4:
+      - address: 192.168.2.1/24
+        secondary: true
     state: merged
 
 # After state:
@@ -191,14 +190,14 @@ EXAMPLES = """
 - name: Override device configuration of all interfaces with provided configuration
   cisco.iosxr.iosxr_l3_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/3
-        ipv4:
-        - address: 192.168.0.1/24
-      - name: GigabitEthernet0/0/0/3.700
-        ipv4:
-        - address: 192.168.0.2/24
-        - address: 192.168.2.1/24
-          secondary: True
+    - name: GigabitEthernet0/0/0/3
+      ipv4:
+      - address: 192.168.0.1/24
+    - name: GigabitEthernet0/0/0/3.700
+      ipv4:
+      - address: 192.168.0.2/24
+      - address: 192.168.2.1/24
+        secondary: true
     state: overridden
 
 # After state:
@@ -250,12 +249,12 @@ EXAMPLES = """
 - name: Replaces device configuration of listed interfaces with provided configuration
   cisco.iosxr.iosxr_l3_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/3
-        ipv6:
-        - address: fd5d:12c9:2201:1::1/64
-      - name: GigabitEthernet0/0/0/4
-        ipv4:
-        - address: 192.168.0.2/24
+    - name: GigabitEthernet0/0/0/3
+      ipv6:
+      - address: fd5d:12c9:2201:1::1/64
+    - name: GigabitEthernet0/0/0/4
+      ipv4:
+      - address: 192.168.0.2/24
     state: replaced
 
 # After state:
@@ -306,12 +305,13 @@ EXAMPLES = """
 #  shutdown
 # !
 
-- name: "Delete L3 attributes of given interfaces (Note: This won't delete the interface itself)"
+- name: "Delete L3 attributes of given interfaces (Note: This won't delete the interface\
+    \     itself)"
   cisco.iosxr.iosxr_l3_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/3
-      - name: GigabitEthernet0/0/0/4
-      - name: GigabitEthernet0/0/0/3.700
+    - name: GigabitEthernet0/0/0/3
+    - name: GigabitEthernet0/0/0/4
+    - name: GigabitEthernet0/0/0/3.700
     state: deleted
 
 # After state:
@@ -363,7 +363,8 @@ EXAMPLES = """
 # !
 
 
-- name: "Delete L3 attributes of all interfaces (Note: This won't delete the interface itself)"
+- name: "Delete L3 attributes of all interfaces (Note: This won't delete the interface\
+    \     itself)"
   cisco.iosxr.iosxr_l3_interfaces:
     state: deleted
 
@@ -468,21 +469,21 @@ EXAMPLES = """
   cisco.iosxr.iosxr_l3_interfaces:
     config:
 
-          - name: GigabitEthernet0/0/0/0
-            ipv4:
+    - name: GigabitEthernet0/0/0/0
+      ipv4:
 
-              - address: 198.51.100.1/24
+      - address: 198.51.100.1/24
 
-          - name: GigabitEthernet0/0/0/1
-            ipv6:
+    - name: GigabitEthernet0/0/0/1
+      ipv6:
 
-              - address: 2001:db8:0:3::/64
-            ipv4:
+      - address: 2001:db8:0:3::/64
+      ipv4:
 
-              - address: 192.0.2.1/24
+      - address: 192.0.2.1/24
 
-              - address: 192.0.2.2/24
-                secondary: true
+      - address: 192.0.2.2/24
+        secondary: true
     state: rendered
 # Task Output (redacted)
 # -----------------------
