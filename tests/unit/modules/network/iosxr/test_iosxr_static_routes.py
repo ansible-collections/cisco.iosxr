@@ -312,65 +312,6 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
         ]
         self.execute_module(changed=True, commands=commands)
 
-    def test_iosxr_static_routes_deleted_next_hop(self):
-        set_module_args(
-            dict(
-                config=[
-                    dict(
-                        address_families=[
-                            dict(
-                                afi="ipv4",
-                                safi="unicast",
-                                routes=[
-                                    dict(
-                                        dest="192.0.2.16/28",
-                                        next_hops=[
-                                            dict(
-                                                interface="FastEthernet0/0/0/5"
-                                            )
-                                        ],
-                                    )
-                                ],
-                            )
-                        ]
-                    )
-                ],
-                state="deleted",
-            )
-        )
-
-        commands = [
-            "router static",
-            "address-family ipv4 unicast",
-            "no 192.0.2.16/28 FastEthernet0/0/0/5",
-        ]
-        self.execute_module(changed=True, commands=commands)
-
-    def test_iosxr_static_routes_deleted_dest(self):
-        set_module_args(
-            dict(
-                config=[
-                    dict(
-                        address_families=[
-                            dict(
-                                afi="ipv4",
-                                safi="unicast",
-                                routes=[dict(dest="192.0.2.16/28")],
-                            )
-                        ]
-                    )
-                ],
-                state="deleted",
-            )
-        )
-
-        commands = [
-            "router static",
-            "address-family ipv4 unicast",
-            "no 192.0.2.16/28",
-        ]
-        self.execute_module(changed=True, commands=commands)
-
     def test_iosxr_static_routes_deleted_afi(self):
         set_module_args(
             dict(
