@@ -31,7 +31,11 @@
       register: result
       cisco.iosxr.iosxr_static_routes: *id004
 
-    - assert: *id003
+    - name: Assert that the previous task was idempotent
+      assert: &id003
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
 
     - include_tasks: _populate_config.yaml
 
