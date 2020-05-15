@@ -151,7 +151,7 @@ rendered:
     - "bundle id 10 mode inherit"
     - "interface GigabitEthernet0/0/0/2"
     - "description 'GigabitEthernet - 2'"
-    - " bundle id 12 mode passive"
+    - "bundle id 12 mode passive"
     - "interface GigabitEthernet0/0/0/3"
     - "description 'GigabitEthernet - 3'"
     - "bundle id 10 mode inherit"
