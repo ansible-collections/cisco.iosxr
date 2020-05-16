@@ -137,7 +137,7 @@ class ActionModule(ActionNetworkModule):
                     % (self._play_context.connection, module_name),
                 }
             provider = self._task.args.get("provider", {})
-            if any(provider.values()) and module_name not in ("iosxr_user",):
+            if any(provider.values()):
                 display.warning(
                     "provider is unnecessary when using {0} and will be ignored".format(
                         self._play_context.connection
