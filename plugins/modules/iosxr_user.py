@@ -213,6 +213,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     load_config,
     is_netconf,
     is_cliconf,
+    get_connection,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     iosxr_argument_spec,
@@ -237,27 +238,22 @@ class PublicKeyManager(object):
         """ This is hepler for getting connection parameters
         """
 
-        params = {
-            "host": None,
-            "username": None,
-            "password": None,
-            "ssh_keyfile": None,
-        }
+        params = {"host": None, "username": None, "password": None}
 
-        for key in params:
-            if self._module.params.get(key) is not None:
-                params[key] = self._module.params.get(key)
-            else:
-                if (
-                    self._module.params.get("provider")
-                    and self._module.params["provider"].get(key) is not None
-                ):
-                    params[key] = self._module.params["provider"].get(key)
+        if self._module.params.get("provider"):
+            for key in params:
+                params[key] = self._module.params["provider"].get(key)
+        else:
+
+            conn = get_connection(self._module)
+
+            params = {
+                "host": conn.get_option("host"),
+                "username": conn.get_option("remote_user"),
+                "password": conn.get_option("password"),
+            }
 
         if not params["host"] or not params["username"]:
-            return None
-
-        if not params["password"] and not params["ssh_keyfile"]:
             return None
 
         return params
@@ -295,7 +291,6 @@ class PublicKeyManager(object):
         user = params.get("username")
         node = params.get("host")
         password = params.get("password")
-        ssh_keyfile = params.get("ssh_keyfile")
 
         if self._module.params["aggregate"]:
             name = "aggregate"
@@ -307,7 +302,7 @@ class PublicKeyManager(object):
 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        if not ssh_keyfile:
+        if password:
             ssh.connect(node, username=user, password=password)
         else:
             ssh.connect(node, username=user, allow_agent=True)
@@ -327,11 +322,10 @@ class PublicKeyManager(object):
         user = params.get("username")
         node = params.get("host")
         password = params.get("password")
-        ssh_keyfile = params.get("ssh_keyfile")
 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        if not ssh_keyfile:
+        if password:
             ssh.connect(node, username=user, password=password)
         else:
             ssh.connect(node, username=user, allow_agent=True)
@@ -356,9 +350,9 @@ class PublicKeyManager(object):
 
     def run(self):
         warning_message = (
-            "Operation with key file failed, please setup provider argument "
-            "or pass its arguments directly to module in case of using "
-            "network_cli or netconf plugin before running this playbook"
+            "Operation with key file failed, couldn't determine host or user to connect. "
+            "Please setup provider argument or pass its arguments directly to module in "
+            "case of using local connection plugin before running this playbook"
         )
 
         if self._module.params["state"] == "present":
