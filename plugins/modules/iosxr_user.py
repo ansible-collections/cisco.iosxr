@@ -214,6 +214,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     is_netconf,
     is_cliconf,
     get_connection,
+    copy_file,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     iosxr_argument_spec,
@@ -233,30 +234,6 @@ class PublicKeyManager(object):
     def __init__(self, module, result):
         self._module = module
         self._result = result
-
-    def get_connection_params(self):
-        """ This is hepler for getting connection parameters
-        """
-
-        params = {"host": None, "username": None, "password": None}
-
-        if self._module.params.get("provider"):
-            for key in params:
-                params[key] = self._module.params["provider"].get(key)
-        else:
-
-            conn = get_connection(self._module)
-
-            params = {
-                "host": conn.get_option("host"),
-                "username": conn.get_option("remote_user"),
-                "password": conn.get_option("password"),
-            }
-
-        if not params["host"] or not params["username"]:
-            return None
-
-        return params
 
     def convert_key_to_base64(self):
         """ IOS-XR only accepts base64 decoded files, this converts the public key to a temp file.
@@ -283,14 +260,6 @@ class PublicKeyManager(object):
     def copy_key_to_node(self, base64keyfile):
         """ Copy key to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well.
         """
-        params = self.get_connection_params()
-
-        if not params:
-            return False
-
-        user = params.get("username")
-        node = params.get("host")
-        password = params.get("password")
 
         if self._module.params["aggregate"]:
             name = "aggregate"
@@ -300,53 +269,16 @@ class PublicKeyManager(object):
         src = base64keyfile
         dst = "/harddisk:/publickey_%s.b64" % (name)
 
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        if password:
-            ssh.connect(node, username=user, password=password)
-        else:
-            ssh.connect(node, username=user, allow_agent=True)
-        sftp = ssh.open_sftp()
-        sftp.put(src, dst)
-        sftp.close()
-        ssh.close()
+        copy_file(self._module, src, dst)
 
     def addremovekey(self, command):
         """ Add or remove key based on command
         """
-        params = self.get_connection_params()
 
-        if not params:
-            return False
+        conn = get_connection(self._module)
+        out = conn.send_command(command, prompt="yes/no", answer="yes")
 
-        user = params.get("username")
-        node = params.get("host")
-        password = params.get("password")
-
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        if password:
-            ssh.connect(node, username=user, password=password)
-        else:
-            ssh.connect(node, username=user, allow_agent=True)
-        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(
-            "%s \r" % (command)
-        )
-        readmsg = ssh_stdout.read(
-            100
-        )  # We need to read a bit to actually apply for some reason
-        if (
-            (b"already" in readmsg)
-            or (b"removed" in readmsg)
-            or (b"really" in readmsg)
-        ):
-            ssh_stdin.write("yes\r")
-        ssh_stdout.read(
-            1
-        )  # We need to read a bit to actually apply for some reason
-        ssh.close()
-
-        return readmsg
+        return out
 
     def run(self):
         warning_message = (
