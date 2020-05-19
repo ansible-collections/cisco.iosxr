@@ -1,0 +1,15 @@
+---
+- debug:
+    msg: START iosxr_lacp parsed integration tests on connection={{ ansible_connection
+      }}
+
+- name: Parse externally provided LACP config to agnostic model
+  register: result
+  cisco.iosxr.iosxr_lacp:
+    running_config: "{{ lookup('file', './fixtures/parsed.cfg') }}"
+    state: parsed
+
+- name: Assert that config was correctly parsed
+  assert:
+    that:
+      - "{{ parsed['after'] == result['parsed'] }}"

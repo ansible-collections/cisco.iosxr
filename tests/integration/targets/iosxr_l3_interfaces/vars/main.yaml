@@ -85,6 +85,28 @@ overridden:
       ipv6:
         - address: 2001:db8:1::/64
       name: GigabitEthernet0/0/0/1
+rendered:
+  commands:
+    - interface GigabitEthernet0/0/0/0
+    - ipv4 address 198.51.100.1 255.255.255.0
+    - interface GigabitEthernet0/0/0/1
+    - ipv4 address 192.0.2.2 255.255.255.0 secondary
+    - ipv4 address 192.0.2.1 255.255.255.0
+    - ipv6 address 2001:db8:0:3::/64
+parsed:
+  after:
+    - ipv6:
+        - address: 2001:db8:0:3::/64
+      ipv4:
+        - address: 192.0.2.1 255.255.255.0
+        - address: 192.0.2.2 255.255.255.0
+          secondary: true
+      name: GigabitEthernet0/0/0/0
+    - name: GigabitEthernet0/0/0/1
+    - ipv4:
+        - address: 192.0.22.1 255.255.255.0
+        - address: 192.0.23.1 255.255.255.0
+      name: GigabitEthernet0/0/0/3
 deleted:
   before:
     - name: Loopback888

@@ -1,0 +1,29 @@
+---
+- debug:
+    msg: START iosxr_interfaces rendered integration tests on connection={{
+      ansible_connection }}
+
+- name: Render platform specific commands from task input using rendered state
+  register: result
+  cisco.iosxr.iosxr_interfaces:
+    config:
+
+      - name: GigabitEthernet0/0/0/0
+        description: Configured and Merged by Ansible-Network
+        mtu: 110
+        enabled: true
+        duplex: half
+
+      - name: GigabitEthernet0/0/0/1
+        description: Configured and Merged by Ansible-Network
+        mtu: 2800
+        enabled: false
+        speed: 100
+        duplex: full
+    state: rendered
+
+- name: Assert that correct set of commands were rendered
+  assert:
+    that:
+      - "{{ rendered['commands'] | symmetric_difference(result['rendered']) |length\
+        \ == 0 }}"

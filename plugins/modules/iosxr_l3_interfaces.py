@@ -31,18 +31,15 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-
+ANSIBLE_METADATA = {"metadata_version": "1.1", "supported_by": "Ansible"}
 DOCUMENTATION = """module: iosxr_l3_interfaces
-short_description: Manage Layer-3 interface on Cisco IOS-XR devices.
+short_description: L3 interfaces resource module
 description: This module provides declarative management of Layer-3 interface on Cisco
   IOS-XR devices.
-author: Sumit Jaiswal (@justjais)
+version_added: 1.0.0
+author:
+- Sumit Jaiswal (@justjais)
+- Rohit Thakur (@rohitthakur2590)
 notes:
 - Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
@@ -83,12 +80,24 @@ options:
             description:
             - Configures the IPv6 address for Interface.
             type: str
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the IOS-XR device by executing
+        the command B(show running-config interface).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
   state:
     choices:
     - merged
     - replaced
     - overridden
     - deleted
+    - parsed
+    - rendered
+    - gathered
     default: merged
     description:
     - The state of the configuration after module completion
@@ -121,7 +130,7 @@ EXAMPLES = """
 # !
 
 - name: Merge provided configuration with device configuration
-  iosxr_l3_interfaces:
+  cisco.iosxr.iosxr_l3_interfaces:
     config:
       - name: GigabitEthernet0/0/0/2
         ipv4:
@@ -180,7 +189,7 @@ EXAMPLES = """
 # !
 
 - name: Override device configuration of all interfaces with provided configuration
-  iosxr_l3_interfaces:
+  cisco.iosxr.iosxr_l3_interfaces:
     config:
       - name: GigabitEthernet0/0/0/3
         ipv4:
@@ -239,7 +248,7 @@ EXAMPLES = """
 # !
 
 - name: Replaces device configuration of listed interfaces with provided configuration
-  iosxr_l3_interfaces:
+  cisco.iosxr.iosxr_l3_interfaces:
     config:
       - name: GigabitEthernet0/0/0/3
         ipv6:
@@ -298,7 +307,7 @@ EXAMPLES = """
 # !
 
 - name: "Delete L3 attributes of given interfaces (Note: This won't delete the interface itself)"
-  iosxr_l3_interfaces:
+  cisco.iosxr.iosxr_l3_interfaces:
     config:
       - name: GigabitEthernet0/0/0/3
       - name: GigabitEthernet0/0/0/4
@@ -355,7 +364,7 @@ EXAMPLES = """
 
 
 - name: "Delete L3 attributes of all interfaces (Note: This won't delete the interface itself)"
-  iosxr_l3_interfaces:
+  cisco.iosxr.iosxr_l3_interfaces:
     state: deleted
 
 # After state:
@@ -376,6 +385,231 @@ EXAMPLES = """
 # interface GigabitEthernet0/0/0/4
 #  shutdown
 # !
+
+
+# Using parsed
+# parsed.cfg
+# ------------
+#
+# nterface Loopback888
+#  description test for ansible
+#  shutdown
+# !
+# interface MgmtEth0/0/CPU0/0
+#  ipv4 address 10.8.38.70 255.255.255.0
+# !
+# interface GigabitEthernet0/0/0/0
+#  description Configured and Merged by Ansible-Network
+#  mtu 66
+#  ipv4 address 192.0.2.1 255.255.255.0
+#  ipv4 address 192.0.2.2 255.255.255.0 secondary
+#  ipv6 address 2001:db8:0:3::/64
+#  duplex half
+# !
+# interface GigabitEthernet0/0/0/1
+#  description Configured and Merged by Ansible-Network
+#  mtu 66
+#  speed 100
+#  duplex full
+#  dot1q native vlan 10
+#  l2transport
+#   l2protocol cdp forward
+#   l2protocol pvst tunnel
+#   propagate remote-status
+#  !
+# !
+# interface GigabitEthernet0/0/0/3
+#  ipv4 address 192.0.22.1 255.255.255.0
+#  ipv4 address 192.0.23.1 255.255.255.0
+# !
+# - name: Convert L3 interfaces config to argspec without connecting to the appliance
+#   cisco.iosxr.iosxr_l3_interfaces:
+#     running_config: "{{ lookup('file', './parsed.cfg') }}"
+#     state: parsed
+# Task Output (redacted)
+# -----------------------
+# "parsed": [
+#         {
+#             "ipv4": [
+#                 {
+#                     "address": "192.0.2.1 255.255.255.0"
+#                 },
+#                 {
+#                     "address": "192.0.2.2 255.255.255.0",
+#                     "secondary": true
+#                 }
+#             ],
+#             "ipv6": [
+#                 {
+#                     "address": "2001:db8:0:3::/64"
+#                 }
+#             ],
+#             "name": "GigabitEthernet0/0/0/0"
+#         },
+#         {
+#             "name": "GigabitEthernet0/0/0/1"
+#         },
+#         {
+#             "ipv4": [
+#                 {
+#                     "address": "192.0.22.1 255.255.255.0"
+#                 },
+#                 {
+#                     "address": "192.0.23.1 255.255.255.0"
+#                 }
+#             ],
+#             "name": "GigabitEthernet0/0/0/3"
+#         }
+#     ]
+
+
+# Using rendered
+- name: Render platform specific commands from task input using rendered state
+  cisco.iosxr.iosxr_l3_interfaces:
+    config:
+
+          - name: GigabitEthernet0/0/0/0
+            ipv4:
+
+              - address: 198.51.100.1/24
+
+          - name: GigabitEthernet0/0/0/1
+            ipv6:
+
+              - address: 2001:db8:0:3::/64
+            ipv4:
+
+              - address: 192.0.2.1/24
+
+              - address: 192.0.2.2/24
+                secondary: true
+    state: rendered
+# Task Output (redacted)
+# -----------------------
+# "rendered": [
+#         "interface GigabitEthernet0/0/0/0",
+#         "ipv4 address 198.51.100.1 255.255.255.0",
+#         "interface GigabitEthernet0/0/0/1",
+#         "ipv4 address 192.0.2.2 255.255.255.0 secondary",
+#         "ipv4 address 192.0.2.1 255.255.255.0",
+#         "ipv6 address 2001:db8:0:3::/64"
+#     ]
+# Using gathered
+# Before state:
+# ------------
+#
+# RP/0/0/CPU0:an-iosxr-02#show running-config  interface
+# interface Loopback888
+#  description test for ansible
+#  shutdown
+# !
+# interface MgmtEth0/0/CPU0/0
+#  ipv4 address 10.8.38.70 255.255.255.0
+# !
+# interface GigabitEthernet0/0/0/0
+#  description Configured and Merged by Ansible-Network
+#  mtu 66
+#  ipv4 address 192.0.2.1 255.255.255.0
+#  ipv4 address 192.0.2.2 255.255.255.0 secondary
+#  ipv6 address 2001:db8:0:3::/64
+#  duplex half
+# !
+# interface GigabitEthernet0/0/0/1
+#  description Configured and Merged by Ansible-Network
+#  mtu 66
+#  speed 100
+#  duplex full
+#  dot1q native vlan 10
+#  l2transport
+#   l2protocol cdp forward
+#   l2protocol pvst tunnel
+#   propagate remote-status
+#  !
+# !
+# interface GigabitEthernet0/0/0/3
+#  shutdown
+# !
+# interface GigabitEthernet0/0/0/4
+#  shutdown
+#  dot1q native vlan 40
+# !
+- name: Gather IOSXR l3 interfaces as in given arguments
+  cisco.iosxr.iosxr_l3_interfaces:
+    config:
+    state: gathered
+# Task Output (redacted)
+# -----------------------
+#
+# "gathered": [
+#         {
+#             "name": "Loopback888"
+#         },
+#         {
+#             "ipv4": [
+#                 {
+#                     "address": "192.0.2.1 255.255.255.0"
+#                 },
+#                 {
+#                     "address": "192.0.2.2 255.255.255.0",
+#                     "secondary": true
+#                 }
+#             ],
+#             "ipv6": [
+#                 {
+#                     "address": "2001:db8:0:3::/64"
+#                 }
+#             ],
+#             "name": "GigabitEthernet0/0/0/0"
+#         },
+#         {
+#             "name": "GigabitEthernet0/0/0/1"
+#         },
+#         {
+#             "name": "GigabitEthernet0/0/0/3"
+#         },
+#         {
+#             "name": "GigabitEthernet0/0/0/4"
+#         }
+#     ]
+# After state:
+# ------------
+#
+# RP/0/0/CPU0:an-iosxr-02#show running-config  interface
+# interface Loopback888
+#  description test for ansible
+#  shutdown
+# !
+# interface MgmtEth0/0/CPU0/0
+#  ipv4 address 10.8.38.70 255.255.255.0
+# !
+# interface GigabitEthernet0/0/0/0
+#  description Configured and Merged by Ansible-Network
+#  mtu 66
+#  ipv4 address 192.0.2.1 255.255.255.0
+#  ipv4 address 192.0.2.2 255.255.255.0 secondary
+#  ipv6 address 2001:db8:0:3::/64
+#  duplex half
+# !
+# interface GigabitEthernet0/0/0/1
+#  description Configured and Merged by Ansible-Network
+#  mtu 66
+#  speed 100
+#  duplex full
+#  dot1q native vlan 10
+#  l2transport
+#   l2protocol cdp forward
+#   l2protocol pvst tunnel
+#   propagate remote-status
+#  !
+# !
+# interface GigabitEthernet0/0/0/3
+#  shutdown
+# !
+# interface GigabitEthernet0/0/0/4
+#  shutdown
+#  dot1q native vlan 40
+# !
+
 
 """
 
@@ -415,13 +649,17 @@ def main():
     required_if = [
         ("state", "merged", ("config",)),
         ("state", "replaced", ("config",)),
+        ("state", "rendered", ("config",)),
         ("state", "overridden", ("config",)),
+        ("state", "parsed", ("running_config",)),
     ]
 
+    mutually_exclusive = [("config", "running_config")]
     module = AnsibleModule(
         argument_spec=L3_InterfacesArgs.argument_spec,
         required_if=required_if,
         supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = L3_Interfaces(module).execute_module()

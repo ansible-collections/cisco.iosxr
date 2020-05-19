@@ -21,6 +21,16 @@ replaced:
   after:
     system:
       priority: 11
+rendered:
+  commands:
+    - lacp system priority 11
+    - lacp system mac 00c1.4c00.bd15
+parsed:
+  after:
+    system:
+      priority: 11
+      mac:
+        address: 00c1.4c00.bd15
 deleted:
   commands:
     - no lacp system priority
