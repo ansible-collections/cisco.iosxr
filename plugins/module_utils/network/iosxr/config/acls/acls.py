@@ -346,36 +346,11 @@ class Acls(ConfigBase):
                         or {}
                     )
                     if have_acl:
-                        if "aces" not in want_acl:
-                            commands.append(
-                                "no {0} access-list {1}".format(
-                                    have_item["afi"], have_acl["name"]
-                                )
+                        commands.append(
+                            "no {0} access-list {1}".format(
+                                have_item["afi"], have_acl["name"]
                             )
-                        else:
-                            acl_updates = []
-                            for want_ace in want_acl["aces"]:
-                                have_ace = (
-                                    search_obj_in_list(
-                                        want_ace.get("sequence"),
-                                        have_acl.get("aces", []),
-                                        key="sequence",
-                                    )
-                                    or {}
-                                )
-                                if have_ace:
-                                    acl_updates.append(
-                                        "no {0}".format(have_ace["sequence"])
-                                    )
-
-                            if acl_updates:
-                                acl_updates.insert(
-                                    0,
-                                    "{0} access-list {1}".format(
-                                        have_item["afi"], have_acl["name"]
-                                    ),
-                                )
-                                commands.extend(acl_updates)
+                        )
 
         return commands
 

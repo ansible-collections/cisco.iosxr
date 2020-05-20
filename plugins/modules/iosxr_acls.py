@@ -958,47 +958,6 @@ EXAMPLES = """
 # ipv4 access-list acl_2
 #  20 permit igmp any any
 
-# Using deleted to delete a single ACE from an ACL
-
-# Before state:
-# -------------
-
-# RP/0/RP0/CPU0:ios#sh access-lists afi-all
-# Thu Feb 20 05:22:57.021 UTC
-# ipv4 access-list acl_1
-#  16 remark TEST_ACL_1_REMARK
-#  21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst
-#  23 deny icmp any 198.51.100.0 0.0.0.15 reassembly-timeout dscp lt af12
-# ipv4 access-list acl_2
-#  10 remark TEST_ACL_2_REMARK
-# ipv6 access-list acl6_1
-#  10 deny tcp 2001:db8:1234::/48 range ftp telnet any syn ttl range 180 250 routing authen log
-#  20 permit icmpv6 any any router-advertisement precedence network destopts
-
-- name: Delete a single ACE
-  iosxr_acls:
-    config:
-      - afi: ipv4
-        acls:
-          - name: acl_1
-            aces:
-              - sequence: 23
-    state: deleted
-
-# After state:
-# -------------
-
-# RP/0/RP0/CPU0:ios#sh access-lists afi-all
-# Thu Feb 20 05:22:57.021 UTC
-# ipv4 access-list acl_1
-#  16 remark TEST_ACL_1_REMARK
-#  21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst
-# ipv4 access-list acl_2
-#  10 remark TEST_ACL_2_REMARK
-# ipv6 access-list acl6_1
-#  10 deny tcp 2001:db8:1234::/48 range ftp telnet any syn ttl range 180 250 routing authen log
-#  20 permit icmpv6 any any router-advertisement precedence network destopts
-
 # Using deleted to delete an entire ACL
 
 # Before state:
