@@ -443,7 +443,6 @@ class Static_routes(ConfigBase):
 
         else:
             for want_afi in want.get("address_families", []):
-                update_commands = []
                 have_afi = (
                     self.find_af_context(
                         want_afi, have.get("address_families", [])
@@ -451,62 +450,11 @@ class Static_routes(ConfigBase):
                     or {}
                 )
                 if have_afi:
-                    if "routes" not in want_afi:
-                        commands.append(
-                            "no address-family {0} {1}".format(
-                                have_afi["afi"], have_afi["safi"]
-                            )
+                    commands.append(
+                        "no address-family {0} {1}".format(
+                            have_afi["afi"], have_afi["safi"]
                         )
-                    else:
-                        for want_route in want_afi.get("routes", []):
-                            have_route = (
-                                search_obj_in_list(
-                                    want_route["dest"],
-                                    have_afi.get("routes", []),
-                                    key="dest",
-                                )
-                                or {}
-                            )
-                            if have_route:
-                                if "next_hops" not in want_route:
-                                    update_commands.append(
-                                        "no {0}".format(want_route["dest"])
-                                    )
-                                else:
-                                    rotated_have_next_hops = self.rotate_next_hops(
-                                        have_route.get("next_hops", {})
-                                    )
-                                    rotated_want_next_hops = self.rotate_next_hops(
-                                        want_route.get("next_hops", {})
-                                    )
-
-                                    for key in rotated_want_next_hops.keys():
-                                        if key in rotated_have_next_hops:
-                                            cmd = "no {0}".format(
-                                                want_route["dest"]
-                                            )
-                                            for item in key:
-                                                if (
-                                                    "." in item
-                                                    or ":" in item
-                                                    or "/" in item
-                                                ):
-                                                    cmd += " {0}".format(item)
-                                                else:
-                                                    cmd += " vrf {0}".format(
-                                                        item
-                                                    )
-                                            update_commands.append(cmd)
-
-                        if update_commands:
-                            update_commands.insert(
-                                0,
-                                "address-family {0} {1}".format(
-                                    want_afi["afi"], want_afi["safi"]
-                                ),
-                            )
-                            commands.extend(update_commands)
-
+                    )
             if "vrf" in want and commands:
                 commands.insert(0, "vrf {0}".format(want["vrf"]))
 

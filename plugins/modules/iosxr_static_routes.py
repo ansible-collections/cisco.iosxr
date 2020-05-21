@@ -37,20 +37,19 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: iosxr_static_routes
-short_description: Manage static routes on devices running Cisco IOS-XR.
+short_description: Static Routes Resource Module.
 description:
 - This module manages static routes on devices running Cisco IOS-XR.
 author: Nilashish Chakraborty (@NilashishC)
 options:
   running_config:
     description:
-    - The module, by default, will connect to the remote device and retrieve the current
-      running-config to use as a base for comparing against the contents of source.
-      There are times when it is not desirable to have the task get the current running-config
-      for every task in a playbook.  The I(running_config) argument allows the implementer
-      to pass in the configuration to use as the base config for comparison. This
-      value of this option should be the output received from device by executing
-      command B(show running-config router static).
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the IOS-XR device by executing
+        the command B(show running-config router static).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
     type: str
   config:
     description: A dictionary of static route options.
@@ -439,122 +438,6 @@ EXAMPLES = """
 #   !
 #   address-family ipv6 unicast
 #    2001:db8:3000::/36 FastEthernet0/0/0/4 2001:db8:2000:2::2 description PROD1 track ip_sla_1
-#   !
-#  !
-# !
-
-# Using deleted to delete a single next hop for a destination network
-
-# Before state
-# -------------
-# RP/0/RP0/CPU0:ios#sh running-config router static
-# Sat Feb 22 07:59:08.669 UTC
-# router static
-#  address-family ipv4 unicast
-#   192.0.2.16/28 FastEthernet0/0/0/1 192.0.2.10 tag 10 description LAB metric 120
-#   192.0.2.16/28 FastEthernet0/0/0/5 track ip_sla_1
-#   192.0.2.32/28 192.0.2.11 100
-#  !
-#  address-family ipv6 unicast
-#   2001:db8:1000::/36 FastEthernet0/0/0/7 description DC
-#   2001:db8:1000::/36 FastEthernet0/0/0/8 2001:db8:2000:2::1
-#  !
-#  vrf DEV_SITE
-#   address-family ipv4 unicast
-#    192.0.2.48/28 vrf test_1 192.0.2.12 description DEV
-#    192.0.2.48/28 GigabitEthernet0/0/0/1 192.0.3.24 vrflabel 2302
-#    192.0.2.80/28 vrf test_1 FastEthernet0/0/0/2 192.0.2.14 vrflabel 124 track ip_sla_2
-#   !
-#  !
-# !
-
-- name: Delete a single next_hop from a destination network
-  iosxr_static_routes:
-    config:
-      - address_families:
-          - afi: ipv4
-            safi: unicast
-            routes:
-              - dest: 192.0.2.16/28
-                next_hops:
-                  - forward_router_address: 192.0.2.10
-                    interface: FastEthernet0/0/0/1
-    state: deleted
-
-# After state
-# -------------
-# RP/0/RP0/CPU0:ios#sh running-config router static
-# Sat Feb 22 07:59:08.669 UTC
-# router static
-#  address-family ipv4 unicast
-#   192.0.2.16/28 FastEthernet0/0/0/5 track ip_sla_1
-#   192.0.2.32/28 192.0.2.11 100
-#  !
-#  address-family ipv6 unicast
-#   2001:db8:1000::/36 FastEthernet0/0/0/7 description DC
-#   2001:db8:1000::/36 FastEthernet0/0/0/8 2001:db8:2000:2::1
-#  !
-#  vrf DEV_SITE
-#   address-family ipv4 unicast
-#    192.0.2.48/28 vrf test_1 192.0.2.12 description DEV
-#    192.0.2.48/28 GigabitEthernet0/0/0/1 192.0.3.24 vrflabel 2302
-#    192.0.2.80/28 vrf test_1 FastEthernet0/0/0/2 192.0.2.14 vrflabel 124 track ip_sla_2
-#   !
-#  !
-# !
-
-# Using deleted to delete a destination network entry
-
-# Before state
-# -------------
-# RP/0/RP0/CPU0:ios#sh running-config router static
-# Sat Feb 22 07:59:08.669 UTC
-# router static
-#  address-family ipv4 unicast
-#   192.0.2.16/28 FastEthernet0/0/0/1 192.0.2.10 tag 10 description LAB metric 120
-#   192.0.2.16/28 FastEthernet0/0/0/5 track ip_sla_1
-#   192.0.2.32/28 192.0.2.11 100
-#  !
-#  address-family ipv6 unicast
-#   2001:db8:1000::/36 FastEthernet0/0/0/7 description DC
-#   2001:db8:1000::/36 FastEthernet0/0/0/8 2001:db8:2000:2::1
-#  !
-#  vrf DEV_SITE
-#   address-family ipv4 unicast
-#    192.0.2.48/28 vrf test_1 192.0.2.12 description DEV
-#    192.0.2.48/28 GigabitEthernet0/0/0/1 192.0.3.24 vrflabel 2302
-#    192.0.2.80/28 vrf test_1 FastEthernet0/0/0/2 192.0.2.14 vrflabel 124 track ip_sla_2
-#   !
-#  !
-# !
-
-- name: Delete a destination network entry
-  iosxr_static_routes:
-    config:
-      - vrf: DEV_SITE
-        address_families:
-          - afi: ipv4
-            safi: unicast
-            routes:
-              - dest: 192.0.2.48/28
-    state: deleted
-
-# After state
-# -------------
-# RP/0/RP0/CPU0:ios#sh running-config router static
-# Sat Feb 22 07:59:08.669 UTC
-# router static
-#  address-family ipv4 unicast
-#   192.0.2.16/28 FastEthernet0/0/0/5 track ip_sla_1
-#   192.0.2.32/28 192.0.2.11 100
-#  !
-#  address-family ipv6 unicast
-#   2001:db8:1000::/36 FastEthernet0/0/0/7 description DC
-#   2001:db8:1000::/36 FastEthernet0/0/0/8 2001:db8:2000:2::1
-#  !
-#  vrf DEV_SITE
-#   address-family ipv4 unicast
-#    192.0.2.80/28 vrf test_1 FastEthernet0/0/0/2 192.0.2.14 vrflabel 124 track ip_sla_2
 #   !
 #  !
 # !
