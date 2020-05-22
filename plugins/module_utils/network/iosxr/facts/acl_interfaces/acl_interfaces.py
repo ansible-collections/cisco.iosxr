@@ -57,10 +57,16 @@ class Acl_interfacesFacts(object):
             data = connection.get_config(flags="interface")
 
         config_parser = Acl_interfacesTemplate(lines=data.splitlines())
-        entry = list(config_parser.parse().values())
+        entry = sorted(
+            list(config_parser.parse().values()),
+            key=lambda k, sk="name": k[sk],
+        )
         if entry:
             for item in entry:
-                item["access_groups"] = list(item["access_groups"].values())
+                item["access_groups"] = sorted(
+                    list(item["access_groups"].values()),
+                    key=lambda k, sk="afi": k[sk],
+                )
 
         ansible_facts["ansible_network_resources"].pop("acl_interfaces", None)
         facts = {"acl_interfaces": []}
