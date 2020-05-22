@@ -37,7 +37,7 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: iosxr_lldp_global
-short_description: LACP global resource module.
+short_description: LLDP global resource module.
 description:
 - This module manages Global Link Layer Discovery Protocol (LLDP) settings on IOS-XR
   devices.

@@ -77,7 +77,7 @@ class Lldp_interfaces(ConfigBase):
         if self.state in self.ACTION_STATES:
             existing_lldp_interfaces_facts = self.get_lldp_interfaces_facts()
         else:
-            existing_lldp_interfaces_facts = {}
+            existing_lldp_interfaces_facts = []
 
         if self.state in self.ACTION_STATES or self.state == "rendered":
             commands.extend(self.set_config(existing_lldp_interfaces_facts))

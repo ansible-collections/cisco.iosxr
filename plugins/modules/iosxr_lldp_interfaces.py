@@ -23,7 +23,7 @@
 #############################################
 
 """
-The module file for cisco.iosxr.iosxr_lldp_interfaces
+The module file for iosxr_lldp_interfaces
 """
 
 from __future__ import absolute_import, division, print_function
@@ -36,7 +36,7 @@ ANSIBLE_METADATA = {
     "supported_by": "network",
 }
 
-DOCUMENTATION = """module: cisco.iosxr.iosxr_lldp_interfaces
+DOCUMENTATION = """module: iosxr_lldp_interfaces
 short_description: Lldp interfaces resource module.
 description:
 - This module manages Link Layer Discovery Protocol (LLDP) attributes of interfaces

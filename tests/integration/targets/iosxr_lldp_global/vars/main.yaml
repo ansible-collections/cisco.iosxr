@@ -49,7 +49,7 @@ parsed:
     holdtime: 100
     reinit: 2
     timer: 3000
-    subinterfaces: frue
+    subinterfaces: true
     tlv_select:
       management_address: false
       system_description: false
