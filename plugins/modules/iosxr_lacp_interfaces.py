@@ -23,7 +23,7 @@
 #############################################
 
 """
-The module file for cisco.iosxr.iosxr_lacp_interfaces
+The module file for iosxr_lacp_interfaces
 """
 
 from __future__ import absolute_import, division, print_function
@@ -36,7 +36,7 @@ ANSIBLE_METADATA = {
     "supported_by": "network",
 }
 
-DOCUMENTATION = """module: cisco.iosxr.iosxr_lacp_interfaces
+DOCUMENTATION = """module: iosxr_lacp_interfaces
 short_description: LACP interfaces resource module.
 description:
 - This module manages Link Aggregation Control Protocol (LACP) attributes of interfaces

@@ -81,7 +81,7 @@ class Lacp_interfaces(ConfigBase):
         if self.state in self.ACTION_STATES:
             existing_lacp_interfaces_facts = self.get_lacp_interfaces_facts()
         else:
-            existing_lacp_interfaces_facts = {}
+            existing_lacp_interfaces_facts = []
 
         if self.state in self.ACTION_STATES or self.state == "rendered":
             commands.extend(self.set_config(existing_lacp_interfaces_facts))
