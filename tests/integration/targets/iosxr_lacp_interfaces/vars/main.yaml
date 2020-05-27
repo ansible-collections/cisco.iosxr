@@ -105,3 +105,26 @@ round_trip:
     - name: GigabitEthernet0/0/0/0
       period: 300
     - name: GigabitEthernet0/0/0/1
+parsed:
+  after:
+    - name: Bundle-Ether10
+      churn_logging: actor
+      collector_max_delay: 100
+      switchover_suppress_flaps: 500
+
+    - name: Bundle-Ether11
+      system:
+        mac: 00c2.4c00.bd15
+
+    - name: GigabitEthernet0/0/0/1
+      period: 200
+rendered:
+  commands:
+    - "interface Bundle-Ether10"
+    - "lacp churn logging actor"
+    - "lacp switchover suppress-flaps 500"
+    - "lacp collector-max-delay 100"
+    - "interface Bundle-Ether11"
+    - "lacp system mac 00c2.4c00.bd15"
+    - "interface GigabitEthernet0/0/0/1"
+    - "lacp period 200"
