@@ -1,0 +1,139 @@
+---
+requires_ansible: '>=2.9'
+plugin_routing:
+  action:
+    iosxr_acl_interfaces:
+      redirect: cisco.iosxr.iosxr
+    acl_interfaces:
+      redirect: cisco.iosxr.iosxr
+    iosxr_acls:
+      redirect: cisco.iosxr.iosxr
+    acls:
+      redirect: cisco.iosxr.iosxr
+    iosxr_banner:
+      redirect: cisco.iosxr.iosxr
+    banner:
+      redirect: cisco.iosxr.iosxr
+    iosxr_bgp:
+      redirect: cisco.iosxr.iosxr
+    bgp:
+      redirect: cisco.iosxr.iosxr
+    iosxr_command:
+      redirect: cisco.iosxr.iosxr
+    command:
+      redirect: cisco.iosxr.iosxr
+    iosxr_config:
+      redirect: cisco.iosxr.iosxr
+    config:
+      redirect: cisco.iosxr.iosxr
+    iosxr_facts:
+      redirect: cisco.iosxr.iosxr
+    facts:
+      redirect: cisco.iosxr.iosxr
+    iosxr_interface:
+      redirect: cisco.iosxr.iosxr
+    interface:
+      redirect: cisco.iosxr.iosxr
+    iosxr_interfaces:
+      redirect: cisco.iosxr.iosxr
+    interfaces:
+      redirect: cisco.iosxr.iosxr
+    iosxr_l2_interfaces:
+      redirect: cisco.iosxr.iosxr
+    l2_interfaces:
+      redirect: cisco.iosxr.iosxr
+    iosxr_l3_interfaces:
+      redirect: cisco.iosxr.iosxr
+    l3_interfaces:
+      redirect: cisco.iosxr.iosxr
+    iosxr_lacp:
+      redirect: cisco.iosxr.iosxr
+    lacp:
+      redirect: cisco.iosxr.iosxr
+    iosxr_lacp_interfaces:
+      redirect: cisco.iosxr.iosxr
+    lacp_interfaces:
+      redirect: cisco.iosxr.iosxr
+    iosxr_lag_interfaces:
+      redirect: cisco.iosxr.iosxr
+    lag_interfaces:
+      redirect: cisco.iosxr.iosxr
+    iosxr_lldp_global:
+      redirect: cisco.iosxr.iosxr
+    lldp_global:
+      redirect: cisco.iosxr.iosxr
+    iosxr_lldp_interfaces:
+      redirect: cisco.iosxr.iosxr
+    lldp_interfaces:
+      redirect: cisco.iosxr.iosxr
+    iosxr_logging:
+      redirect: cisco.iosxr.iosxr
+    logging:
+      redirect: cisco.iosxr.iosxr
+    iosxr_netconf:
+      redirect: cisco.iosxr.iosxr
+    netconf:
+      redirect: cisco.iosxr.iosxr
+    iosxr_static_routes:
+      redirect: cisco.iosxr.iosxr
+    static_routes:
+      redirect: cisco.iosxr.iosxr
+    iosxr_system:
+      redirect: cisco.iosxr.iosxr
+    system:
+      redirect: cisco.iosxr.iosxr
+    iosxr_user:
+      redirect: cisco.iosxr.iosxr
+    user:
+      redirect: cisco.iosxr.iosxr
+  modules:
+    acl_interfaces:
+      redirect: cisco.iosxr.iosxr_acl_interfaces
+    acls:
+      redirect: cisco.iosxr.iosxr_acls
+    banner:
+      redirect: cisco.iosxr.iosxr_banner
+    bgp:
+      redirect: cisco.iosxr.iosxr_bgp
+    command:
+      redirect: cisco.iosxr.iosxr_command
+    config:
+      redirect: cisco.iosxr.iosxr_config
+    facts:
+      redirect: cisco.iosxr.iosxr_facts
+    interface:
+      redirect: cisco.iosxr.iosxr_interface
+      deprecation:
+        warning_text: cisco.iosxr.interface has been deprecated and will be removed
+          in a release after 2022-6-01. See the plugin documentation for more details
+    iosxr_interface:
+      deprecation:
+        warning_text: cisco.iosxr.iosxr_interface has been deprecated and will be
+          removed in a release after 2022-6-01. See the plugin documentation for more
+          details
+    interfaces:
+      redirect: cisco.iosxr.iosxr_interfaces
+    l2_interfaces:
+      redirect: cisco.iosxr.iosxr_l2_interfaces
+    l3_interfaces:
+      redirect: cisco.iosxr.iosxr_l3_interfaces
+    lacp:
+      redirect: cisco.iosxr.iosxr_lacp
+    lacp_interfaces:
+      redirect: cisco.iosxr.iosxr_lacp_interfaces
+    lag_interfaces:
+      redirect: cisco.iosxr.iosxr_lag_interfaces
+    lldp_global:
+      redirect: cisco.iosxr.iosxr_lldp_global
+    lldp_interfaces:
+      redirect: cisco.iosxr.iosxr_lldp_interfaces
+    logging:
+      redirect: cisco.iosxr.iosxr_logging
+    netconf:
+      redirect: cisco.iosxr.iosxr_netconf
+    static_routes:
+      redirect: cisco.iosxr.iosxr_static_routes
+    system:
+      redirect: cisco.iosxr.iosxr_system
+    user:
+      redirect: cisco.iosxr.iosxr_user
