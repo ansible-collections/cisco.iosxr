@@ -36,6 +36,7 @@
       assert:
         that: "{{ merged['after'] | symmetric_difference(result['gathered']) |length\
           \ == 0 }}"
+
   always:
 
     - include_tasks: _remove_config.yaml

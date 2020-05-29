@@ -1,0 +1,27 @@
+---
+- debug:
+    msg: START iosxr_lldp_interfaces rendered integration tests on connection={{ ansible_connection
+      }}
+
+- block:
+
+    - name: Merge the provided configuration with the exisiting running configuration
+      register: result
+      cisco.iosxr.iosxr_lldp_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/1
+            destination:
+              mac_address: ieee-nearest-non-tmpr-bridge
+            transmit: false
+
+          - name: GigabitEthernet0/0/0/2
+            destination:
+              mac_address: ieee-nearest-bridge
+            receive: false
+        state: rendered
+
+    - name: Assert that correct set of commands were rendered
+      assert:
+        that:
+          - "{{ rendered['commands'] | symmetric_difference(result['rendered']) |length\
+            \ == 0 }}"
