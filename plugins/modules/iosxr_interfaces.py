@@ -99,7 +99,6 @@ options:
     description:
     - The state of the configuration after module completion
     type: str
-
 """
 
 EXAMPLES = """
@@ -559,11 +558,14 @@ commands:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.interfaces.interfaces import (
-    InterfacesArgs,
-)
+#from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.interfaces.interfaces import (
+#    InterfacesArgs,
+#)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.interfaces.interfaces import (
     Interfaces,
+)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    convert_doc_to_ansible_module_kwargs,
 )
 
 
@@ -572,6 +574,8 @@ def main():
     Main entry point for module execution
     :returns: the result form module invocation
     """
+    kwargs = convert_doc_to_ansible_module_kwargs(DOCUMENTATION)
+    '''
     required_if = [
         ("state", "merged", ("config",)),
         ("state", "replaced", ("config",)),
@@ -586,7 +590,8 @@ def main():
         supports_check_mode=True,
         mutually_exclusive=mutually_exclusive,
     )
-
+    '''
+    module = AnsibleModule(**kwargs)
     result = Interfaces(module).execute_module()
     module.exit_json(**result)
 
