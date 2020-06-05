@@ -10,7 +10,6 @@ is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to it's desired end-state is
 created
 """
-from copy import deepcopy
 from ansible.module_utils.six import iteritems
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
     Facts,
@@ -25,7 +24,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.r
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
 )
-import q
 
 
 class Ospfv2(ResourceModule):
@@ -113,8 +111,6 @@ class Ospfv2(ResourceModule):
 
         # if state is merged, merge want onto have
         if self.state == "merged":
-            q(wantd)
-            q(haved)
             wantd = dict_merge(haved, wantd)
 
         # if state is deleted, limit the have to anything in want
@@ -174,12 +170,8 @@ class Ospfv2(ResourceModule):
             self._areas_compare(want, have)
 
     def _areas_compare(self, want, have):
-        q(want)
-        q(have)
         wareas = want.get("areas", {})
         hareas = have.get("areas", {})
-        q(wareas)
-        q(hareas)
         for name, entry in iteritems(wareas):
             self._area_compare(want=entry, have=hareas.pop(name, {}))
         for name, entry in iteritems(hareas):
@@ -215,42 +207,17 @@ class Ospfv2(ResourceModule):
         ]
         self.compare(parsers=parsers, want=want, have=have)
         self._areas_compare_virtual_link(want, have)
-        self._area_compare_filters(want, have)
 
     def _areas_compare_virtual_link(self, want, have):
-        q(want)
-        q(have)
         wvlinks = want.get("virtual_link", {})
         hvlinks = have.get("virtual_link", {})
-        q(wvlinks)
-        q(hvlinks)
         for name, entry in iteritems(wvlinks):
-            self._area_compare_virtual_link(want=entry, have=hvlinks.pop(name, {}))
+            self._area_compare_virtual_link(
+                want=entry, have=hvlinks.pop(name, {})
+            )
         for name, entry in iteritems(hvlinks):
             self._area_compare_virtual_link(want={}, have=entry)
 
     def _area_compare_virtual_link(self, want, have):
-        parsers = [
-            "virtual_link.hello_interval",
-        ]
+        parsers = ["virtual_link.hello_interval"]
         self.compare(parsers=parsers, want=want, have=have)
-
-    def _area_compare_filters(self, wantd, haved):
-        for name, entry in iteritems(wantd):
-            h_item = haved.pop(name, {})
-            if entry != h_item and name == "filter_list":
-                filter_list_entry = {}
-                filter_list_entry["area_id"] = wantd["area_id"]
-                if h_item:
-                    li_diff = [
-                        item
-                        for item in entry + h_item
-                        if item not in entry or item not in h_item
-                    ]
-                else:
-                    li_diff = entry
-                filter_list_entry["filter_list"] = li_diff
-                self.addcmd(filter_list_entry, "area.filter_list", False)
-        for name, entry in iteritems(haved):
-            if name == "filter_list":
-                self.addcmd(entry, "area.filter_list", True)

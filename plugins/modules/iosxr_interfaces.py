@@ -558,9 +558,10 @@ commands:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-#from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.interfaces.interfaces import (
+
+# from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.interfaces.interfaces import (
 #    InterfacesArgs,
-#)
+# )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.interfaces.interfaces import (
     Interfaces,
 )
@@ -575,7 +576,7 @@ def main():
     :returns: the result form module invocation
     """
     kwargs = convert_doc_to_ansible_module_kwargs(DOCUMENTATION)
-    '''
+    """
     required_if = [
         ("state", "merged", ("config",)),
         ("state", "replaced", ("config",)),
@@ -590,7 +591,7 @@ def main():
         supports_check_mode=True,
         mutually_exclusive=mutually_exclusive,
     )
-    '''
+    """
     module = AnsibleModule(**kwargs)
     result = Interfaces(module).execute_module()
     module.exit_json(**result)

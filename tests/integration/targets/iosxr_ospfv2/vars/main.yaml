@@ -1,0 +1,297 @@
+---
+merged:
+  before: {}
+  commands:
+    - router ospf 10
+    - authentication keychain ansible_test1102
+    - area 11 default-cost 5
+    - area 11 cost 11
+    - area 22 default-cost 6
+    - router ospf 27
+    - area 10 authentication keychain ansi11393
+    - area 10 hello-interval 2
+    - router ospf 26
+    - adjacency stagger 10 20
+    - authentication message-digest keychain ansible1101pass
+    - router ospf 30
+    - cost 2
+    - weight 2
+    - passive disable
+    - priority 1
+    - flood-reduction disable
+    - default-metric 10
+    - router-id 2.2.2.2
+    - demand-circuit enable
+    - packet-size 577
+    - transmit-delay 2
+    - summary-in enable
+    - external-out disable
+    - dead-interval 2
+    - hello-interval 1
+    - retransmit-interval 2
+    - mtu-ignore enable
+    - area 11 default-cost 5
+    - area 22 default-cost 6
+  update_commands:
+    - router ospf 26
+    - adjacency stagger 11 21
+    - router ospf 27
+    - area 30 dead-interval 4
+  after:
+    processes:
+      - areas:
+          - area_id: "11"
+            cost: 11
+            default_cost: 5
+          - area_id: "22"
+            default_cost: 6
+        authentication:
+          keychain: 'ansible_test1102'
+        process_id: "10"
+
+      - adjacency_stagger:
+          max_adjacency: 20
+          min_adjacency: 10
+        authentication:
+          message_digest:
+            keychain: 'ansible1101pass'
+        process_id: "26"
+      - areas:
+          - area_id: "10"
+            authentication:
+              keychain: 'ansi11393'
+            hello_interval: 2
+        process_id: "27"
+      - areas:
+          - area_id: "11"
+            default_cost: 5
+          - area_id: "22"
+            default_cost: 6
+        cost: 2
+        dead_interval: 2
+        default_metric: 10
+        demand_circuit: "enable"
+        external_out: "disable"
+        flood_reduction: "disable"
+        hello_interval: 1
+        mtu_ignore: "enable"
+        packet_size: 577
+        passive: "disable"
+        priority: 1
+        process_id: "30"
+        retransmit_interval: 2
+        router_id: "2.2.2.2"
+        summary_in: "enable"
+        transmit_delay: 2
+        weight: 2
+
+
+  update_after:
+    processes:
+      - process_id: 27
+        areas:
+          - area_id: 10
+            hello_interval: 2
+            authentication:
+              keychain: 'ansi11393'
+          - area_id: 30
+            hello_interval: 4
+      - process_id: 26
+        adjacency_stagger:
+          min_adjacency: 11
+          max_adjacency: 21
+        authentication:
+          message_digest:
+            keychain: 'ansible1101pass'
+      - process_id: 10
+        authentication:
+          keychain: 'ansible_test1102'
+        areas:
+          - area_id: 11
+            default_cost: 5
+            cost: 11
+          - area_id: 22
+            default_cost: 6
+      - process_id: 30
+        areas:
+          - area_id: 11
+            default_cost: 5
+          - area_id: 22
+            default_cost: 6
+
+        cost: 2
+        default_metric: 10
+        transmit_delay: 2
+        hello_interval: 1
+        dead_interval: 2
+        retransmit_interval: 2
+        weight: 2
+        packet_size: 577
+        priority: 1
+        router_id: '2.2.2.2'
+        demand_circuit: enable
+        passive: disable
+        summary_in: enable
+        flood_reduction: disable
+        mtu_ignore: enable
+        external_out: disable
+replaced:
+  before:
+    processes:
+      - process_id: 27
+        areas:
+          - area_id: 10
+            hello_interval: 2
+            authentication:
+              keychain: 'ansi11393'
+      - process_id: 26
+        adjacency_stagger:
+          min_adjacency: 10
+          max_adjacency: 20
+        authentication:
+          message_digest:
+            keychain: 'ansible1101pass'
+      - process_id: 10
+        authentication:
+          keychain: 'ansible_test1102'
+        areas:
+          - area_id: 11
+            default_cost: 5
+            cost: 11
+          - area_id: 22
+            default_cost: 6
+      - process_id: 30
+        areas:
+          - area_id: 11
+            default_cost: 5
+          - area_id: 22
+            default_cost: 6
+
+        cost: 2
+        default_metric: 10
+        transmit_delay: 2
+        hello_interval: 1
+        dead_interval: 2
+        retransmit_interval: 2
+        weight: 2
+        packet_size: 577
+        priority: 1
+        router_id: '2.2.2.2'
+        demand_circuit: enable
+        passive: disable
+        summary_in: enable
+        flood_reduction: disable
+        mtu_ignore: enable
+        external_out: disable
+
+  commands:
+    - router ospf 27
+    - no area 10 authentication keychain ansi11393
+    - area 20 authentication keychain ansi11393
+    - area 20 default-cost 2
+    - area 20 cost 2
+
+  after:
+    processes:
+      - process_id: 27
+        areas:
+          - area_id: 10
+            hello_interval: 2
+          - area_id: 20
+            cost: 2
+            default_cost: 2
+            authentication:
+              keychain: 'ansi11393'
+      - process_id: 26
+        adjacency_stagger:
+          min_adjacency: 10
+          max_adjacency: 20
+        authentication:
+          message_digest:
+            keychain: 'ansible1101pass'
+      - process_id: 10
+        authentication:
+          keychain: 'ansible_test1102'
+        areas:
+          - area_id: 11
+            default_cost: 5
+            cost: 11
+          - area_id: 22
+            default_cost: 6
+      - process_id: 30
+        areas:
+          - area_id: 11
+            default_cost: 5
+          - area_id: 22
+            default_cost: 6
+
+        cost: 2
+        default_metric: 10
+        transmit_delay: 2
+        hello_interval: 1
+        dead_interval: 2
+        retransmit_interval: 2
+        weight: 2
+        packet_size: 577
+        priority: 1
+        router_id: '2.2.2.2'
+        demand_circuit: enable
+        passive: disable
+        summary_in: enable
+        flood_reduction: disable
+        mtu_ignore: enable
+        external_out: disable
+
+overridden:
+  commands:
+    - no router ospf 10
+    - no router ospf 30
+    - router ospf 27
+    - area 20 authentication keychain ansi11393
+    - area 20 default-cost 2
+    - area 20 cost 2
+  after:
+    processes:
+      - process_id: 27
+        areas:
+          - area_id: 10
+            hello_interval: 2
+          - area_id: 20
+            cost: 2
+            default_cost: 2
+            authentication:
+              keychain: 'ansi11393'
+      - process_id: 26
+        adjacency_stagger:
+          min_adjacency: 10
+          max_adjacency: 20
+        authentication:
+          message_digest:
+            keychain: 'ansible1101pass'
+deleted:
+  commands:
+    - no router ospf 10
+    - no router ospf 26
+    - no router ospf 27
+    - no router ospf 30
+
+  after: {}
+round_trip:
+  after:
+    processes:
+      - process_id: 27
+        areas:
+          - area_id: 10
+            hello_interval: 2
+          - area_id: 20
+            cost: 2
+            default_cost: 2
+            authentication:
+              keychain: 'ansi11393'
+      - process_id: 26
+        adjacency_stagger:
+          min_adjacency: 10
+          max_adjacency: 20
+        authentication:
+          message_digest:
+            keychain: 'ansible1101pass'

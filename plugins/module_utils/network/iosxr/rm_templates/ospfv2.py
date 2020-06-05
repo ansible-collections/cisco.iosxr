@@ -5,7 +5,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 )
 from ansible.module_utils.six import iteritems
 
-import q
 
 def _tmplt_ospf_default_information(config_data):
     if "default_information_originate" in config_data:
@@ -26,6 +25,7 @@ def _tmplt_ospf_default_information(config_data):
             )
         return command
 
+
 def _tmplt_ospf_auto_cost(config_data):
     if "auto_cost" in config_data:
         command = "auto-cost"
@@ -37,78 +37,74 @@ def _tmplt_ospf_auto_cost(config_data):
             )
         return command
 
-def _tmplt_ospf_bfd(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_bfd(config_data):
     if "bfd" in config_data:
         command = "bfd"
         if "minimum_interval" in config_data["bfd"]:
-             command += " minimum-interval {minimum_interval}".format(
-                **config_data["bfd"])
+            command += " minimum-interval {minimum_interval}".format(
+                **config_data["bfd"]
+            )
 
         if "multiplier" in config_data["bfd"]:
-            command += " multiplier {multiplier}".format(
-                **config_data["bfd"])
+            command += " multiplier {multiplier}".format(**config_data["bfd"])
 
         return command
 
-def _tmplt_ospf_security(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_security(config_data):
     if "security_ttl" in config_data:
         command = "security_ttl"
         if "set" in config_data["security_ttl"]:
             command += " ttl"
         elif config_data["security_ttl"].get("hops"):
-            command += " ttl hops {hops}".format(config_data["security_ttl"].get("hops"))
+            command += " ttl hops {hops}".format(
+                config_data["security_ttl"].get("hops")
+            )
         return command
 
-def _tmplt_ospf_distance_admin(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_distance_admin(config_data):
     if "admin_distance" in config_data:
         command = "distance"
         if config_data["admin_distance"].get("value"):
-            command += " {value}".format(config_data["admin_distance"].get("value"))
+            command += " {value}".format(
+                config_data["admin_distance"].get("value")
+            )
         if config_data["admin_distance"].get("source"):
-            command += " {source}".format(config_data["admin_distance"].get("source"))
+            command += " {source}".format(
+                config_data["admin_distance"].get("source")
+            )
         if config_data["admin_distance"].get("wildcard"):
-            command += " {wildcard}".format(config_data["admin_distance"].get("wildcard"))
+            command += " {wildcard}".format(
+                config_data["admin_distance"].get("wildcard")
+            )
         if config_data["admin_distance"].get("access_list"):
-            command += " {access_list}".format(config_data["admin_distance"].get("access_list"))
+            command += " {access_list}".format(
+                config_data["admin_distance"].get("access_list")
+            )
         return command
 
-def _tmplt_ospf_distance_ospf(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_distance_ospf(config_data):
     if "ospf_distance" in config_data:
         command = "distance ospf"
         if config_data["ospf_distance"].get("external"):
-            command += " external {external}".format(config_data["ospf_distance"].get("external"))
+            command += " external {external}".format(
+                config_data["ospf_distance"].get("external")
+            )
         if config_data["ospf_distance"].get("inter_area"):
-            command += " inter-area {inter_area}".format(config_data["ospf_distance"].get("inter_area"))
+            command += " inter-area {inter_area}".format(
+                config_data["ospf_distance"].get("inter_area")
+            )
         if config_data["ospf_distance"].get("intra_area"):
-            command += " intra-area {intra_area}".format(config_data["ospf_distance"].get("intra_area"))
+            command += " intra-area {intra_area}".format(
+                config_data["ospf_distance"].get("intra_area")
+            )
         return command
 
-def _tmplt_ospf_nsr(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_nsr(config_data):
     if "nsr" in config_data:
         command = "nsr"
         if "set" in config_data["nsr"]:
@@ -117,12 +113,8 @@ def _tmplt_ospf_nsr(config_data):
             command += " nsr {disable}".format("disable")
         return command
 
-def _tmplt_ospf_protocol(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_protocol(config_data):
     if "protocol_shutdown" in config_data:
         command = "protocol"
         if "set" in config_data["protocol_shutdown"]:
@@ -132,6 +124,7 @@ def _tmplt_ospf_protocol(config_data):
         elif config_data["shutdown"].get("on_reload"):
             command += " shutdown on-reload"
         return command
+
 
 def _tmplt_ospf_bfd_fast_detect(config_data):
     if "bfd" in config_data:
@@ -143,12 +136,8 @@ def _tmplt_ospf_bfd_fast_detect(config_data):
                 command += " strict-mode"
         return command
 
+
 def _tmplt_ospf_authentication_md(config_data):
-    """
-    This fucntion generated the commands for process.authentication attributes
-    :param config_data:
-    :return:
-    """
     command = []
     if "authentication" in config_data:
         if config_data["authentication"].get("message_digest"):
@@ -158,47 +147,45 @@ def _tmplt_ospf_authentication_md(config_data):
                 command += " keychain " + md.get("keychain")
         return command
 
+
 def _tmplt_ospf_authentication(config_data):
-    """
-    This fucntion generated the commands for process.authentication attributes
-    :param config_data:
-    :return:
-    """
     command = []
     if "authentication" in config_data:
         if config_data["authentication"].get("keychain"):
-            command = "authentication keychain " + config_data["authentication"].get("keychain")
+            command = "authentication keychain " + config_data[
+                "authentication"
+            ].get("keychain")
         elif config_data["authentication"].get("no_auth"):
             command = "authentication null"
         return command
 
+
 def _tmplt_ospf_authentication(config_data):
-    """
-    This fucntion generated the commands for process.authentication attributes
-    :param config_data:
-    :return:
-    """
     command = []
     if "authentication" in config_data:
         if config_data["authentication"].get("keychain"):
-            command = "authentication keychain " + config_data["authentication"].get("keychain")
+            command = "authentication keychain " + config_data[
+                "authentication"
+            ].get("keychain")
         elif config_data["authentication"].get("no_auth"):
             command = "authentication null"
         return command
+
 
 def _tmplt_ospf_adjacency_stagger(config_data):
-    """
-    This fucntion generated the commands for process.adjacenyc_stagger attributes
-    :param config_data:
-    :return:
-    """
     if "adjacency_stagger" in config_data:
         command = "adjacency stagger".format(**config_data)
-        if config_data["adjacency_stagger"].get("min_adjacency") and config_data["adjacency_stagger"].get("min_adjacency"):
-            command += " {} {}".format(config_data["adjacency_stagger"].get("min_adjacency"), config_data["adjacency_stagger"].get("max_adjacency"))
+        if config_data["adjacency_stagger"].get(
+            "min_adjacency"
+        ) and config_data["adjacency_stagger"].get("min_adjacency"):
+            command += " {} {}".format(
+                config_data["adjacency_stagger"].get("min_adjacency"),
+                config_data["adjacency_stagger"].get("max_adjacency"),
+            )
         elif config_data["adjacency_stagger"].get("disable"):
             command += " disable"
         return command
+
 
 def _tmplt_ospf_capability_opaque(config_data):
     if "capability" in config_data:
@@ -209,32 +196,30 @@ def _tmplt_ospf_capability_opaque(config_data):
                 command += "capability opaque disable"
         return command
 
+
 def _tmplt_ospf_authentication_key(config_data):
     if "authentication_key" in config_data:
         command = "authentication-key".format(**config_data)
         if config_data["authentication_key"].get("password"):
-            command += " {password}".format(config_data["authentication_key"].get("password"))
+            command += " {password}".format(
+                config_data["authentication_key"].get("password")
+            )
         return command
 
+
 def _tmplt_ospf_area_authentication(config_data):
-    """
-    :param config_data:
-    :return:
-    """
     if "authentication" in config_data:
         command = "area {area_id} authentication".format(**config_data)
         if config_data["authentication"].get("keychain"):
-            command += " keychain " + config_data["authentication"].get("keychain")
+            command += " keychain " + config_data["authentication"].get(
+                "keychain"
+            )
         elif config_data["authentication"].get("no_auth"):
             command += " null"
         return command
 
+
 def _tmplt_ospf_area_authentication_md(config_data):
-    """
-    This fucntion generated the commands for process.authentication attributes
-    :param config_data:
-    :return:
-    """
     if "authentication" in config_data:
         command = "area {area_id} authentication".format(**config_data)
         if config_data["authentication"].get("message_digest"):
@@ -244,24 +229,18 @@ def _tmplt_ospf_area_authentication_md(config_data):
                 command += " keychain " + md.get("keychain")
         return command
 
-def _tmplt_ospf_area_authentication_key(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_area_authentication_key(config_data):
     if "authentication_key" in config_data:
         command = "area {area_id} authentication-key".format(**config_data)
         if config_data["authentication_key"].get("password"):
-            command += " {password}".format(config_data["authentication_key"].get("password"))
+            command += " {password}".format(
+                config_data["authentication_key"].get("password")
+            )
         return command
 
-def _tmplt_ospf_area_mpls_ldp(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_area_mpls_ldp(config_data):
     commands = []
     if "mpls" in config_data:
         command = "area {area_id} mpls".format(**config_data)
@@ -278,30 +257,22 @@ def _tmplt_ospf_area_mpls_ldp(config_data):
                 commands.append(command)
         return commands
 
-def _tmplt_ospf_area_bfd(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_area_bfd(config_data):
     if "bfd" in config_data:
         command = "area {area_id} bfd".format(**config_data)
         if "minimum_interval" in config_data["bfd"]:
-             command += " minimum-interval {minimum_interval}".format(
-                **config_data["bfd"])
+            command += " minimum-interval {minimum_interval}".format(
+                **config_data["bfd"]
+            )
 
         if "multiplier" in config_data["bfd"]:
-            command += " multiplier {multiplier}".format(
-                **config_data["bfd"])
+            command += " multiplier {multiplier}".format(**config_data["bfd"])
 
         return command
 
-def _tmplt_ospf_area_bfd_fast_detect(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_area_bfd_fast_detect(config_data):
     if "bfd" in config_data:
         command = "area {area_id} bfd".format(**config_data)
         if "fast_detect" in config_data["bfd"]:
@@ -311,12 +282,8 @@ def _tmplt_ospf_area_bfd_fast_detect(config_data):
                 command += " strict-mode"
         return command
 
-def _tmplt_ospf_area_nssa(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_area_nssa(config_data):
     if "nssa" in config_data:
         command = "area {area_id} nssa".format(**config_data)
         if config_data["nssa"].get("no_redistribution"):
@@ -325,29 +292,25 @@ def _tmplt_ospf_area_nssa(config_data):
             command += " no-summary"
         return command
 
-def _tmplt_ospf_area_nssa_def_info_origin(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_area_nssa_def_info_origin(config_data):
     if "nssa" in config_data:
         command = "area {area_id} nssa".format(**config_data)
         if config_data["nssa"].get("default_information_originate"):
             command += " default-information-originate"
-            def_info_origin = config_data["nssa"].get("default_information_originate")
+            def_info_origin = config_data["nssa"].get(
+                "default_information_originate"
+            )
             if "metric" in def_info_origin:
                 command += " metric {metric}".format(def_info_origin["metric"])
             if "metric_type" in def_info_origin:
-                command += " metric-type {metric_type}".format(def_info_origin["metric_type"])
+                command += " metric-type {metric_type}".format(
+                    def_info_origin["metric_type"]
+                )
         return command
 
-def _tmplt_ospf_area_nssa_translate(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_area_nssa_translate(config_data):
     if "nssa" in config_data:
         command = "area {area_id} nssa".format(**config_data)
         if config_data["nssa"].get("translate"):
@@ -359,24 +322,23 @@ def _tmplt_ospf_area_nssa_translate(config_data):
                 command += " always"
         return command
 
-def _tmplt_ospf_area_stub(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_vrf_cmd(process):
+    command = "router ospf {process_id}".format(**process)
+    if "vrf" in process:
+        command += " vrf {vrf}".format(**process)
+    return command
+
+
+def _tmplt_ospf_area_stub(config_data):
     if "stub" in config_data:
         command = "area {area_id} stub".format(**config_data)
         if config_data["stub"].get("no_summary"):
             command += " no-summary"
         return command
 
-def _tmplt_ospf_area_ranges(config_data):
-    """
 
-    :param config_data:
-    :return:
-    """
+def _tmplt_ospf_area_ranges(config_data):
     if "ranges" in config_data:
         commands = []
         for k, v in iteritems(config_data["ranges"]):
@@ -389,200 +351,6 @@ def _tmplt_ospf_area_ranges(config_data):
             cmd += temp_cmd
             commands.append(cmd)
         return commands
-
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-def _tmplt_area_range(arange):
-    command = "area {area} range {range}".format(**arange)
-    if arange.get("not_advertise") is True:
-        command += " not-advertise"
-    if "cost" in arange:
-        command += " cost {cost}".format(**arange)
-    return command
-
-def _tmplt_ospf_vrf_cmd(process):
-    command = "router ospf {process_id}".format(**process)
-    if "vrf" in process:
-        command += " vrf {vrf}".format(**process)
-    return command
-
-
-def _tmplt_default_information(proc):
-    command = "default-information originate"
-    if (
-        "always" in proc["default_information"]
-        and proc["default_information"]["always"]
-    ):
-        command += " always"
-    if "route_map" in proc["default_information"]:
-        command += " route-map"
-        command += " {default_information[route_map]}".format(**proc)
-    return command
-
-def _tmplt_log_adjacency_changes(proc):
-    command = "log-adjacency-changes"
-    if proc.get("detail") is True:
-        command += " detail"
-    return command
-
-
-def _tmplt_max_lsa(proc):
-    max_lsa = proc["max_lsa"]
-    command = "max-lsa {max_non_self_generated_lsa}".format(**max_lsa)
-    if max_lsa.get("threshold"):
-        command += " {threshold}".format(**max_lsa)
-    if max_lsa.get("warning_only"):
-        command += " warning-only"
-    if max_lsa.get("ignore_time"):
-        command += " ignore-time {ignore_time}".format(**max_lsa)
-    if max_lsa.get("ignore_count"):
-        command += " ignore-count {ignore_count}".format(**max_lsa)
-    if max_lsa.get("reset_time"):
-        command += " reset-time {reset_time}".format(**max_lsa)
-    return command
-
-
-def _tmplt_default_information(proc):
-    default_information = proc["default_information"]["originate"]
-    command = "default-information originate"
-
-    if default_information.get("set") is False:
-        command = "no {0}".format(command)
-    else:
-        if default_information.get("always"):
-            command += " always"
-        if default_information.get("route_map"):
-            command += " route-map {route_map}".format(**default_information)
-
-    return command
-
-
-def _tmplt_table_map(proc):
-    table_map = proc["table_map"]
-    command = "table-map"
-
-    if table_map.get("name"):
-        command += " {name}".format(**table_map)
-    if table_map.get("filter"):
-        command += " filter"
-
-    return command
-
-
-def _tmplt_max_metric(proc):
-    max_metric = proc["max_metric"]
-    command = "max-metric router-lsa"
-
-    if max_metric.get("router_lsa", {}).get("set") is False:
-        command = "no {0}".format(command)
-    else:
-        external_lsa = max_metric.get("router_lsa", {}).get("external_lsa", {})
-        include_stub = max_metric.get("router_lsa", {}).get("include_stub", {})
-        on_startup = max_metric.get("router_lsa", {}).get("on_startup", {})
-        summary_lsa = max_metric.get("router_lsa", {}).get("summary_lsa", {})
-        if external_lsa:
-            command += " external-lsa"
-            if external_lsa.get("max_metric_value"):
-                command += " {max_metric_value}".format(**external_lsa)
-        if include_stub:
-            command += " include-stub"
-        if on_startup:
-            command += " on-startup"
-            if on_startup.get("wait_period"):
-                command += " {wait_period}".format(**on_startup)
-            if on_startup.get("wait_for_bgp_asn"):
-                command += " wait-for bgp {wait_for_bgp_asn}".format(
-                    **on_startup
-                )
-        if summary_lsa:
-            command += " summary-lsa"
-            if summary_lsa.get("max_metric_value"):
-                command += " {max_metric_value}".format(**summary_lsa)
-
-    return command
-
-
-def _tmplt_area_nssa(area):
-    nssa = area["nssa"]
-    command = "area {area_id} nssa".format(**area)
-    if nssa.get("set") is False:
-        command = "no {0}".format(command)
-    else:
-        for attrib in [
-            "no_summary",
-            "no_redistribution",
-            "default_information_originate",
-        ]:
-            if nssa.get(attrib):
-                command += " {0}".format(attrib.replace("_", "-"))
-    return command
-
-
-def _tmplt_area_nssa_default_information_originate(nssa):
-    default_info_originate = nssa["default_information_originate"]
-    #command = "area {area_id} nssa default-information-originate".format(**area)
-    command = "nssa default-information-originate"
-    for attrib in ["metric", "metric_type", "no_redistribution", "no_summary"]:
-        if default_info_originate.get(attrib):
-            command += " {0}".format(attrib.replace("_", "-"))
-    return command
-
-
-def _tmplt_area_ranges(arange):
-    command = "area {area_id} range {prefix}".format(**arange)
-    if arange.get("not_advertise") is True:
-        command += " not-advertise"
-    if "cost" in arange:
-        command += " cost {cost}".format(**arange)
-    return command
-
-
-def _tmplt_area_ranges(arange):
-    command = "area {area_id} range {prefix}".format(**arange)
-    if arange.get("not_advertise") is True:
-        command += " not-advertise"
-    if "cost" in arange:
-        command += " cost {cost}".format(**arange)
-    return command
-
-def _tmplt_summary_address(proc):
-    command = "summary-address {prefix}".format(**proc)
-    if proc.get("tag"):
-        command += " tag {tag}".format(**proc)
-    elif proc.get("not_advertise"):
-        command += " not-advertise"
-    return command
-
-
-def _tmplt_area_stub(area):
-    stub = area["stub"]
-    command = "area {area_id} stub".format(**area)
-    if stub.get("set") is False:
-        command = "no {0}".format(command)
-    elif stub.get("no_summary"):
-        command += " no-summary"
-    return command
-
-
-def _tmplt_redistribute(redis):
-    command = "redistribute {protocol}".format(**redis)
-    if redis.get("id"):
-        command += " {id}".format(**redis)
-    if redis.get("route_map"):
-        command += " route-map {route_map}".format(**redis)
-    return command
-
-
-def _tmplt_capability_vrf_lite(proc):
-    command = "capability vrf-lite"
-    vrf_lite = proc["capability"]["vrf_lite"]
-    if vrf_lite.get("set") is False:
-        command = "no {0}".format(command)
-    else:
-        if vrf_lite.get("evpn"):
-            command += " evpn"
-    return command
 
 
 class Ospfv2Template(NetworkTemplate):

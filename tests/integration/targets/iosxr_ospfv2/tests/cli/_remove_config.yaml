@@ -1,0 +1,7 @@
+---
+- name: Remove Static Routes
+  vars:
+    lines: "no router ospf\n"
+  ignore_errors: true
+  ansible.netcommon.cli_config:
+    config: '{{ lines }}'

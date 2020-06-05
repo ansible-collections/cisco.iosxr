@@ -10,9 +10,8 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 from copy import deepcopy
-import q
+import re
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ospfv2 import (
     Ospfv2Template,
 )
@@ -25,9 +24,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
-#from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-#    convert_doc_to_ansible_module_kwargs,
-#)
 
 
 class Ospfv2Facts(object):
@@ -37,10 +33,6 @@ class Ospfv2Facts(object):
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
         self.argument_spec = Ospfv2Args.argument_spec
-        #import ansible_collections.cisco.iosxr.plugins.modules.iosxr_ospfv2 as ARG
-        #self.argument_spec = convert_doc_to_ansible_module_kwargs(
-        #    ARG.DOCUMENTATION
-        #).get("argument_spec")
 
         spec = deepcopy(self.argument_spec)
         if subspec:
@@ -62,82 +54,70 @@ class Ospfv2Facts(object):
         :returns: facts
         """
         if not data:
-            data = connection.get(
-                "show running-config router ospf"
-            )
+            data = connection.get("show running-config router ospf")
 
-        count = 0
-        areas = []
-        end_flag = 0
-        area_str = ''
-        process = ''
-        end_mark = 0
-        curr_process = ''
-        config_commands = []
-        import re
+        end_flag, end_mark,count = 0, 0, 0
+        areas, config_commands = [], []
+        area_str, process, curr_process = "", "", ""
         data = data.splitlines()
-
         for line in data:
-            if line.startswith('router ospf') and curr_process != '' and curr_process != line:
-                end_mark = 0
-                count = 0
-                end_flag = 0
-                area_str = ''
-            if end_mark == 0 and count == 0 and line.startswith('router ospf'):
+            if (
+                line.startswith("router ospf")
+                and curr_process != ""
+                and curr_process != line
+            ):
+                end_mark, count, end_flag, area_str = 0, 0, 0, ""
+            if end_mark == 0 and count == 0 and line.startswith("router ospf"):
                 curr_process = line
-                process = re.sub('\n', '', line)
+                process = re.sub("\n", "", line)
                 count += 1
                 config_commands.append(process)
             else:
-                if line.startswith(' area') or line.startswith(' vrf'):
-                    area_str = process + re.sub('\n', '', line)
-                    config_commands.append(area_str.replace('  ', ' '))
+                if line.startswith(" area") or line.startswith(" vrf"):
+                    area_str = process + re.sub("\n", "", line)
+                    config_commands.append(area_str.replace("  ", " "))
                     end_flag += 1
-                elif end_flag > 0 and '!' not in line:
-                    command = area_str + re.sub('\n', '', line)
-                    config_commands.append(command.replace('  ', ' '))
-                elif '!' in line:
+                elif end_flag > 0 and "!" not in line:
+                    command = area_str + re.sub("\n", "", line)
+                    config_commands.append(command.replace("  ", " "))
+                elif "!" in line:
                     end_flag = 0
                     end_mark += 1
-                    # thats the end of vrf or router
                     if end_mark == 3:
-                        end_mark = 0
-                        count = 0
-                    area_str = ''
+                        end_mark, count = 0, 0
+                    area_str = ""
                 else:
                     command = process + line
                     command.replace("  ", " ")
-                    config_commands.append(re.sub('\n', '', command))
-                    areas.append(re.sub('\n', '', command))
-        # listToStr = ' '.join([str(elem) for elem in config_commands])
+                    config_commands.append(re.sub("\n", "", command))
+                    areas.append(re.sub("\n", "", command))
         data = config_commands
         ipv4 = {"processes": []}
-        rmmod = NetworkTemplate(
-            lines=data, tmplt=Ospfv2Template()
-        )
+        rmmod = NetworkTemplate(lines=data, tmplt=Ospfv2Template())
         current = rmmod.parse()
 
         # convert some of the dicts to lists
         for key, sortv in [("processes", "process_id")]:
             if key in current and current[key]:
                 current[key] = current[key].values()
-                #current[key] = sorted(
-                #    current[key], key=lambda k, sk=sortv: k[sk]
-                #)
+                current[key] = sorted(
+                    current[key], key=lambda k, sk=sortv: k[sk]
+                )
 
         for process in current.get("processes", []):
             if "areas" in process:
                 process["areas"] = list(process["areas"].values())
 
-                #process["areas"] = sorted(
-                #    process["areas"], key=lambda k, sk="area_id": k[sk]
-                #)
-                #for area in process["areas"]:
-                    # if 'ranges' in area:
-                    #     area['ranges'] = sorted(area['ranges'],
-                    #                             key=lambda k, s='ranges': k[s])
-                    #if "filters" in area:
-                    #    area["filters"].sort()
+                process["areas"] = sorted(
+                    process["areas"], key=lambda k, sk="area_id": k[sk]
+                )
+                for area in process["areas"]:
+                    if "ranges" in area:
+                        area["ranges"] = sorted(
+                            area["ranges"], key=lambda k, s="ranges": k[s]
+                        )
+                    if "filters" in area:
+                        area["filters"].sort()
             ipv4["processes"].append(process)
 
         ansible_facts["ansible_network_resources"].pop("ospfv2", None)
@@ -152,46 +132,3 @@ class Ospfv2Facts(object):
 
             ansible_facts["ansible_network_resources"].update(facts)
         return ansible_facts
-        '''
-        This is the old code
-        ipv4 = {"processes": []}
-        a = 0
-        #for section in data.split("router "):
-        for ele in listToStr:
-            if a > 0:
-                break;
-            a = 1
-            #q(section)
-            q(data)
-            rmmod = Ospfv2Template(lines=data)
-            entry = rmmod.parse()
-            q(entry)
-
-            if entry:
-                global_vals = entry.get("vrfs", {}).pop("vrf_", {})
-                for key, value in iteritems(global_vals):
-                    entry[key] = value
-
-                if "vrfs" in entry:
-                    entry["vrfs"] = list(entry["vrfs"].values())
-
-                    for vrf in entry["vrfs"]:
-                        if "areas" in vrf:
-                            vrf["areas"] = list(vrf["areas"].values())
-
-                if "areas" in entry:
-                    entry["areas"] = list(entry["areas"].values())
-
-                #ipv4["processes"].append(entry)
-
-        ansible_facts["ansible_network_resources"].pop("ospfv2", None)
-        facts = {}
-        #params = utils.validate_config(self.argument_spec, {"config": ipv4})
-        params = utils.validate_config(self.argument_spec, {"config": entry})
-        params = utils.remove_empties(params)
-
-        facts["ospfv2"] = params.get("config", [])
-
-        ansible_facts["ansible_network_resources"].update(facts)
-        return ansible_facts
-        '''
