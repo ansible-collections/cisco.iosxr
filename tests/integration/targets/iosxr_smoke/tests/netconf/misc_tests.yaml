@@ -1,3 +1,4 @@
+---
 - debug: msg="START iosxr netconf/misc_tests.yaml on connection={{ ansible_connection }}"
 
 
@@ -6,7 +7,7 @@
   cisco.iosxr.iosxr_interface:
     name: GigabitEthernet0/0/0/1
     description: test_interface_1
-    enabled: True
+    enabled: true
     state: present
     provider: "{{ netconf }}"
   register: result
@@ -28,7 +29,7 @@
     name: GigabitEthernet0/0/0/1
     state: down
     provider: "{{ netconf }}"
-  ignore_errors: yes
+  ignore_errors: true
   register: result
 
 - assert:

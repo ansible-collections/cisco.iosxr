@@ -24,7 +24,7 @@
     tx_rate: gt(0)
     rx_rate: lt(0)
     provider: "{{ cli }}"
-  ignore_errors: yes
+  ignore_errors: true
   register: result
 
 - assert:
