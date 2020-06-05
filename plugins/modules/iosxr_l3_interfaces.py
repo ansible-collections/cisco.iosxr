@@ -305,8 +305,7 @@ EXAMPLES = """
 #  shutdown
 # !
 
-- name: "Delete L3 attributes of given interfaces (Note: This won't delete the interface\
-    \ itself)"
+- name: "Delete L3 attributes of given interfaces (Note: This won't delete the interface itself)"
   cisco.iosxr.iosxr_l3_interfaces:
     config:
     - name: GigabitEthernet0/0/0/3
@@ -363,8 +362,7 @@ EXAMPLES = """
 # !
 
 
-- name: "Delete L3 attributes of all interfaces (Note: This won't delete the interface\
-    \ itself)"
+- name: "Delete L3 attributes of all interfaces (Note: This won't delete the interface itself)"
   cisco.iosxr.iosxr_l3_interfaces:
     state: deleted
 
