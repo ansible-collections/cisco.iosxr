@@ -264,11 +264,15 @@ def copy_file_to_node(module):
 def check_args(module, warnings):
     if module.params["comment"]:
         if len(module.params["comment"]) > 60:
-            module.fail_json(msg="comment argument cannot be more than 60 characters")
+            module.fail_json(
+                msg="comment argument cannot be more than 60 characters"
+            )
     if module.params["label"]:
         label = module.params["label"]
         if len(label) > 30:
-            module.fail_json(msg="label argument cannot be more than 30 characters")
+            module.fail_json(
+                msg="label argument cannot be more than 30 characters"
+            )
         if not label[0].isalpha():
             module.fail_json(msg="label argument must begin with an alphabet")
         valid_chars = re.match(r"[\w-]*$", label)
@@ -390,7 +394,9 @@ def main():
         parents=dict(type="list"),
         before=dict(type="list"),
         after=dict(type="list"),
-        match=dict(default="line", choices=["line", "strict", "exact", "none"]),
+        match=dict(
+            default="line", choices=["line", "strict", "exact", "none"]
+        ),
         replace=dict(default="line", choices=["line", "block", "config"]),
         # this argument is deprecated in favor of setting match: none
         # it will be removed in a future version

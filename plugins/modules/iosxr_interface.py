@@ -338,7 +338,9 @@ class CliConfiguration(ConfigBase):
 
         intf_configs = list()
         for start_index, end_index in zip(start_indexes, end_indexes):
-            intf_configs.append([i.strip() for i in data_lines[start_index:end_index]])
+            intf_configs.append(
+                [i.strip() for i in data_lines[start_index:end_index]]
+            )
 
         if not intf_configs:
             return list()
@@ -353,7 +355,9 @@ class CliConfiguration(ConfigBase):
 
             obj = {
                 "name": name,
-                "description": self.parse_config_argument(intf_config, "description"),
+                "description": self.parse_config_argument(
+                    intf_config, "description"
+                ),
                 "speed": self.parse_config_argument(intf_config, "speed"),
                 "duplex": self.parse_config_argument(intf_config, "duplex"),
                 "mtu": self.parse_config_argument(intf_config, "mtu"),
@@ -385,7 +389,13 @@ class CliConfiguration(ConfigBase):
                         running = obj_in_have.get(item)
                         if candidate != running:
                             if candidate:
-                                cmd = interface + " " + item + " " + str(candidate)
+                                cmd = (
+                                    interface
+                                    + " "
+                                    + item
+                                    + " "
+                                    + str(candidate)
+                                )
                                 commands.append(cmd)
 
                     if disable and obj_in_have.get("enabled", False):
@@ -396,7 +406,9 @@ class CliConfiguration(ConfigBase):
                     for item in args:
                         value = want_item.get(item)
                         if value:
-                            commands.append(interface + " " + item + " " + str(value))
+                            commands.append(
+                                interface + " " + item + " " + str(value)
+                            )
                     if not disable:
                         commands.append("no " + interface + " shutdown")
         self._result["commands"] = commands
@@ -433,14 +445,18 @@ class CliConfiguration(ConfigBase):
                 if match:
                     have_state = match.group(1)
                     if have_state.strip() == "administratively":
-                        match = re.search(r"%s (\w+)" % "administratively", out, re.M)
+                        match = re.search(
+                            r"%s (\w+)" % "administratively", out, re.M
+                        )
                         if match:
                             have_state = match.group(1)
 
                 if have_state is None or not conditional(
                     want_state, have_state.strip()
                 ):
-                    failed_conditions.append("state " + "eq({0!s})".format(want_state))
+                    failed_conditions.append(
+                        "state " + "eq({0!s})".format(want_state)
+                    )
 
             if want_tx_rate:
                 match = re.search(r"%s (\d+)" % "output rate", out, re.M)
@@ -466,7 +482,9 @@ class CliConfiguration(ConfigBase):
 
         if failed_conditions:
             msg = "One or more conditional statements have not been satisfied"
-            self._module.fail_json(msg=msg, failed_conditions=failed_conditions)
+            self._module.fail_json(
+                msg=msg, failed_conditions=failed_conditions
+            )
 
     def run(self):
         self.map_params_to_obj()
@@ -615,7 +633,9 @@ class NCConfiguration(ConfigBase):
             opcode="filter",
         )
 
-        running = get_config(self._module, source="running", config_filter=_get_filter)
+        running = get_config(
+            self._module, source="running", config_filter=_get_filter
+        )
         intfcfg_nodes = etree_findall(running, "interface-configuration")
 
         intf_list = set()
@@ -701,14 +721,22 @@ class NCConfiguration(ConfigBase):
 
         self._data_rate_meta.update(
             [
-                ("interfaces", {"xpath": "infra-statistics/interfaces", "tag": True},),
+                (
+                    "interfaces",
+                    {"xpath": "infra-statistics/interfaces", "tag": True},
+                ),
                 (
                     "interface",
-                    {"xpath": "infra-statistics/interfaces/interface", "tag": True,},
+                    {
+                        "xpath": "infra-statistics/interfaces/interface",
+                        "tag": True,
+                    },
                 ),
                 (
                     "a:name",
-                    {"xpath": "infra-statistics/interfaces/interface/interface-name"},
+                    {
+                        "xpath": "infra-statistics/interfaces/interface/interface-name"
+                    },
                 ),
                 (
                     "cache",
@@ -801,11 +829,17 @@ class NCConfiguration(ConfigBase):
         data_rate_list = etree_findall(out, "interface")
         data_rate_map = dict()
         for item in data_rate_list:
-            data_rate_map.update({etree_find(item, "interface-name").text: dict()})
+            data_rate_map.update(
+                {etree_find(item, "interface-name").text: dict()}
+            )
             data_rate_map[etree_find(item, "interface-name").text].update(
                 {
-                    "input-data-rate": etree_find(item, "input-data-rate").text,
-                    "output-data-rate": etree_find(item, "output-data-rate").text,
+                    "input-data-rate": etree_find(
+                        item, "input-data-rate"
+                    ).text,
+                    "output-data-rate": etree_find(
+                        item, "output-data-rate"
+                    ).text,
                 }
             )
 
@@ -843,19 +877,29 @@ class NCConfiguration(ConfigBase):
 
             if want_state in ("up", "down"):
                 if want_state not in line_state_map[want_item["name"]]:
-                    failed_conditions.append("state " + "eq({0!s})".format(want_state))
+                    failed_conditions.append(
+                        "state " + "eq({0!s})".format(want_state)
+                    )
 
             if want_tx_rate:
-                if want_tx_rate != data_rate_map[want_item["name"]]["output-data-rate"]:
+                if (
+                    want_tx_rate
+                    != data_rate_map[want_item["name"]]["output-data-rate"]
+                ):
                     failed_conditions.append("tx_rate " + want_tx_rate)
 
             if want_rx_rate:
-                if want_rx_rate != data_rate_map[want_item["name"]]["input-data-rate"]:
+                if (
+                    want_rx_rate
+                    != data_rate_map[want_item["name"]]["input-data-rate"]
+                ):
                     failed_conditions.append("rx_rate " + want_rx_rate)
 
         if failed_conditions:
             msg = "One or more conditional statements have not been satisfied"
-            self._module.fail_json(msg=msg, failed_conditions=failed_conditions)
+            self._module.fail_json(
+                msg=msg, failed_conditions=failed_conditions
+            )
 
     def run(self):
         self.map_params_to_obj()
@@ -874,11 +918,15 @@ def main():
         mtu=dict(),
         duplex=dict(choices=["full", "half"]),
         enabled=dict(default=True, type="bool"),
-        active=dict(default="active", type="str", choices=["active", "preconfigure"]),
+        active=dict(
+            default="active", type="str", choices=["active", "preconfigure"]
+        ),
         tx_rate=dict(),
         rx_rate=dict(),
         delay=dict(default=10, type="int"),
-        state=dict(default="present", choices=["present", "absent", "up", "down"]),
+        state=dict(
+            default="present", choices=["present", "absent", "up", "down"]
+        ),
     )
 
     aggregate_spec = deepcopy(element_spec)

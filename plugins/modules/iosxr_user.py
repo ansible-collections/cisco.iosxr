@@ -306,13 +306,21 @@ class PublicKeyManager(object):
             ssh.connect(node, username=user, password=password)
         else:
             ssh.connect(node, username=user, allow_agent=True)
-        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("%s \r" % (command))
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(
+            "%s \r" % (command)
+        )
         readmsg = ssh_stdout.read(
             100
         )  # We need to read a bit to actually apply for some reason
-        if ("already" in readmsg) or ("removed" in readmsg) or ("really" in readmsg):
+        if (
+            ("already" in readmsg)
+            or ("removed" in readmsg)
+            or ("really" in readmsg)
+        ):
             ssh_stdin.write("yes\r")
-        ssh_stdout.read(1)  # We need to read a bit to actually apply for some reason
+        ssh_stdout.read(
+            1
+        )  # We need to read a bit to actually apply for some reason
         ssh.close()
 
         return readmsg
@@ -341,7 +349,10 @@ class PublicKeyManager(object):
                 else:
                     cmdtodo = (
                         "admin crypto key import authentication rsa username %s harddisk:/publickey_%s.b64"
-                        % (self._module.params["name"], self._module.params["name"],)
+                        % (
+                            self._module.params["name"],
+                            self._module.params["name"],
+                        )
                     )
                     addremove = self.addremovekey(cmdtodo)
                     if addremove is False:
@@ -406,7 +417,9 @@ class ConfigBase(object):
         # if key does exist, do a type check on it to validate it
         else:
             value_type = self._module.argument_spec[key].get("type", "str")
-            type_checker = self._module._CHECK_ARGUMENT_TYPES_DISPATCHER[value_type]
+            type_checker = self._module._CHECK_ARGUMENT_TYPES_DISPATCHER[
+                value_type
+            ]
             type_checker(item[key])
             value = item[key]
 
@@ -422,7 +435,10 @@ class ConfigBase(object):
 
         aggregate = list()
         if not users:
-            if not self._module.params["name"] and self._module.params["purge"]:
+            if (
+                not self._module.params["name"]
+                and self._module.params["purge"]
+            ):
                 pass
             elif not self._module.params["name"]:
                 self._module.fail_json(msg="username is required")
@@ -489,7 +505,9 @@ class CliConfiguration(ConfigBase):
                 commands.append(user_cmd)
 
                 if w["configured_password"]:
-                    commands.append(user_cmd + " secret " + w["configured_password"])
+                    commands.append(
+                        user_cmd + " secret " + w["configured_password"]
+                    )
                 if w["group"]:
                     commands.append(user_cmd + " group " + w["group"])
                 elif w["groups"]:
@@ -503,7 +521,9 @@ class CliConfiguration(ConfigBase):
                     self._module.params["update_password"] == "always"
                     and w["configured_password"]
                 ):
-                    commands.append(user_cmd + " secret " + w["configured_password"])
+                    commands.append(
+                        user_cmd + " secret " + w["configured_password"]
+                    )
                 if w["group"] and w["group"] != obj_in_have["group"]:
                     commands.append(user_cmd + " group " + w["group"])
                 elif w["groups"]:
@@ -524,7 +544,9 @@ class CliConfiguration(ConfigBase):
         if commands:
             commit = not self._module.check_mode
             admin = self._module.params["admin"]
-            diff = load_config(self._module, commands, commit=commit, admin=admin)
+            diff = load_config(
+                self._module, commands, commit=commit, admin=admin
+            )
             if diff:
                 self._result["diff"] = dict(prepared=diff)
 
@@ -557,7 +579,10 @@ class NCConfiguration(ConfigBase):
     def map_obj_to_xml_rpc(self):
         self._locald_meta.update(
             [
-                ("aaa_locald", {"xpath": "aaa/usernames", "tag": True, "ns": True},),
+                (
+                    "aaa_locald",
+                    {"xpath": "aaa/usernames", "tag": True, "ns": True},
+                ),
                 (
                     "username",
                     {
@@ -569,14 +594,20 @@ class NCConfiguration(ConfigBase):
                 ("a:name", {"xpath": "aaa/usernames/username/name"}),
                 (
                     "a:configured_password",
-                    {"xpath": "aaa/usernames/username/secret", "operation": "edit",},
+                    {
+                        "xpath": "aaa/usernames/username/secret",
+                        "operation": "edit",
+                    },
                 ),
             ]
         )
 
         self._locald_group_meta.update(
             [
-                ("aaa_locald", {"xpath": "aaa/usernames", "tag": True, "ns": True},),
+                (
+                    "aaa_locald",
+                    {"xpath": "aaa/usernames", "tag": True, "ns": True},
+                ),
                 (
                     "username",
                     {
@@ -614,7 +645,9 @@ class NCConfiguration(ConfigBase):
 
         state = self._module.params["state"]
         _get_filter = build_xml("aaa", opcode="filter")
-        running = get_config(self._module, source="running", config_filter=_get_filter)
+        running = get_config(
+            self._module, source="running", config_filter=_get_filter
+        )
 
         elements = etree_findall(running, "username")
         users = list()
@@ -642,7 +675,11 @@ class NCConfiguration(ConfigBase):
                     tmp_list.append(name.text)
 
                 self._have.append(
-                    {"name": name_list[0].text, "group": None, "groups": tmp_list,}
+                    {
+                        "name": name_list[0].text,
+                        "group": None,
+                        "groups": tmp_list,
+                    }
                 )
 
         locald_params = list()
@@ -675,14 +712,18 @@ class NCConfiguration(ConfigBase):
                         self._module.params["update_password"] == "always"
                         and want_item["configured_password"] is not None
                     ):
-                        want_item["configured_password"] = self.generate_md5_hash(
+                        want_item[
+                            "configured_password"
+                        ] = self.generate_md5_hash(
                             want_item["configured_password"]
                         )
                         locald_params.append(want_item)
                     else:
                         want_item["configured_password"] = None
 
-                    obj_in_have = search_obj_in_list(want_item["name"], self._have)
+                    obj_in_have = search_obj_in_list(
+                        want_item["name"], self._have
+                    )
                     if (
                         want_item["group"] is not None
                         and want_item["group"] != obj_in_have["group"]
@@ -765,7 +806,9 @@ def main():
     element_spec = dict(
         name=dict(),
         configured_password=dict(no_log=True),
-        update_password=dict(default="always", choices=["on_create", "always"]),
+        update_password=dict(
+            default="always", choices=["on_create", "always"]
+        ),
         admin=dict(type="bool", default=False),
         public_key=dict(),
         public_key_contents=dict(),

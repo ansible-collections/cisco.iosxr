@@ -158,7 +158,9 @@ def main():
     argument_spec.update(iosxr_argument_spec)
     argument_spec.update(command_spec)
 
-    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
+    module = AnsibleModule(
+        argument_spec=argument_spec, supports_check_mode=True
+    )
 
     warnings = list()
     result = {"changed": False, "warnings": warnings}
@@ -195,7 +197,9 @@ def main():
         msg = "One or more conditional statements have not been satisfied"
         module.fail_json(msg=msg, failed_conditions=failed_conditions)
 
-    result.update({"stdout": responses, "stdout_lines": list(to_lines(responses))})
+    result.update(
+        {"stdout": responses, "stdout_lines": list(to_lines(responses))}
+    )
 
     module.exit_json(**result)
 

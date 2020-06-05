@@ -292,7 +292,9 @@ def main():
             default="unicast",
         ),
         "networks": dict(type="list", elements="dict", options=network_spec),
-        "redistribute": dict(type="list", elements="dict", options=redistribute_spec),
+        "redistribute": dict(
+            type="list", elements="dict", options=redistribute_spec
+        ),
     }
 
     config_spec = {
@@ -312,7 +314,9 @@ def main():
         ),
     }
 
-    module = NetworkModule(argument_spec=argument_spec, supports_check_mode=True)
+    module = NetworkModule(
+        argument_spec=argument_spec, supports_check_mode=True
+    )
 
     try:
         result = module.edit_config(config_filter="router bgp")
