@@ -30,9 +30,9 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {"metadata_version": "1.1", "supported_by": "Ansible"}
 
-DOCUMENTATION = """module: iosxr_lacp
+DOCUMENTATION = """
+module: iosxr_lacp
 short_description: LACP resource module
 description:
 - This module manages Global Link Aggregation Control Protocol (LACP) on IOS-XR devices.
@@ -69,12 +69,12 @@ options:
                 type: str
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the IOS-XR device by executing
-        the command B(show running-config lacp).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the IOS-XR device
+      by executing the command B(show running-config lacp).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     description:
@@ -287,10 +287,10 @@ EXAMPLES = """
 - name: Render platform specific commands from task input using rendered state
   cisco.iosxr.iosxr_lacp:
     config:
-          system:
-            priority: 11
-            mac:
-              address: 00c1.4c00.bd15
+      system:
+        priority: 11
+        mac:
+          address: 00c1.4c00.bd15
     state: rendered
 # Task Output (redacted)
 # -----------------------

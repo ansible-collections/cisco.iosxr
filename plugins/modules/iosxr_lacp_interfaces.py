@@ -30,14 +30,10 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: iosxr_lacp_interfaces
-short_description: LACP interfaces resource module.
+DOCUMENTATION = """
+module: iosxr_lacp_interfaces
+short_description: LACP interfaces resource module
 description:
 - This module manages Link Aggregation Control Protocol (LACP) attributes of interfaces
   on IOS-XR devices.
@@ -103,12 +99,12 @@ options:
             type: str
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the IOS-XR device by executing
-        the command B(show running-config int).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the IOS-XR device
+      by executing the command B(show running-config int).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     description:
@@ -120,6 +116,7 @@ options:
     - overridden
     - deleted
     default: merged
+
 """
 EXAMPLES = """
 # Using merged
@@ -161,20 +158,20 @@ EXAMPLES = """
 #
 #
 
- - name: Merge provided configuration with device configuration
-   cisco.iosxr.iosxr_lacp_interfaces:
+- name: Merge provided configuration with device configuration
+  cisco.iosxr.iosxr_lacp_interfaces:
     config:
-      - name: Bundle-Ether10
-        churn_logging: actor
-        collector_max_delay: 100
-        switchover_suppress_flaps: 500
+    - name: Bundle-Ether10
+      churn_logging: actor
+      collector_max_delay: 100
+      switchover_suppress_flaps: 500
 
-      - name: Bundle-Ether11
-        system:
-          mac: 00c2.4c00.bd15
+    - name: Bundle-Ether11
+      system:
+        mac: 00c2.4c00.bd15
 
-      - name: GigabitEthernet0/0/0/1
-        period: 200
+    - name: GigabitEthernet0/0/0/1
+      period: 200
     state: merged
 
 #
@@ -261,14 +258,14 @@ EXAMPLES = """
 # !
 #
 
- - name: Replace LACP configuration of listed interfaces with provided configuration
-   cisco.iosxr.iosxr_lacp_interfaces:
+- name: Replace LACP configuration of listed interfaces with provided configuration
+  cisco.iosxr.iosxr_lacp_interfaces:
     config:
-      - name: Bundle-Ether10
-        churn_logging: partner
+    - name: Bundle-Ether10
+      churn_logging: partner
 
-      - name: GigabitEthernet0/0/0/2
-        period: 300
+    - name: GigabitEthernet0/0/0/2
+      period: 300
     state: replaced
 
 #
@@ -357,16 +354,16 @@ EXAMPLES = """
 #
 #
 
- - name: Override all interface LACP configuration with provided configuration
-   cisco.iosxr.iosxr_lacp_interfaces:
+- name: Override all interface LACP configuration with provided configuration
+  cisco.iosxr.iosxr_lacp_interfaces:
     config:
-      - name: Bundle-Ether12
-        churn_logging: both
-        collector_max_delay: 100
-        switchover_suppress_flaps: 500
+    - name: Bundle-Ether12
+      churn_logging: both
+      collector_max_delay: 100
+      switchover_suppress_flaps: 500
 
-      - name: GigabitEthernet0/0/0/1
-        period: 300
+    - name: GigabitEthernet0/0/0/1
+      period: 300
     state: overridden
 
 #
@@ -453,13 +450,14 @@ EXAMPLES = """
 # !
 #
 
- - name: Deleted LACP configurations of provided interfaces (Note - This won't delete the interface itself)
-   cisco.iosxr.iosxr_lacp_interfaces:
+- name: Deleted LACP configurations of provided interfaces (Note - This won't delete
+    the interface itself)
+  cisco.iosxr.iosxr_lacp_interfaces:
     config:
-      - name: Bundle-Ether10
-      - name: Bundle-Ether11
-      - name: GigabitEthernet0/0/0/1
-      - name: GigabitEthernet0/0/0/2
+    - name: Bundle-Ether10
+    - name: Bundle-Ether11
+    - name: GigabitEthernet0/0/0/1
+    - name: GigabitEthernet0/0/0/2
     state: deleted
 
 #
@@ -489,8 +487,9 @@ EXAMPLES = """
 #
 
 - name: Convert lacp interfaces config to argspec without connecting to the appliance
-    cisco.iosxr.iosxr_lacp_interfaces:
-      running_config: "{{ lookup('file', './parsed.cfg') }}"
+  cisco.iosxr.iosxr_lacp_interfaces:
+    running_config: "{{ lookup('file', './parsed.cfg') }}"
+    state: parsed
 
 # --------------
 # Output:
@@ -553,20 +552,20 @@ EXAMPLES = """
 
 # Using rendered:
 
- - name: Render platform specific commands from task input using rendered state
-   cisco.iosxr.iosxr_lacp_interfaces:
+- name: Render platform specific commands from task input using rendered state
+  cisco.iosxr.iosxr_lacp_interfaces:
     config:
-      - name: Bundle-Ether10
-        churn_logging: actor
-        collector_max_delay: 100
-        switchover_suppress_flaps: 500
+    - name: Bundle-Ether10
+      churn_logging: actor
+      collector_max_delay: 100
+      switchover_suppress_flaps: 500
 
-      - name: Bundle-Ether11
-        system:
-          mac: 00c2.4c00.bd15
+    - name: Bundle-Ether11
+      system:
+        mac: 00c2.4c00.bd15
 
-      - name: GigabitEthernet0/0/0/1
-        period: 200
+    - name: GigabitEthernet0/0/0/1
+      period: 200
     state: rendered
 
 # -------------

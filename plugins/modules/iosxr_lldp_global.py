@@ -30,14 +30,10 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: iosxr_lldp_global
-short_description: LLDP global resource module.
+DOCUMENTATION = """
+module: iosxr_lldp_global
+short_description: LLDP resource module
 description:
 - This module manages Global Link Layer Discovery Protocol (LLDP) settings on IOS-XR
   devices.
@@ -94,12 +90,12 @@ options:
             type: bool
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the IOS-XR device by executing
-        the command B(show running-config lldp).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the IOS-XR device
+      by executing the command B(show running-config lldp).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     description:
@@ -113,6 +109,7 @@ options:
     - gathered
     - rendered
     default: merged
+
 """
 EXAMPLES = """
 # Using merged
@@ -135,10 +132,10 @@ EXAMPLES = """
       holdtime: 100
       reinit: 2
       timer: 3000
-      subinterfaces: True
+      subinterfaces: true
       tlv_select:
-        management_address: False
-        system_description: False
+        management_address: false
+        system_description: false
     state: merged
 
 #
@@ -218,9 +215,9 @@ EXAMPLES = """
     config:
       holdtime: 100
       tlv_select:
-        port_description: False
-        system_description: True
-        management_description: True
+        port_description: false
+        system_description: true
+        management_description: true
     state: replaced
 
 #
@@ -352,8 +349,9 @@ EXAMPLES = """
 # !
 
 - name: Convert lldp global config to argspec without connecting to the appliance
-    cisco.iosxr.iosxr_lldp_global:
-      running_config: "{{ lookup('file', './parsed.cfg') }}"
+  cisco.iosxr.iosxr_lldp_global:
+    running_config: "{{ lookup('file', './parsed.cfg') }}"
+    state: parsed
 
 # ------------------------
 # Module Execution Result
@@ -407,10 +405,10 @@ EXAMPLES = """
       holdtime: 100
       reinit: 2
       timer: 3000
-      subinterfaces: True
+      subinterfaces: true
       tlv_select:
-        management_address: False
-        system_description: False
+        management_address: false
+        system_description: false
     state: rendered
 
 #

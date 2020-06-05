@@ -9,13 +9,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: iosxr_netconf
+DOCUMENTATION = """
+module: iosxr_netconf
 author: Kedar Kekan (@kedarX)
 short_description: Configures NetConf sub-system service on Cisco IOS-XR devices
 description:
@@ -23,6 +18,7 @@ description:
   service running on Cisco IOS-XR Software. This module can be used to easily enable
   the Netconf API. Netconf provides a programmatic interface for working with configuration
   and state resources as defined in RFC 6242.
+version_added: 1.0.0
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 options:
@@ -59,12 +55,12 @@ notes:
 
 EXAMPLES = """
 - name: enable netconf service on port 830
-  iosxr_netconf:
+  cisco.iosxr.iosxr_netconf:
     listens_on: 830
     state: present
 
 - name: disable netconf service
-  iosxr_netconf:
+  cisco.iosxr.iosxr_netconf:
     state: absent
 """
 
@@ -99,9 +95,7 @@ def map_obj_to_commands(updates):
             commands.append("no netconf-yang agent ssh")
 
         if "netconf_port" in have:
-            commands.append(
-                "no ssh server netconf port %s" % have["netconf_port"]
-            )
+            commands.append("no ssh server netconf port %s" % have["netconf_port"])
 
         if have["netconf_vrf"]:
             for vrf in have["netconf_vrf"]:
@@ -113,9 +107,7 @@ def map_obj_to_commands(updates):
         if want["netconf_port"] is not None and (
             want["netconf_port"] != have.get("netconf_port")
         ):
-            commands.append(
-                "ssh server netconf port %s" % want["netconf_port"]
-            )
+            commands.append("ssh server netconf port %s" % want["netconf_port"])
         if want["netconf_vrf"] is not None and (
             want["netconf_vrf"] not in have["netconf_vrf"]
         ):
@@ -153,9 +145,7 @@ def map_config_to_obj(module):
             obj.update({"netconf_port": parse_port(config)})
         if "netconf vrf" in config:
             obj["netconf_vrf"].append(parse_vrf(config))
-    if "ssh" in netconf_config and (
-        "netconf_port" in obj or obj["netconf_vrf"]
-    ):
+    if "ssh" in netconf_config and ("netconf_port" in obj or obj["netconf_vrf"]):
         obj.update({"state": "present"})
 
     if "ssh" in netconf_config and "netconf_port" not in obj:
@@ -195,9 +185,7 @@ def main():
     )
     argument_spec.update(iosxr_argument_spec)
 
-    module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
-    )
+    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
     warnings = list()
 
