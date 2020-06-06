@@ -281,18 +281,11 @@ class PublicKeyManager(object):
         return out
 
     def run(self):
-        warning_message = (
-            "Operation with key file failed, couldn't determine host or user to connect. "
-            "Please setup provider argument or pass its arguments directly to module in "
-            "case of using local connection plugin before running this playbook"
-        )
 
         if self._module.params["state"] == "present":
             if not self._module.check_mode:
                 key = self.convert_key_to_base64()
-                copykeys = self.copy_key_to_node(key)
-                if copykeys is False:
-                    self._result["warnings"].append(warning_message)
+                self.copy_key_to_node(key)
 
                 if self._module.params["aggregate"]:
                     for user in self._module.params["aggregate"]:
@@ -300,9 +293,7 @@ class PublicKeyManager(object):
                             "admin crypto key import authentication rsa username %s harddisk:/publickey_aggregate.b64"
                             % (user)
                         )
-                        addremove = self.addremovekey(cmdtodo)
-                        if addremove is False:
-                            self._result["warnings"].append(warning_message)
+                        self.addremovekey(cmdtodo)
                 else:
                     cmdtodo = (
                         "admin crypto key import authentication rsa username %s harddisk:/publickey_%s.b64"
@@ -311,9 +302,7 @@ class PublicKeyManager(object):
                             self._module.params["name"],
                         )
                     )
-                    addremove = self.addremovekey(cmdtodo)
-                    if addremove is False:
-                        self._result["warnings"].append(warning_message)
+                    self.addremovekey(cmdtodo)
         elif self._module.params["state"] == "absent":
             if not self._module.check_mode:
                 if self._module.params["aggregate"]:
@@ -322,23 +311,17 @@ class PublicKeyManager(object):
                             "admin crypto key zeroize authentication rsa username %s"
                             % (user)
                         )
-                        addremove = self.addremovekey(cmdtodo)
-                        if addremove is False:
-                            self._result["warnings"].append(warning_message)
+                        self.addremovekey(cmdtodo)
                 else:
                     cmdtodo = (
                         "admin crypto key zeroize authentication rsa username %s"
                         % (self._module.params["name"])
                     )
-                    addremove = self.addremovekey(cmdtodo)
-                    if addremove is False:
-                        self._result["warnings"].append(warning_message)
+                    self.addremovekey(cmdtodo)
         elif self._module.params["purge"] is True:
             if not self._module.check_mode:
                 cmdtodo = "admin crypto key zeroize authentication rsa all"
-                addremove = self.addremovekey(cmdtodo)
-                if addremove is False:
-                    self._result["warnings"].append(warning_message)
+                self.addremovekey(cmdtodo)
 
         return self._result
 
