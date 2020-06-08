@@ -14,15 +14,16 @@ module: iosxr_interface
 author:
 - Ganesh Nalawade (@ganeshrn)
 - Kedar Kekan (@kedarX)
-short_description: (deprecated) Manage Interface on Cisco IOS XR network devices
+short_description: (deprecated, removed after 2022-06-01) Manage Interface on Cisco
+  IOS XR network devices
 description:
 - This module provides declarative management of Interfaces on Cisco IOS XR network
   devices.
 version_added: 1.0.0
 deprecated:
-  removed_in: '2.13'
   alternative: iosxr_interfaces
   why: Newer and updated modules released with more functionality in Ansible 2.9
+  removed_at_date: '2022-06-01'
 requirements:
 - ncclient >= 0.5.3 when using netconf
 - lxml >= 4.1.1 when using netconf
@@ -103,6 +104,7 @@ options:
     - absent
     - up
     - down
+
 
 """
 

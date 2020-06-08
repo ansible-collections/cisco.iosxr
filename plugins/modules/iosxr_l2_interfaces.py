@@ -435,10 +435,10 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 40
 # !
-# - name: Convert L2 interfaces config to argspec without connecting to the appliance
-#   cisco.iosxr.iosxr_l2_interfaces:
-#     running_config: "{{ lookup('file', './parsed.cfg') }}"
-#     state: parsed
+- name: Convert L2 interfaces config to argspec without connecting to the appliance
+  cisco.iosxr.iosxr_l2_interfaces:
+    running_config: "{{ lookup('file', './parsed.cfg') }}"
+    state: parsed
 # Task Output (redacted)
 # -----------------------
 # "parsed": [
