@@ -9,13 +9,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: iosxr_netconf
+DOCUMENTATION = """
+module: iosxr_netconf
 author: Kedar Kekan (@kedarX)
 short_description: Configures NetConf sub-system service on Cisco IOS-XR devices
 description:
@@ -23,6 +18,7 @@ description:
   service running on Cisco IOS-XR Software. This module can be used to easily enable
   the Netconf API. Netconf provides a programmatic interface for working with configuration
   and state resources as defined in RFC 6242.
+version_added: 1.0.0
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 options:
@@ -59,12 +55,12 @@ notes:
 
 EXAMPLES = """
 - name: enable netconf service on port 830
-  iosxr_netconf:
+  cisco.iosxr.iosxr_netconf:
     listens_on: 830
     state: present
 
 - name: disable netconf service
-  iosxr_netconf:
+  cisco.iosxr.iosxr_netconf:
     state: absent
 """
 

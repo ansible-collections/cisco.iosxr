@@ -10,19 +10,14 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-
-DOCUMENTATION = """module: iosxr_bgp
+DOCUMENTATION = """
+module: iosxr_bgp
 author: Nilashish Chakraborty (@NilashishC)
 short_description: Configure global BGP protocol settings on Cisco IOS-XR
 description:
 - This module provides configuration management of global BGP parameters on devices
   running Cisco IOS-XR
+version_added: 1.0.0
 notes:
 - Tested against Cisco IOS XR Software Version 6.1.3
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
@@ -39,7 +34,7 @@ options:
       router_id:
         description:
         - Configures the BGP routing process router-id value.
-        default: null
+        default:
       log_neighbor_changes:
         description:
         - Enable/disable logging neighbor up/down and reset reason.
@@ -201,26 +196,26 @@ options:
 
 EXAMPLES = """
 - name: configure global bgp as 65000
-  iosxr_bgp:
+  cisco.iosxr.iosxr_bgp:
     bgp_as: 65000
     router_id: 1.1.1.1
     neighbors:
-      - neighbor: 182.168.10.1
-        remote_as: 500
-        description: PEER_1
-      - neighbor: 192.168.20.1
-        remote_as: 500
-        update_source: GigabitEthernet 0/0/0/0
+    - neighbor: 182.168.10.1
+      remote_as: 500
+      description: PEER_1
+    - neighbor: 192.168.20.1
+      remote_as: 500
+      update_source: GigabitEthernet 0/0/0/0
     address_family:
-      - name: ipv4
-        cast: unicast
-        networks:
-          - network: 192.168.2.0/23
-          - network: 10.0.0.0/8
-        redistribute:
-          - protocol: ospf
-            id: 400
-            metric: 110
+    - name: ipv4
+      cast: unicast
+      networks:
+      - network: 192.168.2.0/23
+      - network: 10.0.0.0/8
+      redistribute:
+      - protocol: ospf
+        id: 400
+        metric: 110
 
 - name: remove bgp as 65000 from config
   ios_bgp:

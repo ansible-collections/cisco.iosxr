@@ -7,14 +7,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-
-DOCUMENTATION = """module: iosxr_system
+DOCUMENTATION = """
+module: iosxr_system
 author:
 - Peter Sprygada (@privateip)
 - Kedar Kekan (@kedarX)
@@ -23,6 +17,7 @@ description:
 - This module provides declarative management of node system attributes on Cisco IOS
   XR devices. It provides an option to configure host system parameters or remove
   those parameters from the device active configuration.
+version_added: 1.0.0
 requirements:
 - ncclient >= 0.5.3 when using netconf
 - lxml >= 4.1.1 when using netconf
@@ -81,40 +76,40 @@ options:
 
 EXAMPLES = """
 - name: configure hostname and domain-name (default vrf=default)
-  iosxr_system:
+  cisco.iosxr.iosxr_system:
     hostname: iosxr01
     domain_name: test.example.com
     domain_search:
-      - ansible.com
-      - redhat.com
-      - cisco.com
+    - ansible.com
+    - redhat.com
+    - cisco.com
 - name: remove configuration
-  iosxr_system:
+  cisco.iosxr.iosxr_system:
     hostname: iosxr01
     domain_name: test.example.com
     domain_search:
-      - ansible.com
-      - redhat.com
-      - cisco.com
+    - ansible.com
+    - redhat.com
+    - cisco.com
     state: absent
 - name: configure hostname and domain-name with vrf
-  iosxr_system:
+  cisco.iosxr.iosxr_system:
     hostname: iosxr01
     vrf: nondefault
     domain_name: test.example.com
     domain_search:
-      - ansible.com
-      - redhat.com
-      - cisco.com
+    - ansible.com
+    - redhat.com
+    - cisco.com
 - name: configure DNS lookup sources
-  iosxr_system:
+  cisco.iosxr.iosxr_system:
     lookup_source: MgmtEth0/0/CPU0/0
-    lookup_enabled: True
+    lookup_enabled: true
 - name: configure name servers
-  iosxr_system:
+  cisco.iosxr.iosxr_system:
     name_servers:
-      - 8.8.8.8
-      - 8.8.4.4
+    - 8.8.8.8
+    - 8.8.4.4
 """
 
 RETURN = """

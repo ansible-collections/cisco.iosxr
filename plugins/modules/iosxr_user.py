@@ -9,13 +9,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: iosxr_user
+DOCUMENTATION = """
+module: iosxr_user
 author:
 - Trishna Guha (@trishnaguha)
 - Sebastiaan van Doesselaar (@sebasdoes)
@@ -26,6 +21,7 @@ description:
   network devices. It allows playbooks to manage either individual usernames or the
   aggregate of usernames in the current running config. It also supports purging usernames
   from the configuration that are not explicitly defined.
+version_added: 1.0.0
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 notes:
@@ -125,43 +121,43 @@ requirements:
 
 EXAMPLES = """
 - name: create a new user
-  iosxr_user:
+  cisco.iosxr.iosxr_user:
     name: ansible
     configured_password: mypassword
     state: present
 - name: create a new user in admin configuration mode
-  iosxr_user:
+  cisco.iosxr.iosxr_user:
     name: ansible
     configured_password: mypassword
-    admin: True
+    admin: true
     state: present
 - name: remove all users except admin
-  iosxr_user:
-    purge: True
+  cisco.iosxr.iosxr_user:
+    purge: true
 - name: set multiple users to group sys-admin
-  iosxr_user:
+  cisco.iosxr.iosxr_user:
     aggregate:
-      - name: netop
-      - name: netend
+    - name: netop
+    - name: netend
     group: sysadmin
     state: present
 - name: set multiple users to multiple groups
-  iosxr_user:
+  cisco.iosxr.iosxr_user:
     aggregate:
-      - name: netop
-      - name: netend
+    - name: netop
+    - name: netend
     groups:
-      - sysadmin
-      - root-system
+    - sysadmin
+    - root-system
     state: present
 - name: Change Password for User netop
-  iosxr_user:
+  cisco.iosxr.iosxr_user:
     name: netop
-    configured_password: "{{ new_password }}"
+    configured_password: '{{ new_password }}'
     update_password: always
     state: present
 - name: Add private key authentication for user netop
-  iosxr_user:
+  cisco.iosxr.iosxr_user:
     name: netop
     state: present
     public_key_contents: "{{ lookup('file', '/home/netop/.ssh/id_rsa.pub' }}"

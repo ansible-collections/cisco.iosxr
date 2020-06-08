@@ -21,13 +21,15 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-DOCUMENTATION = """author: Ansible Networking Team
+DOCUMENTATION = """
+author: Ansible Networking Team
 netconf: iosxr
 short_description: Use iosxr netconf plugin to run netconf commands on Cisco IOSXR
   platform
 description:
 - This iosxr plugin provides low level abstraction apis for sending and receiving
   netconf commands from Cisco iosxr network devices.
+version_added: 1.0.0
 options:
   ncclient_device_handler:
     type: str

@@ -9,13 +9,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: iosxr_banner
+DOCUMENTATION = """
+module: iosxr_banner
 author:
 - Trishna Guha (@trishnaguha)
 - Kedar Kekan (@kedarX)
@@ -23,6 +18,7 @@ short_description: Manage multiline banners on Cisco IOS XR devices
 description:
 - This module will configure both exec and motd banners on remote device running Cisco
   IOS XR. It allows playbooks to add or remove banner text from the running configuration.
+version_added: 1.0.0
 requirements:
 - ncclient >= 0.5.3 when using netconf
 - lxml >= 4.1.1 when using netconf
@@ -55,7 +51,7 @@ options:
 
 EXAMPLES = """
 - name: configure the login banner
-  iosxr_banner:
+  cisco.iosxr.iosxr_banner:
     banner: login
     text: |
       this is my login banner
@@ -63,12 +59,12 @@ EXAMPLES = """
       string
     state: present
 - name: remove the motd banner
-  iosxr_banner:
+  cisco.iosxr.iosxr_banner:
     banner: motd
     state: absent
 - name: Configure banner from file
-  iosxr_banner:
-    banner:  motd
+  cisco.iosxr.iosxr_banner:
+    banner: motd
     text: "{{ lookup('file', './config_partial/raw_banner.cfg') }}"
     state: present
 """

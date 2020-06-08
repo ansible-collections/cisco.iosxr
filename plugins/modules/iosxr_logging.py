@@ -9,13 +9,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: iosxr_logging
+DOCUMENTATION = """
+module: iosxr_logging
 author:
 - Trishna Guha (@trishnaguha)
 - Kedar Kekan (@kedarX)
@@ -24,6 +19,7 @@ short_description: Configuration management of system logging services on networ
 description:
 - This module provides declarative management configuration of system logging (syslog)
   on Cisco IOS XR devices.
+version_added: 1.0.0
 requirements:
 - ncclient >= 0.5.3 when using netconf
 - lxml >= 4.1.1 when using netconf
@@ -86,36 +82,36 @@ extends_documentation_fragment:
 
 EXAMPLES = """
 - name: configure logging for syslog server host
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     dest: host
     name: 10.10.10.1
     level: critical
     state: present
 
 - name: add hostnameprefix configuration
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     hostnameprefix: host1
     state: absent
 
 - name: add facility configuration
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     facility: local1
     state: present
 
 - name: configure console logging level
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     dest: console
     level: debugging
     state: present
 
 - name: configure monitor logging level
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     dest: monitor
     level: errors
     state: present
 
 - name: configure syslog to a file
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     dest: file
     name: file_name
     size: 2048
@@ -123,25 +119,25 @@ EXAMPLES = """
     state: present
 
 - name: configure buffered logging with size
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     dest: buffered
     size: 5100000
 
 - name: Configure logging using aggregate
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     aggregate:
-      - { dest: console, level: warning }
-      - { dest: buffered, size: 4800000 }
-      - { dest: file, name: file3, size: 2048}
-      - { dest: host, name: host3, level: critical}
+    - {dest: console, level: warning}
+    - {dest: buffered, size: 4800000}
+    - {dest: file, name: file3, size: 2048}
+    - {dest: host, name: host3, level: critical}
 
 - name: Delete logging using aggregate
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     aggregate:
-      - { dest: console, level: warning }
-      - { dest: buffered, size: 4800000 }
-      - { dest: file, name: file3, size: 2048}
-      - { dest: host, name: host3, level: critical}
+    - {dest: console, level: warning}
+    - {dest: buffered, size: 4800000}
+    - {dest: file, name: file3, size: 2048}
+    - {dest: host, name: host3, level: critical}
     state: absent
 """
 

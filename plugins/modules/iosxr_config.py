@@ -8,20 +8,15 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-
-DOCUMENTATION = """module: iosxr_config
+DOCUMENTATION = """
+module: iosxr_config
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
 short_description: Manage Cisco IOS XR configuration sections
 description:
 - Cisco IOS XR configurations use a simple block indent file syntax for segmenting
   configuration into sections.  This module provides an implementation for working
   with IOS XR configuration sections in a deterministic way.
+version_added: 1.0.0
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 notes:
@@ -98,7 +93,7 @@ options:
       set the C(match=none) which is idempotent.  This argument will be removed in
       a future release.
     type: bool
-    default: 'no'
+    default: no
   config:
     description:
     - The module, by default, will connect to the remote device and retrieve the current
@@ -114,7 +109,7 @@ options:
       playbook root directory or role root directory, if playbook is part of an ansible
       role. If the directory does not exist, it is created.
     type: bool
-    default: 'no'
+    default: no
   comment:
     description:
     - Allows a commit description to be specified to be included when the configuration
@@ -126,7 +121,7 @@ options:
     - Enters into administration configuration mode for making config changes to the
       device.
     type: bool
-    default: 'no'
+    default: no
   label:
     description:
     - Allows a commit label to be specified to be included when the configuration
@@ -165,32 +160,32 @@ options:
 
 EXAMPLES = """
 - name: configure top level configuration
-  iosxr_config:
+  cisco.iosxr.iosxr_config:
     lines: hostname {{ inventory_hostname }}
 
 - name: configure interface settings
-  iosxr_config:
+  cisco.iosxr.iosxr_config:
     lines:
-      - description test interface
-      - ip address 172.31.1.1 255.255.255.0
+    - description test interface
+    - ip address 172.31.1.1 255.255.255.0
     parents: interface GigabitEthernet0/0/0/0
 
 - name: load a config from disk and replace the current config
-  iosxr_config:
+  cisco.iosxr.iosxr_config:
     src: config.cfg
     replace: config
     backup: yes
 
 - name: for idempotency, use full-form commands
-  iosxr_config:
+  cisco.iosxr.iosxr_config:
     lines:
       # - shut
-      - shutdown
+    - shutdown
     # parents: int g0/0/0/1
     parents: interface GigabitEthernet0/0/0/1
 
 - name: configurable backup path
-  iosxr_config:
+  cisco.iosxr.iosxr_config:
     src: config.cfg
     backup: yes
     backup_options:

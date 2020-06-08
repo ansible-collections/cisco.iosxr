@@ -8,14 +8,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-
-DOCUMENTATION = """module: iosxr_command
+DOCUMENTATION = """
+module: iosxr_command
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
 short_description: Run commands on remote devices running Cisco IOS XR
 description:
@@ -24,6 +18,7 @@ description:
   a specific condition before returning or timing out if the condition is not met.
 - This module does not support running commands in configuration mode. Please use
   M(iosxr_config) to configure iosxr devices.
+version_added: 1.0.0
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 notes:
@@ -72,31 +67,30 @@ options:
 """
 
 EXAMPLES = """
-tasks:
-  - name: run show version on remote devices
-    iosxr_command:
-      commands: show version
+- name: run show version on remote devices
+  cisco.iosxr.iosxr_command:
+    commands: show version
 
-  - name: run show version and check to see if output contains iosxr
-    iosxr_command:
-      commands: show version
-      wait_for: result[0] contains IOS-XR
+- name: run show version and check to see if output contains iosxr
+  cisco.iosxr.iosxr_command:
+    commands: show version
+    wait_for: result[0] contains IOS-XR
 
-  - name: run multiple commands on remote nodes
-    iosxr_command:
-      commands:
-        - show version
-        - show interfaces
-        - { command: example command that prompts, prompt: expected prompt, answer: yes}
+- name: run multiple commands on remote nodes
+  cisco.iosxr.iosxr_command:
+    commands:
+    - show version
+    - show interfaces
+    - {command: example command that prompts, prompt: expected prompt, answer: yes}
 
-  - name: run multiple commands and evaluate the output
-    iosxr_command:
-      commands:
-        - show version
-        - show interfaces
-      wait_for:
-        - result[0] contains IOS-XR
-        - result[1] contains Loopback0
+- name: run multiple commands and evaluate the output
+  cisco.iosxr.iosxr_command:
+    commands:
+    - show version
+    - show interfaces
+    wait_for:
+    - result[0] contains IOS-XR
+    - result[1] contains Loopback0
 """
 
 RETURN = """

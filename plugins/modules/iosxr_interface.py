@@ -9,25 +9,21 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["deprecated"],
-    "supported_by": "network",
-}
-
-
-DOCUMENTATION = """module: iosxr_interface
+DOCUMENTATION = """
+module: iosxr_interface
 author:
 - Ganesh Nalawade (@ganeshrn)
 - Kedar Kekan (@kedarX)
-short_description: Manage Interface on Cisco IOS XR network devices
+short_description: (deprecated, removed after 2022-06-01) Manage Interface on Cisco
+  IOS XR network devices
 description:
 - This module provides declarative management of Interfaces on Cisco IOS XR network
   devices.
+version_added: 1.0.0
 deprecated:
-  removed_in: '2.13'
   alternative: iosxr_interfaces
   why: Newer and updated modules released with more functionality in Ansible 2.9
+  removed_at_date: '2022-06-01'
 requirements:
 - ncclient >= 0.5.3 when using netconf
 - lxml >= 4.1.1 when using netconf
@@ -108,34 +104,36 @@ options:
     - absent
     - up
     - down
+
+
 """
 
 EXAMPLES = """
 - name: configure interface
-  iosxr_interface:
-      name: GigabitEthernet0/0/0/2
-      description: test-interface
-      speed: 100
-      duplex: half
-      mtu: 512
+  cisco.iosxr.iosxr_interface:
+    name: GigabitEthernet0/0/0/2
+    description: test-interface
+    speed: 100
+    duplex: half
+    mtu: 512
 
 - name: remove interface
-  iosxr_interface:
+  cisco.iosxr.iosxr_interface:
     name: GigabitEthernet0/0/0/2
     state: absent
 
 - name: make interface up
-  iosxr_interface:
+  cisco.iosxr.iosxr_interface:
     name: GigabitEthernet0/0/0/2
-    enabled: True
+    enabled: true
 
 - name: make interface down
-  iosxr_interface:
+  cisco.iosxr.iosxr_interface:
     name: GigabitEthernet0/0/0/2
-    enabled: False
+    enabled: false
 
 - name: Create interface using aggregate
-  iosxr_interface:
+  cisco.iosxr.iosxr_interface:
     aggregate:
     - name: GigabitEthernet0/0/0/3
     - name: GigabitEthernet0/0/0/2
@@ -145,32 +143,32 @@ EXAMPLES = """
     state: present
 
 - name: Create interface using aggregate along with additional params in aggregate
-  iosxr_interface:
+  cisco.iosxr.iosxr_interface:
     aggregate:
-    - { name: GigabitEthernet0/0/0/3, description: test-interface 3 }
-    - { name: GigabitEthernet0/0/0/2, description: test-interface 2 }
+    - {name: GigabitEthernet0/0/0/3, description: test-interface 3}
+    - {name: GigabitEthernet0/0/0/2, description: test-interface 2}
     speed: 100
     duplex: full
     mtu: 512
     state: present
 
 - name: Delete interface using aggregate
-  iosxr_interface:
+  cisco.iosxr.iosxr_interface:
     aggregate:
     - name: GigabitEthernet0/0/0/3
     - name: GigabitEthernet0/0/0/2
     state: absent
 
 - name: Check intent arguments
-  iosxr_interface:
+  cisco.iosxr.iosxr_interface:
     name: GigabitEthernet0/0/0/5
     state: up
     delay: 20
 
 - name: Config + intent
-  iosxr_interface:
+  cisco.iosxr.iosxr_interface:
     name: GigabitEthernet0/0/0/5
-    enabled: False
+    enabled: false
     state: down
     delay: 20
 """
