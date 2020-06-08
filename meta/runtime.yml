@@ -104,13 +104,12 @@ plugin_routing:
     interface:
       redirect: cisco.iosxr.iosxr_interface
       deprecation:
-        warning_text: cisco.iosxr.interface has been deprecated and will be removed
-          in a release after 2022-6-01. See the plugin documentation for more details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     iosxr_interface:
       deprecation:
-        warning_text: cisco.iosxr.iosxr_interface has been deprecated and will be
-          removed in a release after 2022-6-01. See the plugin documentation for more
-          details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     interfaces:
       redirect: cisco.iosxr.iosxr_interfaces
     l2_interfaces:
