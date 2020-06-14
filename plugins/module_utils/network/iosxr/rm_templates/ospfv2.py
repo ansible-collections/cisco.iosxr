@@ -1,5 +1,7 @@
-import re
+from __future__ import absolute_import, division, print_function
 
+__metaclass__ = type
+import re
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
@@ -60,6 +62,67 @@ def _tmplt_ospf_security(config_data):
         elif config_data["security_ttl"].get("hops"):
             command += " ttl hops {hops}".format(
                 config_data["security_ttl"].get("hops")
+            )
+        return command
+
+
+def _tmplt_ospf_log_adjacency(config_data):
+    if "log_adjacency_changes" in config_data:
+        command = "log adjacency"
+        if "set" in config_data["log_adjacency_changes"]:
+            command += " changes"
+        elif config_data["log_adjacency_changes"].get("disable"):
+            command += " disable"
+        elif config_data["log_adjacency_changes"].get("details"):
+            command += " details"
+        return command
+
+
+def _tmplt_ospf_log_max_lsa(config_data):
+    if "max_lsa" in config_data:
+        command = "max-lsa"
+        if "threshold" in config_data["max_lsa"]:
+            command += " {}".format(config_data["max_lsa"].get("threshold"))
+        if "warning_only" in config_data["max_lsa"]:
+            command += " warning-only {}".format(
+                config_data["max_lsa"].get("warning_only")
+            )
+        if "ignore_time" in config_data["max_lsa"]:
+            command += " ignore-time {}".format(
+                config_data["max_lsa"].get("ignore_time")
+            )
+        if "ignore_count" in config_data["max_lsa"]:
+            command += " ignore-count {}".format(
+                config_data["max_lsa"].get("ignore_count")
+            )
+        if "reset_time" in config_data["max_lsa"]:
+            command += " reset-time {}".format(
+                config_data["max_lsa"].get("reset_time")
+            )
+        return command
+
+
+def _tmplt_ospf_max_metric(config_data):
+    if "max_metric" in config_data:
+        command = "max-metric"
+        if "router_lsa" in config_data["max_metric"]:
+            command += " router-lsa"
+        if "external_lsa" in config_data["max_metric"]:
+            command += " external-lsa {external_lsa}".format(
+                **config_data["max_metric"]
+            )
+        if "include_stub" in config_data["max_metric"]:
+            command += " include-stub"
+        if "on_startup" in config_data["max_metric"]:
+            if "time" in config_data["max_metric"]["on_startup"]:
+                command += " on-startup {time}".format(
+                    **config_data["max_metric"]["on_startup"]
+                )
+            elif "wait_for_bgp" in config_data["max_metric"]["on_startup"]:
+                command += " on-startup wait-for-bgp"
+        if "summary_lsa" in config_data["max_metric"]:
+            command += " summary-lsa {summary_lsa}".format(
+                **config_data["max_metric"]
             )
         return command
 
@@ -126,6 +189,20 @@ def _tmplt_ospf_protocol(config_data):
         return command
 
 
+def _tmplt_microloop_avoidance(config_data):
+    if "microloop_avoidance" in config_data:
+        command = "microloop avoidance"
+        if "protected" in config_data["microloop_avoidance"]:
+            command += " protected"
+        if "segment_routing" in config_data["microloop_avoidance"]:
+            command += " segment_routing"
+        if "rib_update_delay" in config_data["microloop_avoidance"]:
+            command += " rin-update-delay {}".config_data[
+                "microloop_avoidance"
+            ].get("rib_update_delay")
+        return command
+
+
 def _tmplt_ospf_bfd_fast_detect(config_data):
     if "bfd" in config_data:
         command = "bfd"
@@ -134,6 +211,23 @@ def _tmplt_ospf_bfd_fast_detect(config_data):
             command += " fast-detect"
             if "strict_mode" in fast_detect:
                 command += " strict-mode"
+        return command
+
+
+def _tmplt_ospf_mpls_traffic_eng(config_data):
+    if "traffic_eng" in config_data:
+        command = "mpls traffic-eng"
+        if "igp_intact" in config_data["traffic_eng"]:
+            command += " igp-intact"
+        if "ldp_sync_update" in config_data["traffic_eng"]:
+            command += " ldp_sync_update"
+        if "multicast_intact" in config_data["traffic_eng"]:
+            command += " multicast_intact"
+        if "auto_route_exclude" in config_data["traffic_eng"]:
+            policy = config_data["traffic_eng"].get("autoroute_exclude")
+            command += " autoroute-exlude route-policy {}".format(
+                policy.get("route_policy")
+            )
         return command
 
 
@@ -187,6 +281,31 @@ def _tmplt_ospf_adjacency_stagger(config_data):
         return command
 
 
+def _tmplt_ospf_adjacency_distribute_bgp_state(config_data):
+    if "distribute_link_list" in config_data:
+        command = "distribute link-state"
+        if config_data["distribute_link_list"].get("instance_id"):
+            command += "  instance-id {}".format(
+                config_data["distribute_link_list"].get("instance_id")
+            )
+        elif config_data["distribute_link_list"].get("throttle"):
+            command += "  throttle {}".format(
+                config_data["distribute_link_list"].get("throttle")
+            )
+        return command
+    elif "distribute_bgp_ls" in config_data:
+        command = "distribute bgp-ls"
+        if config_data["distribute_bgp_ls"].get("instance_id"):
+            command += "  instance-id {}".format(
+                config_data["distribute_bgp_ls"].get("instance_id")
+            )
+        elif config_data["distribute_bgp_ls"].get("throttle"):
+            command += "  throttle {}".format(
+                config_data["distribute_bgp_ls"].get("throttle")
+            )
+        return command
+
+
 def _tmplt_ospf_capability_opaque(config_data):
     if "capability" in config_data:
         if "opaque" in config_data["capability"]:
@@ -222,7 +341,7 @@ def _tmplt_ospf_area_authentication(config_data):
 def _tmplt_ospf_area_authentication_md(config_data):
     if "authentication" in config_data:
         command = "area {area_id} authentication".format(**config_data)
-        if config_data["authentication"].get("message_digest"):
+        if "message_digest" in config_data["authentication"]:
             command = "authentication message-digest"
             md = config_data["authentication"].get("message_digest")
             if md.get("keychain"):
@@ -283,6 +402,24 @@ def _tmplt_ospf_area_bfd_fast_detect(config_data):
         return command
 
 
+def _tmplt_ospf_mpls_ldp(config_data):
+    commands = []
+    if "mpls" in config_data:
+        command = "mpls".format(**config_data)
+        if config_data["mpls"].get("ldp"):
+            ldp = config_data["mpls"].get("ldp")
+            if "auto_config" in ldp:
+                command += " auto-config"
+                commands.append(command)
+            if "sync" in ldp:
+                command += " sync"
+                commands.append(command)
+            if "sync_igp_shortcuts" in ldp:
+                command += " sync-igp-shortcuts"
+                commands.append(command)
+        return commands
+
+
 def _tmplt_ospf_area_nssa(config_data):
     if "nssa" in config_data:
         command = "area {area_id} nssa".format(**config_data)
@@ -296,16 +433,18 @@ def _tmplt_ospf_area_nssa(config_data):
 def _tmplt_ospf_area_nssa_def_info_origin(config_data):
     if "nssa" in config_data:
         command = "area {area_id} nssa".format(**config_data)
-        if config_data["nssa"].get("default_information_originate"):
+        if "default_information_originate" in config_data["nssa"]:
             command += " default-information-originate"
             def_info_origin = config_data["nssa"].get(
                 "default_information_originate"
             )
             if "metric" in def_info_origin:
-                command += " metric {metric}".format(def_info_origin["metric"])
+                command += " metric {metric}".format(
+                    **config_data["nssa"]["default_information_originate"]
+                )
             if "metric_type" in def_info_origin:
                 command += " metric-type {metric_type}".format(
-                    def_info_origin["metric_type"]
+                    **config_data["nssa"]["default_information_originate"]
                 )
         return command
 
@@ -323,11 +462,43 @@ def _tmplt_ospf_area_nssa_translate(config_data):
         return command
 
 
-def _tmplt_ospf_vrf_cmd(process):
-    command = "router ospf {process_id}".format(**process)
-    if "vrf" in process:
-        command += " vrf {vrf}".format(**process)
-    return command
+def _tmplt_ospf_area_vlink_authentication(config_data):
+    if "authentication" in config_data:
+        command = "area {area_id} virtual-link {id} authentication".format(
+            **config_data
+        )
+        if config_data["authentication"].get("keychain"):
+            command += " keychain " + config_data["authentication"].get(
+                "keychain"
+            )
+        elif config_data["authentication"].get("no_auth"):
+            command += " null"
+        return command
+
+
+def _tmplt_ospf_area_vlink_authentication_md(config_data):
+    if "authentication" in config_data:
+        command = "area {area_id} virtual-link {id} authentication".format(
+            **config_data
+        )
+        if config_data["authentication"].get("message_digest"):
+            command = "authentication message-digest"
+            md = config_data["authentication"].get("message_digest")
+            if md.get("keychain"):
+                command += " keychain " + md.get("keychain")
+        return command
+
+
+def _tmplt_ospf_area_vlink_authentication_key(config_data):
+    if "authentication_key" in config_data:
+        command = "area {area_id} virtual-link {id} authentication-key".format(
+            **config_data
+        )
+        if config_data["authentication_key"].get("password"):
+            command += " {password}".format(
+                config_data["authentication_key"].get("password")
+            )
+        return command
 
 
 def _tmplt_ospf_area_stub(config_data):
@@ -353,6 +524,58 @@ def _tmplt_ospf_area_ranges(config_data):
         return commands
 
 
+def _tmplt_prefix_suppression(config_data):
+    if "prefix_suppression" in config_data:
+        if "set" in config_data["prefix_suppression"]:
+            command = "prefix-suppression"
+        if "secondary_address" in config_data["prefix_suppression"]:
+            command = "prefix-suppression secondary-address"
+        return command
+
+
+def _tmplt_protocol_shutdown(config_data):
+    if "protocol_shutdown" in config_data:
+        if "set" in config_data["protocol_shutdown"]:
+            command = "protocol-shutdown"
+        if "host_mode" in config_data["protocol_shutdown"]:
+            command = "protocol-shutdown host-mode"
+        if "on_reload" in config_data["protocol_shutdown"]:
+            command = "protocol-shutdown on-reload"
+        return command
+
+
+def _tmplt_timers_lsa(config_data):
+    if "timers" in config_data:
+        command = "timers lsa"
+        if "group_pacing" in config_data["timers"]["lsa"]:
+            command += " group-pacing {group_pacing}".format(
+                **config_data["timers"]["lsa"]
+            )
+        if "min_arrival" in config_data["timers"]["lsa"]:
+            command += " min-arrival {min_arrival}".format(
+                **config_data["timers"]["lsa"]
+            )
+        if "refresh" in config_data["timers"]["lsa"]:
+            command += " refresh {refresh}".format(
+                **config_data["timers"]["lsa"]
+            )
+        return command
+
+
+def _tmplt_timers_graceful_shutdown(config_data):
+    if "timers" in config_data:
+        command = "timers graceful-shutdown"
+        if "initial_delay" in config_data["timers"]["graceful-shutdown"]:
+            command += " initial delay {initial_delay}".format(
+                **config_data["timers"]["graceful-shutdown"]
+            )
+        if "retain_routes" in config_data["timers"]["graceful-shutdown"]:
+            command += " retain routes {retain_routes}".format(
+                **config_data["timers"]["graceful-shutdown"]
+            )
+        return command
+
+
 class Ospfv2Template(NetworkTemplate):
     def __init__(self, lines=[]):
         super(Ospfv2Template, self).__init__(lines=lines, tmplt=self)
@@ -368,7 +591,7 @@ class Ospfv2Template(NetworkTemplate):
                         $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_vrf_cmd,
+            "setval": "router ospf {{ process_id }}",
             "result": {
                 "processes": {"{{ pid }}": {"process_id": "{{ pid }}"}}
             },
@@ -761,26 +984,45 @@ class Ospfv2Template(NetworkTemplate):
             },
         },
         {
-            "name": "process.apply_weight",
+            "name": "default_weight",
             "getval": re.compile(
                 r"""
                     ^router
                     \sospf\s(?P<pid>\S+)
                     \sapply-weight(?P<apply_weight>)
-                    (\sbandwidth(?P<bandwidth>\s\d+))?
-                    (\sdefault-weight(?P<default_weight>\s\d+))?
+                    \sdefault-weight(?P<default_weight>\s\d+)
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_area_nssa_translate,
-            "compval": "process.apply_weight",
+            "setval": "apply-weight default-weight {{ default_weight }}",
             "result": {
                 "processes": {
                     "{{ pid }}": {
                             "apply_weight": {
-                                "bandwidth": "{{ bandwidth|int }}",
                                 "default_weight": "{{ default_weight|int }}",
                             }
+                    }
+                }
+            },
+        },
+        {
+            "name": "bandwidth",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \sapply-weight(?P<apply_weight>)
+                    \sbandwidth(?P<bandwidth>\s\d+)?
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": "apply-weight bandwidth {{ bandwidth }}",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "apply_weight": {
+                            "bandwidth": "{{ bandwidth|int }}",
+                        }
                     }
                 }
             },
@@ -886,7 +1128,8 @@ class Ospfv2Template(NetworkTemplate):
                             "metric": "{{ metric|int }}",
                             "metric_type": "{{ metric_type|int }}",
                             "route_policy": "{{ route_policy }}",
-                            "set": "{{ True if default_information is defined and always is undefined and metric is undefined and metric_type is undefined and route_policy is undefined }}"
+                            "set": "{{ True if default_information is defined and always is undefined and metric "
+                                   "is undefined and metric_type is undefined and route_policy is undefined }}"
                         },
                     }
                 }
@@ -1772,7 +2015,7 @@ class Ospfv2Template(NetworkTemplate):
                 }
             },
         },
-            {
+        {
             "name": "area.nssa",
             "getval": re.compile(
                 r"""
@@ -1802,27 +2045,28 @@ class Ospfv2Template(NetworkTemplate):
                 }
             },
         },
-            {
-                "name": "area.nssa.default_information_originate",
-                "getval": re.compile(
-                    r"""
-                    ^router
-                    \sospf\s(?P<pid>\S+)
-                    \sarea\s(?P<area_id>\S+)
-                    \snssa(?P<nssa>)
-                    (\sno-redistribution(?P<no_redis>))?
-                    (\sdefault-information-originate(?P<def_info_origin>))?
-                    (\smetric\s(?P<metric>\d+))?
-                    (\smetric-type\s(?P<metric_type>\d+))?
-                    $""",
-                    re.VERBOSE,
-                ),
-                "setval": _tmplt_ospf_area_nssa_def_info_origin,
-                "compval": "nssa.default_information_originate",
-                "result": {
-                    "processes": {
-                        "{{ pid }}": {
-                            "areas": {
+        {
+            "name": "area.nssa.default_information_originate",
+            "getval": re.compile(
+                r"""
+                ^router
+                \sospf\s(?P<pid>\S+)
+                \sarea\s(?P<area_id>\S+)
+                \snssa(?P<nssa>)
+                (\sno-redistribution(?P<no_redis>))?
+                (\sdefault-information-originate(?P<def_info_origin>))?
+                (\smetric\s(?P<metric>\d+))?
+                (\smetric-type\s(?P<metric_type>\d+))?
+                $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_area_nssa_def_info_origin,
+            "compval": "nssa.default_information_originate",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "areas": {
+                            "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "nssa": {
                                     "default_information_originate": {
@@ -1835,77 +2079,75 @@ class Ospfv2Template(NetworkTemplate):
                     }
                 },
             },
-            {
-                "name": "area.ranges",
-                "getval": re.compile(
-                    r"""
-                        ^router
-                        \sospf\s(?P<pid>\S+)
-                        \sarea\s(?P<area_id>\S+)
-                        \srange(?P<range>)
-                        \s(?P<address>\S+)
-                        (\sadvertise(?P<advertise>))
-                        (\snot-advertise(?P<not_advertise>))?
-                        $""",
-                    re.VERBOSE,
-                ),
-                "setval": _tmplt_ospf_area_ranges,
-                "compval": "ranges",
-                "result": {
-                    "processes": {
-                        "{{ pid }}": {
-                            "areas": {
-                                "{{ area_id }}": {
-                                    "area_id": "{{ area_id }}",
-                                    "ranges": [
-                                        {
-                                            "address": "{{ address }}",
-                                            "advertise": "{{ True if advertise is defined }}",
-                                            "not_advertise": "{{ True if not_advertise is defined }}",
-                                        }
-                                    ],
-                                }
-                            }
-                        }
-                    }
-                },
-            },
-
-            {
-                "name": "area.nssa.translate",
-                "getval": re.compile(
-                    r"""
+        },
+        {
+            "name": "area.ranges",
+            "getval": re.compile(
+                r"""
                     ^router
                     \sospf\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
-                    \snssa(?P<nssa>)
-                    \stranslate(?P<translate>)
-                    \stype7(?P<type7>)
-                    \salways\s(?P<always>)
+                    \srange(?P<range>)
+                    \s(?P<address>\S+)
+                    (\sadvertise(?P<advertise>))
+                    (\snot-advertise(?P<not_advertise>))?
                     $""",
-                    re.VERBOSE,
-                ),
-                "setval": _tmplt_ospf_area_nssa_translate,
-                "compval": "nssa.translate",
-                "result": {
-                    "processes": {
-                        "{{ pid }}": {
-                            "areas": {
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_area_ranges,
+            "compval": "ranges",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "areas": {
+                            "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
-                                "nssa": {
-                                    "translate": {
-                                        "type7": {
-                                            "always": "{{ True if always is defined }}"
-                                      }
-                                    },
-                                }
+                                "ranges": [
+                                    {
+                                        "address": "{{ address }}",
+                                        "advertise": "{{ True if advertise is defined }}",
+                                        "not_advertise": "{{ True if not_advertise is defined }}",
+                                    }
+                                ],
                             }
                         }
                     }
-                },
+                }
             },
-    ]
-    '''
+        },
+        {
+            "name": "area.nssa.translate",
+            "getval": re.compile(
+                r"""
+                ^router
+                \sospf\s(?P<pid>\S+)
+                \sarea\s(?P<area_id>\S+)
+                \snssa(?P<nssa>)
+                \stranslate(?P<translate>)
+                \stype7(?P<type7>)
+                \salways\s(?P<always>)
+                $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_area_nssa_translate,
+            "compval": "nssa.translate",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "areas": {
+                            "area_id": "{{ area_id }}",
+                            "nssa": {
+                                "translate": {
+                                    "type7": {
+                                        "always": "{{ True if always is defined }}"
+                                    }
+                                },
+                            }
+                        }
+                    }
+                }
+            },
+        },
         {
             "name": "virtual_link.hello_interval",
             "getval": re.compile(
@@ -1925,10 +2167,81 @@ class Ospfv2Template(NetworkTemplate):
                     "{{ pid }}": {
                         "areas": {
                             "{{ area_id }}": {
+                                "area_id": "{{ area_id }}",
                                 "virtual_link": {
-                                    "id":   "{{ id }}",
-                                    "hello_interval": "{{ hello_interval|int }}"
+                                    "{{ id }}":
+                                        {
+                                            "id": "{{ id }}",
+                                            "hello_interval": "{{ hello_interval|int }}"
+                                        }
+
                                 }
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "virtual_link.dead_interval",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \sarea\s(?P<area_id>\S+)
+                    \svirtual-link\s(?P<id>\S+)
+                    \sdead-interval\s(?P<dead_interval>\d+)
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": "area {{ area_id }} virtual-link {{ id }} dead-interval {{ dead_interval }}",
+            "compval": "dead_interval",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "areas": {
+                            "{{ area_id }}": {
+                                "area_id": "{{ area_id }}",
+                                "virtual_link": {
+                                    "{{ id }}": {
+                                        "id": "{{ id }}",
+                                        "dead_interval": "{{ dead_interval|int }}"
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "virtual_link.retransmit_interval",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \sarea\s(?P<area_id>\S+)
+                    \svirtual-link\s(?P<id>\S+)
+                    \sretransmit-interval\s(?P<retransmit_interval>\d+)
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": "area {{ area_id }} virtual-link {{ id }} retransmit-interval {{ retransmit_interval }}",
+            "compval": "retransmit_interval",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "areas": {
+                            "{{ area_id }}": {
+                                "area_id": "{{ area_id }}",
+                                "virtual_link": {
+                                    "{{ id }}":  {
+                                        "id": "{{ id }}",
+                                        "retransmit_interval": "{{ retransmit_interval|int }}"
+                                    }
+                                }
+
                             }
                         }
                     }
@@ -1936,41 +2249,640 @@ class Ospfv2Template(NetworkTemplate):
             }
         },
         {
-            "name": "pid",
+            "name": "virtual_link.authentication",
             "getval": re.compile(
                 r"""
-                        ^router
-                        \sospf\s(?P<pid>\S+)
-                        $""",
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \sarea\s(?P<area_id>\S+)
+                    \savirtual-link\s(?P<id>\S+)
+                    \sauthentication(?P<auth>)
+                    (\skeychain\s(?P<keychain>\S+))?
+                    (\snull(?P<no_auth>))?
+                    $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_vrf_cmd,
-            "result": {
-                "processes": {"{{ pid }}": {"process_id": "{{ pid }}"}}
-            },
-            "shared": True,
-        },
-        {
-            "name": "pid",
-            "getval": re.compile(
-                r"""
-                        ^router\s
-                        ospf*
-                        \s(?P<pid>\S+)
-                        \svrf
-                        \s(?P<vrf>\S+)
-                        $""",
-                re.VERBOSE,
-            ),
-            "setval": _tmplt_ospf_vrf_cmd,
+            "setval": _tmplt_ospf_area_vlink_authentication,
+            "compval": "authentication",
             "result": {
                 "processes": {
                     "{{ pid }}": {
-                        "process_id": "{{ pid|int }}",
-                        "vrf": "{{ vrf }}",
+                        "areas": {
+                            "{{ area_id }}": {
+                                "area_id": "{{ area_id }}",
+                                "authentication": {
+                                    "no_auth": "{{ True if no_auth is defined }}",
+                                    "keychain": "{{ keychain }}",
+                                },
+                            }
+                        }
                     }
                 }
             },
-            "shared": True,
         },
-    '''
+        {
+            "name": "virtual_link.authentication_key",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \sarea\s(?P<area_id>\S+)
+                    \svirtual-link\s(?P<id>\S+)
+                    \sauthentication-key(?P<auth_key>)
+                    (\s(?P<password>\S+))?
+                    (\sclear\s(?P<clear>)\S+)?
+                    (\sencrypted(?P<encrypted>\S+))?
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_area_vlink_authentication_key,
+            "compval": "authentication_key",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "areas": {
+                            "{{ area_id }}": {
+                                "area_id": "{{ area_id }}",
+                                "virtual_link": {
+                                    "{{ id }}": {
+                                        "authentication_key": {
+                                            "clear": "{{ clear }}",
+                                            "encrypted": "{{ encrypted}}",
+                                            "password": "{{ password if clear is undefined and encrypted is undefined }}",
+                                        },
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "virtual_link.authentication.message_digest",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \sarea\s(?P<area_id>\S+)
+                    \svirtual-link\s(?P<id>\S+)
+                    \sauthentication(?P<auth>)
+                    \smessage-digest(?P<md>)
+                    \skeychain(?P<md_key>\s\S+)
+                    *$""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_area_vlink_authentication_md,
+            "compval": "authentication.message_digest",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "areas": {
+                            "{{ area_id }}": {
+                                "area_id": "{{ area_id }}",
+                                "virtual_link": {
+                                    "{{ id }}": {
+                                        "authentication": {
+                                            "message_digest": {
+                                                "keychain": "{{ md_key }}",
+                                            }
+                                        },
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "link_down_fast_detect",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \slink-down
+                    \sfast-detect(?P<fast_detect>)
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": "link-down fast-detect",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "link_down_fast_detect": "{{ True if fast_detect is defined }}",
+                    }
+                }
+            },
+        },
+        {
+            "name": "nsr",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \snsr
+                    \sdisable(?P<disable>)
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": "nsr disable",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "disable": "{{ True if disable is defined }}",
+                    }
+                }
+            },
+        },
+        {
+            "name": "database_filter",
+            "getval": re.compile(
+                r"""
+                ^router
+                \sospf\s(?P<pid>\S+)
+                \sdatabase-filter
+                \sall
+                \sout\s(?P<outing>\S+)
+                $""",
+                re.VERBOSE,
+            ),
+
+            "setval": "database-filter all out {{ outing }}",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "outing": "{{ outing }}"
+                    }
+                }
+            },
+        },
+        {
+            "name": "distribute_link_state",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \sdistribute(?P<distribute>)
+                    \slink-state(?P<link_state>)
+                    (\sinstance-id(?P<inst_id>\d+))?
+                    (\sthrottle(?P<throttle>\d+))?
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_adjacency_distribute_bgp_state,
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "distribute_link_list": {
+                            "instance_id": "{{ inst_id|int }}",
+                            "throttle": "{{ throttle }}",
+                        },
+                    }
+                }
+            },
+        },
+        {
+            "name": "distribute_bgp_ls",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \sdistribute(?P<distribute>)
+                    \sbgp-ls(?P<bgp_ls>)
+                    (\sinstance-id(?P<inst_id>\d+))?
+                    (\sthrottle(?P<throttle>\d+))?
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_adjacency_distribute_bgp_state,
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "distribute_bgp_ls": {
+                            "instance_id": "{{ inst_id|int }}",
+                            "throttle": "{{ throttle }}",
+                        },
+                    }
+                }
+            },
+        },
+        {
+            "name": "log_adjacency",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \slog(?P<security>)
+                    \sadjacency(?P<adjacency>)?
+                    (\schanges(?P<changes>))?
+                    (\sdisable(?P<disable>))?
+                    (\sdetails(?P<details>))?
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_log_adjacency,
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "log_adjacency_changes": {
+                            "set": "{{ True changes id defined and disable is undefined and detail is undefined }}",
+                            "disable": "{{ True if disable is defined }}",
+                            "details": "{{ True if details is defined }}",
+                        },
+                    }
+                }
+            },
+        },
+        {
+            "name": "max_lsa",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    (\smax-lsa\s(?P<threshold>\d+))?
+                    (\swarning-only\s(?P<warning_only>\d+)?
+                    (\signore-time\s(?P<ignore_time>\d+))?
+                    (\signore-count\s(?P<ignore_count>\d+))?
+                    (\sreset-time\s(?P<reset_time>)\d+))?
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_log_max_lsa,
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "max_lsa": {
+                            "threshold": "{{ threshold|int }}",
+                            "warning_only": "{{ warning_only|int }}",
+                            "ignore_time": "{{ ignore_time|int }}",
+                            "ignore_count": "{{ ignore_count|int }}",
+                            "reset_time": "{{ reset_time|int }}",
+                        },
+                    }
+                }
+            },
+        },
+        {
+            "name": "max_metric",
+            "getval": re.compile(
+                r"""
+                ^router
+                \sospf\s(?P<pid>\S+)
+                \smax-metric
+                \s*(?P<router_lsa>)
+                (\s*external-lsa(?P<external_lsa>))?
+                (\s(?P<max_metric_value>\d+))?
+                \s*(?P<include_stub>include-stub)*
+                \s*(?P<on_startup>on-startup)*
+                \s*(?P<wait_period>\d+)*
+                \s*(wait-for\sbgp)*
+                \s*(?P<bgp_asn>\d+)*
+                \s*(?P<summary_lsa>summary-lsa)*
+                \s*(?P<sum_lsa_max_metric_value>\d+)*
+                $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_max_metric,
+            "remval": "max-metric router-lsa",
+            "result": {
+                "processes": {
+                    '{{ "pid"  }}': {
+                        "max_metric": {
+                            "router_lsa": {
+                                "set": "{{ True if router_lsa is defined and external_lsa is undefined else None }}",
+                                "external_lsa": {
+                                    "set": "{{ True if external_lsa is defined and max_metric_value is undefined else None }}",
+                                    "max_metric_value": "{{ max_metric_value }}",
+                                },
+                                "include_stub": "{{ not not include_stub }}",
+                                "on_startup": {
+                                    "set": "{{ True if on_startup is defined and (wait_period and bgp_asn) is undefined else None }}",
+                                    "wait_period": "{{ wait_period }}",
+                                    "wait_for_bgp_asn": "{{ bgp_asn }}",
+                                },
+                                "summary_lsa": {
+                                    "set": "{{ True if summary_lsa is defined and sum_lsa_max_metric_value is undefined else None }}",
+                                    "max_metric_value": "{{ sum_lsa_max_metric_value }}",
+                                },
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "mpls_ldp",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \smpls(?P<mpls>)
+                    (\sauto-config(?P<auto_config>))?
+                    (\ssync(?P<sync>))?
+                    (\ssync-igp-shortcuts(?P<syn_igp_shortcuts>))?
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_mpls_ldp,
+            "compval": "mpls_ldp",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "mpls": {
+                            "ldp": {
+                                "auto_config": "{{ True if auto_config is defined }}",
+                                "sync": "{{ True if sync is defined }}",
+                                "sync_igp_shortcuts": "{{ True if sync_igp_shortcuts is defined }}",
+                            }
+                        },
+                    }
+                }
+            },
+        },
+        {
+            "name": "microloop_avoidance",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \smicroloop(?P<microloop>)
+                    \savoidance(?P<avoidance>)
+                    (\s(?P<protected>protected))?
+                    (\s(?P<segment_routing>segment-routing))?
+                    (\srib-update-delay\s(?P<rib_update_delay>\d+))?
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_microloop_avoidance,
+            "compval": "microloop_avoidance",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "microloop_avoidance": {
+                            "protected": "{{ True if protected is defined }}",
+                            "segment_routing": "{{ True if segment_routing is defined }}",
+                            "rib_update_delay": "{{ rib_update_delay }}",
+                        },
+                    }
+                }
+            },
+        },
+        {
+            "name": "mpls_traffic_eng",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \smpls(?P<mpls>)
+                    \straffic-end(?P<traffic_eng>)
+                    (\sautoroute-exclude(?P<autoroute>))?
+                    (\sroute-policy(?P<route_policy>\S+))?
+                    (\s(?P<igp_intact>igp_intact))?
+                    (\s(?P<ldp_sync_update>ldp-sync-update))?
+                    (\s(?P<multicast_intact>multicast-intact))?
+                    (\srouter-id\s(?P<router_id>\S+))?
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_mpls_traffic_eng,
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "mpls": {
+                            "autoroute_exclude": {
+                                "route_policy": "{{ route_policy }}"
+                            },
+                            "igp_intact": "{{ True if igp_intact is defined }}",
+                            "ldp_sync_update": "{{ True if ldp_sync_update is defined }}",
+                            "multicast_intact": "{{ True if multicast_intact is defined }}",
+                            "router_id": "{{ router_id }}"
+                        },
+                    }
+                }
+            },
+        },
+        {
+            "name": "prefix_suppression",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \sprefix-suppression(?P<prefix_suppression>)
+                    (\s(?P<secondary_address>secondary-address))?
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_prefix_suppression,
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "prefix_suppression": {
+                            "set": "{{ True if prefix_suppression is defined and secondary_address is undefined }}",
+                            "secondary_address": "{{ True if secondary_address is defined }}",
+                        },
+                    }
+                }
+            },
+        },
+        {
+            "name": "protocol_shutdown",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \sprotocol-shutdown(?P<protocol_shutdown>)
+                    (\s(?P<host_mode>host-mode))?
+                    (\s(?P<on_reload>on-reload))?
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_protocol_shutdown,
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "protocol_shutdown": {
+                            "set": "{{ True if protocol_shutdown is defined and host_mode is undefined and on_reload is undefined }}",
+                            "host_mode": "{{ True if host_mode is defined }}",
+                            "on_reload": "{{ True if on_reload is defined }}",
+                        },
+                    }
+                }
+            },
+        },
+        {
+            "name": "timers.lsa",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \stimers
+                    \slsa
+                    (\sgroup-pacing\s(?P<group_pacing>\d+))?
+                    (\smin-arrival\s(?P<min_arrival>\d+))?
+                    (\srefresh\s(?P<refresh>\d+))?
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_timers_lsa,
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "timers": {
+                            "lsa":  {
+                                "group_pacing": "{{ group_pacing|int }}",
+                                "min_arrival": "{{ min_arrival|int }}",
+                                "refresh": "{{ refresh|int }}",
+                            },
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "timers.graceful_shutdown",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \stimers
+                    \sgraceful_shutdown
+                    (\sinitial delay\s(?P<initial_delay>\d+))?
+                    (\sretain routes\s(?P<retain_routes>\d+))?
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_timers_graceful_shutdown,
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "timers": {
+                            "graceful_shutdown": {
+                                "initial_delay": "{{ initial_delay|int }}",
+                                "retain_routes": "{{ retain_routes|int }}",
+                            },
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "throttle.spf",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \stimers
+                    \sthrottle
+                    \sspf
+                    (\s(?P<change_delay>\d+))
+                    (\s(?P<second_delay>\d+))
+                    (\s(?P<max_wait>\d+))
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": "timers throttle spf {{ throttle.spf.change_delay }}  {{ throttle.spf.second_delay }} {{ throttle.spf.max_wait }}",
+            "compval": "throttle.lsa_all",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "timers": {
+                            "throttle": {
+                                "lsa_all": {
+                                    "initial_delay": "{{ initial_delay }}",
+                                    "min_delay": "{{ min_delay }}",
+                                    "max_delay": "{{ max_delay }}",
+                                },
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "throttle.lsa_all",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \stimers
+                    \sthrottle
+                    \slsa
+                    \sall
+                    (\s(?P<initial_delay>\d+))
+                    (\s(?P<min_delay>\d+))
+                    (\s(?P<max_delay>\d+))
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": "timers throttle lsa all {{ throttle.lsa_all.initial_delay }} {{ throttle.lsa_all.min_delay }} {{ throttle.lsa_all.max_delay }}",
+            "compval": "throttle.lsa_all",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "timers": {
+                            "throttle": {
+                                "lsa_all": {
+                                    "initial_delay": "{{ initial_delay }}",
+                                    "min_delay": "{{ min_delay }}",
+                                    "max_delay": "{{ max_delay }}",
+                                },
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "throttle.fast_reroute",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \stimers
+                    \sthrottle
+                    \sfast-reroute\s(?P<fast_reroute>\d+)
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": "timers throttle fast-reroute {{ fast_reroute }}",
+            "compval": "throttle.fast_reroute",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "timers": {
+                            "throttle": {
+                                "fast_reroute": "{{ fast_reroute }}",
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "timers.pacing_flood",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospf\s(?P<pid>\S+)
+                    \stimers
+                    \spacing
+                    \sflood\s(?P<pacing_flood>\d+)
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": "timers pacing flood {{ pacing_flood }}",
+            "compval": "timers.pacing_flood",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "timers": {
+                            "pacing_flood": "{{ pacing_flood }}",
+
+                        }
+                    }
+                }
+            },
+        },
+    ]
+    # fmt: on

@@ -24,6 +24,9 @@
 """
 The arg spec for the iosxr_ospfv2 module
 """
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
 
 
 class Ospfv2Args(object):  # pylint: disable=R0903
@@ -266,7 +269,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                         },
                         "authentication": {
                             "mutually_exclusive": [
-                                ["keychain", "message_digest", None]
+                                ["keychain", "message_digest", "no_auth"]
                             ],
                             "options": {
                                 "keychain": {"type": "str"},
@@ -375,6 +378,13 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                             },
                             "type": "dict",
                         },
+                        "distribute_bgp_ls": {
+                            "options": {
+                                "instance_id": {"type": "int"},
+                                "throttle": {"type": "int"},
+                            },
+                            "type": "dict",
+                        },
                         "distribute_link_state": {
                             "options": {
                                 "instance_id": {"type": "int"},
@@ -428,6 +438,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                             "options": {
                                 "detail": {"type": "bool"},
                                 "disable": {"type": "bool"},
+                                "set": {"type": "bool"},
                             },
                             "type": "dict",
                         },
@@ -436,6 +447,15 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                             "type": "str",
                         },
                         "max_lsa": {
+                            "mutually_exclusive": [
+                                [
+                                    "warning_only",
+                                    "ignore_count",
+                                    "reset_time",
+                                    "ignore_time",
+                                    "ignore_count",
+                                ]
+                            ],
                             "options": {
                                 "ignore_count": {"type": "int"},
                                 "ignore_time": {"type": "int"},
@@ -482,24 +502,6 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                     },
                                     "type": "dict",
                                 }
-                            },
-                            "type": "dict",
-                        },
-                        "maximum": {
-                            "options": {
-                                "interfaces": {"type": "int"},
-                                "paths": {"type": "int"},
-                                "redistributed_prefixes": {
-                                    "options": {
-                                        "prefixes": {
-                                            "required": True,
-                                            "type": "int",
-                                        },
-                                        "threshold": {"type": "int"},
-                                        "warning_only": {"type": "bool"},
-                                    },
-                                    "type": "dict",
-                                },
                             },
                             "type": "dict",
                         },
@@ -632,22 +634,6 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                         "protocol_shutdown": {
                             "options": {
                                 "host_mode": {"type": "bool"},
-                                "on_reload": {"type": "bool"},
-                                "set": {"type": "bool"},
-                            },
-                            "type": "dict",
-                        },
-                        "queue": {
-                            "options": {
-                                "dispatch": {
-                                    "options": {
-                                        "flush_lsa": {"type": "int"},
-                                        "incoming": {"type": "int"},
-                                        "rate_limited_lsa": {"type": "int"},
-                                        "spf_lsa_limit": {},
-                                    },
-                                    "type": "dict",
-                                },
                                 "limit": {
                                     "options": {
                                         "high": {"type": "int"},
@@ -656,6 +642,8 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                     },
                                     "type": "dict",
                                 },
+                                "on_reload": {"type": "bool"},
+                                "set": {"type": "bool"},
                             },
                             "type": "dict",
                         },
@@ -714,55 +702,6 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                             },
                             "type": "dict",
                         },
-                        "segment_routing": {
-                            "options": {
-                                "disable": {"type": "bool"},
-                                "forwarding": {
-                                    "choices": ["disable", "mpls"],
-                                    "type": "str",
-                                },
-                                "global_block": {
-                                    "options": {
-                                        "max": {"type": "int"},
-                                        "min": {"type": "int"},
-                                    },
-                                    "type": "dict",
-                                },
-                                "mpls": {"type": "bool"},
-                                "prefix_sid_map": {
-                                    "choices": [
-                                        "advertise_local",
-                                        "receive_disable",
-                                    ],
-                                    "type": "str",
-                                },
-                                "sr_prefer": {"type": "str"},
-                            },
-                            "type": "dict",
-                        },
-                        "snmp": {
-                            "options": {
-                                "context": {"type": "str"},
-                                "trap_rate_limit": {
-                                    "options": {
-                                        "max": {"type": "int"},
-                                        "size": {"type": "int"},
-                                    },
-                                    "type": "dict",
-                                },
-                            },
-                            "type": "dict",
-                        },
-                        "spf_prefix_priority": {
-                            "options": {
-                                "parameters": {
-                                    "elements": "str",
-                                    "type": "list",
-                                },
-                                "route_policy": {"type": "str"},
-                            },
-                            "type": "dict",
-                        },
                         "summary_in": {
                             "choices": ["enable", "disable"],
                             "type": "str",
@@ -789,7 +728,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                     "options": {
                                         "group_pacing": {"type": "int"},
                                         "min_arrival": {"type": "int"},
-                                        "refresh": {},
+                                        "refresh": {"type": "int"},
                                     },
                                     "type": "dict",
                                 },
@@ -825,45 +764,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                             },
                             "type": "dict",
                         },
-                        "trace": {
-                            "options": {
-                                "entry": {
-                                    "choices": [
-                                        0,
-                                        256,
-                                        512,
-                                        1024,
-                                        2048,
-                                        4096,
-                                        8192,
-                                        16384,
-                                        32768,
-                                        65536,
-                                    ],
-                                    "type": "int",
-                                },
-                                "name": {"type": "str"},
-                            },
-                            "required_together": [["name", "entry"]],
-                            "type": "dict",
-                        },
                         "transmit_delay": {"type": "int"},
-                        "ucmp": {
-                            "options": {
-                                "delay_interval": {"type": "int"},
-                                "exclude": {
-                                    "options": {
-                                        "interface": {"type": "str"},
-                                        "interface_type": {"type": "str"},
-                                    },
-                                    "type": "dict",
-                                },
-                                "prefix_list": {"type": "str"},
-                                "set": {"type": "bool"},
-                                "variance": {"type": "int"},
-                            },
-                            "type": "dict",
-                        },
                         "weight": {"type": "int"},
                     },
                     "type": "list",

@@ -10,6 +10,11 @@ is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to it's desired end-state is
 created
 """
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
+
+from copy import deepcopy
 from ansible.module_utils.six import iteritems
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
     Facts,
@@ -79,24 +84,19 @@ class Ospfv2(ResourceModule):
         for thing in wantd, haved:
             for _pid, proc in iteritems(thing):
                 for area in proc.get("areas", []):
-                    ranges = {
-                        entry["address"]: entry
-                        for entry in area.get("ranges", [])
-                    }
-                    if bool(ranges):
-                        area["ranges"] = ranges
-                    filter_list = {
-                        entry["direction"]: entry
-                        for entry in area.get("filter_list", [])
-                    }
-                    if bool(filter_list):
-                        area["filter_list"] = filter_list
                     virtual_link = {
                         entry["id"]: entry
                         for entry in area.get("virtual_link", [])
                     }
                     if bool(virtual_link):
                         area["virtual_link"] = virtual_link
+                    ranges = {
+                        entry["address"]: entry
+                        for entry in area.get("ranges", [])
+                    }
+                    if bool(ranges):
+                        area["ranges"] = ranges
+
                 proc["areas"] = {
                     entry["area_id"]: entry for entry in proc.get("areas", [])
                 }
@@ -122,10 +122,21 @@ class Ospfv2(ResourceModule):
             wantd = {}
 
         # delete processes first so we do run into "more than one" errors
-        if self.state in ["overridden", "deleted"]:
-            for k, have in iteritems(haved):
+        if self.state == "deleted":
+            haved_del = deepcopy(haved)
+            want_process = {}
+            for k, t_want in iteritems(haved_del):
+                want_process["process_id"] = t_want.get("process_id")
+                if not (len(t_want) == 2 and not t_want.get("areas")):
+                    self._compare(want=want_process, have=haved_del.get(k, {}))
+        if self.state == "overridden":
+            haved_del = deepcopy(haved)
+            want = {}
+            for k, t_want in iteritems(haved_del):
                 if k not in wantd:
-                    self.addcmd(have, "pid", True)
+                    want["process_id"] = t_want.get("process_id")
+                    if not (len(t_want) == 2 and not t_want.get("areas")):
+                        self._compare(want=want, have=haved_del.get(k, {}))
 
         for k, want in iteritems(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
@@ -139,8 +150,10 @@ class Ospfv2(ResourceModule):
             "priority",
             "protocol",
             "auto_cost",
+            "bandwidth",
             "flood_reduction",
             "default_metric",
+            "default_weight",
             "router_id",
             "demand_circuit",
             "packet_size",
@@ -159,9 +172,28 @@ class Ospfv2(ResourceModule):
             "admin_distance",
             "ospf_distance",
             "address_family_unicast",
+            "loopback_stub_network",
             "authentication.message_digest",
             "default_information_originate",
-            "loopback_stub_network",
+            "link_down_fast_detect",
+            "nsr",
+            "database_filter",
+            "log_adjacency",
+            "distribute_bgp_ls",
+            "distribute_link_state",
+            "max_lsa",
+            "max_metric",
+            "mpls_ldp",
+            "mpls_traffic_eng",
+            "microloop_avoidance",
+            "prefix_suppression",
+            "protocol_shutdown",
+            "timers.lsa",
+            "timers.graceful_shutdown",
+            "throttle.lsa_all",
+            "throttle.spf",
+            "throttle.fast_reroute",
+            "timers.pacing_flood",
         ]
 
         if want != have:
@@ -219,5 +251,12 @@ class Ospfv2(ResourceModule):
             self._area_compare_virtual_link(want={}, have=entry)
 
     def _area_compare_virtual_link(self, want, have):
-        parsers = ["virtual_link.hello_interval"]
+        parsers = [
+            "virtual_link.authentication",
+            "virtual_link.authentication_key",
+            "virtual_link.authentication.message_digest",
+            "virtual_link.hello_interval",
+            "virtual_link.dead_interval",
+            "virtual_link.retransmit_interval",
+        ]
         self.compare(parsers=parsers, want=want, have=have)

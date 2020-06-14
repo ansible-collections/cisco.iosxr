@@ -1,5 +1,5 @@
 ---
-- name: Setup
+- name: Setup (Populate OSPFv2 routes)
   cisco.iosxr.iosxr_ospfv2:
     config:
 

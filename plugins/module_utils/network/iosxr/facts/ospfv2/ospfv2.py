@@ -9,8 +9,13 @@ It is in this file the configuration is collected from the device
 for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
+
 from copy import deepcopy
 import re
+from operator import itemgetter
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ospfv2 import (
     Ospfv2Template,
@@ -56,7 +61,7 @@ class Ospfv2Facts(object):
         if not data:
             data = connection.get("show running-config router ospf")
 
-        end_flag, end_mark,count = 0, 0, 0
+        end_flag, end_mark, count, v_read = 0, 0, 0, False
         areas, config_commands = [], []
         area_str, process, curr_process = "", "", ""
         data = data.splitlines()
@@ -77,6 +82,18 @@ class Ospfv2Facts(object):
                     area_str = process + re.sub("\n", "", line)
                     config_commands.append(area_str.replace("  ", " "))
                     end_flag += 1
+                elif line.startswith("  virtual-link"):
+                    virtual_str = area_str + re.sub("\n", "", line)
+                    config_commands.append(virtual_str.replace("  ", " "))
+                    v_read = True
+                elif v_read:
+                    if "!" not in line:
+                        command = virtual_str.replace("  ", " ") + re.sub(
+                            "\n", "", line
+                        )
+                        config_commands.append(command.replace("   ", " "))
+                    else:
+                        v_read = False
                 elif end_flag > 0 and "!" not in line:
                     command = area_str + re.sub("\n", "", line)
                     config_commands.append(command.replace("  ", " "))
@@ -107,7 +124,6 @@ class Ospfv2Facts(object):
         for process in current.get("processes", []):
             if "areas" in process:
                 process["areas"] = list(process["areas"].values())
-
                 process["areas"] = sorted(
                     process["areas"], key=lambda k, sk="area_id": k[sk]
                 )
@@ -116,8 +132,13 @@ class Ospfv2Facts(object):
                         area["ranges"] = sorted(
                             area["ranges"], key=lambda k, s="ranges": k[s]
                         )
-                    if "filters" in area:
-                        area["filters"].sort()
+                    if "virtual_link" in area:
+                        area["virtual_link"] = list(
+                            area["virtual_link"].values()
+                        )
+                        area["virtual_link"] = sorted(
+                            area["virtual_link"], key=lambda k, sk="id": k[sk]
+                        )
             ipv4["processes"].append(process)
 
         ansible_facts["ansible_network_resources"].pop("ospfv2", None)

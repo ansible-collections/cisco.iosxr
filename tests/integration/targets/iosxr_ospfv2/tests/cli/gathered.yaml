@@ -1,6 +1,6 @@
 ---
 - debug:
-    msg: START iosxr_static_routes gathered integration tests on connection={{ ansible_connection
+    msg: START iosxr_ospfv2 gathered integration tests on connection={{ ansible_connection
       }}
 
 - include_tasks: _remove_config.yaml
@@ -9,10 +9,10 @@
 
 - block:
 
-    - name: Gather static routes facts from the device using iosxr_static_routes
+    - name: Gather static routes facts from the device using iosxr_ospfv2
         module
       register: result
-      cisco.iosxr.iosxr_static_routes:
+      cisco.iosxr.iosxr_ospfv2:
         state: gathered
 
     - assert:

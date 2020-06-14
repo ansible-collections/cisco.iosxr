@@ -5,7 +5,7 @@
 
 - block:
 
-    - name: Use parsed state to convert externally supplied device specific static
+    - name: Use parsed state to convert externally supplied device specific ospfv2
         routes commands to structured format
       register: result
       cisco.iosxr.iosxr_ospfv2:
