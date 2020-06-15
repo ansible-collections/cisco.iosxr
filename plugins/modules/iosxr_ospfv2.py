@@ -2470,8 +2470,6 @@ EXAMPLES = """
 #            }
 #        ]
 #    }
-
-
 """
 RETURN = """
 before:
