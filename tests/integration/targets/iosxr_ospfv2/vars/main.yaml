@@ -3,19 +3,16 @@ merged:
   before: {}
   commands:
     - router ospf 10
-    - authentication keychain ansible_test1102
     - area 11 default-cost 5
     - area 11 cost 11
     - area 22 default-cost 6
     - router ospf 27
-    - area 10 authentication keychain ansi11393
     - area 10 hello-interval 2
     - router ospf 26
     - adjacency stagger 10 20
     - authentication message-digest keychain ansible1101pass
     - router ospf 30
     - cost 2
-    - weight 2
     - passive disable
     - priority 1
     - flood-reduction disable
@@ -45,8 +42,6 @@ merged:
             default_cost: 5
           - area_id: "22"
             default_cost: 6
-        authentication:
-          keychain: 'ansible_test1102'
         process_id: "10"
 
       - adjacency_stagger:
@@ -58,8 +53,6 @@ merged:
         process_id: "26"
       - areas:
           - area_id: "10"
-            authentication:
-              keychain: 'ansi11393'
             hello_interval: 2
         process_id: "27"
       - areas:
@@ -83,7 +76,6 @@ merged:
         router_id: "2.2.2.2"
         summary_in: "enable"
         transmit_delay: 2
-        weight: 2
 
   update_after:
     processes:
@@ -93,8 +85,6 @@ merged:
             default_cost: 5
           - area_id: "22"
             default_cost: 6
-        authentication:
-          keychain: 'ansible_test1102'
         process_id: '10'
       - adjacency_stagger:
           max_adjacency: 21
@@ -105,8 +95,6 @@ merged:
         process_id: '26'
       - areas:
           - area_id: '10'
-            authentication:
-              keychain: 'ansi11393'
             hello_interval: 2
           - area_id: '30'
             dead_interval: 4
@@ -133,7 +121,6 @@ merged:
         router_id: '2.2.2.2'
         summary_in: 'enable'
         transmit_delay: 2
-        weight: 2
 replaced:
   before:
     processes:
@@ -143,8 +130,6 @@ replaced:
             default_cost: 5
           - area_id: '22'
             default_cost: 6
-        authentication:
-          keychain: 'ansible_test1102'
         process_id: '10'
       - adjacency_stagger:
           max_adjacency: 20
@@ -155,8 +140,6 @@ replaced:
         process_id: '26'
       - areas:
           - area_id: '10'
-            authentication:
-              keychain: 'ansi11393'
             hello_interval: 2
         process_id: '27'
       - areas:
@@ -180,11 +163,9 @@ replaced:
         router_id: '2.2.2.2'
         summary_in: 'enable'
         transmit_delay: 2
-        weight: 2
 
   commands:
     - router ospf 27
-    - area 20 authentication keychain ansi11393
     - area 20 default-cost 2
     - area 20 cost 2
 
@@ -196,8 +177,6 @@ replaced:
             default_cost: 5
           - area_id: '22'
             default_cost: 6
-        authentication:
-          keychain: 'ansible_test1102'
         process_id: '10'
       - adjacency_stagger:
           max_adjacency: 20
@@ -208,12 +187,8 @@ replaced:
         process_id: '26'
       - areas:
           - area_id: '10'
-            authentication:
-              keychain: 'ansi11393'
             hello_interval: 2
           - area_id: '20'
-            authentication:
-              keychain: 'ansi11393'
             cost: 2
             default_cost: 2
         process_id: '27'
@@ -238,18 +213,15 @@ replaced:
         router_id: '2.2.2.2'
         summary_in: 'enable'
         transmit_delay: 2
-        weight: 2
 
 overridden:
   commands:
     - router ospf 10
-    - no authentication keychain ansible_test1102
     - no area 11 default-cost 5
     - no area 11 cost 11
     - no area 22 default-cost 6
     - router ospf 30
     - no cost 2
-    - no weight 2
     - no passive disable
     - no priority 1
     - no flood-reduction disable
@@ -267,7 +239,6 @@ overridden:
     - no area 11 default-cost 5
     - no area 22 default-cost 6
     - router ospf 27
-    - area 20 authentication keychain ansi11393
     - area 20 default-cost 2
     - area 20 cost 2
   after:
@@ -282,12 +253,8 @@ overridden:
         process_id: '26'
       - areas:
           - area_id: '10'
-            authentication:
-              keychain: 'ansi11393'
             hello_interval: 2
           - area_id: '20'
-            authentication:
-              keychain: 'ansi11393'
             cost: 2
             default_cost: 2
         process_id: '27'
@@ -295,7 +262,6 @@ overridden:
 deleted:
   commands:
     - router ospf 10
-    - no authentication keychain ansible_test1102
     - no area 11 default-cost 5
     - no area 11 cost 11
     - no area 22 default-cost 6
@@ -303,11 +269,9 @@ deleted:
     - no adjacency stagger 10 20
     - no authentication message-digest keychain ansible1101pass
     - router ospf 27
-    - no area 10 authentication keychain ansi11393
     - no area 10 hello-interval 2
     - router ospf 30
     - no cost 2
-    - no weight 2
     - no passive disable
     - no priority 1
     - no flood-reduction disable
@@ -344,12 +308,8 @@ round_trip:
         process_id: '26'
       - areas:
           - area_id: '10'
-            authentication:
-              keychain: 'ansi11393'
             hello_interval: 2
           - area_id: '20'
-            authentication:
-              keychain: 'ansi11393'
             cost: 2
             default_cost: 2
         process_id: '27'

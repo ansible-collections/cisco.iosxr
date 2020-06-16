@@ -16,8 +16,6 @@
               areas:
                 - area_id: 10
                   hello_interval: 2
-                  authentication:
-                    keychain: 'ansi11393'
             - process_id: 26
               adjacency_stagger:
                 min_adjacency: 10
@@ -26,8 +24,6 @@
                 message_digest:
                   keychain: 'ansible1101pass'
             - process_id: 10
-              authentication:
-                keychain: 'ansible_test1102'
               areas:
                 - area_id: 11
                   default_cost: 5
@@ -47,7 +43,6 @@
               hello_interval: 1
               dead_interval: 2
               retransmit_interval: 2
-              weight: 2
               packet_size: 577
               priority: 1
               router_id: '2.2.2.2'
@@ -76,13 +71,9 @@
               areas:
                 - area_id: 10
                   hello_interval: 2
-                  authentication:
-                    keychain: 'ansi11393'
                 - area_id: 20
                   cost: 2
                   default_cost: 2
-                  authentication:
-                    keychain: 'ansi11393'
             - process_id: 26
               adjacency_stagger:
                 min_adjacency: 10

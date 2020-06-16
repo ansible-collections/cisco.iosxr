@@ -18,13 +18,9 @@
               areas:
                 - area_id: 10
                   hello_interval: 2
-                  authentication:
-                    keychain: 'ansi11393'
                 - area_id: 20
                   cost: 2
                   default_cost: 2
-                  authentication:
-                    keychain: 'ansi11393'
             - process_id: 26
               adjacency_stagger:
                 min_adjacency: 10

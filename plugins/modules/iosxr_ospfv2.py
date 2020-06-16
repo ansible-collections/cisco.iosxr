@@ -26,20 +26,21 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_ospfv2
-short_description: OSPFV2 resource module
-description: This module manages global OSPFv2 configuration on devices running Cisco IOS-XR
+short_description: OSPFv2 resource module
+description: This module manages global OSPFv2 configuration on devices running Cisco
+  IOS-XR
 version_added: 1.0.0
 author:
 - Rohit Thakur (@rohitthakur2590)
 notes:
-  - Tested against IOS-XR 6.1.3
-  - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html)
+- Tested against IOS-XR 6.1.3
+- This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html)
 options:
   config:
     description: A list of OSPFv2 process configuration
     type: dict
     suboptions:
-      processes: 
+      processes:
         description: A list of OSPFv2 instances configuration
         type: list
         elements: dict
@@ -52,7 +53,8 @@ options:
             type: dict
             suboptions:
               min_adjacency:
-                description: Initial number of neighbors to bring up per area (default 2)
+                description: Initial number of neighbors to bring up per area (default
+                  2)
                 type: int
               max_adjacency:
                 description: Maximum simultaneous neighbors to bring up
@@ -88,9 +90,9 @@ options:
                 description: Reference bandwidth to use for calculation (Mbits/sec)
                 type: int
               default_weight:
-                description: Specify default weight value to use when it is not configured under interface
+                description: Specify default weight value to use when it is not configured
+                  under interface
                 type: int
-          
           areas:
             description: Configure OSPFv2 areas' properties
             type: list
@@ -99,7 +101,7 @@ options:
               area_id:
                 description: Area ID as IP address or integer
                 type: str
-                required: True
+                required: true
               authentication:
                 description: Enable authentication
                 type: dict
@@ -131,7 +133,8 @@ options:
                     description: Specifies an ENCRYPTED password (key) will follow
                     type: str
               default_cost:
-                description: Set the summary default-cost of a NSSA/stub area. Stub's advertised external route metric
+                description: Set the summary default-cost of a NSSA/stub area. Stub's
+                  advertised external route metric
                 type: int
               cost:
                 description: Interface cost
@@ -151,7 +154,7 @@ options:
                 suboptions:
                   traffic_eng:
                     description: Configure an ospf area to run MPLS Traffic Engineering
-                    type: bool  
+                    type: bool
                   ldp:
                     description: Configure LDP parameters
                     type: dict
@@ -164,13 +167,13 @@ options:
                         type: bool
                       sync_igp_shortcuts:
                         description: LDP sync for igp-shortcut tunnels
-                        type: bool  
+                        type: bool
               mtu_ignore:
                 description: Enable/Disable ignoring of MTU in DBD packets
                 type: str
                 choices:
-                  - enable
-                  - disable
+                - enable
+                - disable
               bfd:
                 description: Configure BFD parameters
                 type: dict
@@ -183,7 +186,8 @@ options:
                       description: Enable fast detection only
                       type: bool
                     strict_mode:
-                      description: Hold down neighbor session until BFD session is up
+                      description: Hold down neighbor session until BFD session is
+                        up
                       type: bool
                 minimum_interval:
                   description: Hello interval in milli-seconds
@@ -193,7 +197,7 @@ options:
                   type: int
               nssa:
                 description:
-                  - NSSA settings for the area
+                - NSSA settings for the area
                 type: dict
                 suboptions:
                   set:
@@ -221,22 +225,23 @@ options:
                     suboptions:
                       type7:
                         description:
-                          - Translate from Type 7 to Type 5
+                        - Translate from Type 7 to Type 5
                         type: dict
                         suboptions:
                           always:
                             description:
-                              - Always translate LSAs
+                            - Always translate LSAs
                             type: bool
               ranges:
-                description: Summarize routes matching address/mask (border routers only)
+                description: Summarize routes matching address/mask (border routers
+                  only)
                 type: list
                 elements: dict
                 suboptions:
                   address:
                     description: IP in Prefix format (x.x.x.x/len)
                     type: str
-                    required: True
+                    required: true
                   advertise:
                     description: Advertise this range (default)
                     type: bool
@@ -244,7 +249,8 @@ options:
                     description: DoNotAdvertise this range
                     type: bool
               route_policy:
-                description: Specify the route-policy to filter type 3 LSAs (list can have one inbound and/or one outbound policy only)
+                description: Specify the route-policy to filter type 3 LSAs (list
+                  can have one inbound and/or one outbound policy only)
                 type: list
                 elements: dict
                 suboptions:
@@ -256,20 +262,20 @@ options:
                     description: Specify inbound or outbound
                     type: str
                     choices:
-                      - in
-                      - out
+                    - in
+                    - out
               stub:
                 description:
-                  - Settings for configuring the area as a stub
+                - Settings for configuring the area as a stub
                 type: dict
                 suboptions:
                   set:
                     description:
-                      - Configure the area as a stub
+                    - Configure the area as a stub
                     type: bool
                   no_summary:
                     description:
-                      - Do not send summary LSA into stub area
+                    - Do not send summary LSA into stub area
                     type: bool
               virtual_link:
                 description: Define a virtual link
@@ -279,7 +285,7 @@ options:
                   id:
                     description: Router-ID of virtual link neighbor (A.B.C.D)
                     type: str
-                    required: True
+                    required: true
                   authentication:
                     description: Enable authentication
                     type: dict
@@ -305,7 +311,8 @@ options:
                         description: The OSPFv2 password (key)
                         type: str
                       clear:
-                        description: Specifies an UNENCRYPTED password (key) will follow
+                        description: Specifies an UNENCRYPTED password (key) will
+                          follow
                         type: str
                       encrypted:
                         description: Specifies an ENCRYPTED password (key) will follow
@@ -329,7 +336,7 @@ options:
                       id:
                         description: Key ID (1-255)
                         type: int
-                        required: True
+                        required: true
                       md5:
                         description: Use MD5 Algorithm
                         type: dict
@@ -338,12 +345,14 @@ options:
                             description: The OSPFv2 password (key)
                             type: str
                           clear:
-                            description: Specifies an UNENCRYPTED password (key) will follow
+                            description: Specifies an UNENCRYPTED password (key) will
+                              follow
                             type: bool
                           encrypted:
-                            description: Specifies an ENCRYPTED password (key) will follow
-                            type: bool       
-              
+                            description: Specifies an ENCRYPTED password (key) will
+                              follow
+                            type: bool
+
           authentication_key:
             description: Used to mention authentication password (key)
             type: dict
@@ -398,7 +407,7 @@ options:
                 description: Configure opaque LSA
                 type: dict
                 suboptions:
-                  disable: 
+                  disable:
                     description: Disable Opaque LSA capability
                     type: bool
                   set:
@@ -408,9 +417,10 @@ options:
             description: Interface cost (1-65535)
             type: int
           database_filter:
-            description: Filter OSPFv2 LSA during synchronization and flooding (all outgoing LSA). Enable/Disable filtering
+            description: Filter OSPFv2 LSA during synchronization and flooding (all
+              outgoing LSA). Enable/Disable filtering
             type: str
-            choices: ['enable','disable']
+            choices: [enable, disable]
           dead_interval:
             description: Interval after which a neighbor is declared dead
             type: int
@@ -439,7 +449,7 @@ options:
           demand_circuit:
             description: Enable/Disable OSPFv2 demand circuit
             type: str
-            choices: ['enable','disable']
+            choices: [enable, disable]
           distance:
             description: Define an administrative distance
             type: dict
@@ -465,7 +475,7 @@ options:
                 description: OSPFv2 administrative distance
                 type: dict
                 suboptions:
-                  external: 
+                  external:
                     description: Distance for external routes
                     type: int
                   inter_area:
@@ -473,7 +483,7 @@ options:
                     type: int
                   intra_area:
                     description: Distance for intra-area routes
-                    type: int 
+                    type: int
           distribute_link_state:
             description: Enable Distribution of LSAs to external services
             type: dict
@@ -495,7 +505,8 @@ options:
                 description: Throttle time between successive LSA updates
                 type: int
           distribute_list:
-            description: Filter networks in routing updates (list can have one inbound and/or one outbound policy only)
+            description: Filter networks in routing updates (list can have one inbound
+              and/or one outbound policy only)
             type: list
             elements: dict
             suboptions:
@@ -506,8 +517,8 @@ options:
                 description: Filter incoming/outgoing routing updates
                 type: str
                 choices:
-                  - in
-                  - out
+                - in
+                - out
               outgoing_params:
                 description: Specify additional parameters for outgoing updates only
                 type: dict
@@ -515,32 +526,35 @@ options:
                   route_type:
                     description: Type of routes
                     type: str
-                    choices: 
-                      - bgp
-                      - connected
-                      - dagr
-                      - ospf
-                      - static
-                  id: 
+                    choices:
+                    - bgp
+                    - connected
+                    - dagr
+                    - ospf
+                    - static
+                  id:
                     description:
-                      - For BGP, specify AS number. 2-byte AS number (or) 4-byte AS number in asdot (X.Y) format (or) 4-byte AS number in asplain format
-                      - For OSPF, specify OSPFv2 instance name
+                    - For BGP, specify AS number. 2-byte AS number (or) 4-byte AS
+                      number in asdot (X.Y) format (or) 4-byte AS number in asplain
+                      format
+                    - For OSPF, specify OSPFv2 instance name
                     type: str
               route_policy:
-                description: Route Policy to filter OSPFv2 prefixes (for incoming updates only)
+                description: Route Policy to filter OSPFv2 prefixes (for incoming
+                  updates only)
                 type: str
           external_out:
             description: Enable/Disable advertisement of intra-area prefixes as external
             type: str
             choices:
-              - enable
-              - disable
+            - enable
+            - disable
           flood_reduction:
             description: Enable/Disable OSPFv2 Flood Reduction
             type: str
             choices:
-              - enable
-              - disable                    
+            - enable
+            - disable
           hello_interval:
             description: Time between HELLO packets (<1-65535> seconds)
             type: int
@@ -567,32 +581,32 @@ options:
             description: Advertise loopback as a stub network
             type: str
             choices:
-              - enable
-              - disable
+            - enable
+            - disable
           max_lsa:
             description:
-              - Feature to limit the number of non-self-originated LSAs
+            - Feature to limit the number of non-self-originated LSAs
             type: dict
             suboptions:
               threshold:
                 description:
-                  - Threshold value (%) at which to generate a warning message
+                - Threshold value (%) at which to generate a warning message
                 type: int
               ignore_count:
                 description:
-                  - Set count on how many times adjacencies can be suppressed
+                - Set count on how many times adjacencies can be suppressed
                 type: int
               ignore_time:
                 description:
-                  - Set number of minutes during which all adjacencies are suppressed
+                - Set number of minutes during which all adjacencies are suppressed
                 type: int
               reset_time:
                 description:
-                  - Set number of minutes after which ignore-count is reset to zero
+                - Set number of minutes after which ignore-count is reset to zero
                 type: int
               warning_only:
                 description:
-                  - Log a warning message when limit is exceeded
+                - Log a warning message when limit is exceeded
                 type: bool
           max_metric:
             description: Set maximum metric
@@ -617,37 +631,37 @@ options:
                         type: int
                   include_stub:
                     description:
-                      - Advertise Max metric for Stub links as well
+                    - Advertise Max metric for Stub links as well
                     type: bool
                   on_startup:
                     description:
-                      - Effective only at startup
+                    - Effective only at startup
                     type: dict
                     suboptions:
                       set:
                         description:
-                          - Set on-startup attribute
+                        - Set on-startup attribute
                         type: bool
                       wait_period:
                         description:
-                          - Wait period in seconds after startup
+                        - Wait period in seconds after startup
                         type: int
                       wait_for_bgp_asn:
                         description:
-                          - ASN of BGP to wait for
+                        - ASN of BGP to wait for
                         type: int
                   summary_lsa:
                     description:
-                      - Summary LSAs configuration
+                    - Summary LSAs configuration
                     type: dict
                     suboptions:
                       set:
                         description:
-                          - Set summary-lsa attribute
+                        - Set summary-lsa attribute
                         type: bool
                       max_metric_value:
                         description:
-                          - Max metric value for summary LSAs
+                        - Max metric value for summary LSAs
                         type: int
           message_digest_key:
             description: Message digest authentication password (key)
@@ -656,11 +670,11 @@ options:
               id:
                 description: Key ID
                 type: int
-                required: True
+                required: true
               md5:
                 description: Use MD5 Algorithm
                 type: dict
-                required: True
+                required: true
                 suboptions:
                   password:
                     description: The OSPFv2 password (key)
@@ -670,7 +684,7 @@ options:
                     type: bool
                   encrypted:
                     description: Specifies an ENCRYPTED password (key) will follow
-                    type: bool            
+                    type: bool
           microloop_avoidance:
             description: Avoid microloops
             type: dict
@@ -694,7 +708,7 @@ options:
               track_external_routes:
                 description: Enables Tracking External(Type-5/7) Prefix monitoring
                 type: bool
-              track_ip_frr: 
+              track_ip_frr:
                 description: Enables Tracking IP-Frr Convergence
                 type: bool
               track_summary_routes:
@@ -748,8 +762,8 @@ options:
             description: Enable/Disable ignoring of MTU in DBD packets
             type: str
             choices:
-              - enable
-              - disable
+            - enable
+            - disable
           network:
             description: Network type
             type: dict
@@ -775,7 +789,8 @@ options:
                 type: dict
                 suboptions:
                   enforce_global:
-                    description: Cancel NSF restart when non-NSF-aware neighbors detected for the whole OSPFv2 process
+                    description: Cancel NSF restart when non-NSF-aware neighbors detected
+                      for the whole OSPFv2 process
                     type: bool
                   set:
                     description: Enable Cisco NSF
@@ -795,12 +810,13 @@ options:
                     type: bool
               interval:
                 description: Minimum interval between NSF restarts (<90-3600> seconds)
-                type: int            
+                type: int
               lifetime:
-                description:  Maximum route lifetime following restart (<90-1800> seconds)
+                description: Maximum route lifetime following restart (<90-1800> seconds)
                 type: int
           nsr:
-            description: Enable NSR for all VRFs in this process. 'False' option to disable NSR for all VRFs in this process
+            description: Enable NSR for all VRFs in this process. 'False' option to
+              disable NSR for all VRFs in this process
             type: bool
           packet_size:
             description: Size of OSPFv2 packets to use. min=576 max=MTU bytes
@@ -809,8 +825,8 @@ options:
             description: Enable/Disable passive
             type: str
             choices:
-              - enable
-              - disable
+            - enable
+            - disable
           prefix_suppression:
             description: Suppress advertisement of the prefixes
             type: dict
@@ -827,7 +843,7 @@ options:
           process_id:
             description: The OSPFv2 Process ID
             type: str
-            required: True
+            required: true
           protocol_shutdown:
             description: Protocol specific configuration
             type: dict
@@ -846,13 +862,16 @@ options:
                 type: dict
                 suboptions:
                   high:
-                    description: Hello events are dropped when incoming event queue exceeds this value
+                    description: Hello events are dropped when incoming event queue
+                      exceeds this value
                     type: int
                   low:
-                    description: DBD/LS Update/Req packets are dropped when incoming event queue exceeds this value
+                    description: DBD/LS Update/Req packets are dropped when incoming
+                      event queue exceeds this value
                     type: int
                   medium:
-                    description: LSA ACKs are dropped when incoming event queue exceeds this value
+                    description: LSA ACKs are dropped when incoming event queue exceeds
+                      this value
                     type: int
           redistribute:
             description: Redistribute information from another routing Protocol
@@ -861,27 +880,30 @@ options:
               route_type:
                 description: Route type to redistribute
                 type: str
-                choices: ['application', 'bgp', 'connected', 'dagr', 'eigrp', 'isis', 'mobile', 'ospf', 'rip', 'static', 'subscriber']
+                choices: [application, bgp, connected, dagr, eigrp, isis, mobile,
+                  ospf, rip, static, subscriber]
               id:
-                description: OnePK application name for application routes (or) AS number for bgp and eigrp (or) instance name for isis and ospf
+                description: OnePK application name for application routes (or) AS
+                  number for bgp and eigrp (or) instance name for isis and ospf
                 type: str
               level:
-                description: ISIS levels.(1=level-1 routes only, 2=level-2 routes only,12=level-1 and level-2 routes)
-                choices: [1,2,12]
+                description: ISIS levels
+                choices: [1, 2, 12]
                 type: int
               lsa_type_summary:
                 description: LSA type 3 for redistributed routes
                 type: bool
               match:
-                description: Redistribution of routes. For OSPFv2 - external/internal/nssa-external 1/2. For EIGRP - external/internal
+                description: Redistribution of routes. For OSPFv2 - external/internal/nssa-external
+                  1/2. For EIGRP - external/internal
                 type: str
               metric:
                 description: Metric for redistributed routes
                 type: int
               metric_type:
-                description: OSPFv2 exterior metric type for redistributed routes (Type 1/Type 2)
+                description: OSPFv2 exterior metric type for redistributed routes
                 type: int
-                choices: [1,2]
+                choices: [1, 2]
               route_policy:
                 description: Apply route-policy to redistribution
                 type: dict
@@ -892,7 +914,7 @@ options:
                   parameters:
                     description: Specify parameter values for the policy
                     type: list
-                    elements: str                
+                    elements: str
               nssa_only:
                 description: Redistribute to NSSA areas only
                 type: bool
@@ -921,7 +943,7 @@ options:
           summary_in:
             description: Enable/Disable advertisement of external prefixes as inter-area
             type: str
-            choices: ['enable','disable']
+            choices: [enable, disable]
           summary_prefix:
             description: Configure IP address summaries
             type: list
@@ -930,9 +952,10 @@ options:
               prefix:
                 description: IP summary address/mask (A.B.C.D/prefix)
                 type: str
-                required: True
+                required: true
               not_advertise:
-                description: Suppress routes that match the specified prefix/mask pair
+                description: Suppress routes that match the specified prefix/mask
+                  pair
                 type: bool
               tag:
                 description: Set tag
@@ -956,13 +979,16 @@ options:
                 type: dict
                 suboptions:
                   group_pacing:
-                    description: OSPFv2 LSA group pacing timer. Interval between group of LSA being refreshed or maxaged
+                    description: OSPFv2 LSA group pacing timer. Interval between group
+                      of LSA being refreshed or maxaged
                     type: int
                   min_arrival:
-                    description: OSPFv2 MinLSArrival timer. The minimum interval in millisec between accepting the same LSA
+                    description: OSPFv2 MinLSArrival timer. The minimum interval in
+                      millisec between accepting the same LSA
                     type: int
                   refresh:
-                    description: OSPFv2 LSA refresh interval. How often self-originated LSAs should be refreshed, in seconds
+                    description: OSPFv2 LSA refresh interval. How often self-originated
+                      LSAs should be refreshed, in seconds
                     type: int
               throttle:
                 description: OSPFv2 throttle timers
@@ -976,29 +1002,35 @@ options:
                         description: Delay to generate first occurance of LSA in milliseconds
                         type: int
                       min_delay:
-                        description: Minimum delay between originating the same LSA in milliseconds
+                        description: Minimum delay between originating the same LSA
+                          in milliseconds
                         type: int
                       max_delay:
-                        description: Maximum delay between originating the same LSA in milliseconds
+                        description: Maximum delay between originating the same LSA
+                          in milliseconds
                         type: int
                   spf:
                     description: OSPFv2 SPF throttle timers
                     type: dict
                     suboptions:
                       change_delay:
-                        description: Delay between receiving a change to SPF calculation in milliseconds
+                        description: Delay between receiving a change to SPF calculation
+                          in milliseconds
                         type: int
                       second_delay:
-                        description: Delay between first and second SPF calculation in milliseconds
+                        description: Delay between first and second SPF calculation
+                          in milliseconds
                         type: int
                       max_wait:
                         description: Maximum wait time in milliseconds for SPF calculations
                         type: int
                   fast_reroute:
-                    description: Fast-reroute throttle timer. Delay between end of SPF and start of the fast-reroute computation in milliseconds
+                    description: Fast-reroute throttle timer. Delay between end of
+                      SPF and start of the fast-reroute computation in milliseconds
                     type: int
               pacing_flood:
-                description: OSPFv2 flood pacing timer. Interval in msec to pace flooding on all interfaces
+                description: OSPFv2 flood pacing timer. Interval in msec to pace flooding
+                  on all interfaces
                 type: int
           transmit_delay:
             description: Estimated time needed to send link-state update packet
@@ -1028,11 +1060,12 @@ options:
     - rendered
     - overridden
     default: merged
+
 """
 
 EXAMPLES = """
 # Using merged
-#
+
 # Before state:
 # -------------
 #
@@ -1045,51 +1078,48 @@ EXAMPLES = """
   cisco.iosxr.iosxr_ospfv2:
     config:
       processes:
-        - process_id: 27
-          areas:
-            - area_id: 10
-              hello_interval: 2
-              authentication:
-                keychain: 'ansi11393'
-        - process_id: 26
-          adjacency_stagger:
-            min_adjacency: 10
-            max_adjacency: 20
+      - process_id: '27'
+        areas:
+        - area_id: '10'
+          hello_interval: 2
           authentication:
-            message_digest:
-              keychain: 'ansible1101pass'
-        - process_id: 10
-          authentication:
-            keychain: 'ansible_test1102'
-          areas:
-            - area_id: 11
-              default_cost: 5
-              cost: 11
-            - area_id: 22
-              default_cost: 6
-        - process_id: 30
-          areas:
-            - area_id: 11
-              default_cost: 5
-            - area_id: 22
-              default_cost: 6
+            keychain: ansi11393
+      - process_id: '26'
+        adjacency_stagger:
+          max_adjacency: 20
+          min_adjacency: 10
+      - process_id: '10'
+        authentication:
+          keychain: ansible_test1102
+        areas:
+        - area_id: '11'
+          default_cost: 5
+          cost: 11
+        - area_id: 22
+          default_cost: 6
+      - process_id: '30'
+        areas:
+        - area_id: 11
+          default_cost: 5
+        - area_id: 22
+          default_cost: 6
 
-          cost: 2
-          default_metric: 10
-          transmit_delay: 2
-          hello_interval: 1
-          dead_interval: 2
-          retransmit_interval: 2
-          weight: 2
-          packet_size: 577
-          priority: 1
-          router_id: '2.2.2.2'
-          demand_circuit: enable
-          passive: disable
-          summary_in: enable
-          flood_reduction: disable
-          mtu_ignore: enable
-          external_out: disable
+        cost: 2
+        default_metric: 10
+        transmit_delay: 2
+        hello_interval: 1
+        dead_interval: 2
+        retransmit_interval: 2
+        weight: 2
+        packet_size: 577
+        priority: 1
+        router_id: 2.2.2.2
+        demand_circuit: enable
+        passive: disable
+        summary_in: enable
+        flood_reduction: disable
+        mtu_ignore: enable
+        external_out: disable
     state: merged
 
 #
@@ -1213,7 +1243,6 @@ EXAMPLES = """
 # After state
 # ------------
 #
-#
 # RP/0/RP0/CPU0:anton#show running-config router ospf
 # Thu Jun 11 16:06:44.406 UTC
 # router ospf 10
@@ -1322,22 +1351,19 @@ EXAMPLES = """
   cisco.iosxr.iosxr_ospfv2:
     config:
       processes:
-        - process_id: 27
-          areas:
-            - area_id: 10
-              hello_interval: 2
-            - area_id: 20
-              cost: 2
-              default_cost: 2
-              authentication:
-                keychain: 'ansi11393'
-        - process_id: 26
-          adjacency_stagger:
-            min_adjacency: 10
-            max_adjacency: 20
+      - process_id: 27
+        areas:
+        - area_id: 10
+          hello_interval: 2
+        - area_id: 20
+          cost: 2
+          default_cost: 2
           authentication:
-            message_digest:
-              keychain: 'ansible1101pass'
+            keychain: ansi11393
+      - process_id: 26
+        adjacency_stagger:
+          min_adjacency: 10
+          max_adjacency: 20
     state: replaced
 
 #
@@ -1626,24 +1652,21 @@ EXAMPLES = """
   cisco.iosxr.iosxr_ospfv2:
     config:
       processes:
-        - process_id: 27
-          areas:
-            - area_id: 10
-              hello_interval: 2
-              authentication:
-                keychain: 'ansi11393'
-            - area_id: 20
-              cost: 2
-              default_cost: 2
-              authentication:
-                keychain: 'ansi11393'
-        - process_id: 26
-          adjacency_stagger:
-            min_adjacency: 10
-            max_adjacency: 20
+      - process_id: 27
+        areas:
+        - area_id: 10
+          hello_interval: 2
           authentication:
-            message_digest:
-              keychain: 'ansible1101pass
+            keychain: ansi11393
+        - area_id: 20
+          cost: 2
+          default_cost: 2
+          authentication:
+            keychain: ansi11393
+      - process_id: 26
+        adjacency_stagger:
+          min_adjacency: 10
+          max_adjacency: 20
     state: overridden
 
 #
@@ -1889,10 +1912,10 @@ EXAMPLES = """
   cisco.iosxr.iosxr_ospfv2:
     config:
       processes:
-        - process_id: 10
-        - process_id: 26
-        - process_id: 27
-        - process_id: 30
+      - process_id: '10'
+      - process_id: '26'
+      - process_id: '27'
+      - process_id: '30'
     state: deleted
 
 #
@@ -2186,51 +2209,48 @@ EXAMPLES = """
   cisco.iosxr.iosxr_ospfv2:
     config:
       processes:
-        - process_id: 27
-          areas:
-            - area_id: 10
-              hello_interval: 2
-              authentication:
-                keychain: 'ansi11393'
-        - process_id: 26
-          adjacency_stagger:
-            min_adjacency: 10
-            max_adjacency: 20
+      - process_id: 27
+        areas:
+        - area_id: 10
+          hello_interval: 2
           authentication:
-            message_digest:
-              keychain: 'ansible1101pass'
-        - process_id: 10
-          authentication:
-            keychain: 'ansible_test1102'
-          areas:
-            - area_id: 11
-              default_cost: 5
-              cost: 11
-            - area_id: 22
-              default_cost: 6
-        - process_id: 30
-          areas:
-            - area_id: 11
-              default_cost: 5
-            - area_id: 22
-              default_cost: 6
+            keychain: ansi11393
+      - process_id: 26
+        adjacency_stagger:
+          min_adjacency: 10
+          max_adjacency: 20
+      - process_id: 10
+        authentication:
+          keychain: ansible_test1102
+        areas:
+        - area_id: 11
+          default_cost: 5
+          cost: 11
+        - area_id: 22
+          default_cost: 6
+      - process_id: 30
+        areas:
+        - area_id: 11
+          default_cost: 5
+        - area_id: 22
+          default_cost: 6
 
-          cost: 2
-          default_metric: 10
-          transmit_delay: 2
-          hello_interval: 1
-          dead_interval: 2
-          retransmit_interval: 2
-          weight: 2
-          packet_size: 577
-          priority: 1
-          router_id: '2.2.2.2'
-          demand_circuit: enable
-          passive: disable
-          summary_in: enable
-          flood_reduction: disable
-          mtu_ignore: enable
-          external_out: disable
+        cost: 2
+        default_metric: 10
+        transmit_delay: 2
+        hello_interval: 1
+        dead_interval: 2
+        retransmit_interval: 2
+        weight: 2
+        packet_size: 577
+        priority: 1
+        router_id: 2.2.2.2
+        demand_circuit: enable
+        passive: disable
+        summary_in: enable
+        flood_reduction: disable
+        mtu_ignore: enable
+        external_out: disable
     state: rendered
 
 #
