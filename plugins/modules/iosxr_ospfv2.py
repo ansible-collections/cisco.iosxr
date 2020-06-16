@@ -1041,7 +1041,7 @@ options:
   running_config:
     description:
     - This option is used only with state I(parsed).
-    - The value of this option should be the output received from the VyOS device
+    - The value of this option should be the output received from the IOS-XR device
       by executing the command B(show running-config router ospf).
     - The state I(parsed) reads the configuration from C(running_config) option and
       transforms it into Ansible structured data as per the resource module's argspec
@@ -2348,7 +2348,6 @@ EXAMPLES = """
 #
 - name: Gather ospfv2 routes configuration
   cisco.iosxr.iosxr_ospfv2:
-    config:
     state: gathered
 #
 #

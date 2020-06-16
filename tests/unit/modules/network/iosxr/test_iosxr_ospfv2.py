@@ -20,41 +20,6 @@ class TestIosxrOspfV2Module(TestIosxrModule):
 
     def setUp(self):
         super(TestIosxrOspfV2Module, self).setUp()
-        """
-        self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
-        )
-        self.get_config = self.mock_get_config.start()
-
-        self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
-        )
-        self.load_config = self.mock_load_config.start()
-
-        self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
-        )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
-
-        self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
-        )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
-
-        self.mock_execute_show_command = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ospfv2.ospfv2.Ospfv2Facts.get_ospfv2_data"
-        )
-        self.execute_show_command = self.mock_execute_show_command.start()
-        # hey
-        self.mock_edit_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.providers.CliProvider.edit_config"
-        )
-        self.edit_config = self.mock_edit_config.start()
-        """
 
         self.mock_get_config = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
