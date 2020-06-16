@@ -1129,7 +1129,7 @@ EXAMPLES = """
 # ------------------------
 #
 #  "before": {}
-#  
+#
 #  "commands": [
 #        "router ospf 30",
 #        "cost 2",
@@ -1446,7 +1446,7 @@ EXAMPLES = """
 #            }
 #        ]
 #    }
-#  
+#
 #  "commands": [
 #        "router ospf 27",
 #        "no area 10 authentication keychain ansi11393",
@@ -1454,7 +1454,7 @@ EXAMPLES = """
 #        "area 20 default-cost 2",
 #        "area 20 cost 2"
 #    ]
-#  
+#
 #  "after": {
 #        "processes": [
 #            {
@@ -1539,7 +1539,7 @@ EXAMPLES = """
 # -----------
 # After state
 # -----------
-# 
+#
 # RP/0/RP0/CPU0:anton(config)#do show running-config router ospf
 # Thu Jun 11 16:40:31.038 UTC
 # router ospf 10
@@ -1749,7 +1749,7 @@ EXAMPLES = """
 #            }
 #        ]
 #    }
-#  
+#
 #  "commands": [
 #        "router ospf 10",
 #        "no authentication keychain ansible_test1102",
@@ -1780,7 +1780,7 @@ EXAMPLES = """
 #        "area 20 default-cost 2",
 #        "area 20 cost 2"
 #    ]
-#  
+#
 #  "after": {
 #        "processes": [
 #            {
@@ -1828,7 +1828,7 @@ EXAMPLES = """
 # -----------
 # After state
 # -----------
-# 
+#
 # RP/0/RP0/CPU0:anton#show running-config router ospf
 # Thu Jun 11 16:50:36.332 UTC
 # router ospf 10
@@ -1998,7 +1998,7 @@ EXAMPLES = """
 #            }
 #        ]
 #    },
-#  
+#
 #  "commands": [
 #        "router ospf 10",
 #        "no authentication keychain ansible_test1102",
@@ -2031,7 +2031,7 @@ EXAMPLES = """
 #        "no area 11 default-cost 5",
 #        "no area 22 default-cost 6"
 #    ]
-#  
+#
 #  "after": {
 #        "processes": [
 #            {
@@ -2053,7 +2053,7 @@ EXAMPLES = """
 # -----------
 # After state
 # -----------
-# 
+#
 # RP/0/RP0/CPU0:anton(config)#show running-config router ospf
 # Thu Jun 11 17:07:34.218 UTC
 # router ospf 10
