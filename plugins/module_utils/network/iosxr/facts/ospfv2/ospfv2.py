@@ -15,7 +15,6 @@ __metaclass__ = type
 
 from copy import deepcopy
 import re
-from operator import itemgetter
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ospfv2 import (
     Ospfv2Template,
@@ -50,6 +49,9 @@ class Ospfv2Facts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_ospfv2_data(self, connection):
+        return connection.get("show running-config router ospf")
+
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for interfaces
         :param connection: the device connection
@@ -58,9 +60,9 @@ class Ospfv2Facts(object):
         :rtype: dictionary
         :returns: facts
         """
-        if not data:
-            data = connection.get("show running-config router ospf")
 
+        if not data:
+            data = self.get_ospfv2_data(connection)
         end_flag, end_mark, count, v_read = 0, 0, 0, False
         areas, config_commands = [], []
         area_str, process, curr_process = "", "", ""

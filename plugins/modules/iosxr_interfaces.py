@@ -32,7 +32,6 @@ version_added: 1.0.0
 author:
 - Sumit Jaiswal (@justjais)
 - Rohit Thakur (@rohitthakur2590)
-
 notes:
 - Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
@@ -103,7 +102,6 @@ options:
 
 EXAMPLES = """
 # Using merged
-
 # Before state:
 # -------------
 #
@@ -123,7 +121,6 @@ EXAMPLES = """
 #  ipv4 address 10.10.0.2 255.255.255.0
 #  dot1q native vlan 1021
 # !
-
 - name: Configure Ethernet interfaces
   cisco.iosxr.iosxr_interfaces:
     config:
@@ -135,7 +132,6 @@ EXAMPLES = """
       enabled: false
       duplex: full
     state: merged
-
 # After state:
 # ------------
 #
@@ -158,9 +154,7 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 1021
 # !
-
 # Using replaced
-
 # Before state:
 # ------------
 #
@@ -180,7 +174,6 @@ EXAMPLES = """
 #  ipv4 address 10.10.0.2 255.255.255.0
 #  dot1q native vlan 1021
 # !
-
 - name: Configure following interfaces and replace their existing config
   cisco.iosxr.iosxr_interfaces:
     config:
@@ -193,7 +186,6 @@ EXAMPLES = """
       enabled: false
       duplex: auto
     state: replaced
-
 # After state:
 # ------------
 #
@@ -217,9 +209,7 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 1021
 # !
-
 # Using overridden
-
 # Before state:
 # ------------
 #
@@ -242,7 +232,6 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 1021
 # !
-
 - name: Override interfaces
   cisco.iosxr.iosxr_interfaces:
     config:
@@ -255,7 +244,6 @@ EXAMPLES = """
       enabled: false
       speed: 1000
     state: overridden
-
 # After state:
 # ------------
 #
@@ -279,9 +267,7 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 1021
 # !
-
 # Using deleted
-
 # Before state:
 # ------------
 #
@@ -305,14 +291,12 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 1021
 # !
-
 - name: Delete IOSXR interfaces as in given arguments
   cisco.iosxr.iosxr_interfaces:
     config:
     - name: GigabitEthernet0/0/0/2
     - name: GigabitEthernet0/0/0/3
     state: deleted
-
 # After state:
 # ------------
 #
@@ -330,10 +314,7 @@ EXAMPLES = """
 #  ipv4 address 10.10.0.2 255.255.255.0
 #  dot1q native vlan 1021
 # !
-
-
 # Using parsed
-
 # parsed.cfg
 # ------------
 #
@@ -356,16 +337,12 @@ EXAMPLES = """
 # interface GigabitEthernet0/0/0/4
 #  shutdown
 # !
-
 # - name: Convert ACL interfaces config to argspec without connecting to the appliance
 #   cisco.iosxr.iosxr_interfaces:
 #     running_config: "{{ lookup('file', './parsed.cfg') }}"
 #     state: parsed
-
-
 # Task Output (redacted)
 # -----------------------
-
 # "parsed": [
 #        {
 #            "name": "MgmtEth0/RP0/CPU0/0"
@@ -417,10 +394,7 @@ EXAMPLES = """
 #        }
 #    ]
 # }
-
-
 # Using rendered
-
 - name: Render platform specific commands from task input using rendered state
   cisco.iosxr.iosxr_interfaces:
     config:
@@ -436,10 +410,8 @@ EXAMPLES = """
       speed: 100
       duplex: full
     state: rendered
-
 # Task Output (redacted)
 # -----------------------
-
 # "rendered": [
 #         "interface GigabitEthernet0/0/0/0",
 #         "description Configured and Merged by Ansible-Network",
@@ -453,10 +425,7 @@ EXAMPLES = """
 #         "duplex full",
 #         "shutdown"
 #     ]
-
-
 # Using gathered
-
 # Before state:
 # ------------
 #
@@ -480,12 +449,10 @@ EXAMPLES = """
 # interface GigabitEthernet0/0/0/4
 # shutdown
 # !
-
 - name: Gather IOSXR interfaces as in given arguments
   cisco.iosxr.iosxr_interfaces:
     config:
     state: gathered
-
 # Task Output (redacted)
 # -----------------------
 #
@@ -511,7 +478,6 @@ EXAMPLES = """
 #             "name": "GigabitEthernet0/0/0/4"
 #         }
 #     ]
-
 # After state:
 # ------------
 #
@@ -535,8 +501,6 @@ EXAMPLES = """
 # interface GigabitEthernet0/0/0/4
 # shutdown
 # !
-
-
 """
 
 RETURN = """
@@ -558,15 +522,11 @@ commands:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-
-# from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.interfaces.interfaces import (
-#    InterfacesArgs,
-# )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.interfaces.interfaces import (
+    InterfacesArgs,
+)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.interfaces.interfaces import (
     Interfaces,
-)
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    convert_doc_to_ansible_module_kwargs,
 )
 
 
@@ -574,8 +534,6 @@ def main():
     """
     Main entry point for module execution
     :returns: the result form module invocation
-    """
-    kwargs = convert_doc_to_ansible_module_kwargs(DOCUMENTATION)
     """
     required_if = [
         ("state", "merged", ("config",)),
@@ -591,8 +549,7 @@ def main():
         supports_check_mode=True,
         mutually_exclusive=mutually_exclusive,
     )
-    """
-    module = AnsibleModule(**kwargs)
+
     result = Interfaces(module).execute_module()
     module.exit_json(**result)
 

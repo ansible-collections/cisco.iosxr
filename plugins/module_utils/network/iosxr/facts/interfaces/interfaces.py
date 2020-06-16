@@ -22,12 +22,8 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common i
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     get_interface_type,
 )
-
-# from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.interfaces.interfaces import (
-#     InterfacesArgs,
-# )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    convert_doc_to_ansible_module_kwargs,
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.interfaces.interfaces import (
+    InterfacesArgs,
 )
 
 
@@ -37,12 +33,7 @@ class InterfacesFacts(object):
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
-        # self.argument_spec = InterfacesArgs.argument_spec
-        import ansible_collections.cisco.iosxr.plugins.modules.iosxr_interfaces as ARG
-
-        self.argument_spec = convert_doc_to_ansible_module_kwargs(
-            ARG.DOCUMENTATION
-        ).get("argument_spec")
+        self.argument_spec = InterfacesArgs.argument_spec
         spec = deepcopy(self.argument_spec)
         if subspec:
             if options:

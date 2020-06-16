@@ -60,7 +60,7 @@ def _tmplt_ospf_security(config_data):
         if "set" in config_data["security_ttl"]:
             command += " ttl"
         elif config_data["security_ttl"].get("hops"):
-            command += " ttl hops {hops}".format(
+            command += " ttl hops {}".format(
                 config_data["security_ttl"].get("hops")
             )
         return command
@@ -131,19 +131,17 @@ def _tmplt_ospf_distance_admin(config_data):
     if "admin_distance" in config_data:
         command = "distance"
         if config_data["admin_distance"].get("value"):
-            command += " {value}".format(
-                config_data["admin_distance"].get("value")
-            )
+            command += " {}".format(config_data["admin_distance"].get("value"))
         if config_data["admin_distance"].get("source"):
-            command += " {source}".format(
+            command += " {}".format(
                 config_data["admin_distance"].get("source")
             )
         if config_data["admin_distance"].get("wildcard"):
-            command += " {wildcard}".format(
+            command += " {}".format(
                 config_data["admin_distance"].get("wildcard")
             )
         if config_data["admin_distance"].get("access_list"):
-            command += " {access_list}".format(
+            command += " {}".format(
                 config_data["admin_distance"].get("access_list")
             )
         return command
@@ -153,15 +151,15 @@ def _tmplt_ospf_distance_ospf(config_data):
     if "ospf_distance" in config_data:
         command = "distance ospf"
         if config_data["ospf_distance"].get("external"):
-            command += " external {external}".format(
+            command += " external {}".format(
                 config_data["ospf_distance"].get("external")
             )
         if config_data["ospf_distance"].get("inter_area"):
-            command += " inter-area {inter_area}".format(
+            command += " inter-area {}".format(
                 config_data["ospf_distance"].get("inter_area")
             )
         if config_data["ospf_distance"].get("intra_area"):
-            command += " intra-area {intra_area}".format(
+            command += " intra-area {}".format(
                 config_data["ospf_distance"].get("intra_area")
             )
         return command
@@ -173,7 +171,7 @@ def _tmplt_ospf_nsr(config_data):
         if "set" in config_data["nsr"]:
             command += " nsr"
         elif config_data["nsr"].get("disable"):
-            command += " nsr {disable}".format("disable")
+            command += " nsr {}".format("disable")
         return command
 
 
@@ -253,8 +251,7 @@ def _tmplt_ospf_authentication(config_data):
             command = "authentication null"
         return command
 
-
-def _tmplt_ospf_authentication(config_data):
+    # ROHIT def _tmplt_ospf_authentication(config_data):
     command = []
     if "authentication" in config_data:
         if config_data["authentication"].get("keychain"):
@@ -320,7 +317,7 @@ def _tmplt_ospf_authentication_key(config_data):
     if "authentication_key" in config_data:
         command = "authentication-key".format(**config_data)
         if config_data["authentication_key"].get("password"):
-            command += " {password}".format(
+            command += " {}".format(
                 config_data["authentication_key"].get("password")
             )
         return command
@@ -353,7 +350,7 @@ def _tmplt_ospf_area_authentication_key(config_data):
     if "authentication_key" in config_data:
         command = "area {area_id} authentication-key".format(**config_data)
         if config_data["authentication_key"].get("password"):
-            command += " {password}".format(
+            command += " {}".format(
                 config_data["authentication_key"].get("password")
             )
         return command
@@ -495,7 +492,7 @@ def _tmplt_ospf_area_vlink_authentication_key(config_data):
             **config_data
         )
         if config_data["authentication_key"].get("password"):
-            command += " {password}".format(
+            command += " {}".format(
                 config_data["authentication_key"].get("password")
             )
         return command
@@ -612,7 +609,7 @@ class Ospfv2Template(NetworkTemplate):
             "result": {
                 "processes": {
                     "{{ pid }}": {
-                     "cost": "{{ cost|int }}",
+                        "cost": "{{ cost|int }}",
                     }
                 }
             },
@@ -998,9 +995,9 @@ class Ospfv2Template(NetworkTemplate):
             "result": {
                 "processes": {
                     "{{ pid }}": {
-                            "apply_weight": {
-                                "default_weight": "{{ default_weight|int }}",
-                            }
+                        "apply_weight": {
+                            "default_weight": "{{ default_weight|int }}",
+                        }
                     }
                 }
             },
@@ -1425,7 +1422,7 @@ class Ospfv2Template(NetworkTemplate):
                    \sarea\s(?P<area_id>\S+)
                    \sdefault-cost\s(?P<default_cost>\d+)
                    $""",
-                   re.VERBOSE,
+                re.VERBOSE,
             ),
 
             "setval": "area {{ area_id }} default-cost {{ default_cost }}",
@@ -1531,7 +1528,7 @@ class Ospfv2Template(NetworkTemplate):
                    \sarea\s(?P<area_id>\S+)
                    \scost\s(?P<cost>\d+)
                    $""",
-                   re.VERBOSE,
+                re.VERBOSE,
             ),
             "setval": "area {{ area_id }} cost {{ cost }}",
             "compval": "cost",
@@ -2236,7 +2233,7 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "virtual_link": {
-                                    "{{ id }}":  {
+                                    "{{ id }}": {
                                         "id": "{{ id }}",
                                         "retransmit_interval": "{{ retransmit_interval|int }}"
                                     }
@@ -2729,7 +2726,7 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "timers": {
-                            "lsa":  {
+                            "lsa": {
                                 "group_pacing": "{{ group_pacing|int }}",
                                 "min_arrival": "{{ min_arrival|int }}",
                                 "refresh": "{{ refresh|int }}",
