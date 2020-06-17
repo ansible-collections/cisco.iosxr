@@ -1,0 +1,101 @@
+---
+- debug:
+    msg: START iosxr_ospfv2 round trip integration tests on connection={{
+      ansible_connection }}
+
+- block:
+
+    - include_tasks: _remove_config.yaml
+
+    - name: Apply the provided configuration (base config)
+      register: base_config
+      cisco.iosxr.iosxr_ospfv2:
+        config:
+          processes:
+            - process_id: 27
+              areas:
+                - area_id: 10
+                  hello_interval: 2
+            - process_id: 26
+              adjacency_stagger:
+                min_adjacency: 10
+                max_adjacency: 20
+              authentication:
+                message_digest:
+                  keychain: 'ansible1101pass'
+            - process_id: 10
+              areas:
+                - area_id: 11
+                  default_cost: 5
+                  cost: 11
+                - area_id: 22
+                  default_cost: 6
+            - process_id: 30
+              areas:
+                - area_id: 11
+                  default_cost: 5
+                - area_id: 22
+                  default_cost: 6
+
+              cost: 2
+              default_metric: 10
+              transmit_delay: 2
+              hello_interval: 1
+              dead_interval: 2
+              retransmit_interval: 2
+              packet_size: 577
+              priority: 1
+              router_id: '2.2.2.2'
+              demand_circuit: enable
+              passive: disable
+              summary_in: enable
+              flood_reduction: disable
+              mtu_ignore: enable
+              external_out: disable
+        state: merged
+
+    - name: Gather ospfv2 facts
+      cisco.iosxr.iosxr_facts:
+        gather_subset:
+          - '!all'
+          - '!min'
+        gather_network_resources:
+          - ospfv2
+
+    - name: Apply the provided configuration (config to be reverted)
+      register: result
+      cisco.iosxr.iosxr_ospfv2:
+        config:
+          processes:
+            - process_id: 27
+              areas:
+                - area_id: 10
+                  hello_interval: 2
+                - area_id: 20
+                  cost: 2
+                  default_cost: 2
+            - process_id: 26
+              adjacency_stagger:
+                min_adjacency: 10
+                max_adjacency: 20
+              authentication:
+                message_digest:
+                  keychain: 'ansible1101pass'
+        state: overridden
+
+    - name: Assert that changes were applied
+      assert:
+        that: "{{ round_trip['after'] == result['after'] }}"
+
+    - name: Revert back to base config using facts round trip
+      register: revert
+      cisco.iosxr.iosxr_ospfv2:
+        config: "{{ ansible_facts['network_resources']['ospfv2'] }}"
+        state: overridden
+
+    - name: Assert that config was reverted
+      assert:
+        that: "{{ base_config['after'] == revert['after'] }}"
+  always:
+
+    - include_tasks: _remove_config.yaml
