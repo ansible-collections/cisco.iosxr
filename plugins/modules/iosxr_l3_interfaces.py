@@ -21,6 +21,7 @@
 #
 #
 ##############################################
+# pylint: skip-file
 
 """
 The module file for ios_l3_interfaces

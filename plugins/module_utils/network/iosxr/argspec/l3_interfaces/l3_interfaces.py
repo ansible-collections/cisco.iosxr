@@ -21,6 +21,7 @@
 #   builder template.
 #
 #############################################
+# pylint: skip-file
 """
 The arg spec for the ios_l3_interfaces module
 """
