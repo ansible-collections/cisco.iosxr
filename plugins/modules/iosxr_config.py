@@ -24,7 +24,8 @@ notes:
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 - Tested against IOS XRv 6.1.3.
 - This module does not support C(netconf) connection
-- Abbreviated commands are NOT idempotent, see L(Network FAQ,../network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands).
+- Abbreviated commands are NOT idempotent, see L(Network FAQ,../network/user_guide/faq.html
+  #why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands).
 - Avoid service disrupting changes (viz. Management IP) from config replace.
 - Do not use C(end) in the replace config file.
 options:

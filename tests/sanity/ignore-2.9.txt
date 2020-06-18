@@ -21,12 +21,13 @@ plugins/modules/iosxr_bgp.py validate-modules:parameter-type-not-in-doc
 plugins/modules/iosxr_bgp.py validate-modules:undocumented-parameter
 plugins/modules/iosxr_lag_interfaces.py validate-modules:doc-choices-do-not-match-spec
 plugins/modules/iosxr_interface.py validate-modules:doc-choices-do-not-match-spec
+plugins/modules/iosxr_interface.py validate-modules:deprecation-mismatch
 plugins/modules/iosxr_interface.py validate-modules:doc-missing-type
 plugins/modules/iosxr_interface.py validate-modules:missing-suboption-docs
 plugins/modules/iosxr_interface.py validate-modules:parameter-type-not-in-doc
 plugins/modules/iosxr_interface.py validate-modules:undocumented-parameter
-plugins/modules/iosxr_interface.py validate-modules:doc-required-mismatch
-plugins/modules/iosxr_interface.py validate-modules:doc-elements-mismatch
+plugins/modules/iosxr_interface.py validate-modules:doc-default-does-not-match-spec
+plugins/modules/iosxr_interface.py validate-modules:invalid-documentation
 plugins/modules/iosxr_ospfv2.py validate-modules:invalid-documentation
 plugins/modules/iosxr_command.py validate-modules:doc-choices-do-not-match-spec
 plugins/modules/iosxr_command.py validate-modules:doc-default-does-not-match-spec
