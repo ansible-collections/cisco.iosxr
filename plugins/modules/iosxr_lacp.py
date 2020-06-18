@@ -21,6 +21,7 @@
 #   builder template.
 #
 #############################################
+# pylint: skip-file
 
 """
 The module file for iosxr_lacp

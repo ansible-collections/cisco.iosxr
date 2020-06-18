@@ -74,13 +74,13 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr
     netconf:
       redirect: cisco.iosxr.iosxr
-    iosxr_static_routes:
-      redirect: cisco.iosxr.iosxr
-    static_routes:
-      redirect: cisco.iosxr.iosxr
     iosxr_ospfv2:
       redirect: cisco.iosxr.iosxr
     ospfv2:
+      redirect: cisco.iosxr.iosxr
+    iosxr_static_routes:
+      redirect: cisco.iosxr.iosxr
+    static_routes:
       redirect: cisco.iosxr.iosxr
     iosxr_system:
       redirect: cisco.iosxr.iosxr
@@ -134,10 +134,10 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr_logging
     netconf:
       redirect: cisco.iosxr.iosxr_netconf
-    static_routes:
-      redirect: cisco.iosxr.iosxr_static_routes
     ospfv2:
       redirect: cisco.iosxr.iosxr_ospfv2
+    static_routes:
+      redirect: cisco.iosxr.iosxr_static_routes
     system:
       redirect: cisco.iosxr.iosxr_system
     user:

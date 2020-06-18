@@ -21,6 +21,7 @@
 #   builder template.
 #
 #############################################
+# pylint: skip-file
 """
 The arg spec for the iosxr_ospfv2 module
 """
