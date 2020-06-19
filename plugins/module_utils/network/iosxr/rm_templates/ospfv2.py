@@ -197,7 +197,7 @@ def _tmplt_microloop_avoidance(config_data):
         if "segment_routing" in config_data["microloop_avoidance"]:
             command += " segment_routing"
         if "rib_update_delay" in config_data["microloop_avoidance"]:
-            command += " rin-update-delay {}".config_data[
+            command += " rin-update-delay {0}".config_data[
                 "microloop_avoidance"
             ].get("rib_update_delay")
         return command
@@ -284,7 +284,7 @@ def _tmplt_ospf_adjacency_distribute_bgp_state(config_data):
     if "distribute_link_list" in config_data:
         command = "distribute link-state"
         if config_data["distribute_link_list"].get("instance_id"):
-            command += "  instance-id {}".format(
+            command += "  instance-id {0}".format(
                 config_data["distribute_link_list"].get("instance_id")
             )
         elif config_data["distribute_link_list"].get("throttle"):
