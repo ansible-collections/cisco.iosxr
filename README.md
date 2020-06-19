@@ -10,10 +10,10 @@ This collection has been tested against Cisco IOSXR version 6.1.3.
 <!--start requires_ansible-->
 ## Ansible version compatibility
 
-This collection has been tested against following Ansible versions: **>=2.9,<2.11**.
+This collection has been tested against following Ansible versions: **>=2.9.10,<2.11**.
 
-Plugins and modules within a collection may be tested with only specific Ansible versions. 
-A collection may contain metadata that identifies these versions. 
+Plugins and modules within a collection may be tested with only specific Ansible versions.
+A collection may contain metadata that identifies these versions.
 PEP440 is the schema used to describe the versions of Ansible.
 <!--end requires_ansible-->
 
@@ -114,10 +114,12 @@ See [LICENSE](https://www.gnu.org/licenses/gpl-3.0.txt) to see the full text.
 Name | Description
 --- | ---
 [cisco.iosxr.iosxr](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_cliconf.rst)|Use iosxr cliconf to run command on Cisco IOS XR platform
+
 ### Netconf plugins
 Name | Description
 --- | ---
 [cisco.iosxr.iosxr](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_netconf.rst)|Use iosxr netconf plugin to run netconf commands on Cisco IOSXR platform
+
 ### Modules
 Name | Description
 --- | ---
@@ -143,4 +145,5 @@ Name | Description
 [cisco.iosxr.iosxr_static_routes](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_static_routes_module.rst)|Static routes resource module
 [cisco.iosxr.iosxr_system](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_system_module.rst)|Manage the system attributes on Cisco IOS XR devices
 [cisco.iosxr.iosxr_user](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_user_module.rst)|Manage the aggregate of local users on Cisco IOS XR device
+
 <!--end collection content-->

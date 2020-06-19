@@ -1,5 +1,3 @@
-:orphan:
-
 .. _cisco.iosxr.iosxr_lag_interfaces_module:
 
 

@@ -1,5 +1,3 @@
-:orphan:
-
 .. _cisco.iosxr.iosxr_lacp_interfaces_module:
 
 
@@ -230,6 +228,9 @@ Parameters
                                                                                                                                                                                                 <li>replaced</li>
                                                                                                                                                                                                 <li>overridden</li>
                                                                                                                                                                                                 <li>deleted</li>
+                                                                                                                                                                                                <li>parsed</li>
+                                                                                                                                                                                                <li>gathered</li>
+                                                                                                                                                                                                <li>rendered</li>
                                                                                     </ul>
                                                                             </td>
                                                                 <td>

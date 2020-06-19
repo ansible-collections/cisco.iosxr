@@ -1,5 +1,3 @@
-:orphan:
-
 .. _cisco.iosxr.iosxr_user_module:
 
 

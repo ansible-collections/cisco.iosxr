@@ -1,5 +1,3 @@
-:orphan:
-
 .. _cisco.iosxr.iosxr_static_routes_module:
 
 

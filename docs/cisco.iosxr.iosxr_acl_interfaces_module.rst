@@ -1,5 +1,3 @@
-:orphan:
-
 .. _cisco.iosxr.iosxr_acl_interfaces_module:
 
 

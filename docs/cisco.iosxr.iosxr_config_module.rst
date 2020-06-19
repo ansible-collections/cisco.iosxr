@@ -1,5 +1,3 @@
-:orphan:
-
 .. _cisco.iosxr.iosxr_config_module:
 
 
@@ -452,7 +450,7 @@ Notes
    - This module works with connection ``network_cli``. See `the IOS-XR Platform Options <../network/user_guide/platform_iosxr.html>`_.
    - Tested against IOS XRv 6.1.3.
    - This module does not support ``netconf`` connection
-   - Abbreviated commands are NOT idempotent, see `Network FAQ <../network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands>`_.
+   - Abbreviated commands are NOT idempotent, see L(Network FAQ,../network/user_guide/faq.html
    - Avoid service disrupting changes (viz. Management IP) from config replace.
    - Do not use ``end`` in the replace config file.
    - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`

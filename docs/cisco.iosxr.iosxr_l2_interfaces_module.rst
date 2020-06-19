@@ -1,5 +1,3 @@
-:orphan:
-
 .. _cisco.iosxr.iosxr_l2_interfaces_module:
 
 

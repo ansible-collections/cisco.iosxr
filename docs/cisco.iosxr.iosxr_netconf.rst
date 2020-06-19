@@ -1,4 +1,3 @@
-
 .. _cisco.iosxr.iosxr_netconf:
 
 

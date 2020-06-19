@@ -1,5 +1,3 @@
-:orphan:
-
 .. _cisco.iosxr.iosxr_facts_module:
 
 
