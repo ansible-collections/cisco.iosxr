@@ -10,7 +10,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 
 
 class Acl_interfacesTemplate(NetworkTemplate):
-    def __init__(self, lines=[]):
+    def __init__(self, lines=None):
         super(Acl_interfacesTemplate, self).__init__(lines=lines, tmplt=self)
 
     # fmt: off
