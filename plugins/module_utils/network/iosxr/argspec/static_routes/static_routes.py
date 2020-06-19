@@ -21,7 +21,6 @@
 #   builder template.
 #
 #############################################
-# pylint: skip-file
 """
 The arg spec for the iosxr_static_routes module
 """

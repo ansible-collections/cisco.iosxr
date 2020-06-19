@@ -1,4 +1,3 @@
-# pylint: skip-file
 from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
@@ -61,7 +60,7 @@ def _tmplt_ospf_security(config_data):
         if "set" in config_data["security_ttl"]:
             command += " ttl"
         elif config_data["security_ttl"].get("hops"):
-            command += " ttl hops {}".format(
+            command += " ttl hops {0}".format(
                 config_data["security_ttl"].get("hops")
             )
         return command
@@ -83,21 +82,21 @@ def _tmplt_ospf_log_max_lsa(config_data):
     if "max_lsa" in config_data:
         command = "max-lsa"
         if "threshold" in config_data["max_lsa"]:
-            command += " {}".format(config_data["max_lsa"].get("threshold"))
+            command += " {0}".format(config_data["max_lsa"].get("threshold"))
         if "warning_only" in config_data["max_lsa"]:
-            command += " warning-only {}".format(
+            command += " warning-only {0}".format(
                 config_data["max_lsa"].get("warning_only")
             )
         if "ignore_time" in config_data["max_lsa"]:
-            command += " ignore-time {}".format(
+            command += " ignore-time {0}".format(
                 config_data["max_lsa"].get("ignore_time")
             )
         if "ignore_count" in config_data["max_lsa"]:
-            command += " ignore-count {}".format(
+            command += " ignore-count {0}".format(
                 config_data["max_lsa"].get("ignore_count")
             )
         if "reset_time" in config_data["max_lsa"]:
-            command += " reset-time {}".format(
+            command += " reset-time {0}".format(
                 config_data["max_lsa"].get("reset_time")
             )
         return command
@@ -132,17 +131,19 @@ def _tmplt_ospf_distance_admin(config_data):
     if "admin_distance" in config_data:
         command = "distance"
         if config_data["admin_distance"].get("value"):
-            command += " {}".format(config_data["admin_distance"].get("value"))
+            command += " {0}".format(
+                config_data["admin_distance"].get("value")
+            )
         if config_data["admin_distance"].get("source"):
-            command += " {}".format(
+            command += " {0}".format(
                 config_data["admin_distance"].get("source")
             )
         if config_data["admin_distance"].get("wildcard"):
-            command += " {}".format(
+            command += " {0}".format(
                 config_data["admin_distance"].get("wildcard")
             )
         if config_data["admin_distance"].get("access_list"):
-            command += " {}".format(
+            command += " {0}".format(
                 config_data["admin_distance"].get("access_list")
             )
         return command
@@ -152,15 +153,15 @@ def _tmplt_ospf_distance_ospf(config_data):
     if "ospf_distance" in config_data:
         command = "distance ospf"
         if config_data["ospf_distance"].get("external"):
-            command += " external {}".format(
+            command += " external {0}".format(
                 config_data["ospf_distance"].get("external")
             )
         if config_data["ospf_distance"].get("inter_area"):
-            command += " inter-area {}".format(
+            command += " inter-area {0}".format(
                 config_data["ospf_distance"].get("inter_area")
             )
         if config_data["ospf_distance"].get("intra_area"):
-            command += " intra-area {}".format(
+            command += " intra-area {0}".format(
                 config_data["ospf_distance"].get("intra_area")
             )
         return command
@@ -172,7 +173,7 @@ def _tmplt_ospf_nsr(config_data):
         if "set" in config_data["nsr"]:
             command += " nsr"
         elif config_data["nsr"].get("disable"):
-            command += " nsr {}".format("disable")
+            command += " nsr {0}".format("disable")
         return command
 
 
@@ -196,7 +197,7 @@ def _tmplt_microloop_avoidance(config_data):
         if "segment_routing" in config_data["microloop_avoidance"]:
             command += " segment_routing"
         if "rib_update_delay" in config_data["microloop_avoidance"]:
-            command += " rin-update-delay {}".config_data[
+            command += " rin-update-delay {0}".config_data[
                 "microloop_avoidance"
             ].get("rib_update_delay")
         return command
@@ -224,7 +225,7 @@ def _tmplt_ospf_mpls_traffic_eng(config_data):
             command += " multicast_intact"
         if "auto_route_exclude" in config_data["traffic_eng"]:
             policy = config_data["traffic_eng"].get("autoroute_exclude")
-            command += " autoroute-exlude route-policy {}".format(
+            command += " autoroute-exlude route-policy {0}".format(
                 policy.get("route_policy")
             )
         return command
@@ -270,7 +271,7 @@ def _tmplt_ospf_adjacency_stagger(config_data):
         if config_data["adjacency_stagger"].get(
             "min_adjacency"
         ) and config_data["adjacency_stagger"].get("min_adjacency"):
-            command += " {} {}".format(
+            command += " {0} {1}".format(
                 config_data["adjacency_stagger"].get("min_adjacency"),
                 config_data["adjacency_stagger"].get("max_adjacency"),
             )
@@ -283,22 +284,22 @@ def _tmplt_ospf_adjacency_distribute_bgp_state(config_data):
     if "distribute_link_list" in config_data:
         command = "distribute link-state"
         if config_data["distribute_link_list"].get("instance_id"):
-            command += "  instance-id {}".format(
+            command += "  instance-id {0}".format(
                 config_data["distribute_link_list"].get("instance_id")
             )
         elif config_data["distribute_link_list"].get("throttle"):
-            command += "  throttle {}".format(
+            command += "  throttle {0}".format(
                 config_data["distribute_link_list"].get("throttle")
             )
         return command
     elif "distribute_bgp_ls" in config_data:
         command = "distribute bgp-ls"
         if config_data["distribute_bgp_ls"].get("instance_id"):
-            command += "  instance-id {}".format(
+            command += "  instance-id {0}".format(
                 config_data["distribute_bgp_ls"].get("instance_id")
             )
         elif config_data["distribute_bgp_ls"].get("throttle"):
-            command += "  throttle {}".format(
+            command += "  throttle {0}".format(
                 config_data["distribute_bgp_ls"].get("throttle")
             )
         return command
@@ -318,7 +319,7 @@ def _tmplt_ospf_authentication_key(config_data):
     if "authentication_key" in config_data:
         command = "authentication-key".format(**config_data)
         if config_data["authentication_key"].get("password"):
-            command += " {}".format(
+            command += " {0}".format(
                 config_data["authentication_key"].get("password")
             )
         return command
@@ -351,7 +352,7 @@ def _tmplt_ospf_area_authentication_key(config_data):
     if "authentication_key" in config_data:
         command = "area {area_id} authentication-key".format(**config_data)
         if config_data["authentication_key"].get("password"):
-            command += " {}".format(
+            command += " {0}".format(
                 config_data["authentication_key"].get("password")
             )
         return command
@@ -493,7 +494,7 @@ def _tmplt_ospf_area_vlink_authentication_key(config_data):
             **config_data
         )
         if config_data["authentication_key"].get("password"):
-            command += " {}".format(
+            command += " {0}".format(
                 config_data["authentication_key"].get("password")
             )
         return command
@@ -575,7 +576,7 @@ def _tmplt_timers_graceful_shutdown(config_data):
 
 
 class Ospfv2Template(NetworkTemplate):
-    def __init__(self, lines=[]):
+    def __init__(self, lines=None):
         super(Ospfv2Template, self).__init__(lines=lines, tmplt=self)
 
     # fmt: off

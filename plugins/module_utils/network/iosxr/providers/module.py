@@ -2,7 +2,6 @@
 # (c) 2019, Ansible by Red Hat, inc
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
-# pylint: skip-file
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers import (
