@@ -1,5 +1,3 @@
-:orphan:
-
 .. _cisco.iosxr.iosxr_lldp_global_module:
 
 
