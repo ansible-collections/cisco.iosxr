@@ -81,3 +81,10 @@ releases:
         name: iosxr
         namespace: null
     release_date: '2020-06-23'
+  1.0.1:
+    changes:
+      minor_changes:
+      - Bring plugin table to correct position (https://github.com/ansible-collections/cisco.iosxr/pull/44)
+    fragments:
+    - 44-plugin-doc-fixes.yaml
+    release_date: '2020-06-23'

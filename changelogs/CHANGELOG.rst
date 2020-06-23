@@ -5,6 +5,14 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v1.0.1
+======
+
+Minor Changes
+-------------
+
+- Bring plugin table to correct position (https://github.com/ansible-collections/cisco.iosxr/pull/44)
+
 v1.0.0
 ======
 
