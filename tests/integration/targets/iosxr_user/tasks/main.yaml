@@ -1,7 +1,7 @@
 ---
 - include: cli.yaml
   tags:
-    - cli
+    - network_cli
 
 - include: netconf.yaml
   tags:
