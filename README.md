@@ -57,6 +57,7 @@ Name | Description
 [cisco.iosxr.iosxr_static_routes](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_static_routes_module.rst)|Static routes resource module
 [cisco.iosxr.iosxr_system](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_system_module.rst)|Manage the system attributes on Cisco IOS XR devices
 [cisco.iosxr.iosxr_user](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_user_module.rst)|Manage the aggregate of local users on Cisco IOS XR device
+
 <!--end collection content-->
 
 Click the ``Content`` button to see the list of content included in this collection.
