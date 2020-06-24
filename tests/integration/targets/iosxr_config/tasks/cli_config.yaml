@@ -15,4 +15,4 @@
   loop_control:
     loop_var: test_case_to_run
   tags:
-    - cli_config
+    - network_cli
