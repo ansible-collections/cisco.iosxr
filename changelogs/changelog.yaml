@@ -1,0 +1,90 @@
+ancestor: null
+releases:
+  1.0.0:
+    modules:
+    - description: ACL interfaces resource module
+      name: iosxr_acl_interfaces
+      namespace: ''
+    - description: ACLs resource module
+      name: iosxr_acls
+      namespace: ''
+    - description: Manage multiline banners on Cisco IOS XR devices
+      name: iosxr_banner
+      namespace: ''
+    - description: Configure global BGP protocol settings on Cisco IOS-XR
+      name: iosxr_bgp
+      namespace: ''
+    - description: Run commands on remote devices running Cisco IOS XR
+      name: iosxr_command
+      namespace: ''
+    - description: Manage Cisco IOS XR configuration sections
+      name: iosxr_config
+      namespace: ''
+    - description: Get facts about iosxr devices.
+      name: iosxr_facts
+      namespace: ''
+    - description: (deprecated, removed after 2022-06-01) Manage Interface on Cisco
+        IOS XR network devices
+      name: iosxr_interface
+      namespace: ''
+    - description: Interfaces resource module
+      name: iosxr_interfaces
+      namespace: ''
+    - description: L2 interfaces resource module
+      name: iosxr_l2_interfaces
+      namespace: ''
+    - description: L3 interfaces resource module
+      name: iosxr_l3_interfaces
+      namespace: ''
+    - description: LACP resource module
+      name: iosxr_lacp
+      namespace: ''
+    - description: LACP interfaces resource module
+      name: iosxr_lacp_interfaces
+      namespace: ''
+    - description: LAG interfaces resource module
+      name: iosxr_lag_interfaces
+      namespace: ''
+    - description: LLDP resource module
+      name: iosxr_lldp_global
+      namespace: ''
+    - description: LLDP interfaces resource module
+      name: iosxr_lldp_interfaces
+      namespace: ''
+    - description: Configuration management of system logging services on network
+        devices
+      name: iosxr_logging
+      namespace: ''
+    - description: Configures NetConf sub-system service on Cisco IOS-XR devices
+      name: iosxr_netconf
+      namespace: ''
+    - description: OSPFv2 resource module
+      name: iosxr_ospfv2
+      namespace: ''
+    - description: Static routes resource module
+      name: iosxr_static_routes
+      namespace: ''
+    - description: Manage the system attributes on Cisco IOS XR devices
+      name: iosxr_system
+      namespace: ''
+    - description: Manage the aggregate of local users on Cisco IOS XR device
+      name: iosxr_user
+      namespace: ''
+    plugins:
+      cliconf:
+      - description: Use iosxr cliconf to run command on Cisco IOS XR platform
+        name: iosxr
+        namespace: null
+      netconf:
+      - description: Use iosxr netconf plugin to run netconf commands on Cisco IOSXR
+          platform
+        name: iosxr
+        namespace: null
+    release_date: '2020-06-23'
+  1.0.1:
+    changes:
+      minor_changes:
+      - Bring plugin table to correct position (https://github.com/ansible-collections/cisco.iosxr/pull/44)
+    fragments:
+    - 44-plugin-doc-fixes.yaml
+    release_date: '2020-06-23'
