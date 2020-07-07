@@ -23,38 +23,38 @@ The Cisco IOSXR collection supports ``network_cli``  and ``netconf`` connections
 ### Cliconf plugins
 Name | Description
 --- | ---
-[cisco.iosxr.iosxr](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_cliconf.rst)|Use iosxr cliconf to run command on Cisco IOS XR platform
+[cisco.iosxr.iosxr](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_cliconf.rst)|Use iosxr cliconf to run command on Cisco IOS XR platform
 
 ### Netconf plugins
 Name | Description
 --- | ---
-[cisco.iosxr.iosxr](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_netconf.rst)|Use iosxr netconf plugin to run netconf commands on Cisco IOSXR platform
+[cisco.iosxr.iosxr](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_netconf.rst)|Use iosxr netconf plugin to run netconf commands on Cisco IOSXR platform
 
 ### Modules
 Name | Description
 --- | ---
-[cisco.iosxr.iosxr_acl_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_acl_interfaces_module.rst)|ACL interfaces resource module
-[cisco.iosxr.iosxr_acls](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_acls_module.rst)|ACLs resource module
-[cisco.iosxr.iosxr_banner](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_banner_module.rst)|Manage multiline banners on Cisco IOS XR devices
-[cisco.iosxr.iosxr_bgp](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_bgp_module.rst)|Configure global BGP protocol settings on Cisco IOS-XR
-[cisco.iosxr.iosxr_command](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_command_module.rst)|Run commands on remote devices running Cisco IOS XR
-[cisco.iosxr.iosxr_config](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_config_module.rst)|Manage Cisco IOS XR configuration sections
-[cisco.iosxr.iosxr_facts](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_facts_module.rst)|Get facts about iosxr devices.
-[cisco.iosxr.iosxr_interface](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_interface_module.rst)|(deprecated, removed after 2022-06-01) Manage Interface on Cisco IOS XR network devices
-[cisco.iosxr.iosxr_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_interfaces_module.rst)|Interfaces resource module
-[cisco.iosxr.iosxr_l2_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_l2_interfaces_module.rst)|L2 interfaces resource module
-[cisco.iosxr.iosxr_l3_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_l3_interfaces_module.rst)|L3 interfaces resource module
-[cisco.iosxr.iosxr_lacp](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_lacp_module.rst)|LACP resource module
-[cisco.iosxr.iosxr_lacp_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_lacp_interfaces_module.rst)|LACP interfaces resource module
-[cisco.iosxr.iosxr_lag_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_lag_interfaces_module.rst)|LAG interfaces resource module
-[cisco.iosxr.iosxr_lldp_global](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_lldp_global_module.rst)|LLDP resource module
-[cisco.iosxr.iosxr_lldp_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_lldp_interfaces_module.rst)|LLDP interfaces resource module
-[cisco.iosxr.iosxr_logging](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_logging_module.rst)|Configuration management of system logging services on network devices
-[cisco.iosxr.iosxr_netconf](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_netconf_module.rst)|Configures NetConf sub-system service on Cisco IOS-XR devices
-[cisco.iosxr.iosxr_ospfv2](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_ospfv2_module.rst)|OSPFv2 resource module
-[cisco.iosxr.iosxr_static_routes](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_static_routes_module.rst)|Static routes resource module
-[cisco.iosxr.iosxr_system](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_system_module.rst)|Manage the system attributes on Cisco IOS XR devices
-[cisco.iosxr.iosxr_user](https://github.com/ansible-collections/cisco.iosxr/blob/master/docs/cisco.iosxr.iosxr_user_module.rst)|Manage the aggregate of local users on Cisco IOS XR device
+[cisco.iosxr.iosxr_acl_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_acl_interfaces_module.rst)|ACL interfaces resource module
+[cisco.iosxr.iosxr_acls](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_acls_module.rst)|ACLs resource module
+[cisco.iosxr.iosxr_banner](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_banner_module.rst)|Manage multiline banners on Cisco IOS XR devices
+[cisco.iosxr.iosxr_bgp](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_bgp_module.rst)|Configure global BGP protocol settings on Cisco IOS-XR
+[cisco.iosxr.iosxr_command](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_command_module.rst)|Run commands on remote devices running Cisco IOS XR
+[cisco.iosxr.iosxr_config](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_config_module.rst)|Manage Cisco IOS XR configuration sections
+[cisco.iosxr.iosxr_facts](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_facts_module.rst)|Get facts about iosxr devices.
+[cisco.iosxr.iosxr_interface](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_interface_module.rst)|(deprecated, removed after 2022-06-01) Manage Interface on Cisco IOS XR network devices
+[cisco.iosxr.iosxr_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_interfaces_module.rst)|Interfaces resource module
+[cisco.iosxr.iosxr_l2_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_l2_interfaces_module.rst)|L2 interfaces resource module
+[cisco.iosxr.iosxr_l3_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_l3_interfaces_module.rst)|L3 interfaces resource module
+[cisco.iosxr.iosxr_lacp](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_lacp_module.rst)|LACP resource module
+[cisco.iosxr.iosxr_lacp_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_lacp_interfaces_module.rst)|LACP interfaces resource module
+[cisco.iosxr.iosxr_lag_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_lag_interfaces_module.rst)|LAG interfaces resource module
+[cisco.iosxr.iosxr_lldp_global](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_lldp_global_module.rst)|LLDP resource module
+[cisco.iosxr.iosxr_lldp_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_lldp_interfaces_module.rst)|LLDP interfaces resource module
+[cisco.iosxr.iosxr_logging](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_logging_module.rst)|Configuration management of system logging services on network devices
+[cisco.iosxr.iosxr_netconf](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_netconf_module.rst)|Configures NetConf sub-system service on Cisco IOS-XR devices
+[cisco.iosxr.iosxr_ospfv2](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_ospfv2_module.rst)|OSPFv2 resource module
+[cisco.iosxr.iosxr_static_routes](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_static_routes_module.rst)|Static routes resource module
+[cisco.iosxr.iosxr_system](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_system_module.rst)|Manage the system attributes on Cisco IOS XR devices
+[cisco.iosxr.iosxr_user](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_user_module.rst)|Manage the aggregate of local users on Cisco IOS XR device
 
 <!--end collection content-->
 
