@@ -60,6 +60,7 @@ options:
         - The address format is <ipv4 address>/<mask>, the mask is number in range
           0-32 eg. 192.168.0.1/24
         type: list
+        elements: dict
         suboptions:
           address:
             description:
@@ -75,6 +76,7 @@ options:
         - The address format is <ipv6 address>/<mask>, the mask is number in range
           0-128 eg. fd5d:12c9:2201:1::1/64
         type: list
+        elements: dict
         suboptions:
           address:
             description:

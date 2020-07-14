@@ -115,14 +115,11 @@ iosxr_provider_spec = {
 
 iosxr_argument_spec = {
     "provider": dict(
-        type="dict", options=iosxr_provider_spec, removed_in_version=2.14
+        type="dict",
+        options=iosxr_provider_spec,
+        removed_at_date="2022-06-01",
+        removed_from_collection="cisco.iosxr",
     )
-}
-
-command_spec = {
-    "command": dict(),
-    "prompt": dict(default=None),
-    "answer": dict(default=None),
 }
 
 CONFIG_MISPLACED_CHILDREN = [re.compile(r"^end-\s*(.+)$")]

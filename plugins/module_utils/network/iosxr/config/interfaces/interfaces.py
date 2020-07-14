@@ -167,9 +167,7 @@ class Interfaces(ConfigBase):
 
         for interface in want:
             for each in have:
-                if each["name"] == interface["name"]:
-                    break
-                elif interface["name"] in each["name"]:
+                if each["name"] == interface["name"] or interface["name"] in each["name"]:
                     break
             else:
                 continue
@@ -192,9 +190,7 @@ class Interfaces(ConfigBase):
 
         for each in have:
             for interface in want:
-                if each["name"] == interface["name"]:
-                    break
-                elif interface["name"] in each["name"]:
+                if each["name"] == interface["name"] or interface["name"] in each["name"]:
                     break
             else:
                 # We didn't find a matching desired state, which means we can
@@ -224,9 +220,7 @@ class Interfaces(ConfigBase):
                 commands.extend(self._set_config(interface, dict()))
             else:
                 for each in have:
-                    if each["name"] == interface["name"]:
-                        break
-                    elif interface["name"] in each["name"]:
+                    if each["name"] == interface["name"] or interface["name"] in each["name"]:
                         break
                 else:
                     continue
@@ -245,9 +239,7 @@ class Interfaces(ConfigBase):
         if want:
             for interface in want:
                 for each in have:
-                    if each["name"] == interface["name"]:
-                        break
-                    elif interface["name"] in each["name"]:
+                    if each["name"] == interface["name"] or interface["name"] in each["name"]:
                         break
                 else:
                     continue

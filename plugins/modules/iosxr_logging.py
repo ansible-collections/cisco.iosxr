@@ -37,14 +37,17 @@ options:
     - monitor
     - buffered
     - file
+    type: str
   name:
     description:
     - When C(dest) = I(file) name indicates file-name
     - When C(dest) = I(host) name indicates the host-name or ip-address of syslog
       server.
+    type: str
   vrf:
     description:
     - vrf name when syslog server is configured, C(dest) = C(host)
+    type: str
     default: default
   size:
     description:
@@ -52,23 +55,82 @@ options:
       I(307200 to 125000000 bytes). Default 307200
     - Size of file when C(dest) = C(file). The acceptable value is in the range I(1
       to 2097152)KB. Default 2 GB
+    type: int
   facility:
     description:
     - To configure the type of syslog facility in which system logging (syslog) messages
       are sent to syslog servers Optional config for C(dest) = C(host)
     default: local7
+    type: str
   hostnameprefix:
     description:
     - To append a hostname prefix to system logging (syslog) messages logged to syslog
       servers. Optional config for C(dest) = C(host)
+    type: str
   level:
     description:
     - Specifies the severity level for the logging.
+    type: str
     default: debugging
     aliases:
     - severity
+    choices: ["emergencies", "alerts", "critical", "errors", "warning", "notifications", "informational", "debugging"]
   aggregate:
     description: List of syslog logging configuration definitions.
+    type: list
+    elements: dict
+    suboptions:
+      dest:
+        description:
+        - Destination for system logging (syslog) messages.
+        choices:
+        - host
+        - console
+        - monitor
+        - buffered
+        - file
+        type: str
+      name:
+        description:
+        - When C(dest) = I(file) name indicates file-name
+        - When C(dest) = I(host) name indicates the host-name or ip-address of syslog
+          server.
+        type: str
+      vrf:
+        description:
+        - vrf name when syslog server is configured, C(dest) = C(host)
+        type: str
+      size:
+        description:
+        - Size of buffer when C(dest) = C(buffered). The acceptable value is in the range
+          I(307200 to 125000000 bytes). Default 307200
+        - Size of file when C(dest) = C(file). The acceptable value is in the range I(1
+          to 2097152)KB. Default 2 GB
+        type: int
+      facility:
+        description:
+        - To configure the type of syslog facility in which system logging (syslog) messages
+          are sent to syslog servers Optional config for C(dest) = C(host)
+        type: str
+      hostnameprefix:
+        description:
+        - To append a hostname prefix to system logging (syslog) messages logged to syslog
+          servers. Optional config for C(dest) = C(host)
+        type: str
+      level:
+        description:
+        - Specifies the severity level for the logging.
+        type: str
+        aliases:
+        - severity
+        choices: ["emergencies", "alerts", "critical", "errors", "warning", "notifications", "informational", "debugging"]
+      state:
+        description:
+        - Existential state of the logging configuration on the node.
+        choices:
+        - present
+        - absent
+        type: str
   state:
     description:
     - Existential state of the logging configuration on the node.
@@ -76,6 +138,7 @@ options:
     choices:
     - present
     - absent
+    type: str
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 """
@@ -159,7 +222,6 @@ xml:
   description: NetConf rpc xml sent to device with transport C(netconf)
   returned: always (empty list when no xml rpc to send)
   type: list
-  version_added: 2.5
   sample:
     - '<config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
     <syslog xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-infra-syslog-cfg">
@@ -1089,7 +1151,7 @@ def main():
         hostnameprefix=dict(type="str"),
         level=dict(
             type="str",
-            default="informational",
+            default="debugging",
             aliases=["severity"],
             choices=[
                 "emergencies",

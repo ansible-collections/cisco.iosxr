@@ -200,7 +200,7 @@ class L3_Interfaces(ConfigBase):
                 if each["name"] == interface["name"]:
                     in_have.add(interface["name"])
                     break
-                elif interface["name"] != each["name"]:
+                if interface["name"] != each["name"]:
                     not_in_have.add(interface["name"])
             else:
                 # We didn't find a matching desired state, which means we can
@@ -260,9 +260,7 @@ class L3_Interfaces(ConfigBase):
             for interface in want:
                 interface["name"] = normalize_interface(interface["name"])
                 for each in have:
-                    if each["name"] == interface["name"]:
-                        break
-                    elif interface["name"] in each["name"]:
+                    if each["name"] == interface["name"] or interface["name"] in each["name"]:
                         break
                 else:
                     continue
@@ -297,7 +295,7 @@ class L3_Interfaces(ConfigBase):
                 ):
                     diff = True
                     break
-                elif each_want.get("address") != every_have.get(
+                if each_want.get("address") != every_have.get(
                     "address"
                 ) and len(each_want.keys()) == len(every_have.keys()):
                     diff = True

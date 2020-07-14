@@ -33,17 +33,20 @@ options:
     description:
     - Specifies the type of banner to configure on remote device.
     required: true
+    type: str
     choices:
     - login
     - motd
   text:
     description:
-    - Banner text to be configured. Accepts multiline string, without empty lines.
+    - Banner text to be configured. Accepts multi line string, without empty lines.
       Requires I(state=present).
+    type: str
   state:
     description:
     - Existential state of the configuration on the device.
     default: present
+    type: str
     choices:
     - present
     - absent
@@ -84,7 +87,6 @@ xml:
   description: NetConf rpc xml sent to device with transport C(netconf)
   returned: always (empty list when no xml rpc to send)
   type: list
-  version_added: 2.5
   sample:
     - '<config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
             <banners xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-infra-infra-cfg">

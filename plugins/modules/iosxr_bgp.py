@@ -25,6 +25,7 @@ options:
   config:
     description:
     - Specifies the BGP related configuration.
+    type: dict
     suboptions:
       bgp_as:
         description:
@@ -34,7 +35,7 @@ options:
       router_id:
         description:
         - Configures the BGP routing process router-id value.
-        default:
+        type: str
       log_neighbor_changes:
         description:
         - Enable/disable logging neighbor up/down and reset reason.
@@ -42,10 +43,13 @@ options:
       neighbors:
         description:
         - Specifies BGP neighbor related configurations.
+        type: list
+        elements: dict
         suboptions:
           neighbor:
             description:
             - Neighbor router address.
+            type: str
             required: true
           remote_as:
             description:
@@ -55,9 +59,11 @@ options:
           update_source:
             description:
             - Source of the routing updates.
+            type: str
           password:
             description:
             - Password to authenticate the BGP peer connection.
+            type: str
           enabled:
             description:
             - Administratively shutdown or enable a neighbor.
@@ -65,6 +71,7 @@ options:
           description:
             description:
             - Neighbor specific description.
+            type: str
           advertisement_interval:
             description:
             - Specifies the minimum interval (in seconds) between sending BGP routing
@@ -85,6 +92,7 @@ options:
           timers:
             description:
             - Specifies BGP neighbor timer related configurations.
+            type: dict
             suboptions:
               keepalive:
                 description:
@@ -92,14 +100,12 @@ options:
                   to its peer.
                 - The range is from 0 to 65535.
                 type: int
-                required: true
               holdtime:
                 description:
                 - Interval after not receiving a keepalive message that the software
                   declares a peer dead.
                 - The range is from 3 to 65535.
                 type: int
-                required: true
               min_neighbor_holdtime:
                 description:
                 - Interval specifying the minimum acceptable hold-time from a BGP
@@ -111,6 +117,8 @@ options:
       address_family:
         description:
         - Specifies BGP address family related configurations.
+        type: list
+        elements: dict
         suboptions:
           afi:
             description:
@@ -119,6 +127,7 @@ options:
             - ipv4
             - ipv6
             required: true
+            type: str
           safi:
             description:
             - Specifies the type of cast for the address family.
@@ -127,53 +136,68 @@ options:
             - unicast
             - multicast
             - labeled-unicast
+            type: str
             default: unicast
           redistribute:
             description:
             - Specifies the redistribute information from another routing protocol.
+            type: list
+            elements: dict
             suboptions:
               protocol:
                 description:
                 - Specifies the protocol for configuring redistribute information.
+                type: str
                 choices:
-                - ospf
-                - ospfv3
-                - eigrp
-                - isis
-                - static
-                - connected
-                - lisp
-                - mobile
-                - rip
-                - subscriber
+                 - ospf
+                 - ospfv3
+                 - eigrp
+                 - isis
+                 - static
+                 - connected
+                 - lisp
+                 - mobile
+                 - rip
+                 - subscriber
                 required: true
               id:
                 description:
                 - Identifier for the routing protocol for configuring redistribute
                   information.
                 - Valid for protocols 'ospf', 'eigrp', 'isis' and 'ospfv3'.
+                type: str
               metric:
                 description:
                 - Specifies the metric for redistributed routes.
+                type: int
               route_map:
                 description:
                 - Specifies the route map reference.
+                type: str
           networks:
             description:
             - Specify networks to announce via BGP.
             - For operation replace, this option is mutually exclusive with root level
               networks option.
+            type: list
+            elements: dict
             suboptions:
               network:
                 description:
                 - Network ID to announce via BGP.
                 required: true
+                aliases:
+                - prefix
+                type: str
               masklen:
                 description:
                 - Subnet mask length for the network to announce(e.g, 8, 16, 24, etc.).
+                type: int
+                required: true
               route_map:
                 description:
                 - Route map to modify the attributes.
+                type: str
   operation:
     description:
     - Specifies the operation to be performed on the BGP process configured on the
@@ -187,6 +211,7 @@ options:
       the device and replaced with the input configuration.
     - In case of delete the existing BGP configuration will be removed from the device.
     default: merge
+    type: str
     choices:
     - merge
     - replace
@@ -254,13 +279,22 @@ def main():
     """ main entry point for module execution
     """
     network_spec = {
-        "prefix": dict(required=True),
+        "network": dict(aliases=["prefix"], required=True),
         "masklen": dict(type="int", required=True),
         "route_map": dict(),
     }
 
     redistribute_spec = {
-        "protocol": dict(choices=REDISTRIBUTE_PROTOCOLS, required=True),
+        "protocol": dict(type="str", choices=["ospf",
+                                              "ospfv3",
+                                              "eigrp",
+                                              "isis",
+                                              "static",
+                                              "connected",
+                                              "lisp",
+                                              "mobile",
+                                              "rip",
+                                              "subscriber"], required=True),
         "id": dict(),
         "metric": dict(type="int"),
         "route_map": dict(),

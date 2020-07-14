@@ -99,7 +99,20 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                     },
                                     "type": "dict",
                                 },
-                                "bfd": {"type": "dict"},
+                                "bfd": {
+                                    "options": {
+                                        "fast_detect": {
+                                            "options": {
+                                                "set": {"type": "bool"},
+                                                "strict_mode": {"type": "bool"},
+                                            },
+                                            "type": "dict",
+                                        },
+                                        "minimum_interval": {"type": "int"},
+                                        "multiplier": {"type": "int"},
+                                    },
+                                    "type": "dict",
+                                },
                                 "cost": {"type": "int"},
                                 "dead_interval": {"type": "int"},
                                 "default_cost": {"type": "int"},
@@ -447,15 +460,6 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                             "type": "str",
                         },
                         "max_lsa": {
-                            "mutually_exclusive": [
-                                [
-                                    "warning_only",
-                                    "ignore_count",
-                                    "reset_time",
-                                    "ignore_time",
-                                    "ignore_count",
-                                ]
-                            ],
                             "options": {
                                 "ignore_count": {"type": "int"},
                                 "ignore_time": {"type": "int"},
