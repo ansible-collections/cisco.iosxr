@@ -893,13 +893,17 @@ def main():
     element_spec = dict(
         name=dict(type="str"),
         configured_password=dict(type="str", no_log=True),
-        update_password=dict(type="str", default="always", choices=["on_create", "always"]),
+        update_password=dict(
+            type="str", default="always", choices=["on_create", "always"]
+        ),
         admin=dict(type="bool", default=False),
         public_key=dict(type="str"),
         public_key_contents=dict(type="str"),
         group=dict(type="str", aliases=["role"]),
         groups=dict(type="list", elements="dict"),
-        state=dict(type="str", default="present", choices=["present", "absent"]),
+        state=dict(
+            type="str", default="present", choices=["present", "absent"]
+        ),
     )
     aggregate_spec = deepcopy(element_spec)
     aggregate_spec["name"] = dict(required=True)

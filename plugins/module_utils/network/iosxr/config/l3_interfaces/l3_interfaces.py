@@ -260,7 +260,10 @@ class L3_Interfaces(ConfigBase):
             for interface in want:
                 interface["name"] = normalize_interface(interface["name"])
                 for each in have:
-                    if each["name"] == interface["name"] or interface["name"] in each["name"]:
+                    if (
+                        each["name"] == interface["name"]
+                        or interface["name"] in each["name"]
+                    ):
                         break
                 else:
                     continue

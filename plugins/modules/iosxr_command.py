@@ -131,6 +131,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     run_commands,
     iosxr_argument_spec,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    command_spec,
+)
 
 
 def parse_commands(module, warnings):
@@ -160,6 +163,7 @@ def main():
     )
 
     argument_spec.update(iosxr_argument_spec)
+    argument_spec.update(command_spec)
 
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True

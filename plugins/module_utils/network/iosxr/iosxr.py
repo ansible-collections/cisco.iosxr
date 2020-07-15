@@ -122,6 +122,12 @@ iosxr_argument_spec = {
     )
 }
 
+command_spec = {
+    "command": dict(),
+    "prompt": dict(default=None),
+    "answer": dict(default=None),
+}
+
 CONFIG_MISPLACED_CHILDREN = [re.compile(r"^end-\s*(.+)$")]
 
 # Objects defined in Route-policy Language guide of IOS_XR.

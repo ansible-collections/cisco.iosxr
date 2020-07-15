@@ -1,0 +1,5 @@
+plugins/action/iosxr.py action-plugin-docs
+plugins/modules/iosxr_command.py validate-modules:doc-missing-type
+plugins/modules/iosxr_command.py validate-modules:undocumented-parameter
+plugins/modules/iosxr_interface.py validate-modules:deprecation-mismatch
+plugins/modules/iosxr_interface.py validate-modules:invalid-documentation

@@ -1001,7 +1001,9 @@ def main():
         mtu=dict(),
         duplex=dict(choices=["full", "half"]),
         enabled=dict(default=True, type="bool"),
-        active=dict(type="str", choices=["active", "preconfigure"], default="active"),
+        active=dict(
+            type="str", choices=["active", "preconfigure"], default="active"
+        ),
         tx_rate=dict(),
         rx_rate=dict(),
         delay=dict(default=10, type="int"),

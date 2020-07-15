@@ -104,7 +104,9 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         "fast_detect": {
                                             "options": {
                                                 "set": {"type": "bool"},
-                                                "strict_mode": {"type": "bool"},
+                                                "strict_mode": {
+                                                    "type": "bool"
+                                                },
                                             },
                                             "type": "dict",
                                         },
