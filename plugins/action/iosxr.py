@@ -42,7 +42,9 @@ class ActionModule(ActionNetworkModule):
         del tmp  # tmp no longer has any effect
 
         module_name = self._task.action.split(".")[-1]
-        self._config_module = True if module_name == "iosxr_config" else False
+        self._config_module = (
+            True if module_name in ["iosxr_config", "config"] else False
+        )
         force_cli = module_name in (
             "iosxr_netconf",
             "iosxr_config",

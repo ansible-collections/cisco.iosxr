@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Make `src`, `backup` and `backup_options` in iosxr_config work when module alias is used (https://github.com/ansible-collections/cisco.iosxr/pull/63).
