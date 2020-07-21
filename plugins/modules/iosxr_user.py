@@ -813,7 +813,7 @@ def main():
         public_key=dict(),
         public_key_contents=dict(),
         group=dict(aliases=["role"]),
-        groups=dict(type="list", elements="dict"),
+        groups=dict(type="list", elements="str"),
         state=dict(default="present", choices=["present", "absent"]),
     )
     aggregate_spec = deepcopy(element_spec)
