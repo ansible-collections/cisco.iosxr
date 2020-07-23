@@ -20,7 +20,7 @@
 - assert:
     that:
       - result.changed == true
-      - '"logging 172.16.0.1 vrf default severity info" in result.commands'
+      - '"logging 172.16.0.1 vrf default severity debugging" in result.commands'
 
 - name: Remove host logging - teardown
   ansible.netcommon.net_logging:
