@@ -7,7 +7,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-
 DOCUMENTATION = """
 module: iosxr_command
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
@@ -35,7 +34,7 @@ options:
       is provided, the module is not returned until the condition is satisfied or
       the number of retries has expired.
     type: list
-    elements: str
+    elements: raw
     required: true
   wait_for:
     description:
@@ -131,9 +130,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     run_commands,
     iosxr_argument_spec,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    command_spec,
-)
 
 
 def parse_commands(module, warnings):
@@ -155,7 +151,7 @@ def parse_commands(module, warnings):
 
 def main():
     argument_spec = dict(
-        commands=dict(type="list", required=True, elements="str"),
+        commands=dict(type="list", required=True, elements="raw"),
         wait_for=dict(type="list", aliases=["waitfor"], elements="str"),
         match=dict(default="all", choices=["all", "any"]),
         retries=dict(default=10, type="int"),
@@ -163,7 +159,6 @@ def main():
     )
 
     argument_spec.update(iosxr_argument_spec)
-    argument_spec.update(command_spec)
 
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True

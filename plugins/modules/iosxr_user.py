@@ -80,7 +80,7 @@ options:
           the group has been configured on the device. It is similar to the aggregate
           command for usernames, but lets you configure multiple groups for the user(s).
         type: list
-        elements: dict
+        elements: str
       admin:
         description:
         - Enters into administration configuration mode for making config changes to the
@@ -155,7 +155,7 @@ options:
       the group has been configured on the device. It is similar to the aggregate
       command for usernames, but lets you configure multiple groups for the user(s).
     type: list
-    elements: dict
+    elements: str
   purge:
     description:
     - Instructs the module to consider the resource definition absolute. It will remove
@@ -900,7 +900,7 @@ def main():
         public_key=dict(type="str"),
         public_key_contents=dict(type="str"),
         group=dict(type="str", aliases=["role"]),
-        groups=dict(type="list", elements="dict"),
+        groups=dict(type="list", elements="str"),
         state=dict(
             type="str", default="present", choices=["present", "absent"]
         ),

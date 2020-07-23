@@ -108,7 +108,6 @@ options:
         description:
         - Name of the interface to configure in C(type + path) format. e.g. C(GigabitEthernet0/0/0/0)
         type: str
-        required: true
       description:
         description:
         - Description of Interface being configured.
@@ -995,7 +994,7 @@ def main():
     """ main entry point for module execution
     """
     element_spec = dict(
-        name=dict(type="str", required=True),
+        name=dict(type="str"),
         description=dict(type="str"),
         speed=dict(choices=["10", "100", "1000"]),
         mtu=dict(),
