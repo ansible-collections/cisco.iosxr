@@ -81,13 +81,13 @@ def filter_dict_having_none_value(want, have):
     for k, v in iteritems(want):
         if isinstance(v, dict):
             for key, value in iteritems(v):
-                if value is None:
+                if value is None and k in have and key in have.get(k):
                     dict_val = have.get(k).get(key)
                     test_key_dict.update({key: dict_val})
                 test_dict.update({k: test_key_dict})
         if isinstance(v, list) and isinstance(v[0], dict):
             for key, value in iteritems(v[0]):
-                if value is None:
+                if value is None and k in have and key in have.get(k):
                     dict_val = have.get(k).get(key)
                     test_key_dict.update({key: dict_val})
                 test_dict.update({k: test_key_dict})
