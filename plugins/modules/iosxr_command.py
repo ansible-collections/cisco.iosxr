@@ -33,6 +33,9 @@ options:
       The resulting output from the command is returned. If the I(wait_for) argument
       is provided, the module is not returned until the condition is satisfied or
       the number of retries has expired.
+    - If a command sent to the device requires answering a prompt, it is possible to pass
+      a dict containing command, answer and prompt. Common answers are 'y' or "\\r"
+      (carriage return, must be double quotes). See examples
     type: list
     elements: raw
     required: true
