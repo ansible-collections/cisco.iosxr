@@ -34,35 +34,45 @@ options:
   hostname:
     description:
     - Configure the device hostname parameter. This option takes an ASCII string value.
+    type: str
   vrf:
     description:
     - VRF name for domain services
+    type: str
+    default: "default"
   domain_name:
     description:
     - Configure the IP domain name on the remote device to the provided value. Value
       should be in the dotted name form and will be appended to the C(hostname) to
       create a fully-qualified domain name.
+    type: str
   domain_search:
     description:
     - Provides the list of domain suffixes to append to the hostname for the purpose
       of doing name resolution. This argument accepts a list of names and will be
       reconciled with the current active configuration on the running node.
+    type: list
+    elements: str
   lookup_source:
     description:
     - The C(lookup_source) argument provides one or more source interfaces to use
       for performing DNS lookups.  The interface provided in C(lookup_source) must
       be a valid interface configured on the device.
+    type: str
   lookup_enabled:
     description:
     - Provides administrative control for enabling or disabling DNS lookups.  When
       this argument is set to True, lookups are performed and when it is set to False,
       lookups are not performed.
     type: bool
+    default: true
   name_servers:
     description:
     - The C(name_serves) argument accepts a list of DNS name servers by way of either
       FQDN or IP address to use to perform name resolution lookups.  This argument
       accepts wither a list of DNS servers See examples.
+    type: list
+    elements: str
   state:
     description:
     - State of the configuration values in the device's current active configuration.  When
@@ -72,6 +82,7 @@ options:
     choices:
     - present
     - absent
+    type: str
 """
 
 EXAMPLES = """
@@ -124,7 +135,6 @@ xml:
   description: NetConf rpc xml sent to device with transport C(netconf)
   returned: always (empty list when no xml rpc to send)
   type: list
-  version_added: 2.5
   sample:
     - '<config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
     <ip-domain xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-ip-domain-cfg">
@@ -898,12 +908,12 @@ def main():
     """ Main entry point for Ansible module execution
     """
     argument_spec = dict(
-        hostname=dict(),
+        hostname=dict(type="str"),
         vrf=dict(type="str", default="default"),
-        domain_name=dict(),
-        domain_search=dict(type="list"),
-        name_servers=dict(type="list"),
-        lookup_source=dict(),
+        domain_name=dict(type="str"),
+        domain_search=dict(type="list", elements="str"),
+        name_servers=dict(type="list", elements="str"),
+        lookup_source=dict(type="str"),
         lookup_enabled=dict(type="bool", default=True),
         state=dict(choices=["present", "absent"], default="present"),
     )

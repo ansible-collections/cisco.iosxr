@@ -27,6 +27,7 @@ options:
     - This argument specifies the port the netconf service should listen on for SSH
       connections.  The default port as defined in RFC 6242 is 830.
     required: false
+    type: int
     default: 830
     aliases:
     - listens_on
@@ -34,6 +35,7 @@ options:
     description:
     - netconf vrf name
     required: false
+    type: str
     default: default
     aliases:
     - vrf
@@ -43,6 +45,7 @@ options:
       the I(state) argument is set to I(present) the netconf service will be configured.  If
       the I(state) argument is set to I(absent) the netconf service will be removed
       from the configuration.
+    type: str
     required: false
     default: present
     choices:

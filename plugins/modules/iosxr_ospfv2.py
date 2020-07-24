@@ -178,23 +178,22 @@ options:
                 description: Configure BFD parameters
                 type: dict
                 suboptions:
-                fast_detect:
-                  description: Configure fast detection
-                  type: dict
-                  suboptions:
-                    set:
-                      description: Enable fast detection only
-                      type: bool
-                    strict_mode:
-                      description: Hold down neighbor session until BFD session is
-                        up
-                      type: bool
-                minimum_interval:
-                  description: Hello interval in milli-seconds
-                  type: int
-                multiplier:
-                  description: Detect multiplier
-                  type: int
+                  fast_detect:
+                    description: Configure fast detection
+                    type: dict
+                    suboptions:
+                      set:
+                        description: Enable fast detection only
+                        type: bool
+                      strict_mode:
+                        description: Hold down neighbor session until BFD session is up
+                        type: bool
+                  minimum_interval:
+                    description: Hello interval in milli-seconds
+                    type: int
+                  multiplier:
+                    description: Detect multiplier
+                    type: int
               nssa:
                 description:
                 - NSSA settings for the area

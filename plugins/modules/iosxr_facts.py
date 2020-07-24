@@ -38,6 +38,8 @@ options:
       with an initial C(M(!)) to specify that a specific subset should not be collected.
     required: false
     default: '!config'
+    type: list
+    elements: str
   gather_network_resources:
     description:
     - When supplied, this argument will restrict the facts collected to a given subset.
@@ -48,6 +50,8 @@ options:
       'lldp_interfaces', 'interfaces', 'l2_interfaces', 'l3_interfaces', 'lag_interfaces',
       'acls', 'acl_interfaces', 'static_routes', 'ospfv2'.
     required: false
+    type: list
+    elements: str
 """
 
 EXAMPLES = """

@@ -195,7 +195,7 @@ class L2_Interfaces(ConfigBase):
                 if each["name"] == interface["name"]:
                     in_have.add(interface["name"])
                     break
-                elif interface["name"] != each["name"]:
+                if interface["name"] != each["name"]:
                     not_in_have.add(interface["name"])
             else:
                 # We didn't find a matching desired state, which means we can
@@ -229,9 +229,10 @@ class L2_Interfaces(ConfigBase):
         for interface in want:
             interface["name"] = normalize_interface(interface["name"])
             for each in have:
-                if each["name"] == interface["name"]:
-                    break
-                elif interface["name"] in each["name"]:
+                if (
+                    each["name"] == interface["name"]
+                    or interface["name"] in each["name"]
+                ):
                     break
             else:
                 commands.extend(self._set_config(interface, {}, module))
@@ -252,9 +253,10 @@ class L2_Interfaces(ConfigBase):
             for interface in want:
                 interface["name"] = normalize_interface(interface["name"])
                 for each in have:
-                    if each["name"] == interface["name"]:
-                        break
-                    elif interface["name"] in each["name"]:
+                    if (
+                        each["name"] == interface["name"]
+                        or interface["name"] in each["name"]
+                    ):
                         break
                 else:
                     continue

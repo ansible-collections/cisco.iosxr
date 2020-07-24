@@ -46,6 +46,7 @@ options:
   config:
     description: A dictionary of LACP interfaces options.
     type: list
+    elements: dict
     suboptions:
       name:
         description:
