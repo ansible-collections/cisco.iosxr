@@ -169,7 +169,7 @@ Parameters
                                     </td>
                                 <td>
                                                                                                                             <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                                                                                    <li>yes</li>
+                                                                                                                                                                <li>on</li>
                                                                                                                                                                                                 <li>active</li>
                                                                                                                                                                                                 <li>passive</li>
                                                                                                                                                                                                 <li>inherit</li>
@@ -196,7 +196,7 @@ Parameters
                                     </td>
                                 <td>
                                                                                                                             <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                                                                                    <li>yes</li>
+                                                                                                                                                                <li>on</li>
                                                                                                                                                                                                 <li>active</li>
                                                                                                                                                                                                 <li>passive</li>
                                                                                     </ul>
