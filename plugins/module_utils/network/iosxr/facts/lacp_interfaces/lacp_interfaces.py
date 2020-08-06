@@ -56,7 +56,7 @@ class Lacp_interfacesFacts(object):
 
         if not data:
             data = connection.get_config(flags="interface")
-        interfaces = data.split("interface ")
+        interfaces = ("\n" + data).split("\ninterface ")
 
         objs = []
         for interface in interfaces:
