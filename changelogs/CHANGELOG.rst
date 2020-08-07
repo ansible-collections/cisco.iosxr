@@ -5,6 +5,32 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v1.0.4
+======
+
+Release Summary
+---------------
+
+- Rereleased 1.0.3 with updated changelog.
+
+v1.0.3
+======
+
+Release Summary
+---------------
+
+- Rereleased 1.0.2 with regenerated documentation.
+
+v1.0.2
+======
+
+Bugfixes
+--------
+
+- Make `src`, `backup` and `backup_options` in iosxr_config work when module alias is used (https://github.com/ansible-collections/cisco.iosxr/pull/63).
+- Makes sure that docstring and argspec are in sync and removes sanity ignores (https://github.com/ansible-collections/cisco.iosxr/pull/62).
+- Update docs after sanity fixes to modules.
+
 v1.0.1
 ======
 
