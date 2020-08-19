@@ -290,19 +290,23 @@ class L3_Interfaces(ConfigBase):
             each_want = dict(each)
             for every in have:
                 every_have = dict(every)
-                if (
-                    each_want.get("address") != every_have.get("address")
-                    and each_want.get("secondary")
-                    != every_have.get("secondary")
-                    and len(each_want.keys()) == len(every_have.keys())
-                ):
+
+                if each_want.get("address") == every_have.get("address"):
+                    if len(each_want.keys()) == len(every_have.keys()) and (
+                        each_want.get("secondary")
+                        == every_have.get("secondary")
+                    ):
+                        diff = False
+                        break
+                    if not each_want.get("secondary") and not every_have.get(
+                        "secondary"
+                    ):
+                        diff = False
+                        break
+
                     diff = True
-                    break
-                if each_want.get("address") != every_have.get(
-                    "address"
-                ) and len(each_want.keys()) == len(every_have.keys()):
+                else:
                     diff = True
-                    break
             if diff:
                 break
 

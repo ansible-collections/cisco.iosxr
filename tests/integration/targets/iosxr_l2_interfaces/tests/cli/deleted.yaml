@@ -1,6 +1,6 @@
 ---
 - debug:
-    msg: Start Deleted integration state for ios_interfaces ansible_connection={{
+    msg: Start Deleted integration state for ios_l2_interfaces ansible_connection={{
       ansible_connection }}
 
 - include_tasks: _remove_config.yaml

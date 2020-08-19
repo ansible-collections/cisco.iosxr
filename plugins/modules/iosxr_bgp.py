@@ -270,6 +270,9 @@ from ansible.module_utils._text import to_text
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.module import (
     NetworkModule,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.cli.config.bgp.process import (
+    REDISTRIBUTE_PROTOCOLS,
+)
 
 
 def main():
@@ -282,22 +285,7 @@ def main():
     }
 
     redistribute_spec = {
-        "protocol": dict(
-            type="str",
-            choices=[
-                "ospf",
-                "ospfv3",
-                "eigrp",
-                "isis",
-                "static",
-                "connected",
-                "lisp",
-                "mobile",
-                "rip",
-                "subscriber",
-            ],
-            required=True,
-        ),
+        "protocol": dict(choices=REDISTRIBUTE_PROTOCOLS, required=True),
         "id": dict(),
         "metric": dict(type="int"),
         "route_map": dict(),

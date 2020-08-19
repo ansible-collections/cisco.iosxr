@@ -9,7 +9,6 @@
 from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
-
 from ansible.module_utils._text import to_text
 from ansible_collections.ansible.netcommon.plugins.module_utils.compat import (
     ipaddress,
@@ -116,7 +115,20 @@ def filter_dict_having_none_value(want, have):
                     ]:
                         test_dict.update({"ipv4": {"secondary": True}})
         if k == "l2protocol":
-            if want[k] != have.get("l2protocol") and have.get("l2protocol"):
+            diff = True
+            h_proto = have.get("l2protocol")
+            w_proto = want.get("l2protocol")
+            if h_proto:
+                if w_proto:
+                    for h in h_proto:
+                        for w in w_proto:
+                            if h == w:
+                                diff = False
+                        if not diff:
+                            break
+                else:
+                    diff = True
+            if diff:
                 test_dict.update({k: v})
         if v is None:
             val = have.get(k)

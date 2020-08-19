@@ -96,7 +96,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
             "area 11 default-cost 5",
         ]
         result = self.execute_module(changed=True)
-        self.assertEqual(result["commands"], commands)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_ospfv2_merged_idempotent(self):
         set_module_args(
@@ -146,7 +146,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
             "area 11 default-cost 5",
         ]
         result = self.execute_module(changed=True)
-        self.assertEqual(result["commands"], commands)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_ospfv2_replaced_idempotent(self):
         set_module_args(
@@ -193,7 +193,8 @@ class TestIosxrOspfV2Module(TestIosxrModule):
             "default-metric 10",
             "area 11 default-cost 5",
         ]
-        self.execute_module(changed=True, commands=commands)
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_ospfv2_overridden_idempotent(self):
         set_module_args(
@@ -226,7 +227,8 @@ class TestIosxrOspfV2Module(TestIosxrModule):
             "no default-metric 10",
             "no area 11 default-cost 5",
         ]
-        self.execute_module(changed=True, commands=commands)
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_ospfv2_parsed(self):
         set_module_args(

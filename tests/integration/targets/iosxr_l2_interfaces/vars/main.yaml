@@ -105,9 +105,9 @@ parsed:
     - l2protocol:
         - cdp: forward
         - pvst: tunnel
+      native_vlan: 10
       l2transport: true
       name: GigabitEthernet0/0/0/1
-      native_vlan: 10
       propagate: true
     - name: GigabitEthernet0/0/0/3
     - name: GigabitEthernet0/0/0/3.900
