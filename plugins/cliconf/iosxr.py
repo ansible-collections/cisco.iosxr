@@ -197,7 +197,7 @@ class Cliconf(CliconfBase):
 
         # prepare candidate configuration
         sanitized_candidate = sanitize_config(candidate)
-        candidate_obj = NetworkConfig(indent=1)
+        candidate_obj = NetworkConfig(indent=1, comment_tokens=["!"])
         candidate_obj.load(sanitized_candidate)
 
         if running and diff_match != "none":
@@ -208,7 +208,10 @@ class Cliconf(CliconfBase):
             running = sanitize_config(running)
 
             running_obj = NetworkConfig(
-                indent=1, contents=running, ignore_lines=diff_ignore_lines
+                indent=1,
+                contents=running,
+                ignore_lines=diff_ignore_lines,
+                comment_tokens=["!"],
             )
             configdiffobjs = candidate_obj.difference(
                 running_obj, path=path, match=diff_match, replace=diff_replace
