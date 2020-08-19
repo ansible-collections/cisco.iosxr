@@ -40,6 +40,8 @@ options:
   text:
     description:
     - Banner text to be configured. Accepts multi line string, without empty lines.
+      When using a multi line string, the first and last characters must be the
+      start and end delimiters for the banner
       Requires I(state=present).
     type: str
   state:
@@ -57,9 +59,9 @@ EXAMPLES = """
   cisco.iosxr.iosxr_banner:
     banner: login
     text: |
-      this is my login banner
+      @this is my login banner
       that contains a multiline
-      string
+      string@
     state: present
 - name: remove the motd banner
   cisco.iosxr.iosxr_banner:
@@ -79,9 +81,9 @@ commands:
   type: list
   sample:
     - banner login
-    - this is my login banner
+    - @this is my login banner
     - that contains a multiline
-    - string
+    - string@
 
 xml:
   description: NetConf rpc xml sent to device with transport C(netconf)
@@ -129,7 +131,7 @@ class ConfigBase(object):
     def map_params_to_obj(self):
         text = self._module.params["text"]
         if text:
-            text = "{0!r}".format(str(text).strip())
+            text = "{0}".format(str(text).strip())
         self._want.update(
             {
                 "banner": self._module.params["banner"],
@@ -156,7 +158,7 @@ class CliConfiguration(ConfigBase):
         elif state == "present":
             if self._want["text"] and self._want["text"].encode().decode(
                 "unicode_escape"
-            ).strip("'") != self._have.get("text"):
+            ) != self._have.get("text"):
                 banner_cmd = "banner {0!s} ".format(
                     self._module.params["banner"]
                 )
@@ -175,7 +177,7 @@ class CliConfiguration(ConfigBase):
         output = get_config(self._module, config_filter=cli_filter)
         match = re.search(r"banner (\S+) (.*)", output, re.DOTALL)
         if match:
-            text = match.group(2).strip("'")
+            text = match.group(2)
         else:
             text = None
         obj = {"banner": self._module.params["banner"], "state": "absent"}
