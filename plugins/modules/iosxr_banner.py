@@ -81,7 +81,7 @@ commands:
   type: list
   sample:
     - banner login
-    - @this is my login banner
+    - "@this is my login banner"
     - that contains a multiline
     - string@
 
