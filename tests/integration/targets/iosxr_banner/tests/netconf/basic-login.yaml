@@ -9,7 +9,7 @@
   register: result
   cisco.iosxr.iosxr_banner:
     banner: login
-    text: "this is my login banner\nthat has a multiline\nstring\n"
+    text: "@this is my login banner\nthat has a multiline\nstring\n@"
     provider: '{{ netconf }}'
     state: present
 
@@ -26,7 +26,7 @@
   register: result
   cisco.iosxr.iosxr_banner:
     banner: login
-    text: "this is my login banner\nthat has a multiline\nstring\n"
+    text: "@this is my login banner\nthat has a multiline\nstring\n@"
     provider: '{{ netconf }}'
     state: present
 
