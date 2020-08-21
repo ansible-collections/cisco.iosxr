@@ -255,7 +255,7 @@ class Netconf(NetconfBase):
     def commit(
         self, confirmed=False, timeout=None, persist=None, remove_ns=False
     ):
-        timeout = to_text(timeout, errors='surrogate_or_strict')
+        timeout = to_text(timeout, errors="surrogate_or_strict")
         try:
             resp = self.m.commit(
                 confirmed=confirmed, timeout=timeout, persist=persist
