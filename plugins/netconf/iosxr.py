@@ -43,7 +43,7 @@ import json
 import re
 import collections
 
-from ansible.module_utils._text import to_native
+from ansible.module_utils._text import to_native, to_text
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.netconf import (
     remove_namespaces,
 )
@@ -255,6 +255,7 @@ class Netconf(NetconfBase):
     def commit(
         self, confirmed=False, timeout=None, persist=None, remove_ns=False
     ):
+        timeout = to_text(timeout, errors="surrogate_or_strict")
         try:
             resp = self.m.commit(
                 confirmed=confirmed, timeout=timeout, persist=persist
