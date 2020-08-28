@@ -6,6 +6,7 @@ dependencies:
 license_file: LICENSE
 name: iosxr
 namespace: cisco
+description: Ansible Network Collection for Cisco IOSXR devices.
 readme: README.md
 repository: https://github.com/ansible-collections/cisco.iosxr
 tags: [cisco, iosxr, networking, netconf]

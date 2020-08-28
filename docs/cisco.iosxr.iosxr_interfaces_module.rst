@@ -31,172 +31,174 @@ Parameters
         <tr>
             <th colspan="2">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="2">
+            <tr>
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>config</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=dictionary</span>                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>A dictionary of interface options</div>
-                                                        </td>
+                         / <span style="color: purple">elements=dictionary</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>A dictionary of interface options</div>
+                </td>
             </tr>
-                                                            <tr>
-                                                    <td class="elbow-placeholder"></td>
-                                                <td colspan="1">
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>description</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Interface description.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Interface description.</div>
+                </td>
             </tr>
-                                <tr>
-                                                    <td class="elbow-placeholder"></td>
-                                                <td colspan="1">
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>duplex</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>full</li>
-                                                                                                                                                                                                <li>half</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Configures the interface duplex mode. Default is auto-negotiation when not configured.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>full</li>
+                                    <li>half</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Configures the interface duplex mode. Default is auto-negotiation when not configured.</div>
+                </td>
             </tr>
-                                <tr>
-                                                    <td class="elbow-placeholder"></td>
-                                                <td colspan="1">
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>enabled</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Administrative state of the interface.</div>
-                                            <div>Set the value to <code>True</code> to administratively enable the interface or <code>False</code> to disable it.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Administrative state of the interface.</div>
+                        <div>Set the value to <code>True</code> to administratively enable the interface or <code>False</code> to disable it.</div>
+                </td>
             </tr>
-                                <tr>
-                                                    <td class="elbow-placeholder"></td>
-                                                <td colspan="1">
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>mtu</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Sets the MTU value for the interface. Applicable for Ethernet interfaces only.</div>
-                                            <div>Refer to vendor documentation for valid values.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Sets the MTU value for the interface. Applicable for Ethernet interfaces only.</div>
+                        <div>Refer to vendor documentation for valid values.</div>
+                </td>
             </tr>
-                                <tr>
-                                                    <td class="elbow-placeholder"></td>
-                                                <td colspan="1">
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Full name of the interface to configure in <code>type + path</code> format. e.g. <code>GigabitEthernet0/0/0/0</code></div>
-                                                        </td>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Full name of the interface to configure in <code>type + path</code> format. e.g. <code>GigabitEthernet0/0/0/0</code></div>
+                </td>
             </tr>
-                                <tr>
-                                                    <td class="elbow-placeholder"></td>
-                                                <td colspan="1">
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>speed</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Configure the speed for an interface. Default is auto-negotiation when not configured.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Configure the speed for an interface. Default is auto-negotiation when not configured.</div>
+                </td>
             </tr>
-                    
-                                                <tr>
-                                                                <td colspan="2">
+
+            <tr>
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>running_config</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>This option is used only with state <em>parsed</em>.</div>
-                                            <div>The value of this option should be the output received from the IOS-XR device by executing the command <b>show running-config interface</b>.</div>
-                                            <div>The state <em>parsed</em> reads the configuration from <code>running_config</code> option and transforms it into Ansible structured data as per the resource module&#x27;s argspec and the value is then returned in the <em>parsed</em> key within the result.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>This option is used only with state <em>parsed</em>.</div>
+                        <div>The value of this option should be the output received from the IOS-XR device by executing the command <b>show running-config interface</b>.</div>
+                        <div>The state <em>parsed</em> reads the configuration from <code>running_config</code> option and transforms it into Ansible structured data as per the resource module&#x27;s argspec and the value is then returned in the <em>parsed</em> key within the result.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="2">
+            <tr>
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>merged</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>parsed</li>
-                                                                                                                                                                                                <li>deleted</li>
-                                                                                                                                                                                                <li>replaced</li>
-                                                                                                                                                                                                <li>rendered</li>
-                                                                                                                                                                                                <li>gathered</li>
-                                                                                                                                                                                                <li>overridden</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>The state of the configuration after module completion</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>merged</b>&nbsp;&larr;</div></li>
+                                    <li>parsed</li>
+                                    <li>deleted</li>
+                                    <li>replaced</li>
+                                    <li>rendered</li>
+                                    <li>gathered</li>
+                                    <li>overridden</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The state of the configuration after module completion</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 
@@ -214,7 +216,6 @@ Examples
 
 .. code-block:: yaml+jinja
 
-    
     # Using merged
     # Before state:
     # -------------
@@ -618,7 +619,6 @@ Examples
 
 
 
-
 Return Values
 -------------
 Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
@@ -631,58 +631,58 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-                    <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>after</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">list</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>when changed</td>
                 <td>
-                                                                        <div>The configuration as structured data after module completion.</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">The configuration returned will always be in the same format of the parameters above.</div>
-                                    </td>
+                            <div>The configuration as structured data after module completion.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">The configuration returned will always be in the same format of the parameters above.</div>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>before</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">list</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>always</td>
                 <td>
-                                                                        <div>The configuration as structured data prior to module invocation.</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">The configuration returned will always be in the same format of the parameters above.</div>
-                                    </td>
+                            <div>The configuration as structured data prior to module invocation.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">The configuration returned will always be in the same format of the parameters above.</div>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>commands</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">list</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>always</td>
                 <td>
-                                                                        <div>The set of commands pushed to the remote device</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;interface GigabitEthernet0/0/0/2&#x27;, &#x27;description: Configured by Ansible&#x27;, &#x27;shutdown&#x27;]</div>
-                                    </td>
+                            <div>The set of commands pushed to the remote device</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;interface GigabitEthernet0/0/0/2&#x27;, &#x27;description: Configured by Ansible&#x27;, &#x27;shutdown&#x27;]</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/><br/>
 
 
@@ -695,5 +695,3 @@ Authors
 
 - Sumit Jaiswal (@justjais)
 - Rohit Thakur (@rohitthakur2590)
-
-

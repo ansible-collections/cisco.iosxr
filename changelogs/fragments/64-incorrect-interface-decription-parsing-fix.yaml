@@ -1,3 +1,0 @@
----
-bugfixes:
-  - running config data for interface split when substring interface starts with newline

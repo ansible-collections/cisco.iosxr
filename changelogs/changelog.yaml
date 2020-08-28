@@ -115,3 +115,13 @@ releases:
     fragments:
     - 1.0.4.yaml
     release_date: '2020-08-07'
+  1.0.5:
+    changes:
+      bugfixes:
+      - Confirmed commit fails with TypeError in IOS XR netconf plugin (https://github.com/ansible-collections/cisco.iosxr/issues/74)
+      - running config data for interface split when substring interface starts with
+        newline
+    fragments:
+    - 64-incorrect-interface-decription-parsing-fix.yaml
+    - iosxr_netconf_config_commit_fix.yaml
+    release_date: '2020-08-28'

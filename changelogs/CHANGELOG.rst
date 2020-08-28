@@ -5,6 +5,15 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v1.0.5
+======
+
+Bugfixes
+--------
+
+- Confirmed commit fails with TypeError in IOS XR netconf plugin (https://github.com/ansible-collections/cisco.iosxr/issues/74)
+- running config data for interface split when substring interface starts with newline
+
 v1.0.4
 ======
 
