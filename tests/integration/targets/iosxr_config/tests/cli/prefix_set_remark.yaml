@@ -1,0 +1,29 @@
+---
+- debug: msg="START cli/prefix_set_remark.yaml on connection={{ ansible_connection }}"
+
+- name: pre-setup cleanup
+  cisco.iosxr.iosxr_config:
+    commands:
+      - no prefix-set test_set
+
+- name: setup
+  register: result
+  cisco.iosxr.iosxr_config:
+    lines:
+      - '#testremark'
+      - 192.168.1.0/20 le 24
+      - end-set
+    parents: prefix-set test_set
+
+- assert:
+    that:
+      - result.changed == true
+      - "'#testremark' in result.commands"
+
+- name: post-setup cleanup
+  cisco.iosxr.iosxr_config:
+    commands:
+      - no prefix-set test_set
+
+
+- debug: msg="END cli/prefix_set_remark.yaml on connection={{ ansible_connection }}"
