@@ -1,0 +1,3 @@
+---
+minor_changes:
+  - Platform supported coments token to be provided when invoking the object.
