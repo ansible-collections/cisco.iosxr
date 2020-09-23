@@ -1,0 +1,61 @@
+---
+- debug:
+    msg: START iosxr_ospfv3 overridden integration tests on connection={{
+      ansible_connection }}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_config.yaml
+
+- block:
+
+    - name: Overridde all ospfv3 configuration with provided configuration
+      register: result
+      cisco.iosxr.iosxr_ospfv3: &id001
+        config:
+          processes:
+            - process_id: 27
+              areas:
+                - area_id: 10
+                  hello_interval: 2
+                - area_id: 20
+                  cost: 2
+                  default_cost: 2
+            - process_id: 26
+              authentication:
+                disable: true
+        state: overridden
+
+    - name: Assert that correct set of commands were generated
+      assert:
+        that:
+          - "{{ overridden['commands'] | symmetric_difference(result['commands'])\
+            \ |length == 0 }}"
+
+    - name: Assert that before dicts are correctly generated
+      assert:
+        that:
+          - "{{ replaced['before'] == result['before'] }}"
+
+    - name: Assert that after dict is correctly generated
+      assert:
+        that:
+          - "{{ overridden['after'] == result['after'] }}"
+
+    - name: Overridde all ospfv3 configuration with given configuration (IDEMPOTENT)
+      register: result
+      cisco.iosxr.iosxr_ospfv3: *id001
+
+    - name: Assert that task was idempotent
+      assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
+
+    - name: Assert that before dict is correctly generated
+      assert:
+        that:
+          - "{{ overridden['after'] == result['before'] }}"
+  always:
+
+    - include_tasks: _remove_config.yaml
