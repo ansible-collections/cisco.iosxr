@@ -38,6 +38,7 @@ class Ospfv3Args(object):  # pylint: disable=R0903
         pass
 
     argument_spec = {
+        "running_config": {"type": "str"},
         "config": {
             "type": "dict",
             "options": {
@@ -49,7 +50,6 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                         "address_family_unicast": {"type": "bool"},
                         "authentication": {
                             "type": "dict",
-                            "mutually_exclusive": [["disable", "ipsec"]],
                             "options": {
                                 "disable": {"type": "bool", "default": False},
                                 "ipsec": {
@@ -69,9 +69,6 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                         },
                         "auto_cost": {
                             "type": "dict",
-                            "mutually_exclusive": [
-                                ["reference_bandwidth", "disable"]
-                            ],
                             "options": {
                                 "reference_bandwidth": {"type": "int"},
                                 "disable": {"type": "bool"},
@@ -98,9 +95,6 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                 "area_id": {"type": "str", "required": True},
                                 "authentication": {
                                     "type": "dict",
-                                    "mutually_exclusive": [
-                                        ["disable", "ipsec"]
-                                    ],
                                     "options": {
                                         "disable": {
                                             "type": "bool",
@@ -253,11 +247,15 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                             "elements": "int",
                                                         },
                                                         "tunnel_ipsec": {
-                                                            "type": "int"
+                                                            "type": "list",
+                                                            "elements": "int",
                                                         },
                                                         "tunnel_mte": {
                                                             "type": "list",
                                                             "elements": "int",
+                                                        },
+                                                        "tunnel_mpls": {
+                                                            "type": "int"
                                                         },
                                                     },
                                                 },
@@ -360,11 +358,15 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                             "elements": "int",
                                                         },
                                                         "tunnel_ipsec": {
-                                                            "type": "int"
+                                                            "type": "list",
+                                                            "elements": "int",
                                                         },
                                                         "tunnel_mte": {
                                                             "type": "list",
                                                             "elements": "int",
+                                                        },
+                                                        "tunnel_mpls": {
+                                                            "type": "int"
                                                         },
                                                     },
                                                 },
@@ -423,9 +425,6 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                 "ranges": {
                                     "type": "list",
                                     "elements": "dict",
-                                    "mutually_exclusive": [
-                                        ["advertise", "not_advertise"]
-                                    ],
                                     "options": {
                                         "address": {
                                             "type": "str",
@@ -455,9 +454,6 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                         },
                                         "authentication": {
                                             "type": "dict",
-                                            "mutually_exclusive": [
-                                                ["disable", "ipsec"]
-                                            ],
                                             "options": {
                                                 "disable": {
                                                     "type": "bool",
@@ -491,9 +487,6 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                         "transmit_delay": {"type": "int"},
                                         "encryption": {
                                             "type": "dict",
-                                            "mutually_exclusive": [
-                                                ["disable", "ipsec"]
-                                            ],
                                             "options": {
                                                 "disable": {
                                                     "type": "bool",
@@ -533,6 +526,52 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                                         "key": {
                                                                             "type": "str"
                                                                         },
+                                                                        "clear_key": {
+                                                                            "type": "str"
+                                                                        },
+                                                                        "password_key": {
+                                                                            "type": "str"
+                                                                        },
+                                                                    },
+                                                                },
+                                                                "des": {
+                                                                    "type": "dict",
+                                                                    "options": {
+                                                                        "key": {
+                                                                            "type": "str"
+                                                                        },
+                                                                        "clear_key": {
+                                                                            "type": "str"
+                                                                        },
+                                                                        "password_key": {
+                                                                            "type": "str"
+                                                                        },
+                                                                    },
+                                                                },
+                                                                "null_encryption": {
+                                                                    "type": "dict",
+                                                                    "options": {
+                                                                        "authentication": {
+                                                                            "type": "dict",
+                                                                            "options": {
+                                                                                "algorithim_type": {
+                                                                                    "type": "str",
+                                                                                    "choices": [
+                                                                                        "md5",
+                                                                                        "sha1",
+                                                                                    ],
+                                                                                },
+                                                                                "key": {
+                                                                                    "type": "str"
+                                                                                },
+                                                                                "clear_key": {
+                                                                                    "type": "str"
+                                                                                },
+                                                                                "password_key": {
+                                                                                    "type": "str"
+                                                                                },
+                                                                            },
+                                                                        }
                                                                     },
                                                                 },
                                                             },
@@ -545,9 +584,6 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                 },
                                 "encryption": {
                                     "type": "dict",
-                                    "mutually_exclusive": [
-                                        ["disable", "ipsec"]
-                                    ],
                                     "options": {
                                         "disable": {
                                             "type": "bool",
@@ -593,6 +629,46 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                                 "password_key": {
                                                                     "type": "str"
                                                                 },
+                                                            },
+                                                        },
+                                                        "des": {
+                                                            "type": "dict",
+                                                            "options": {
+                                                                "key": {
+                                                                    "type": "str"
+                                                                },
+                                                                "clear_key": {
+                                                                    "type": "str"
+                                                                },
+                                                                "password_key": {
+                                                                    "type": "str"
+                                                                },
+                                                            },
+                                                        },
+                                                        "null_encryption": {
+                                                            "type": "dict",
+                                                            "options": {
+                                                                "authentication": {
+                                                                    "type": "dict",
+                                                                    "options": {
+                                                                        "algorithim_type": {
+                                                                            "type": "str",
+                                                                            "choices": [
+                                                                                "md5",
+                                                                                "sha1",
+                                                                            ],
+                                                                        },
+                                                                        "key": {
+                                                                            "type": "str"
+                                                                        },
+                                                                        "clear_key": {
+                                                                            "type": "str"
+                                                                        },
+                                                                        "password_key": {
+                                                                            "type": "str"
+                                                                        },
+                                                                    },
+                                                                }
                                                             },
                                                         },
                                                     },
@@ -664,7 +740,6 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                         },
                         "encryption": {
                             "type": "dict",
-                            "mutually_exclusive": [["disable", "ipsec"]],
                             "options": {
                                 "disable": {"type": "bool", "default": False},
                                 "ipsec": {
@@ -848,12 +923,14 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                     "elements": "int",
                                                 },
                                                 "tunnel_ipsec": {
-                                                    "type": "int"
+                                                    "type": "list",
+                                                    "elements": "int",
                                                 },
                                                 "tunnel_mte": {
                                                     "type": "list",
                                                     "elements": "int",
                                                 },
+                                                "tunnel_mpls": {"type": "int"},
                                             },
                                         },
                                     },
@@ -953,12 +1030,14 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                     "elements": "int",
                                                 },
                                                 "tunnel_ipsec": {
-                                                    "type": "int"
+                                                    "type": "list",
+                                                    "elements": "int",
                                                 },
                                                 "tunnel_mte": {
                                                     "type": "list",
                                                     "elements": "int",
                                                 },
+                                                "tunnel_mpls": {"type": "int"},
                                             },
                                         },
                                     },
@@ -971,7 +1050,8 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                             "options": {
                                 "set": {"type": "bool"},
                                 "helper_disable": {"type": "bool"},
-                                "interval": {"type": "int"},
+                                "min_interval": {"type": "int"},
+                                "max_interval": {"type": "int"},
                             },
                         },
                         "hello_interval": {"type": "int"},
@@ -990,7 +1070,7 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                             "options": {
                                 "interfaces": {"type": "int"},
                                 "paths": {"type": "int"},
-                                "redistributed_prefixes": {},
+                                "redistributed_prefixes": {"type": "int"},
                             },
                         },
                         "mpls_ldp_sync": {"type": "bool"},
@@ -1122,6 +1202,10 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "external": {
+                                                    "type": "int",
+                                                    "choices": ["1", "2"],
+                                                },
+                                                "nssa_external": {
                                                     "type": "int",
                                                     "choices": ["1", "2"],
                                                 },

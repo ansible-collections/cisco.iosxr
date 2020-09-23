@@ -250,12 +250,24 @@ def _tmplt_ospf_authentication_ipsec(config_data):
         return command
 
 
-def _tmplt_ospfv3_leaf_attrib(config_data):
+def _tmplt_ospfv3_demand_circuit(config_data):
     command = []
     if "demand_circuit" in config_data:
         command = "demand-circuit"
-    elif "passive" in config_data:
+        return command
+
+
+def _tmplt_ospfv3_passive(config_data):
+    command = []
+    if "passive" in config_data:
         command = "passive"
+        return command
+
+
+def _tmplt_ospfv3_demand_mtu_ignore(config_data):
+    command = []
+    if "mtu_ignore" in config_data:
+        command = "mtu-ignore"
         return command
 
 
@@ -774,11 +786,11 @@ class Ospfv3Template(NetworkTemplate):
                 re.VERBOSE,
             ),
 
-            "setval": _tmplt_ospfv3_leaf_attrib,
+            "setval": _tmplt_ospfv3_passive,
             "result": {
                 "processes": {
                     "{{ pid }}": {
-                        "passive": "{{ passive }}",
+                        "passive": "{{ True if passive is defined }}",
                     }
                 }
             },
@@ -816,7 +828,7 @@ class Ospfv3Template(NetworkTemplate):
                 re.VERBOSE,
             ),
 
-            "setval": _tmplt_ospfv3_leaf_attrib,
+            "setval": _tmplt_ospfv3_demand_circuit,
             "result": {
                 "processes": {
                     "{{ pid }}": {
@@ -851,16 +863,16 @@ class Ospfv3Template(NetworkTemplate):
                 r"""
                 ^router
                 \sospfv3\s(?P<pid>\S+)
-                \smtu-ignore\s(?P<mtu_ignore>\S+)
+                (\smtu-ignore(?P<mtu_ignore>))?
                 $""",
                 re.VERBOSE,
             ),
 
-            "setval": "{{ mtu-ignore if mtu_ignore is defined }}",
+            "setval": _tmplt_ospfv3_demand_mtu_ignore,
             "result": {
                 "processes": {
                     "{{ pid }}": {
-                        "mtu_ignore": "{{ mtu_ignore }}",
+                        "mtu_ignore": "{{ True if mtu_ignore is defined }}",
                     }
                 }
             },
@@ -1371,7 +1383,7 @@ class Ospfv3Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sarea\s(?P<area_id>\S+)
                 \sdead-interval\s(?P<dead_interval>\d+)
                 $""",

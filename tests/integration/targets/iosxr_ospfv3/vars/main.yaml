@@ -9,25 +9,22 @@ merged:
     - router ospfv3 27
     - area 10 hello-interval 2
     - router ospfv3 26
-    - authentication message-digest keychain ansible1101pass
+    - authentication disable
     - router ospfv3 30
     - cost 2
-    - passive disable
     - priority 1
-    - flood-reduction disable
     - default-metric 10
     - router-id 2.2.2.2
-    - demand-circuit enable
+    - demand-circuit
     - packet-size 577
     - transmit-delay 2
     - dead-interval 2
     - hello-interval 1
     - retransmit-interval 2
-    - mtu-ignore enable
+    - mtu-ignore
     - area 11 default-cost 5
     - area 22 default-cost 6
   update_commands:
-    - router ospfv3 26
     - router ospfv3 27
     - area 30 dead-interval 4
   after:
@@ -41,8 +38,7 @@ merged:
         process_id: "10"
 
       - authentication:
-          message_digest:
-            keychain: 'ansible1101pass'
+          disable: true
         process_id: "26"
       - areas:
           - area_id: "10"
@@ -56,12 +52,10 @@ merged:
         cost: 2
         dead_interval: 2
         default_metric: 10
-        demand_circuit: "enable"
-        flood_reduction: "disable"
+        demand_circuit: true
         hello_interval: 1
-        mtu_ignore: "enable"
+        mtu_ignore: true
         packet_size: 577
-        passive: "disable"
         priority: 1
         process_id: "30"
         retransmit_interval: 2
@@ -78,8 +72,7 @@ merged:
             default_cost: 6
         process_id: '10'
       - authentication:
-          message_digest:
-            keychain: 'ansible1101pass'
+          disable: true
         process_id: '26'
       - areas:
           - area_id: '10'
@@ -96,12 +89,10 @@ merged:
         cost: 2
         dead_interval: 2
         default_metric: 10
-        demand_circuit: 'enable'
-        flood_reduction: 'disable'
+        demand_circuit: true
         hello_interval: 1
-        mtu_ignore: 'enable'
+        mtu_ignore: true
         packet_size: 577
-        passive: 'disable'
         priority: 1
         process_id: '30'
         retransmit_interval: 2
@@ -118,8 +109,7 @@ replaced:
             default_cost: 6
         process_id: '10'
       - authentication:
-          message_digest:
-            keychain: 'ansible1101pass'
+          disable: true
         process_id: '26'
       - areas:
           - area_id: '10'
@@ -133,12 +123,10 @@ replaced:
         cost: 2
         dead_interval: 2
         default_metric: 10
-        demand_circuit: 'enable'
-        flood_reduction: 'disable'
+        demand_circuit: true
         hello_interval: 1
-        mtu_ignore: 'enable'
+        mtu_ignore: true
         packet_size: 577
-        passive: 'disable'
         priority: 1
         process_id: '30'
         retransmit_interval: 2
@@ -160,8 +148,7 @@ replaced:
             default_cost: 6
         process_id: '10'
       - authentication:
-          message_digest:
-            keychain: 'ansible1101pass'
+          disable: true
         process_id: '26'
       - areas:
           - area_id: '10'
@@ -178,12 +165,10 @@ replaced:
         cost: 2
         dead_interval: 2
         default_metric: 10
-        demand_circuit: 'enable'
-        flood_reduction: 'disable'
+        demand_circuit: true
         hello_interval: 1
-        mtu_ignore: 'enable'
+        mtu_ignore: true
         packet_size: 577
-        passive: 'disable'
         priority: 1
         process_id: '30'
         retransmit_interval: 2
@@ -198,18 +183,16 @@ overridden:
     - no area 22 default-cost 6
     - router ospfv3 30
     - no cost 2
-    - no passive disable
     - no priority 1
-    - no flood-reduction disable
     - no default-metric 10
     - no router-id 2.2.2.2
-    - no demand-circuit enable
+    - no demand-circuit
     - no packet-size 577
     - no transmit-delay 2
     - no dead-interval 2
     - no hello-interval 1
     - no retransmit-interval 2
-    - no mtu-ignore enable
+    - no mtu-ignore
     - no area 11 default-cost 5
     - no area 22 default-cost 6
     - router ospfv3 27
@@ -219,8 +202,7 @@ overridden:
     processes:
       - process_id: '10'
       - authentication:
-          message_digest:
-            keychain: 'ansible1101pass'
+          disable: true
         process_id: '26'
       - areas:
           - area_id: '10'
@@ -237,23 +219,21 @@ deleted:
     - no area 11 cost 11
     - no area 22 default-cost 6
     - router ospfv3 26
-    - no authentication message-digest keychain ansible1101pass
+    - no authentication disable
     - router ospfv3 27
     - no area 10 hello-interval 2
     - router ospfv3 30
     - no cost 2
-    - no passive disable
     - no priority 1
-    - no flood-reduction disable
     - no default-metric 10
     - no router-id 2.2.2.2
-    - no demand-circuit enable
+    - no demand-circuit
     - no packet-size 577
     - no transmit-delay 2
     - no dead-interval 2
     - no hello-interval 1
     - no retransmit-interval 2
-    - no mtu-ignore enable
+    - no mtu-ignore
     - no area 11 default-cost 5
     - no area 22 default-cost 6
 
@@ -268,8 +248,7 @@ round_trip:
     processes:
       - process_id: '10'
       - authentication:
-          message_digest:
-            keychain: 'ansible1101pass'
+          disable: true
         process_id: '26'
       - areas:
           - area_id: '10'

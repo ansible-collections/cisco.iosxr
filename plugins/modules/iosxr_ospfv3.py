@@ -32,7 +32,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_ospfv3
-version_added: 1.0.0
+version_added: 1.2.0
 short_description: ospfv3 resource module
 description:
   - This module manages global ospfv3 configuration on devices running Cisco IOS-XR
@@ -41,6 +41,15 @@ notes:
   - Tested against IOS-XR 6.1.3
   - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html)
 options:
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the IOS-XR device
+        by executing the command B(show running-config router ospfv3).
+      - The state I(parsed) reads the configuration from C(running_config) option and
+        transforms it into Ansible structured data as per the resource module's argspec
+        and the value is then returned in the I(parsed) key within the result.
+    type: str
   config:
     description: A list of ospfv3 process configuration
     type: dict
@@ -60,7 +69,6 @@ options:
           authentication:
             description: Enable authentication
             type: dict
-            mutually_exclusive: [[disable,ipsec]]
             suboptions:
               disable:
                 description: Do not authenticate OSPFv3 packets
@@ -89,7 +97,6 @@ options:
           auto_cost:
             description: Calculate ospfv3 interface cost according to bandwidth
             type: dict
-            mutually_exclusive: [[reference_bandwidth,disable]]
             suboptions:
               reference_bandwidth:
                 description: Specify reference bandwidth in megabits per sec
@@ -129,7 +136,6 @@ options:
               authentication:
                 description: Enable authentication
                 type: dict
-                mutually_exclusive: [[disable,ipsec]]
                 suboptions:
                   disable:
                     description: Do not authenticate OSPFv3 packets
@@ -489,7 +495,6 @@ options:
                 description: Summarize routes matching address/mask (border routers only)
                 type: list
                 elements: dict
-                mutually_exclusive: [[advertise,not_advertise]]
                 suboptions:
                   address:
                     description: IP in Prefix format (X:X::X/length)
@@ -532,7 +537,6 @@ options:
                   authentication:
                     description: Enable authentication
                     type: dict
-                    mutually_exclusive: [[disable,ipsec]]
                     suboptions:
                       disable:
                         description: Do not authenticate OSPFv3 packets
@@ -573,7 +577,6 @@ options:
                   encryption:
                     description: Encrypt and authenticate OSPFv3 packets
                     type: dict
-                    mutually_exclusive: [[disable,ipsec]]
                     suboptions:
                       disable:
                         description: Do not encrypt OSPFv3 packets
@@ -614,50 +617,49 @@ options:
                                   key:
                                     description: Cleartext AES key
                                     type: str
-                                    clear_key:
-                                      description: Specify AES key in cleartext form
-                                      type: str
-                                    password_key:
-                                      description: Specify AES key in encrypted form
-                                      type: str
-                                des:
-                                  description: This specify the des algorithim
-                                  type: dict
-                                  suboptions:
-                                    key:
-                                      description: Cleartext AES key
-                                      type: str
-                                    clear_key:
-                                      description: Specify AES key in cleartext form
-                                      type: str
-                                    password_key:
-                                      description: Specify AES key in encrypted form
-                                      type: str
-                                null_encryption:
-                                  description: Specify null encryption attributes
-                                  type: dict
-                                  suboptions:
-                                    authentication:
-                                      description: Specify authentication parameters
-                                      type: dict
-                                      suboptions:
-                                        algorithim_type:
-                                          description: Specify the type of algorithim
-                                          type: str
-                                          choices: ["md5", "sha1"]
-                                        key:
-                                          description: Specify key
-                                          type: str
-                                        clear_key:
-                                          description: Specify key in cleartext form
-                                          type: str
-                                        password_key:
-                                          description: Specify key in encrypted form
-                                          type: str
+                                  clear_key:
+                                    description: Specify AES key in cleartext form
+                                    type: str
+                                  password_key:
+                                    description: Specify AES key in encrypted form
+                                    type: str
+                              des:
+                                description: This specify the des algorithim
+                                type: dict
+                                suboptions:
+                                  key:
+                                    description: Cleartext AES key
+                                    type: str
+                                  clear_key:
+                                    description: Specify AES key in cleartext form
+                                    type: str
+                                  password_key:
+                                    description: Specify AES key in encrypted form
+                                    type: str
+                              null_encryption:
+                                description: Specify null encryption attributes
+                                type: dict
+                                suboptions:
+                                  authentication:
+                                    description: Specify authentication parameters
+                                    type: dict
+                                    suboptions:
+                                      algorithim_type:
+                                        description: Specify the type of algorithim
+                                        type: str
+                                        choices: ["md5", "sha1"]
+                                      key:
+                                        description: Specify key
+                                        type: str
+                                      clear_key:
+                                        description: Specify key in cleartext form
+                                        type: str
+                                      password_key:
+                                        description: Specify key in encrypted form
+                                        type: str
               encryption:
                 description: Encrypt and authenticate OSPFv3 packets
                 type: dict
-                mutually_exclusive: [[disable,ipsec]]
                 suboptions:
                   disable:
                     description: Do not encrypt OSPFv3 packets
@@ -704,40 +706,40 @@ options:
                               password_key:
                                 description: Specify AES key in encrypted form
                                 type: str
-                            des:
-                              description: This specify the des algorithim
-                              type: dict
-                              suboptions:
-                                  key:
-                                    description: Cleartext AES key
-                                    type: str
-                                  clear_key:
-                                    description: Specify AES key in cleartext form
-                                    type: str
-                                  password_key:
-                                    description: Specify AES key in encrypted form
-                                    type: str
-                              null_encryption:
-                                description: Specify null encryption attributes
+                          des:
+                            description: This specify the des algorithim
+                            type: dict
+                            suboptions:
+                              key:
+                                description: Cleartext AES key
+                                type: str
+                              clear_key:
+                                description: Specify AES key in cleartext form
+                                type: str
+                              password_key:
+                                description: Specify AES key in encrypted form
+                                type: str
+                          null_encryption:
+                            description: Specify null encryption attributes
+                            type: dict
+                            suboptions:
+                              authentication:
+                                description: Specify authentication parameters
                                 type: dict
                                 suboptions:
-                                  authentication:
-                                    description: Specify authentication parameters
-                                    type: dict
-                                    suboptions:
-                                      algorithim_type:
-                                        description: Specify the type of algorithim
-                                        type: str
-                                        choices: ["md5", "sha1"]
-                                      key:
-                                        description: Specify key
-                                        type: str
-                                      clear_key:
-                                        description: Specify key in cleartext form
-                                        type: str
-                                      password_key:
-                                        description: Specify key in encrypted form
-                                        type: str
+                                  algorithim_type:
+                                    description: Specify the type of algorithim
+                                    type: str
+                                    choices: ["md5", "sha1"]
+                                  key:
+                                    description: Specify key
+                                    type: str
+                                  clear_key:
+                                    description: Specify key in cleartext form
+                                    type: str
+                                  password_key:
+                                    description: Specify key in encrypted form
+                                    type: str
           capability:
             description: Enable specific OSPFv3 feature
             type: dict
@@ -834,7 +836,6 @@ options:
           encryption:
             description: Encrypt and authenticate OSPFv3 packets
             type: dict
-            mutually_exclusive: [[disable,ipsec]]
             suboptions:
               disable:
                 description: Do not encrypt OSPFv3 packets
@@ -1608,19 +1609,1142 @@ options:
       - rendered
       - parsed
     default: merged
-# required_if:
-# - ["state", "merged", ["config",]]
-# - ["state", "replaced", ["config",]]
-# - ["state", "overridden", ["config",]]
-# - ["state", "rendered", ["config",]]
-# - ["state", "parsed", ["running_config",]]
-#
-# mutually_exclusive:
-#  - ["config", "running_config"]
-#
-# supports_check_mode: True
 """
 EXAMPLES = """
+# Using merged
+
+# Before state:
+# -------------
+#
+# RP/0/RP0/CPU0:anton#show running-config router ospfv3
+# Thu Jun 11 15:54:44.569 UTC
+# % No such configuration item(s)
+#
+
+- name: Merge provided OSPFv3 configuration with the existing configuration
+  cisco.iosxr.iosxr_ospfv3:
+    config:
+      processes:
+        - process_id: 27
+          areas:
+            - area_id: 10
+              hello_interval: 2
+        - process_id: 26
+          authentication:
+            disable: true
+        - process_id: 10
+          areas:
+            - area_id: 11
+              default_cost: 5
+              cost: 11
+            - area_id: 22
+              default_cost: 6
+        - process_id: 30
+          areas:
+            - area_id: 11
+              default_cost: 5
+            - area_id: 22
+              default_cost: 6
+          cost: 2
+          default_metric: 10
+          transmit_delay: 2
+          hello_interval: 1
+          dead_interval: 2
+          retransmit_interval: 2
+          packet_size: 577
+          priority: 1
+          router_id: '2.2.2.2'
+          demand_circuit: true
+          mtu_ignore: true
+    state: merged
+
+#
+#
+# ------------------------
+# Module Execution Result
+# ------------------------
+#
+#  "before": {}
+#
+#  "commands": [
+#         "router ospfv3 10",
+#         "area 11 default-cost 5",
+#         "area 11 cost 11",
+#         "area 22 default-cost 6",
+#         "router ospfv3 26",
+#         "authentication disable",
+#         "router ospfv3 27",
+#         "area 10 hello-interval 2",
+#         "router ospfv3 30",
+#         "cost 2",
+#         "priority 1",
+#         "default-metric 10",
+#         "router-id 2.2.2.2",
+#         "demand-circuit",
+#         "packet-size 577",
+#         "transmit-delay 2",
+#         "dead-interval 2",
+#         "hello-interval 1",
+#         "retransmit-interval 2",
+#         "mtu-ignore",
+#         "area 11 default-cost 5",
+#         "area 22 default-cost 6"
+#    ]
+#
+#  "after": {
+#         "processes": [
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "11",
+#                         "cost": 11,
+#                         "default_cost": 5
+#                     },
+#                     {
+#                         "area_id": "22",
+#                         "default_cost": 6
+#                     }
+#                 ],
+#                 "process_id": "10"
+#             },
+#             {
+#                 "authentication": {
+#                     "disable": true
+#                 },
+#                 "process_id": "26"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "10",
+#                         "hello_interval": 2
+#                     }
+#                 ],
+#                 "process_id": "27"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "11",
+#                         "default_cost": 5
+#                     },
+#                     {
+#                         "area_id": "22",
+#                         "default_cost": 6
+#                     }
+#                 ],
+#                 "cost": 2,
+#                 "dead_interval": 2,
+#                 "default_metric": 10,
+#                 "demand_circuit": true,
+#                 "hello_interval": 1,
+#                 "mtu_ignore": true,
+#                 "packet_size": 577,
+#                 "priority": 1,
+#                 "process_id": "30",
+#                 "retransmit_interval": 2,
+#                 "router_id": "2.2.2.2",
+#                 "transmit_delay": 2
+#             }
+#         ]
+#     }
+#
+#
+# ------------
+# After state
+# ------------
+#
+# RP/0/RP0/CPU0:anton#show running-config router ospfv3
+# router ospfv3 10
+#  area 11
+#   cost 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+# !
+# router ospfv3 26
+#  authentication disable
+# !
+# router ospfv3 27
+#  area 10
+#   hello-interval 2
+#  !
+#  area 20
+#  !
+#  area 30
+#  !
+# !
+# router ospfv3 30
+#  cost 2
+#  priority 1
+#  mtu-ignore
+#  packet-size 577
+#  dead-interval 2
+#  retransmit-interval 2
+#  demand-circuit
+#  hello-interval 1
+#  transmit-delay 2
+#  router-id 2.2.2.2
+#  default-metric 10
+#  area 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+#  --More-- router ospfv3 10
+#  area 11
+#   cost 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+# !
+# router ospfv3 26
+#  authentication disable
+# !
+# router ospfv3 27
+#  area 10
+#   hello-interval 2
+#  !
+#  area 20
+#  !
+#  area 30
+#  !
+# !
+# router ospfv3 30
+#  cost 2
+#  priority 1
+#  mtu-ignore
+#  packet-size 577
+#  dead-interval 2
+#  retransmit-interval 2
+#  demand-circuit
+#  hello-interval 1
+#  transmit-delay 2
+#  router-id 2.2.2.2
+#  default-metric 10
+#  area 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+# !
+
+
+
+# Using replaced
+#
+# ------------
+# Before state
+# ------------
+#
+#
+# RP/0/RP0/CPU0:anton#show running-config router ospf
+# router ospfv3 10
+#  area 11
+#   cost 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+# !
+# router ospfv3 26
+#  authentication disable
+# !
+# router ospfv3 27
+#  area 10
+#   hello-interval 2
+#  !
+#  area 20
+#  !
+#  area 30
+#  !
+# !
+# router ospfv3 30
+#  cost 2
+#  priority 1
+#  mtu-ignore
+#  packet-size 577
+#  dead-interval 2
+#  retransmit-interval 2
+#  demand-circuit
+#  hello-interval 1
+#  transmit-delay 2
+#  router-id 2.2.2.2
+#  default-metric 10
+#  area 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+#  --More-- router ospfv3 10
+#  area 11
+#   cost 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+# !
+# router ospfv3 26
+#  authentication disable
+# !
+# router ospfv3 27
+#  area 10
+#   hello-interval 2
+#  !
+#  area 20
+#  !
+#  area 30
+#  !
+# !
+# router ospfv3 30
+#  cost 2
+#  priority 1
+#  mtu-ignore
+#  packet-size 577
+#  dead-interval 2
+#  retransmit-interval 2
+#  demand-circuit
+#  hello-interval 1
+#  transmit-delay 2
+#  router-id 2.2.2.2
+#  default-metric 10
+#  area 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+# !
+
+- name: Replace OSPFv3 routes configurations from the device
+  cisco.iosxr.iosxr_ospfv3:
+    config:
+      processes:
+        - process_id: 27
+          areas:
+            - area_id: 10
+              hello_interval: 2
+            - area_id: 20
+              cost: 2
+              default_cost: 2
+        - process_id: 26
+          authentication:
+            disable: true
+    state: replaced
+
+#
+#
+# ------------------------
+# Module Execution Result
+# ------------------------
+#
+#  "before": {
+#         "processes": [
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "11",
+#                         "cost": 11,
+#                         "default_cost": 5
+#                     },
+#                     {
+#                         "area_id": "22",
+#                         "default_cost": 6
+#                     }
+#                 ],
+#                 "process_id": "10"
+#             },
+#             {
+#                 "authentication": {
+#                     "disable": true
+#                 },
+#                 "process_id": "26"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "10",
+#                         "hello_interval": 2
+#                     }
+#                 ],
+#                 "process_id": "27"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "11",
+#                         "default_cost": 5
+#                     },
+#                     {
+#                         "area_id": "22",
+#                         "default_cost": 6
+#                     }
+#                 ],
+#                 "cost": 2,
+#                 "dead_interval": 2,
+#                 "default_metric": 10,
+#                 "demand_circuit": true,
+#                 "hello_interval": 1,
+#                 "mtu_ignore": true,
+#                 "packet_size": 577,
+#                 "priority": 1,
+#                 "process_id": "30",
+#                 "retransmit_interval": 2,
+#                 "router_id": "2.2.2.2",
+#                 "transmit_delay": 2
+#             }
+#         ]
+#     }
+#
+#  "commands": [
+#         "router ospfv3 27",
+#         "area 20 default-cost 2",
+#         "area 20 cost 2"
+#     ]
+#
+#  "after": {
+#         "processes": [
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "11",
+#                         "cost": 11,
+#                         "default_cost": 5
+#                     },
+#                     {
+#                         "area_id": "22",
+#                         "default_cost": 6
+#                     }
+#                 ],
+#                 "process_id": "10"
+#             },
+#             {
+#                 "authentication": {
+#                     "disable": true
+#                 },
+#                 "process_id": "26"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "10",
+#                         "hello_interval": 2
+#                     },
+#                     {
+#                         "area_id": "20",
+#                         "cost": 2,
+#                         "default_cost": 2
+#                     }
+#                 ],
+#                 "process_id": "27"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "11",
+#                         "default_cost": 5
+#                     },
+#                     {
+#                         "area_id": "22",
+#                         "default_cost": 6
+#                     }
+#                 ],
+#                 "cost": 2,
+#                 "dead_interval": 2,
+#                 "default_metric": 10,
+#                 "demand_circuit": true,
+#                 "hello_interval": 1,
+#                 "mtu_ignore": true,
+#                 "packet_size": 577,
+#                 "priority": 1,
+#                 "process_id": "30",
+#                 "retransmit_interval": 2,
+#                 "router_id": "2.2.2.2",
+#                 "transmit_delay": 2
+#             }
+#         ]
+#     }
+#
+#
+# -----------
+# After state
+# -----------
+#
+# RP/0/RP0/CPU0:anton(config)#do show running-config router ospfv3
+# router ospfv3 10
+#  area 11
+#   cost 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+# !
+# router ospfv3 26
+#  authentication disable
+# !
+# router ospfv3 27
+#  area 10
+#   hello-interval 2
+#  !
+#  area 20
+#   cost 2
+#   default-cost 2
+#  !
+#  area 30
+#  !
+# !
+# router ospfv3 30
+#  cost 2
+#  priority 1
+#  mtu-ignore
+#  packet-size 577
+#  dead-interval 2
+#  retransmit-interval 2
+#  demand-circuit
+#  hello-interval 1
+#  transmit-delay 2
+#  router-id 2.2.2.2
+#  default-metric 10
+#  area 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+# !
+
+
+- name: Override existing OSPFv3 configurations from the device
+  cisco.iosxr.iosxr_ospfv3:
+    config:
+      processes:
+        - process_id: 27
+          areas:
+            - area_id: 10
+              hello_interval: 2
+              authentication:
+                disable: true
+            - area_id: 20
+              cost: 2
+              default_cost: 2
+              authentication:
+                disable: true
+        - process_id: 26
+          areas:
+            - area_id: 10
+              hello_interval: 2
+              authentication:
+                disable: true
+    state: overridden
+
+#
+#
+# ------------------------
+# Module Execution Result
+# ------------------------
+#
+#  "before": {
+#         "processes": [
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "11",
+#                         "cost": 11,
+#                         "default_cost": 5
+#                     },
+#                     {
+#                         "area_id": "22",
+#                         "default_cost": 6
+#                     }
+#                 ],
+#                 "process_id": "10"
+#             },
+#             {
+#                 "authentication": {
+#                     "disable": true
+#                 },
+#                 "process_id": "26"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "10",
+#                         "hello_interval": 2
+#                     },
+#                     {
+#                         "area_id": "20",
+#                         "cost": 2,
+#                         "default_cost": 2
+#                     }
+#                 ],
+#                 "process_id": "27"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "11",
+#                         "default_cost": 5
+#                     },
+#                     {
+#                         "area_id": "22",
+#                         "default_cost": 6
+#                     }
+#                 ],
+#                 "cost": 2,
+#                 "dead_interval": 2,
+#                 "default_metric": 10,
+#                 "demand_circuit": true,
+#                 "hello_interval": 1,
+#                 "mtu_ignore": true,
+#                 "packet_size": 577,
+#                 "priority": 1,
+#                 "process_id": "30",
+#                 "retransmit_interval": 2,
+#                 "router_id": "2.2.2.2",
+#                 "transmit_delay": 2
+#             }
+#         ]
+#     }
+#
+#  "commands": [
+#         "router ospfv3 10",
+#         "no area 11 default-cost 5",
+#         "no area 11 cost 11",
+#         "no area 22 default-cost 6",
+#         "router ospfv3 30",
+#         "no cost 2",
+#         "no priority 1",
+#         "no default-metric 10",
+#         "no router-id 2.2.2.2",
+#         "no demand-circuit",
+#         "no packet-size 577",
+#         "no transmit-delay 2",
+#         "no dead-interval 2",
+#         "no hello-interval 1",
+#         "no retransmit-interval 2",
+#         "no mtu-ignore",
+#         "no area 11 default-cost 5",
+#         "no area 22 default-cost 6",
+#         "router ospfv3 26",
+#         "area 10 hello-interval 4"
+#     ]
+#
+#  "after": {
+#         "processes": [
+#             {
+#                 "process_id": "10"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "10",
+#                         "hello_interval": 4
+#                     }
+#                 ],
+#                 "authentication": {
+#                     "disable": true
+#                 },
+#                 "process_id": "26"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "10",
+#                         "hello_interval": 2
+#                     },
+#                     {
+#                         "area_id": "20",
+#                         "cost": 2,
+#                         "default_cost": 2
+#                     }
+#                 ],
+#                 "process_id": "27"
+#             },
+#             {
+#                 "process_id": "30"
+#             }
+#         ]
+#     }
+#
+#
+# -----------
+# After state
+# -----------
+#
+# RP/0/RP0/CPU0:anton#show running-config router ospfv3
+# router ospfv3 10
+#  area 11
+#  !
+#  area 22
+#  !
+# !
+# router ospfv3 26
+#  authentication disable
+#  area 10
+#   hello-interval 4
+#  !
+# !
+# router ospfv3 27
+#  area 10
+#   hello-interval 2
+#  !
+#  area 20
+#   cost 2
+#   default-cost 2
+#  !
+#  area 30
+#  !
+# !
+# router ospfv3 30
+#  area 11
+#  !
+#  area 22
+#  !
+# !
+
+
+
+# Using deleted
+#
+# ------------
+# Before state
+# ------------
+#
+#
+# RP/0/RP0/CPU0:anton#show running-config router ospfv3
+# router ospfv3 10
+#  area 11
+#  !
+#  area 22
+#  !
+# !
+# router ospfv3 26
+#  authentication disable
+#  area 10
+#   hello-interval 4
+#  !
+# !
+# router ospfv3 27
+#  area 10
+#   hello-interval 2
+#  !
+#  area 20
+#   cost 2
+#   default-cost 2
+#  !
+#  area 30
+#  !
+# !
+# router ospfv3 30
+#  area 11
+#  !
+#  area 22
+#  !
+# !
+
+- name: Deleted existing OSPFv3 configurations from the device
+  cisco.iosxr.iosxr_ospfv3:
+    config:
+      processes:
+      - process_id: '10'
+      - process_id: '26'
+      - process_id: '27'
+      - process_id: '30'
+    state: deleted
+
+#
+#
+# ------------------------
+# Module Execution Result
+# ------------------------
+#
+#  "before": {
+#         "processes": [
+#             {
+#                 "process_id": "10"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "10",
+#                         "hello_interval": 4
+#                     }
+#                 ],
+#                 "authentication": {
+#                     "disable": true
+#                 },
+#                 "process_id": "26"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "10",
+#                         "hello_interval": 2
+#                     },
+#                     {
+#                         "area_id": "20",
+#                         "cost": 2,
+#                         "default_cost": 2
+#                     }
+#                 ],
+#                 "process_id": "27"
+#             },
+#             {
+#                 "process_id": "30"
+#             }
+#         ]
+#     },
+#
+#  "commands": [
+#         "router ospfv3 26",
+#         "no authentication disable",
+#         "no area 10 hello-interval 4",
+#         "router ospfv3 27",
+#         "no area 10 hello-interval 2",
+#         "no area 20 default-cost 2",
+#         "no area 20 cost 2"
+#     ]
+#
+#  "after": {
+#        "processes": [
+#            {
+#                "process_id": "10"
+#            },
+#            {
+#                "process_id": "26"
+#            },
+#            {
+#                "process_id": "27"
+#            },
+#            {
+#                "process_id": "30"
+#            }
+#        ]
+#    }
+#
+#
+# -----------
+# After state
+# -----------
+#
+# RP/0/RP0/CPU0:anton(config)#show running-config router ospfv3
+# router ospfv3 10
+# !
+# router ospfv3 26
+# !
+# router ospfv3 27
+# !
+# router ospfv3 30
+# !
+
+
+# Using parsed
+# parsed.cfg
+# ------------
+# router ospfv3 10
+#  area 11
+#   cost 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+# !
+# router ospfv3 26
+#  authentication disable
+# !
+# router ospfv3 27
+#  area 10
+#   hello-interval 2
+#  !
+# !
+# router ospfv3 30
+#  router-id 2.2.2.2
+#  cost 2
+#  packet-size 577
+#  priority 1
+#  mtu-ignore
+#  dead-interval 2
+#  retransmit-interval 2
+#  demand-circuit
+#  hello-interval 1
+#  transmit-delay 2
+#  default-metric 10
+#  area 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+# !
+- name: Parsed the device configuration to get output commands
+  cisco.iosxr.iosxr_ospfv3:
+    running_config: "{{ lookup('file', './parsed.cfg') }}"
+    state: parsed
+#
+#
+# -------------------------
+# Module Execution Result
+# -------------------------
+#
+#
+# "parsed": {
+#         "processes": [
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "11",
+#                         "cost": 11,
+#                         "default_cost": 5
+#                     },
+#                     {
+#                         "area_id": "22",
+#                         "default_cost": 6
+#                     }
+#                 ],
+#                 "process_id": "10"
+#             },
+#             {
+#                 "authentication": {
+#                     "disable": true
+#                 },
+#                 "process_id": "26"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "10",
+#                         "hello_interval": 2
+#                     }
+#                 ],
+#                 "process_id": "27"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "11",
+#                         "default_cost": 5
+#                     },
+#                     {
+#                         "area_id": "22",
+#                         "default_cost": 6
+#                     }
+#                 ],
+#                 "cost": 2,
+#                 "dead_interval": 2,
+#                 "default_metric": 10,
+#                 "demand_circuit": true,
+#                 "hello_interval": 1,
+#                 "mtu_ignore": true,
+#                 "packet_size": 577,
+#                 "priority": 1,
+#                 "process_id": "30",
+#                 "retransmit_interval": 2,
+#                 "router_id": "2.2.2.2",
+#                 "transmit_delay": 2
+#             }
+#         ]
+#     }
+#
+# Using rendered
+#
+#
+- name: Render the commands for provided  configuration
+  cisco.iosxr.iosxr_ospfv3:
+    config:
+      processes:
+        - process_id: 27
+          areas:
+            - area_id: 10
+              hello_interval: 2
+        - process_id: 26
+          authentication:
+            disable: true
+        - process_id: 10
+          areas:
+            - area_id: 11
+              default_cost: 5
+              cost: 11
+            - area_id: 22
+              default_cost: 6
+        - process_id: 30
+          areas:
+            - area_id: 11
+              default_cost: 5
+            - area_id: 22
+              default_cost: 6
+          cost: 2
+          default_metric: 10
+          transmit_delay: 2
+          hello_interval: 1
+          dead_interval: 2
+          retransmit_interval: 2
+          packet_size: 577
+          priority: 1
+          router_id: '2.2.2.2'
+          demand_circuit: true
+          mtu_ignore: true
+    state: rendered
+
+#
+#
+# -------------------------
+# Module Execution Result
+# -------------------------
+#
+#
+# "rendered": [
+#         "router ospfv3 27",
+#         "area 10 hello-interval 2",
+#         "router ospfv3 26",
+#         "authentication disable",
+#         "router ospfv3 10",
+#         "area 11 default-cost 5",
+#         "area 11 cost 11",
+#         "area 22 default-cost 6",
+#         "router ospfv3 30",
+#         "cost 2",
+#         "priority 1",
+#         "default-metric 10",
+#         "router-id 2.2.2.2",
+#         "demand-circuit",
+#         "packet-size 577",
+#         "transmit-delay 2",
+#         "dead-interval 2",
+#         "hello-interval 1",
+#         "retransmit-interval 2",
+#         "mtu-ignore",
+#         "area 11 default-cost 5",
+#         "area 22 default-cost 6"
+#     ]
+
+
+# Using gathered
+#
+# Before state:
+# -------------
+#
+# RP/0/RP0/CPU0:anton#show running-config router ospf
+# router ospfv3 10
+#  area 11
+#   cost 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+# !
+# router ospfv3 26
+#  authentication disable
+#  area 10
+#  !
+# !
+# router ospfv3 27
+#  area 10
+#   hello-interval 2
+#  !
+#  area 20
+#  !
+#  area 30
+#  !
+# !
+# router ospfv3 30
+#  cost 2
+#  priority 1
+#  mtu-ignore
+#  packet-size 577
+#  dead-interval 2
+#  retransmit-interval 2
+#  demand-circuit
+#  hello-interval 1
+#  transmit-delay 2
+#  router-id 2.2.2.2
+#  default-metric 10
+#  area 11
+#   default-cost 5
+#  !
+#  area 22
+#   default-cost 6
+#  !
+# !
+
+- name: Gather ospfv3 routes configuration
+  cisco.iosxr.iosxr_ospfv3:
+    state: gathered
+#
+#
+# -------------------------
+# Module Execution Result
+# -------------------------
+#
+#    "gathered": {
+#         "processes": [
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "11",
+#                         "cost": 11,
+#                         "default_cost": 5
+#                     },
+#                     {
+#                         "area_id": "22",
+#                         "default_cost": 6
+#                     }
+#                 ],
+#                 "process_id": "10"
+#             },
+#             {
+#                 "authentication": {
+#                     "disable": true
+#                 },
+#                 "process_id": "26"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "10",
+#                         "hello_interval": 2
+#                     }
+#                 ],
+#                 "process_id": "27"
+#             },
+#             {
+#                 "areas": [
+#                     {
+#                         "area_id": "11",
+#                         "default_cost": 5
+#                     },
+#                     {
+#                         "area_id": "22",
+#                         "default_cost": 6
+#                     }
+#                 ],
+#                 "cost": 2,
+#                 "dead_interval": 2,
+#                 "default_metric": 10,
+#                 "demand_circuit": true,
+#                 "hello_interval": 1,
+#                 "mtu_ignore": true,
+#                 "packet_size": 577,
+#                 "priority": 1,
+#                 "process_id": "30",
+#                 "retransmit_interval": 2,
+#                 "router_id": "2.2.2.2",
+#                 "transmit_delay": 2
+#             }
+#         ]
+#     }
+#
 """
 
 from ansible.module_utils.basic import AnsibleModule

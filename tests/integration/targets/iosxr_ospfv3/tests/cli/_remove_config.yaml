@@ -1,5 +1,5 @@
 ---
-- name: Remove OSPFv2 Routes
+- name: Remove OSPFv3 Routes
   vars:
     lines: "no router ospfv3 26\n
             no router ospfv3 27\n

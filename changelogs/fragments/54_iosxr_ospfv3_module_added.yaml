@@ -1,0 +1,3 @@
+---
+major_changes:
+  - Added iosxr ospfv3 resource module (https://github.com/ansible-collections/cisco.iosxr/pull/81).
