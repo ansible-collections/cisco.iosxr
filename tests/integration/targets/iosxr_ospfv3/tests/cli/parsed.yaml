@@ -13,4 +13,6 @@
         state: parsed
 
     - assert:
-        that: "{{ merged['after'] == result['parsed'] }}"
+        that:
+          - "{{ merged['after'] == result['parsed'] }}"
+          - "result.changed == false"

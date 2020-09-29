@@ -1794,7 +1794,7 @@ EXAMPLES = """
 #  area 22
 #   default-cost 6
 #  !
-#  --More-- router ospfv3 10
+# router ospfv3 10
 #  area 11
 #   cost 11
 #   default-cost 5
@@ -1884,7 +1884,7 @@ EXAMPLES = """
 #  area 22
 #   default-cost 6
 #  !
-#  --More-- router ospfv3 10
+# router ospfv3 10
 #  area 11
 #   cost 11
 #   default-cost 5
