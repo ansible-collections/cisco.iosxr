@@ -40,18 +40,22 @@ def _tmplt_ospf_auto_cost(config_data):
         return command
 
 
-def _tmplt_ospf_bfd(config_data):
+def _tmplt_ospfv3_bfd_minimum_interval(config_data):
     if "bfd" in config_data:
-        command = "bfd"
         if "minimum_interval" in config_data["bfd"]:
-            command += " minimum-interval {minimum_interval}".format(
+            command = "bfd minimum-interval {minimum_interval}".format(
                 **config_data["bfd"]
             )
+            return command
 
+
+def _tmplt_ospfv3_bfd_multiplier(config_data):
+    if "bfd" in config_data:
         if "multiplier" in config_data["bfd"]:
-            command += " multiplier {multiplier}".format(**config_data["bfd"])
-
-        return command
+            command = "bfd multiplier {multiplier}".format(
+                **config_data["bfd"]
+            )
+            return command
 
 
 def _tmplt_ospf_security(config_data):
@@ -205,13 +209,13 @@ def _tmplt_microloop_avoidance(config_data):
 
 def _tmplt_ospf_bfd_fast_detect(config_data):
     if "bfd" in config_data:
-        command = "bfd"
         if "fast_detect" in config_data["bfd"]:
+            command = "bfd"
             fast_detect = config_data["bfd"].get("fast_detect")
             command += " fast-detect"
             if "strict_mode" in fast_detect:
                 command += " strict-mode"
-        return command
+            return command
 
 
 def _tmplt_ospf_mpls_traffic_eng(config_data):
@@ -232,7 +236,6 @@ def _tmplt_ospf_mpls_traffic_eng(config_data):
 
 
 def _tmplt_ospf_authentication_ipsec(config_data):
-    command = []
     if "authentication" in config_data:
         if config_data["authentication"].get("ipsec"):
             command = "authentication ipsec"
@@ -243,40 +246,36 @@ def _tmplt_ospf_authentication_ipsec(config_data):
                 command += " " + md.get("algorithim_type")
             if md.get("clear_key"):
                 command += " clear " + md.get("clear_key")
-            if md.get("password_key"):
+            elif md.get("password_key"):
                 command += " password " + md.get("password_key")
-            if md.get("key"):
+            elif md.get("key"):
                 command += " " + md.get("key")
-        return command
+            return command
 
 
 def _tmplt_ospfv3_demand_circuit(config_data):
-    command = []
     if "demand_circuit" in config_data:
         command = "demand-circuit"
         return command
 
 
 def _tmplt_ospfv3_passive(config_data):
-    command = []
     if "passive" in config_data:
         command = "passive"
         return command
 
 
 def _tmplt_ospfv3_demand_mtu_ignore(config_data):
-    command = []
     if "mtu_ignore" in config_data:
         command = "mtu-ignore"
         return command
 
 
-def _tmplt_ospf_authentication(config_data):
-    command = []
+def _tmplt_ospfv3_authentication(config_data):
     if "authentication" in config_data:
         if config_data["authentication"].get("disable"):
             command = "authentication disable"
-        return command
+            return command
 
 
 def _tmplt_ospf_adjacency_distribute_bgp_state(config_data):
@@ -314,47 +313,31 @@ def _tmplt_ospf_capability_opaque(config_data):
         return command
 
 
-def _tmplt_ospf_authentication_key(config_data):
-    if "authentication_key" in config_data:
-        command = "authentication-key".format(**config_data)
-        if config_data["authentication_key"].get("password"):
-            command += " {0}".format(
-                config_data["authentication_key"].get("password")
-            )
-        return command
-
-
-def _tmplt_ospf_area_authentication(config_data):
+def _tmplt_ospfv3_area_authentication(config_data):
     if "authentication" in config_data:
-        command = "area {area_id} authentication".format(**config_data)
-        if config_data["authentication"].get("keychain"):
-            command += " keychain " + config_data["authentication"].get(
-                "keychain"
-            )
-        elif config_data["authentication"].get("no_auth"):
-            command += " null"
-        return command
+        if config_data["authentication"].get("disable"):
+            command = "area {area_id} ".format(**config_data)
+            command += "authentication disable"
+            return command
 
 
-def _tmplt_ospf_area_authentication_md(config_data):
+def _tmplt_ospfv3_area_authentication_ipsec(config_data):
     if "authentication" in config_data:
-        command = "area {area_id} authentication".format(**config_data)
-        if "message_digest" in config_data["authentication"]:
-            command = "authentication message-digest"
-            md = config_data["authentication"].get("message_digest")
-            if md.get("keychain"):
-                command += " keychain " + md.get("keychain")
-        return command
-
-
-def _tmplt_ospf_area_authentication_key(config_data):
-    if "authentication_key" in config_data:
-        command = "area {area_id} authentication-key".format(**config_data)
-        if config_data["authentication_key"].get("password"):
-            command += " {0}".format(
-                config_data["authentication_key"].get("password")
-            )
-        return command
+        command = "area {area_id} ".format(**config_data)
+        if config_data["authentication"].get("ipsec"):
+            command += "authentication ipsec"
+            md = config_data["authentication"].get("ipsec")
+            if md.get("spi"):
+                command += " spi " + str(md.get("spi"))
+            if md.get("algorithim_type"):
+                command += " " + md.get("algorithim_type")
+            if md.get("clear_key"):
+                command += " clear " + md.get("clear_key")
+            elif md.get("password_key"):
+                command += " password " + md.get("password_key")
+            elif md.get("key"):
+                command += " " + md.get("key")
+            return command
 
 
 def _tmplt_ospf_area_mpls_ldp(config_data):
@@ -375,29 +358,35 @@ def _tmplt_ospf_area_mpls_ldp(config_data):
         return commands
 
 
-def _tmplt_ospf_area_bfd(config_data):
+def _tmplt_ospfv3_area_bfd_minimum_interval(config_data):
     if "bfd" in config_data:
-        command = "area {area_id} bfd".format(**config_data)
         if "minimum_interval" in config_data["bfd"]:
-            command += " minimum-interval {minimum_interval}".format(
+            command = "area {area_id} ".format(**config_data)
+            command += " bfd minimum-interval {minimum_interval}".format(
                 **config_data["bfd"]
             )
-
-        if "multiplier" in config_data["bfd"]:
-            command += " multiplier {multiplier}".format(**config_data["bfd"])
-
-        return command
+            return command
 
 
-def _tmplt_ospf_area_bfd_fast_detect(config_data):
+def _tmplt_ospfv3_area_bfd_multiplier(config_data):
     if "bfd" in config_data:
-        command = "area {area_id} bfd".format(**config_data)
+        if "multiplier" in config_data["bfd"]:
+            command = "area {area_id} ".format(**config_data)
+            command += "bfd multiplier {multiplier}".format(
+                **config_data["bfd"]
+            )
+            return command
+
+
+def _tmplt_ospfv3_area_bfd_fast_detect(config_data):
+    if "bfd" in config_data:
         if "fast_detect" in config_data["bfd"]:
+            command = "area {area_id} ".format(**config_data)
             fast_detect = config_data["bfd"].get("fast_detect")
-            command += " fast-detect"
+            command += "bfd fast-detect"
             if "strict_mode" in fast_detect:
                 command += " strict-mode"
-        return command
+            return command
 
 
 def _tmplt_ospf_mpls_ldp(config_data):
@@ -995,7 +984,7 @@ class Ospfv3Template(NetworkTemplate):
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_authentication,
+            "setval": _tmplt_ospfv3_authentication,
             "result": {
                 "processes": {
                     "{{ pid }}": {
@@ -1009,17 +998,14 @@ class Ospfv3Template(NetworkTemplate):
         {
             "name": "authentication.ipsec",
             "getval": re.compile(
-                r"""
-                    ^router
+                r"""^router
                     \sospfv3\s(?P<pid>\S+)
                     \sauthentication(?P<auth>)
-                    \sipsec(?P<ip_sec>)
-                    \sspi(?P<spi>\s\d+)?
-                    \s(?P<algo_type>\S+)
-                    (\sclear\s(?P<clear_key>\S+))?
-                    (\spassword\s(?P<password_key>)\S+)?
-                    \s(?P<key>\S+)
-                    *$""",
+                    \sipsec(?P<ipsec>)
+                    \sspi\s(?P<spi>\d+)
+                    (\s(?P<algo_type>\S+))?
+                    (\spassword\s(?P<password_key>\S+))?
+                    $""",
                 re.VERBOSE,
             ),
             "setval": _tmplt_ospf_authentication_ipsec,
@@ -1095,23 +1081,43 @@ class Ospfv3Template(NetworkTemplate):
             },
         },
         {
-            "name": "bfd",
+            "name": "bfd.minimum_interval",
             "getval": re.compile(
                 r"""
                     ^router
                     \sospfv3\s(?P<pid>\S+)
                     \sbfd(?P<bfd>)
-                    (\sminimum-interval\s(?P<minimum_interval>\d+))?
-                    (\smultiplier\s(?P<multiplier>\d+))?
+                    \sminimum-interval\s(?P<minimum_interval>\d+)
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_bfd,
+            "setval": _tmplt_ospfv3_bfd_minimum_interval,
             "result": {
                 "processes": {
                     "{{ pid }}": {
                         "bfd": {
                             "minimum_interval": "{{ minimum_interval|int }}",
+                        },
+                    }
+                }
+            },
+        },
+        {
+            "name": "bfd.multiplier",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospfv3\s(?P<pid>\S+)
+                    \sbfd(?P<bfd>)
+                    \smultiplier\s(?P<multiplier>\d+)
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospfv3_bfd_multiplier,
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "bfd": {
                             "multiplier": "{{ multiplier|int }}",
                         },
                     }
@@ -1320,32 +1326,6 @@ class Ospfv3Template(NetworkTemplate):
                                 "inter_area": "{{ inter_area|int }}",
                                 "intra_area": "{{ intra_area|int }}",
                             }
-                        },
-                    }
-                }
-            },
-        },
-        {
-            "name": "authentication_key",
-            "getval": re.compile(
-                r"""
-                    ^router
-                    \sospfv3\s(?P<pid>\S+)
-                    \sauthentication-key(?P<auth_key>)
-                    (\s(?P<password>\S+))?
-                    (\sclear\s(?P<clear>)\S+)?
-                    (\sencrypted(?P<encrypted>\S+))?
-                    $""",
-                re.VERBOSE,
-            ),
-            "setval": _tmplt_ospf_authentication_key,
-            "result": {
-                "processes": {
-                    "{{ pid }}": {
-                        "authentication_key": {
-                            "clear": "{{ clear }}",
-                            "encrypted": "{{ encrypted}}",
-                            "password": "{{ password if clear is undefined and encrypted is undefined }}",
                         },
                     }
                 }
@@ -1704,12 +1684,11 @@ class Ospfv3Template(NetworkTemplate):
                     \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
                     \sauthentication(?P<auth>)
-                    (\skeychain\s(?P<keychain>\S+))?
-                    (\snull(?P<no_auth>))?
+                    (\sdisable(?P<disable>))?
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_area_authentication,
+            "setval": _tmplt_ospfv3_area_authentication,
             "compval": "authentication",
             "result": {
                 "processes": {
@@ -1718,8 +1697,7 @@ class Ospfv3Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "authentication": {
-                                    "no_auth": "{{ True if no_auth is defined }}",
-                                    "keychain": "{{ keychain }}",
+                                    "disable": "{{ True if disable is defined }}",
                                 },
                             }
                         }
@@ -1728,53 +1706,22 @@ class Ospfv3Template(NetworkTemplate):
             },
         },
         {
-            "name": "area.authentication_key",
+            "name": "area.authentication.ipsec",
             "getval": re.compile(
                 r"""
                     ^router
                     \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
-                    \sauthentication-key(?P<auth_key>)
-                    (\s(?P<password>\S+))?
-                    (\sclear\s(?P<clear>)\S+)?
-                    (\sencrypted(?P<encrypted>\S+))?
+                    \sauthentication(?P<auth_key>)
+                    \sipsec(?P<ipsec>)
+                    \sspi\s(?P<spi>\d+)
+                    (\s(?P<algo_type>\S+))?
+                    (\spassword\s(?P<password_key>\S+))?
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_area_authentication_key,
-            "compval": "authentication_key",
-            "result": {
-                "processes": {
-                    "{{ pid }}": {
-                        "areas": {
-                            "{{ area_id }}": {
-                                "area_id": "{{ area_id }}",
-                                "authentication_key": {
-                                    "clear": "{{ clear }}",
-                                    "encrypted": "{{ encrypted}}",
-                                    "password": "{{ password if clear is undefined and encrypted is undefined }}",
-                                },
-                            }
-                        }
-                    }
-                }
-            },
-        },
-        {
-            "name": "area.authentication.message_digest",
-            "getval": re.compile(
-                r"""
-                    ^router
-                    \sospfv3\s(?P<pid>\S+)
-                    \sarea\s(?P<area_id>\S+)
-                    \sauthentication(?P<auth>)
-                    \smessage-digest(?P<md>)
-                    \skeychain(?P<md_key>\s\S+)
-                    *$""",
-                re.VERBOSE,
-            ),
-            "setval": _tmplt_ospf_area_authentication_md,
-            "compval": "authentication.message_digest",
+            "setval": _tmplt_ospfv3_area_authentication_ipsec,
+            "compval": "authentication.ipsec",
             "result": {
                 "processes": {
                     "{{ pid }}": {
@@ -1782,14 +1729,18 @@ class Ospfv3Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "authentication": {
-                                    "message_digest": {
-                                        "keychain": "{{ md_key }}",
-                                    }
-                                },
+                                    "ipsec": {
+                                        "spi": "{{ spi }}",
+                                        "algorithim_type": "{{ algo_type }}",
+                                        "clear_key": "{{ clear_key }}",
+                                        "password_key": "{{ password_key }}",
+                                        "key": "{{ key }}",
+                                    },
+                                }
                             }
                         }
                     }
-                }
+                },
             },
         },
         {
@@ -1858,20 +1809,19 @@ class Ospfv3Template(NetworkTemplate):
             },
         },
         {
-            "name": "area.bfd",
+            "name": "area.bfd.minimum_interval",
             "getval": re.compile(
                 r"""
                     ^router
                     \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
                     \sbfd(?P<bfd>)
-                    (\sminimum-interval\s(?P<minimum_interval>\d+))?
-                    (\smultiplier\s(?P<multiplier>\d+))?
+                    \sminimum-interval\s(?P<minimum_interval>\d+)
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_area_bfd,
-            "compval": "bfd",
+            "setval": _tmplt_ospfv3_area_bfd_minimum_interval,
+            "compval": "bfd.minimum_interval",
             "result": {
                 "processes": {
                     "{{ pid }}": {
@@ -1880,6 +1830,34 @@ class Ospfv3Template(NetworkTemplate):
                                 "area_id": "{{ area_id }}",
                                 "bfd": {
                                     "minimum_interval": "{{ minimum_interval|int }}",
+                                },
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "area.bfd.multiplier",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospfv3\s(?P<pid>\S+)
+                    \sarea\s(?P<area_id>\S+)
+                    \sbfd(?P<bfd>)
+                    \smultiplier\s(?P<multiplier>\d+)
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospfv3_area_bfd_multiplier,
+            "compval": "bfd.multiplier",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "areas": {
+                            "{{ area_id }}": {
+                                "area_id": "{{ area_id }}",
+                                "bfd": {
                                     "multiplier": "{{ multiplier|int }}",
                                 },
                             }
@@ -1902,7 +1880,7 @@ class Ospfv3Template(NetworkTemplate):
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_area_bfd_fast_detect,
+            "setval": _tmplt_ospfv3_area_bfd_fast_detect,
             "compval": "bfd.fast_detect",
             "result": {
                 "processes": {

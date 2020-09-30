@@ -138,7 +138,8 @@ class Ospfv3(ResourceModule):
 
     def _compare(self, want, have):
         parsers = [
-            "bfd",
+            "bfd.minimum_interval",
+            "bfd.multiplier",
             "cost",
             "weight",
             "passive",
@@ -204,11 +205,11 @@ class Ospfv3(ResourceModule):
     def _area_compare(self, want, have):
         parsers = [
             "area.authentication",
-            "area.authentication_key",
-            "area.authentication.message_digest",
+            "area.authentication.ipsec",
             "area.mpls_traffic_eng",
             "area.mpls_ldp",
-            "area.bfd",
+            "area.bfd.minimum_interval",
+            "area.bfd.multiplier",
             "area.bfd.fast_detect",
             "area.nssa",
             "area.nssa.default_information_originate",

@@ -32,7 +32,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_ospfv3
-version_added: 1.2.0
+version_added: 1.1.0
 short_description: ospfv3 resource module
 description:
   - This module manages global ospfv3 configuration on devices running Cisco IOS-XR

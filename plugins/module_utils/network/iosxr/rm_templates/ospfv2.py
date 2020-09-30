@@ -253,17 +253,6 @@ def _tmplt_ospf_authentication(config_data):
             command = "authentication null"
         return command
 
-    # ROHIT def _tmplt_ospf_authentication(config_data):
-    command = []
-    if "authentication" in config_data:
-        if config_data["authentication"].get("keychain"):
-            command = "authentication keychain " + config_data[
-                "authentication"
-            ].get("keychain")
-        elif config_data["authentication"].get("no_auth"):
-            command = "authentication null"
-        return command
-
 
 def _tmplt_ospf_adjacency_stagger(config_data):
     if "adjacency_stagger" in config_data:
