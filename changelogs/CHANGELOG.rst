@@ -5,6 +5,20 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v1.1.0
+======
+
+Minor Changes
+-------------
+
+- Added iosxr ospfv3 resource module (https://github.com/ansible-collections/cisco.iosxr/pull/81).
+- Platform supported coments token to be provided when invoking the object.
+
+New Modules
+-----------
+
+- iosxr_ospfv3 - ospfv3 resource module
+
 v1.0.5
 ======
 
