@@ -1,0 +1,120 @@
+---
+- debug:
+    msg: START iosxr_ospfv3 merged integration tests on connection={{ ansible_connection
+      }}
+
+- include_tasks: _remove_config.yaml
+
+- block:
+
+    - name: Merge the provided configuration with the exisiting running configuration
+      register: result
+      cisco.iosxr.iosxr_ospfv3: &id001
+        config:
+          processes:
+            - process_id: 27
+              areas:
+                - area_id: 10
+                  hello_interval: 2
+            - process_id: 26
+              authentication:
+                disable: true
+            - process_id: 10
+              areas:
+                - area_id: 11
+                  default_cost: 5
+                  cost: 11
+                - area_id: 22
+                  default_cost: 6
+            - process_id: 30
+              areas:
+                - area_id: 11
+                  default_cost: 5
+                - area_id: 22
+                  default_cost: 6
+
+              cost: 2
+              default_metric: 10
+              transmit_delay: 2
+              hello_interval: 1
+              dead_interval: 2
+              retransmit_interval: 2
+              packet_size: 577
+              priority: 1
+              router_id: '2.2.2.2'
+              demand_circuit: true
+              mtu_ignore: true
+        state: merged
+
+    - name: Assert that before dicts were correctly generated
+      assert:
+        that: "{{ merged['before'] == result['before'] }}"
+
+    - name: Assert that correct set of commands were generated
+      assert:
+        that:
+          - "{{ merged['commands'] | symmetric_difference(result['commands']) |length\
+            \ == 0 }}"
+
+    - name: Assert that after dicts was correctly generated
+      assert:
+        that:
+          - "{{ merged['after'] == result['after'] }}"
+
+    - name: Merge the provided configuration with the existing running configuration
+        (IDEMPOTENT)
+      register: result
+      cisco.iosxr.iosxr_ospfv3: *id001
+
+    - name: Assert that the previous task was idempotent
+      assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
+
+    - name: Assert that before dicts were correctly generated
+      assert:
+        that:
+          - "{{ merged['after'] == result['before'] }}"
+
+    - name: Update existing configuration using merged
+      register: result
+      cisco.iosxr.iosxr_ospfv3: &id002
+        config:
+          processes:
+            - process_id: 27
+              areas:
+                - area_id: 10
+                  hello_interval: 2
+                - area_id: 30
+                  dead_interval: 4
+            - process_id: 26
+              authentication:
+                disable: true
+
+    - name: Assert that before dicts were correctly generated
+      assert:
+        that: "{{ merged['after'] == result['before'] }}"
+
+    - name: Assert that correct set of commands were generated
+      assert:
+        that:
+          - "{{ merged['update_commands'] | symmetric_difference(result['commands'])\
+            \ |length == 0 }}"
+
+    - name: Assert that after dicts were correctly generated
+      assert:
+        that: "{{ merged['update_after'] == result['after'] }}"
+
+    - name: Update existing ospfv3 configuration using merged (IDEMPOTENT)
+      register: result
+      cisco.iosxr.iosxr_ospfv3: *id002
+
+    - name: Assert that the previous task was idempotent
+      assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
+  always:
+
+    - include_tasks: _remove_config.yaml

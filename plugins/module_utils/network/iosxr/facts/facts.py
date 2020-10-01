@@ -59,6 +59,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.st
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ospfv2.ospfv2 import (
     Ospfv2Facts,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ospfv3.ospfv3 import (
+    Ospfv3Facts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -77,6 +80,7 @@ FACT_RESOURCE_SUBSETS = dict(
     acls=AclsFacts,
     static_routes=Static_routesFacts,
     ospfv2=Ospfv2Facts,
+    ospfv3=Ospfv3Facts,
 )
 
 

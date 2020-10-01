@@ -40,18 +40,22 @@ def _tmplt_ospf_auto_cost(config_data):
         return command
 
 
-def _tmplt_ospf_bfd(config_data):
+def _tmplt_ospfv3_bfd_minimum_interval(config_data):
     if "bfd" in config_data:
-        command = "bfd"
         if "minimum_interval" in config_data["bfd"]:
-            command += " minimum-interval {minimum_interval}".format(
+            command = "bfd minimum-interval {minimum_interval}".format(
                 **config_data["bfd"]
             )
+            return command
 
+
+def _tmplt_ospfv3_bfd_multiplier(config_data):
+    if "bfd" in config_data:
         if "multiplier" in config_data["bfd"]:
-            command += " multiplier {multiplier}".format(**config_data["bfd"])
-
-        return command
+            command = "bfd multiplier {multiplier}".format(
+                **config_data["bfd"]
+            )
+            return command
 
 
 def _tmplt_ospf_security(config_data):
@@ -205,13 +209,13 @@ def _tmplt_microloop_avoidance(config_data):
 
 def _tmplt_ospf_bfd_fast_detect(config_data):
     if "bfd" in config_data:
-        command = "bfd"
         if "fast_detect" in config_data["bfd"]:
+            command = "bfd"
             fast_detect = config_data["bfd"].get("fast_detect")
             command += " fast-detect"
             if "strict_mode" in fast_detect:
                 command += " strict-mode"
-        return command
+            return command
 
 
 def _tmplt_ospf_mpls_traffic_eng(config_data):
@@ -231,42 +235,47 @@ def _tmplt_ospf_mpls_traffic_eng(config_data):
         return command
 
 
-def _tmplt_ospf_authentication_md(config_data):
-    command = []
+def _tmplt_ospf_authentication_ipsec(config_data):
     if "authentication" in config_data:
-        if config_data["authentication"].get("message_digest"):
-            command = "authentication message-digest"
-            md = config_data["authentication"].get("message_digest")
-            if md.get("keychain"):
-                command += " keychain " + md.get("keychain")
+        if config_data["authentication"].get("ipsec"):
+            command = "authentication ipsec"
+            md = config_data["authentication"].get("ipsec")
+            if md.get("spi"):
+                command += " spi " + str(md.get("spi"))
+            if md.get("algorithim_type"):
+                command += " " + md.get("algorithim_type")
+            if md.get("clear_key"):
+                command += " clear " + md.get("clear_key")
+            elif md.get("password_key"):
+                command += " password " + md.get("password_key")
+            elif md.get("key"):
+                command += " " + md.get("key")
+            return command
+
+
+def _tmplt_ospfv3_demand_circuit(config_data):
+    if "demand_circuit" in config_data:
+        command = "demand-circuit"
         return command
 
 
-def _tmplt_ospf_authentication(config_data):
-    command = []
+def _tmplt_ospfv3_passive(config_data):
+    if "passive" in config_data:
+        command = "passive"
+        return command
+
+
+def _tmplt_ospfv3_demand_mtu_ignore(config_data):
+    if "mtu_ignore" in config_data:
+        command = "mtu-ignore"
+        return command
+
+
+def _tmplt_ospfv3_authentication(config_data):
     if "authentication" in config_data:
-        if config_data["authentication"].get("keychain"):
-            command = "authentication keychain " + config_data[
-                "authentication"
-            ].get("keychain")
-        elif config_data["authentication"].get("no_auth"):
-            command = "authentication null"
-        return command
-
-
-def _tmplt_ospf_adjacency_stagger(config_data):
-    if "adjacency_stagger" in config_data:
-        command = "adjacency stagger".format(**config_data)
-        if config_data["adjacency_stagger"].get(
-            "min_adjacency"
-        ) and config_data["adjacency_stagger"].get("min_adjacency"):
-            command += " {0} {1}".format(
-                config_data["adjacency_stagger"].get("min_adjacency"),
-                config_data["adjacency_stagger"].get("max_adjacency"),
-            )
-        elif config_data["adjacency_stagger"].get("disable"):
-            command += " disable"
-        return command
+        if config_data["authentication"].get("disable"):
+            command = "authentication disable"
+            return command
 
 
 def _tmplt_ospf_adjacency_distribute_bgp_state(config_data):
@@ -304,47 +313,31 @@ def _tmplt_ospf_capability_opaque(config_data):
         return command
 
 
-def _tmplt_ospf_authentication_key(config_data):
-    if "authentication_key" in config_data:
-        command = "authentication-key".format(**config_data)
-        if config_data["authentication_key"].get("password"):
-            command += " {0}".format(
-                config_data["authentication_key"].get("password")
-            )
-        return command
-
-
-def _tmplt_ospf_area_authentication(config_data):
+def _tmplt_ospfv3_area_authentication(config_data):
     if "authentication" in config_data:
-        command = "area {area_id} authentication".format(**config_data)
-        if config_data["authentication"].get("keychain"):
-            command += " keychain " + config_data["authentication"].get(
-                "keychain"
-            )
-        elif config_data["authentication"].get("no_auth"):
-            command += " null"
-        return command
+        if config_data["authentication"].get("disable"):
+            command = "area {area_id} ".format(**config_data)
+            command += "authentication disable"
+            return command
 
 
-def _tmplt_ospf_area_authentication_md(config_data):
+def _tmplt_ospfv3_area_authentication_ipsec(config_data):
     if "authentication" in config_data:
-        command = "area {area_id} authentication".format(**config_data)
-        if "message_digest" in config_data["authentication"]:
-            command = "authentication message-digest"
-            md = config_data["authentication"].get("message_digest")
-            if md.get("keychain"):
-                command += " keychain " + md.get("keychain")
-        return command
-
-
-def _tmplt_ospf_area_authentication_key(config_data):
-    if "authentication_key" in config_data:
-        command = "area {area_id} authentication-key".format(**config_data)
-        if config_data["authentication_key"].get("password"):
-            command += " {0}".format(
-                config_data["authentication_key"].get("password")
-            )
-        return command
+        command = "area {area_id} ".format(**config_data)
+        if config_data["authentication"].get("ipsec"):
+            command += "authentication ipsec"
+            md = config_data["authentication"].get("ipsec")
+            if md.get("spi"):
+                command += " spi " + str(md.get("spi"))
+            if md.get("algorithim_type"):
+                command += " " + md.get("algorithim_type")
+            if md.get("clear_key"):
+                command += " clear " + md.get("clear_key")
+            elif md.get("password_key"):
+                command += " password " + md.get("password_key")
+            elif md.get("key"):
+                command += " " + md.get("key")
+            return command
 
 
 def _tmplt_ospf_area_mpls_ldp(config_data):
@@ -365,29 +358,35 @@ def _tmplt_ospf_area_mpls_ldp(config_data):
         return commands
 
 
-def _tmplt_ospf_area_bfd(config_data):
+def _tmplt_ospfv3_area_bfd_minimum_interval(config_data):
     if "bfd" in config_data:
-        command = "area {area_id} bfd".format(**config_data)
         if "minimum_interval" in config_data["bfd"]:
-            command += " minimum-interval {minimum_interval}".format(
+            command = "area {area_id} ".format(**config_data)
+            command += " bfd minimum-interval {minimum_interval}".format(
                 **config_data["bfd"]
             )
-
-        if "multiplier" in config_data["bfd"]:
-            command += " multiplier {multiplier}".format(**config_data["bfd"])
-
-        return command
+            return command
 
 
-def _tmplt_ospf_area_bfd_fast_detect(config_data):
+def _tmplt_ospfv3_area_bfd_multiplier(config_data):
     if "bfd" in config_data:
-        command = "area {area_id} bfd".format(**config_data)
+        if "multiplier" in config_data["bfd"]:
+            command = "area {area_id} ".format(**config_data)
+            command += "bfd multiplier {multiplier}".format(
+                **config_data["bfd"]
+            )
+            return command
+
+
+def _tmplt_ospfv3_area_bfd_fast_detect(config_data):
+    if "bfd" in config_data:
         if "fast_detect" in config_data["bfd"]:
+            command = "area {area_id} ".format(**config_data)
             fast_detect = config_data["bfd"].get("fast_detect")
-            command += " fast-detect"
+            command += "bfd fast-detect"
             if "strict_mode" in fast_detect:
                 command += " strict-mode"
-        return command
+            return command
 
 
 def _tmplt_ospf_mpls_ldp(config_data):
@@ -564,9 +563,9 @@ def _tmplt_timers_graceful_shutdown(config_data):
         return command
 
 
-class Ospfv2Template(NetworkTemplate):
+class Ospfv3Template(NetworkTemplate):
     def __init__(self, lines=None):
-        super(Ospfv2Template, self).__init__(lines=lines, tmplt=self)
+        super(Ospfv3Template, self).__init__(lines=lines, tmplt=self)
 
     # fmt: off
     PARSERS = [
@@ -575,11 +574,11 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                         ^router
-                        \sospf\s(?P<pid>\S+)
+                        \sospfv3\s(?P<pid>\S+)
                         $""",
                 re.VERBOSE,
             ),
-            "setval": "router ospf {{ process_id }}",
+            "setval": "router ospfv3 {{ process_id }}",
             "result": {
                 "processes": {"{{ pid }}": {"process_id": "{{ pid }}"}}
             },
@@ -590,7 +589,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \scost(?P<cost>\s\d+)
                 $""",
                 re.VERBOSE,
@@ -610,7 +609,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sdefault-metric(?P<default_metric>\s\d+)
                 $""",
                 re.VERBOSE,
@@ -630,7 +629,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \spacket-size(?P<packet_size>\s\d+)
                 $""",
                 re.VERBOSE,
@@ -650,7 +649,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sdead-interval(?P<dead_interval>\s\d+)
                 $""",
                 re.VERBOSE,
@@ -670,7 +669,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \shello-interval(?P<hello_interval>\s\d+)
                 $""",
                 re.VERBOSE,
@@ -690,7 +689,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \spriority(?P<priority>\s\d+)
                 $""",
                 re.VERBOSE,
@@ -710,7 +709,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sweight(?P<weight>\s\d+)
                 $""",
                 re.VERBOSE,
@@ -730,7 +729,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sretransmit-interval(?P<retransmit_interval>\s\d+)
                 $""",
                 re.VERBOSE,
@@ -750,7 +749,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \stransmit-delay(?P<transmit_delay>\s\d+)
                 $""",
                 re.VERBOSE,
@@ -770,17 +769,17 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
-                \spassive\s(?P<passive>\S+)
+                \sospfv3\s(?P<pid>\S+)
+                (\spassive(?P<passive>))?
                 $""",
                 re.VERBOSE,
             ),
 
-            "setval": "passive {{ passive }}",
+            "setval": _tmplt_ospfv3_passive,
             "result": {
                 "processes": {
                     "{{ pid }}": {
-                        "passive": "{{ passive }}",
+                        "passive": "{{ True if passive is defined }}",
                     }
                 }
             },
@@ -790,7 +789,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sdatabase-filter
                 \sall
                 \sout\s(?P<database_filter>\s\S+)
@@ -812,37 +811,17 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
-                \sdemand-circuit\s(?P<demand_circuit>\S+)
+                \sospfv3\s(?P<pid>\S+)
+                (\sdemand-circuit(?P<demand_circuit>))?
                 $""",
                 re.VERBOSE,
             ),
 
-            "setval": "demand-circuit {{ demand_circuit }}",
+            "setval": _tmplt_ospfv3_demand_circuit,
             "result": {
                 "processes": {
                     "{{ pid }}": {
-                        "demand_circuit": "{{ demand_circuit }}",
-                    }
-                }
-            },
-        },
-        {
-            "name": "external_out",
-            "getval": re.compile(
-                r"""
-                ^router
-                \sospf\s(?P<pid>\S+)
-                \sexternal-out\s(?P<external_out>\S+)
-                $""",
-                re.VERBOSE,
-            ),
-
-            "setval": "external-out {{ external_out }}",
-            "result": {
-                "processes": {
-                    "{{ pid }}": {
-                        "external_out": "{{ external_out }}",
+                        "demand_circuit": "{{ True if demand_circuit is defined }}",
                     }
                 }
             },
@@ -852,7 +831,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \srouter-id\s(?P<router_id>\S+)
                 $""",
                 re.VERBOSE,
@@ -868,42 +847,21 @@ class Ospfv2Template(NetworkTemplate):
             },
         },
         {
-            "name": "summary_in",
-            "getval": re.compile(
-                r"""
-                ^router
-                \sospf\s(?P<pid>\S+)
-                \ssummary-in\s(?P<summary_in>\S+)
-                $""",
-                re.VERBOSE,
-            ),
-
-            "setval": "summary-in {{ summary_in }}",
-            "result": {
-                "processes": {
-                    "{{ pid }}": {
-                        "summary_in": "{{ summary_in }}",
-                    }
-                }
-            },
-        },
-
-        {
             "name": "mtu_ignore",
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
-                \smtu-ignore\s(?P<mtu_ignore>\S+)
+                \sospfv3\s(?P<pid>\S+)
+                (\smtu-ignore(?P<mtu_ignore>))?
                 $""",
                 re.VERBOSE,
             ),
 
-            "setval": "mtu-ignore {{ mtu_ignore }}",
+            "setval": _tmplt_ospfv3_demand_mtu_ignore,
             "result": {
                 "processes": {
                     "{{ pid }}": {
-                        "mtu_ignore": "{{ mtu_ignore }}",
+                        "mtu_ignore": "{{ True if mtu_ignore is defined }}",
                     }
                 }
             },
@@ -913,13 +871,13 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sflood-reduction\s(?P<flood_reduction>\S+)
                 $""",
                 re.VERBOSE,
             ),
 
-            "setval": "flood-reduction {{ flood_reduction }}",
+            "setval": "flood-reduction {{ True if flood_reduction is defined }}",
             "result": {
                 "processes": {
                     "{{ pid }}": {
@@ -933,7 +891,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sloopback(?P<loopback>)
                 \sstub-network\s(?P<stub_network>\S+)
                 $""",
@@ -954,7 +912,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \saddress-family(?P<address_family>)
                 \sipv4(?P<ipv4>)
                 \sunicast(?P<unicast>)
@@ -976,7 +934,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sapply-weight(?P<apply_weight>)
                     \sdefault-weight(?P<default_weight>\s\d+)
                     $""",
@@ -998,7 +956,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sapply-weight(?P<apply_weight>)
                     \sbandwidth(?P<bandwidth>\s\d+)?
                     $""",
@@ -1016,26 +974,21 @@ class Ospfv2Template(NetworkTemplate):
             },
         },
         {
-            "name": "adjacency_stagger",
+            "name": "authentication",
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
-                    \sadjacency(?P<adjacency>)
-                    \sstagger(?P<stagger>)
-                    (\s(?P<min_adjacency>\d+))?
-                    (\s(?P<max_adjacency>\d+))?
-                    (\sdisable(?P<disable>\S+))?
+                    \sospfv3\s(?P<pid>\S+)
+                    \sauthentication(?P<auth>)
+                    (\sdisable(?P<disable>))?
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_adjacency_stagger,
+            "setval": _tmplt_ospfv3_authentication,
             "result": {
                 "processes": {
                     "{{ pid }}": {
-                        "adjacency_stagger": {
-                            "min_adjacency": "{{ min_adjacency|int }}",
-                            "max_adjacency": "{{ max_adjacency }}",
+                        "authentication": {
                             "disable": "{{ True if disable is defined }}",
                         },
                     }
@@ -1043,49 +996,29 @@ class Ospfv2Template(NetworkTemplate):
             },
         },
         {
-            "name": "authentication",
+            "name": "authentication.ipsec",
             "getval": re.compile(
-                r"""
-                    ^router
-                    \sospf\s(?P<pid>\S+)
+                r"""^router
+                    \sospfv3\s(?P<pid>\S+)
                     \sauthentication(?P<auth>)
-                    (\skeychain\s(?P<keychain>\S+)*)?
-                    (\snull(?P<no_auth>))?
+                    \sipsec(?P<ipsec>)
+                    \sspi\s(?P<spi>\d+)
+                    (\s(?P<algo_type>\S+))?
+                    (\spassword\s(?P<password_key>\S+))?
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_authentication,
+            "setval": _tmplt_ospf_authentication_ipsec,
             "result": {
                 "processes": {
                     "{{ pid }}": {
                         "authentication": {
-                            "no_auth": "{{ True if no_auth is defined }}",
-                            "keychain": "{{ keychain }}",
-                        },
-                    }
-                }
-            },
-        },
-        {
-            "name": "authentication.message_digest",
-            "getval": re.compile(
-                r"""
-                    ^router
-                    \sospf\s(?P<pid>\S+)
-                    \sauthentication(?P<auth>)
-                    \smessage-digest(?P<md>)
-                    \skeychain\s(?P<md_key>\S+)
-                    *$""",
-                re.VERBOSE,
-            ),
-            "setval": _tmplt_ospf_authentication_md,
-            "result": {
-                "processes": {
-                    "{{ pid }}": {
-                        "authentication": {
-                            "message_digest": {
-                                "keychain": "{{ md_key }}",
-                                "set": "{{ True if md is defined and md_key is undefined }}",
+                            "ipsec": {
+                                "spi": "{{ spi }}",
+                                "algorithim_type": "{{ algo_type }}",
+                                "clear_key": "{{ clear_key }}",
+                                "password_key": "{{ password_key }}",
+                                "key": "{{ key }}",
                             }
                         },
                     }
@@ -1097,7 +1030,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sdefault-information(?P<default_information>)
                     (\soriginate(?P<originate>))?
                     (\salways(?P<always>))?
@@ -1128,7 +1061,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sauto-cost(?P<auto_cost>)
                     (\sreference-bandwidth\s(?P<reference_bandwidth>\d+))?
                     (\sdisable(?P<disable>))?
@@ -1148,23 +1081,43 @@ class Ospfv2Template(NetworkTemplate):
             },
         },
         {
-            "name": "bfd",
+            "name": "bfd.minimum_interval",
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sbfd(?P<bfd>)
-                    (\sminimum-interval\s(?P<minimum_interval>\d+))?
-                    (\smultiplier\s(?P<multiplier>\d+))?
+                    \sminimum-interval\s(?P<minimum_interval>\d+)
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_bfd,
+            "setval": _tmplt_ospfv3_bfd_minimum_interval,
             "result": {
                 "processes": {
                     "{{ pid }}": {
                         "bfd": {
                             "minimum_interval": "{{ minimum_interval|int }}",
+                        },
+                    }
+                }
+            },
+        },
+        {
+            "name": "bfd.multiplier",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospfv3\s(?P<pid>\S+)
+                    \sbfd(?P<bfd>)
+                    \smultiplier\s(?P<multiplier>\d+)
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospfv3_bfd_multiplier,
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "bfd": {
                             "multiplier": "{{ multiplier|int }}",
                         },
                     }
@@ -1176,7 +1129,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sbfd(?P<bfd>)
                     \sfast-detect(?P<fast_detect>)
                     (\s(?P<disable>disable))?
@@ -1203,7 +1156,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \ssecurity(?P<security>)
                     \sttl(?P<ttl>)?
                     (\shops\s(?P<hops>\d+))?
@@ -1227,7 +1180,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \snsr(?P<nsr>)
                     \sdisable(?P<disable>)?
                     $""",
@@ -1250,7 +1203,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sprotocol(?P<protocol>)
                     \s(shutdown(?P<shutdown>))
                     (\shost-mode(?P<host_mode>))?
@@ -1276,7 +1229,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \scapability(?P<capability>)
                     (\stype7\s(?P<type7>\S+))?
                     $""",
@@ -1298,7 +1251,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \scapability(?P<capability>)?
                     \sopaque(?P<opaque>)
                     (\sdisable(?P<disable>))?
@@ -1324,7 +1277,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sdistance\s(?P<value>d+)
                     \s(?P<source>\S+)
                     \s(?P<wildcard>\S+)
@@ -1354,9 +1307,9 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sdistance(?P<value>)
-                    \sospf(?P<ospf>)
+                    \sospfv3(?P<ospf>)
                     (\sexternal\s(?P<external>\d+))?
                     (\sinter-area\s(?P<inter_area>\d+))?
                     (\sintra-area\s(?P<intra_area>\d+))?
@@ -1379,37 +1332,11 @@ class Ospfv2Template(NetworkTemplate):
             },
         },
         {
-            "name": "authentication_key",
-            "getval": re.compile(
-                r"""
-                    ^router
-                    \sospf\s(?P<pid>\S+)
-                    \sauthentication-key(?P<auth_key>)
-                    (\s(?P<password>\S+))?
-                    (\sclear\s(?P<clear>)\S+)?
-                    (\sencrypted(?P<encrypted>\S+))?
-                    $""",
-                re.VERBOSE,
-            ),
-            "setval": _tmplt_ospf_authentication_key,
-            "result": {
-                "processes": {
-                    "{{ pid }}": {
-                        "authentication_key": {
-                            "clear": "{{ clear }}",
-                            "encrypted": "{{ encrypted}}",
-                            "password": "{{ password if clear is undefined and encrypted is undefined }}",
-                        },
-                    }
-                }
-            },
-        },
-        {
             "name": "area.default_cost",
             "getval": re.compile(
                 r"""
                    ^router
-                   \sospf\s(?P<pid>\S+)
+                   \sospfv3\s(?P<pid>\S+)
                    \sarea\s(?P<area_id>\S+)
                    \sdefault-cost\s(?P<default_cost>\d+)
                    $""",
@@ -1436,7 +1363,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sarea\s(?P<area_id>\S+)
                 \sdead-interval\s(?P<dead_interval>\d+)
                 $""",
@@ -1463,7 +1390,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sarea\s(?P<area_id>\S+)
                 \shello-interval\s(?P<hello_interval>\d+)
                 $""",
@@ -1489,7 +1416,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sarea\s(?P<area_id>\S+)
                 \stransmit-delay\s(?P<transmit_delay>\d+)
                 $""",
@@ -1515,7 +1442,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                    ^router
-                   \sospf\s(?P<pid>\S+)
+                   \sospfv3\s(?P<pid>\S+)
                    \sarea\s(?P<area_id>\S+)
                    \scost\s(?P<cost>\d+)
                    $""",
@@ -1541,7 +1468,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                    ^router
-                   \sospf\s(?P<pid>\S+)
+                   \sospfv3\s(?P<pid>\S+)
                    \sarea\s(?P<area_id>\S+)
                    \spriority\s(?P<priority>\d+)
                    $""",
@@ -1567,7 +1494,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                    ^router
-                   \sospf\s(?P<pid>\S+)
+                   \sospfv3\s(?P<pid>\S+)
                    \sarea\s(?P<area_id>\S+)
                    \sweight\s(?P<weight>\d+)
                    $""",
@@ -1593,7 +1520,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                    ^router
-                   \sospf\s(?P<pid>\S+)
+                   \sospfv3\s(?P<pid>\S+)
                    \sarea\s(?P<area_id>\S+)
                    \spacket-size\s(?P<packet_size>\d+)
                    $""",
@@ -1619,7 +1546,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sarea\s(?P<area_id>\S+)
                 \ssummary-in\s(?P<summary_in>\S+)
                 $""",
@@ -1646,7 +1573,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sarea\s(?P<area_id>\S+)
                 \sdemand-circuit\s(?P<demand_circuit>\S+)
                 $""",
@@ -1673,7 +1600,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sarea\s(?P<area_id>\S+)
                 \spassive\s(?P<passive>\S+)
                 $""",
@@ -1700,7 +1627,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sarea\s(?P<area_id>\S+)
                 \sexternal-out\s(?P<external_out>\S+)
                 $""",
@@ -1727,7 +1654,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sarea\s(?P<area_id>\S+)
                 \smtu-ignore\s(?P<mtu_ignore>\S+)
                 $""",
@@ -1754,15 +1681,14 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
                     \sauthentication(?P<auth>)
-                    (\skeychain\s(?P<keychain>\S+))?
-                    (\snull(?P<no_auth>))?
+                    (\sdisable(?P<disable>))?
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_area_authentication,
+            "setval": _tmplt_ospfv3_area_authentication,
             "compval": "authentication",
             "result": {
                 "processes": {
@@ -1771,8 +1697,7 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "authentication": {
-                                    "no_auth": "{{ True if no_auth is defined }}",
-                                    "keychain": "{{ keychain }}",
+                                    "disable": "{{ True if disable is defined }}",
                                 },
                             }
                         }
@@ -1781,53 +1706,22 @@ class Ospfv2Template(NetworkTemplate):
             },
         },
         {
-            "name": "area.authentication_key",
+            "name": "area.authentication.ipsec",
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
-                    \sauthentication-key(?P<auth_key>)
-                    (\s(?P<password>\S+))?
-                    (\sclear\s(?P<clear>)\S+)?
-                    (\sencrypted(?P<encrypted>\S+))?
+                    \sauthentication(?P<auth_key>)
+                    \sipsec(?P<ipsec>)
+                    \sspi\s(?P<spi>\d+)
+                    (\s(?P<algo_type>\S+))?
+                    (\spassword\s(?P<password_key>\S+))?
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_area_authentication_key,
-            "compval": "authentication_key",
-            "result": {
-                "processes": {
-                    "{{ pid }}": {
-                        "areas": {
-                            "{{ area_id }}": {
-                                "area_id": "{{ area_id }}",
-                                "authentication_key": {
-                                    "clear": "{{ clear }}",
-                                    "encrypted": "{{ encrypted}}",
-                                    "password": "{{ password if clear is undefined and encrypted is undefined }}",
-                                },
-                            }
-                        }
-                    }
-                }
-            },
-        },
-        {
-            "name": "area.authentication.message_digest",
-            "getval": re.compile(
-                r"""
-                    ^router
-                    \sospf\s(?P<pid>\S+)
-                    \sarea\s(?P<area_id>\S+)
-                    \sauthentication(?P<auth>)
-                    \smessage-digest(?P<md>)
-                    \skeychain(?P<md_key>\s\S+)
-                    *$""",
-                re.VERBOSE,
-            ),
-            "setval": _tmplt_ospf_area_authentication_md,
-            "compval": "authentication.message_digest",
+            "setval": _tmplt_ospfv3_area_authentication_ipsec,
+            "compval": "authentication.ipsec",
             "result": {
                 "processes": {
                     "{{ pid }}": {
@@ -1835,14 +1729,18 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "authentication": {
-                                    "message_digest": {
-                                        "keychain": "{{ md_key }}",
-                                    }
-                                },
+                                    "ipsec": {
+                                        "spi": "{{ spi }}",
+                                        "algorithim_type": "{{ algo_type }}",
+                                        "clear_key": "{{ clear_key }}",
+                                        "password_key": "{{ password_key }}",
+                                        "key": "{{ key }}",
+                                    },
+                                }
                             }
                         }
                     }
-                }
+                },
             },
         },
         {
@@ -1850,7 +1748,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
                     \smpls(?P<mpls>)
                     \straffic-end(?P<traffic_eng>)
@@ -1879,7 +1777,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
                     \smpls(?P<mpls>)
                     (\sauto-config(?P<auto_config>))?
@@ -1911,20 +1809,19 @@ class Ospfv2Template(NetworkTemplate):
             },
         },
         {
-            "name": "area.bfd",
+            "name": "area.bfd.minimum_interval",
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
                     \sbfd(?P<bfd>)
-                    (\sminimum-interval\s(?P<minimum_interval>\d+))?
-                    (\smultiplier\s(?P<multiplier>\d+))?
+                    \sminimum-interval\s(?P<minimum_interval>\d+)
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_area_bfd,
-            "compval": "bfd",
+            "setval": _tmplt_ospfv3_area_bfd_minimum_interval,
+            "compval": "bfd.minimum_interval",
             "result": {
                 "processes": {
                     "{{ pid }}": {
@@ -1933,6 +1830,34 @@ class Ospfv2Template(NetworkTemplate):
                                 "area_id": "{{ area_id }}",
                                 "bfd": {
                                     "minimum_interval": "{{ minimum_interval|int }}",
+                                },
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "area.bfd.multiplier",
+            "getval": re.compile(
+                r"""
+                    ^router
+                    \sospfv3\s(?P<pid>\S+)
+                    \sarea\s(?P<area_id>\S+)
+                    \sbfd(?P<bfd>)
+                    \smultiplier\s(?P<multiplier>\d+)
+                    $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospfv3_area_bfd_multiplier,
+            "compval": "bfd.multiplier",
+            "result": {
+                "processes": {
+                    "{{ pid }}": {
+                        "areas": {
+                            "{{ area_id }}": {
+                                "area_id": "{{ area_id }}",
+                                "bfd": {
                                     "multiplier": "{{ multiplier|int }}",
                                 },
                             }
@@ -1946,7 +1871,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sbfd(?P<bfd>)
                     \sarea(?P<area_id>)
                     \sfast-detect(?P<fast_detect>)
@@ -1955,7 +1880,7 @@ class Ospfv2Template(NetworkTemplate):
                     $""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_ospf_area_bfd_fast_detect,
+            "setval": _tmplt_ospfv3_area_bfd_fast_detect,
             "compval": "bfd.fast_detect",
             "result": {
                 "processes": {
@@ -1980,7 +1905,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sarea\s(?P<area_id>\S+)
                 \sstub(?P<nssa>)
                 (\sno-summary(?P<no_sum>))?
@@ -2008,7 +1933,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sarea\s(?P<area_id>\S+)
                 \snssa(?P<nssa>)
                 (\sno-redistribution(?P<no_redis>))?
@@ -2038,7 +1963,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sarea\s(?P<area_id>\S+)
                 \snssa(?P<nssa>)
                 (\sno-redistribution(?P<no_redis>))?
@@ -2073,7 +1998,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
                     \srange(?P<range>)
                     \s(?P<address>\S+)
@@ -2108,7 +2033,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sarea\s(?P<area_id>\S+)
                 \snssa(?P<nssa>)
                 \stranslate(?P<translate>)
@@ -2141,7 +2066,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
                     \svirtual-link\s(?P<id>\S+)
                     \shello-interval\s(?P<hello_interval>\d+)
@@ -2175,7 +2100,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
                     \svirtual-link\s(?P<id>\S+)
                     \sdead-interval\s(?P<dead_interval>\d+)
@@ -2208,7 +2133,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
                     \svirtual-link\s(?P<id>\S+)
                     \sretransmit-interval\s(?P<retransmit_interval>\d+)
@@ -2241,7 +2166,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
                     \savirtual-link\s(?P<id>\S+)
                     \sauthentication(?P<auth>)
@@ -2273,7 +2198,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
                     \svirtual-link\s(?P<id>\S+)
                     \sauthentication-key(?P<auth_key>)
@@ -2311,7 +2236,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sarea\s(?P<area_id>\S+)
                     \svirtual-link\s(?P<id>\S+)
                     \sauthentication(?P<auth>)
@@ -2348,7 +2273,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \slink-down
                     \sfast-detect(?P<fast_detect>)
                     $""",
@@ -2368,7 +2293,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \snsr
                     \sdisable(?P<disable>)
                     $""",
@@ -2388,7 +2313,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \sdatabase-filter
                 \sall
                 \sout\s(?P<outing>\S+)
@@ -2410,7 +2335,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sdistribute(?P<distribute>)
                     \slink-state(?P<link_state>)
                     (\sinstance-id(?P<inst_id>\d+))?
@@ -2435,7 +2360,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sdistribute(?P<distribute>)
                     \sbgp-ls(?P<bgp_ls>)
                     (\sinstance-id(?P<inst_id>\d+))?
@@ -2460,7 +2385,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \slog(?P<security>)
                     \sadjacency(?P<adjacency>)?
                     (\schanges(?P<changes>))?
@@ -2487,7 +2412,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     (\smax-lsa\s(?P<threshold>\d+))?
                     (\swarning-only\s(?P<warning_only>\d+)?
                     (\signore-time\s(?P<ignore_time>\d+))?
@@ -2516,7 +2441,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^router
-                \sospf\s(?P<pid>\S+)
+                \sospfv3\s(?P<pid>\S+)
                 \smax-metric
                 \s*(?P<router_lsa>)
                 (\s*external-lsa(?P<external_lsa>))?
@@ -2564,7 +2489,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \smpls(?P<mpls>)
                     (\sauto-config(?P<auto_config>))?
                     (\ssync(?P<sync>))?
@@ -2593,7 +2518,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \smicroloop(?P<microloop>)
                     \savoidance(?P<avoidance>)
                     (\s(?P<protected>protected))?
@@ -2621,7 +2546,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \smpls(?P<mpls>)
                     \straffic-end(?P<traffic_eng>)
                     (\sautoroute-exclude(?P<autoroute>))?
@@ -2655,7 +2580,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sprefix-suppression(?P<prefix_suppression>)
                     (\s(?P<secondary_address>secondary-address))?
                     $""",
@@ -2678,7 +2603,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \sprotocol-shutdown(?P<protocol_shutdown>)
                     (\s(?P<host_mode>host-mode))?
                     (\s(?P<on_reload>on-reload))?
@@ -2703,7 +2628,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \stimers
                     \slsa
                     (\sgroup-pacing\s(?P<group_pacing>\d+))?
@@ -2732,7 +2657,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \stimers
                     \sgraceful_shutdown
                     (\sinitial delay\s(?P<initial_delay>\d+))?
@@ -2759,7 +2684,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \stimers
                     \sthrottle
                     \sspf
@@ -2792,7 +2717,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \stimers
                     \sthrottle
                     \slsa
@@ -2826,7 +2751,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \stimers
                     \sthrottle
                     \sfast-reroute\s(?P<fast_reroute>\d+)
@@ -2852,7 +2777,7 @@ class Ospfv2Template(NetworkTemplate):
             "getval": re.compile(
                 r"""
                     ^router
-                    \sospf\s(?P<pid>\S+)
+                    \sospfv3\s(?P<pid>\S+)
                     \stimers
                     \spacing
                     \sflood\s(?P<pacing_flood>\d+)
