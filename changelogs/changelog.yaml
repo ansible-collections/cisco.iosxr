@@ -125,3 +125,16 @@ releases:
     - 64-incorrect-interface-decription-parsing-fix.yaml
     - iosxr_netconf_config_commit_fix.yaml
     release_date: '2020-08-28'
+  1.1.0:
+    changes:
+      minor_changes:
+      - Added iosxr ospfv3 resource module (https://github.com/ansible-collections/cisco.iosxr/pull/81).
+      - Platform supported coments token to be provided when invoking the object.
+    fragments:
+    - 54_iosxr_ospfv3_module_added.yaml
+    - provide_fuctionality_to_utilize_remarks.yaml
+    modules:
+    - description: ospfv3 resource module
+      name: iosxr_ospfv3
+      namespace: ''
+    release_date: '2020-10-01'
