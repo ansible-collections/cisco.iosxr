@@ -58,13 +58,14 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.mock_load_config.stop()
         self.mock_execute_show_command.stop()
 
-    def load_fixtures(self, commands=None):
+    def _prepare(self):
         def load_from_file(*args, **kwargs):
             return load_fixture("iosxr_acls_config.cfg")
 
         self.execute_show_command.side_effect = load_from_file
 
     def test_iosxr_acls_merged(self):
+        self._prepare()
         set_module_args(
             dict(
                 config=[
@@ -97,6 +98,7 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=True, commands=commands)
 
     def test_iosxr_acls_merged_idempotent(self):
+        self._prepare()
         set_module_args(
             dict(
                 config=[
@@ -124,6 +126,7 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=False, commands=[])
 
     def test_iosxr_acls_replaced(self):
+        self._prepare()
         set_module_args(
             dict(
                 config=[
@@ -158,6 +161,7 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=True, commands=commands)
 
     def test_iosxr_acls_replaced_idempotent(self):
+        self._prepare()
         set_module_args(
             dict(
                 config=[
@@ -192,6 +196,7 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=False, commands=[])
 
     def test_iosxr_acls_overridden(self):
+        self._prepare()
         set_module_args(
             dict(
                 config=[
@@ -227,6 +232,7 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=True, commands=commands)
 
     def test_iosxr_acls_overridden_idempotent(self):
+        self._prepare()
         set_module_args(
             dict(
                 config=[
@@ -278,6 +284,7 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=False, commands=[])
 
     def test_iosxr_acls_deletedacls(self):
+        self._prepare()
         set_module_args(
             dict(
                 config=[dict(afi="ipv6", acls=[dict(name="acl6_1")])],
@@ -288,11 +295,13 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=True, commands=commands)
 
     def test_iosxr_acls_deletedafis(self):
+        self._prepare()
         set_module_args(dict(config=[dict(afi="ipv4")], state="deleted"))
         commands = ["no ipv4 access-list acl_2"]
         self.execute_module(changed=True, commands=commands)
 
     def test_iosxr_acls_rendered(self):
+        self._prepare()
         set_module_args(
             dict(
                 config=[
@@ -321,3 +330,32 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.assertEqual(
             sorted(result["rendered"]), sorted(commands), result["rendered"]
         )
+
+    def test_iosxr_acls_overridden_on_empty_config(self):
+        self.execute_show_command.return_value = ""
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        afi="ipv4",
+                        acls=[
+                            dict(
+                                name="acl_1",
+                                aces=[
+                                    dict(
+                                        sequence="10",
+                                        grant="deny",
+                                        source=dict(any=True),
+                                        destination=dict(any=True),
+                                        protocol="ip",
+                                    )
+                                ],
+                            )
+                        ],
+                    )
+                ],
+                state="overridden",
+            )
+        )
+        cmds = ["ipv4 access-list acl_1", "10 deny ip any any"]
+        self.execute_module(changed=True, commands=cmds)
