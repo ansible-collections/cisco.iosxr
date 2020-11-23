@@ -1,0 +1,65 @@
+---
+- debug:
+    msg: START iosxr_ospf_interfaces overridden integration tests on connection={{
+      ansible_connection }}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_config.yaml
+
+- block:
+
+    - name: Overridde all ospf_interfaces configuration with provided configuration
+      register: result
+      cisco.iosxr.iosxr_ospf_interfaces: &id001
+        config:
+          - name: GigabitEthernet0/0/0/1
+            type: gigabitethernet
+            address_family:
+              - afi: ipv4
+                processes:
+                  - process_id: "LAB1"
+                    area:
+                      area_id: 0.0.0.3
+                cost: 10
+                authentication:
+                  message_digest:
+                    keychain: iosxr
+        state: overridden
+
+    - name: Assert that correct set of commands were generated
+      assert:
+        that:
+          - "{{ overridden['commands'] | symmetric_difference(result['commands'])\
+            \ |length == 0 }}"
+
+    - name: Assert that before dicts are correctly generated
+      assert:
+        that:
+          - "{{ merged['after'] | symmetric_difference(result['before'])\
+            \ |length == 0 }}"
+
+    - name: Assert that after dict is correctly generated
+      assert:
+        that:
+          - "{{ overridden['after'] | symmetric_difference(result['after'])\
+            \ |length == 0 }}"
+
+    - name: Overridde all ospf_interfaces configuration with given configuration (IDEMPOTENT)
+      register: result
+      cisco.iosxr.iosxr_ospf_interfaces: *id001
+
+    - name: Assert that task was idempotent
+      assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
+
+    - name: Assert that before dict is correctly generated
+      assert:
+        that:
+          - "{{ overridden['after'] | symmetric_difference(result['before'])\
+            \ |length == 0 }}"
+  always:
+
+    - include_tasks: _remove_config.yaml

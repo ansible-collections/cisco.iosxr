@@ -1,0 +1,79 @@
+---
+- debug:
+    msg: START iosxr_ospf_interfaces round trip integration tests on connection={{
+      ansible_connection }}
+
+- block:
+
+    - include_tasks: _remove_config.yaml
+
+    - name: Apply the provided configuration (base config)
+      register: base_config
+      cisco.iosxr.iosxr_ospf_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/0
+            type: gigabitethernet
+            address_family:
+              - afi: ipv4
+                processes:
+                  - process_id: "LAB3"
+                    area:
+                      area_id: 0.0.0.3
+                cost: 20
+                authentication:
+                  message_digest:
+                    keychain: cisco
+              - afi: ipv6
+                processes:
+                  - process_id: "LAB3"
+                    area:
+                      area_id: 0.0.0.2
+                cost: 30
+        state: merged
+
+    - name: Gather ospf_interfaces facts
+      cisco.iosxr.iosxr_facts:
+        gather_subset:
+          - '!all'
+          - '!min'
+        gather_network_resources:
+          - ospf_interfaces
+
+    - name: Apply the provided configuration (config to be reverted)
+      register: result
+      cisco.iosxr.iosxr_ospf_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/1
+            type: gigabitethernet
+            address_family:
+              - afi: ipv4
+                processes:
+                  - process_id: "LAB1"
+                    area:
+                      area_id: 0.0.0.3
+                cost: 10
+                authentication:
+                  message_digest:
+                    keychain: iosxr
+        state: overridden
+
+    - name: Assert that changes were applied
+      assert:
+        that:
+          - "{{ round_trip['after'] | symmetric_difference(result['after'])\
+            \ |length == 0 }}"
+
+    - name: Revert back to base config using facts round trip
+      register: revert
+      cisco.iosxr.iosxr_ospf_interfaces:
+        config: "{{ ansible_facts['network_resources']['ospf_interfaces'] }}"
+        state: overridden
+
+    - name: Assert that config was reverted
+      assert:
+        that:
+          - "{{ base_config['after'] | symmetric_difference(revert['after'])\
+            \ |length == 0 }}"
+  always:
+
+    - include_tasks: _remove_config.yaml
