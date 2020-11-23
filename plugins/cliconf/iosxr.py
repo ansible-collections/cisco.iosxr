@@ -39,7 +39,7 @@ options:
     type: list
     default: []
     vars:
-    - name: ansible_ios_config_commands
+    - name: ansible_iosxr_config_commands
 """
 
 import re
