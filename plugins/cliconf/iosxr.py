@@ -28,6 +28,18 @@ description:
 - This iosxr plugin provides low level abstraction apis for sending and receiving
   CLI commands from Cisco IOS XR network devices.
 version_added: 1.0.0
+options:
+  config_commands:
+    description:
+    - Specifies a list of commands that can make configuration changes
+      to the target device.
+    - When `ansible_network_single_user_mode` is enabled, if a command sent
+      to the device is present in this list, the existing cache is invalidated.
+    version_added: 1.2.0
+    type: list
+    default: []
+    vars:
+    - name: ansible_ios_config_commands
 """
 
 import re
@@ -52,36 +64,43 @@ from ansible.plugins.cliconf import CliconfBase
 
 
 class Cliconf(CliconfBase):
+    def __init__(self, *args, **kwargs):
+        self._device_info = {}
+        super(Cliconf, self).__init__(*args, **kwargs)
+
     def get_device_info(self):
-        device_info = {}
+        if not self._device_info:
+            device_info = {}
 
-        device_info["network_os"] = "iosxr"
-        reply = self.get("show version | utility head -n 20")
-        data = to_text(reply, errors="surrogate_or_strict").strip()
+            device_info["network_os"] = "iosxr"
+            reply = self.get("show version | utility head -n 20")
+            data = to_text(reply, errors="surrogate_or_strict").strip()
 
-        match = re.search(r"Version (\S+)$", data, re.M)
-        if match:
-            device_info["network_os_version"] = match.group(1)
-
-        match = re.search(r'image file is "(.+)"', data)
-        if match:
-            device_info["network_os_image"] = match.group(1)
-
-        model_search_strs = [
-            r"^[Cc]isco (.+) \(revision",
-            r"^[Cc]isco (\S+ \S+).+bytes of .*memory",
-        ]
-        for item in model_search_strs:
-            match = re.search(item, data, re.M)
+            match = re.search(r"Version (\S+)$", data, re.M)
             if match:
-                device_info["network_os_model"] = match.group(1)
-                break
+                device_info["network_os_version"] = match.group(1)
 
-        match = re.search(r"^(.+) uptime", data, re.M)
-        if match:
-            device_info["network_os_hostname"] = match.group(1)
+            match = re.search(r'image file is "(.+)"', data)
+            if match:
+                device_info["network_os_image"] = match.group(1)
 
-        return device_info
+            model_search_strs = [
+                r"^[Cc]isco (.+) \(revision",
+                r"^[Cc]isco (\S+ \S+).+bytes of .*memory",
+            ]
+            for item in model_search_strs:
+                match = re.search(item, data, re.M)
+                if match:
+                    device_info["network_os_model"] = match.group(1)
+                    break
+
+            match = re.search(r"^(.+) uptime", data, re.M)
+            if match:
+                device_info["network_os_hostname"] = match.group(1)
+
+            self._device_info = device_info
+
+        return self._device_info
 
     def configure(self, admin=False, exclusive=False):
         prompt = to_text(
@@ -89,20 +108,20 @@ class Cliconf(CliconfBase):
         ).strip()
         if not prompt.endswith(")#"):
             if admin and "admin-" not in prompt:
-                self.send_command("admin")
+                self._connection.send_command("admin")
             if exclusive:
-                self.send_command("configure exclusive")
+                self._connection.send_command("configure exclusive")
                 return
-            self.send_command("configure terminal")
+            self._connection.send_command("configure terminal")
 
     def abort(self, admin=False):
         prompt = to_text(
             self._connection.get_prompt(), errors="surrogate_or_strict"
         ).strip()
         if prompt.endswith(")#"):
-            self.send_command("abort")
+            self._connection.send_command("abort")
             if admin and "admin-" in prompt:
-                self.send_command("exit")
+                self._connection.send_command("exit")
 
     def get_config(self, source="running", format="text", flags=None):
         if source not in ["running"]:
@@ -116,7 +135,7 @@ class Cliconf(CliconfBase):
         cmd += " ".join(to_list(flags))
         cmd = cmd.strip()
 
-        return self.send_command(cmd)
+        return self._connection.send_command(cmd, use_cache=True)
 
     def edit_config(
         self,
@@ -146,7 +165,7 @@ class Cliconf(CliconfBase):
             if not isinstance(line, Mapping):
                 line = {"command": line}
             cmd = line["command"]
-            results.append(self.send_command(**line))
+            results.append(self._connection.send_command(**line))
             requests.append(cmd)
 
         # Before any commit happend, we can get a real configuration
@@ -239,13 +258,14 @@ class Cliconf(CliconfBase):
             raise ValueError(
                 "'output' value %s is not supported for get" % output
             )
-        return self.send_command(
+        return self._connection.send_command(
             command=command,
             prompt=prompt,
             answer=answer,
             sendonly=sendonly,
             newline=newline,
             check_all=check_all,
+            use_cache=True,
         )
 
     def commit(self, comment=None, label=None, replace=None):
@@ -273,7 +293,7 @@ class Cliconf(CliconfBase):
             cmd_obj["prompt"] = "(C|c)onfirm"
             cmd_obj["answer"] = "y"
 
-        self.send_command(**cmd_obj)
+        self._connection.send_command(**cmd_obj)
 
     def run_commands(self, commands=None, check_rc=True):
         if commands is None:
@@ -290,8 +310,11 @@ class Cliconf(CliconfBase):
                     % output
                 )
 
+            if not cmd.get("prompt"):
+                cmd["use_cache"] = True
+
             try:
-                out = self.send_command(**cmd)
+                out = self._connection.send_command(**cmd)
             except AnsibleConnectionFailure as e:
                 if check_rc:
                     raise
@@ -315,7 +338,7 @@ class Cliconf(CliconfBase):
         return responses
 
     def discard_changes(self):
-        self.send_command("abort")
+        self._connection.send_command("abort")
 
     def get_device_operations(self):
         return {
