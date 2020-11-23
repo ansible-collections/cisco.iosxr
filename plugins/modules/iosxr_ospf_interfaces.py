@@ -270,7 +270,7 @@ options:
                       multilink:
                         description: Specify Multilink network interface(s)
                         type: list
-                        elemeplugins/modules/iosxr_ospf_interfaces.pynts: dict
+                        elements: dict
                         suboptions:
                           name:
                             description: Specify the interface id

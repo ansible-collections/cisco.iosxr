@@ -10,13 +10,3 @@
   ignore_errors: true
   ansible.netcommon.cli_config:
     config: '{{ lines }}'
-
-#- name: Remove OSPFv3 Routes
-#  vars:
-#    lines: "no router ospf LAB \n
-#            no router ospf LAB1 \n
-#            no router ospf LAB3 \n
-#            "
-#  ignore_errors: true
-#  ansible.netcommon.cli_config:
-#    config: '{{ lines }}'
