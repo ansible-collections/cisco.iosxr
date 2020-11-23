@@ -59,23 +59,28 @@ options:
             type: str
             choices: ['ipv4', 'ipv6']
             required: True
-          process:
+          processes:
             description:
               - Interfaces configuration for an OSPF process.
-            type: dict
+            type: list
+            elements: dict
             suboptions:
               process_id:
                 description:
                   - OSPF process tag.
                 type: str
                 required: True
-              area_id:
-                description:
-                  - OSPF interfaces area ID as a decimal value. Please
-                    refer vendor documentation of Valid values.
-                  - OSPF interfaces area ID in IP address format(e.g.
-                    A.B.C.D)
-                type: str
+              area:
+                description: Specify the area-id
+                type: dict
+                suboptions:
+                  area_id:
+                    description:
+                      - OSPF interfaces area ID as a decimal value. Please
+                        refer vendor documentation of Valid values.
+                      - OSPF interfaces area ID in IP address format(e.g.
+                        A.B.C.D)
+                    type: str
           apply_group_option:
             description: Specify configuration from a group
             type: dict
@@ -187,8 +192,9 @@ options:
                         type: list
                         elements: dict
                         suboptions:
-                          name: Specify the interface id
-                          type: int
+                          name:
+                            description: Specify the interface id
+                            type: int
                       bundle_ether:
                         description: Specify Aggregated Ethernet interface(s)
                         type: list
@@ -264,7 +270,7 @@ options:
                       multilink:
                         description: Specify Multilink network interface(s)
                         type: list
-                        elements: dict
+                        elemeplugins/modules/iosxr_ospf_interfaces.pynts: dict
                         suboptions:
                           name:
                             description: Specify the interface id
@@ -274,8 +280,9 @@ options:
                         type: list
                         elements: dict
                         suboptions:
-                          name: Specify the interface id
-                          type: int
+                          name:
+                            description: Specify the interface id
+                            type: int
                       pw_iw:
                         description: Specify PWHE VC11 IP Interworking Interface
                         type: list

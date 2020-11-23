@@ -296,10 +296,11 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
         self.execute_module(changed=False, commands=[])
 
     def test_iosxr_ospf_interfaces_parsed(self):
-        set_module_args(dict(
-            running_config="router ospf LAB3\n area 0.0.0.3\n  interface GigabitEthernet0/0/0/0\n   cost 20\n  !\n !\n!",
-            state="parsed",
-        )
+        set_module_args(
+            dict(
+                running_config="router ospf LAB3\n area 0.0.0.3\n  interface GigabitEthernet0/0/0/0\n   cost 20\n  !\n !\n!",
+                state="parsed",
+            )
         )
         result = self.execute_module(changed=False)
         parsed_list = [

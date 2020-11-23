@@ -41,7 +41,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
             "elements": "dict",
             "options": {
                 "name": {"type": "str", "required": True},
-                "int_type": {"type": "str", "required": True},
+                "type": {"type": "str", "required": True},
                 "address_family": {
                     "type": "list",
                     "elements": "dict",
@@ -61,11 +61,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                                 },
                                 "area": {
                                     "type": "dict",
-                                    "options": {
-                                        "area_id": {
-                                            "type": "str",
-                                        }
-                                    },
+                                    "options": {"area_id": {"type": "str"}},
                                 },
                             },
                         },
@@ -84,10 +80,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "message_digest": {
                                     "type": "dict",
-                                    "options": {
-                                        "keychain": {"type": "str"},
-                                        "set": {"type": "bool"},
-                                    },
+                                    "options": {"keychain": {"type": "str"}},
                                 },
                                 "null_auth": {"type": "bool"},
                             },
@@ -95,9 +88,9 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                         "authentication_key": {
                             "type": "dict",
                             "options": {
-                                "encrypted": {"type": "str"},
                                 "password": {"type": "str"},
                                 "clear": {"type": "str"},
+                                "encrypted": {"type": "str"},
                             },
                         },
                         "bfd": {
@@ -107,7 +100,6 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "set": {"type": "bool"},
-                                        "disable": {"type": "bool"},
                                         "strict_mode": {"type": "bool"},
                                     },
                                 },
@@ -151,184 +143,161 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "int"}
                                                     },
                                                 },
                                                 "bundle_ether": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "int"}
                                                     },
                                                 },
                                                 "pos_int": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "int"}
                                                     },
                                                 },
                                                 "fast_ethernet": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                                 "fiftygige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                                 "fortygige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                                 "fourhundredgige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                                 "gigabitethernet": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                                 "hundredgige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                                 "mgmteth": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                                 "multilink": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                                 "pw_ether": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "int"}
                                                     },
                                                 },
                                                 "pw_iw": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "int"}
                                                     },
                                                 },
                                                 "srp": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                                 "serial": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                                 "tengige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                                 "twentyfivegige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                                 "twohundredgige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                                 "nve": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "int"}
                                                     },
                                                 },
                                                 "tunnel_ip": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "int"}
                                                     },
                                                 },
                                                 "tunnel_ipsec": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "int"}
                                                     },
                                                 },
                                                 "tunnel_mte": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "int"}
                                                     },
                                                 },
                                                 "tunnel_mpls": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {},
-                                                        "type": {},
+                                                        "name": {"type": "str"}
                                                     },
                                                 },
                                             },
@@ -339,13 +308,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                         },
                         "flood_reduction": {"type": "bool"},
                         "hello_interval": {"type": "int"},
-                        "link_down_fast_detect": {
-                            "type": "dict",
-                            "options": {
-                                "set": {"type": "bool"},
-                                "disable": {"type": "bool"},
-                            },
-                        },
+                        "link_down_fast_detect": {"type": "bool"},
                         "message_digest_key": {
                             "type": "dict",
                             "options": {
@@ -353,17 +316,15 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                                 "md5": {
                                     "type": "dict",
                                     "required": True,
-                                    "options": {"encrypted": {"type": "str"}},
+                                    "options": {
+                                        "password": {"type": "str"},
+                                        "clear": {"type": "bool"},
+                                        "encrypted": {"type": "bool"},
+                                    },
                                 },
                             },
                         },
-                        "mpls": {
-                            "type": "dict",
-                            "options": {
-                                "set_ldp": {"type": "bool"},
-                                "ldp_sync": {"type": "bool"},
-                            },
-                        },
+                        "mpls_ldp_sync": {"type": "bool"},
                         "mtu_ignore": {"type": "bool"},
                         "network": {
                             "type": "str",
@@ -387,13 +348,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                         },
                         "packet_size": {"type": "int"},
                         "passive": {"type": "bool"},
-                        "prefix_suppression": {
-                            "type": "dict",
-                            "options": {
-                                "disable": {"type": "bool"},
-                                "secondary_address": {"type": "bool"},
-                            },
-                        },
+                        "prefix_suppression": {"type": "bool"},
                         "priority": {"type": "int"},
                         "retransmit_interval": {"type": "int"},
                         "security_ttl": {
