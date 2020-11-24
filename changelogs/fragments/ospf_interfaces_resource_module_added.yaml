@@ -1,0 +1,3 @@
+---
+major_changes:
+  - Added iosxr ospf_interfaces resource module (https://github.com/ansible-collections/cisco.iosxr/pull/84).
