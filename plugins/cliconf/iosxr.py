@@ -108,20 +108,20 @@ class Cliconf(CliconfBase):
         ).strip()
         if not prompt.endswith(")#"):
             if admin and "admin-" not in prompt:
-                self._connection.send_command("admin")
+                self.send_command("admin")
             if exclusive:
-                self._connection.send_command("configure exclusive")
+                self.send_command("configure exclusive")
                 return
-            self._connection.send_command("configure terminal")
+            self.send_command("configure terminal")
 
     def abort(self, admin=False):
         prompt = to_text(
             self._connection.get_prompt(), errors="surrogate_or_strict"
         ).strip()
         if prompt.endswith(")#"):
-            self._connection.send_command("abort")
+            self.send_command("abort")
             if admin and "admin-" in prompt:
-                self._connection.send_command("exit")
+                self.send_command("exit")
 
     def get_config(self, source="running", format="text", flags=None):
         if source not in ["running"]:
@@ -135,7 +135,7 @@ class Cliconf(CliconfBase):
         cmd += " ".join(to_list(flags))
         cmd = cmd.strip()
 
-        return self._connection.send_command(cmd, use_cache=True)
+        return self.send_command(cmd)
 
     def edit_config(
         self,
@@ -165,7 +165,7 @@ class Cliconf(CliconfBase):
             if not isinstance(line, Mapping):
                 line = {"command": line}
             cmd = line["command"]
-            results.append(self._connection.send_command(**line))
+            results.append(self.send_command(**line))
             requests.append(cmd)
 
         # Before any commit happend, we can get a real configuration
@@ -258,14 +258,13 @@ class Cliconf(CliconfBase):
             raise ValueError(
                 "'output' value %s is not supported for get" % output
             )
-        return self._connection.send_command(
+        return self.send_command(
             command=command,
             prompt=prompt,
             answer=answer,
             sendonly=sendonly,
             newline=newline,
             check_all=check_all,
-            use_cache=True,
         )
 
     def commit(self, comment=None, label=None, replace=None):
@@ -293,7 +292,7 @@ class Cliconf(CliconfBase):
             cmd_obj["prompt"] = "(C|c)onfirm"
             cmd_obj["answer"] = "y"
 
-        self._connection.send_command(**cmd_obj)
+        self.send_command(**cmd_obj)
 
     def run_commands(self, commands=None, check_rc=True):
         if commands is None:
@@ -310,11 +309,8 @@ class Cliconf(CliconfBase):
                     % output
                 )
 
-            if not cmd.get("prompt"):
-                cmd["use_cache"] = True
-
             try:
-                out = self._connection.send_command(**cmd)
+                out = self.send_command(**cmd)
             except AnsibleConnectionFailure as e:
                 if check_rc:
                     raise
@@ -338,7 +334,7 @@ class Cliconf(CliconfBase):
         return responses
 
     def discard_changes(self):
-        self._connection.send_command("abort")
+        self.send_command("abort")
 
     def get_device_operations(self):
         return {
