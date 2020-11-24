@@ -127,11 +127,10 @@ class Ospf_interfaces(ResourceModule):
             wantd = {}
 
         # remove superfluous config for overridden and deleted
-        if self.state in ["overridden"]:
+        if self.state == "overridden":
             for k, have in iteritems(haved):
                 if k not in wantd:
                     self._remove_ospf_int(have)
-                    # self._compare(want={}, have=have)
         if self.state != "deleted":
             for k, want in iteritems(wantd):
                 self._compare(want=want, have=haved.pop(k, {}))

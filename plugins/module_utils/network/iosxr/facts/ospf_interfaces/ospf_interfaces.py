@@ -87,12 +87,14 @@ class Ospf_interfacesFacts(object):
                     config_commands.append(area_str.replace("  ", " "))
                     end_flag += 1
                 elif line.startswith("  interface"):
-                    virtual_str = area_str + re.sub("\n", "", line)
-                    config_commands.append(virtual_str.replace("  ", " "))
+                    ospf_int = area_str + re.sub("\n", "", line)
+                    # default output format has more spaces with default identation
+                    # reset the spaces with replace
+                    config_commands.append(ospf_int.replace("  ", " "))
                     v_read = True
                 elif v_read:
                     if "!" not in line:
-                        command = virtual_str.replace("  ", " ") + re.sub(
+                        command = ospf_int.replace("  ", " ") + re.sub(
                             "\n", "", line
                         )
                         config_commands.append(command.replace("   ", " "))

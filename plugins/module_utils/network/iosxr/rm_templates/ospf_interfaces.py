@@ -21,17 +21,9 @@ def _compute_command(cfg):
     ospf_type = get_ospf_type(cfg["address_family"]["afi"])
     type = get_interface_type(cfg["name"])
     area = cfg["address_family"]["processes"]["area"]
-    cmd = (
-        "router "
-        + ospf_type
-        + " "
-        + cfg["address_family"]["processes"]["process_id"]
-        + " area "
-        + area["area_id"]
-        + " interface "
-        + type
-        + " "
-        + cfg["name"].split(type)[1]
+    pid = cfg["address_family"]["processes"]["process_id"]
+    cmd = "router {} {} area {} interface {} {}".format(
+        ospf_type, pid, area["area_id"], type, cfg["name"].split(type)[1]
     )
     return cmd
 
@@ -40,17 +32,12 @@ def _tmplt_ospf_int_delete(config_data):
     ospf_type = get_ospf_type(config_data["afi"])
     type = get_interface_type(config_data["name"])
     area = config_data["area"]
-    command = (
-        "router "
-        + ospf_type
-        + " "
-        + config_data["process"]
-        + " area "
-        + area["area_id"]
-        + " interface "
-        + type
-        + " "
-        + config_data["name"].split(type)[1]
+    command = "router {} {} area {} interface {} {}".format(
+        ospf_type,
+        config_data["process"],
+        area["area_id"],
+        type,
+        config_data["name"].split(type)[1],
     )
     return command
 
