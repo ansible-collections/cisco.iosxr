@@ -227,7 +227,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Banner text to be configured. Accepts multi line string, without empty lines. Requires <em>state=present</em>.</div>
+                        <div>Banner text to be configured. Accepts multi line string, without empty lines. When using a multi line string, the first and last characters must be the start and end delimiters for the banner Requires <em>state=present</em>.</div>
                 </td>
             </tr>
     </table>
@@ -254,9 +254,9 @@ Examples
       cisco.iosxr.iosxr_banner:
         banner: login
         text: |
-          this is my login banner
+          @this is my login banner
           that contains a multiline
-          string
+          string@
         state: present
     - name: remove the motd banner
       cisco.iosxr.iosxr_banner:
@@ -296,7 +296,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>The list of configuration mode commands sent to device with transport <code>cli</code></div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;banner login&#x27;, &#x27;this is my login banner&#x27;, &#x27;that contains a multiline&#x27;, &#x27;string&#x27;]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;banner login&#x27;, &#x27;@this is my login banner&#x27;, &#x27;that contains a multiline&#x27;, &#x27;string@&#x27;]</div>
                 </td>
             </tr>
             <tr>

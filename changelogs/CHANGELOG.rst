@@ -5,6 +5,26 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v1.2.0
+======
+
+Minor Changes
+-------------
+
+- Added iosxr ospf_interfaces resource module (https://github.com/ansible-collections/cisco.iosxr/pull/84).
+
+Bugfixes
+--------
+
+- Add version key to galaxy.yaml to work around ansible-galaxy bug
+- Fix iosxr_acls throwing a traceback with overridden (https://github.com/ansible-collections/cisco.iosxr/issues/87).
+- require one to specify a banner delimiter in order to fix a timeout when using multi-line strings
+
+New Modules
+-----------
+
+- iosxr_ospf_interfaces - OSPF Interfaces Resource Module.
+
 v1.1.0
 ======
 

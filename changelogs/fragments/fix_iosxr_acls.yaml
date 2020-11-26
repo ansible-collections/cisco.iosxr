@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Fix iosxr_acls throwing a traceback with overridden (https://github.com/ansible-collections/cisco.iosxr/issues/87).
