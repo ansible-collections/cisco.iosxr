@@ -1,3 +1,0 @@
----
-bugfixes:
-  - require one to specify a banner delimiter in order to fix a timeout when using multi-line strings

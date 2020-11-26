@@ -138,3 +138,22 @@ releases:
       name: iosxr_ospfv3
       namespace: ''
     release_date: '2020-10-01'
+  1.2.0:
+    changes:
+      bugfixes:
+      - Add version key to galaxy.yaml to work around ansible-galaxy bug
+      - Fix iosxr_acls throwing a traceback with overridden (https://github.com/ansible-collections/cisco.iosxr/issues/87).
+      - require one to specify a banner delimiter in order to fix a timeout when using
+        multi-line strings
+      minor_changes:
+      - Added iosxr ospf_interfaces resource module (https://github.com/ansible-collections/cisco.iosxr/pull/84).
+    fragments:
+    - 79-iosxr-multi-line-banner-fix.yaml
+    - fix_iosxr_acls.yaml
+    - galaxy-version.yaml
+    - ospf_interfaces_resource_module_added.yaml
+    modules:
+    - description: OSPF Interfaces Resource Module.
+      name: iosxr_ospf_interfaces
+      namespace: ''
+    release_date: '2020-11-26'
