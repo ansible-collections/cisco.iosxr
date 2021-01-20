@@ -43,6 +43,7 @@ class TerminalModule(TerminalBase):
         re.compile(br"[^\r\n]+ not found", re.I),
         re.compile(br"'[^']' +returned error code: ?\d+"),
         re.compile(br"Failed to commit", re.I),
+        re.compile(br"show configuration failed \[inheritance\]", re.I),
     ]
 
     def on_open_shell(self):
