@@ -220,7 +220,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # Gather all facts
     - cisco.iosxr.iosxr_facts:

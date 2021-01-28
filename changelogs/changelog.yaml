@@ -157,3 +157,11 @@ releases:
       name: iosxr_ospf_interfaces
       namespace: ''
     release_date: '2020-11-26'
+  1.2.1:
+    changes:
+      bugfixes:
+      - Update docs to clarify the idemptonecy releated caveat and add it in the output
+        warnings (https://github.com/ansible-collections/ansible.netcommon/pull/189)
+    fragments:
+    - iosxr_config_diff_doc_update.yaml
+    release_date: '2021-01-28'

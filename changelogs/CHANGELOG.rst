@@ -5,6 +5,14 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v1.2.1
+======
+
+Bugfixes
+--------
+
+- Update docs to clarify the idemptonecy releated caveat and add it in the output warnings (https://github.com/ansible-collections/ansible.netcommon/pull/189)
+
 v1.2.0
 ======
 
