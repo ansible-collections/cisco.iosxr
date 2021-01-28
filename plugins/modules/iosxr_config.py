@@ -34,7 +34,7 @@ options:
     description:
     - The ordered set of commands that should be configured in the section. The commands
       must be the exact same commands as found in the device running-config as found in the
-      device running-config to ensure idempotency and correct diff. Be sure to note the 
+      device running-config to ensure idempotency and correct diff. Be sure to note the
       configuration command syntax as some commands are automatically modified by the
       device config parser.
     type: list
