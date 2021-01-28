@@ -240,7 +240,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: enable netconf service on port 830
       cisco.iosxr.iosxr_netconf:
