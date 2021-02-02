@@ -60,9 +60,9 @@ class Bgp_globalFacts(object):
 
         if not data:
             data = connection.get('show running-config router bgp')
-            vrf_data = self._flatten_config(data, "vrf")
-            neighbor_data = self._flatten_config(vrf_data, "neighbor")
-            data = self._flatten_config(neighbor_data, "session-group")
+            #vrf_data = self._flatten_config(data, "vrf")
+            neighbor_data = self._flatten_config(data, "neighbor")
+            data = self._flatten_config(neighbor_data, "rpki server")
 
             # remove address_family configs from bgp_global
             bgp_global_config = []
@@ -90,15 +90,39 @@ class Bgp_globalFacts(object):
         # parse native config using the Bgp_global template
         bgp_global_parser = Bgp_globalTemplate(lines=bgp_global_config)
         objs = bgp_global_parser.parse()
-        #import epdb;epdb.serve()
+
+        vrfs = objs.get("vrfs", {})
+
+        # move global vals to their correct position in facts tree
+        # this is only needed for keys that are valid for both global
+        # and VRF contexts
+        global_vals = vrfs.pop("vrf_", {})
+        for key, value in iteritems(global_vals):
+            if objs.get(key):
+                objs[key].update(value)
+            else:
+                objs[key] = value
+        # transform vrfs into a list
+        if vrfs:
+            objs["vrfs"] = sorted(
+                list(objs["vrfs"].values()), key=lambda k, sk="vrf": k[sk]
+            )
+            for vrf in objs["vrfs"]:
+                self._post_parse(vrf)
+        else:
+            objs["vrfs"] = []
+
+        self._post_parse(objs)
+
 
         ansible_facts['ansible_network_resources'].pop('bgp_global', None)
 
         params = utils.remove_empties(
             utils.validate_config(self.argument_spec, {"config": objs})
         )
+        #import epdb;epdb.serve()
 
-        facts['bgp_global'] = params['config']
+        facts['bgp_global'] = params.get("config", {})
         ansible_facts['ansible_network_resources'].update(facts)
 
         return ansible_facts
@@ -124,3 +148,24 @@ class Bgp_globalFacts(object):
             elif in_nbr_cxt:
                 data[data.index(x)] = cur_nbr["nbr"] + " " + x.strip()
         return "\n".join(data)
+
+    def _post_parse(self, obj):
+        """ Converts the intermediate data structure
+            to valid format as per argspec.
+        :param obj: dict
+        """
+        #import epdb;
+        #epdb.serve()
+        neighbors = obj.get("neighbors", [])
+        if neighbors:
+            obj["neighbors"] = sorted(
+                list(neighbors.values()),
+                key=lambda k, sk="neighbor": k[sk],
+            )
+        rpki_servers = obj.get("rpki", {}).get("servers", [])
+        #import epdb;epdb.serve()
+        if rpki_servers:
+            obj["rpki"]["servers"] = sorted(
+                list(rpki_servers.values()),
+                key=lambda k, sk="name": k[sk],
+            )

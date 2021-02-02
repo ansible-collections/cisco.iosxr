@@ -38,7 +38,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
         "config": {
             "type": "dict",
             "options": {
-                "as_number": {"type": "str", "required": True},
+                "as_number": {"type": "str"},
                 "bfd": {
                     "type": "dict",
                     "options": {
@@ -277,22 +277,38 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "options": {
                                 "additional_paths": {
-                                    "type": "str",
-                                    "choices": ["send", "receive"],
+                                    "type": "dict",
+                                    "options": {
+                                        "send": {
+                                            "type": "dict",
+                                            "options": {
+                                                "set": {"type": "bool"},
+                                                "disable": {"type": "bool"},
+                                            },
+                                        },
+                                        "receive": {
+                                            "type": "dict",
+                                            "options": {
+                                                "set": {"type": "bool"},
+                                                "disable": {"type": "bool"},
+                                            },
+                                        },
+                                    },
                                 },
                                 "suppress": {
                                     "type": "dict",
                                     "options": {
                                         "4_byte_AS": {
                                             "type": "dict",
-                                            "options": {"inheritance_disable": {}},
+                                            "options": {"set": {"type": "bool"}},
                                         },
                                         "all": {
                                             "type": "dict",
                                             "options": {
                                                 "inheritance_disable": {
                                                     "type": "bool"
-                                                }
+                                                },
+                                                "set": {"type": "bool"},
                                             },
                                         },
                                     },
@@ -303,9 +319,12 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "description": {"type": "str"},
                         "dmz_link_bandwidth": {
                             "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
+                            "options": {
+                                "inheritance_disable": {"type": "bool"},
+                                "set": {"type": "bool"},
+                            },
                         },
-                        "dscp": {"type": "int"},
+                        "dscp": {"type": "str"},
                         "ebgp_multihop": {
                             "type": "dict",
                             "options": {
@@ -315,18 +334,25 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "ebgp_recv_extcommunity_dmz": {
                             "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
+                            "options": {
+                                "inheritance_disable": {"type": "bool"},
+                                "set": {"type": "bool"},
+                            },
                         },
                         "ebgp_send_extcommunity_dmz": {
                             "type": "dict",
                             "options": {
                                 "inheritance_disable": {"type": "bool"},
                                 "cumulatie": {"type": "bool"},
+                                "set": {"type": "bool"},
                             },
                         },
                         "egress_engineering": {
                             "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
+                            "options": {
+                                "inheritance_disable": {"type": "bool"},
+                                "set": {"type": "bool"},
+                            },
                         },
                         "enforce_first_as": {
                             "type": "dict",
@@ -335,16 +361,19 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "graceful_maintenance": {
                             "type": "dict",
                             "options": {
+                                "set": {"type": "bool"},
                                 "activate": {
                                     "type": "dict",
                                     "options": {
-                                        "inheritance_disable": {"type": "bool"}
+                                        "inheritance_disable": {"type": "bool"},
+                                        "set": {"type": "bool"},
                                     },
                                 },
                                 "as_prepends": {
                                     "type": "dict",
                                     "options": {
-                                        "inheritance_disable": {"type": "bool"}
+                                        "inheritance_disable": {"type": "bool"},
+                                        "value": {"type": "int"},
                                     },
                                 },
                                 "local_preference": {
@@ -361,12 +390,14 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "restart_time": {"type": "int"},
                                 "stalepath_time": {"type": "int"},
-                                "disable": {"type": "bool"},
                             },
                         },
                         "ignore_connected_check": {
                             "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
+                            "options": {
+                                "inheritance_disable": {"type": "bool"},
+                                "set": {"type": "bool"},
+                            },
                         },
                         "keychain": {
                             "type": "dict",
@@ -405,7 +436,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "value": {"type": "int"},
                                                 "disable": {"type": "bool"},
-                                                "inheritance_diable": {
+                                                "inheritance_disable": {
                                                     "type": "bool"
                                                 },
                                             },
@@ -415,7 +446,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "value": {"type": "int"},
                                                 "disable": {"type": "bool"},
-                                                "inheritance_diable": {
+                                                "inheritance_disable": {
                                                     "type": "bool"
                                                 },
                                             },
@@ -433,8 +464,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 }
                             },
                         },
-                        "password": {"type": "str"},
-                        "precedence": {"type": "int"},
                         "receive_buffer_size": {"type": "int"},
                         "remote_as": {"type": "int"},
                         "send_buffer_size": {"type": "int"},
@@ -444,7 +473,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "shutdown": {
                             "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
+                            "options": {
+                                "inheritance_disable": {"type": "bool"},
+                                "set": {"type": "bool"},
+                            },
                         },
                         "tcp": {
                             "type": "dict",
@@ -467,7 +499,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "ttl_security": {
                             "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
+                            "options": {
+                                "inheritance_disable": {"type": "bool"},
+                                "set": {"type": "bool"},
+                            },
                         },
                         "update": {
                             "type": "dict",
@@ -503,241 +538,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             },
                         },
                         "update_source": {"type": "str"},
-                        "use": {
-                            "type": "dict",
-                            "options": {
-                                "neighbor_group": {"type": "str"},
-                                "session_group": {"type": "str"},
-                            },
-                        },
-                    },
-                },
-                "neighbor_group": {
-                    "type": "dict",
-                    "options": {
-                        "name": {"type": "str"},
-                        "advertisement_interval": {"type": "int"},
-                        "bfd": {
-                            "type": "dict",
-                            "options": {
-                                "fast_detect": {
-                                    "type": "dict",
-                                    "options": {
-                                        "disable": {"type": "bool"},
-                                        "strict_mode": {"type": "bool"},
-                                    },
-                                },
-                                "multiplier": {"type": "int"},
-                                "minimum_interval": {"type": "int"},
-                            },
-                        },
-                        "bmp_activate": {
-                            "type": "dict",
-                            "options": {"server": {"type": "int"}},
-                        },
-                        "capability": {
-                            "type": "dict",
-                            "options": {
-                                "additional_paths": {
-                                    "type": "str",
-                                    "choices": ["send", "receive"],
-                                },
-                                "suppress": {
-                                    "type": "dict",
-                                    "options": {
-                                        "4_byte_AS": {
-                                            "type": "dict",
-                                            "options": {"inheritance_disable": {}},
-                                        },
-                                        "all": {
-                                            "type": "dict",
-                                            "options": {
-                                                "inheritance_disable": {
-                                                    "type": "bool"
-                                                }
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                        "cluster_id": {"type": "str"},
-                        "dmz_link_bandwidth": {
-                            "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
-                        },
-                        "ng_description": {"type": "str"},
-                        "ebgp_multihop": {
-                            "type": "dict",
-                            "options": {
-                                "value": {"type": "int"},
-                                "mpls": {"type": "bool"},
-                            },
-                        },
-                        "ebgp_recv_extcommunity_dmz": {
-                            "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
-                        },
-                        "ebgp_send_extcommunity_dmz": {
-                            "type": "dict",
-                            "options": {
-                                "inheritance_disable": {"type": "bool"},
-                                "cumulatie": {"type": "bool"},
-                            },
-                        },
-                        "egress_engineering": {
-                            "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
-                        },
-                        "enforce_first_as": {
-                            "type": "dict",
-                            "options": {"disable": {"type": "bool"}},
-                        },
-                        "graceful_maintenance": {
-                            "type": "dict",
-                            "options": {
-                                "activate": {
-                                    "type": "dict",
-                                    "options": {
-                                        "inheritance_disable": {"type": "bool"}
-                                    },
-                                },
-                                "as_prepends": {
-                                    "type": "dict",
-                                    "options": {
-                                        "inheritance_disable": {"type": "bool"}
-                                    },
-                                },
-                                "local_preference": {
-                                    "type": "dict",
-                                    "options": {
-                                        "value": {"type": "int"},
-                                        "inheritance_disable": {"type": "bool"},
-                                    },
-                                },
-                            },
-                        },
-                        "graceful_restart": {
-                            "type": "dict",
-                            "options": {
-                                "restart_time": {"type": "int"},
-                                "stalepath_time": {"type": "int"},
-                                "disable": {"type": "bool"},
-                            },
-                        },
-                        "ignore_connected_check": {
-                            "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
-                        },
-                        "keychain": {
-                            "type": "dict",
-                            "options": {
-                                "name": {"type": "str"},
-                                "inheritance_disable": {"type": "bool"},
-                            },
-                        },
-                        "local": {
-                            "type": "dict",
-                            "options": {
-                                "address": {
-                                    "type": "dict",
-                                    "options": {
-                                        "ipv4_address": {"type": "str"},
-                                        "inheritance_disable": {"type": "bool"},
-                                    },
-                                }
-                            },
-                        },
-                        "local_as": {
-                            "type": "dict",
-                            "options": {
-                                "value": {"type": "int"},
-                                "inheritance_disable": {"type": "bool"},
-                            },
-                        },
-                        "log": {
-                            "type": "dict",
-                            "options": {
-                                "message": {
-                                    "type": "dict",
-                                    "options": {
-                                        "in": {
-                                            "type": "dict",
-                                            "options": {
-                                                "value": {"type": "int"},
-                                                "disable": {"type": "bool"},
-                                                "inheritance_diable": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                        "out": {
-                                            "type": "dict",
-                                            "options": {
-                                                "value": {"type": "int"},
-                                                "disable": {"type": "bool"},
-                                                "inheritance_diable": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                    },
-                                }
-                            },
-                        },
-                        "origin_as": {
-                            "type": "dict",
-                            "options": {
-                                "validation": {
-                                    "type": "dict",
-                                    "options": {"disable": {"type": "bool"}},
-                                }
-                            },
-                        },
-                        "password": {"type": "str"},
-                        "precedance": {"type": "int"},
-                        "receive_buffer_size": {"type": "int"},
-                        "send_buffer_size": {"type": "int"},
-                        "remote_as": {"type": "int"},
-                        "session_open_mode": {
-                            "type": "str",
-                            "choices": ["active-only", "both", "passive-only"],
-                        },
-                        "shutdown": {
-                            "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
-                        },
-                        "tcp": {
-                            "type": "dict",
-                            "options": {
-                                "mss": {
-                                    "type": "dict",
-                                    "options": {
-                                        "value": {"type": "int"},
-                                        "inheritance_disable": {"type": "bool"},
-                                    },
-                                }
-                            },
-                        },
-                        "timers": {
-                            "type": "dict",
-                            "options": {
-                                "keepalive_time": {"type": "int"},
-                                "holdtime": {"type": "int"},
-                            },
-                        },
-                        "ttl_security": {
-                            "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
-                        },
-                        "update_source": {"type": "str"},
-                        "use": {
-                            "type": "dict",
-                            "options": {
-                                "neighbor_group": {"type": "str"},
-                                "session_group": {"type": "str"},
-                            },
-                        },
                     },
                 },
                 "nsr": {
@@ -745,234 +545,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                     "options": {
                         "set": {"type": "bool"},
                         "disable": {"type": "bool"},
-                    },
-                },
-                "session_group": {
-                    "type": "dict",
-                    "options": {
-                        "name": {"type": "str"},
-                        "advertisement_interval": {"type": "int"},
-                        "bfd": {
-                            "type": "dict",
-                            "options": {
-                                "fast_detect": {
-                                    "type": "dict",
-                                    "options": {
-                                        "disable": {"type": "bool"},
-                                        "strict_mode": {"type": "bool"},
-                                    },
-                                },
-                                "multiplier": {"type": "int"},
-                                "minimum_interval": {"type": "int"},
-                            },
-                        },
-                        "bmp_activate": {
-                            "type": "dict",
-                            "options": {"server": {"type": "int"}},
-                        },
-                        "capability": {
-                            "type": "dict",
-                            "options": {
-                                "additional_paths": {
-                                    "type": "str",
-                                    "choices": ["send", "receive"],
-                                },
-                                "suppress": {
-                                    "type": "dict",
-                                    "options": {
-                                        "4_byte_AS": {
-                                            "type": "dict",
-                                            "options": {"inheritance_disable": {}},
-                                        },
-                                        "all": {
-                                            "type": "dict",
-                                            "options": {
-                                                "inheritance_disable": {
-                                                    "type": "bool"
-                                                }
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                        "cluster_id": {"type": "str"},
-                        "dmz_link_bandwidth": {
-                            "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
-                        },
-                        "ng_description": {"type": "str"},
-                        "ebgp_multihop": {
-                            "type": "dict",
-                            "options": {
-                                "value": {"type": "int"},
-                                "mpls": {"type": "bool"},
-                            },
-                        },
-                        "ebgp_recv_extcommunity_dmz": {
-                            "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
-                        },
-                        "ebgp_send_extcommunity_dmz": {
-                            "type": "dict",
-                            "options": {
-                                "inheritance_disable": {"type": "bool"},
-                                "cumulatie": {"type": "bool"},
-                            },
-                        },
-                        "egress_engineering": {
-                            "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
-                        },
-                        "enforce_first_as": {
-                            "type": "dict",
-                            "options": {"disable": {"type": "bool"}},
-                        },
-                        "graceful_maintenance": {
-                            "type": "dict",
-                            "options": {
-                                "activate": {
-                                    "type": "dict",
-                                    "options": {
-                                        "inheritance_disable": {"type": "bool"}
-                                    },
-                                },
-                                "as_prepends": {
-                                    "type": "dict",
-                                    "options": {
-                                        "inheritance_disable": {"type": "bool"}
-                                    },
-                                },
-                                "local_preference": {
-                                    "type": "dict",
-                                    "options": {
-                                        "value": {"type": "int"},
-                                        "inheritance_disable": {"type": "bool"},
-                                    },
-                                },
-                            },
-                        },
-                        "graceful_restart": {
-                            "type": "dict",
-                            "options": {
-                                "restart_time": {"type": "int"},
-                                "stalepath_time": {"type": "int"},
-                                "disable": {"type": "bool"},
-                            },
-                        },
-                        "ignore_connected_check": {
-                            "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
-                        },
-                        "keychain": {
-                            "type": "dict",
-                            "options": {
-                                "name": {"type": "str"},
-                                "inheritance_disable": {"type": "bool"},
-                            },
-                        },
-                        "local": {
-                            "type": "dict",
-                            "options": {
-                                "address": {
-                                    "type": "dict",
-                                    "options": {
-                                        "ipv4_address": {"type": "str"},
-                                        "inheritance_disable": {"type": "bool"},
-                                    },
-                                }
-                            },
-                        },
-                        "local_as": {
-                            "type": "dict",
-                            "options": {
-                                "value": {"type": "int"},
-                                "inheritance_disable": {"type": "bool"},
-                            },
-                        },
-                        "log": {
-                            "type": "dict",
-                            "options": {
-                                "message": {
-                                    "type": "dict",
-                                    "options": {
-                                        "in": {
-                                            "type": "dict",
-                                            "options": {
-                                                "value": {"type": "int"},
-                                                "disable": {"type": "bool"},
-                                                "inheritance_diable": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                        "out": {
-                                            "type": "dict",
-                                            "options": {
-                                                "value": {"type": "int"},
-                                                "disable": {"type": "bool"},
-                                                "inheritance_diable": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                    },
-                                }
-                            },
-                        },
-                        "origin_as": {
-                            "type": "dict",
-                            "options": {
-                                "validation": {
-                                    "type": "dict",
-                                    "options": {"disable": {"type": "bool"}},
-                                }
-                            },
-                        },
-                        "password": {"type": "str"},
-                        "precedance": {"type": "int"},
-                        "receive_buffer_size": {"type": "int"},
-                        "send_buffer_size": {"type": "int"},
-                        "remote_as": {"type": "int"},
-                        "session_open_mode": {
-                            "type": "str",
-                            "choices": ["active-only", "both", "passive-only"],
-                        },
-                        "shutdown": {
-                            "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
-                        },
-                        "tcp": {
-                            "type": "dict",
-                            "options": {
-                                "mss": {
-                                    "type": "dict",
-                                    "options": {
-                                        "value": {"type": "int"},
-                                        "inheritance_disable": {"type": "bool"},
-                                    },
-                                }
-                            },
-                        },
-                        "timers": {
-                            "type": "dict",
-                            "options": {
-                                "keepalive_time": {"type": "int"},
-                                "holdtime": {"type": "int"},
-                            },
-                        },
-                        "ttl_security": {
-                            "type": "dict",
-                            "options": {"inheritance_disable": {"type": "bool"}},
-                        },
-                        "update_source": {"type": "str"},
-                        "use": {
-                            "type": "dict",
-                            "options": {
-                                "neighbor_group": {"type": "str"},
-                                "session_group": {"type": "str"},
-                            },
-                        },
                     },
                 },
                 "socket": {
@@ -1044,24 +616,24 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "origin": {"type": "int"},
                             },
                         },
-                        "server": {
-                            "type": "dict",
+                        "servers": {
+                            "type": "list",
+                            "elements": "dict",
                             "options": {
                                 "name": {"type": "str"},
-                                "password": {"type": "str"},
                                 "purge_time": {"type": "int"},
                                 "refresh_time": {
                                     "type": "dict",
                                     "options": {
                                         "value": {"type": "int"},
-                                        False: {"type": "bool"},
+                                        "time_off": {"type": "bool"},
                                     },
                                 },
                                 "response_time": {
                                     "type": "dict",
                                     "options": {
                                         "value": {"type": "int"},
-                                        False: {"type": "bool"},
+                                        "time_off": {"type": "bool"},
                                     },
                                 },
                                 "shutdown": {"type": "bool"},
@@ -1231,7 +803,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 }
                             },
                         },
-                        "neighbor": {
+                        "neighbors": {
                             "type": "list",
                             "elements": "dict",
                             "options": {
@@ -1259,8 +831,27 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "additional_paths": {
-                                            "type": "str",
-                                            "choices": ["send", "receive"],
+                                            "type": "dict",
+                                            "options": {
+                                                "send": {
+                                                    "type": "dict",
+                                                    "options": {
+                                                        "set": {"type": "bool"},
+                                                        "disable": {
+                                                            "type": "bool"
+                                                        },
+                                                    },
+                                                },
+                                                "receive": {
+                                                    "type": "dict",
+                                                    "options": {
+                                                        "set": {"type": "bool"},
+                                                        "disable": {
+                                                            "type": "bool"
+                                                        },
+                                                    },
+                                                },
+                                            },
                                         },
                                         "suppress": {
                                             "type": "dict",
@@ -1268,7 +859,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                 "4_byte_AS": {
                                                     "type": "dict",
                                                     "options": {
-                                                        "inheritance_disable": {}
+                                                        "set": {"type": "bool"}
                                                     },
                                                 },
                                                 "all": {
@@ -1276,7 +867,8 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                     "options": {
                                                         "inheritance_disable": {
                                                             "type": "bool"
-                                                        }
+                                                        },
+                                                        "set": {"type": "bool"},
                                                     },
                                                 },
                                             },
@@ -1288,10 +880,11 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "dmz_link_bandwidth": {
                                     "type": "dict",
                                     "options": {
-                                        "inheritance_disable": {"type": "bool"}
+                                        "inheritance_disable": {"type": "bool"},
+                                        "set": {"type": "bool"},
                                     },
                                 },
-                                "dscp": {"type": "int"},
+                                "dscp": {"type": "str"},
                                 "ebgp_multihop": {
                                     "type": "dict",
                                     "options": {
@@ -1302,7 +895,8 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "ebgp_recv_extcommunity_dmz": {
                                     "type": "dict",
                                     "options": {
-                                        "inheritance_disable": {"type": "bool"}
+                                        "inheritance_disable": {"type": "bool"},
+                                        "set": {"type": "bool"},
                                     },
                                 },
                                 "ebgp_send_extcommunity_dmz": {
@@ -1310,12 +904,14 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "inheritance_disable": {"type": "bool"},
                                         "cumulatie": {"type": "bool"},
+                                        "set": {"type": "bool"},
                                     },
                                 },
                                 "egress_engineering": {
                                     "type": "dict",
                                     "options": {
-                                        "inheritance_disable": {"type": "bool"}
+                                        "inheritance_disable": {"type": "bool"},
+                                        "set": {"type": "bool"},
                                     },
                                 },
                                 "enforce_first_as": {
@@ -1325,12 +921,14 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "graceful_maintenance": {
                                     "type": "dict",
                                     "options": {
+                                        "set": {"type": "bool"},
                                         "activate": {
                                             "type": "dict",
                                             "options": {
                                                 "inheritance_disable": {
                                                     "type": "bool"
-                                                }
+                                                },
+                                                "set": {"type": "bool"},
                                             },
                                         },
                                         "as_prepends": {
@@ -1338,7 +936,8 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "inheritance_disable": {
                                                     "type": "bool"
-                                                }
+                                                },
+                                                "value": {"type": "int"},
                                             },
                                         },
                                         "local_preference": {
@@ -1357,13 +956,13 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "restart_time": {"type": "int"},
                                         "stalepath_time": {"type": "int"},
-                                        "disable": {"type": "bool"},
                                     },
                                 },
                                 "ignore_connected_check": {
                                     "type": "dict",
                                     "options": {
-                                        "inheritance_disable": {"type": "bool"}
+                                        "inheritance_disable": {"type": "bool"},
+                                        "set": {"type": "bool"},
                                     },
                                 },
                                 "keychain": {
@@ -1407,7 +1006,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                         "disable": {
                                                             "type": "bool"
                                                         },
-                                                        "inheritance_diable": {
+                                                        "inheritance_disable": {
                                                             "type": "bool"
                                                         },
                                                     },
@@ -1419,7 +1018,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                         "disable": {
                                                             "type": "bool"
                                                         },
-                                                        "inheritance_diable": {
+                                                        "inheritance_disable": {
                                                             "type": "bool"
                                                         },
                                                     },
@@ -1439,8 +1038,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         }
                                     },
                                 },
-                                "password": {"type": "str"},
-                                "precedence": {"type": "int"},
                                 "receive_buffer_size": {"type": "int"},
                                 "remote_as": {"type": "int"},
                                 "send_buffer_size": {"type": "int"},
@@ -1455,7 +1052,8 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "shutdown": {
                                     "type": "dict",
                                     "options": {
-                                        "inheritance_disable": {"type": "bool"}
+                                        "inheritance_disable": {"type": "bool"},
+                                        "set": {"type": "bool"},
                                     },
                                 },
                                 "tcp": {
@@ -1482,7 +1080,8 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "ttl_security": {
                                     "type": "dict",
                                     "options": {
-                                        "inheritance_disable": {"type": "bool"}
+                                        "inheritance_disable": {"type": "bool"},
+                                        "set": {"type": "bool"},
                                     },
                                 },
                                 "update": {
@@ -1525,13 +1124,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     },
                                 },
                                 "update_source": {"type": "str"},
-                                "use": {
-                                    "type": "dict",
-                                    "options": {
-                                        "neighbor_group": {"type": "str"},
-                                        "session_group": {"type": "str"},
-                                    },
-                                },
                             },
                         },
                         "rd": {
@@ -1570,6 +1162,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                 "gathered",
                 "rendered",
                 "parsed",
+                "purged",
             ],
             "default": "merged",
         },

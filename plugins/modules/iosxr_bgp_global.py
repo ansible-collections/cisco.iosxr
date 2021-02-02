@@ -30,7 +30,6 @@ options:
         as_number:
           description: Autonomous system number of the router.
           type: str
-          required: true
         bfd: &bfd
           description: Configure BFD parameters.
           type: dict
@@ -326,10 +325,10 @@ options:
                 - Neighbor router address.
               type: str
               required: true
-            advertisement_interval: &advertisement_interval
+            advertisement_interval:
               description: Minimum interval between sending BGP routing updates.Example-<0-600>.
               type: int
-            bfd: &nbr_bfd
+            bfd:
               description: Configure BFD parameters.
               type: dict
               suboptions:
@@ -358,8 +357,28 @@ options:
               suboptions:
                 additional_paths:
                   description: BGP additional-paths commands.
-                  type: str
-                  choices: [ 'send', 'receive' ]
+                  type: dict
+                  suboptions:
+                    send:
+                      type: dict
+                      description: Additional paths Send capability
+                      suboptions:
+                        set:
+                          type: bool
+                          description: set send capability
+                        disable:
+                          type: bool
+                          description: set send capability
+                    receive:
+                      type: dict
+                      description: Additional paths receive capability
+                      suboptions:
+                        set:
+                          type: bool
+                          description: set receive capability
+                        disable:
+                          type: bool
+                          description: set receive capability
                 suppress:
                   description: Suppress advertising capability to the peer.
                   type: dict
@@ -368,8 +387,10 @@ options:
                       description: 4-byte-as capability
                       type: dict
                       suboptions:
-                        inheritance_disable:
-                          description: Do not inherit this configuration from parent group.
+                        set:
+                          description: set 4_byte_as.
+                          type: bool
+
                     all:
                       description: all capability
                       type: dict
@@ -377,8 +398,11 @@ options:
                         inheritance_disable:
                           description: Do not inherit this configuration from parent group.
                           type: bool
+                        set:
+                          description: set all.
+                          type: bool
             cluster_id: *cluster_id
-            description: &desc
+            description:
               description: Neighbor specific description.
               type: str
             dmz_link_bandwidth: &dmz_link_bw
@@ -388,27 +412,33 @@ options:
                 inheritance_disable:
                   description: Do not inherit this configuration from parent group.
                   type: bool
-            dscp: &dscp
+                set:
+                  description: set dmz-link-bandwidth.
+                  type: bool
+            dscp:
               description: Set IP DSCP (DiffServ CodePoint).Please refer vendor document for valid entries.
-              type: int
-            ebgp_multihop: &ebgp_multihop
+              type: str
+            ebgp_multihop:
               description: Allow EBGP neighbors not on directly connected networks.
               type: dict
               suboptions:
                 value:
-                  description: maximum hop count.Example- <1-255>.
+                  description: maximum hop count.Example-<1-255>.
                   type: int
                 mpls:
                   description: Disable BGP MPLS forwarding.
                   type: bool
-            ebgp_recv_extcommunity_dmz: &ebgp_recv_dmz
+            ebgp_recv_extcommunity_dmz:
               description: Receive extcommunity dmz link bandwidth from ebgp neighbor.
               type: dict
               suboptions:
                 inheritance_disable:
                   description: Prevent ebgp-recv-community-dmz from being inherited from parent
                   type: bool
-            ebgp_send_extcommunity_dmz: &ebgp_send_dmg
+                set:
+                  description: set ebgp-recv-community-dmz.
+                  type: bool
+            ebgp_send_extcommunity_dmz:
               description: Send extcommunity dmz link bandwidth from ebgp neighbor.
               type: dict
               suboptions:
@@ -418,20 +448,29 @@ options:
                 cumulatie:
                   description: Send cumulative community dmz link bandwidth of all multipaths to ebgp neighbor.
                   type: bool
-            egress_engineering: &egress_eng
+                set:
+                  description: set ebgp-send-community-dmz.
+                  type: bool
+            egress_engineering:
               type: dict
               description: Enable egress peer engineering for this neighbor.
               suboptions:
                 inheritance_disable:
-                  description: Prevent egress_engineering from being inherited from parent
+                  description: Prevent egress-engineering from being inherited from parent
+                  type: bool
+                set:
+                  description: set egress-engineering.
                   type: bool
             enforce_first_as: *enforce_first_as
-            graceful_maintenance: &graceful_maintenance
+            graceful_maintenance:
               description:
                 Attributes for Graceful Maintenance. This will cause neighbors to de-prefer routes from this router and
                 choose alternates. This allows the router to be brought in or out of service gracefully.
               type: dict
               suboptions:
+                set:
+                  description: set graceful maintenance.
+                  type: bool
                 activate:
                   description: Routes will be announced with the graceful maintenance attributes while activated either here or under router
                     bgp configuration.
@@ -439,6 +478,9 @@ options:
                   suboptions:
                     inheritance_disable:
                       description: Prevent activate from being inherited from the parent.
+                      type: bool
+                    set:
+                      description: activate.
                       type: bool
                 as_prepends:
                   description: Number of times to prepend the local AS number to the
@@ -448,6 +490,9 @@ options:
                     inheritance_disable:
                       description: Prevent as prepends from being inherited from the parent.
                       type: bool
+                    value:
+                      description: Range of values for as prepends.Example-<0-6> .
+                      type: int
                 local_preference:
                   description: local preference with which to advertise routes to ibgp neigbors. Default=No Touch
                   type: dict
@@ -458,23 +503,23 @@ options:
                     inheritance_disable:
                       description: Prevent local preference from being inherited from the parent.
                       type: bool
-            graceful_restart: &graceful_restart
+            graceful_restart:
               description: Enable graceful restart support for this neighbor.
               type: dict
               suboptions:
                 restart_time: *restart_time
                 stalepath_time: *stalepath_time
-                disable:
-                  description: Enable graceful-restart.
-                  type: bool
-            ignore_connected_check: &ignore_connected_chk
+            ignore_connected_check:
               description: Bypass the directly connected nexthop check for single-hop eBGP peering
               type: dict
               suboptions:
                 inheritance_disable:
                   description: Prevent ignore-connected-check from being inherited from the parent
                   type: bool
-            keychain: &keychain
+                set:
+                  description: set ignore-connected-check.
+                  type: bool
+            keychain:
               description: Set keychain based authentication.
               type: dict
               suboptions:
@@ -484,7 +529,7 @@ options:
                 inheritance_disable:
                   description: Prevent keychain from being inherited from parent.
                   type: bool
-            local: &local
+            local:
               type: dict
               description: Configure local parameter
               suboptions:
@@ -498,7 +543,7 @@ options:
                     inheritance_disable:
                       description: Prevent local address from being inherited from parent.
                       type: bool
-            local_as: &local_as
+            local_as:
               description: Specify local AS number.
               type: dict
               suboptions:
@@ -508,7 +553,7 @@ options:
                 inheritance_disable:
                   description: Prevent local AS from being inherited from parent.
                   type: bool
-            log: &log
+            log:
               description: Logging update messages per neighbor.
               type: dict
               suboptions:
@@ -526,7 +571,7 @@ options:
                         disable:
                           description: Disable inbound message logging.
                           type: bool
-                        inheritance_diable:
+                        inheritance_disable:
                           description: Prevents the msg log from being inherited from the parent.
                           type: bool
                     out:
@@ -539,10 +584,10 @@ options:
                         disable:
                           description: Disable inbound message logging.
                           type: bool
-                        inheritance_diable:
+                        inheritance_disable:
                           description: Prevents the msg log from being inherited from the parent.
                           type: bool
-            origin_as: &origin_as
+            origin_as:
               description: BGP origin-AS knobs.
               type: dict
               suboptions:
@@ -553,34 +598,30 @@ options:
                     disable:
                       description: Disable RPKI origin-AS validation.
                       type: bool
-            password: &pass
-              description:
-                - Set a password.
-              type: str
-            precedence: &pre
-              description: Set precedence.Please refer vendor document for valid values<0-7>.
-              type: int
-            receive_buffer_size: &rec_buffer_size
+            receive_buffer_size:
               description: Set socket and BGP receive buffer size.Example <512-131072>.
               type: int
-            remote_as: &remote_as
+            remote_as:
               description: Neighbor Autonomous System.
               type: int
-            send_buffer_size: &send_buffer_size
+            send_buffer_size:
               description: Set socket and BGP send buffer size.Example  <4096-131072>.
               type: int
-            session_open_mode: &session_open_mode
+            session_open_mode:
               description: Establish BGP session using this TCP open mode.
               type: str
               choices: [ 'active-only', 'both', 'passive-only' ]
-            shutdown: &shutdown
+            shutdown:
               description: Administratively shut down this neighbor.
               type: dict
               suboptions:
                 inheritance_disable:
                   description: Prevent shutdown from being inherited from parent
                   type: bool
-            tcp: &tcp
+                set:
+                  description: shutdown.
+                  type: bool
+            tcp:
               description: TCP session configuration commands.
               type: dict
               suboptions:
@@ -604,12 +645,15 @@ options:
                 holdtime:
                   description: hold time <3-65535> or 0 Disable hold time.
                   type: int
-            ttl_security: &ttl_security
+            ttl_security:
               description: Enable EBGP TTL security.
               type: dict
               suboptions:
                 inheritance_disable:
                   description: Prevent ttl-security from being inherited from parent
+                  type: bool
+                set:
+                  description: set ttl-security
                   type: bool
             update:
               description: BGP Update configuration.
@@ -644,58 +688,9 @@ options:
                             buffers:
                               description: Number of buffers to store filtered update messages (resizing does not take effect after filtering action has started).
                               type: int
-            update_source: &update_src
+            update_source:
               description: Source of routing updates.Refer vendor document for valid values.
               type: str
-            use: &use
-              description: Inherit configuration from a group.
-              type: dict
-              suboptions:
-                neighbor_group:
-                  description: Inherit configuration from a neighbor-group. Name of neighbour-group.
-                  type: str
-                session_group:
-                  description: Inherit address-family independent config from a session-group.
-                  type: str
-        neighbor_group:
-          description: Specify a Neighbor-group.
-          type: dict
-          suboptions:
-            name:
-              description: Neighbor-group name.
-              type: str
-            advertisement_interval: *advertisement_interval
-            bfd: *nbr_bfd
-            bmp_activate: *bmp_activate
-            capability: *capability
-            cluster_id: *cluster_id
-            dmz_link_bandwidth: *dmz_link_bw
-            ng_description: *desc
-            ebgp_multihop: *ebgp_multihop
-            ebgp_recv_extcommunity_dmz: *ebgp_recv_dmz
-            ebgp_send_extcommunity_dmz: *ebgp_send_dmg
-            egress_engineering: *egress_eng
-            enforce_first_as: *enforce_first_as
-            graceful_maintenance: *graceful_maintenance
-            graceful_restart: *graceful_restart
-            ignore_connected_check: *ignore_connected_chk
-            keychain: *keychain
-            local: *local
-            local_as: *local_as
-            log: *log
-            origin_as: *origin_as
-            password: *pass
-            precedance: *pre
-            receive_buffer_size: *rec_buffer_size
-            send_buffer_size: *send_buffer_size
-            remote_as: *remote_as
-            session_open_mode: *session_open_mode
-            shutdown: *shutdown
-            tcp: *tcp
-            timers: *timers
-            ttl_security: *ttl_security
-            update_source: *update_src
-            use: *use
         nsr:
           description: Enable non-stop-routing support for all neighbors.
           type: dict
@@ -706,45 +701,6 @@ options:
             disable:
               type: bool
               description: disable nsr
-        session_group:
-          description: Specify a session-group.
-          type: dict
-          suboptions:
-            name:
-              description: Session-group name.
-              type: str
-            advertisement_interval: *advertisement_interval
-            bfd: *nbr_bfd
-            bmp_activate: *bmp_activate
-            capability: *capability
-            cluster_id: *cluster_id
-            dmz_link_bandwidth: *dmz_link_bw
-            ng_description: *desc
-            ebgp_multihop: *ebgp_multihop
-            ebgp_recv_extcommunity_dmz: *ebgp_recv_dmz
-            ebgp_send_extcommunity_dmz: *ebgp_send_dmg
-            egress_engineering: *egress_eng
-            enforce_first_as: *enforce_first_as
-            graceful_maintenance: *graceful_maintenance
-            graceful_restart: *graceful_restart
-            ignore_connected_check: *ignore_connected_chk
-            keychain: *keychain
-            local: *local
-            local_as: *local_as
-            log: *log
-            origin_as: *origin_as
-            password: *pass
-            precedance: *pre
-            receive_buffer_size: *rec_buffer_size
-            send_buffer_size: *send_buffer_size
-            remote_as: *remote_as
-            session_open_mode: *session_open_mode
-            shutdown: *shutdown
-            tcp: *tcp
-            timers: *timers
-            ttl_security: *ttl_security
-            update_source: *update_src
-            use: *use
         socket: &socket
           description: set socket parameters.
           type: dict
@@ -824,16 +780,14 @@ options:
                 origin:
                   description: Origin Autonomous System number (in asplain format) Example-<1-4294967295>.
                   type: int
-            server:
+            servers:
               description: Configure RPKI cache-servers.
-              type: dict
+              type: list
+              elements: dict
               suboptions:
                 name:
                   description:
                   type: str
-                password:
-                  type: str
-                  description: Specify a (SSH) password for the RPKI cache-server
                 purge_time:
                   type: int
                   description: Time to wait after a cache goes down to clean up stale routes
@@ -844,7 +798,7 @@ options:
                     value:
                       description: Purge time (in seconds) <30-360>
                       type: int
-                    off:
+                    time_off:
                       description: Do not send serial-queries periodically
                       type: bool
                 response_time:
@@ -854,7 +808,7 @@ options:
                     value:
                       description: Purge time (in seconds) <15-3600>
                       type: int
-                    off:
+                    time_off:
                       description: Wait indefinitely for a response
                       type: bool
                 shutdown:
@@ -878,8 +832,6 @@ options:
                         port:
                           description: Specify a port number for the RPKI cache-server transport
                           type: int
-
-
         vrfs:
           description: Specify a vrf name.
           type: list
@@ -906,7 +858,7 @@ options:
             default_information: *default_info
             default_metric: *default_metric
             mpls: *mpls
-            neighbor: *neighbors
+            neighbors: *neighbors
             rd:
               description: route distinguisher.
               type: dict
@@ -932,7 +884,7 @@ options:
       description:
       - The state the configuration should be left in.
       type: str
-      choices: [deleted, merged, overridden, replaced, gathered, rendered, parsed]
+      choices: [deleted, merged, overridden, replaced, gathered, rendered, parsed, purged]
       default: merged
 """
 EXAMPLES = """
