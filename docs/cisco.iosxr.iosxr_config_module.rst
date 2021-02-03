@@ -179,7 +179,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The module, by default, will connect to the remote device and retrieve the current running-config to use as a base for comparing against the contents of source.  There are times when it is not desirable to have the task get the current running-config for every task in a playbook.  The <em>config</em> argument allows the implementer to pass in the configuration to use as the base config for comparison.</div>
+                        <div>The module, by default, will connect to the remote device and retrieve the current running-config to use as a base for comparing against the contents of source.  There are times when it is not desirable to have the task get the current running-config for every task in a playbook.  The <em>config</em> argument allows the implementer to pass in the configuration to use as the base config for comparison. The configuration lines for this option should be similar to how it will appear if present in the running-configuration of the device to ensure idempotency and correct diff.</div>
                 </td>
             </tr>
             <tr>
@@ -249,7 +249,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The ordered set of commands that should be configured in the section.  The commands must be the exact same commands as found in the device running-config.  Be sure to note the configuration command syntax as some commands are automatically modified by the device config parser.</div>
+                        <div>The ordered set of commands that should be configured in the section. The commands must be the exact same commands as found in the device running-config as found in the device running-config to ensure idempotency and correct diff. Be sure to note the configuration command syntax as some commands are automatically modified by the device config parser.</div>
                         <div style="font-size: small; color: darkgreen"><br/>aliases: commands</div>
                 </td>
             </tr>
@@ -458,7 +458,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Specifies the source path to the file that contains the configuration or configuration template to load.  The path to the source file can either be the full path on the Ansible control host or a relative path from the playbook or role root directory.  This argument is mutually exclusive with <em>lines</em>, <em>parents</em>.</div>
+                        <div>Specifies the source path to the file that contains the configuration or configuration template to load. The path to the source file can either be the full path on the Ansible control host or a relative path from the playbook or role root directory.  This argument is mutually exclusive with <em>lines</em>, <em>parents</em>. The configuration lines in the source file should be similar to how it will appear if present in the running-configuration of the device to ensure idempotency and correct diff.</div>
                 </td>
             </tr>
     </table>
@@ -475,6 +475,7 @@ Notes
    - Abbreviated commands are NOT idempotent, see L(Network FAQ,../network/user_guide/faq.html
    - Avoid service disrupting changes (viz. Management IP) from config replace.
    - Do not use ``end`` in the replace config file.
+   - To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they appear if present in the running configuration on device including the indentation.
    - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
    - For more information on using Ansible to manage Cisco devices see the `Cisco integration page <https://www.ansible.com/integrations/networks/cisco>`_.
 
@@ -483,7 +484,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: configure top level configuration
       cisco.iosxr.iosxr_config:

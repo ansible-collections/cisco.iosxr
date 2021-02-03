@@ -644,7 +644,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: configure global bgp as 65000
       cisco.iosxr.iosxr_bgp:
