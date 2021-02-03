@@ -62,7 +62,9 @@ class Bgp_globalFacts(object):
             data = connection.get('show running-config router bgp')
             #vrf_data = self._flatten_config(data, "vrf")
             neighbor_data = self._flatten_config(data, "neighbor")
-            data = self._flatten_config(neighbor_data, "rpki server")
+            rpki_server_data = self._flatten_config(neighbor_data, "rpki server")
+            data = self._flatten_config(rpki_server_data, "bgp confederation peers")
+
 
             # remove address_family configs from bgp_global
             bgp_global_config = []
@@ -80,6 +82,13 @@ class Bgp_globalFacts(object):
         # parse native config using the Bgp_global template
         bgp_global_parser = Bgp_globalTemplate(lines=bgp_global_config)
         objs = bgp_global_parser.parse()
+
+        conf_peers = objs.get("bgp",{}).get("confederation", {}).get("peers", {})
+        if conf_peers:
+            objs['bgp']['confederation']['peers'] = list(conf_peers.values())
+
+
+
 
         vrfs = objs.get("vrfs", {})
 

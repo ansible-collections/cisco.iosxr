@@ -592,6 +592,26 @@ class Bgp_globalTemplate(NetworkTemplate):
             }
         },
         {
+            "name": "bgp_confederation_peers",
+            "getval": re.compile(
+                r"""
+                \s+bgp\s(?P<confederation_peers>confederation\speers\s\d+)
+                $""", re.VERBOSE
+            ),
+            "setval": _tmplt_confederation_peers,
+            "compval": "bgp.confederation.peers",
+            "result": {
+                "bgp": {
+                    "confederation": {
+                        "peers": {
+                            "peer"+"{{confederation_peers.split(" ")[2]}}": "{{confederation_peers.split(" ")[2]}}"
+                        }
+                    }
+
+                },
+            }
+        },
+        {
             "name": "bgp_graceful_restart_set",
             "getval": re.compile(
                 r"""

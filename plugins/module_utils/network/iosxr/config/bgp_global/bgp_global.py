@@ -155,11 +155,13 @@ class Bgp_global(ResourceModule):
         self._compare_rpki_server(want=want, have=self.have)
         self._compare_neighbors(want=want, have=self.have)
         self._vrfs_compare(want=want, have=have)
+        self. _compare_confederation_peers(want=want, have=have)
         self.compare(parsers=self.parsers, want=want, have=have)
         if self.commands and "router bgp" not in self.commands[0]:
             self.commands.insert(
                 0, self._tmplt.render({"as_number": want['as_number']}, "router", False)
             )
+
 
     def _compare_rpki_server(self, want, have):
         """Leverages the base class `compare()` method and
@@ -190,6 +192,25 @@ class Bgp_global(ResourceModule):
                 )
         for name, entry in iteritems(have):
             self.addcmd(entry, "rpki_server_name", True)
+
+    def _compare_confederation_peers(self, want, have):
+        """Custom handling of confederation.peers option
+        :params want: the want BGP dictionary
+        :params have: the have BGP dictionary
+        """
+        w_cpeers = want.get("bgp", {}).get("confederation", {}).get("peers", [])
+        h_cpeers = have.get("bgp", {}).get("confederation", {}).get("peers", [])
+
+        if set(w_cpeers) != set(h_cpeers):
+            if self.state in ["replaced", "deleted"]:
+                # if there are peers already configured
+                # we need to remove those before we pass
+                # the new ones otherwise the device appends
+                # them to the existing ones
+                if h_cpeers:
+                    self.addcmd(have, "bgp_confederation_peers", True)
+            if w_cpeers:
+                self.addcmd(want, "bgp_confederation_peers", False)
 
     def _compare_neighbors(self, want, have, vrf=None):
         """Leverages the base class `compare()` method and
@@ -279,7 +300,15 @@ class Bgp_global(ResourceModule):
                     begin, self._tmplt.render({"neighbor": neighbor_address}, "neighbor", False)
                 )
         for name, entry in iteritems(have_nbr):
-            self.addcmd(entry, "neighbor", True)
+            if self._check_af("neighbor", name):
+                self._module.fail_json(
+                    msg="Neighbor {0} has address-family configurations. "
+                        "Please use the iosxr_bgp_neighbor_address_family module to remove those first.".format(
+                        name
+                    )
+                )
+            else:
+                self.addcmd(entry, "neighbor", True)
 
     def _vrfs_compare(self, want, have):
         """Custom handling of VRFs option
@@ -303,7 +332,15 @@ class Bgp_global(ResourceModule):
         # instead remove only those attributes
         # that this module manages
         for name, entry in iteritems(hvrfs):
-            self.addcmd(entry, "vrf", True)
+            if self._check_af("vrf", name):
+                self._module.fail_json(
+                    msg="VRF {0} has address-family configurations. "
+                        "Please use the iosxr_bgp_address_family module to remove those first.".format(
+                        name
+                    )
+                )
+            else:
+                self.addcmd(entry, "vrf", True)
 
     def _bgp_list_to_dict(self, entry):
         """Convert list of items to dict of items
@@ -336,6 +373,27 @@ class Bgp_global(ResourceModule):
             entry["vrfs"] = {x["vrf"]: x for x in entry.get("vrfs", [])}
             for _k, vrf in iteritems(entry["vrfs"]):
                 self._bgp_list_to_dict(vrf)
+
+    def _get_config(self):
+        return self._connection.get("show running-config router bgp")
+
+    def _check_af(self, context, context_name):
+        af_present = False
+        if self._connection:
+            config_lines = self._get_config().splitlines()
+            index = [i + 1 for i, el in enumerate(config_lines) if context_name in el]
+            if index:
+                # had to do this to escape flake8 and black errors
+                ind = index[0]
+                for line in config_lines[ind:]:
+                    if context in line:
+                        break
+                    if "address-family" in line:
+                        af_present = True
+                        break
+        return af_present
+
+
 
 
 
