@@ -67,7 +67,6 @@ class Bgp_globalFacts(object):
             # remove address_family configs from bgp_global
             bgp_global_config = []
             start = False
-            confederation_peers = ""
             for bgp_line in data.splitlines():
                 if "address-family" in bgp_line:
                     start = True
@@ -76,16 +75,7 @@ class Bgp_globalFacts(object):
                 if start and '!' in bgp_line:
                     start = False
 
-        """
-            for bgp_line in bgp_global_config:
-                if "confederation peers" in bgp_line:
-                    start = True
-                if start:
-                    confederation_peers += bgp_line
-                if start and '!' in bgp_line:
-                    start = False
-            bgp_global_config.append(confederation_peers)
-        """
+
 
         # parse native config using the Bgp_global template
         bgp_global_parser = Bgp_globalTemplate(lines=bgp_global_config)
@@ -94,7 +84,7 @@ class Bgp_globalFacts(object):
         vrfs = objs.get("vrfs", {})
 
         # move global vals to their correct position in facts tree
-        # this is only needed for keys that are valid for both global
+        # this is only needed for keys that are common between both global
         # and VRF contexts
         global_vals = vrfs.pop("vrf_", {})
         for key, value in iteritems(global_vals):
@@ -128,7 +118,7 @@ class Bgp_globalFacts(object):
         return ansible_facts
 
     def _flatten_config(self, data, context):
-        """ Flatten neighbor contexts in
+        """ Flatten different contexts in
             the running-config for easier parsing.
         :param obj: dict
         :returns: flattened running config
@@ -154,8 +144,6 @@ class Bgp_globalFacts(object):
             to valid format as per argspec.
         :param obj: dict
         """
-        #import epdb;
-        #epdb.serve()
         neighbors = obj.get("neighbors", [])
         if neighbors:
             obj["neighbors"] = sorted(
@@ -163,7 +151,6 @@ class Bgp_globalFacts(object):
                 key=lambda k, sk="neighbor": k[sk],
             )
         rpki_servers = obj.get("rpki", {}).get("servers", [])
-        #import epdb;epdb.serve()
         if rpki_servers:
             obj["rpki"]["servers"] = sorted(
                 list(rpki_servers.values()),

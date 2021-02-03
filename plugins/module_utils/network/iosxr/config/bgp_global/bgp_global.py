@@ -104,7 +104,9 @@ class Bgp_global(ResourceModule):
             'update_in_error_handling_extended_ibgp',
             'update_out_logging',
             'update_limit',
-            'rpki_route_value'
+            'rpki_route_value',
+            'rd_auto',
+            'timers_keepalive',
         ]
 
     def execute_module(self):
@@ -119,12 +121,9 @@ class Bgp_global(ResourceModule):
         return self.result
 
     def generate_commands(self):
-        #import epdb;epdb.serve()
         """ Generate configuration commands to send based on
                     want, have and desired state.
                 """
-        #if self.state in ["deleted", "replaced"]:
-        #    self._build_af_data()
 
         for entry in self.want, self.have:
             self._bgp_list_to_dict(entry)
@@ -138,8 +137,6 @@ class Bgp_global(ResourceModule):
                     self.have.get("as_number") == self.want.get("as_number")
             ):
                 self.addcmd(self.have or {}, "router", True)
-            #import epdb;
-            #epdb.serve()
 
         else:
             wantd = self.want
@@ -155,7 +152,6 @@ class Bgp_global(ResourceModule):
            the `want` and `have` data with the `parsers` defined
            for the Bgp_global network resource.
         """
-        #import epdb;epdb.serve()
         self._compare_rpki_server(want=want, have=self.have)
         self._compare_neighbors(want=want, have=self.have)
         self._vrfs_compare(want=want, have=have)
@@ -181,8 +177,6 @@ class Bgp_global(ResourceModule):
             'rpki_server_transport_ssh',
             'rpki_server_transport_tcp',
         ]
-        #import epdb;
-        #epdb.serve()
         want = want.get("rpki", {}).get("servers", {})
         have = have.get("rpki", {}).get("servers", {})
         for name, entry in iteritems(want):
@@ -271,12 +265,8 @@ class Bgp_global(ResourceModule):
             'neighbor_update_in_filtering_attribute_filter_group',
             'neighbor_update_in_filtering_logging_disable',
             'neighbor_update_in_filtering_message_buffers',
-            'rd_value',
-            'rd_auto',
-            'timers_keepalive',
            ]
-        #import epdb;
-        #epdb.serve()
+
         want_nbr = want.get("neighbors", {})
         have_nbr = have.get("neighbors", {})
         for name, entry in iteritems(want_nbr):
@@ -284,12 +274,10 @@ class Bgp_global(ResourceModule):
             begin = len(self.commands)
             self.compare(parsers=neighbor_parsers, want=entry, have=have)
             neighbor_address = entry.get("neighbor", "")
-            #import epdb; epdb.serve()
             if len(self.commands) != begin:
                 self.commands.insert(
                     begin, self._tmplt.render({"neighbor": neighbor_address}, "neighbor", False)
                 )
-        #import epdb;epdb.serve()
         for name, entry in iteritems(have_nbr):
             self.addcmd(entry, "neighbor", True)
 
@@ -301,7 +289,15 @@ class Bgp_global(ResourceModule):
         wvrfs = want.get("vrfs", {})
         hvrfs = have.get("vrfs", {})
         for name, entry in iteritems(wvrfs):
-            self._compare(want=entry, have=hvrfs.pop(name, {}), vrf=name)
+            begin = len(self.commands)
+            vrf_have = hvrfs.pop(name, {})
+            self._compare_rpki_server(want=entry, have=vrf_have)
+            self._compare_neighbors(want=entry, have=vrf_have)
+            self.compare(parsers=self.parsers, want=entry, have=vrf_have)
+            if len(self.commands) != begin:
+                self.commands.insert(
+                    begin, self._tmplt.render({"vrf": entry.get('vrf')}, "vrf", False)
+                )
         # cleanup remaining VRFs
         # but do not negate it entirely
         # instead remove only those attributes

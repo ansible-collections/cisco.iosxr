@@ -72,8 +72,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bfd_minimum_interval",
             "getval": re.compile(
                 r"""
-                \sbfd
-                \s(?P<min_interval>minimum-interval\s\S+)
+                \s+bfd\s(?P<min_interval>minimum-interval\s\d+)
                 $""", re.VERBOSE
             ),
             "compval": "bfd.minimum_interval",
@@ -92,8 +91,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bfd_multiplier",
             "getval": re.compile(
                 r"""
-                \sbfd
-                \s(?P<multiplier>multiplier\s\S+) 
+                \s+bfd\s(?P<multiplier>multiplier\s\d+) 
                 $""", re.VERBOSE
             ),
             "setval": "bfd multiplier {{bfd.multiplier}}",
@@ -127,8 +125,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_auto_policy_soft_reset",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<auto_policy_soft_reset_disable>auto-policy-soft-reset\sdisable)
+                \s+bgp\s(?P<auto_policy_soft_reset_disable>auto-policy-soft-reset\sdisable)
                 $""", re.VERBOSE
             ),
             "setval": "bgp auto-policy-soft-reset disable",
@@ -149,8 +146,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_cluster_id",
             "getval": re.compile(
                 r"""
-                \sbgp 
-                \s(?P<cluster_id>cluster-id\s\d+)
+                \s+bgp\s(?P<cluster_id>cluster-id\s\d+)
                 $""", re.VERBOSE
             ),
             "setval": "bgp cluster-id {{bgp.cluster_id}}",
@@ -165,8 +161,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_default_local_preference",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<default_local_pref>default\slocal-preference\s\S+)            
+                \s+bgp\s(?P<default_local_pref>default\slocal-preference\s\S+)            
                 $""", re.VERBOSE
             ),
             "setval": "bgp default local-preference {{bgp.default.local_preference}}",
@@ -188,8 +183,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_enforce_first_as_disable",
             "getval": re.compile(
                 r"""
-                \sbgp           
-                \s(?P<enforce_first_as_disable>enforce-first-as\sdisable)
+                \s+bgp\s(?P<enforce_first_as_disable>enforce-first-as\sdisable)
                 $""", re.VERBOSE
             ),
             "setval": "bgp enforce-first-as disable",
@@ -210,8 +204,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_fast_external_fallover_disable",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<fast_external_fallover_disable>fast-external-fallover\sdisable)
+                \s+bgp\s(?P<fast_external_fallover_disable>fast-external-fallover\sdisable)
                 $""", re.VERBOSE
             ),
             "setval": "bgp fast-external-fallover disable",
@@ -232,8 +225,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_install_diversion",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<install_diversion>install\sdiversion)
+                \s+bgp\s(?P<install_diversion>install\sdiversion)
                 $""", re.VERBOSE
             ),
             "setval": "bgp install diversion",
@@ -250,8 +242,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_max_neighbors",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<max_neighbors>maximum\sneighbor\s\d+)
+                \s+bgp\s(?P<max_neighbors>maximum\sneighbor\s\d+)
                 $""", re.VERBOSE
             ),
             "setval": "bgp maximum neighbor {{bgp.maximum.neighbor}}",
@@ -269,8 +260,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_redistribute_internal",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<redistribute_internal>redistribute-internal)
+                \s+bgp\s(?P<redistribute_internal>redistribute-internal)
                 $""", re.VERBOSE
             ),
             "setval": "bgp redistribute-internal",
@@ -288,8 +278,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_router_id",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<router_id>router-id\s\S+)
+                \s+bgp\s(?P<router_id>router-id\s\S+)
                 $""", re.VERBOSE
             ),
             "setval": "bgp router-id {{ bgp.router_id }}",
@@ -308,8 +297,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_scan_time",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<scan_time>scan-time\s\d+)
+                \s+bgp\s(?P<scan_time>scan-time\s\d+)
                 $""", re.VERBOSE
             ),
             "setval": "bgp scan-time {{ bgp.scan_time }}",
@@ -324,8 +312,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_unsafe_ebgp_policy",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<unsafe_ebgp_policy>unsafe-ebgp-policy)
+                \s+bgp\s(?P<unsafe_ebgp_policy>unsafe-ebgp-policy)
                 $""", re.VERBOSE
             ),
             "setval": "bgp unsafe-ebgp-policy",
@@ -342,8 +329,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_update_delay",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<update_delay>update-delay\s\d+)
+                \s+bgp\s(?P<update_delay>update-delay\s\d+)
                 $""", re.VERBOSE
             ),
             "setval": "bgp update-delay {{ bgp.update_delay }}",
@@ -359,8 +345,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_bestpath_aigp",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<bestpath_aigp_ignore>bestpath\saigp\signore)
+                \s+bgp\s(?P<bestpath_aigp_ignore>bestpath\saigp\signore)
                 $""", re.VERBOSE
             ),
             "setval": "bgp bestpath aigp ignore",
@@ -383,8 +368,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_bestpath_as_path_ignore",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<as_path_ignore>bestpath\sas-path\signore)
+                \s+bgp\s(?P<as_path_ignore>bestpath\sas-path\signore)
                 $""", re.VERBOSE
             ),
             "setval": "bgp bestpath as-path ignore",
@@ -407,8 +391,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_bestpath_as_path_multipath_relax",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<as_path_multipath_relax>bestpath\sas-path\smultipath-relax)
+                \s+bgp\s(?P<as_path_multipath_relax>bestpath\sas-path\smultipath-relax)
                 $""", re.VERBOSE
             ),
             "setval": "bgp bestpath as-path multipath-relax",
@@ -431,8 +414,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_bestpath_med_always",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<always>bestpath\smed\salways)
+                \s+bgp\s(?P<always>bestpath\smed\salways)
                 $""", re.VERBOSE
             ),
             "setval": "bgp bestpath med always",
@@ -455,8 +437,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_bestpath_med_confed",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<confed>bestpath\smed\sconfed)
+                \s+bgp\s(?P<confed>bestpath\smed\sconfed)
                 $""", re.VERBOSE
             ),
             "setval": "bgp bestpath med confed",
@@ -479,8 +460,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_bestpath_med_missing_as_worst",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<missing_as_worst>bestpath\smed\smissing-as-worst)
+                \s+bgp\s(?P<missing_as_worst>bestpath\smed\smissing-as-worst)
                 $""", re.VERBOSE
             ),
             "setval": "bgp bestpath med missing-as-worst)",
@@ -503,8 +483,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_bestpath_compare_routerid",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<compare_routerid>bestpath\scompare-routerid)
+                \s+bgp\s(?P<compare_routerid>bestpath\scompare-routerid)
                 $""", re.VERBOSE
             ),
             "setval": "bgp bestpath compare-routerid",
@@ -525,8 +504,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_bestpath_cost_community_ignore",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<cost_community_ignore>bestpath\scost-community\signore)
+                \s+bgp\s(?P<cost_community_ignore>bestpath\scost-community\signore)
                 $""", re.VERBOSE
             ),
             "setval": "bgp bestpath cost-community ignore",
@@ -549,8 +527,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_bestpath_origin_as_use",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<origin_as_use>bestpath\sorigin-as\suse\svalidity)
+                \s+bgp\s(?P<origin_as_use>bestpath\sorigin-as\suse\svalidity)
                 $""", re.VERBOSE
             ),
             "setval": "bgp bestpath origin-as use validity",
@@ -575,8 +552,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_bestpath_origin_as_allow",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<origin_as_allow>bestpath\sorigin-as\sallow\sinvalid)
+                \s+bgp\s(?P<origin_as_allow>bestpath\sorigin-as\sallow\sinvalid)
                 $""", re.VERBOSE
             ),
             "setval": "bgp bestpath origin-as allow invalid",
@@ -601,8 +577,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_confederation_identifier",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<confederation_identifier>confederation\sidentifier\s\d+)
+                \s+bgp\s(?P<confederation_identifier>confederation\sidentifier\s\d+)
                 $""", re.VERBOSE
             ),
             "setval": "bgp confederation identifier {{ bgp.confederation.identifier}}",
@@ -620,8 +595,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_graceful_restart_set",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<graceful_restart_set>graceful-restart)
+                \s+bgp\s(?P<graceful_restart_set>graceful-restart)
                 $""", re.VERBOSE
             ),
             "setval": "bgp graceful-restart",
@@ -639,8 +613,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_graceful_restart_graceful_reset",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<graceful_restart_graceful_reset>graceful-restart\sgraceful-reset)
+                \s+bgp\s(?P<graceful_restart_graceful_reset>graceful-restart\sgraceful-reset)
                 $""", re.VERBOSE
             ),
             "setval": "bgp graceful-restart graceful-reset",
@@ -658,8 +631,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_graceful_restart_restart_time",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<graceful_restart_restart_time>graceful-restart\srestart-time\s\d+)
+                \s+bgp\s(?P<graceful_restart_restart_time>graceful-restart\srestart-time\s\d+)
                 $""", re.VERBOSE
             ),
             "setval": "bgp graceful-restart restart-time {{ bgp.graceful_restart.restart_time}}",
@@ -677,8 +649,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_graceful_restart_purge_time",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<graceful_restart_purge_time>graceful-restart\spurge-time\s\d+)
+                \s+bgp\s(?P<graceful_restart_purge_time>graceful-restart\spurge-time\s\d+)
                 $""", re.VERBOSE
             ),
             "setval": "bgp graceful-restart purge-time {{ bgp.graceful_restart.purge_time}}",
@@ -696,8 +667,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_graceful_restart_stalepath_time",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<graceful_restart_stalepath_time>graceful-restart\sstalepath-time\s\d+)
+                \s+bgp\s(?P<graceful_restart_stalepath_time>graceful-restart\sstalepath-time\s\d+)
                 $""", re.VERBOSE
             ),
             "setval": "bgp graceful-restart stalepath-time {{ bgp.graceful_restart.stalepath_time}}",
@@ -715,8 +685,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_log_message",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<log_message>log\smessage\sdisable)
+                \s+bgp\s(?P<log_message>log\smessage\sdisable)
                 $""", re.VERBOSE
             ),
             "setval": "bgp log message disable",
@@ -738,8 +707,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_log_neighbor_changes_detail",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<log_neighbor_changes_detail>log\sneighbor\schanges\sdetail)
+                \s+bgp\s(?P<log_neighbor_changes_detail>log\sneighbor\schanges\sdetail)
                 $""", re.VERBOSE
             ),
             "setval": "bgp log neighbor changes detail",
@@ -761,8 +729,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_log_neighbor_changes_disable",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<log_neighbor_changes_disable>log\sneighbor\schanges\sdisable)
+                \s+bgp\s(?P<log_neighbor_changes_disable>log\sneighbor\schanges\sdisable)
                 $""", re.VERBOSE
             ),
             "setval": "bgp log neighbor changes disable",
@@ -784,8 +751,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_multipath_as_path_ignore_onwards",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<multipath>multipath\sas-path\signore\sonwards)
+                \s+bgp\s(?P<multipath>multipath\sas-path\signore\sonwards)
                 $""", re.VERBOSE
             ),
             "setval": "bgp multipath as-path ignore onwards",
@@ -805,8 +771,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_origin_as_validation_disable",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<origin_as_validation_disable>origin-as\svalidation\sdisable)
+                \s+bgp\s(?P<origin_as_validation_disable>origin-as\svalidation\sdisable)
                 $""", re.VERBOSE
             ),
             "setval": "bgp origin-as validation disable",
@@ -824,8 +789,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_origin_as_validation_signal_ibgp",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<origin_as_validation_signal_ibgp>origin-as\svalidation\ssignal\sibgp)
+                \s+bgp\s(?P<origin_as_validation_signal_ibgp>origin-as\svalidation\ssignal\sibgp)
                 $""", re.VERBOSE
             ),
             "setval": "bgp origin-as validation signal ibgp",
@@ -843,8 +807,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_origin_as_validation_time_off",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<validation_time_off>origin-as\svalidation\stime\soff)
+                \s+bgp\s(?P<validation_time_off>origin-as\svalidation\stime\soff)
                 $""", re.VERBOSE
             ),
             "setval": "bgp origin-as validation time off",
@@ -862,8 +825,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_origin_as_validation_time",
             "getval": re.compile(
                 r"""
-                \sbgp
-                \s(?P<validation_time>origin-as\svalidation\stime\s\d+)
+                \s+bgp\s(?P<validation_time>origin-as\svalidation\stime\s\d+)
                 $""", re.VERBOSE
             ),
             "setval": "bgp origin-as validation time {{ bgp.origin_as.validation.time.time_in_second }}",
@@ -882,8 +844,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_default_information_originate",
             "getval": re.compile(
                 r"""
-                \sdefault-information
-                \s(?P<default_information_originate>originate)
+                \s+default-information\s(?P<default_information_originate>originate)
                 $""", re.VERBOSE
             ),
             "setval": "default-information originate",
@@ -900,8 +861,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_default_metric",
             "getval": re.compile(
                 r"""
-                \sdefault-metric
-                \s(?P<default_metric>\d+)
+                \s+default-metric\s(?P<default_metric>\d+)
                 $""", re.VERBOSE
             ),
             "setval": "default-metric {{default_metric}}",
@@ -916,9 +876,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_graceful_maintenance",
             "getval": re.compile(
                 r"""
-                \sgraceful-maintenance
-                \sactivate
-                \s(?P<graceful_maintenance>\S*)
+                \s+graceful-maintenance\sactivate\s(?P<graceful_maintenance>\S*)
                 $""", re.VERBOSE
             ),
             "setval": "graceful_maintenance {{graceful_maintenance.activate}}",
@@ -931,10 +889,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "ibgp_policy_out_enforce_modifications",
             "getval": re.compile(
                 r"""
-                \sibgp
-                \spolicy
-                \sout
-                \s(?P<ibgp_policy_out>enforce-modifications)
+                \s+ibgp\spolicy\sout\s(?P<ibgp_policy_out>enforce-modifications)
                 $""", re.VERBOSE
             ),
             "setval": "ibgp policy out enforce-modifications",
@@ -947,9 +902,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "mpls_activate_interface",
             "getval": re.compile(
                 r"""
-                \smpls
-                \sactivate
-                \sinterface(?P<mpls_interface>\S+)
+                \s+mpls\sactivate\sinterface(?P<mpls_interface>\S+)
                 $""", re.VERBOSE
             ),
             "setval": "mpls activate interface {{mpls.activate.interface}}",
@@ -990,8 +943,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "nsr_disable",
             "getval": re.compile(
                 r"""
-                \snsr
-                \s(?P<nsr_disable>disable\s*)
+                \snsr\s(?P<nsr_disable>disable\s*)
                 $""", re.VERBOSE
             ),
             "setval": "nsr disable",
@@ -1004,8 +956,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "socket_receive_buffer_size",
             "getval": re.compile(
                 r"""
-                \ssocket
-                \s(?P<socket_rcv_buffer_size>receive-buffer-size\s\d+)
+                \s+socket\s(?P<socket_rcv_buffer_size>receive-buffer-size\s\d+)
                 $""", re.VERBOSE
             ),
             "setval": "socket receive-buffer-size {{ socket.receive_buffer_size}}",
@@ -1020,8 +971,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "socket_send_buffer_size",
             "getval": re.compile(
                 r"""
-                \ssocket
-                \s(?P<socket_send_buffer_size>send-buffer-size\s\d+)
+                \s+socket\s(?P<socket_send_buffer_size>send-buffer-size\s\d+)
                 $""", re.VERBOSE
             ),
             "setval": "socket send-buffer-size {{ socket.send_buffer_size}}",
@@ -1036,12 +986,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "update_in_error_handling_basic_ebgp_disable",
             "getval": re.compile(
                 r"""
-                \supdate
-                \sin
-                \serror-handling
-                \sbasic
-                \sebgp
-                \s(?P<disable>disable)
+                \s+update\sin\serror-handling\sbasic\sebgp\s(?P<disable>disable)
                 $""", re.VERBOSE
             ),
             "setval": "update in error-handling basic ebgp disable",
@@ -1054,12 +999,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "update_in_error_handling_basic_ibgp_disable",
             "getval": re.compile(
                 r"""
-                \supdate
-                \sin
-                \serror-handling
-                \sbasic
-                \sibgp
-                \s(?P<disable>disable)
+                \s+update\sin\serror-handling\sbasic\sibgp\s(?P<disable>disable)
                 $""", re.VERBOSE
             ),
             "setval": "update in error-handling basic ibgp disable",
@@ -1072,11 +1012,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "update_in_error_handling_extended_ebgp",
             "getval": re.compile(
                 r"""
-                \supdate
-                \sin
-                \serror-handling
-                \sextended
-                \s(?P<extended_ebgp>ebgp)
+                \s+update\sin\serror-handling\sextended\s(?P<extended_ebgp>ebgp)
                 $""", re.VERBOSE
             ),
             "setval": "update in error-handling extended ebgp",
@@ -1089,11 +1025,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "update_in_error_handling_extended_ibgp",
             "getval": re.compile(
                 r"""
-                \supdate
-                \sin
-                \serror-handling
-                \sextended
-                \s(?P<extended_ibgp>ibgp)
+                \s+update\sin\serror-handling\sextended\s(?P<extended_ibgp>ibgp)
                 $""", re.VERBOSE
             ),
             "setval": "update in error-handling extended ibgp",
@@ -1106,9 +1038,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "update_out_logging",
             "getval": re.compile(
                 r"""
-                \supdate
-                \sout
-                \s(?P<update_out_logging>logging)
+                \s+update\sout\s(?P<update_out_logging>logging)
                 $""", re.VERBOSE
             ),
             "setval": "update out logging",
@@ -1121,9 +1051,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "update_limit",
             "getval": re.compile(
                 r"""
-                \supdate
-                \slimit
-                \s(?P<update_limit>\d+)
+                \s+update\slimit\s(?P<update_limit>\d+)
                 $""", re.VERBOSE
             ),
             "setval": "update limit {{ update.limit }}",
@@ -2831,31 +2759,10 @@ class Bgp_globalTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "rd_value",
-            "getval": re.compile(
-                r"""
-                \srd
-                \svalue
-                \s(?P<rd_value>rd\svalue\s\S+)
-                $""", re.VERBOSE
-            ),
-            "setval": "rd value {{ rd.value}}",
-            "compval": "rd.value",
-            "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "rd": {
-                            "value": "{{ rd.value.split(" ")[2] }}"}}
-                }
-            }
-        },
-        {
             "name": "rd_auto",
             "getval": re.compile(
                 r"""
-                \srd
-                \svalue
-                \s(?P<rd_auto>rd\sauto)
+                \s+rd(?P<rd_auto>\sauto)
                 $""", re.VERBOSE
             ),
             "setval": "rd auto",
@@ -2864,7 +2771,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "rd": {
-                            "auto": "True if rd_auto is defined }}"}}
+                            "auto": "{{True if rd_auto is defined }}"}}
                 }
             }
         },
@@ -2872,18 +2779,17 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "timers_keepalive",
             "getval": re.compile(
                 r"""
-                \s(?P<timers_keepalive_time>timers\s\d+)
-                \s(?P<hold_time>\d+)
+                \s+timers\sbgp\s(?P<timers_keepalive_time>\d+)\s(?P<hold_time>\d+)
                 $""", re.VERBOSE
             ),
-            "setval": "timers {{ timers.keepalive_time}} {{ timers.holdtime}}",
+            "setval": "timers bgp {{ timers.keepalive_time}} {{ timers.holdtime}}",
             "compval": "timers",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
 
-                        "timers": {"keepalive_time": "{{ timers_keepalive_time.split(" ")[1] }}",
-                                   "holdtime": "{{ hold_time.split(" ")[0]}}"}}}
+                        "timers": {"keepalive_time": "{{ timers_keepalive_time }}",
+                                   "holdtime": "{{ hold_time}}"}}}
             }
         }
 

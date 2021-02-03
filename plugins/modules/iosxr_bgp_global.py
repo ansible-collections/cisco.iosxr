@@ -863,9 +863,6 @@ options:
               description: route distinguisher.
               type: dict
               suboptions:
-                value:
-                  description: 4-byte AS number in asdot (X.Y) format or 2-byte/4-byte AS number or Ip address.
-                  type: str
                 auto:
                   description: Automatic route distinguisher.
                   type: bool

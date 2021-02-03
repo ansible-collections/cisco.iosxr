@@ -1128,10 +1128,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "rd": {
                             "type": "dict",
-                            "options": {
-                                "value": {"type": "str"},
-                                "auto": {"type": "bool"},
-                            },
+                            "options": {"auto": {"type": "bool"}},
                         },
                         "socket": {
                             "type": "dict",
