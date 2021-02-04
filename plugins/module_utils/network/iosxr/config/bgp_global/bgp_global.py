@@ -152,11 +152,12 @@ class Bgp_global(ResourceModule):
            the `want` and `have` data with the `parsers` defined
            for the Bgp_global network resource.
         """
+
+        self.compare(parsers=self.parsers, want=want, have=have)
         self._compare_rpki_server(want=want, have=self.have)
+        self._compare_confederation_peers(want=want, have=have)
         self._compare_neighbors(want=want, have=self.have)
         self._vrfs_compare(want=want, have=have)
-        self. _compare_confederation_peers(want=want, have=have)
-        self.compare(parsers=self.parsers, want=want, have=have)
         if self.commands and "router bgp" not in self.commands[0]:
             self.commands.insert(
                 0, self._tmplt.render({"as_number": want['as_number']}, "router", False)

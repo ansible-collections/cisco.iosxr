@@ -1154,7 +1154,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
             "choices": [
                 "deleted",
                 "merged",
-                "overridden",
                 "replaced",
                 "gathered",
                 "rendered",
