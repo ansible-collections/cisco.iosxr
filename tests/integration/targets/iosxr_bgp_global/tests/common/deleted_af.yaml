@@ -13,7 +13,7 @@
           as_number: "65536"
         state: deleted
       register: result
-      ignore_errors: True
+      ignore_errors: true
 
     - name: Assert that the task failed
       assert:

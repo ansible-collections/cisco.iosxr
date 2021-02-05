@@ -17,7 +17,6 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from copy import deepcopy
 
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
@@ -48,65 +47,65 @@ class Bgp_global(ResourceModule):
             tmplt=Bgp_globalTemplate(),
         )
         self.parsers = [
-            'router',
-            'bfd_multiplier',
-            'bfd_minimum_interval',
-            'bgp_auto_policy_soft_reset',
-            'bgp_as_path_loopcheck',
-            'bgp_cluster_id',
-            'bgp_default_local_preference',
-            'bgp_enforce_first_as_disable',
-            'bgp_fast_external_fallover_disable',
-            'bgp_install_diversion',
-            'bgp_max_neighbors',
-            'bgp_redistribute_internal',
-            'bgp_router_id',
-            'bgp_scan_time',
-            'bgp_unsafe_ebgp_policy',
-            'bgp_update_delay',
-            'bgp_bestpath_aigp',
-            'bgp_bestpath_as_path_ignore',
-            'bgp_bestpath_as_path_multipath_relax',
-            'bgp_bestpath_med_always',
-            'bgp_bestpath_med_confed',
-            'bgp_bestpath_med_missing_as_worst',
-            'bgp_bestpath_compare_routerid',
-            'bgp_bestpath_cost_community_ignore',
-            'bgp_bestpath_origin_as_use',
-            'bgp_bestpath_origin_as_allow',
-            'bgp_confederation_identifier',
-            'bgp_graceful_restart_set',
-            'bgp_graceful_restart_graceful_reset',
-            'bgp_graceful_restart_restart_time',
-            'bgp_graceful_restart_purge_time',
-            'bgp_graceful_restart_stalepath_time',
-            'bgp_log_message',
-            'bgp_log_neighbor_changes_detail',
-            'bgp_log_neighbor_changes_disable',
-            'bgp_multipath_as_path_ignore_onwards',
-            'bgp_origin_as_validation_disable',
-            'bgp_origin_as_validation_signal_ibgp',
-            'bgp_origin_as_validation_time_off',
-            'bgp_origin_as_validation_time',
-            'bgp_default_information_originate',
-            'bgp_default_metric',
-            'bgp_graceful_maintenance',
-            'ibgp_policy_out_enforce_modifications',
-            'mpls_activate_interface',
-            'mvpn',
-            'nsr_set',
-            'nsr_disable',
-            'socket_receive_buffer_size',
-            'socket_send_buffer_size',
-            'update_in_error_handling_basic_ebgp_disable',
-            'update_in_error_handling_basic_ibgp_disable',
-            'update_in_error_handling_extended_ebgp',
-            'update_in_error_handling_extended_ibgp',
-            'update_out_logging',
-            'update_limit',
-            'rpki_route_value',
-            'rd_auto',
-            'timers_keepalive',
+            "router",
+            "bfd_multiplier",
+            "bfd_minimum_interval",
+            "bgp_auto_policy_soft_reset",
+            "bgp_as_path_loopcheck",
+            "bgp_cluster_id",
+            "bgp_default_local_preference",
+            "bgp_enforce_first_as_disable",
+            "bgp_fast_external_fallover_disable",
+            "bgp_install_diversion",
+            "bgp_max_neighbors",
+            "bgp_redistribute_internal",
+            "bgp_router_id",
+            "bgp_scan_time",
+            "bgp_unsafe_ebgp_policy",
+            "bgp_update_delay",
+            "bgp_bestpath_aigp",
+            "bgp_bestpath_as_path_ignore",
+            "bgp_bestpath_as_path_multipath_relax",
+            "bgp_bestpath_med_always",
+            "bgp_bestpath_med_confed",
+            "bgp_bestpath_med_missing_as_worst",
+            "bgp_bestpath_compare_routerid",
+            "bgp_bestpath_cost_community_ignore",
+            "bgp_bestpath_origin_as_use",
+            "bgp_bestpath_origin_as_allow",
+            "bgp_confederation_identifier",
+            "bgp_graceful_restart_set",
+            "bgp_graceful_restart_graceful_reset",
+            "bgp_graceful_restart_restart_time",
+            "bgp_graceful_restart_purge_time",
+            "bgp_graceful_restart_stalepath_time",
+            "bgp_log_message",
+            "bgp_log_neighbor_changes_detail",
+            "bgp_log_neighbor_changes_disable",
+            "bgp_multipath_as_path_ignore_onwards",
+            "bgp_origin_as_validation_disable",
+            "bgp_origin_as_validation_signal_ibgp",
+            "bgp_origin_as_validation_time_off",
+            "bgp_origin_as_validation_time",
+            "bgp_default_information_originate",
+            "bgp_default_metric",
+            "bgp_graceful_maintenance",
+            "ibgp_policy_out_enforce_modifications",
+            "mpls_activate_interface",
+            "mvpn",
+            "nsr_set",
+            "nsr_disable",
+            "socket_receive_buffer_size",
+            "socket_send_buffer_size",
+            "update_in_error_handling_basic_ebgp_disable",
+            "update_in_error_handling_basic_ibgp_disable",
+            "update_in_error_handling_extended_ebgp",
+            "update_in_error_handling_extended_ibgp",
+            "update_out_logging",
+            "update_limit",
+            "rpki_route_value",
+            "rd_auto",
+            "timers_keepalive",
         ]
 
     def execute_module(self):
@@ -130,11 +129,16 @@ class Bgp_global(ResourceModule):
 
         # if state is deleted, clean up global params
         if self.state == "deleted":
-            if not self.want or (self.have.get("as_number") == self.want.get("as_number")):
-                self._compare(want={"as_number": self.want.get("as_number")}, have=self.have)
+            if not self.want or (
+                self.have.get("as_number") == self.want.get("as_number")
+            ):
+                self._compare(
+                    want={"as_number": self.want.get("as_number")},
+                    have=self.have,
+                )
         elif self.state == "purged":
             if not self.want or (
-                    self.have.get("as_number") == self.want.get("as_number")
+                self.have.get("as_number") == self.want.get("as_number")
             ):
                 self.addcmd(self.have or {}, "router", True)
 
@@ -160,9 +164,11 @@ class Bgp_global(ResourceModule):
         self._vrfs_compare(want=want, have=have)
         if self.commands and "router bgp" not in self.commands[0]:
             self.commands.insert(
-                0, self._tmplt.render({"as_number": want['as_number']}, "router", False)
+                0,
+                self._tmplt.render(
+                    {"as_number": want["as_number"]}, "router", False
+                ),
             )
-
 
     def _compare_rpki_server(self, want, have):
         """Leverages the base class `compare()` method and
@@ -171,25 +177,30 @@ class Bgp_global(ResourceModule):
                    for the Bgp_global rpki servers resource.
                 """
         rpki_server_parsers = [
-            'rpki_server_purge_time',
-            'rpki_server_refresh_time',
-            'rpki_server_refresh_time_off',
-            'rpki_server_response_time',
-            'rpki_server_response_time_off',
-            'rpki_server_shutdown',
-            'rpki_server_transport_ssh',
-            'rpki_server_transport_tcp',
+            "rpki_server_purge_time",
+            "rpki_server_refresh_time",
+            "rpki_server_refresh_time_off",
+            "rpki_server_response_time",
+            "rpki_server_response_time_off",
+            "rpki_server_shutdown",
+            "rpki_server_transport_ssh",
+            "rpki_server_transport_tcp",
         ]
         want = want.get("rpki", {}).get("servers", {})
         have = have.get("rpki", {}).get("servers", {})
         for name, entry in iteritems(want):
             new_have = have.pop(name, {})
             begin = len(self.commands)
-            self.compare(parsers=rpki_server_parsers, want=entry, have=new_have)
+            self.compare(
+                parsers=rpki_server_parsers, want=entry, have=new_have
+            )
             rpki_server_name = entry.get("name")
             if len(self.commands) != begin:
                 self.commands.insert(
-                    begin, self._tmplt.render({"name": rpki_server_name }, "rpki_server_name", False)
+                    begin,
+                    self._tmplt.render(
+                        {"name": rpki_server_name}, "rpki_server_name", False
+                    ),
                 )
         for name, entry in iteritems(have):
             self.addcmd(entry, "rpki_server_name", True)
@@ -199,8 +210,12 @@ class Bgp_global(ResourceModule):
         :params want: the want BGP dictionary
         :params have: the have BGP dictionary
         """
-        w_cpeers = want.get("bgp", {}).get("confederation", {}).get("peers", [])
-        h_cpeers = have.get("bgp", {}).get("confederation", {}).get("peers", [])
+        w_cpeers = (
+            want.get("bgp", {}).get("confederation", {}).get("peers", [])
+        )
+        h_cpeers = (
+            have.get("bgp", {}).get("confederation", {}).get("peers", [])
+        )
 
         if set(w_cpeers) != set(h_cpeers):
             if self.state in ["replaced", "deleted"]:
@@ -220,74 +235,74 @@ class Bgp_global(ResourceModule):
                    for the Bgp_global neighbor resource.
                 """
         neighbor_parsers = [
-            'advertisement_interval',
-            'bfd_fast_detect_disable',
-            'bfd_fast_detect_strict_mode',
-            'bfd_nbr_minimum_interval',
-            'bfd_nbr_multiplier',
-            'bmp_activate',
-            'dmz_link_bandwidth',
-            'dmz_link_bandwidth_inheritance_disable',
-            'neighbor_description',
-            'neighbor_cluster_id',
-            'dscp',
-            'ebgp_multihop_value',
-            'ebgp_multihop_mpls',
-            'ebgp_recv_extcommunity_dmz',
-            'ebgp_recv_extcommunity_dmz_set',
-            'ebgp_send_extcommunity_dmz',
-            'ebgp_send_extcommunity_dmz_set',
-            'ebgp_send_extcommunity_dmz_cumulatie',
-            'egress_engineering',
-            'egress_engineering_set',
-            'ignore_connected_check',
-            'ignore_connected_check_set',
-            'neighbor_enforce_first_as_disable',
-            'neighbor_graceful_restart_restart_time',
-            'neighbor_graceful_restart_stalepath_time',
-            'keychain',
-            'keychain_name',
-            'local_as_inheritance_disable',
-            'local_as',
-            'local',
-            'local_address',
-            'origin_as',
-            'remote_as',
-            'receive_buffer_size',
-            'send_buffer_size',
-            'session_open_mode',
-            'neighbor_shutdown',
-            'neighbor_shutdown_inheritance_disable',
-            'neighbor_tcp_mss',
-            'neighbor_tcp_mss_inheritance_disable',
-            'neighbor_timers_keepalive',
-            'update_source',
-            'neighbor_ttl_security_inheritance_disable',
-            'neighbor_ttl_security',
-            'neighbor_graceful_maintenance_set',
-            'neighbor_graceful_maintenance_activate',
-            'neighbor_graceful_maintenance_activate_inheritance_disable',
-            'neighbor_graceful_maintenance_as_prepends',
-            'neighbor_graceful_maintenance_local_preference_disable',
-            'neighbor_graceful_maintenance_local_preference',
-            'neighbor_graceful_maintenance_as_prepends_value',
-            'neighbor_capability_additional_paths_send',
-            'neighbor_capability_additional_paths_send_disable',
-            'neighbor_capability_additional_paths_rcv_disable',
-            'neighbor_capability_additional_paths_rcv',
-            'neighbor_capability_suppress_4_byte_AS',
-            'neighbor_capability_suppress_all',
-            'neighbor_capability_suppress_all_inheritance_disable',
-            'neighbor_log_message_in_value',
-            'neighbor_log_message_in_disable',
-            'neighbor_log_message_in_inheritance_disable',
-            'neighbor_log_message_out_value',
-            'neighbor_log_message_out_disable',
-            'neighbor_log_message_out_inheritance_disable',
-            'neighbor_update_in_filtering_attribute_filter_group',
-            'neighbor_update_in_filtering_logging_disable',
-            'neighbor_update_in_filtering_message_buffers',
-           ]
+            "advertisement_interval",
+            "bfd_fast_detect_disable",
+            "bfd_fast_detect_strict_mode",
+            "bfd_nbr_minimum_interval",
+            "bfd_nbr_multiplier",
+            "bmp_activate",
+            "dmz_link_bandwidth",
+            "dmz_link_bandwidth_inheritance_disable",
+            "neighbor_description",
+            "neighbor_cluster_id",
+            "dscp",
+            "ebgp_multihop_value",
+            "ebgp_multihop_mpls",
+            "ebgp_recv_extcommunity_dmz",
+            "ebgp_recv_extcommunity_dmz_set",
+            "ebgp_send_extcommunity_dmz",
+            "ebgp_send_extcommunity_dmz_set",
+            "ebgp_send_extcommunity_dmz_cumulatie",
+            "egress_engineering",
+            "egress_engineering_set",
+            "ignore_connected_check",
+            "ignore_connected_check_set",
+            "neighbor_enforce_first_as_disable",
+            "neighbor_graceful_restart_restart_time",
+            "neighbor_graceful_restart_stalepath_time",
+            "keychain",
+            "keychain_name",
+            "local_as_inheritance_disable",
+            "local_as",
+            "local",
+            "local_address",
+            "origin_as",
+            "remote_as",
+            "receive_buffer_size",
+            "send_buffer_size",
+            "session_open_mode",
+            "neighbor_shutdown",
+            "neighbor_shutdown_inheritance_disable",
+            "neighbor_tcp_mss",
+            "neighbor_tcp_mss_inheritance_disable",
+            "neighbor_timers_keepalive",
+            "update_source",
+            "neighbor_ttl_security_inheritance_disable",
+            "neighbor_ttl_security",
+            "neighbor_graceful_maintenance_set",
+            "neighbor_graceful_maintenance_activate",
+            "neighbor_graceful_maintenance_activate_inheritance_disable",
+            "neighbor_graceful_maintenance_as_prepends",
+            "neighbor_graceful_maintenance_local_preference_disable",
+            "neighbor_graceful_maintenance_local_preference",
+            "neighbor_graceful_maintenance_as_prepends_value",
+            "neighbor_capability_additional_paths_send",
+            "neighbor_capability_additional_paths_send_disable",
+            "neighbor_capability_additional_paths_rcv_disable",
+            "neighbor_capability_additional_paths_rcv",
+            "neighbor_capability_suppress_4_byte_AS",
+            "neighbor_capability_suppress_all",
+            "neighbor_capability_suppress_all_inheritance_disable",
+            "neighbor_log_message_in_value",
+            "neighbor_log_message_in_disable",
+            "neighbor_log_message_in_inheritance_disable",
+            "neighbor_log_message_out_value",
+            "neighbor_log_message_out_disable",
+            "neighbor_log_message_out_inheritance_disable",
+            "neighbor_update_in_filtering_attribute_filter_group",
+            "neighbor_update_in_filtering_logging_disable",
+            "neighbor_update_in_filtering_message_buffers",
+        ]
 
         want_nbr = want.get("neighbors", {})
         have_nbr = have.get("neighbors", {})
@@ -298,13 +313,16 @@ class Bgp_global(ResourceModule):
             neighbor_address = entry.get("neighbor", "")
             if len(self.commands) != begin:
                 self.commands.insert(
-                    begin, self._tmplt.render({"neighbor": neighbor_address}, "neighbor", False)
+                    begin,
+                    self._tmplt.render(
+                        {"neighbor": neighbor_address}, "neighbor", False
+                    ),
                 )
         for name, entry in iteritems(have_nbr):
             if self._check_af("neighbor", name):
                 self._module.fail_json(
                     msg="Neighbor {0} has address-family configurations. "
-                        "Please use the iosxr_bgp_neighbor_address_family module to remove those first.".format(
+                    "Please use the iosxr_bgp_neighbor_address_family module to remove those first.".format(
                         name
                     )
                 )
@@ -326,7 +344,10 @@ class Bgp_global(ResourceModule):
             self.compare(parsers=self.parsers, want=entry, have=vrf_have)
             if len(self.commands) != begin:
                 self.commands.insert(
-                    begin, self._tmplt.render({"vrf": entry.get('vrf')}, "vrf", False)
+                    begin,
+                    self._tmplt.render(
+                        {"vrf": entry.get("vrf")}, "vrf", False
+                    ),
                 )
         # cleanup remaining VRFs
         # but do not negate it entirely
@@ -336,7 +357,7 @@ class Bgp_global(ResourceModule):
             if self._check_af("vrf", name):
                 self._module.fail_json(
                     msg="VRF {0} has address-family configurations. "
-                        "Please use the iosxr_bgp_address_family module to remove those first.".format(
+                    "Please use the iosxr_bgp_address_family module to remove those first.".format(
                         name
                     )
                 )
@@ -361,6 +382,7 @@ class Bgp_global(ResourceModule):
             key_4 = x["action"]
 
             return (key_1, key_2, key_3, key_4)
+
         if "servers" in entry.get("rpki", {}):
             entry["rpki"]["servers"] = {
                 x["name"]: x for x in entry.get("rpki", {}).get("servers", [])
@@ -382,7 +404,11 @@ class Bgp_global(ResourceModule):
         af_present = False
         if self._connection:
             config_lines = self._get_config().splitlines()
-            index = [i + 1 for i, el in enumerate(config_lines) if context_name in el]
+            index = [
+                i + 1
+                for i, el in enumerate(config_lines)
+                if context_name in el
+            ]
             if index:
                 # had to do this to escape flake8 and black errors
                 ind = index[0]
@@ -393,11 +419,3 @@ class Bgp_global(ResourceModule):
                         af_present = True
                         break
         return af_present
-
-
-
-
-
-
-
-

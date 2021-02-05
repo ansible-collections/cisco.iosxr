@@ -27,13 +27,11 @@ from ansible_collections.cisco.iosxr.plugins.modules import iosxr_bgp_global
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
     set_module_args,
 )
-from .iosxr_module import TestIosxrModule, load_fixture
-
+from .iosxr_module import TestIosxrModule
 
 
 class TestIosxrBgpGlobalModule(TestIosxrModule):
     module = iosxr_bgp_global
-
 
     def setUp(self):
         super(TestIosxrBgpGlobalModule, self).setUp()
@@ -85,18 +83,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     as_number="65536",
                     default_metric=4,
                     socket=dict(
-                        receive_buffer_size=514,
-                        send_buffer_size=4098
+                        receive_buffer_size=514, send_buffer_size=4098
                     ),
                     bgp=dict(
-                        confederation=dict(
-                            identifier=4
-                        ),
-                        bestpath=dict(
-                            med=dict(
-                                confed=True
-                            )
-                        ),
+                        confederation=dict(identifier=4),
+                        bestpath=dict(med=dict(confed=True)),
                         cluster_id=5,
                         router_id="192.0.2.10",
                     ),
@@ -105,7 +96,6 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             neighbor="192.0.2.11",
                             cluster_id=3,
                             remote_as="65537",
-
                         ),
                         dict(
                             neighbor="192.0.2.14",
@@ -113,18 +103,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             bfd=dict(
                                 multiplier=6,
                                 minimum_interval=20,
-                                fast_detect=dict(
-                                    strict_mode=True
-                                )
-                            )
+                                fast_detect=dict(strict_mode=True),
+                            ),
                         ),
                     ],
-                    vrfs=[
-                        dict(
-                            vrf="vrf1",
-                            default_metric=5,
-                        ),
-                    ],
+                    vrfs=[dict(vrf="vrf1", default_metric=5)],
                 ),
                 state="merged",
             )
@@ -138,18 +121,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     as_number="65536",
                     default_metric=4,
                     socket=dict(
-                        receive_buffer_size=514,
-                        send_buffer_size=4098
+                        receive_buffer_size=514, send_buffer_size=4098
                     ),
                     bgp=dict(
-                        confederation=dict(
-                            identifier=4
-                        ),
-                        bestpath=dict(
-                            med=dict(
-                                confed=True
-                            )
-                        ),
+                        confederation=dict(identifier=4),
+                        bestpath=dict(med=dict(confed=True)),
                         cluster_id=5,
                         router_id="192.0.2.10",
                     ),
@@ -158,7 +134,6 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             neighbor="192.0.2.11",
                             cluster_id=3,
                             remote_as="65537",
-
                         ),
                         dict(
                             neighbor="192.0.2.14",
@@ -166,18 +141,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             bfd=dict(
                                 multiplier=6,
                                 minimum_interval=20,
-                                fast_detect=dict(
-                                    strict_mode=True
-                                )
-                            )
+                                fast_detect=dict(strict_mode=True),
+                            ),
                         ),
                     ],
-                    vrfs=[
-                        dict(
-                            vrf="vrf1",
-                            default_metric=5,
-                        ),
-                    ],
+                    vrfs=[dict(vrf="vrf1", default_metric=5)],
                 ),
                 state="merged",
             )
@@ -200,7 +168,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "bfd multiplier 6",
             "remote-as 65538",
             "vrf vrf1",
-            "default-metric 5"
+            "default-metric 5",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -235,18 +203,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     as_number="65536",
                     default_metric=5,
                     socket=dict(
-                        receive_buffer_size=514,
-                        send_buffer_size=4098
+                        receive_buffer_size=514, send_buffer_size=4098
                     ),
                     bgp=dict(
-                        confederation=dict(
-                            identifier=4
-                        ),
-                        bestpath=dict(
-                            med=dict(
-                                confed=True
-                            )
-                        ),
+                        confederation=dict(identifier=4),
+                        bestpath=dict(med=dict(confed=True)),
                         cluster_id=5,
                         router_id="192.0.2.10",
                     ),
@@ -257,18 +218,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             bfd=dict(
                                 multiplier=6,
                                 minimum_interval=20,
-                                fast_detect=dict(
-                                    strict_mode=True
-                                )
-                            )
-                        ),
+                                fast_detect=dict(strict_mode=True),
+                            ),
+                        )
                     ],
-                    vrfs=[
-                        dict(
-                            vrf="vrf1",
-                            default_metric=5,
-                        ),
-                    ],
+                    vrfs=[dict(vrf="vrf1", default_metric=5)],
                 ),
                 state="replaced",
             )
@@ -282,7 +236,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "bfd fast-detect strict-mode",
             "bfd minimum-interval 20",
             "bfd multiplier 6",
-            "remote-as 65538"
+            "remote-as 65538",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -317,18 +271,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     as_number="65536",
                     default_metric=4,
                     socket=dict(
-                        receive_buffer_size=514,
-                        send_buffer_size=4098
+                        receive_buffer_size=514, send_buffer_size=4098
                     ),
                     bgp=dict(
-                        confederation=dict(
-                            identifier=4
-                        ),
-                        bestpath=dict(
-                            med=dict(
-                                confed=True
-                            )
-                        ),
+                        confederation=dict(identifier=4),
+                        bestpath=dict(med=dict(confed=True)),
                         cluster_id=5,
                         router_id="192.0.2.10",
                     ),
@@ -337,7 +284,6 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             neighbor="192.0.2.11",
                             cluster_id=3,
                             remote_as="65537",
-
                         ),
                         dict(
                             neighbor="192.0.2.14",
@@ -345,18 +291,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             bfd=dict(
                                 multiplier=6,
                                 minimum_interval=20,
-                                fast_detect=dict(
-                                    strict_mode=True
-                                )
-                            )
+                                fast_detect=dict(strict_mode=True),
+                            ),
                         ),
                     ],
-                    vrfs=[
-                        dict(
-                            vrf="vrf1",
-                            default_metric=5,
-                        ),
-                    ],
+                    vrfs=[dict(vrf="vrf1", default_metric=5)],
                 ),
                 state="replaced",
             )
@@ -388,14 +327,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             """
         )
         self.get_config.return_value = run_cfg
-        set_module_args(
-            dict(
-                config=dict(
-                    as_number="65536",
-                ),
-                state="deleted",
-            )
-        )
+        set_module_args(dict(config=dict(as_number="65536"), state="deleted"))
 
         commands = [
             "router bgp 65536",
@@ -408,7 +340,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "no socket send-buffer-size 4098",
             "no neighbor 192.0.2.11",
             "no neighbor 192.0.2.14",
-            "no vrf vrf1"
+            "no vrf vrf1",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -419,14 +351,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             """
         )
         self.get_config.return_value = run_cfg
-        set_module_args(
-            dict(
-                config=dict(
-                    as_number="65536",
-                ),
-                state="deleted",
-            )
-        )
+        set_module_args(dict(config=dict(as_number="65536"), state="deleted"))
 
         result = self.execute_module(changed=False)
         self.assertEqual(result["commands"], [])
@@ -438,18 +363,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     as_number="65536",
                     default_metric=4,
                     socket=dict(
-                        receive_buffer_size=514,
-                        send_buffer_size=4098
+                        receive_buffer_size=514, send_buffer_size=4098
                     ),
                     bgp=dict(
-                        confederation=dict(
-                            identifier=4
-                        ),
-                        bestpath=dict(
-                            med=dict(
-                                confed=True
-                            )
-                        ),
+                        confederation=dict(identifier=4),
+                        bestpath=dict(med=dict(confed=True)),
                         cluster_id=5,
                         router_id="192.0.2.10",
                     ),
@@ -458,7 +376,6 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             neighbor="192.0.2.11",
                             cluster_id=3,
                             remote_as="65537",
-
                         ),
                         dict(
                             neighbor="192.0.2.14",
@@ -466,18 +383,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             bfd=dict(
                                 multiplier=6,
                                 minimum_interval=20,
-                                fast_detect=dict(
-                                    strict_mode=True
-                                )
-                            )
+                                fast_detect=dict(strict_mode=True),
+                            ),
                         ),
                     ],
-                    vrfs=[
-                        dict(
-                            vrf="vrf1",
-                            default_metric=5,
-                        ),
-                    ],
+                    vrfs=[dict(vrf="vrf1", default_metric=5)],
                 ),
                 state="rendered",
             )
@@ -501,59 +411,52 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "bfd multiplier 6",
             "remote-as 65538",
             "vrf vrf1",
-            "default-metric 5"
+            "default-metric 5",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
 
     def test_iosxr_bgp_global_parsed(self):
-        self.maxDiff=None
+        self.maxDiff = None
         set_module_args(
             dict(
-                running_config="router bgp 65536\n bgp confederation identifier 4\n bgp router-id 192.0.2.10\n bgp cluster-id 5\n default-metric 4\n "
-                               "socket send-buffer-size 4098\n bgp bestpath med confed\n socket receive-buffer-size 514\n neighbor 192.0.2.11\n  remote-as 65537\n  "
-                               "cluster-id 3\n !\n neighbor 192.0.2.14\n  remote-as 65538\n  bfd fast-detect strict-mode\n  bfd multiplier 6\n  bfd minimum-interval 20\n !\n!",
+                running_config="router bgp 65536\n bgp confederation identifier 4\n "
+                "bgp router-id 192.0.2.10\n bgp cluster-id 5\n default-metric 4\n "
+                "socket send-buffer-size 4098\n bgp bestpath med confed\n "
+                "socket receive-buffer-size 514\n neighbor 192.0.2.11\n  remote-as 65537\n  "
+                "cluster-id 3\n !\n neighbor 192.0.2.14\n  remote-as 65538\n "
+                " bfd fast-detect strict-mode\n "
+                " bfd multiplier 6\n  bfd minimum-interval 20\n !\n!",
                 state="parsed",
             )
         )
         result = self.execute_module(changed=False)
         parsed_list = {
-        "as_number": "65536",
-        "bgp": {
-            "bestpath": {
-                "med": {
-                    "confed": True
-                }
+            "as_number": "65536",
+            "bgp": {
+                "bestpath": {"med": {"confed": True}},
+                "cluster_id": "5",
+                "confederation": {"identifier": 4},
+                "router_id": "192.0.2.10",
             },
-            "cluster_id": "5",
-            "confederation": {
-                "identifier": 4
-            },
-            "router_id": "192.0.2.10"
-        },
-        "default_metric": 4,
-        "neighbors": [
-            {
-                "cluster_id": "3",
-                "neighbor": "192.0.2.11",
-                "remote_as": 65537
-            },
-            {
-                "bfd": {
-                    "fast_detect": {
-                        "strict_mode": True
-                    },
-                    "minimum_interval": 20,
-                    "multiplier": 6
+            "default_metric": 4,
+            "neighbors": [
+                {
+                    "cluster_id": "3",
+                    "neighbor": "192.0.2.11",
+                    "remote_as": 65537,
                 },
-                "neighbor": "192.0.2.14",
-                "remote_as": 65538
-            }
-        ],
-        "socket": {
-            "receive_buffer_size": 514,
-            "send_buffer_size": 4098,
-        }
+                {
+                    "bfd": {
+                        "fast_detect": {"strict_mode": True},
+                        "minimum_interval": 20,
+                        "multiplier": 6,
+                    },
+                    "neighbor": "192.0.2.14",
+                    "remote_as": 65538,
+                },
+            ],
+            "socket": {"receive_buffer_size": 514, "send_buffer_size": 4098},
         }
 
         self.assertEqual(parsed_list, result["parsed"])

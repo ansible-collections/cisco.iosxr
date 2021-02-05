@@ -686,7 +686,8 @@ options:
                           type: dict
                           suboptions:
                             buffers:
-                              description: Number of buffers to store filtered update messages (resizing does not take effect after filtering action has started).
+                              description: Number of buffers to store filtered update messages
+                               (resizing does not take effect after filtering action has started).
                               type: int
             update_source:
               description: Source of routing updates.Refer vendor document for valid values.
@@ -1111,7 +1112,7 @@ commands:
 "no neighbor 192.0.2.14",
 "no vrf vrf1"
 
-configuration on device after delete 
+configuration on device after delete
 -------------------------------------------
 
 RP/0/0/CPU0:10#show running-config router bgp
@@ -1230,7 +1231,7 @@ rendered output
   "graceful-maintenance as-prepends 2",
   "bgp enforce-first-as disable",
   "default-metric 4"
-  
+
 ############## Using parsed #####################
 # parsed.cfg
 # ------------
@@ -1259,8 +1260,7 @@ router bgp 65536
   cisco.iosxr.iosxr_bgp_global:
     running_config: "{{ lookup('file', 'parsed.cfg') }}"
     state: parsed
-  
-  
+
 #Task output using parsed
     as_number: "65536"
     default_metric: 4

@@ -8,9 +8,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 """
-The Bgp_global parser templates file. This contains 
-a list of parser definitions and associated functions that 
-facilitates both facts gathering and native command generation for 
+The Bgp_global parser templates file. This contains
+a list of parser definitions and associated functions that
+facilitates both facts gathering and native command generation for
 the given network resource.
 """
 
@@ -19,15 +19,16 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
     NetworkTemplate,
 )
 
+
 def _tmplt_confederation_peers(config_data):
     cmds = []
     base_cmd = "bgp confederation peers "
-    peers = config_data.get("bgp",{}).get("confederation", {}).get("peers")
-    #import epdb;epdb.serve()
+    peers = config_data.get("bgp", {}).get("confederation", {}).get("peers")
     if peers:
         for peer in peers:
             cmds.append(base_cmd + str(peer))
     return cmds
+
 
 class Bgp_globalTemplate(NetworkTemplate):
     def __init__(self, lines=None):
@@ -79,10 +80,8 @@ class Bgp_globalTemplate(NetworkTemplate):
             "setval": "bfd minimum-interval {{bfd.minimum_interval}}",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bfd": {
-                    "minimum_interval": "{{ min_interval.split(" ")[1] }}"
-                },
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bfd": {"minimum_interval": "{{ min_interval.split(" ")[1] }}"},
                     }
                 }
             }
@@ -91,17 +90,15 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bfd_multiplier",
             "getval": re.compile(
                 r"""
-                \s+bfd\s(?P<multiplier>multiplier\s\d+) 
+                \s+bfd\s(?P<multiplier>multiplier\s\d+)
                 $""", re.VERBOSE
             ),
             "setval": "bfd multiplier {{bfd.multiplier}}",
             "compval": "bfd.multiplier",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bfd": {
-                    "multiplier": "{{multiplier.split(" ")[1]}}"
-                    },
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bfd": {"multiplier": "{{multiplier.split(" ")[1]}}"},
                     }
                 }
             }
@@ -132,12 +129,12 @@ class Bgp_globalTemplate(NetworkTemplate):
             "compval": "bgp.auto_policy_soft_reset",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bgp": {
-                    "auto_policy_soft_reset": {
-                        "disable": "{{True if auto_policy_soft_reset_disable is defined}}"
-                    },
-                }
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bgp": {
+                            "auto_policy_soft_reset": {
+                                "disable": "{{True if auto_policy_soft_reset_disable is defined}}"
+                            },
+                        }
                     }
                 },
             }
@@ -161,20 +158,19 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "bgp_default_local_preference",
             "getval": re.compile(
                 r"""
-                \s+bgp\s(?P<default_local_pref>default\slocal-preference\s\S+)            
+                \s+bgp\s(?P<default_local_pref>default\slocal-preference\s\S+)
                 $""", re.VERBOSE
             ),
             "setval": "bgp default local-preference {{bgp.default.local_preference}}",
             "compval": "bgp.default.local-preference",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bgp": {
-                    "default":
-                        {
-                            "local_preference": "{{default_local_pref.split(" ")[2] }}",
-                        }
-                },
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bgp": {
+                            "default": {
+                                "local_preference": "{{default_local_pref.split(" ")[2] }}",
+                            }
+                        },
                     }
                 }
             }
@@ -191,11 +187,11 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "bgp": {
-                        "enforce_first_as": {
-                            "disable": "{{ True if enforce_first_as_disable is defined }}",
+                        "bgp": {
+                            "enforce_first_as": {
+                                "disable": "{{ True if enforce_first_as_disable is defined }}",
+                            }
                         }
-                }
                     }
                 }
             }
@@ -212,10 +208,10 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "bgp": {
-                    "fast_external_fallover": {
-                        "disable": "{{True if fast_external_fallover_disable is defined}}"
-                    }
+                        "bgp": {
+                            "fast_external_fallover": {
+                                "disable": "{{True if fast_external_fallover_disable is defined}}"
+                            }
                         }
                     }
                 },
@@ -268,10 +264,11 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "bgp": {
-                    "redistribute_internal": "{{ True if redistribute_internal is defined }}",
-                },
-                    }}
+                        "bgp": {
+                            "redistribute_internal": "{{ True if redistribute_internal is defined }}",
+                        },
+                    }
+                }
             }
         },
         {
@@ -286,9 +283,9 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "bgp": {
-                    "router_id": "{{router_id.split(" ")[1]}}",
-                },
+                        "bgp": {
+                            "router_id": "{{router_id.split(" ")[1]}}",
+                        },
                     }
                 }
             }
@@ -320,9 +317,11 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "bgp": {
-                    "unsafe_ebgp_policy": "{{ True if unsafe_ebgp_policy is defined }}",}}
-                 },
+                        "bgp": {
+                            "unsafe_ebgp_policy": "{{ True if unsafe_ebgp_policy is defined }}",
+                        }
+                    }
+                },
             }
         },
         {
@@ -352,14 +351,14 @@ class Bgp_globalTemplate(NetworkTemplate):
             "compval": "bgp.bestpath.aigp.ignore",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bgp": {
-                    "bestpath": {
-                        "aigp": {
-                            "ignore": "{{ True if bestpath_aigp_ignore is defined }}",
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bgp": {
+                            "bestpath": {
+                                "aigp": {
+                                    "ignore": "{{ True if bestpath_aigp_ignore is defined }}",
+                                },
+                            }
                         },
-                    }
-                },
                     }
                 }
             }
@@ -375,14 +374,14 @@ class Bgp_globalTemplate(NetworkTemplate):
             "compval": "bgp.bestpath.as_path.ignore",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bgp": {
-                    "bestpath": {
-                        "as_path": {
-                            "ignore": "{{ True if as_path_ignore is defined }}",
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bgp": {
+                            "bestpath": {
+                                "as_path": {
+                                    "ignore": "{{ True if as_path_ignore is defined }}",
+                                }
+                            }
                         }
-                    }
-                }
                     }
                 },
             }
@@ -398,14 +397,14 @@ class Bgp_globalTemplate(NetworkTemplate):
             "compval": "bgp.bestpath.as_path.multipath_relax",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bgp": {
-                    "bestpath": {
-                        "as_path": {
-                            "multipath_relax": "{{ True if as_path_multipath_relax is defined }}",
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bgp": {
+                            "bestpath": {
+                                "as_path": {
+                                    "multipath_relax": "{{ True if as_path_multipath_relax is defined }}",
+                                }
+                            }
                         }
-                    }
-                }
                     }
                 },
             }
@@ -421,15 +420,15 @@ class Bgp_globalTemplate(NetworkTemplate):
             "compval": "bgp.bestpath.med.always",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bgp": {
-                    "bestpath": {
-                        "med": {
-                            "always": "{{ True if always is defined}}"
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bgp": {
+                            "bestpath": {
+                                "med": {
+                                    "always": "{{ True if always is defined}}"
+                                },
+                            }
                         },
                     }
-                },
-            }
                 }
             }
         },
@@ -444,14 +443,14 @@ class Bgp_globalTemplate(NetworkTemplate):
             "compval": "bgp.bestpath.med.confed",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bgp": {
-                    "bestpath": {
-                        "med":{
-                            "confed": "{{ True if confed is defined}}",
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bgp": {
+                            "bestpath": {
+                                "med": {
+                                    "confed": "{{ True if confed is defined}}",
+                                }
+                            },
                         }
-                    },
-                }
                     }
                 }
             }
@@ -467,14 +466,14 @@ class Bgp_globalTemplate(NetworkTemplate):
             "compval": "bgp.bestpath.med.missing_as_worst",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bgp": {
-                    "bestpath": {
-                        "med": {
-                            "missing_as_worst": "{{ True if missing_as_worst is defined}}"
-                        }
-                    }
-                },
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bgp": {
+                            "bestpath": {
+                                "med": {
+                                    "missing_as_worst": "{{ True if missing_as_worst is defined}}"
+                                }
+                            }
+                        },
                     }
                 }
             }
@@ -490,13 +489,13 @@ class Bgp_globalTemplate(NetworkTemplate):
             "compval": "bgp.bestpath.compare_routerid",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bgp": {
-                    "bestpath": {
-                        "compare_routerid": "{{ True if compare_routerid is defined }}"
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bgp": {
+                            "bestpath": {
+                                "compare_routerid": "{{ True if compare_routerid is defined }}"
+                            }
+                        },
                     }
-                },
-            }
                 }
             }
         },
@@ -511,14 +510,14 @@ class Bgp_globalTemplate(NetworkTemplate):
             "compval": "bgp.bestpath.cost_community.ignore",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bgp": {
-                    "bestpath": {
-                        "cost_community": {
-                            "ignore": "{{ True if cost_community_ignore is defined}}"
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bgp": {
+                            "bestpath": {
+                                "cost_community": {
+                                    "ignore": "{{ True if cost_community_ignore is defined}}"
+                                }
+                            }
                         }
-                    }
-                }
                     }
                 },
             }
@@ -534,16 +533,14 @@ class Bgp_globalTemplate(NetworkTemplate):
             "compval": "bgp.bestpath.origin_as.use.validity",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bgp": {
-                    "bestpath": {
-                        "origin_as":
-                            {
-                                "use": {"validity": "{{ True if origin_as_use is defined }}"}
-
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bgp": {
+                            "bestpath": {
+                                "origin_as": {
+                                    "use": {"validity": "{{ True if origin_as_use is defined }}"}
+                                }
                             }
-                    }
-                }
+                        }
                     }
                 },
             }
@@ -559,16 +556,15 @@ class Bgp_globalTemplate(NetworkTemplate):
             "compval": "bgp.bestpath.origin_as.allow.invalid",
             "result": {
                 "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}':{
-                "bgp": {
-                    "bestpath": {
-                        "origin_as":
-                            {
-                                "allow": {"invalid": "{{ True if origin_as_allow is defined }}"}
-
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "bgp": {
+                            "bestpath": {
+                                "origin_as":
+                                    {
+                                        "allow": {"invalid": "{{ True if origin_as_allow is defined }}"}
+                                    }
                             }
-                    }
-                },
+                        },
                     }
                 }
             }
@@ -604,7 +600,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "bgp": {
                     "confederation": {
                         "peers": {
-                            "peer"+"{{confederation_peers.split(" ")[2]}}": "{{confederation_peers.split(" ")[2]}}"
+                            "peer" + "{{confederation_peers.split(" ")[2]}}": "{{confederation_peers.split(" ")[2]}}"
                         }
                     }
 
@@ -713,11 +709,11 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "bgp": {
-                    "log": {
-                        "message": {"disable": "{{ True if log_message is defined }}"}
-                    }
-                }
+                        "bgp": {
+                            "log": {
+                                "message": {"disable": "{{ True if log_message is defined }}"}
+                            }
+                        }
                     }
 
                 },
@@ -735,11 +731,14 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "bgp": {
-                    "log": {
-                        "neighbor": {"changes": {"detail": "{{True if log_neighbor_changes_detail is defined }}"}}
-                    }
-                }
+                        "bgp": {
+                            "log": {
+                                "neighbor": {
+                                    "changes": {
+                                        "detail": "{{True if log_neighbor_changes_detail is defined }}"}
+                                }
+                            }
+                        }
                     }
 
                 },
@@ -757,11 +756,16 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "bgp": {
-                    "log": {
-                        "neighbor": {"changes": {"disable": "{{ True if log_neighbor_changes_disable is defined }}"}}
-                    }
-                }
+                        "bgp": {
+                            "log": {
+                                "neighbor": {
+                                    "changes": {
+                                        "disable":
+                                            "{{ True if log_neighbor_changes_disable is defined }}"
+                                        }
+                                }
+                            }
+                        }
                     }
 
                 },
@@ -779,9 +783,9 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "bgp": {
-                    "multipath": {
-                        "as_path": {"ignore": {"onwards": "{{ not not multipath}}"}}}}
+                        "bgp": {
+                            "multipath": {
+                                "as_path": {"ignore": {"onwards": "{{ not not multipath}}"}}}}
                     }
 
                 },
@@ -872,8 +876,10 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "default_information": {
-                    "originate": "{{ not not default_information_originate }}"}}
+                        "default_information": {
+                            "originate": "{{ not not default_information_originate }}"
+                        }
+                    }
                 },
             }
         },
@@ -889,7 +895,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "default_metric": "{{ default_metric }}"}}
+                        "default_metric": "{{ default_metric }}"}}
             }
         },
         {
@@ -930,7 +936,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "mpls": {"activate": {"interface": "{{ mpls_interface }}"}}}}
+                        "mpls": {"activate": {"interface": "{{ mpls_interface }}"}}}}
             }
         },
         {
@@ -984,7 +990,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "socket": {"receive_buffer_size": "{{ socket_rcv_buffer_size.split(" ")[1] }}"}}}
+                        "socket": {"receive_buffer_size": "{{ socket_rcv_buffer_size.split(" ")[1] }}"}}}
             }
         },
         {
@@ -999,7 +1005,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "socket": {"send_buffer_size": "{{ socket_send_buffer_size.split(" ")[1] }}"}}}
+                        "socket": {"send_buffer_size": "{{ socket_send_buffer_size.split(" ")[1] }}"}}}
             }
         },
         {
@@ -1154,7 +1160,8 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "rpki":
                     {
-                        "servers": {"{{rpki_server.split(" ")[1]}}": {"refresh_time": {"value": "{{ refresh_time.split(" ")[1] }}"}}}
+                        "servers": {"{{rpki_server.split(" ")[1]}}": {"refresh_time": {
+                            "value": "{{ refresh_time.split(" ")[1] }}"}}}
                     }
             }
         },
@@ -1173,7 +1180,8 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "rpki":
                     {
-                        "servers": {"{{rpki_server.split(" ")[1] }}": {"refresh_time": {"time_off": "{{ True if refresh_time is defined }}"}}}
+                        "servers": {"{{rpki_server.split(" ")[1] }}": {"refresh_time": {
+                            "time_off": "{{ True if refresh_time is defined }}"}}}
                     }
             }
         },
@@ -1192,7 +1200,8 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "rpki":
                     {
-                        "servers": {"{{rpki_server.split(" ")[1]}}": {"response_time": {"time_off": "{{ True if response_time is defined }}"}}}
+                        "servers": {"{{rpki_server.split(" ")[1]}}": {"response_time": {
+                            "time_off": "{{ True if response_time is defined }}"}}}
                     }
             }
         },
@@ -1210,7 +1219,8 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "rpki":
                     {
-                        "servers": {"{{rpki_server.split(" ")[1]}}": {"response_time": {"value": "{{ response_time.split(" ")[1] }}"}}}
+                        "servers": {"{{rpki_server.split(" ")[1]}}": {"response_time": {
+                            "value": "{{ response_time.split(" ")[1] }}"}}}
                     }
             }
         },
@@ -1248,7 +1258,8 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "rpki":
                     {
-                        "servers": {"{{rpki_server.split(" ")[1]}}": {"transport": {"ssh": {"port": "{{ ssh_port.split(" ")[1] }}"}}}}
+                        "servers": {"{{rpki_server.split(" ")[1]}}": {"transport": {"ssh": {
+                            "port": "{{ ssh_port.split(" ")[1] }}"}}}}
                     }
             }
         },
@@ -1268,7 +1279,8 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "rpki":
                     {
-                        "servers": {"{{rpki_server.split(" ")[1]}}": {"transport": {"tcp": {"port": "{{ tcp_port.split(" ")[1] }}"}}}}
+                        "servers": {"{{rpki_server.split(" ")[1]}}": {"transport": {"tcp": {
+                            "port": "{{ tcp_port.split(" ")[1] }}"}}}}
                     }
             }
         },
@@ -1375,7 +1387,8 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}":
-                                {"bfd":
+                                {
+                                    "bfd":
                                     {
                                         "multiplier": "{{multiplier.split(" ")[1]}}"
                                     }
@@ -1401,7 +1414,8 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}":
-                                {"bfd":
+                                {
+                                    "bfd":
                                     {
                                         "minimum_interval": "{{min_interval.split(" ")[1]}}"
                                     }
@@ -1482,7 +1496,8 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}":
-                                {"dmz_link_bandwidth":
+                                {
+                                    "dmz_link_bandwidth":
                                     {
                                         "set": "{{ True if dmz_link_bandwidth is defined }}"
                                     }
@@ -1508,7 +1523,8 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}":
-                                {"dmz_link_bandwidth":
+                                {
+                                    "dmz_link_bandwidth":
                                     {
                                         "inheritance_disable": "{{ True if dmz_link_bandwidth is defined }}"
                                     }
@@ -1532,7 +1548,8 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
-                            "{{nbr_address.split(" ")[1]}}": {"ebgp_multihop": {"value":"{{ ebgp_multihop.split(" ")[1] }}"}}}
+                            "{{nbr_address.split(" ")[1]}}": {"ebgp_multihop": {
+                                "value": "{{ ebgp_multihop.split(" ")[1] }}"}}}
                     }
                 }
             }
@@ -1669,9 +1686,9 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                "neighbors": {
-                    "{{nbr_address.split(" ")[1]}}": {"egress_engineering": {
-                        "inheritance_disable": "{{ True if egress_engineering is defined }}"}}}}}
+                        "neighbors": {
+                            "{{nbr_address.split(" ")[1]}}": {"egress_engineering": {
+                                "inheritance_disable": "{{ True if egress_engineering is defined }}"}}}}}
             }
         },
         {
@@ -2020,7 +2037,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "shutdown":
-                                    {"set":"{{ True if shutdown is defined }}"}}}}}
+                                    {"set": "{{ True if shutdown is defined }}"}}}}}
             }
         },
         {
@@ -2113,8 +2130,9 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
-                                "timers": {"keepalive_time": "{{ timers_keepalive_time.split(" ")[1] }}",
-                                          "holdtime": "{{ timers_holdtime.split(" ")[0] }}"}}}}}
+                                "timers": {
+                                    "keepalive_time": "{{ timers_keepalive_time.split(" ")[1] }}",
+                                    "holdtime": "{{ timers_holdtime.split(" ")[0] }}"}}}}}
             }
         },
         {

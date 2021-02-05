@@ -17,7 +17,7 @@
           identifier: 4
         bestpath:
           med:
-            confed: True
+            confed: true
         cluster_id: 5
         router_id: 192.0.2.10
       neighbors:
@@ -28,7 +28,7 @@
           remote_as: 65538
           bfd:
             fast_detect:
-              strict_mode: True
+              strict_mode: true
             multiplier: 6
             minimum_interval: 20
     state: rendered

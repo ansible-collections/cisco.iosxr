@@ -33,9 +33,6 @@
       register: result
       cisco.iosxr.iosxr_bgp_global: *deleted
 
-    - debug:
-       msg: result={{ result}}
-
     - assert:
         that:
           - result.commands|length == 0

@@ -27,11 +27,12 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
     Bgp_globalArgs,
 )
 
+
 class Bgp_globalFacts(object):
     """ The iosxr bgp_global facts class
     """
 
-    def __init__(self, module, subspec='config', options='options'):
+    def __init__(self, module, subspec="config", options="options"):
         self._module = module
         self.argument_spec = Bgp_globalArgs.argument_spec
         spec = deepcopy(self.argument_spec)
@@ -46,7 +47,7 @@ class Bgp_globalFacts(object):
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
     def get_config(self, connection):
-        return connection.get('show running-config router bgp')
+        return connection.get("show running-config router bgp")
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for Bgp_global network resource
@@ -65,10 +66,9 @@ class Bgp_globalFacts(object):
             data = self.get_config(connection)
         neighbor_data = self._flatten_config(data, "neighbor")
         rpki_server_data = self._flatten_config(neighbor_data, "rpki server")
-        data = self._flatten_config(rpki_server_data, "bgp confederation peers")
-
-
-
+        data = self._flatten_config(
+            rpki_server_data, "bgp confederation peers"
+        )
 
         # remove address_family configs from bgp_global
 
@@ -78,21 +78,18 @@ class Bgp_globalFacts(object):
                 start = True
             if not start:
                 bgp_global_config.append(bgp_line)
-            if start and '!' in bgp_line:
+            if start and "!" in bgp_line:
                 start = False
-
-
 
         # parse native config using the Bgp_global template
         bgp_global_parser = Bgp_globalTemplate(lines=bgp_global_config)
         objs = bgp_global_parser.parse()
 
-        conf_peers = objs.get("bgp",{}).get("confederation", {}).get("peers", {})
+        conf_peers = (
+            objs.get("bgp", {}).get("confederation", {}).get("peers", {})
+        )
         if conf_peers:
-            objs['bgp']['confederation']['peers'] = list(conf_peers.values())
-
-
-
+            objs["bgp"]["confederation"]["peers"] = list(conf_peers.values())
 
         vrfs = objs.get("vrfs", {})
 
@@ -117,16 +114,14 @@ class Bgp_globalFacts(object):
 
         self._post_parse(objs)
 
-
-        ansible_facts['ansible_network_resources'].pop('bgp_global', None)
+        ansible_facts["ansible_network_resources"].pop("bgp_global", None)
 
         params = utils.remove_empties(
             utils.validate_config(self.argument_spec, {"config": objs})
         )
-        #import epdb;epdb.serve()
 
-        facts['bgp_global'] = params.get("config", {})
-        ansible_facts['ansible_network_resources'].update(facts)
+        facts["bgp_global"] = params.get("config", {})
+        ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts
 
@@ -160,12 +155,10 @@ class Bgp_globalFacts(object):
         neighbors = obj.get("neighbors", [])
         if neighbors:
             obj["neighbors"] = sorted(
-                list(neighbors.values()),
-                key=lambda k, sk="neighbor": k[sk],
+                list(neighbors.values()), key=lambda k, sk="neighbor": k[sk]
             )
         rpki_servers = obj.get("rpki", {}).get("servers", [])
         if rpki_servers:
             obj["rpki"]["servers"] = sorted(
-                list(rpki_servers.values()),
-                key=lambda k, sk="name": k[sk],
+                list(rpki_servers.values()), key=lambda k, sk="name": k[sk]
             )
