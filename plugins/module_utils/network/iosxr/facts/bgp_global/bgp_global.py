@@ -45,6 +45,9 @@ class Bgp_globalFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_config(self, connection):
+        return connection.get('show running-config router bgp')
+
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for Bgp_global network resource
 
@@ -57,25 +60,26 @@ class Bgp_globalFacts(object):
         """
         facts = {}
         objs = []
-
+        bgp_global_config = []
         if not data:
-            data = connection.get('show running-config router bgp')
-            #vrf_data = self._flatten_config(data, "vrf")
-            neighbor_data = self._flatten_config(data, "neighbor")
-            rpki_server_data = self._flatten_config(neighbor_data, "rpki server")
-            data = self._flatten_config(rpki_server_data, "bgp confederation peers")
+            data = self.get_config(connection)
+        neighbor_data = self._flatten_config(data, "neighbor")
+        rpki_server_data = self._flatten_config(neighbor_data, "rpki server")
+        data = self._flatten_config(rpki_server_data, "bgp confederation peers")
 
 
-            # remove address_family configs from bgp_global
-            bgp_global_config = []
-            start = False
-            for bgp_line in data.splitlines():
-                if "address-family" in bgp_line:
-                    start = True
-                if not start:
-                    bgp_global_config.append(bgp_line)
-                if start and '!' in bgp_line:
-                    start = False
+
+
+        # remove address_family configs from bgp_global
+
+        start = False
+        for bgp_line in data.splitlines():
+            if "address-family" in bgp_line:
+                start = True
+            if not start:
+                bgp_global_config.append(bgp_line)
+            if start and '!' in bgp_line:
+                start = False
 
 
 
