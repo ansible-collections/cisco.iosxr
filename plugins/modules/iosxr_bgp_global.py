@@ -895,15 +895,15 @@ EXAMPLES = """
 #
 ##### Using Merged ##########################################
 # -----------------------------------------------------------------
-# 
+#
 # configuration on device  Before merge state:
-# 
-# 
+#
+#
 # #RP/0/0/CPU0:10#show running-config router bgp
 # #Thu Feb  4 09:38:36.245 UTC
 # #% No such configuration item(s)
 # #RP/0/0/CPU0:10#
-# 
+#
 # --------------Merge state---------------
 #  - name: Merge the following configuration
 #       cisco.iosxr.iosxr_bgp_global:
@@ -933,9 +933,9 @@ EXAMPLES = """
 #               - vrf: vrf1
 #                 default_metric: 5
 # ----------------------------------------
-# 
-# 
-# 
+#
+#
+#
 # # commands:
 # - "router bgp 65536",
 # - "bgp cluster-id 5",
@@ -952,10 +952,10 @@ EXAMPLES = """
 # - "remote-as 65538",
 # - "vrf vrf1",
 # - "default-metric 5"
-# 
+#
 # # Configuration on device After Merge state:
 # # --------------------------------------------
-# 
+#
 # RP/0/0/CPU0:10#show running-config router bgp
 # Thu Feb  4 09:44:32.480 UTC
 # router bgp 65536
@@ -976,12 +976,12 @@ EXAMPLES = """
 #   default-metric 5
 #  !
 # !
-# 
+#
 # ##### Using replaced ###########################################
-# 
+#
 # configuration on device before replaced
 # --------------------------------------------
-# 
+#
 # RP/0/0/CPU0:10#show running-config router bgp
 # Thu Feb  4 09:44:32.480 UTC
 # router bgp 65536
@@ -1041,10 +1041,10 @@ EXAMPLES = """
 # - "bfd multiplier 6",
 # - "remote-as 65538",
 # - "no neighbor 192.0.2.13"
-# 
+#
 # # configuration on device After Replaced  state:
 # # ----------------------------------------------
-# 
+#
 # RP/0/0/CPU0:10#show running-config router bgp
 # Thu Feb  4 09:54:11.161 UTC
 # router bgp 65536
@@ -1065,13 +1065,13 @@ EXAMPLES = """
 #   default-metric 5
 #  !
 # !
-# 
-# 
+#
+#
 # ##### Using deleted ############################################
-# 
+#
 # configuration on device Before deleted state
 # ---------------------------------------------
-# 
+#
 # RP/0/0/CPU0:10#show running-config router bgp
 # Thu Feb  4 09:54:11.161 UTC
 # router bgp 65536
@@ -1092,14 +1092,14 @@ EXAMPLES = """
 #   default-metric 5
 #  !
 # !
-# 
+#
 # --------------------------------------------------------
 # - name: Delete BGP configurations handled by this module
 #  cisco.iosxr.iosxr_bgp_global:
 #         state: deleted
 #         config:
-#             as_number: 65536
-# 
+#            as_number: 65536
+#
 # commands:
 # "router bgp 65536",
 # "no bgp cluster-id 5",
@@ -1111,22 +1111,22 @@ EXAMPLES = """
 # "no socket send-buffer-size 4098",
 # "no neighbor 192.0.2.14",
 # "no vrf vrf1"
-# 
+#
 # configuration on device after delete
 # -------------------------------------------
-# 
+#
 # RP/0/0/CPU0:10#show running-config router bgp
 # Thu Feb  4 10:01:08.232 UTC
 # router bgp 65536
 # !
-# 
-# 
-# 
+#
+#
+#
 # ################# Using Purged ########################################
-# 
+#
 # configuration on device Before Purged state
 # --------------------------------------------
-# 
+#
 # RP/0/0/CPU0:10#show running-config router bgp
 # Thu Feb  4 09:54:11.161 UTC
 # router bgp 65536
@@ -1149,27 +1149,27 @@ EXAMPLES = """
 #   default-metric 5
 #  !
 # !
-# 
+#
 # - name: Purge all BGP configurations from the device
 #   cisco.iosxr.iosxr_bgp_global:
 #     state: purged
-# 
+#
 #  commands:
 # - no router bgp 65563
-# 
-# 
-# 
+#
+#
+#
 # configuration on device After purged state:
 # ---------------------------------------------
-# 
+#
 # #RP/0/0/CPU0:10#show running-config router bgp
 # #Thu Feb  4 09:38:36.245 UTC
 # #% No such configuration item(s)
 # #RP/0/0/CPU0:10#
-# 
-# 
+#
+#
 # ################# Using Rendred #######################################################
-# 
+#
 # - name: Render platform specific configuration lines (without connecting to the device)
 #   cisco.iosxr.iosxr_bgp_global:
 #         state: rendered
@@ -1231,7 +1231,7 @@ EXAMPLES = """
 #   "graceful-maintenance as-prepends 2",
 #   "bgp enforce-first-as disable",
 #   "default-metric 4"
-# 
+#
 # ############## Using parsed #####################
 # # parsed.cfg
 # # ------------
@@ -1255,12 +1255,12 @@ EXAMPLES = """
 #  !
 # !
 # ------------------------------------
-# 
+#
 # - name: Parse externally provided BGP config
 #   cisco.iosxr.iosxr_bgp_global:
 #     running_config: "{{ lookup('file', 'parsed.cfg') }}"
 #     state: parsed
-# 
+#
 # #Task output using parsed
 #     as_number: "65536"
 #     default_metric: 4
@@ -1286,6 +1286,7 @@ EXAMPLES = """
 #             strict_mode: true
 #           multiplier: 6
 #           minimum_interval: 20
+#
 """
 
 from ansible.module_utils.basic import AnsibleModule
