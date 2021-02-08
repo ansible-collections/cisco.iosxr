@@ -18,7 +18,7 @@ short_description: Manages BGP global resource module.
 description:
 - This module configures and manages the attributes of BGP global on Cisco IOS-XR platforms.
 version_added: 1.3.0
-author: Ashwini Mhatre (@Ashwini Mhatre)
+author: Ashwini Mhatre (@amhatre)
 notes:
 - Tested against Cisco IOS-XR 6.1.3.
 - This module works with connection C(network_cli).
