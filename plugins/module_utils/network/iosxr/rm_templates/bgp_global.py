@@ -762,7 +762,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                                     "changes": {
                                         "disable":
                                             "{{ True if log_neighbor_changes_disable is defined }}"
-                                        }
+                                    }
                                 }
                             }
                         }
@@ -2214,12 +2214,12 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
-                                "graceful_maintenance":
-                                    {"set": "{{ True if graceful_maintenance is defined }}"}
-                                }
+                                "graceful_maintenance": {
+                                    "set": "{{ True if graceful_maintenance is defined }}"}
                             }
                         }
                     }
+                }
             }
         },
         {
