@@ -290,7 +290,7 @@ class Bgp_global(ResourceModule):
             "neighbor_capability_additional_paths_send_disable",
             "neighbor_capability_additional_paths_rcv_disable",
             "neighbor_capability_additional_paths_rcv",
-            "neighbor_capability_suppress_4_byte_AS",
+            "neighbor_capability_suppress_four_byte_AS",
             "neighbor_capability_suppress_all",
             "neighbor_capability_suppress_all_inheritance_disable",
             "neighbor_log_message_in_value",

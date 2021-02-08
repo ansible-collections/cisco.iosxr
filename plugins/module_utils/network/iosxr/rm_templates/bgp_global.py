@@ -2475,7 +2475,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "neighbor_capability_suppress_4_byte_AS",
+            "name": "neighbor_capability_suppress_four_byte_AS",
             "getval": re.compile(
                 r"""
                \s+(?P<nbr_address>neighbor\s\S+)
@@ -2485,7 +2485,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "capability suppress 4-byte-as",
-            "compval": "capability.suppress.4_byte_AS.set",
+            "compval": "capability.suppress.four_byte_AS.set",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
@@ -2493,7 +2493,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                             "{{nbr_address.split(" ")[1]}}": {
                                 "capability": {
                                     "suppress": {
-                                        "4_byte_AS": {
+                                        "four_byte_AS": {
                                             "set": "{{ True if suppress_4_byte_as is defined }}"}}}
                             }
                         }

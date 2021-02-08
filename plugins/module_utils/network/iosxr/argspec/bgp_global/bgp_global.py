@@ -304,7 +304,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "suppress": {
                                     "type": "dict",
                                     "options": {
-                                        "4_byte_AS": {
+                                        "four_byte_AS": {
                                             "type": "dict",
                                             "options": {
                                                 "set": {"type": "bool"}
@@ -900,7 +900,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "suppress": {
                                             "type": "dict",
                                             "options": {
-                                                "4_byte_AS": {
+                                                "four_byte_AS": {
                                                     "type": "dict",
                                                     "options": {
                                                         "set": {"type": "bool"}
