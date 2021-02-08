@@ -79,3 +79,16 @@ replaced:
             strict_mode: true
           multiplier: 6
           minimum_interval: 20
+rendered:
+  commands:
+    - router bgp 65536
+    - bgp cluster-id 5
+    - bgp router-id 192.0.2.10
+    - bgp bestpath med confed
+    - bgp confederation identifier 4
+    - default-metric 4
+    - socket receive-buffer-size 514
+    - socket send-buffer-size 4098
+    - neighbor 192.0.2.11
+    - cluster-id 3
+    - remote-as 65537

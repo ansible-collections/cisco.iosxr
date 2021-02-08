@@ -24,20 +24,13 @@
         - neighbor: 192.0.2.11
           remote_as: 65537
           cluster_id: 3
-        - neighbor: 192.0.2.14
-          remote_as: 65538
-          bfd:
-            fast_detect:
-              strict_mode: true
-            multiplier: 6
-            minimum_interval: 20
     state: rendered
   register: result
 
 - name: Assert that correct set of commands were rendered
   assert:
     that:
-      - merged['commands'] == result['rendered']
+      - rendered['commands'] == result['rendered']
 
 - name: Gather BGP facts
   cisco.iosxr.iosxr_bgp_global:
