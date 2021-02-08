@@ -686,8 +686,7 @@ options:
                           type: dict
                           suboptions:
                             buffers:
-                              description: Number of buffers to store filtered update messages
-                              (resizing does not take effect after filtering action has started).
+                              description: Number of buffers to store filtered update messages.
                               type: int
             update_source:
               description: Source of routing updates.Refer vendor document for valid values.
