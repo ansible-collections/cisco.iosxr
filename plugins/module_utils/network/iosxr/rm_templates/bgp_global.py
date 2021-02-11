@@ -47,6 +47,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": "router bgp {{ as_number }}",
+            "compval": "as_number",
             "result": {"as_number": "{{ as_num }}"},
             "shared": True
         },
