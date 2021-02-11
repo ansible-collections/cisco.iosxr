@@ -45,33 +45,97 @@ class Bgp_address_familyFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_config(self, connection):
+        return connection.get("show running-config router bgp")
+
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for Bgp_address_family network resource
-
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
-
         :rtype: dictionary
         :returns: facts
         """
         facts = {}
         objs = []
-
+        bgp_global_config = []
         if not data:
-            data = connection.get()
+            data = self.get_config(connection)
+        data = self._flatten_config(data, "vrf")
+        # parse native config using the Bgp_global template
+        bgp_global_parser = Bgp_address_familyTemplate(lines=data.splitlines())
+        objs = bgp_global_parser.parse()
+        vrfs = objs.get("vrfs", {})
 
-        # parse native config using the Bgp_address_family template
-        bgp_address_family_parser = Bgp_address_familyTemplate(lines=data.splitlines())
-        objs = list(bgp_address_family_parser.parse().values())
 
-        ansible_facts['ansible_network_resources'].pop('bgp_address_family', None)
+        # move global vals to their correct position in facts tree
+        # this is only needed for keys that are common between both global
+        # and VRF contexts
+        global_vals = vrfs.pop("vrf_", {})
+        for key, value in iteritems(global_vals):
+            if objs.get(key):
+                objs[key] = utils.dict_merge(objs[key], value)
+            else:
+                objs[key] = value
+        af = objs.get("address_family")
+        # transform vrfs into a list
+        vrfs.pop("vrf_all", {})
+        if vrfs:
+            objs["vrfs"] = sorted(
+                list(objs["vrfs"].values()), key=lambda k, sk="vrf": k[sk]
+            )
+            for vrf in objs["vrfs"]:
+                self._post_parse(vrf)
+        else:
+            objs["vrfs"] = []
+
+        if af:
+            self._post_parse(objs)
+        else:
+            objs["address_family"] = []
+
+
+        ansible_facts["ansible_network_resources"].pop("bgp_global", None)
 
         params = utils.remove_empties(
             utils.validate_config(self.argument_spec, {"config": objs})
         )
 
-        facts['bgp_address_family'] = params['config']
-        ansible_facts['ansible_network_resources'].update(facts)
+        facts["bgp_address_family"] = params.get("config", {})
+        ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts
+
+    def _post_parse(self, obj):
+        """ Converts the intermediate data structure
+            to valid format as per argspec.
+        :param obj: dict
+        """
+        af = obj.get("address_family", {})
+        if af:
+            obj["address_family"] = list(af.values())
+
+    def _flatten_config(self, data, context):
+        """ Flatten different contexts in
+            the running-config for easier parsing.
+        :param obj: dict
+        :returns: flattened running config
+        """
+        data = data.split("\n")
+        in_nbr_cxt = False
+        cur_nbr = {}
+
+        for x in data:
+            cur_indent = len(x) - len(x.lstrip())
+            if x.strip().startswith(context):
+                in_nbr_cxt = True
+                cur_nbr["nbr"] = x
+                cur_nbr["indent"] = cur_indent
+            elif cur_nbr and (cur_indent <= cur_nbr["indent"]):
+                in_nbr_cxt = False
+            elif in_nbr_cxt:
+                data[data.index(x)] = cur_nbr["nbr"] + " " + x.strip()
+        return "\n".join(data)
+
+
+

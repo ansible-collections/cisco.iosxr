@@ -48,6 +48,56 @@ class Bgp_address_family(ResourceModule):
             tmplt=Bgp_address_familyTemplate(),
         )
         self.parsers = [
+            'router',
+            'address_family',
+            'advertise_best_external',
+            'aggregate_address',
+            'additional_paths',
+            'allocate_label',
+            'as_path_loopcheck_out_disable',
+            'bgp_attribute_download',
+            'bgp_bestpath_origin_as_use',
+            'bgp_bestpath_origin_as_allow',
+            'bgp_client_to_client_reflection_cluster_id',
+            'bgp_reflection_disable',
+            'bgp_dampening',
+            'bgp_label_delay',
+            'bgp_import_delay',
+            'bgp_origin_as_validation',
+            'bgp_scan_time',
+            'default_martian_check_disable',
+            'distance',
+            'dynamic_med',
+            'maximum_paths_ibgp',
+            'maximum_paths_ebgp',
+            'maximum_paths_eibgp',
+            'optimal_route_reflection',
+            'nexthop',
+            'network',
+            'permanent_network_route_policy',
+            'retain_local_label',
+            'update',
+            'redistribute_application',
+            'redistribute_connected',
+            'redistribute_isis',
+            'redistribute_eigrp',
+            'redistribute_lisp',
+            'redistribute_mobile',
+            'redistribute_ospf',
+            'redistribute_rip',
+            'redistribute_static',
+            'redistribute_subscriber',
+            'global_table_multicast',
+            'segmented_multicast',
+            'inter_as_install',
+            'vrf_all_conf',
+            'weight',
+            'route_target_download',
+            'label_mode',
+            'mvpn_single_forwarder_selection_highest_ip_address',
+            'mvpn_single_forwarder_selection_all',
+            'table_policy'
+
         ]
 
     def execute_module(self):
@@ -58,40 +108,137 @@ class Bgp_address_family(ResourceModule):
         """
         if self.state not in ["parsed", "gathered"]:
             self.generate_commands()
+            #import epdb;epdb.serve()
             self.run_commands()
         return self.result
 
     def generate_commands(self):
         """ Generate configuration commands to send based on
-            want, have and desired state.
-        """
-        wantd = {entry['name']: entry for entry in self.want}
-        haved = {entry['name']: entry for entry in self.have}
+                    want, have and desired state.
+                """
 
-        # if state is merged, merge want onto have and then compare
-        if self.state == "merged":
-            wantd = dict_merge(haved, wantd)
+        for entry in self.want, self.have:
+            self._bgp_list_to_dict(entry)
 
-        # if state is deleted, empty out wantd and set haved to wantd
+        # if state is deleted, clean up global params
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
-            wantd = {}
+            if not self.want or (
+                    self.have.get("as_number") == self.want.get("as_number")
+            ):
+                self._compare(
+                    want={"as_number": self.want.get("as_number")},
+                    have=self.have,
+                )
 
-        # remove superfluous config for overridden and deleted
-        if self.state in ["overridden", "deleted"]:
-            for k, have in iteritems(haved):
-                if k not in wantd:
-                    self._compare(want={}, have=have)
+        else:
+            wantd = self.want
+            # if state is merged, merge want onto have and then compare
+            #import epdb;epdb.serve()
+            if self.state == "merged":
+                wantd = dict_merge(self.have, self.want)
 
-        for k, want in iteritems(wantd):
-            self._compare(want=want, have=haved.pop(k, {}))
+            self._compare(want=wantd, have=self.have)
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
            populates the list of commands to be run by comparing
            the `want` and `have` data with the `parsers` defined
-           for the Bgp_address_family network resource.
+           for the Bgp_global network resource.
         """
-        self.compare(parsers=self.parsers, want=want, have=have)
+
+        self._compare_af(want=want, have=have)
+        self._vrfs_compare(want=want, have=have)
+        if self.commands and "router bgp" not in self.commands[0]:
+            self.commands.insert(
+                0,
+                self._tmplt.render(
+                    {"as_number": want["as_number"]}, "router", False
+                ),
+            )
+
+    def _compare_af(self, want, have):
+        """Custom handling of afs option
+               :params want: the want BGP dictionary
+               :params have: the have BGP dictionary
+        """
+        wafs = want.get("address_family", {})
+        hafs = have.get("address_family", {})
+        for name, entry in iteritems(wafs):
+            begin = len(self.commands)
+            af_have = hafs.pop(name, {})
+            self.compare(parsers=self.parsers, want=entry, have=af_have)
+            if len(self.commands) != begin:
+                self.commands.insert(
+                    begin,
+                    self._tmplt.render(
+                        {"afi": entry.get("afi"), "af_modifier": entry.get("af_modifier")}, "address_family", False
+                    ),
+                )
+
+        for name, entry in iteritems(hafs):
+            self.addcmd({"afi": entry.get("afi"), "af_modifier": entry.get("af_modifier")}, "address_family", True)
+
+
+    def _vrfs_compare(self, want, have):
+        """Custom handling of VRFs option
+        :params want: the want BGP dictionary
+        :params have: the have BGP dictionary
+        """
+        wvrfs = want.get("vrfs", {})
+        hvrfs = have.get("vrfs", {})
+        for name, entry in iteritems(wvrfs):
+            begin = len(self.commands)
+            vrf_have = hvrfs.pop(name, {})
+            self._compare_af(want=entry, have=vrf_have)
+            if len(self.commands) != begin:
+                self.commands.insert(
+                    begin,
+                    self._tmplt.render(
+                        {"vrf": entry.get("vrf")}, "vrf", False
+                    ),
+                )
+        # for deleted and replaced state
+        for name, entry in iteritems(hvrfs):
+            begin = len(self.commands)
+            self._compare_af(want={}, have=entry)
+            if len(self.commands) != begin:
+                self.commands.insert(
+                    begin,
+                    self._tmplt.render(
+                        {"vrf": entry.get("vrf")}, "vrf", False
+                    ),
+                )
+
+
+    def _bgp_list_to_dict(self, entry):
+        """Convert list of items to dict of items
+           for efficient diff calculation.
+        :params entry: data dictionary
+        """
+
+        def _build_key(x):
+            """Build primary key for path_attribute
+               option.
+            :params x: path_attribute dictionary
+            :returns: primary key as tuple
+            """
+            key_1 = "start_{0}".format(x.get("range", {}).get("start", ""))
+            key_2 = "end_{0}".format(x.get("range", {}).get("end", ""))
+            key_3 = "type_{0}".format(x.get("type", ""))
+            key_4 = x["action"]
+
+            return (key_1, key_2, key_3, key_4)
+
+        if "address_family" in entry:
+            entry["address_family"] = {
+               "address_family_"+x["afi"]+"_"+x["af_modifier"]: x for x in entry.get("address_family", [])
+            }
+
+        if "vrfs" in entry:
+            entry["vrfs"] = {x["vrf"]: x for x in entry.get("vrfs", [])}
+            for _k, vrf in iteritems(entry["vrfs"]):
+                self._bgp_list_to_dict(vrf)
+
+    def _get_config(self):
+        return self._connection.get("show running-config router bgp")
+

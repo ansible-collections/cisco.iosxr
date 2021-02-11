@@ -27,7 +27,7 @@ options:
       description: A list of configurations for BGP address family.
       type: dict
       suboptions:
-        AS_number:
+        as_number:
           description: Autonomous system number.
           type: str
         address_family:
@@ -38,7 +38,7 @@ options:
             afi:
               description: address family.
               type: str
-              choices: ['ipv4', 'ipv6', 'l2vpn', 'link-state', 'vvpnv4', 'vpnv6']
+              choices: ['ipv4', 'ipv6', 'l2vpn', 'link-state', 'vpnv4', 'vpnv6']
             af_modifier:
               description: Address Family modifier
               type: str
@@ -63,7 +63,7 @@ options:
                 as_confed_set:
                   type: bool
                   description: Generate AS confed set path information.
-                summery_only:
+                summary_only:
                   type: bool
                   description: Filter more specific routes from updates.
                 route_policy:
@@ -115,16 +115,20 @@ options:
                   type: dict
                   description: Configure client to client route reflection.
                   suboptions:
-                    reflection_disable:
-                      type: bool
-                      description: Disable client to client reflection.
                     reflection:
                       type: dict
                       description: disable client to client reflection of cluster id.
                       suboptions:
-                        cluster_id:
-                          type: str
+                        cluster_id_disable:
+                          type: dict
                           description: ID of Cluster for which reflection is to be disabled.
+                          suboptions:
+                            cluster_id:
+                              type: str
+                              description: ID of Cluster for which reflection is to be disabled.
+                            disable:
+                              type: bool
+                              description: disable cluster id.
                         disable:
                           type: bool
                           disable: disable reflection.
@@ -244,19 +248,6 @@ options:
                     selective_order_igp_metric:
                       description: Allow multipaths only from marked neighbors
                       type: bool
-                    unequal_cost:
-                      type: dict
-                      description: Allow multipaths to have different BGP nexthop IGP metrics.
-                      suboptions:
-                        set:
-                          type: bool
-                          description: set unequal_cost.
-                        order_igp_metric:
-                          description: Order candidate multipaths for selection as per configured number(cisco-support).
-                          type: bool
-                        selective_order_igp_metric:
-                          description: Allow multipaths only from marked neighbors
-                          type: bool
                 eibgp:
                   type: dict
                   description: eiBGP-multipath.
@@ -287,7 +278,7 @@ options:
               type: dict
               description: Nexthop
               suboptions:
-                resolution_prefix-length_minimum:
+                resolution_prefix_length_minimum:
                   type: int
                   description: Set minimum prefix-length for nexthop resolution.
                   choices: [0,32]
@@ -330,7 +321,7 @@ options:
                   type: dict
                   descriptions: Update limit
                   suboptions:
-                    address_family:
+                    sub_group:
                       type: dict
                       description: Update limit for address-family.
                       suboptions:
@@ -340,7 +331,7 @@ options:
                         ebgp:
                           type: int
                           descriptions: Update limit for eBGP sub-groups<1-512.
-                    sub_group:
+                    address_family:
                       type: int
                       descriptions: Update limit for sub-groups.
                 wait_install:
@@ -507,14 +498,10 @@ options:
             segmented_multicast:
               type: bool
               description:  Enable segmented multicast.This is applicable for mvpn afi.
-              when:
-                condition: afi == "mvpn"
             global_table_multicast:
               type: bool
               description: Enable global table multicast.
-              when:
-                condition: afi == "mvpn"
-            vrf_all:
+            vrf_all_conf:
               type: dict
               description: configuration is for all vrfs and its applicable for afi vpn6 and modifier unicast.
               suboptions:
@@ -547,13 +534,12 @@ options:
                 reset_on_import:
                   type: bool
                   description: set reset_on_import.
-
         vrfs:
           description: Configure BGP in a VRF.
           type: list
           elements: dict
           suboptions:
-            vrf_name:
+            vrf:
              description: VRF name.
              type: str
             address_family:
@@ -565,7 +551,7 @@ options:
                   description: address family.
                   type: str
                   choices: ['ipv4', 'ipv6']
-                af_type:
+                af_modifier:
                   description: Address family type for ipv4.
                   type: str
                   choices: ['unicast', 'multicast', 'flowspec', 'mvpn']

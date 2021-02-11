@@ -38,7 +38,7 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
         "config": {
             "type": "dict",
             "options": {
-                "AS_number": {"type": "str"},
+                "as_number": {"type": "str"},
                 "address_family": {
                     "type": "list",
                     "elements": "dict",
@@ -50,7 +50,7 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                 "ipv6",
                                 "l2vpn",
                                 "link-state",
-                                "vvpnv4",
+                                "vpnv4",
                                 "vpnv6",
                             ],
                         },
@@ -81,7 +81,7 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                 "value": {"type": "str"},
                                 "as_set": {"type": "bool"},
                                 "as_confed_set": {"type": "bool"},
-                                "summery_only": {"type": "bool"},
+                                "summary_only": {"type": "bool"},
                                 "route_policy": {"type": "str"},
                             },
                         },
@@ -124,14 +124,23 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                 "client_to_client": {
                                     "type": "dict",
                                     "options": {
-                                        "reflection_disable": {"type": "bool"},
                                         "reflection": {
                                             "type": "dict",
                                             "options": {
-                                                "cluster_id": {"type": "str"},
+                                                "cluster_id_disable": {
+                                                    "type": "dict",
+                                                    "options": {
+                                                        "cluster_id": {
+                                                            "type": "str"
+                                                        },
+                                                        "disable": {
+                                                            "type": "bool"
+                                                        },
+                                                    },
+                                                },
                                                 "disable": {"type": "bool"},
                                             },
-                                        },
+                                        }
                                     },
                                 },
                                 "dampening": {
@@ -219,18 +228,6 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                         "selective_order_igp_metric": {
                                             "type": "bool"
                                         },
-                                        "unequal_cost": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "order_igp_metric": {
-                                                    "type": "bool"
-                                                },
-                                                "selective_order_igp_metric": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
                                     },
                                 },
                                 "eibgp": {
@@ -256,7 +253,7 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                         "nexthop": {
                             "type": "dict",
                             "options": {
-                                "resolution_prefix-length_minimum": {
+                                "resolution_prefix_length_minimum": {
                                     "type": "int",
                                     "choices": [0, 32],
                                 },
@@ -282,14 +279,14 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                 "limit": {
                                     "type": "dict",
                                     "options": {
-                                        "address_family": {
+                                        "sub_group": {
                                             "type": "dict",
                                             "options": {
                                                 "ibgp": {"type": "int"},
                                                 "ebgp": {"type": "int"},
                                             },
                                         },
-                                        "sub_group": {"type": "int"},
+                                        "address_family": {"type": "int"},
                                     },
                                 },
                                 "wait_install": {"type": "bool"},
@@ -394,7 +391,7 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                         "inter_as_install": {"type": "bool"},
                         "segmented_multicast": {"type": "bool"},
                         "global_table_multicast": {"type": "bool"},
-                        "vrf_all": {
+                        "vrf_all_conf": {
                             "type": "dict",
                             "options": {
                                 "source_rt_import_policy": {"type": "bool"},
@@ -422,7 +419,7 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                     "type": "list",
                     "elements": "dict",
                     "options": {
-                        "vrf_name": {"type": "str"},
+                        "vrf": {"type": "str"},
                         "address_family": {
                             "type": "list",
                             "elements": "dict",
@@ -431,7 +428,7 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                     "type": "str",
                                     "choices": ["ipv4", "ipv6"],
                                 },
-                                "af_type": {
+                                "af_modifier": {
                                     "type": "str",
                                     "choices": [
                                         "unicast",
@@ -452,7 +449,7 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                         "value": {"type": "str"},
                                         "as_set": {"type": "bool"},
                                         "as_confed_set": {"type": "bool"},
-                                        "summery_only": {"type": "bool"},
+                                        "summary_only": {"type": "bool"},
                                         "route_policy": {"type": "str"},
                                     },
                                 },
@@ -481,7 +478,7 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                 "nexthop": {
                                     "type": "dict",
                                     "options": {
-                                        "resolution_prefix-length_minimum": {
+                                        "resolution_prefix_length_minimum": {
                                             "type": "int",
                                             "choices": [0, 32],
                                         },
@@ -546,18 +543,6 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                                 },
                                                 "selective_order_igp_metric": {
                                                     "type": "bool"
-                                                },
-                                                "unequal_cost": {
-                                                    "type": "dict",
-                                                    "options": {
-                                                        "set": {"type": "bool"},
-                                                        "order_igp_metric": {
-                                                            "type": "bool"
-                                                        },
-                                                        "selective_order_igp_metric": {
-                                                            "type": "bool"
-                                                        },
-                                                    },
                                                 },
                                             },
                                         },
