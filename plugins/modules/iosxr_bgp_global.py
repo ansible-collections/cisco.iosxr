@@ -17,7 +17,7 @@ module: iosxr_bgp_global
 short_description: Manages BGP global resource module.
 description:
 - This module configures and manages the attributes of BGP global on Cisco IOS-XR platforms.
-version_added: 1.3.0
+version_added: 2.0.0
 author: Ashwini Mhatre (@amhatre)
 notes:
 - Tested against Cisco IOS-XR 6.1.3.
@@ -129,6 +129,7 @@ options:
                 peers:
                   description: Enter peer ASs in BGP confederation mode.
                   type: list
+                  elements: int
             default: &default
               description: Configure default value.
               type: dict

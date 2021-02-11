@@ -105,7 +105,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "options": {
                                 "identifier": {"type": "int"},
-                                "peers": {"type": "list"},
+                                "peers": {"type": "list", "elements": "int"},
                             },
                         },
                         "default": {

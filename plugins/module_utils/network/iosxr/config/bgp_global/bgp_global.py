@@ -123,7 +123,16 @@ class Bgp_global(ResourceModule):
         """ Generate configuration commands to send based on
                     want, have and desired state.
                 """
+        if self.state in ["merged", "replaced"]:
+            w_asn = self.want.get("as_number")
+            h_asn = self.have.get("as_number")
 
+            if h_asn and w_asn != h_asn:
+                self._module.fail_json(
+                    msg="BGP is already configured with ASN {0}. "
+                    "Please remove it with state purged before "
+                    "configuring new as_number".format(h_asn)
+                )
         for entry in self.want, self.have:
             self._bgp_list_to_dict(entry)
 
