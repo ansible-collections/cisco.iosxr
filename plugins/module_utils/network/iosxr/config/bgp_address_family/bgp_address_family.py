@@ -175,8 +175,10 @@ class Bgp_address_family(ResourceModule):
                     ),
                 )
 
-        for name, entry in iteritems(hafs):
-            self.addcmd({"afi": entry.get("afi"), "af_modifier": entry.get("af_modifier")}, "address_family", True)
+        # for deleted and overridden state
+        if self.state != "replaced":
+            for name, entry in iteritems(hafs):
+                self.addcmd({"afi": entry.get("afi"), "af_modifier": entry.get("af_modifier")}, "address_family", True)
 
 
     def _vrfs_compare(self, want, have):
@@ -197,18 +199,18 @@ class Bgp_address_family(ResourceModule):
                         {"vrf": entry.get("vrf")}, "vrf", False
                     ),
                 )
-        # for deleted and replaced state
-        for name, entry in iteritems(hvrfs):
-            begin = len(self.commands)
-            self._compare_af(want={}, have=entry)
-            if len(self.commands) != begin:
-                self.commands.insert(
-                    begin,
-                    self._tmplt.render(
-                        {"vrf": entry.get("vrf")}, "vrf", False
-                    ),
-                )
-
+        # for deleted and overridden state
+        if self.state != "replaced":
+            for name, entry in iteritems(hvrfs):
+                begin = len(self.commands)
+                self._compare_af(want={}, have=entry)
+                if len(self.commands) != begin:
+                    self.commands.insert(
+                        begin,
+                        self._tmplt.render(
+                            {"vrf": entry.get("vrf")}, "vrf", False
+                        ),
+                    )
 
     def _bgp_list_to_dict(self, entry):
         """Convert list of items to dict of items

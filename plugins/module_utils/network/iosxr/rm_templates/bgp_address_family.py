@@ -775,10 +775,11 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "name": "bgp_scan_time",
             "getval": re.compile(
                 r"""
-                \s+bgp\sscan-time(?P<scan_time>\s\d+)
+                \s+bgp\sscan-time\s(?P<scan_time>\d+)
                 $""", re.VERBOSE
             ),
             "setval": "bgp scan-time {{bgp.scan_time}}",
+            "compval": "bgp.scan_time",
             "result": {
                 "address_family": {
                     '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
