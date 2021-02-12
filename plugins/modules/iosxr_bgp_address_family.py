@@ -17,7 +17,7 @@ module: iosxr_bgp_global
 short_description: Manages BGP global resource module.
 description:
 - This module configures and manages the attributes of BGP global on Cisco IOS-XR platforms.
-version_added: 1.3.0
+version_added: 2.0.0
 author: Ashwini Mhatre (amhatre)
 notes:
 - Tested against Cisco IOS-XR 6.1.3.
@@ -600,8 +600,8 @@ options:
     running_config:
       description:
       - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the EOS device by
-        executing the command B(show running-config | section bgp).
+      - The value of this option should be the output received from the Iosxr device by
+        executing the command B(show running-config router bgp).
       - The state I(parsed) reads the configuration from C(running_config) option and
         transforms it into Ansible structured data as per the resource module's argspec
         and the value is then returned in the I(parsed) key within the result.
