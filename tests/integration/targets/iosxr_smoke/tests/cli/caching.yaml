@@ -32,11 +32,11 @@
       that:
         commands:
           - '"interface GigabitEthernet0/0/0/0" in result.commands'
-          - '"description Configured and Merged by Ansible-Network" in result.commands'
+          - '"description Configured by Ansible" in result.commands'
           - '"mtu 110" in result.commands'
           - '"duplex half" in result.commands'
           - '"interface GigabitEthernet0/0/0/1" in result.commands'
-          - '"description Configured and Merged by Ansible-Network" in result.commands'
+          - '"description Configured by Ansible" in result.commands'
           - '"mtu 2800" in result.commands'
           - '"speed 100" in result.commands'
           - '"duplex full" in result.commands'
