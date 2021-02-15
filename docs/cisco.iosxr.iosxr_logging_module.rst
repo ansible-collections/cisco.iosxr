@@ -509,7 +509,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: configure logging for syslog server host
       cisco.iosxr.iosxr_logging:
