@@ -1,4 +1,3 @@
-plugins/action/iosxr.py action-plugin-docs # base class for deprecated network platform modules using `connection: local
 plugins/module_utils/network/iosxr/config/*.py compile-2.6!skip
 plugins/module_utils/network/iosxr/config/*.py import-2.6!skip
 plugins/modules/*.py import-2.6!skip
