@@ -27,11 +27,10 @@ options:
       description: A list of configurations for BGP address family.
       type: dict
       suboptions:
-        AS_number:
+        as_number:
           description: Autonomous system number.
           type: str
-        neighbors:
-          neighbors: &neighbors
+        neighbors: &neighbors
             description: Specify a neighbor router.
             type: list
             elements: dict
@@ -57,9 +56,6 @@ options:
                     description: Address Family modifier
                     type: str
                     choices: [ 'flowspec', 'mdt', 'multicast', 'mvpn', 'rt-filter', 'tunnel', 'unicast', 'labeled-unicast' ]
-                  advertise_permanent_network:
-                    type: bool
-                    description: Per neighbor advertisement options.
                   aigp:
                     description: AIGP attribute
                     type: dict
@@ -90,7 +86,7 @@ options:
                       set:
                         type: bool
                         description: set allowas_in
-                  as_overrride: &as_override
+                  as_override: &as_override
                     type: dict
                     description: Override matching AS-number while sending update
                     suboptions:
@@ -127,9 +123,16 @@ options:
                       capable:
                         type: bool
                         description: Treat neighbor as LLGR capable.
-                      stale_time_send:
-                        type: int
+                      stale_time:
+                        type: dict
                         description: Maximum time to wait before purging long-lived stale routes.
+                        suboptions:
+                          send:
+                            type: int
+                            description: max send time
+                          accept:
+                            type: int
+                            description: max accept time
                   maximum_prefix: &maximum_prefix
                     type: dict
                     description: Maximum number of prefixes to accept from this peer.
@@ -296,7 +299,6 @@ options:
              description: VRF name.
              type: str
             neighbors:
-              neighbors:
                 description: Specify a neighbor router.
                 type: list
                 elements: dict

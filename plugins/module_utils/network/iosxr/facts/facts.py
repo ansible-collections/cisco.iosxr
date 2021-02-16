@@ -88,7 +88,7 @@ FACT_RESOURCE_SUBSETS = dict(
     ospfv2=Ospfv2Facts,
     ospfv3=Ospfv3Facts,
     ospf_interfaces=Ospf_interfacesFacts,
-    bgp_neighbor_address_family=Bgp_neighbor_address_familyFacts
+    bgp_neighbor_address_family=Bgp_neighbor_address_familyFacts,
 )
 
 

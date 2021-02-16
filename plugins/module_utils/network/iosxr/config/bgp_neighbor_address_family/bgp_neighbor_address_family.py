@@ -48,6 +48,12 @@ class Bgp_neighbor_address_family(ResourceModule):
             tmplt=Bgp_neighbor_address_familyTemplate(),
         )
         self.parsers = [
+            "router",
+            "aigp",
+            "allowas_in",
+            "as_override",
+            "bestpath_origin_as_allow_invalid",
+            "long_lived_graceful_restart"
         ]
 
     def execute_module(self):
@@ -57,6 +63,8 @@ class Bgp_neighbor_address_family(ResourceModule):
         :returns: The result from module execution
         """
         if self.state not in ["parsed", "gathered"]:
+            #import epdb;
+            #epdb.serve()
             self.generate_commands()
             self.run_commands()
         return self.result
@@ -95,7 +103,7 @@ class Bgp_neighbor_address_family(ResourceModule):
            for the Bgp_global network resource.
         """
 
-        self._compare_neighbor(want=want, have=have)
+        self._compare_neighbors(want=want, have=have)
         self._vrfs_compare(want=want, have=have)
         if self.commands and "router bgp" not in self.commands[0]:
             self.commands.insert(
@@ -216,10 +224,17 @@ class Bgp_neighbor_address_family(ResourceModule):
 
             return (key_1, key_2, key_3, key_4)
 
-        if "address_family" in entry:
-            entry["address_family"] = {
-                "address_family_" + x["afi"] + "_" + x["af_modifier"]: x for x in entry.get("address_family", [])
+        if "neighbors" in entry:
+            entry["neighbors"] = {
+                x["neighbor"]: x for x in entry.get("neighbors", [])
             }
+            for neighbor, value in iteritems(entry["neighbors"]):
+                if "address_family" in value:
+                    entry["neighbors"][neighbor]["address_family"] = {
+                        "address_family_" + x["afi"] + "_" + x["af_modifier"]: x for x in value.get("address_family", [])
+                    }
+
+
 
         if "vrfs" in entry:
             entry["vrfs"] = {x["vrf"]: x for x in entry.get("vrfs", [])}

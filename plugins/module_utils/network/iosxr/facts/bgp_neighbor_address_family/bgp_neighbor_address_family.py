@@ -86,7 +86,7 @@ class Bgp_neighbor_address_familyFacts(object):
         else:
             objs["vrfs"] = []
 
-
+        self._post_parse(objs)
         ansible_facts["ansible_network_resources"].pop("bgp_neighbor_address_family", None)
 
         params = utils.remove_empties(
@@ -108,7 +108,7 @@ class Bgp_neighbor_address_familyFacts(object):
             obj["neighbors"] = sorted(
                 list(neighbors.values()), key=lambda k, sk="neighbor": k[sk]
             )
-        for neighbor in neighbors:
+        for neighbor in obj["neighbors"]:
             af = neighbor.get("address_family", {})
             if af:
                 neighbor["address_family"] = list(af.values())
