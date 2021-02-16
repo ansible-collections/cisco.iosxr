@@ -1,3 +1,4 @@
+plugins/action/iosxr.py action-plugin-docs # base class for deprecated network platform modules using `connection: local
 plugins/module_utils/network/iosxr/config/acl_interfaces/acl_interfaces.py compile-2.6!skip
 plugins/module_utils/network/iosxr/config/ospf_interfaces/ospf_interfaces.py compile-2.6!skip
 plugins/module_utils/network/iosxr/config/ospfv2/ospfv2.py compile-2.6!skip
