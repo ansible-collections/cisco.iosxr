@@ -23,7 +23,9 @@ __metaclass__ = type
 
 from textwrap import dedent
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.plugins.modules import iosxr_bgp_address_family
+from ansible_collections.cisco.iosxr.plugins.modules import (
+    iosxr_bgp_address_family,
+)
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
     set_module_args,
 )
@@ -79,28 +81,15 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             af_modifier="unicast",
                             dynamic_med=10,
                             redistribute=dict(
-                                application=dict(
-                                    name="test1",
-                                    metric=10
-                                ),
-                                connected=dict(
-                                    metric=10
-                                ),
-                                isis=dict(
-                                    name="test3",
-                                    metric=4
-                                )
+                                application=dict(name="test1", metric=10),
+                                connected=dict(metric=10),
+                                isis=dict(name="test3", metric=4),
                             ),
-                            bgp=dict(
-                                scan_time=20,
-                                attribute_download=True
-                            ),
+                            bgp=dict(scan_time=20, attribute_download=True),
                             advertise_best_external=True,
-                            allocate_label=dict(
-                                all=True
-                            )
+                            allocate_label=dict(all=True),
                         )
-                    ]
+                    ],
                 ),
                 state="merged",
             )
@@ -118,28 +107,15 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             af_modifier="unicast",
                             dynamic_med=10,
                             redistribute=dict(
-                                application=dict(
-                                    name="test1",
-                                    metric=10
-                                ),
-                                connected=dict(
-                                    metric=10
-                                ),
-                                isis=dict(
-                                    name="test3",
-                                    metric=4
-                                )
+                                application=dict(name="test1", metric=10),
+                                connected=dict(metric=10),
+                                isis=dict(name="test3", metric=4),
                             ),
-                            bgp=dict(
-                                scan_time=20,
-                                attribute_download=True
-                            ),
+                            bgp=dict(scan_time=20, attribute_download=True),
                             advertise_best_external=True,
-                            allocate_label=dict(
-                                all=True
-                            )
+                            allocate_label=dict(all=True),
                         )
-                    ]
+                    ],
                 ),
                 state="merged",
             )
@@ -154,7 +130,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "dynamic-med interval 10",
             "redistribute application test1 metric 10",
             "redistribute connected metric 10",
-            "redistribute isis test3 metric 4"
+            "redistribute isis test3 metric 4",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -187,26 +163,17 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             af_modifier="unicast",
                             dynamic_med=4,
                             redistribute=dict(
-                                application=dict(
-                                    name="test1",
-                                    metric=10
-                                ),
-                                connected=dict(
-                                    metric=10
-                                ),
-                                isis=dict(
-                                    name="test3",
-                                    metric=4
-                                )
+                                application=dict(name="test1", metric=10),
+                                connected=dict(metric=10),
+                                isis=dict(name="test3", metric=4),
                             ),
                         )
-                    ]
+                    ],
                 ),
                 state="replaced",
             )
         )
         commands = [
-
             "router bgp 65536",
             "address-family ipv4 unicast",
             "no advertise best-external",
@@ -242,20 +209,12 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             af_modifier="unicast",
                             dynamic_med=4,
                             redistribute=dict(
-                                application=dict(
-                                    name="test1",
-                                    metric=10
-                                ),
-                                connected=dict(
-                                    metric=10
-                                ),
-                                isis=dict(
-                                    name="test3",
-                                    metric=4
-                                )
+                                application=dict(name="test1", metric=10),
+                                connected=dict(metric=10),
+                                isis=dict(name="test3", metric=4),
                             ),
                         )
-                    ]
+                    ],
                 ),
                 state="merged",
             )
@@ -280,10 +239,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         self.get_config.return_value = run_cfg
         set_module_args(dict(config=dict(as_number="65536"), state="deleted"))
 
-        commands = [
-            "router bgp 65536",
-            "no address-family ipv4 unicast",
-        ]
+        commands = ["router bgp 65536", "no address-family ipv4 unicast"]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
@@ -310,28 +266,15 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             af_modifier="unicast",
                             dynamic_med=10,
                             redistribute=dict(
-                                application=dict(
-                                    name="test1",
-                                    metric=10
-                                ),
-                                connected=dict(
-                                    metric=10
-                                ),
-                                isis=dict(
-                                    name="test3",
-                                    metric=4
-                                )
+                                application=dict(name="test1", metric=10),
+                                connected=dict(metric=10),
+                                isis=dict(name="test3", metric=4),
                             ),
-                            bgp=dict(
-                                scan_time=20,
-                                attribute_download=True
-                            ),
+                            bgp=dict(scan_time=20, attribute_download=True),
                             advertise_best_external=True,
-                            allocate_label=dict(
-                                all=True
-                            )
+                            allocate_label=dict(all=True),
                         )
-                    ]
+                    ],
                 ),
                 state="rendered",
             )
@@ -346,7 +289,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "dynamic-med interval 10",
             "redistribute application test1 metric 10",
             "redistribute connected metric 10",
-            "redistribute isis test3 metric 4"
+            "redistribute isis test3 metric 4",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
@@ -369,36 +312,22 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         set_module_args(dict(running_config=run_cfg, state="parsed"))
         result = self.execute_module(changed=False)
         parsed_list = {
-                "address_family": [
-                    {
-                        "advertise_best_external": True,
-                        "af_modifier": "unicast",
-                        "afi": "ipv4",
-                        "allocate_label": {
-                            "all": True
-                        },
-                        "bgp": {
-                            "attribute_download": True,
-                            "scan_time": 20
-                        },
-                        "dynamic_med": 10,
-                        "redistribute": {
-                            "application": {
-                                "metric": 10,
-                                "name": "test1"
-                            },
-                            "connected": {
-                                "metric": 10
-                            },
-                            "isis": {
-                                "metric": 4,
-                                "name": "test3"
-                            }
-                        }
-                    }
-                ],
-                "as_number": "65536"
+            "address_family": [
+                {
+                    "advertise_best_external": True,
+                    "af_modifier": "unicast",
+                    "afi": "ipv4",
+                    "allocate_label": {"all": True},
+                    "bgp": {"attribute_download": True, "scan_time": 20},
+                    "dynamic_med": 10,
+                    "redistribute": {
+                        "application": {"metric": 10, "name": "test1"},
+                        "connected": {"metric": 10},
+                        "isis": {"metric": 4, "name": "test3"},
+                    },
+                }
+            ],
+            "as_number": "65536",
         }
 
         self.assertEqual(parsed_list, result["parsed"])
-

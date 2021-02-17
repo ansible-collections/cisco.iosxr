@@ -180,7 +180,7 @@ class Bgp_address_family(ResourceModule):
                         ),
                     )
 
-        # compare af under vrf separatly to ensure correct genration of commands
+        # compare af under vrf separately to ensure correct generation of commands
         for waf, haf in vrf_want_have:
             begin = len(self.commands)
             self.compare(parsers=self.parsers, want=waf, have=haf)
@@ -214,37 +214,6 @@ class Bgp_address_family(ResourceModule):
                     "address_family",
                     True,
                 )
-
-    def _vrfs_compare(self, want, have):
-        """Custom handling of VRFs option
-        :params want: the want BGP dictionary
-        :params have: the have BGP dictionary
-        """
-        wvrfs = want.get("vrfs", {})
-        hvrfs = have.get("vrfs", {})
-        for name, entry in iteritems(wvrfs):
-            begin = len(self.commands)
-            vrf_have = hvrfs.pop(name, {})
-            self._compare_af(want=entry, have=vrf_have)
-            if len(self.commands) != begin:
-                self.commands.insert(
-                    begin,
-                    self._tmplt.render(
-                        {"vrf": entry.get("vrf")}, "vrf", False
-                    ),
-                )
-        # for deleted and overridden state
-        if self.state != "replaced":
-            for name, entry in iteritems(hvrfs):
-                begin = len(self.commands)
-                self._compare_af(want={}, have=entry)
-                if len(self.commands) != begin:
-                    self.commands.insert(
-                        begin,
-                        self._tmplt.render(
-                            {"vrf": entry.get("vrf")}, "vrf", False
-                        ),
-                    )
 
     def _bgp_list_to_dict(self, entry):
         """Convert list of items to dict of items
