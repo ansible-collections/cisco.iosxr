@@ -70,6 +70,7 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                 "link-state",
                             ],
                         },
+                        "vrf": {"type": "str"},
                         "additional_paths": {
                             "type": "str",
                             "choices": ["send", "receive"],
@@ -114,7 +115,9 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                                 "allow": {
                                                     "type": "dict",
                                                     "options": {
-                                                        "invalid": {"type": "bool"}
+                                                        "invalid": {
+                                                            "type": "bool"
+                                                        }
                                                     },
                                                 },
                                             },
@@ -175,7 +178,9 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                                 "signal": {
                                                     "type": "dict",
                                                     "options": {
-                                                        "ibgp": {"type": "bool"}
+                                                        "ibgp": {
+                                                            "type": "bool"
+                                                        }
                                                     },
                                                 },
                                             },
@@ -328,7 +333,11 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                         "route_policy": {"type": "str"},
                                         "level": {
                                             "type": "str",
-                                            "choices": ["1", "2", "1-inter-area"],
+                                            "choices": [
+                                                "1",
+                                                "2",
+                                                "1-inter-area",
+                                            ],
                                         },
                                     },
                                 },
@@ -413,288 +422,23 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                 "reset_on_import": {"type": "bool"},
                             },
                         },
-                    },
-                },
-                "vrfs": {
-                    "type": "list",
-                    "elements": "dict",
-                    "options": {
-                        "vrf": {"type": "str"},
-                        "address_family": {
-                            "type": "list",
-                            "elements": "dict",
+                        "allow_vpn_default_originate": {"type": "bool"},
+                        "label_mode": {
+                            "type": "dict",
                             "options": {
-                                "afi": {
-                                    "type": "str",
-                                    "choices": ["ipv4", "ipv6"],
-                                },
-                                "af_modifier": {
-                                    "type": "str",
-                                    "choices": [
-                                        "unicast",
-                                        "multicast",
-                                        "flowspec",
-                                        "mvpn",
-                                    ],
-                                },
-                                "additional_paths": {
-                                    "type": "str",
-                                    "choices": ["send", "receive"],
-                                },
-                                "advertise_best_external": {"type": "bool"},
-                                "as_path_loopcheck_out_disable": {"type": "bool"},
-                                "aggrigate_address": {
-                                    "type": "dict",
-                                    "options": {
-                                        "value": {"type": "str"},
-                                        "as_set": {"type": "bool"},
-                                        "as_confed_set": {"type": "bool"},
-                                        "summary_only": {"type": "bool"},
-                                        "route_policy": {"type": "str"},
-                                    },
-                                },
-                                "allocate_label": {
-                                    "type": "dict",
-                                    "options": {
-                                        "all": {"type": "bool"},
-                                        "route_policy": {"type": "str"},
-                                    },
-                                },
-                                "allow_vpn_default_originate": {"type": "bool"},
-                                "bgp": {
-                                    "type": "dict",
-                                    "options": {
-                                        "dampening": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "value": {"type": "int"},
-                                                "route_policy": {"type": "str"},
-                                            },
-                                        },
-                                        "attribute_download": {"type": "bool"},
-                                    },
-                                },
-                                "nexthop": {
-                                    "type": "dict",
-                                    "options": {
-                                        "resolution_prefix_length_minimum": {
-                                            "type": "int",
-                                            "choices": [0, 32],
-                                        },
-                                        "route_policy": {"type": "str"},
-                                        "trigger_delay_critical": {"type": "int"},
-                                        "trigger_delay_non_critical": {
-                                            "type": "int"
-                                        },
-                                    },
-                                },
-                                "distance": {
-                                    "type": "dict",
-                                    "options": {
-                                        "routes_external_to_as": {"type": "int"},
-                                        "routes_internal_to_as": {"type": "int"},
-                                        "local_routes": {"type": "int"},
-                                    },
-                                },
-                                "dynamic_med": {"type": "int"},
-                                "label_mode": {
-                                    "type": "dict",
-                                    "options": {
-                                        "per_ce": {"type": "bool"},
-                                        "per_vrf": {"type": "bool"},
-                                        "route_policy": {"type": "str"},
-                                        "per_prefix": {"type": "bool"},
-                                    },
-                                },
-                                "maximum_paths": {
-                                    "type": "dict",
-                                    "options": {
-                                        "ibgp": {
-                                            "type": "dict",
-                                            "options": {
-                                                "max_path_value": {"type": "int"},
-                                                "order_igp_metric": {
-                                                    "type": "bool"
-                                                },
-                                                "selective_order_igp_metric": {
-                                                    "type": "bool"
-                                                },
-                                                "unequal_cost": {
-                                                    "type": "dict",
-                                                    "options": {
-                                                        "set": {"type": "bool"},
-                                                        "order_igp_metric": {
-                                                            "type": "bool"
-                                                        },
-                                                        "selective_order_igp_metric": {
-                                                            "type": "bool"
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
-                                        "ebgp": {
-                                            "type": "dict",
-                                            "options": {
-                                                "max_path_value": {"type": "int"},
-                                                "order_igp_metric": {
-                                                    "type": "bool"
-                                                },
-                                                "selective_order_igp_metric": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                        "eibgp": {
-                                            "type": "dict",
-                                            "options": {
-                                                "max_path_value": {"type": "int"},
-                                                "order_igp_metric": {
-                                                    "type": "bool"
-                                                },
-                                                "selective_order_igp_metric": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                                "mvpn_single_forwarder_selection_all": {
-                                    "type": "bool"
-                                },
-                                "mvpn_single_forwarder_selection_highest_ip_address": {
-                                    "type": "bool"
-                                },
-                                "network": {
-                                    "type": "dict",
-                                    "options": {
-                                        "value": {"type": "str"},
-                                        "backdoor_route_policy": {"type": "str"},
-                                        "route_policy": {"type": "str"},
-                                    },
-                                },
-                                "optimal_route_reflection": {
-                                    "type": "dict",
-                                    "options": {
-                                        "group_name": {"type": "str"},
-                                        "primary_address": {"type": "str"},
-                                        "secondary_address": {"type": "str"},
-                                    },
-                                },
-                                "redistribute": {
-                                    "type": "dict",
-                                    "options": {
-                                        "application": {
-                                            "type": "dict",
-                                            "options": {
-                                                "name": {"type": "str"},
-                                                "metric": {"type": "int"},
-                                                "route_policy": {"type": "str"},
-                                            },
-                                        },
-                                        "connected": {
-                                            "type": "dict",
-                                            "options": {
-                                                "metric": {"type": "int"},
-                                                "route_policy": {"type": "str"},
-                                            },
-                                        },
-                                        "eigrp": {
-                                            "type": "dict",
-                                            "options": {
-                                                "name": {"type": "str"},
-                                                "metric": {"type": "int"},
-                                                "route_policy": {"type": "str"},
-                                                "internal": {"type": "bool"},
-                                                "external": {"type": "bool"},
-                                            },
-                                        },
-                                        "isis": {
-                                            "type": "dict",
-                                            "options": {
-                                                "name": {"type": "str"},
-                                                "metric": {"type": "int"},
-                                                "route_policy": {"type": "str"},
-                                                "level": {
-                                                    "type": "str",
-                                                    "choices": [
-                                                        "1",
-                                                        "2",
-                                                        "1-inter-area",
-                                                    ],
-                                                },
-                                            },
-                                        },
-                                        "lisp": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "metric": {"type": "int"},
-                                                "route_policy": {"type": "str"},
-                                            },
-                                        },
-                                        "mobile": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "metric": {"type": "int"},
-                                                "route_policy": {"type": "str"},
-                                            },
-                                        },
-                                        "ospf": {
-                                            "type": "dict",
-                                            "options": {
-                                                "name": {"type": "str"},
-                                                "metric": {"type": "int"},
-                                                "route_policy": {"type": "str"},
-                                                "internal": {"type": "bool"},
-                                                "nssa_external": {"type": "bool"},
-                                                "external": {
-                                                    "type": "int",
-                                                    "choices": [1, 2],
-                                                },
-                                            },
-                                        },
-                                        "rip": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "metric": {"type": "int"},
-                                                "route_policy": {"type": "str"},
-                                            },
-                                        },
-                                        "static": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "metric": {"type": "int"},
-                                                "route_policy": {"type": "str"},
-                                            },
-                                        },
-                                        "subscriber": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "metric": {"type": "int"},
-                                                "route_policy": {"type": "str"},
-                                            },
-                                        },
-                                    },
-                                },
-                                "table_policy": {"type": "str"},
-                                "route_target_download": {"type": "bool"},
-                                "weight": {
-                                    "type": "dict",
-                                    "options": {
-                                        "reset_on_import_disable": {
-                                            "type": "bool"
-                                        },
-                                        "reset_on_import": {"type": "bool"},
-                                    },
-                                },
+                                "per_ce": {"type": "bool"},
+                                "per_vrf": {"type": "bool"},
+                                "route_policy": {"type": "str"},
+                                "per_prefix": {"type": "bool"},
                             },
                         },
+                        "mvpn_single_forwarder_selection_all": {
+                            "type": "bool"
+                        },
+                        "mvpn_single_forwarder_selection_highest_ip_address": {
+                            "type": "bool"
+                        },
+                        "route_target_download": {"type": "bool"},
                     },
                 },
             },

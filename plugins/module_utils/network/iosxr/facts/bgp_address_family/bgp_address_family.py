@@ -16,7 +16,6 @@ based on the configuration.
 
 from copy import deepcopy
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
@@ -27,11 +26,12 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
     Bgp_address_familyArgs,
 )
 
+
 class Bgp_address_familyFacts(object):
     """ The iosxr bgp_address_family facts class
     """
 
-    def __init__(self, module, subspec='config', options='options'):
+    def __init__(self, module, subspec="config", options="options"):
         self._module = module
         self.argument_spec = Bgp_address_familyArgs.argument_spec
         spec = deepcopy(self.argument_spec)
@@ -58,44 +58,24 @@ class Bgp_address_familyFacts(object):
         """
         facts = {}
         objs = []
-        bgp_global_config = []
         if not data:
             data = self.get_config(connection)
-        data = self._flatten_config(data, "vrf")
+
+        nb_data = self._flatten_config(data, "neighbor")
+        data = self._flatten_config(nb_data, "vrf")
         # parse native config using the Bgp_global template
         bgp_global_parser = Bgp_address_familyTemplate(lines=data.splitlines())
         objs = bgp_global_parser.parse()
-        vrfs = objs.get("vrfs", {})
 
-
-        # move global vals to their correct position in facts tree
-        # this is only needed for keys that are common between both global
-        # and VRF contexts
-        global_vals = vrfs.pop("vrf_", {})
-        for key, value in iteritems(global_vals):
-            if objs.get(key):
-                objs[key] = utils.dict_merge(objs[key], value)
-            else:
-                objs[key] = value
         af = objs.get("address_family")
-        # transform vrfs into a list
-        vrfs.pop("vrf_all", {})
-        if vrfs:
-            objs["vrfs"] = sorted(
-                list(objs["vrfs"].values()), key=lambda k, sk="vrf": k[sk]
-            )
-            for vrf in objs["vrfs"]:
-                self._post_parse(vrf)
-        else:
-            objs["vrfs"] = []
-
         if af:
             self._post_parse(objs)
         else:
             objs["address_family"] = []
 
-
-        ansible_facts["ansible_network_resources"].pop("bgp_global", None)
+        ansible_facts["ansible_network_resources"].pop(
+            "bgp_address_family", None
+        )
 
         params = utils.remove_empties(
             utils.validate_config(self.argument_spec, {"config": objs})
@@ -136,6 +116,3 @@ class Bgp_address_familyFacts(object):
             elif in_nbr_cxt:
                 data[data.index(x)] = cur_nbr["nbr"] + " " + x.strip()
         return "\n".join(data)
-
-
-

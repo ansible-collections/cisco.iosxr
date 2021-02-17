@@ -13,12 +13,12 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = """
-module: iosxr_bgp_global
+module: iosxr_bgp_address_family
 short_description: Manages BGP global resource module.
 description:
-- This module configures and manages the attributes of BGP global on Cisco IOS-XR platforms.
+- This module configures and manages the attributes of BGP address family on Cisco IOS-XR platforms.
 version_added: 2.0.0
-author: Ashwini Mhatre (amhatre)
+author: Ashwini Mhatre (@amhatre)
 notes:
 - Tested against Cisco IOS-XR 6.1.3.
 - This module works with connection C(network_cli).
@@ -43,6 +43,9 @@ options:
               description: Address Family modifier
               type: str
               choices: [ 'flowspec', 'mdt', 'multicast', 'mvpn', 'rt-filter', 'tunnel', 'unicast', 'evpn', 'mspw', 'vpls-vpws', 'link-state' ]
+            vrf:
+              description: VRF name.
+              type: str
             additional_paths: &additional_paths
               description: BGP additional-paths commands
               type: str
@@ -131,7 +134,7 @@ options:
                               description: disable cluster id.
                         disable:
                           type: bool
-                          disable: disable reflection.
+                          description: disable reflection.
                 dampening: &dampening
                   type: dict
                   description: Enable route-flap dampening
@@ -263,7 +266,7 @@ options:
                       type: bool
             network: &network
               type: dict
-              description:
+              description: Specify a network to announce via BGP.
               suboptions:
                 value:
                   type: str
@@ -315,11 +318,11 @@ options:
               description: Configure policy for installation of routes to RIB.
             update:
               type: dict
-              descriptions: BGP Update generation configuration.
+              description: BGP Update generation configuration.
               suboptions:
                 limit:
                   type: dict
-                  descriptions: Update limit
+                  description: Update limit.
                   suboptions:
                     sub_group:
                       type: dict
@@ -327,13 +330,13 @@ options:
                       suboptions:
                         ibgp:
                           type: int
-                          descriptions: Update limit for iBGP sub-groups<1-512.
+                          description: Update limit for iBGP sub-groups<1-512.
                         ebgp:
                           type: int
-                          descriptions: Update limit for eBGP sub-groups<1-512.
+                          description: Update limit for eBGP sub-groups<1-512.
                     address_family:
                       type: int
-                      descriptions: Update limit for sub-groups.
+                      description: Update limit for sub-groups.
                 wait_install:
                   type: bool
                   description: Wait for route install.
@@ -534,69 +537,28 @@ options:
                 reset_on_import:
                   type: bool
                   description: set reset_on_import.
-        vrfs:
-          description: Configure BGP in a VRF.
-          type: list
-          elements: dict
-          suboptions:
-            vrf:
-             description: VRF name.
-             type: str
-            address_family:
-              description: Enable address family and enter its config mode
-              type: list
-              elements: dict
+            allow_vpn_default_originate:
+              type: bool
+              description: Allow sending default originate route to VPN neighbor.
+            label_mode:
+              type: dict
+              description: label configuration.
               suboptions:
-                afi:
-                  description: address family.
-                  type: str
-                  choices: ['ipv4', 'ipv6']
-                af_modifier:
-                  description: Address family type for ipv4.
-                  type: str
-                  choices: ['unicast', 'multicast', 'flowspec', 'mvpn']
-                additional_paths: *additional_paths
-                advertise_best_external: *advertise
-                as_path_loopcheck_out_disable: *as_path_loopcheck
-                aggrigate_address: *aggrigate_address
-                allocate_label: *allocate_label
-                allow_vpn_default_originate:
+                per_ce: *per_ce
+                per_vrf: *per_vrf
+                route_policy: *route_policy
+                per_prefix:
                   type: bool
-                  description: Allow sending default originate route to VPN neighbor.
-                bgp:
-                  description: BGP parameters.
-                  type: dict
-                  suboptions:
-                    dampening: *dampening
-                    attribute_download: *attribute_download
-                nexthop: *nexthop
-                distance: *distance
-                dynamic_med: *dynamic_med
-                label_mode:
-                  type: dict
-                  description: label configuration.
-                  suboptions:
-                    per_ce: *per_ce
-                    per_vrf: *per_vrf
-                    route_policy: *route_policy
-                    per_prefix:
-                      type: bool
-                      description: Set per perfix label mode.
-                maximum_paths: *maximum_paths
-                mvpn_single_forwarder_selection_all:
-                  type: bool
-                  description: Enable single forwarder selection  for all
-                mvpn_single_forwarder_selection_highest_ip_address:
-                  type: bool
-                  description: Enable single forwarder selection  for PE with highest ip address.
-                network: *network
-                optimal_route_reflection: *optimal_rr
-                redistribute: *redistribute
-                table_policy: *table_policy
-                route_target_download:
-                  description: Route target RIB installation.
-                  type: bool
-                weight: *wt
+                  description: Set per perfix label mode.
+            mvpn_single_forwarder_selection_all:
+              type: bool
+              description: Enable single forwarder selection  for all
+            mvpn_single_forwarder_selection_highest_ip_address:
+              type: bool
+              description: Enable single forwarder selection  for PE with highest ip address.
+            route_target_download:
+              description: Route target RIB installation.
+              type: bool
     running_config:
       description:
       - This option is used only with state I(parsed).

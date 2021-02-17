@@ -8,9 +8,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 """
-The Bgp_address_family parser templates file. This contains 
-a list of parser definitions and associated functions that 
-facilitates both facts gathering and native command generation for 
+The Bgp_address_family parser templates file. This contains
+a list of parser definitions and associated functions that
+facilitates both facts gathering and native command generation for
 the given network resource.
 """
 
@@ -32,7 +32,9 @@ def _tmpl_aggregate_address(config_data):
         if config_data["aggregate_address"].get("summary_only", ""):
             command += " summary-only"
         if config_data["aggregate_address"].get("route_policy", ""):
-            command += " route-policy {route_policy}".format(**config_data["aggregate_address"])
+            command += " route-policy {route_policy}".format(
+                **config_data["aggregate_address"]
+            )
         return command
 
 
@@ -43,13 +45,17 @@ def _tmpl_allocate_label(config_data):
             command += " all"
 
         if "route_policy" in config_data["allocate_label"]:
-            command += " route-policy {route_policy}".format(**config_data["route_policy"])
+            command += " route-policy {route_policy}".format(
+                **config_data["route_policy"]
+            )
 
         return command
 
 
 def _tmpl_bgp_origin_as_validation(config_data):
-    origin_as_conf = config_data.get("bgp", {}).get("origin_as", {}).get("validation")
+    origin_as_conf = (
+        config_data.get("bgp", {}).get("origin_as", {}).get("validation")
+    )
     if origin_as_conf:
         command = []
         if "disable" in origin_as_conf:
@@ -62,7 +68,7 @@ def _tmpl_bgp_origin_as_validation(config_data):
 
 def _tmpl_bgp_dampening(config_data):
     dampening_conf = config_data.get("bgp", {}).get("dampening", {})
-    #import epdb;epdb.serve()
+    # import epdb;epdb.serve()
     if dampening_conf:
         command = "bgp dampening"
         if "value" in dampening_conf:
@@ -89,7 +95,9 @@ def _tmpl_maximum_paths_ibgp(config_data):
             command += " unequal-cost"
             if "order_igp_metric" in ibgp_conf.get("unequal_cost", {}):
                 command += " order igp-metric"
-            elif "selective_order_igp_metric" in ibgp_conf.get("unequal_cost", {}):
+            elif "selective_order_igp_metric" in ibgp_conf.get(
+                "unequal_cost", {}
+            ):
                 command += " selective order igp-metric"
         return command
 
@@ -123,6 +131,7 @@ def _tmpl_maximum_paths_eibgp(config_data):
             command += " selective order igp-metric"
         return command
 
+
 def _tmpl_network(config_data):
     network_conf = config_data.get("network", {})
     # import epdb;epdb.serve()
@@ -131,26 +140,35 @@ def _tmpl_network(config_data):
         if "value" in network_conf:
             command += " " + str(network_conf["value"])
         if "backdoor_route_policy" in network_conf:
-            command += " backdoor-route-policy " + network_conf["backdoor_route_policy:"]
+            command += (
+                " backdoor-route-policy "
+                + network_conf["backdoor_route_policy:"]
+            )
         if "route_policy" in network_conf:
             command += " route-policy " + network_conf["route_policy"]
         return command
 
+
 def _tmpl_nexthop(config_data):
     nexthop_conf = config_data.get("nexthop", {})
-    commands=[]
+    commands = []
     # import epdb;epdb.serve()
     if nexthop_conf:
 
         if "resolution_prefix_length_minimum" in nexthop_conf:
-            command = "nexthop resolution prefix-length minimum "\
-                       + str(nexthop_conf["resolution_prefix_length_minimum"])
+            command = "nexthop resolution prefix-length minimum " + str(
+                nexthop_conf["resolution_prefix_length_minimum"]
+            )
             commands.append(command)
         if "trigger_delay_critical" in nexthop_conf:
-            command = "nexthop trigger-delay critical " + str(nexthop_conf["trigger_delay_non_critical"])
+            command = "nexthop trigger-delay critical " + str(
+                nexthop_conf["trigger_delay_non_critical"]
+            )
             commands.append(command)
         if "trigger_delay_non_critical" in nexthop_conf:
-            command = "nexthop trigger-delay non-critical " + str(nexthop_conf["trigger_delay_non_critical"])
+            command = "nexthop trigger-delay non-critical " + str(
+                nexthop_conf["trigger_delay_non_critical"]
+            )
             commands.append(command)
         if "route_policy" in nexthop_conf:
             command += " route-policy " + nexthop_conf["route_policy"]
@@ -160,7 +178,7 @@ def _tmpl_nexthop(config_data):
 
 def _tmpl_optimal_route(config_data):
     orr_conf = config_data.get("optimal_route_reflection", {})
-    #import epdb;epdb.serve()
+    # import epdb;epdb.serve()
     if orr_conf:
         command = "optimal-route-reflection"
         if "group_name" in orr_conf:
@@ -183,14 +201,20 @@ def _tmpl_update(config_data):
             command = "update wait-install"
             commands.append(command)
         if "address_family" in update_limit:
-            command = "update limit address-family " + str(update_limit["address_family"])
+            command = "update limit address-family " + str(
+                update_limit["address_family"]
+            )
             commands.append(command)
         if "sub_group" in update_limit:
             if "ibgp" in update_limit["sub_group"]:
-                command = "update limit sub-group ibgp " + str(update_limit["sub_group"]["ibgp"])
+                command = "update limit sub-group ibgp " + str(
+                    update_limit["sub_group"]["ibgp"]
+                )
                 commands.append(command)
             if "ebgp" in update_limit["sub_group"]:
-                command = "update limit sub-group ebgp " + str(update_limit["sub_group"]["ebgp"])
+                command = "update limit sub-group ebgp " + str(
+                    update_limit["sub_group"]["ebgp"]
+                )
                 commands.append(command)
     return commands
 
@@ -320,7 +344,7 @@ def _tmpl_redistraibute_subscriber(config_data):
 def _tmpl_vrf_all(config_data):
     conf = config_data.get("vrf_all", {})
     commands = []
-    #import epdb; epdb.serve()
+    # import epdb; epdb.serve()
     if conf:
         if "source_rt_import_policy" in conf:
             commands.append("vrf all source rt import-policy")
@@ -348,6 +372,7 @@ def _tmpl_wt(config_data):
             command += " reset-on-import disable"
         return command
 
+
 def _tmpl_label_mode(conf):
     if "label_mode" in conf:
         command = "vrf all label mode"
@@ -364,8 +389,9 @@ def _tmpl_label_mode(conf):
 
 class Bgp_address_familyTemplate(NetworkTemplate):
     def __init__(self, lines=None):
-        super(Bgp_address_familyTemplate, self).__init__(lines=lines, tmplt=self)
-
+        super(Bgp_address_familyTemplate, self).__init__(
+            lines=lines, tmplt=self
+        )
 
     # fmt: off
     PARSERS = [
@@ -393,11 +419,6 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             ),
             "setval": "vrf {{ vrf }}",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "vrf": "{{ vrf }}"
-                    }
-                }
             },
             "shared": True,
         },
@@ -405,21 +426,17 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "name": "address_family",
             "getval": re.compile(
                 r"""
-                (\s+vrf\s(?P<vrf>\b(?!all\b)\S+))?    
+                (\s+vrf\s(?P<vrf>\b(?!all\b)\S+))?
                 (?P<address_family>\s+address-family\s(?P<afi>\S+)\s(?P<af_modifier>\S+))
                 $""", re.VERBOSE
             ),
             "setval": "address-family {{ afi}} {{af_modifier}}",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi + "_" + af_modifier}}':
-                                {
-                                    "afi": "{{ afi}}",
-                                    "af_modifier": "{{af_modifier}}",
-                                }
-                        }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "afi": "{{ afi}}",
+                        "af_modifier": "{{af_modifier}}",
+                        "vrf": "{{ vrf }}"
                     }
                 }
             },
@@ -435,14 +452,9 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             ),
             "setval": "advertise best-external",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}':
-                                {
-                                    "advertise_best_external": "{{True if abe is defined}}",
-                                }
-                        }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "advertise_best_external": "{{True if abe is defined}}",
                     }
                 }
             }
@@ -452,26 +464,22 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s+allocate-label\s(?P<all>all)
-                 (\sroute-policy\s(?P<route_policy>)\S+)?
+                 (\sroute-policy\s(?P<route_policy>\S+))?
                 $""", re.VERBOSE
             ),
             "setval": _tmpl_allocate_label,
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}':
-                                {
-                                    "allocate_label": {
-                                        "all": "{{True if all is defined}}",
-                                        "route_policy": "{{route_policy}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "allocate_label": {
+                            "all": "{{True if all is defined}}",
+                            "route_policy": "{{route_policy}}",
                         }
                     }
                 }
             }
         },
+
         {
             "name": "aggregate_address",
             "getval": re.compile(
@@ -481,28 +489,24 @@ class Bgp_address_familyTemplate(NetworkTemplate):
                 (\sas-set(?P<as_set>))?
                 (\sas-confed-set(?P<as_confed_set>))?
                 (\ssummary-only(?P<summery_only>))?
-                (\sroute-policy\s(?P<route_policy>)\S+)?
+                (\sroute-policy\s(?P<route_policy>\S+))?
                 $""", re.VERBOSE
             ),
             "setval": _tmpl_aggregate_address,
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}':
-                                {
-                                    "aggregate_address": {
-                                        "as_set": "{{True if as_set is defined}}",
-                                        "as_confed_set": "{{True if as_confed_set is defined}}",
-                                        "summary_only": "{{True if summery_only is defined}}",
-                                        "value": "{{value}}",
-                                        "route_policy": "{{route_policy}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "aggregate_address": {
+                            "as_set": "{{True if as_set is defined}}",
+                            "as_confed_set": "{{True if as_confed_set is defined}}",
+                            "summary_only": "{{True if summery_only is defined}}",
+                            "value": "{{value}}",
+                            "route_policy": "{{route_policy}}",
                         }
                     }
                 }
             }
+
         },
         {
             "name": "additional_paths",
@@ -514,14 +518,9 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             ),
             "setval": "additional-paths {{additional_paths}}",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}':
-                                {
-                                    "additional_paths": "{{value}}"
-                                }
-                        }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "additional_paths": "{{value}}"
                     }
                 }
             }
@@ -536,14 +535,9 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             ),
             "setval": "as-path-loopcheck out disable",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}':
-                                {
-                                    "as_path_loopcheck_out_disable": "{{True if value is defined }}"
-                                }
-                        }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "as_path_loopcheck_out_disable": "{{True if value is defined }}"
                     }
                 }
             }
@@ -559,14 +553,10 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": "bgp attribute-download",
             "compval": "bgp.attribute_download",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "bgp": {
-                                    "attribute_download": "{{True if value is defined }}"
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d()}}': {
+                        "bgp": {
+                            "attribute_download": "{{True if value is defined }}"
                         }
                     }
                 }
@@ -583,7 +573,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "compval": "bgp.bestpath.origin_as.use",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "bgp": {
                             "bestpath": {"origin_as": {"use": {"validity": "{{True if origin_as is defined }}"}}}
                         }
@@ -602,7 +592,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "compval": "bgp.bestpath.origin_as.allow",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "bgp": {
                             "bestpath": {
                                 "origin_as": {"allow": {"invalid": "{{True if origin_as is defined }}"}}
@@ -626,7 +616,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "compval": "bgp.client_to_client.reflection.disable",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}':{
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "bgp": {
                             "client_to_client": {
                                 "reflection": {
@@ -652,7 +642,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "compval": "bgp.client_to_client.reflection.cluster_id",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "bgp": {
                             "client_to_client": {
                                 "reflection": {
@@ -680,17 +670,13 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_bgp_dampening,
             "compval": "bgp.dampening",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "bgp": {
-                                    "dampening": {
-                                        "set": "{{True if set is defined}}",
-                                        "value": "{{value}}",
-                                        "route_policy": "{{route_policy}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "bgp": {
+                            "dampening": {
+                                "set": "{{True if set is defined}}",
+                                "value": "{{value}}",
+                                "route_policy": "{{route_policy}}",
                             }
                         }
                     }
@@ -710,7 +696,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "compval": "bgp.label_delay",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "bgp": {
                             "label_delay": {
                                 "delay_second_parts": "{{first}}",
@@ -734,7 +720,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "compval": "bgp.import_delay",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "bgp": {
                             "import_delay": {
                                 "delay_second_parts": "{{first}}",
@@ -758,12 +744,14 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "compval": "bgp.origin_as.validation",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "bgp": {
                             "origin_as": {
                                 "validation": {
-                                   "disable": "{{True if disable is defined}}",
-                                    "signal": {"ibgp": "{{True if signal is defined}}"}
+                                    "disable": "{{True if disable is defined}}",
+                                    "signal": {
+                                        "ibgp": "{{True if signal is defined}}"
+                                    }
                                 }
                             }
                         }
@@ -782,7 +770,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "compval": "bgp.scan_time",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "bgp": {
                             "scan_time": "{{scan_time}}"
                         }
@@ -800,7 +788,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": "default-martian-check disable",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "default_martian_check_disable": "{{ True if disable is defined}}"
                     }
                 }
@@ -814,23 +802,18 @@ class Bgp_address_familyTemplate(NetworkTemplate):
                 \s+distance\sbgp
                 (\s(?P<external>\d+))?
                 (\s(?P<internal>\d+))?
-                (\s(?P<local>\d+))?              
+                (\s(?P<local>\d+))?
                 $""", re.VERBOSE
             ),
             "setval": "distnace bgp {{distnace.bgp.routes_external_to_as}} "
                       "{{distnace.bgp.routes_internal_to_as}} {{distnace.bgp.local_routes}}",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}':
-                                {
-                                    "distance": {
-                                        "routes_external_to_as": "{{external}}",
-                                        "routes_internal_to_as": "{{internal}}",
-                                        "local_routes": "{{local}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "distance": {
+                            "routes_external_to_as": "{{external}}",
+                            "routes_internal_to_as": "{{internal}}",
+                            "local_routes": "{{local}}",
                         }
                     }
                 }
@@ -841,18 +824,14 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 (\s+vrf\s(?P<vrf>\S+))?
-                \s+dynamic-med\sinterval\s(?P<dynamic_med>\d+) 
+                \s+dynamic-med\sinterval\s(?P<dynamic_med>\d+)
                 $""", re.VERBOSE
             ),
             "setval": "dynamic-med interval {{dynamic_med}}",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "dynamic_med": "{{ dynamic_med}}",
-                            }
-                        }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "dynamic_med": "{{ dynamic_med}}",
                     }
                 }
             }
@@ -873,23 +852,18 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_maximum_paths_ibgp,
             "compval": "maximum_paths.ibgp",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "maximum_paths": {
-                                    "ibgp": {
-                                        "max_path_value": "{{ max_path_value }}",
-                                        "order_igp_metric": "{{ True if order_igp_metric is defined}}",
-                                        "selective_order_igp_metric":
-                                            "{{ True if selective_order_igp_metric is defined}}",
-                                        "unequal_cost": {
-                                            "set": "{{ True if unequal_cost is defined}}",
-                                            "order_igp_metric": "{{ True if order_igp_metric1 is defined}}",
-                                            "selective_order_igp_metric":
-                                                "{{ True if selective_order_igp_metric1 is defined}}",
-                                        }
-                                    }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "maximum_paths": {
+                            "ibgp": {
+                                "max_path_value": "{{ max_path_value }}",
+                                "order_igp_metric": "{{ True if order_igp_metric is defined}}",
+                                "selective_order_igp_metric":
+                                "{{ True if selective_order_igp_metric is defined}}",
+                                "unequal_cost": {
+                                    "set": "{{ True if unequal_cost is defined}}",
+                                    "order_igp_metric": "{{ True if order_igp_metric1 is defined}}",
+                                    "selective_order_igp_metric": "{{ True if selective_order_igp_metric1 is defined}}",
                                 }
                             }
                         }
@@ -910,19 +884,15 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_maximum_paths_ebgp,
             "compval": "maximum_paths.ebgp",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "maximum_paths": {
-                                    "ebgp": {
-                                        "max_path_value": "{{ max_path_value }}",
-                                        "order_igp_metric": "{{ True if order_igp_metric is defined}}",
-                                        "selective_order_igp_metric":
-                                            "{{ True if selective_order_igp_metric is defined}}",
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "maximum_paths": {
+                            "ebgp": {
+                                "max_path_value": "{{ max_path_value }}",
+                                "order_igp_metric": "{{ True if order_igp_metric is defined}}",
+                                "selective_order_igp_metric":
+                                "{{ True if selective_order_igp_metric is defined}}",
 
-                                    }
-                                }
                             }
                         }
                     }
@@ -942,19 +912,15 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_maximum_paths_eibgp,
             "compval": "maximum_paths.eibgp",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "maximum_paths": {
-                                    "eibgp": {
-                                        "max_path_value": "{{ max_path_value }}",
-                                        "order_igp_metric": "{{ True if order_igp_metric is defined}}",
-                                        "selective_order_igp_metric":
-                                            "{{ True if selective_order_igp_metric is defined}}",
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "maximum_paths": {
+                            "eibgp": {
+                                "max_path_value": "{{ max_path_value }}",
+                                "order_igp_metric": "{{ True if order_igp_metric is defined}}",
+                                "selective_order_igp_metric":
+                                "{{ True if selective_order_igp_metric is defined}}",
 
-                                    }
-                                }
                             }
                         }
                     }
@@ -973,7 +939,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_network,
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "network": {
                             "backdoor_route_policy": "{{backdoor_route_policy}}",
                             "value": "{{value}}",
@@ -997,18 +963,13 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             ),
             "setval": _tmpl_nexthop,
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}':
-                                {
-                                    "nexthop": {
-                                        "trigger_delay_critical": "{{trigger_delay_critical}}",
-                                        "trigger_delay_non_critical": "{{trigger_delay_non_critical}}",
-                                        "resolution_prefix_length_minimum": "{{value}}",
-                                        "route_policy": "{{route_policy}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "nexthop": {
+                            "trigger_delay_critical": "{{trigger_delay_critical}}",
+                            "trigger_delay_non_critical": "{{trigger_delay_non_critical}}",
+                            "resolution_prefix_length_minimum": "{{value}}",
+                            "route_policy": "{{route_policy}}",
                         }
                     }
                 }
@@ -1022,21 +983,17 @@ class Bgp_address_familyTemplate(NetworkTemplate):
                 \s+optimal-route-reflection
                 (\s(?P<value>\S+))?
                 (\s(?P<primary>\S+))?
-                (\s(?P<secondary>\S+))? 
+                (\s(?P<secondary>\S+))?
                 $""", re.VERBOSE
             ),
             "setval": _tmpl_optimal_route,
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                    "optimal_route_reflection": {
-                                        "group_name": "{{value}}",
-                                        "primary_address": "{{primary}}",
-                                        "secondary_address": "{{secondary}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "optimal_route_reflection": {
+                            "group_name": "{{value}}",
+                            "primary_address": "{{primary}}",
+                            "secondary_address": "{{secondary}}",
                         }
                     }
                 }
@@ -1052,7 +1009,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": "permanent-network route-policy {{permanent_network_route_policy}}",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "permanent_network_route_policy": "{{route_policy}}"
                     }
                 }
@@ -1068,7 +1025,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": "retain local-label {{retain_local_label}}",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "retain_local_label": "{{value}}"
                     }
                 }
@@ -1090,7 +1047,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_update,
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}':
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}':
                         {
                             "update": {
                                 "wait_install": "{{True if wait is defined}}",
@@ -1120,17 +1077,13 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_redistraibute_application,
             "compval": "redistribute.application",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "redistribute": {
-                                    "application": {
-                                        "name": "{{value}}",
-                                        "route_policy": "{{route_policy}}",
-                                        "metric": "{{metric}}"
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "redistribute": {
+                            "application": {
+                                "name": "{{value}}",
+                                "route_policy": "{{route_policy}}",
+                                "metric": "{{metric}}"
                             }
                         }
                     }
@@ -1141,7 +1094,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "name": "redistribute_connected",
             "getval": re.compile(
                 r"""
-                (\s+vrf\s(?P<vrf>\S+))?    
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+redistribute\sconnected
                 (\smetric\s(?P<metric>\d+))?
                 (\sroute-policy\s(?P<route_policy>\S+))?
@@ -1150,16 +1103,12 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_redistraibute_connected,
             "compval": "redistribute.connected",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "redistribute": {
-                                    "connected": {
-                                        "route_policy": "{{route_policy}}",
-                                        "metric": "{{metric}}"
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "redistribute": {
+                            "connected": {
+                                "route_policy": "{{route_policy}}",
+                                "metric": "{{metric}}"
                             }
                         }
                     }
@@ -1181,19 +1130,15 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_redistraibute_eigrp,
             "compval": "redistribute.eigrp",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "redistribute": {
-                                    "eigrp": {
-                                        "name": "{{value}}",
-                                        "route_policy": "{{route_policy}}",
-                                        "metric": "{{metric}}",
-                                        "internal": "{{True if internal is defined}}",
-                                        "external": "{{True if external is defined}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "redistribute": {
+                            "eigrp": {
+                                "name": "{{value}}",
+                                "route_policy": "{{route_policy}}",
+                                "metric": "{{metric}}",
+                                "internal": "{{True if internal is defined}}",
+                                "external": "{{True if external is defined}}",
                             }
                         }
                     }
@@ -1214,18 +1159,14 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_redistraibute_isis,
             "compval": "redistribute.isis",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "redistribute": {
-                                    "isis": {
-                                        "name": "{{value}}",
-                                        "route_policy": "{{route_policy}}",
-                                        "metric": "{{metric}}",
-                                        "level": "{{level}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "redistribute": {
+                            "isis": {
+                                "name": "{{value}}",
+                                "route_policy": "{{route_policy}}",
+                                "metric": "{{metric}}",
+                                "level": "{{level}}",
                             }
                         }
                     }
@@ -1245,17 +1186,13 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_redistraibute_lisp,
             "compval": "redistribute.lisp",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "redistribute": {
-                                    "lisp": {
-                                        "set": "{{True if lisp is defined}}",
-                                        "route_policy": "{{route_policy}}",
-                                        "metric": "{{metric}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "redistribute": {
+                            "lisp": {
+                                "set": "{{True if lisp is defined}}",
+                                "route_policy": "{{route_policy}}",
+                                "metric": "{{metric}}",
                             }
                         }
                     }
@@ -1275,17 +1212,13 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_redistraibute_mobile,
             "compval": "redistribute.mobile",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "redistribute": {
-                                    "mobile": {
-                                        "set": "{{True if mobile is defined}}",
-                                        "route_policy": "{{route_policy}}",
-                                        "metric": "{{metric}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "redistribute": {
+                            "mobile": {
+                                "set": "{{True if mobile is defined}}",
+                                "route_policy": "{{route_policy}}",
+                                "metric": "{{metric}}",
                             }
                         }
                     }
@@ -1307,19 +1240,15 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_redistraibute_ospf,
             "compval": "redistribute.ospf",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "redistribute": {
-                                    "ospf": {
-                                        "name": "{{value}}",
-                                        "route_policy": "{{route_policy}}",
-                                        "metric": "{{metric}}",
-                                        "internal": "{{True if internal is defined}}",
-                                        "external": "{{True if external is defined}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "redistribute": {
+                            "ospf": {
+                                "name": "{{value}}",
+                                "route_policy": "{{route_policy}}",
+                                "metric": "{{metric}}",
+                                "internal": "{{True if internal is defined}}",
+                                "external": "{{True if external is defined}}",
                             }
                         }
                     }
@@ -1339,17 +1268,13 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_redistraibute_rip,
             "compval": "redistribute.rip",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "redistribute": {
-                                    "rip": {
-                                        "set": "{{True if rip is defined}}",
-                                        "route_policy": "{{route_policy}}",
-                                        "metric": "{{metric}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "redistribute": {
+                            "rip": {
+                                "set": "{{True if rip is defined}}",
+                                "route_policy": "{{route_policy}}",
+                                "metric": "{{metric}}",
                             }
                         }
                     }
@@ -1369,17 +1294,13 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_redistraibute_static,
             "compval": "redistribute.static",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "redistribute": {
-                                    "static": {
-                                        "set": "{{True if static is defined}}",
-                                        "route_policy": "{{route_policy}}",
-                                        "metric": "{{metric}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "redistribute": {
+                            "static": {
+                                "set": "{{True if static is defined}}",
+                                "route_policy": "{{route_policy}}",
+                                "metric": "{{metric}}",
                             }
                         }
                     }
@@ -1399,17 +1320,13 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_redistraibute_subscriber,
             "compval": "redistribute.subscriber",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "redistribute": {
-                                    "subscriber": {
-                                        "set": "{{True if set is defined}}",
-                                        "route_policy": "{{route_policy}}",
-                                        "metric": "{{metric}}",
-                                    }
-                                }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "redistribute": {
+                            "subscriber": {
+                                "set": "{{True if set is defined}}",
+                                "route_policy": "{{route_policy}}",
+                                "metric": "{{metric}}",
                             }
                         }
                     }
@@ -1426,7 +1343,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": "inter-as install",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "inter_as_install": "{{True if inter_as is defined}}"
                     }
                 }
@@ -1443,7 +1360,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": "segmented-multicast",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "segmented_multicast": "{{True if segmented_multicast is defined}}"
                     }
                 }
@@ -1460,7 +1377,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": "global-table-multicast",
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "global_table_multicast": "{{True if global_table_multicast is defined}}"
                     }
                 }
@@ -1477,13 +1394,9 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             ),
             "setval": "table-policy {{table_policy}}",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "table_policy": "{{table_policy}}"
-                            }
-                        }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "table_policy": "{{table_policy}}"
                     }
                 }
             }
@@ -1504,7 +1417,7 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_vrf_all,
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
                         "vrf_all_conf": {
                             "source_rt_import_policy": "{{ True if source_rt_import_policy is defined}}",
                             "table_policy": "{{table_policy}}",
@@ -1517,7 +1430,6 @@ class Bgp_address_familyTemplate(NetworkTemplate):
                     }
                 }
             }
-
         },
         {
             "name": "weight",
@@ -1530,20 +1442,15 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             ),
             "setval": _tmpl_wt,
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "weight": {
-                                    "reset_on_import_disable": "{{ True if reset_on_import_disable is defined}}",
-                                    "reset_on_import": "{{ True if reset_on_import is defined}}"
-                                }
-                            }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "weight": {
+                            "reset_on_import_disable": "{{ True if reset_on_import_disable is defined}}",
+                            "reset_on_import": "{{ True if reset_on_import is defined}}"
                         }
                     }
                 }
             }
-
         },
         {
             "name": "route_target_download",
@@ -1555,14 +1462,10 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             ),
             "setval": "route-target download",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                    "route_target_download": "{{True if value is defined }}"
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "route_target_download": "{{True if value is defined }}"
 
-                            }
-                        }
                     }
                 }
             }
@@ -1577,14 +1480,9 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             ),
             "setval": "mvpn single-forwarder-selection all",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "mvpn_single_forwarder_selection_all": "{{True if value is defined }}"
-
-                            }
-                        }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "mvpn_single_forwarder_selection_all": "{{True if value is defined }}"
                     }
                 }
             }
@@ -1599,14 +1497,9 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             ),
             "setval": "mvpn single-forwarder-selection highest-ip-address",
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                                "mvpn_single_forwarder_selection_highest_ip_address": "{{True if value is defined }}"
-
-                            }
-                        }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "mvpn_single_forwarder_selection_highest_ip_address": "{{True if value is defined }}"
                     }
                 }
             }
@@ -1623,17 +1516,13 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             ),
             "setval": _tmpl_label_mode,
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "address_family": {
-                            '{{"address_family_" + afi|d() + "_" + af_modifier|d()}}': {
-                               "label_mode":{
-                                   "per_ce": "{{ True if per_ce is defined}}",
-                                   "per_prefix": "{{ True if per_prefix is defined}}",
-                                   "per_vrf": "{{ True if per_vrf is defined}}",
-                                   "route_policy": "{{ route_policy}}"
-                               }
-                            }
+                "address_family": {
+                    '{{"address_family_" + afi + "_" + af_modifier + "_vrf_" + vrf|d() }}': {
+                        "label_mode": {
+                            "per_ce": "{{ True if per_ce is defined}}",
+                            "per_prefix": "{{ True if per_prefix is defined}}",
+                            "per_vrf": "{{ True if per_vrf is defined}}",
+                            "route_policy": "{{ route_policy}}"
                         }
                     }
                 }
@@ -1642,4 +1531,3 @@ class Bgp_address_familyTemplate(NetworkTemplate):
 
         ]
     # fmt: on
-

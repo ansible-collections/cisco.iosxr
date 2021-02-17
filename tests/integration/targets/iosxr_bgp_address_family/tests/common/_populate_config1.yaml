@@ -1,3 +1,4 @@
+---
 - name: "Setup"
   cisco.iosxr.iosxr_config:
     lines:
