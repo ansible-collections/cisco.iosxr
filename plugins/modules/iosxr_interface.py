@@ -39,7 +39,6 @@ options:
     description:
     - Name of the interface to configure in C(type + path) format. e.g. C(GigabitEthernet0/0/0/0)
     type: str
-    required: true
   description:
     description:
     - Description of Interface being configured.
@@ -108,6 +107,7 @@ options:
         description:
         - Name of the interface to configure in C(type + path) format. e.g. C(GigabitEthernet0/0/0/0)
         type: str
+        required: true
       description:
         description:
         - Description of Interface being configured.

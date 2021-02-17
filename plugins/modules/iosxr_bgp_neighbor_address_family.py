@@ -13,12 +13,12 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = """
-module: iosxr_bgp_global
-short_description: Manages BGP global resource module.
+module: iosxr_bgp_neighbor_address_family
+short_description: Manages BGP neighbor address family resource module.
 description:
 - This module configures and manages the attributes of BGP global on Cisco IOS-XR platforms.
 version_added: 2.0.0
-author: Ashwini Mhatre (amhatre)
+author: Ashwini Mhatre (@amhatre)
 notes:
 - Tested against Cisco IOS-XR 6.1.3.
 - This module works with connection C(network_cli).
@@ -40,9 +40,6 @@ options:
                   - Neighbor router address.
                 type: str
                 required: true
-              remote_as:
-                description:
-                type: int
               address_family:
                 description: Enable address family and enter its config mode
                 type: list
@@ -52,10 +49,13 @@ options:
                     description: address family.
                     type: str
                     choices: [ 'ipv4', 'ipv6']
-                  af_modifier:
+                  safi:
                     description: Address Family modifier
                     type: str
                     choices: [ 'flowspec', 'mdt', 'multicast', 'mvpn', 'rt-filter', 'tunnel', 'unicast', 'labeled-unicast' ]
+                  vrf:
+                    description: VRF name.
+                    type: str
                   aigp:
                     description: AIGP attribute
                     type: dict
@@ -76,7 +76,7 @@ options:
                         disable:
                           description: disable Send AIGP value in MED.
                           type: bool
-                  allowas_in: &allowas_in
+                  allowas_in:
                     type: dict
                     description: Allow as-path with my AS present in it.
                     suboptions:
@@ -86,7 +86,7 @@ options:
                       set:
                         type: bool
                         description: set allowas_in
-                  as_override: &as_override
+                  as_override:
                     type: dict
                     description: Override matching AS-number while sending update
                     suboptions:
@@ -99,11 +99,11 @@ options:
                   bestpath_origin_as_allow_invalid:
                     type: bool
                     description: Change default route selection criteria.Allow BGP origin-AS knobs.
-                  capability_orf_prefix: &capability
+                  capability_orf_prefix:
                     type: str
                     description: Advertise address prefix ORF capability to this neighbor.
                     choices: ['both', 'send', 'none', 'receive']
-                  default_originate: &default_originate
+                  default_originate:
                     type: dict
                     description: Originate default route to this neighbor.
                     suboptions:
@@ -116,7 +116,7 @@ options:
                       inheritance_disable:
                         type: bool
                         description: Prevent default-originate from being inherited from the parent.
-                  long_lived_graceful_restart: &long_lived_graceful_restart
+                  long_lived_graceful_restart:
                     type: dict
                     description: Enable long lived graceful restart support.
                     suboptions:
@@ -133,7 +133,7 @@ options:
                           accept:
                             type: int
                             description: max accept time
-                  maximum_prefix: &maximum_prefix
+                  maximum_prefix:
                     type: dict
                     description: Maximum number of prefixes to accept from this peer.
                     suboptions:
@@ -152,7 +152,7 @@ options:
                       discard_extra_paths:
                         description: Discard extra paths when limit is exceeded.
                         type: bool
-                  multipath: &multipath
+                  multipath:
                     type: bool
                     description: Paths from this neighbor is eligible for multipath.
                   next_hop_self: &next_hop_self
@@ -181,7 +181,7 @@ options:
                   optimal_route_reflection_group_name: &optimal_route_reflection
                     type: str
                     description: Configure optimal-route-reflection group.
-                  orf_route_policy: &orf_route_policy
+                  orf_route_policy:
                     type: str
                     description: Specify ORF and inbound filtering criteria.'
                   origin_as:
@@ -195,7 +195,7 @@ options:
                           disable:
                             description: Disable RPKI origin-AS validation.
                             type: bool
-                  remove_private_AS: &remove_private_AS
+                  remove_private_AS:
                     type: dict
                     description: Remove private AS number from outbound updates.
                     suboptions:
@@ -211,27 +211,27 @@ options:
                       inheritance_disable:
                         type: bool
                         description: Prevent remove-private-AS from being inherited from the parent.
-                  route_policy: &route_policy
+                  route_policy:
                     type: str
                     description: Apply route policy to neighbor.
-                  route_reflector_client: &route_reflector_client
+                  route_reflector_client:
                     type: dict
                     description:  Configure a neighbor as Route Reflector client.
                     suboptions:
                       set:
                         type: bool
                         description: set route-reflector-client.
-                      inheritance-disable:
+                      inheritance_disable:
                         type: bool
                         description: Prevent route-reflector-client from being inherited from the parent.
-                  send_community_ebgp: &send_community_ebgp
+                  send_community_ebgp:
                     description: Send community attribute to this external neighbor.
                     type: dict
                     suboption:
                       set:
                         type: bool
                         description: set send_community_ebgp.
-                      inheritance-disable:
+                      inheritance_disable:
                         type: bool
                         description: Prevent send_community_ebgp from being inherited from the parent.
                   send_community_gshut_ebgp: &send_community_gshut_ebgp
@@ -241,7 +241,7 @@ options:
                       set:
                         type: bool
                         description: set send_community_gshut_ebgp.
-                      inheritance-disable:
+                      inheritance_disable:
                         type: bool
                         description: Prevent send_community_gshut_ebgp from being inherited from the parent.
                   send_extended_community_ebgp: &send_extended_community_ebgp
@@ -251,7 +251,7 @@ options:
                       set:
                         type: bool
                         description: set send_extended_community_ebgp.
-                      inheritance-disable:
+                      inheritance_disable:
                         type: bool
                         description: Prevent send_extended_community_ebgp from being inherited from the parent.
                   send_multicast_attributes:
@@ -264,20 +264,27 @@ options:
                       disable:
                         type: bool
                         description: Disable send multicast attributes.
-                  soft_reconfiguration: &soft_reconfiguration
+                  soft_reconfiguration:
                     description: Per neighbor soft reconfiguration.
                     type: dict
                     suboptions:
-                      inbound_always:
-                        type: bool
-                        description: Allow inbound soft reconfiguration for this neighbor. Always use soft reconfig, even if route refresh is supported.
-                      inbound_inheritance-disable:
-                        type: bool
-                        description: Prevent soft_reconfiguration from being inherited from the parent.
-                  weight: &wt
+                      inbound:
+                        type: dict
+                        description: inbound soft reconfiguration
+                        suboptions:
+                          set:
+                            type: bool
+                            description: set inbound
+                          always:
+                            type: bool
+                            description: Allow inbound soft reconfiguration for this neighbor. Always use soft reconfig, even if route refresh is supported.
+                          inheritance_disable:
+                            type: bool
+                            description: Prevent soft_reconfiguration from being inherited from the parent.
+                  weight:
                     type: int
                     description: Set default weight for routes from this neighbor.
-                  validation: &validation
+                  validation:
                     type: dict
                     description: Flowspec Validation for this neighbor.
                     suboptions:
@@ -290,95 +297,6 @@ options:
                       disable:
                         type: bool
                         description:  disable validation.
-        vrfs:
-          description: Configure BGP in a VRF.
-          type: list
-          elements: dict
-          suboptions:
-            vrf_name:
-             description: VRF name.
-             type: str
-            neighbors:
-                description: Specify a neighbor router.
-                type: list
-                elements: dict
-                suboptions:
-                  neighbor:
-                    description:
-                      - Neighbor router address.
-                    type: str
-                    required: true
-                  remote_as:
-                    description:
-                    type: int
-                  address_family:
-                    description: Enable address family and enter its config mode
-                    type: list
-                    elements: dict
-                    suboptions:
-                      afi: *afi
-                      af_modifier:
-                        description: Address Family modifier
-                        type: str
-                        choices: [ 'flowspec', 'multicast', 'mvpn', 'unicast', 'labeled-unicast' ]
-                      aigp:
-                        type: dict
-                        description: Enable AIGP for this neighbor .
-                        suboptions:
-                          set:
-                            type: bool
-                            description: set aigp
-                          disable:
-                            type: bool
-                            description: disable aigp.
-                          send:
-                            type: dict
-                            description: Copy AIGP
-                            suboptions:
-                              med:
-                                type: dict
-                                description: Send AIGP value in MED.
-                                suboptions:
-                                  set:
-                                    type: bool
-                                    description: set med
-                                  disable:
-                                    type: bool
-                                    description: disable med
-                              cost_community:
-                                type: dict
-                                description: Send AIGP value in cost-community.
-                                suboptions:
-                                  set:
-                                    type: bool
-                                    description: set cost-community.
-                                  disable:
-                                    type: bool
-                                    description: disable cost-community.
-                      allowas_in: *allowas_in
-                      as_overrride: *as_override
-                      capability_orf_prefix: *capability
-                      default_originate: *default_originate
-                      long_lived_graceful_restart: *long_lived_graceful_restart
-                      maximum_prefix: *maximum_prefix
-                      multipath: *multipath
-                      next_hop_self: *next_hop_self
-                      next_hop_unchanged: *next_hop_unchanged
-                      optimal_route_reflection_group_name: *optimal_route_reflection
-                      orf_route_policy: *orf_route_policy
-                      remove_private_AS: *remove_private_AS
-                      route_policy: *route_policy
-                      route_reflector_client: *route_reflector_client
-                      send_community_ebgp: *send_community_ebgp
-                      send_community_gshut_ebgp: *send_community_gshut_ebgp
-                      send_extended_community_ebgp: *send_extended_community_ebgp
-                      soft_reconfiguration: *soft_reconfiguration
-                      site_of_origin:
-                        description: Site-of-Origin extended community associated with the neighbor.
-                        type: str
-                      weight: *wt
-                      validation: *validation
-
     running_config:
       description:
       - This option is used only with state I(parsed).

@@ -65,28 +65,8 @@ class Bgp_neighbor_address_familyFacts(object):
         # parse native config using the Bgp_global template
         bgp_global_parser = Bgp_neighbor_address_familyTemplate(lines=data.splitlines())
         objs = bgp_global_parser.parse()
-        vrfs = objs.get("vrfs", {})
-
-        # move global vals to their correct position in facts tree
-        # this is only needed for keys that are common between both global
-        # and VRF contexts
-        global_vals = vrfs.pop("vrf_", {})
-        for key, value in iteritems(global_vals):
-            if objs.get(key):
-                objs[key] = utils.dict_merge(objs[key], value)
-            else:
-                objs[key] = value
-        # transform vrfs into a list
-        if vrfs:
-            objs["vrfs"] = sorted(
-                list(objs["vrfs"].values()), key=lambda k, sk="vrf": k[sk]
-            )
-            for vrf in objs["vrfs"]:
-                self._post_parse(vrf)
-        else:
-            objs["vrfs"] = []
-
         self._post_parse(objs)
+
         ansible_facts["ansible_network_resources"].pop("bgp_neighbor_address_family", None)
 
         params = utils.remove_empties(

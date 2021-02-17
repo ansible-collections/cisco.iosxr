@@ -53,7 +53,25 @@ class Bgp_neighbor_address_family(ResourceModule):
             "allowas_in",
             "as_override",
             "bestpath_origin_as_allow_invalid",
-            "long_lived_graceful_restart"
+            "capability_orf_prefix",
+            "default_originate",
+            "long_lived_graceful_restart",
+            "maximum_prefix",
+            "multipath",
+            "next_hop_self",
+            "next_hop_unchanged",
+            "optimal_route_reflection_group_name",
+            "origin_as",
+            "remove_private_AS",
+            "route_reflector_client",
+            "send_community_ebgp",
+            "send_community_gshut_ebgp",
+            "send_extended_community_ebgp",
+            "send_multicast_attributes",
+            "soft_reconfiguration",
+            "weight",
+            "site_of_origin",
+            "validation"
         ]
 
     def execute_module(self):
@@ -63,8 +81,7 @@ class Bgp_neighbor_address_family(ResourceModule):
         :returns: The result from module execution
         """
         if self.state not in ["parsed", "gathered"]:
-            #import epdb;
-            #epdb.serve()
+            import epdb; epdb.serve()
             self.generate_commands()
             self.run_commands()
         return self.result
@@ -104,7 +121,6 @@ class Bgp_neighbor_address_family(ResourceModule):
         """
 
         self._compare_neighbors(want=want, have=have)
-        self._vrfs_compare(want=want, have=have)
         if self.commands and "router bgp" not in self.commands[0]:
             self.commands.insert(
                 0,
@@ -113,7 +129,8 @@ class Bgp_neighbor_address_family(ResourceModule):
                 ),
             )
 
-    def _compare_neighbors(self, want, have, vrf=None):
+
+    def _compare_neighbors(self, want, have):
         """Leverages the base class `compare()` method and
                    populates the list of commands to be run by comparing
                    the `want` and `have` data with the `parsers` defined
@@ -121,6 +138,7 @@ class Bgp_neighbor_address_family(ResourceModule):
                 """
         want_nbr = want.get("neighbors", {})
         have_nbr = have.get("neighbors", {})
+        vrf_want_have = []
         for name, entry in iteritems(want_nbr):
             have = have_nbr.pop(name, {})
             begin = len(self.commands)
@@ -133,8 +151,8 @@ class Bgp_neighbor_address_family(ResourceModule):
                         {"neighbor": neighbor_address}, "neighbor", False
                     ),
                 )
+
         # for deleted and overridden state
-                # for deleted and overridden state
         if self.state != "replaced":
             for name, entry in iteritems(have_nbr):
                 begin = len(self.commands)
@@ -143,10 +161,16 @@ class Bgp_neighbor_address_family(ResourceModule):
                     self.commands.insert(
                         begin,
                         self._tmplt.render(
-                            {"neighbor": neighbor_address}, "neighbor", False
-                        ),
-
+                            {"neighbor": name}, "neighbor", False),
                     )
+                    if "vrf" in entry.get("address_family"):
+                        self.commands.insert(
+                            begin,
+                            self._tmplt.render(
+                                self._tmplt.render({"vrf": entry.get("address_family").get("vrf")}, "vrf",False),
+                            )
+                        )
+
 
     def _compare_af(self, want, have):
         """Custom handling of afs option
@@ -155,54 +179,37 @@ class Bgp_neighbor_address_family(ResourceModule):
         """
         wafs = want.get("address_family", {})
         hafs = have.get("address_family", {})
+        vrf_want_have = []
         for name, entry in iteritems(wafs):
             begin = len(self.commands)
             af_have = hafs.pop(name, {})
+            if entry.get("vrf"):
+                vrf_want_have((entry,af_have))
             self.compare(parsers=self.parsers, want=entry, have=af_have)
             if len(self.commands) != begin:
                 self.commands.insert(
                     begin,
                     self._tmplt.render(
-                        {"afi": entry.get("afi"), "af_modifier": entry.get("af_modifier")}, "address_family", False
+                        {"afi": entry.get("afi"), "safi": entry.get("safi")}, "address_family", False
                     ),
+                )
+
+                # compare af under vrf separately to ensure correct generation of commands
+        for waf, haf in vrf_want_have:
+            begin = len(self.commands)
+            self._compare_af(want=waf, have=haf)
+            if len(self.commands) != begin:
+                self.commands.insert(
+                        begin,
+                        self._tmplt.render({"vrf": waf.get("vrf")}, "vrf", False),
                 )
 
         # for deleted and overridden state
         if self.state != "replaced":
             for name, entry in iteritems(hafs):
-                self.addcmd({"afi": entry.get("afi"), "af_modifier": entry.get("af_modifier")}, "address_family", True)
+                self.addcmd({"afi": entry.get("afi"), "safi": entry.get("safi")}, "address_family", True)
 
-    def _vrfs_compare(self, want, have):
-        """Custom handling of VRFs option
-        :params want: the want BGP dictionary
-        :params have: the have BGP dictionary
-        """
-        wvrfs = want.get("vrfs", {})
-        hvrfs = have.get("vrfs", {})
-        for name, entry in iteritems(wvrfs):
-            begin = len(self.commands)
-            vrf_have = hvrfs.pop(name, {})
-            self._compare_neighbors(want=entry, have=vrf_have)
-            if len(self.commands) != begin:
-                self.commands.insert(
-                    begin,
-                    self._tmplt.render(
-                        {"vrf": entry.get("vrf")}, "vrf", False
-                    ),
-                )
 
-        # for deleted and overridden state
-        if self.state != "replaced":
-            for name, entry in iteritems(hvrfs):
-                begin = len(self.commands)
-                self._compare_neighbors(want={}, have=entry)
-                if len(self.commands) != begin:
-                    self.commands.insert(
-                        begin,
-                        self._tmplt.render(
-                            {"vrf": entry.get("vrf")}, "vrf", False
-                        ),
-                    )
 
 
     def _bgp_list_to_dict(self, entry):
@@ -211,19 +218,6 @@ class Bgp_neighbor_address_family(ResourceModule):
         :params entry: data dictionary
         """
 
-        def _build_key(x):
-            """Build primary key for path_attribute
-               option.
-            :params x: path_attribute dictionary
-            :returns: primary key as tuple
-            """
-            key_1 = "start_{0}".format(x.get("range", {}).get("start", ""))
-            key_2 = "end_{0}".format(x.get("range", {}).get("end", ""))
-            key_3 = "type_{0}".format(x.get("type", ""))
-            key_4 = x["action"]
-
-            return (key_1, key_2, key_3, key_4)
-
         if "neighbors" in entry:
             entry["neighbors"] = {
                 x["neighbor"]: x for x in entry.get("neighbors", [])
@@ -231,12 +225,5 @@ class Bgp_neighbor_address_family(ResourceModule):
             for neighbor, value in iteritems(entry["neighbors"]):
                 if "address_family" in value:
                     entry["neighbors"][neighbor]["address_family"] = {
-                        "address_family_" + x["afi"] + "_" + x["af_modifier"]: x for x in value.get("address_family", [])
+                        "address_family_" + x["afi"] + "_" + x["safi"] +"_vrf_" +x.get("vrf", ""): x for x in value.get("address_family", [])
                     }
-
-
-
-        if "vrfs" in entry:
-            entry["vrfs"] = {x["vrf"]: x for x in entry.get("vrfs", [])}
-            for _k, vrf in iteritems(entry["vrfs"]):
-                self._bgp_list_to_dict(vrf)

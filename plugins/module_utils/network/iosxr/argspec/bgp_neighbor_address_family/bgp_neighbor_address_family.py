@@ -44,7 +44,6 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                     "elements": "dict",
                     "options": {
                         "neighbor": {"type": "str", "required": True},
-                        "remote_as": {"type": "int"},
                         "address_family": {
                             "type": "list",
                             "elements": "dict",
@@ -53,7 +52,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                     "type": "str",
                                     "choices": ["ipv4", "ipv6"],
                                 },
-                                "af_modifier": {
+                                "safi": {
                                     "type": "str",
                                     "choices": [
                                         "flowspec",
@@ -66,6 +65,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         "labeled-unicast",
                                     ],
                                 },
+                                "vrf": {"type": "str"},
                                 "aigp": {
                                     "type": "dict",
                                     "options": {
@@ -174,7 +174,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "set": {"type": "bool"},
-                                        "inheritance-disable": {"type": "bool"},
+                                        "inheritance_disable": {"type": "bool"},
                                     },
                                 },
                                 "send_community_ebgp": {"type": "dict"},
@@ -183,7 +183,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "set": {"type": "bool"},
-                                        "inheritance-disable": {"type": "bool"},
+                                        "inheritance_disable": {"type": "bool"},
                                     },
                                 },
                                 "send_multicast_attributes": {
@@ -196,10 +196,16 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                 "soft_reconfiguration": {
                                     "type": "dict",
                                     "options": {
-                                        "inbound_always": {"type": "bool"},
-                                        "inbound_inheritance-disable": {
-                                            "type": "bool"
-                                        },
+                                        "inbound": {
+                                            "type": "dict",
+                                            "options": {
+                                                "set": {"type": "bool"},
+                                                "always": {"type": "bool"},
+                                                "inheritance_disable": {
+                                                    "type": "bool"
+                                                },
+                                            },
+                                        }
                                     },
                                 },
                                 "weight": {"type": "int"},
@@ -209,212 +215,6 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         "set": {"type": "bool"},
                                         "redirect": {"type": "bool"},
                                         "disable": {"type": "bool"},
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-                "vrfs": {
-                    "type": "list",
-                    "elements": "dict",
-                    "options": {
-                        "vrf_name": {"type": "str"},
-                        "neighbors": {
-                            "type": "list",
-                            "elements": "dict",
-                            "options": {
-                                "neighbor": {"type": "str", "required": True},
-                                "remote_as": {"type": "int"},
-                                "address_family": {
-                                    "type": "list",
-                                    "elements": "dict",
-                                    "options": {
-                                        "afi": {
-                                            "type": "str",
-                                            "choices": ["ipv4", "ipv6"],
-                                        },
-                                        "af_modifier": {
-                                            "type": "str",
-                                            "choices": [
-                                                "flowspec",
-                                                "multicast",
-                                                "mvpn",
-                                                "unicast",
-                                                "labeled-unicast",
-                                            ],
-                                        },
-                                        "aigp": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "disable": {"type": "bool"},
-                                                "send": {
-                                                    "type": "dict",
-                                                    "options": {
-                                                        "med": {
-                                                            "type": "dict",
-                                                            "options": {
-                                                                "set": {
-                                                                    "type": "bool"
-                                                                },
-                                                                "disable": {
-                                                                    "type": "bool"
-                                                                },
-                                                            },
-                                                        },
-                                                        "cost_community": {
-                                                            "type": "dict",
-                                                            "options": {
-                                                                "set": {
-                                                                    "type": "bool"
-                                                                },
-                                                                "disable": {
-                                                                    "type": "bool"
-                                                                },
-                                                            },
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
-                                        "allowas_in": {
-                                            "type": "dict",
-                                            "options": {
-                                                "value": {"type": "int"},
-                                                "set": {"type": "bool"},
-                                            },
-                                        },
-                                        "as_overrride": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "inheritance_disable": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                        "capability_orf_prefix": {
-                                            "type": "str",
-                                            "choices": [
-                                                "both",
-                                                "send",
-                                                "none",
-                                                "receive",
-                                            ],
-                                        },
-                                        "default_originate": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "route_policy": {"type": "str"},
-                                                "inheritance_disable": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                        "long_lived_graceful_restart": {
-                                            "type": "dict",
-                                            "options": {
-                                                "capable": {"type": "bool"},
-                                                "stale_time": {
-                                                    "type": "dict",
-                                                    "options": {
-                                                        "send": {"type": "int"},
-                                                        "accept": {"type": "int"},
-                                                    },
-                                                },
-                                            },
-                                        },
-                                        "maximum_prefix": {
-                                            "type": "dict",
-                                            "options": {
-                                                "max_limit": {"type": "int"},
-                                                "threshold_value": {"type": "int"},
-                                                "restart": {"type": "int"},
-                                                "warning_only": {"type": "bool"},
-                                                "discard_extra_paths": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                        "multipath": {"type": "bool"},
-                                        "next_hop_self": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "inheritance_disable": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                        "next_hop_unchanged": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "inheritance_disable": {
-                                                    "type": "bool"
-                                                },
-                                                "multipath": {"type": "bool"},
-                                            },
-                                        },
-                                        "optimal_route_reflection_group_name": {
-                                            "type": "str"
-                                        },
-                                        "orf_route_policy": {"type": "str"},
-                                        "remove_private_AS": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "inbound": {"type": "bool"},
-                                                "entire_aspath": {"type": "bool"},
-                                                "inheritance_disable": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                        "route_policy": {"type": "str"},
-                                        "route_reflector_client": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "inheritance-disable": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                        "send_community_ebgp": {"type": "dict"},
-                                        "send_community_gshut_ebgp": {
-                                            "type": "dict"
-                                        },
-                                        "send_extended_community_ebgp": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "inheritance-disable": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                        "soft_reconfiguration": {
-                                            "type": "dict",
-                                            "options": {
-                                                "inbound_always": {"type": "bool"},
-                                                "inbound_inheritance-disable": {
-                                                    "type": "bool"
-                                                },
-                                            },
-                                        },
-                                        "site_of_origin": {"type": "str"},
-                                        "weight": {"type": "int"},
-                                        "validation": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "redirect": {"type": "bool"},
-                                                "disable": {"type": "bool"},
-                                            },
-                                        },
                                     },
                                 },
                             },
