@@ -183,7 +183,7 @@ options:
               description: Log bgp info
               type: dict
               suboptions:
-                message:
+                log_message:
                   description: Log neighbor inbound/outbound message.
                   type: dict
                   suboptions:
@@ -558,7 +558,7 @@ options:
               description: Logging update messages per neighbor.
               type: dict
               suboptions:
-                message:
+                log_message:
                   description: Logging update/notification messages per neighbor.
                   type: dict
                   suboptions:
@@ -682,7 +682,7 @@ options:
                               disable:
                                 description: Disable update filtering syslog message.
                                 type: bool
-                        message:
+                        update_message:
                           description: Filtered update messages.
                           type: dict
                           suboptions:

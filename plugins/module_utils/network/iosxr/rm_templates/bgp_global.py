@@ -706,13 +706,13 @@ class Bgp_globalTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "bgp log message disable",
-            "compval": "bgp.log.message.disable",
+            "compval": "bgp.log_message.message.disable",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "bgp": {
                             "log": {
-                                "message": {"disable": "{{ True if log_message is defined }}"}
+                                "log_message": {"disable": "{{ True if log_message is defined }}"}
                             }
                         }
                     }
@@ -2568,14 +2568,14 @@ class Bgp_globalTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "log message in {{ log.message.in.value}}",
-            "compval": "log.message.in.value",
+            "compval": "log.log_message.in.value",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "log": {
-                                    "message": {
+                                    "log_message": {
                                         "in": {
                                             "value": "{{ value.split(" ")[1] }}"}}}
                             }
@@ -2595,14 +2595,14 @@ class Bgp_globalTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "log message in disable",
-            "compval": "log.message.in.disable",
+            "compval": "log.log_message.in.disable",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "log": {
-                                    "message": {
+                                    "log_message": {
                                         "in": {
                                             "disable": "{{ True if disable is defined }}"}}}
                             }
@@ -2622,14 +2622,14 @@ class Bgp_globalTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "log message in inheritance-diable",
-            "compval": "log.message.in.inheritance_disable",
+            "compval": "log.log_message.in.inheritance_disable",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "log": {
-                                    "message": {
+                                    "log_message": {
                                         "in": {
                                             "inheritance_disable": "{{ True if disable is defined }}"}}}
                             }
@@ -2649,14 +2649,14 @@ class Bgp_globalTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "log message out {{ log.message.out.value}}",
-            "compval": "log.message.out.value",
+            "compval": "log.log_message.out.value",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "log": {
-                                    "message": {
+                                    "log_message": {
                                         "out": {
                                             "value": "{{ value.split(" ")[1] }}"}}}
                             }
@@ -2676,14 +2676,14 @@ class Bgp_globalTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "log message out disable",
-            "compval": "log.message.out.disable",
+            "compval": "log.log_message.out.disable",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "log": {
-                                    "message": {
+                                    "log_message": {
                                         "out": {
                                             "disable": "{{ True if disable is defined }}"}}}
                             }
@@ -2703,14 +2703,14 @@ class Bgp_globalTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "log message out inheritance-diable",
-            "compval": "log.message.out.inheritance_disable",
+            "compval": "log.log_message.out.inheritance_disable",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "log": {
-                                    "message": {
+                                    "log_message": {
                                         "out": {
                                             "inheritance_disable": "{{ True if disable is defined }}"}}}
                             }
@@ -2780,7 +2780,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "update in filtering message buffers {{ update.in.filtering.message.buffers}}",
-            "compval": "update.in.filtering.message.buffers",
+            "compval": "update.in.filtering.update_message.buffers",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
@@ -2789,7 +2789,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                                 "update": {
                                     "in": {
                                         "filtering": {
-                                            "message": {
+                                            "update_message": {
                                                 "buffers": "{{ message_buffers.split(" ")[2] }}"}}}}
                             }
                         }
