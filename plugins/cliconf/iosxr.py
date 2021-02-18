@@ -28,6 +28,18 @@ description:
 - This iosxr plugin provides low level abstraction apis for sending and receiving
   CLI commands from Cisco IOS XR network devices.
 version_added: 1.0.0
+options:
+  config_commands:
+    description:
+    - Specifies a list of commands that can make configuration changes
+      to the target device.
+    - When `ansible_network_single_user_mode` is enabled, if a command sent
+      to the device is present in this list, the existing cache is invalidated.
+    version_added: 2.0.0
+    type: list
+    default: []
+    vars:
+    - name: ansible_iosxr_config_commands
 """
 
 import re
@@ -52,36 +64,43 @@ from ansible.plugins.cliconf import CliconfBase
 
 
 class Cliconf(CliconfBase):
+    def __init__(self, *args, **kwargs):
+        self._device_info = {}
+        super(Cliconf, self).__init__(*args, **kwargs)
+
     def get_device_info(self):
-        device_info = {}
+        if not self._device_info:
+            device_info = {}
 
-        device_info["network_os"] = "iosxr"
-        reply = self.get("show version | utility head -n 20")
-        data = to_text(reply, errors="surrogate_or_strict").strip()
+            device_info["network_os"] = "iosxr"
+            reply = self.get("show version | utility head -n 20")
+            data = to_text(reply, errors="surrogate_or_strict").strip()
 
-        match = re.search(r"Version (\S+)$", data, re.M)
-        if match:
-            device_info["network_os_version"] = match.group(1)
-
-        match = re.search(r'image file is "(.+)"', data)
-        if match:
-            device_info["network_os_image"] = match.group(1)
-
-        model_search_strs = [
-            r"^[Cc]isco (.+) \(revision",
-            r"^[Cc]isco (\S+ \S+).+bytes of .*memory",
-        ]
-        for item in model_search_strs:
-            match = re.search(item, data, re.M)
+            match = re.search(r"Version (\S+)$", data, re.M)
             if match:
-                device_info["network_os_model"] = match.group(1)
-                break
+                device_info["network_os_version"] = match.group(1)
 
-        match = re.search(r"^(.+) uptime", data, re.M)
-        if match:
-            device_info["network_os_hostname"] = match.group(1)
+            match = re.search(r'image file is "(.+)"', data)
+            if match:
+                device_info["network_os_image"] = match.group(1)
 
-        return device_info
+            model_search_strs = [
+                r"^[Cc]isco (.+) \(revision",
+                r"^[Cc]isco (\S+ \S+).+bytes of .*memory",
+            ]
+            for item in model_search_strs:
+                match = re.search(item, data, re.M)
+                if match:
+                    device_info["network_os_model"] = match.group(1)
+                    break
+
+            match = re.search(r"^(.+) uptime", data, re.M)
+            if match:
+                device_info["network_os_hostname"] = match.group(1)
+
+            self._device_info = device_info
+
+        return self._device_info
 
     def configure(self, admin=False, exclusive=False):
         prompt = to_text(
