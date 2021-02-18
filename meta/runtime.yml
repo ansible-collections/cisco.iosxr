@@ -18,6 +18,9 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr
     bgp:
       redirect: cisco.iosxr.iosxr
+      deprecation:
+        removal_date: '2023-01-29'
+        warning_text: See the plugin documentation for more details
     iosxr_command:
       redirect: cisco.iosxr.iosxr
     command:
@@ -98,6 +101,10 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr
     user:
       redirect: cisco.iosxr.iosxr
+    iosxr_bgp_global:
+      redirect: cisco.iosxr.iosxr
+    bgp_global:
+      redirect: cisco.iosxr.iosxr
   modules:
     acl_interfaces:
       redirect: cisco.iosxr.iosxr_acl_interfaces
@@ -107,6 +114,9 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr_banner
     bgp:
       redirect: cisco.iosxr.iosxr_bgp
+      deprecation:
+        removal_date: '2023-01-29'
+        warning_text: See the plugin documentation for more details
     command:
       redirect: cisco.iosxr.iosxr_command
     config:
@@ -154,3 +164,5 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr_system
     user:
       redirect: cisco.iosxr.iosxr_user
+    bgp_global:
+      redirect: cisco.iosxr.iosxr
