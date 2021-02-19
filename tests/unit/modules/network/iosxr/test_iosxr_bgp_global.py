@@ -45,7 +45,8 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         )
 
         self.mock_get_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_global.bgp_global.Bgp_globalFacts.get_config"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_global.bgp_global."
+            "Bgp_globalFacts.get_config"
         )
         self.get_config = self.mock_get_config.start()
 
