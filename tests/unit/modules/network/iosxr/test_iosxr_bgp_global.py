@@ -37,14 +37,16 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         super(TestIosxrBgpGlobalModule, self).setUp()
 
         self.mock_get_resource_connection = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base."
+            "get_resource_connection"
         )
         self.get_resource_connection = (
             self.mock_get_resource_connection.start()
         )
 
         self.mock_get_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_global.bgp_global.Bgp_globalFacts.get_config"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_global.bgp_global."
+            "Bgp_globalFacts.get_config"
         )
         self.get_config = self.mock_get_config.start()
 
