@@ -1,0 +1,23 @@
+---
+- name: "Setup"
+  cisco.iosxr.iosxr_config:
+    lines:
+      - "router bgp 65536"
+      - "bgp cluster-id 5"
+      - "bgp router-id 192.0.2.10"
+      - "bgp bestpath med confed"
+      - "bgp confederation identifier 4"
+      - "default-metric 4"
+      - "socket receive-buffer-size 514"
+      - "socket send-buffer-size 4098"
+      - "neighbor 192.0.2.11"
+      - "cluster-id 3"
+      - "remote-as 65537"
+      - "neighbor 192.0.2.14"
+      - "bfd fast-detect strict-mode"
+      - "bfd minimum-interval 20"
+      - "bfd multiplier 6"
+      - "remote-as 65538"
+
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
