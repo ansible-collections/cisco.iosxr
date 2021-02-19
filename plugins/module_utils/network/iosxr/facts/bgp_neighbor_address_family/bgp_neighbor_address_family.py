@@ -59,9 +59,11 @@ class Bgp_neighbor_address_familyFacts(object):
         facts = {}
         objs = []
         bgp_global_config = []
+
         if not data:
             data = self.get_config(connection)
-        data = self._flatten_config(data, "neighbor")
+        nbr_data = self._flatten_config(data, "neighbor")
+        data = self._flatten_config(nbr_data, "vrf")
         # parse native config using the Bgp_global template
         bgp_global_parser = Bgp_neighbor_address_familyTemplate(lines=data.splitlines())
         objs = bgp_global_parser.parse()
@@ -88,10 +90,10 @@ class Bgp_neighbor_address_familyFacts(object):
             obj["neighbors"] = sorted(
                 list(neighbors.values()), key=lambda k, sk="neighbor": k[sk]
             )
-        for neighbor in obj["neighbors"]:
-            af = neighbor.get("address_family", {})
-            if af:
-                neighbor["address_family"] = list(af.values())
+            for neighbor in obj["neighbors"]:
+                af = neighbor.get("address_family", {})
+                if af:
+                    neighbor["address_family"] = list(af.values())
 
     def _flatten_config(self, data, context):
         """ Flatten different contexts in

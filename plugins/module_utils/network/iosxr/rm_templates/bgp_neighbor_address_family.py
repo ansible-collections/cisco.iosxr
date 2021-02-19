@@ -85,7 +85,7 @@ def _tmpl_soft_reconfiguration(config_data):
     if conf:
         command = "soft-reconfiguration "
         if "inbound" in conf:
-            command += " inbound"
+            command += "inbound"
             if "set" in conf["inbound"]:
                 pass
             elif "always" in conf["inbound"]:
@@ -160,7 +160,8 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
         {
             "name": "address_family",
             "getval": re.compile(
-                r"""  
+                r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 (\s+(?P<nbr_address>neighbor\s\S+))
                 (?P<address_family>\s+address-family\s(?P<afi>\S+)\s(?P<safi>\S+))
                 $""", re.VERBOSE
@@ -186,6 +187,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "neighbor",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+neighbor\s(?P<value>\S+)
                 $""", re.VERBOSE
             ),
@@ -202,6 +204,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "aigp",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \saigp(?P<aigp>)
                 (\sdisable(?P<disable>))?
@@ -235,6 +238,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "allowas_in",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \sallowas-in(?P<allowas_in>)(\s(?P<value>\S+))?
                 $""", re.VERBOSE
@@ -260,6 +264,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "as_override",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \sas-override(?P<as_override>)
                 (\sinheritance-disable(?P<inheritance_disable>))?
@@ -285,6 +290,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "bestpath_origin_as_allow_invalid",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \sbestpath\sorigin-as\sallow\s(?P<invalid>invalid)
                 $""", re.VERBOSE
@@ -306,6 +312,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "capability_orf_prefix",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \scapability\sorf\sprefix\s(?P<capability_orf_prefix>\S+)
                 $""", re.VERBOSE
@@ -327,6 +334,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "default_originate",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \sdefault-originate(?P<default_originate>)
                 (\sroute-policy\s(?P<route_policy>\S+))?
@@ -354,6 +362,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "long_lived_graceful_restart_capable",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \s+long-lived-graceful-restart
                 \s(?P<capable>capable)
@@ -379,6 +388,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "long_lived_graceful_restart_stale_time",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \s+long-lived-graceful-restart
                 \s+stale-time\ssend\s(?P<stale_time_send>\d+)\saccept\s(?P<accept>\d+)
@@ -409,6 +419,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "maximum_prefix",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \s+maximum-prefix
                 (\s(?P<maximum_prefix>\d+))?
@@ -441,6 +452,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "multipath",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \smultipath(?P<multipath>)
                 $""", re.VERBOSE
@@ -462,6 +474,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "next_hop_self",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \snext-hop-self(?P<next_hop_self>)
                 (\sinheritance-disable(?P<inheritance_disable>))?
@@ -487,6 +500,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "next_hop_unchanged",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \snext-hop-unchanged(?P<next_hop_unchanged>)
                 (\sinheritance-disable(?P<inheritance_disable>))?
@@ -514,6 +528,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "optimal_route_reflection_group_name",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \soptimal-route-reflection\s(?P<group_name>\S+)
              
@@ -536,6 +551,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "orf_route_policy",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \sorf\sroute-policy\s(?P<orf_rr>\S+)
                 $""", re.VERBOSE
@@ -557,6 +573,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "origin_as",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \sorigin-as\svalidation\sdisable(?P<origin_as>)
                 $""", re.VERBOSE
@@ -583,6 +600,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "route_policy",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \sroute-policy\s(?P<route_policy>\S+)
                 $""", re.VERBOSE
@@ -604,6 +622,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "remove_private_AS",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \sremove-private-AS(?P<remove_private_AS>)
                 (\sinbound(?P<inbound>))?
@@ -633,6 +652,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "route_reflector_client",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \sroute-reflector-client(?P<route_reflector_client>)
                 (\sinheritance-disable(?P<inheritance_disable>))?
@@ -660,6 +680,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "send_community_ebgp",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \ssend-community-ebgp(?P<send_community_ebgp>)
                 (\sinheritance-disable(?P<inheritance_disable>))?
@@ -687,6 +708,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "send_community_gshut_ebgp",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \ssend-community-gshut-ebgp(?P<send_community_gshut_ebg>)
                 (\sinheritance-disable(?P<inheritance_disable>))?
@@ -714,6 +736,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "send_extended_community_ebgp",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \ssend-extended-community-ebgp(?P<send_extended_community_ebgp>)
                 (\sinheritance-disable(?P<inheritance_disable>))?
@@ -741,6 +764,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "send_multicast_attributes",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \s+(?P<send_multicast_attributes>send-multicast-attributes)
                 (\sdisable(?P<disable>))?
@@ -767,6 +791,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "soft_reconfiguration",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \ssoft-reconfiguration
                 \sinbound(?P<inbound>)
@@ -799,6 +824,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "weight",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \sweight\s(?P<weight>\d+)
                 $""", re.VERBOSE
@@ -820,6 +846,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "validation",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \svalidation(?P<validation>)
                 (\s(?P<redirect>redirect))?
@@ -847,6 +874,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "name": "site_of_origin",
             "getval": re.compile(
                 r"""
+                (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \ssite-of-origin\s(?P<site_of_origin>\S+)
                 $""", re.VERBOSE
