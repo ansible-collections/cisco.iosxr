@@ -45,6 +45,8 @@ class TerminalModule(TerminalBase):
         re.compile(br"Failed to commit", re.I),
     ]
 
+    terminal_config_prompt = re.compile(r"^.+\(config(-.*)?\)#$")
+
     def on_open_shell(self):
         try:
             for cmd in (

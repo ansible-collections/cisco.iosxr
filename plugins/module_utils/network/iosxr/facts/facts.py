@@ -68,6 +68,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.os
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_address_family.bgp_address_family import (
     Bgp_address_familyFacts,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_global.bgp_global import (
+    Bgp_globalFacts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -89,6 +92,7 @@ FACT_RESOURCE_SUBSETS = dict(
     ospfv3=Ospfv3Facts,
     ospf_interfaces=Ospf_interfacesFacts,
     bgp_address_family=Bgp_address_familyFacts,
+    bgp_global=Bgp_globalFacts,
 )
 
 
