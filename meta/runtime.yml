@@ -21,6 +21,10 @@ plugin_routing:
       deprecation:
         removal_date: '2023-01-29'
         warning_text: See the plugin documentation for more details
+    iosxr_bgp_address_family:
+      redirect: cisco.iosxr.iosxr
+    bgp_address_family:
+      redirect: cisco.iosxr.iosxr
     iosxr_command:
       redirect: cisco.iosxr.iosxr
     command:
@@ -164,5 +168,7 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr_system
     user:
       redirect: cisco.iosxr.iosxr_user
+    bgp_address_family:
+      redirect: cisco.iosxr.iosxr_bgp_address_family
     bgp_global:
-      redirect: cisco.iosxr.iosxr
+      redirect: cisco.iosxr.iosxr_bgp_global

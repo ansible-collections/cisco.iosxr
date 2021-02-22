@@ -1,0 +1,41 @@
+---
+- debug:
+    msg: Start iosxr_bgp_address_family deleted integration tests connection={{ ansible_connection}}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_config.yaml
+
+- block:
+
+    - name: Delete given bgp_address_family configuration
+      become: true
+      register: result
+      cisco.iosxr.iosxr_bgp_address_family: &deleted
+        config:
+          as_number: "65536"
+        state: deleted
+
+    - become: true
+      cisco.iosxr.iosxr_facts:
+        gather_network_resources: bgp_address_family
+
+    - assert:
+        that:
+          - result.commands|length == 2
+          - result.changed == true
+          - "'no router bgp 65536' not in result.commands"
+          - ansible_facts.network_resources.bgp_address_family == result.after
+          - result.after == deleted.after
+
+    - name: Idempotency check
+      become: true
+      register: result
+      cisco.iosxr.iosxr_bgp_address_family: *deleted
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+    - include_tasks: _remove_config.yaml
