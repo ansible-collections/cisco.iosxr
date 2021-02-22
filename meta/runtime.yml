@@ -23,8 +23,8 @@ plugin_routing:
         warning_text: See the plugin documentation for more details
     iosxr_bgp_address_family:
       redirect: cisco.iosxr.iosxr
-      bgp_address_family:
-        redirect: cisco.iosxr.iosxr
+    bgp_address_family:
+      redirect: cisco.iosxr.iosxr
     iosxr_command:
       redirect: cisco.iosxr.iosxr
     command:
