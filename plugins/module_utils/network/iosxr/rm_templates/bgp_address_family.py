@@ -939,22 +939,20 @@ class Bgp_address_familyTemplate(NetworkTemplate):
             "setval": _tmpl_update,
             "result": {
                 "address_family": {
-                    '{{"address_family_" + afi + "_" + safi + "_vrf_" + vrf|d() }}':
-                        {
-                            "update": {
-                                "wait_install": "{{True if wait is defined}}",
-                                "limit": {
-                                    "sub_group": {
-                                        "ibgp": "{{ibgp}}",
-                                        "ebgp": "{{ebgp}}"
-                                    },
-                                    "address_family": "{{af}}"
-                                }
+                    '{{"address_family_" + afi + "_" + safi + "_vrf_" + vrf|d() }}': {
+                        "update": {
+                            "wait_install": "{{True if wait is defined}}",
+                            "limit": {
+                                "sub_group": {
+                                    "ibgp": "{{ibgp}}",
+                                    "ebgp": "{{ebgp}}"
+                                },
+                                "address_family": "{{af}}"
                             }
                         }
                     }
                 }
-
+            }
         },
         {
             "name": "redistribute",
@@ -1188,6 +1186,5 @@ class Bgp_address_familyTemplate(NetworkTemplate):
                 }
             }
         },
-
-        ]
+    ]
     # fmt: on
