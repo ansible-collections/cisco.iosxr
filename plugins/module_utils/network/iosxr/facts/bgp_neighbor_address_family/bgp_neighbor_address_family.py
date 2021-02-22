@@ -67,7 +67,22 @@ class Bgp_neighbor_address_familyFacts(object):
         # parse native config using the Bgp_global template
         bgp_global_parser = Bgp_neighbor_address_familyTemplate(lines=data.splitlines())
         objs = bgp_global_parser.parse()
-        self._post_parse(objs)
+        #import epdb;epdb.serve()
+
+        if objs:
+            top_lvl_nbrs = objs.get("vrfs", {}).pop("vrf_", {})
+            objs["neighbors"] = self._post_parse(top_lvl_nbrs).get(
+                "neighbors", []
+            )
+
+            if "vrfs" in objs:
+                for vrf in objs["vrfs"].values():
+                    vrf["neighbors"] = self._post_parse(vrf)["neighbors"]
+                objs["vrfs"] = list(objs["vrfs"].values())
+
+        ansible_facts["ansible_network_resources"].pop(
+            "bgp_neighbor_address_family", None
+        )
 
         ansible_facts["ansible_network_resources"].pop("bgp_neighbor_address_family", None)
 
@@ -80,21 +95,19 @@ class Bgp_neighbor_address_familyFacts(object):
 
         return ansible_facts
 
-    def _post_parse(self, obj):
+    def _post_parse(self, data):
         """ Converts the intermediate data structure
             to valid format as per argspec.
         :param obj: dict
         """
-        neighbors = obj.get("neighbors", [])
-        if neighbors:
-            obj["neighbors"] = sorted(
-                list(neighbors.values()), key=lambda k, sk="neighbor": k[sk]
+        if "neighbors" in data:
+            data["neighbors"] = sorted(
+                list(data["neighbors"].values()),
+                key=lambda k, s="neighbor": k[s],
             )
-            for neighbor in obj["neighbors"]:
-                af = neighbor.get("address_family", {})
-                if af:
-                    neighbor["address_family"] = list(af.values())
-
+            for nbr in data["neighbors"]:
+                nbr["address_family"] = list(nbr["address_family"].values())
+        return data
     def _flatten_config(self, data, context):
         """ Flatten different contexts in
             the running-config for easier parsing.

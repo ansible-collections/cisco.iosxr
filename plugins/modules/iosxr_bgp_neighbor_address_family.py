@@ -53,7 +53,7 @@ options:
                     description: Address Family modifier
                     type: str
                     choices: [ 'flowspec', 'mdt', 'multicast', 'mvpn', 'rt-filter', 'tunnel', 'unicast', 'labeled-unicast' ]
-                  aigp:
+                  aigp: &aigp
                     description: AIGP attribute
                     type: dict
                     suboptions:
@@ -67,12 +67,15 @@ options:
                         description: send AIGP attribute.
                         type: bool
                       send_med:
-                        set:
-                          type: bool
-                          description: set Send AIGP value in MED.
-                        disable:
-                          description: disable Send AIGP value in MED.
-                          type: bool
+                        description: send med options.
+                        type: dict
+                        suboptions:
+                          set:
+                            type: bool
+                            description: set Send AIGP value in MED.
+                          disable:
+                            description: disable Send AIGP value in MED.
+                            type: bool
                   allowas_in: &allowas_in
                     type: dict
                     description: Allow as-path with my AS present in it.
@@ -322,40 +325,7 @@ options:
                         description: Address Family modifier
                         type: str
                         choices: [ 'flowspec', 'multicast', 'mvpn', 'unicast', 'labeled-unicast' ]
-                      aigp:
-                        type: dict
-                        description: Enable AIGP for this neighbor .
-                        suboptions:
-                          set:
-                            type: bool
-                            description: set aigp
-                          disable:
-                            type: bool
-                            description: disable aigp.
-                          send:
-                            type: dict
-                            description: Copy AIGP
-                            suboptions:
-                              med:
-                                type: dict
-                                description: Send AIGP value in MED.
-                                suboptions:
-                                  set:
-                                    type: bool
-                                    description: set med
-                                  disable:
-                                    type: bool
-                                    description: disable med
-                              cost_community:
-                                type: dict
-                                description: Send AIGP value in cost-community.
-                                suboptions:
-                                  set:
-                                    type: bool
-                                    description: set cost-community.
-                                  disable:
-                                    type: bool
-                                    description: disable cost-community.
+                      aigp: *aigp
                       allowas_in: *allowas_in
                       as_overrride: *as_override
                       capability_orf_prefix: *capability

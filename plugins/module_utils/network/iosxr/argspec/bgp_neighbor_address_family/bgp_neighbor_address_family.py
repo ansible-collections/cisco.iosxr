@@ -73,7 +73,13 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         "send_cost_community_disable": {
                                             "type": "bool"
                                         },
-                                        "send_med": {},
+                                        "send_med": {
+                                            "type": "dict",
+                                            "options": {
+                                                "set": {"type": "bool"},
+                                                "disable": {"type": "bool"},
+                                            },
+                                        },
                                     },
                                 },
                                 "allowas_in": {
@@ -251,32 +257,17 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         "aigp": {
                                             "type": "dict",
                                             "options": {
-                                                "set": {"type": "bool"},
                                                 "disable": {"type": "bool"},
-                                                "send": {
+                                                "set": {"type": "bool"},
+                                                "send_cost_community_disable": {
+                                                    "type": "bool"
+                                                },
+                                                "send_med": {
                                                     "type": "dict",
                                                     "options": {
-                                                        "med": {
-                                                            "type": "dict",
-                                                            "options": {
-                                                                "set": {
-                                                                    "type": "bool"
-                                                                },
-                                                                "disable": {
-                                                                    "type": "bool"
-                                                                },
-                                                            },
-                                                        },
-                                                        "cost_community": {
-                                                            "type": "dict",
-                                                            "options": {
-                                                                "set": {
-                                                                    "type": "bool"
-                                                                },
-                                                                "disable": {
-                                                                    "type": "bool"
-                                                                },
-                                                            },
+                                                        "set": {"type": "bool"},
+                                                        "disable": {
+                                                            "type": "bool"
                                                         },
                                                     },
                                                 },

@@ -157,13 +157,14 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
+                                "neighbor": "{{nbr_address.split(" ")[1]}}",
                                 "address_family": {
                                     '{{"address_family_" + afi + "_" + safi }}': {
                                         "afi": "{{ afi}}",
                                         "safi": "{{safi}}",
-                                        "vrf": "{{vrf|d()}}"
                                     }
                                 }
                             }
@@ -181,15 +182,16 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \saigp(?P<aigp>)
                 (\sdisable(?P<disable>))?
-                (\ssend\s(?P<send_med>med))?
-                (\ssend\smed(?P<send_disable>disable))?
-                (\ssend\scost-community\s(?P<cc_disable>disable))?
+                (\ssend\smed(?P<send_med>))?
+                (\ssend\smed\sdisable(?P<send_disable>))?
+                (\ssend\scost-community\sdisable(?P<cc_disable>))?
                 $""", re.VERBOSE
             ),
             "setval": _tmpl_aigp,
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -224,6 +226,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -253,13 +256,19 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             ),
             "setval": "as-override{{' inheritance-disable' if as_override.inheritance_disable is defined }}",
             "result": {
-                "neighbors": {
-                    "{{nbr_address.split(" ")[1]}}": {
-                        "address_family": {
-                            '{{"address_family_" + afi + "_" + safi + "_vrf_" + vrf|d()}}': {
-                                "as_override": {
-                                    "set": "{{True if as_override is defined and inheritance_disable is not defined}}",
-                                    "inheritance_disable": "{{True if inheritance_disable is defined}}"
+                "vrfs": {
+                    "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
+                        "neighbors": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "address_family": {
+                                    '{{"address_family_" + afi + "_" + safi }}': {
+                                        "as_override": {
+                                            "set": "{{True if as_override is defined "
+                                                   "and inheritance_disable is not defined}}",
+                                            "inheritance_disable": "{{True if inheritance_disable is defined}}"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -272,16 +281,21 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s+(?P<nbr_address>neighbor\s\S+)
-                \sbestpath\sorigin-as\sallow\s(?P<invalid>invalid)
+                \sbestpath\sorigin-as\sallow\sinvalid(?P<invalid>)
                 $""", re.VERBOSE
             ),
             "setval": "bestpath origin-as allow invalid",
             "result": {
-                "neighbors": {
-                    "{{nbr_address.split(" ")[1]}}": {
-                        "address_family": {
-                            '{{"address_family_" + afi + "_" + safi }}': {
-                                "bestpath_origin_as_allow_invalid": "{{ True if invalid is defined}}"
+                "vrfs": {
+                    "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
+                        "neighbors": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "address_family": {
+                                    '{{"address_family_" + afi + "_" + safi }}': {
+                                        "bestpath_origin_as_allow_invalid": "{{ True if invalid is defined}}"
+                                    }
+                                }
                             }
                         }
                     }
@@ -301,6 +315,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -329,6 +344,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -361,6 +377,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -392,6 +409,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -428,6 +446,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -460,6 +479,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -487,6 +507,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -519,6 +540,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -550,6 +572,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -576,6 +599,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -598,15 +622,19 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "origin-as validation disable",
-            "result":{
-                "neighbors": {
-                    "{{nbr_address.split(" ")[1]}}": {
-                        "address_family": {
-                            '{{"address_family_" + afi + "_" + safi }}': {
-                                "origin_as": {
-                                    "validation": {
-                                        "disable": "{{True if origin_as is defined }}"
-
+            "result": {
+                "vrfs": {
+                    "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
+                        "neighbors": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "address_family": {
+                                    '{{"address_family_" + afi + "_" + safi }}': {
+                                        "origin_as": {
+                                            "validation": {
+                                                "disable": "{{True if origin_as is defined }}"
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -628,6 +656,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -657,6 +686,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -690,6 +720,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -722,6 +753,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -754,6 +786,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -786,6 +819,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -818,6 +852,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -851,6 +886,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -885,6 +921,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -905,14 +942,15 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \svalidation(?P<validation>)
-                (\s(?P<redirect>redirect))?
-                 (\s(?P<disable>disable))?
+                (\sredirect(?P<redirect>))?
+                 (\sdisable(?P<disable>))?
                 $""", re.VERBOSE
             ),
             "setval": _tmpl_validation,
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -943,6 +981,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
@@ -956,7 +995,5 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 }
             }
         },
-
-
     ]
     # fmt: on

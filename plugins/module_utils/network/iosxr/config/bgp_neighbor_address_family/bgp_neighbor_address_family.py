@@ -122,6 +122,7 @@ class Bgp_neighbor_address_family(ResourceModule):
         """
 
         self._compare_neighbors(want=want, have=have)
+        self._compare_vrf(want=want, have=have)
         if self.commands and "router bgp" not in self.commands[0]:
             self.commands.insert(
                 0,
@@ -138,102 +139,86 @@ class Bgp_neighbor_address_family(ResourceModule):
                 """
         want_nbr = want.get("neighbors", {})
         have_nbr = have.get("neighbors", {})
-        vrf_want_have = []
         for name, entry in iteritems(want_nbr):
             have = have_nbr.pop(name, {})
-            neighbor_address = entry.get("neighbor", "")
-            self._compare_af(neighbor_address, want=entry, have=have)
+            begin = len(self.commands)
+            self._compare_af( want=entry, have=have)
+            if len(self.commands) != begin:
+                self.commands.insert(
+                    begin, "neighbor {0}".format(name)
+                )
 
 
         # for deleted and overridden state
         if self.state != "replaced":
             for name, entry in iteritems(have_nbr):
-                neighbor_address = entry.get("neighbor", "")
-                self._compare_af(neighbor_address, want={}, have=entry)
+                begin = len(self.commands)
+                self._compare_af( want={}, have=entry)
+                if len(self.commands) != begin:
+                    self.commands.insert(
+                        begin, "neighbor {0}".format(name)
+                    )
 
-    def _compare_af(self, neighbor_address, want, have):
+
+
+    def _compare_af(self, want, have):
         """Custom handling of afs option
                :params want: the want BGP dictionary
                :params have: the have BGP dictionary
         """
         wafs = want.get("address_family", {})
         hafs = have.get("address_family", {})
-        vrf_want_have = []
-        begin_nbr = len(self.commands)
         for name, entry in iteritems(wafs):
-            #import epdb;epdb.serve()
             begin = len(self.commands)
             af_have = hafs.pop(name, {})
-            if entry.get("vrf"):
-                vrf_want_have.append((entry, af_have))
-            else:
-                self.compare(parsers=self.parsers, want=entry, have=af_have)
-                if len(self.commands) != begin:
-                    self.commands.insert(
-                        begin,
-                        self._tmplt.render(
-                            {"afi": entry.get("afi"), "safi": entry.get("safi")}, "address_family", False
-                        ),
-                    )
-        if len(self.commands) != begin_nbr:
-            self.commands.insert(
-                begin_nbr,
-                self._tmplt.render(
-                    {"neighbor": neighbor_address}, "neighbor", False
-                ),
-        )
-            # compare af under vrf separately to ensure correct generation of commands
-        for waf, haf in vrf_want_have:
-            begin = len(self.commands)
-            self.compare(parsers=self.parsers, want=waf, have=haf)
+            self.compare(parsers=self.parsers, want=entry, have=af_have)
             if len(self.commands) != begin:
                 self.commands.insert(
                     begin,
                     self._tmplt.render(
-                        {
-                            "afi": waf.get("afi"),
-                            "safi": waf.get("safi"),
-                        },
-                        "address_family", False,
+                        {"afi": entry.get("afi"), "safi": entry.get("safi")}, "address_family", False
                     ),
                 )
-                self.commands.insert(
-                    begin,
-                    self._tmplt.render(
-                        {"neighbor": neighbor_address}, "neighbor", False),
-                    ),
-                self.commands.insert(
-                     begin,
-                    self._tmplt.render({"vrf": waf.get("vrf")}, "vrf", False),
-                )
 
-            # for deleted and overridden state
-        if self.state != "replaced":
-            for name, entry in iteritems(hafs):
-                if "vrf" in entry:
-                    self.addcmd({"vrf": entry.get("vrf")}, "vrf", False)
-                self.addcmd({"neighbor": neighbor_address}, "neighbor", False)
-                self.addcmd(
-                    {
-                        "afi": entry.get("afi"),
-                        "safi": entry.get("safi"),
-                     },
-                    "address_family",
-                    True,
-                )
+        for name, entry in iteritems(hafs):
+            self.addcmd({"afi": entry.get("afi"), "safi": entry.get("safi")}, "address_family", True)
 
-    def _bgp_list_to_dict(self, entry):
-        """Convert list of items to dict of items
-           for efficient diff calculation.
-        :params entry: data dictionary
+    def _compare_vrf(self, want, have):
+        """Custom handling of VRFs option
+        :params want: the want BGP dictionary
+        :params have: the have BGP dictionary
         """
+        wvrfs = want.get("vrfs", {})
+        hvrfs = have.get("vrfs", {})
+        for name, entry in iteritems(wvrfs):
+            begin = len(self.commands)
+            vrf_have = hvrfs.pop(name, {})
+            self._compare_neighbors(want=entry, have=vrf_have)
+            if len(self.commands) != begin:
+                self.commands.insert(
+                    begin, "vrf {0}".format(name)
+                )
+        # for deleted and replaced state
+        for name, entry in iteritems(hvrfs):
+            begin = len(self.commands)
+            self._compare_neighbors(want={}, have=entry)
+            if len(self.commands) != begin:
+                self.commands.insert(
+                    begin, "vrf {0}".format(name)
+                )
 
-        if "neighbors" in entry:
-            entry["neighbors"] = {
-                x["neighbor"]: x for x in entry.get("neighbors", [])
-            }
-            for neighbor, value in iteritems(entry["neighbors"]):
-                if "address_family" in value:
-                    entry["neighbors"][neighbor]["address_family"] = {
-                        "address_family_" + x["afi"] + "_" + x["safi"] +"_vrf_" +x.get("vrf", ""): x for x in value.get("address_family", [])
+
+    def _bgp_list_to_dict(self, data):
+        if "neighbors" in data:
+            for nbr in data["neighbors"]:
+                if "address_family" in nbr:
+                    nbr["address_family"] = {
+                        (x["afi"], x.get("safi")): x
+                        for x in nbr["address_family"]
                     }
+            data["neighbors"] = {x["neighbor"]: x for x in data["neighbors"]}
+
+        if "vrfs" in data:
+            for vrf in data["vrfs"]:
+                self._bgp_list_to_dict(vrf)
+            data["vrfs"] = {x["vrf"]: x for x in data["vrfs"]}

@@ -97,14 +97,16 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             dict(
                 config=dict(
                     as_number="1",
-                    neighbors=[
+                    vrfs=[
                         dict(
-                            neighbor="1.2.1.2",
-                            address_family=[
+                            vrf="vrf1",
+                            neighbors=[
+                            dict(
+                                neighbor="1.2.1.2",
+                                address_family=[
                                 dict(
                                     afi="ipv4",
                                     safi="unicast",
-                                    vrf="vrf1",
                                     multipath=True,
                                     default_originate=dict(
                                         set=True
@@ -113,7 +115,8 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                                 )
                             ]
 
-                        ),
+                        )])],
+                    neighbors=[
                         dict(
                             neighbor="1.1.1.1",
                             address_family=[
@@ -194,27 +197,31 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         self.execute_module(changed=False, commands=[])
 
     def test_iosxr_bgp_nbr_af_merged(self):
+        self.maxDiff = None
         set_module_args(
             dict(
                 config=dict(
                     as_number="1",
-                    neighbors=[
+                    vrfs=[
                         dict(
-                            neighbor="1.2.1.2",
-                            address_family=[
+                            vrf="vrf1",
+                            neighbors=[
                                 dict(
-                                    afi="ipv4",
-                                    safi="unicast",
-                                    vrf="vrf1",
-                                    multipath=True,
-                                    default_originate=dict(
-                                        set=True
-                                    ),
-                                    capability_orf_prefix="both"
-                                )
-                            ]
+                                    neighbor="1.2.1.2",
+                                    address_family=[
+                                        dict(
+                                            afi="ipv4",
+                                            safi="unicast",
+                                            multipath=True,
+                                            default_originate=dict(
+                                                set=True
+                                            ),
+                                            capability_orf_prefix="both"
+                                        )
+                                    ]
 
-                        ),
+                                )])],
+                    neighbors=[
                         dict(
                             neighbor="1.1.1.1",
                             address_family=[
@@ -273,9 +280,6 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                                     as_override=dict(
                                         set=True
                                     ),
-                                    allowas_in=dict(
-                                        value=4
-                                    ),
                                     bestpath_origin_as_allow_invalid=True,
                                     long_lived_graceful_restart=dict(
                                         stale_time=dict(
@@ -298,21 +302,20 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "address-family ipv4 unicast",
             "aigp",
             "aigp send med",
-            "allowas-in 4",
-            "as-override ",
+            "as-override",
             "bestpath origin-as allow invalid",
             "capability orf prefix both",
             "default-originate",
-            "maximum-prefix 10 20 restart 10 ",
+            "maximum-prefix 10 20 restart 10",
             "multipath",
-            "next-hop-self ",
+            "next-hop-self",
             "next-hop-unchanged multipath",
             "origin-as validation disable",
             "remove-private-AS inbound entire-aspath",
-            "send-community-ebgp ",
-            "send-community-gshut-ebgp ",
-            "send-extended-community-ebgp ",
-            "send-multicast-attributes ",
+            "send-community-ebgp",
+            "send-community-gshut-ebgp",
+            "send-extended-community-ebgp",
+            "send-multicast-attributes",
             "soft-reconfiguration inbound",
             "vrf vrf1",
             "neighbor 1.2.1.2",
@@ -367,23 +370,24 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             dict(
                 config=dict(
                     as_number="1",
-                    neighbors=[
+                    vrfs=[
                         dict(
-                            neighbor="1.2.1.2",
-                            address_family=[
+                            vrf="vrf1",
+                            neighbors=[
                                 dict(
-                                    afi="ipv4",
-                                    safi="unicast",
-                                    vrf="vrf1",
-                                    multipath=True,
-                                    default_originate=dict(
-                                        set=True
-                                    ),
-                                )
-                            ]
+                                    neighbor="1.2.1.2",
+                                    address_family=[
+                                        dict(
+                                            afi="ipv4",
+                                            safi="unicast",
+                                            multipath=True,
+                                            default_originate=dict(
+                                                set=True
+                                            ),
+                                        )
+                                    ]
 
-                        ),
-                    ],
+                                )])],
                 ),
                 state="replaced",
             )
@@ -439,24 +443,25 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             dict(
                 config=dict(
                     as_number="1",
-                    neighbors=[
+                    vrfs=[
                         dict(
-                            neighbor="1.2.1.2",
-                            address_family=[
+                            vrf="vrf1",
+                            neighbors=[
                                 dict(
-                                    afi="ipv4",
-                                    safi="unicast",
-                                    vrf="vrf1",
-                                    multipath=True,
-                                    default_originate=dict(
-                                        set=True
-                                    ),
-                                    capability_orf_prefix="both",
-                                )
-                            ]
+                                    neighbor="1.2.1.2",
+                                    address_family=[
+                                        dict(
+                                            afi="ipv4",
+                                            safi="unicast",
+                                            multipath=True,
+                                            default_originate=dict(
+                                                set=True
+                                            ),
+                                            capability_orf_prefix="both"
+                                        )
+                                    ]
 
-                        ),
-                    ],
+                                )])],
                 ),
                 state="replaced",
             )
@@ -537,23 +542,26 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             dict(
                 config=dict(
                     as_number="1",
-                    neighbors=[
+                    vrfs=[
                         dict(
-                            neighbor="1.2.1.2",
-                            address_family=[
+                            vrf="vrf1",
+                            neighbors=[
                                 dict(
-                                    afi="ipv4",
-                                    safi="unicast",
-                                    vrf="vrf1",
-                                    multipath=True,
-                                    default_originate=dict(
-                                        set=True
-                                    ),
-                                    capability_orf_prefix="both"
-                                )
-                            ]
+                                    neighbor="1.2.1.2",
+                                    address_family=[
+                                        dict(
+                                            afi="ipv4",
+                                            safi="unicast",
+                                            multipath=True,
+                                            default_originate=dict(
+                                                set=True
+                                            ),
+                                            capability_orf_prefix="both"
+                                        )
+                                    ]
 
-                        ),
+                                )])],
+                    neighbors=[
                         dict(
                             neighbor="1.1.1.1",
                             address_family=[
@@ -638,20 +646,20 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "aigp",
             "aigp send med",
             "allowas-in 4",
-            "as-override ",
+            "as-override",
             "bestpath origin-as allow invalid",
             "capability orf prefix both",
             "default-originate",
-            "maximum-prefix 10 20 restart 10 ",
+            "maximum-prefix 10 20 restart 10",
             "multipath",
-            "next-hop-self ",
+            "next-hop-self",
             "next-hop-unchanged multipath",
             "origin-as validation disable",
             "remove-private-AS inbound entire-aspath",
-            "send-community-ebgp ",
-            "send-community-gshut-ebgp ",
-            "send-extended-community-ebgp ",
-            "send-multicast-attributes ",
+            "send-community-ebgp",
+            "send-community-gshut-ebgp",
+            "send-extended-community-ebgp",
+            "send-multicast-attributes",
             "soft-reconfiguration inbound",
             "vrf vrf1",
             "neighbor 1.2.1.2",
@@ -665,6 +673,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
 
     def test_iosxr_bgp_global_parsed(self):
+        self.maxDiff=None
         set_module_args(
             dict(
                 running_config="router bgp 1\n bgp router-id 1.2.1.3\n neighbor 1.1.1.1\n  "
@@ -679,7 +688,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                                "remove-private-AS inbound entire-aspath\n   "
                                "next-hop-unchanged multipath\n  !\n  address-family ipv4 flowspec\n"
                                "   aigp send cost-community disable\n   aigp send med\n   validation disable\n  "
-                               "!\n !\n vrf vrf1\n  rd auto\n  neighbor 1.2.1.2\n  !\n !\n!",
+                               "!\n !\n !",
                 state="parsed",
             )
         )
@@ -735,7 +744,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             "afi": "ipv4",
                             "aigp": {
                                 "send_cost_community_disable": True,
-                                "send_med": "{'set': True}",
+                                "send_med": {"set": True},
                                 "set": True
                             },
                             "safi": "flowspec",
@@ -746,9 +755,6 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                         }
                     ],
                     "neighbor": "1.1.1.1"
-                },
-                {
-                    "neighbor": "1.2.1.2"
                 }
             ]
         }
@@ -797,23 +803,24 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             dict(
                 config=dict(
                     as_number="1",
-                    neighbors=[
+                    vrfs=[
                         dict(
-                            neighbor="1.2.1.2",
-                            address_family=[
+                            vrf="vrf1",
+                            neighbors=[
                                 dict(
-                                    afi="ipv4",
-                                    safi="unicast",
-                                    vrf="vrf1",
-                                    multipath=True,
-                                    default_originate=dict(
-                                        set=True
-                                    ),
-                                )
-                            ]
+                                    neighbor="1.2.1.2",
+                                    address_family=[
+                                        dict(
+                                            afi="ipv4",
+                                            safi="unicast",
+                                            multipath=True,
+                                            default_originate=dict(
+                                                set=True
+                                            ),
+                                        )
+                                    ]
 
-                        ),
-                    ],
+                                )])],
                 ),
                 state="overridden",
             )

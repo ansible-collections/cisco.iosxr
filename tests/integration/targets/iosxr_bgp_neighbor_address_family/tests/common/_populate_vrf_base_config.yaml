@@ -1,0 +1,16 @@
+---
+- name: "Setup"
+  cisco.iosxr.iosxr_config:
+    lines:
+      - "address-family ipv4 unicast"
+      - "address-family vpnv4 unicast"
+      - "bgp router-id 10.0.0.1"
+      - "vrf vrf1"
+      - " rd auto"
+      - " address-family ipv4 unicast"
+      - " neighbor 1.1.1.1"
+      - "  remote-as 5"
+    parents: "router bgp 65536"
+
+  vars:
+    ansible_connection: ansible.netcommon.network_cli

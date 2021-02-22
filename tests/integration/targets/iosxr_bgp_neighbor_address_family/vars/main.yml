@@ -19,6 +19,15 @@ merged:
     - send-multicast-attributes
     - soft-reconfiguration inbound always
     - weight 5
+  vrf:
+    commands:
+      - router bgp 65536
+      - vrf vrf1
+      - neighbor 1.1.1.1
+      - address-family ipv4 unicast
+      - capability orf prefix both
+      - default-originate
+      - multipath
 
   after:
     as_number: "65536"
@@ -71,7 +80,6 @@ overridden:
     - default-originate
     - multipath
     - weight 5
-    - neighbor 1.1.1.1
     - no address-family ipv4 unicast
 
 replaced:
@@ -81,6 +89,15 @@ replaced:
     - address-family ipv4 unicast
     - no origin-as validation disable
     - weight 4
+
+  vrf:
+    commands:
+      - router bgp 65536
+      - vrf vrf1
+      - neighbor 1.1.1.1
+      - address-family ipv4 unicast
+      - no multipath
+      - weight 4
 
 rendered:
   commands:
