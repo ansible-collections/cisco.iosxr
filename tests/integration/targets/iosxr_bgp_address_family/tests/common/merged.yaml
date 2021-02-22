@@ -11,17 +11,12 @@
           as_number: "65536"
           address_family:
             - afi: "ipv4"
-              af_modifier: "unicast"
+              safi: "unicast"
               dynamic_med: 10
               redistribute:
-                application:
-                  name: test1
+                - protocol: application
+                  id: test1
                   metric: 10
-                connected:
-                  metric: 10
-                isis:
-                  name: test3
-                  metric: 4
               bgp:
                 scan_time: 20
                 attribute_download: true
@@ -59,3 +54,43 @@
           - result.commands|length == 0
   always:
     - include_tasks: _remove_config.yaml
+
+- debug:
+    msg: Start iosxr_bgp_address-family merged integration tests for af under vrf connection={{ ansible_connection}}
+
+- include_tasks: _populate_base_vrf.yaml
+
+- block:
+    - name: Merge the provided configuration with the exisiting running configuration(VRF)
+      cisco.iosxr.iosxr_bgp_address_family: &id002
+        config:
+          as_number: "65536"
+          address_family:
+            - afi: "ipv4"
+              safi: "unicast"
+              vrf: vrf1
+              dynamic_med: 9
+              redistribute:
+                - protocol: connected
+                  metric: 10
+
+      register: result
+    - name: Assert that correct set of commands were generated
+      assert:
+        that:
+          - "{{ merged['vrf']['commands'] | symmetric_difference(result['commands']) |length\
+            \ == 0 }}"
+
+
+    - name: Merge the provided configuration with the existing running configuration
+        (IDEMPOTENT)
+      cisco.iosxr.iosxr_bgp_address_family: *id002
+      register: result
+
+    - name: Assert that the previous task was idempotent
+      assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
+
+- include_tasks: _remove_config.yaml

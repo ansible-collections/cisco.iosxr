@@ -39,7 +39,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         super(TestIosxrBgpGlobalModule, self).setUp()
 
         self.mock_get_resource_connection = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection"
         )
         self.get_resource_connection = (
             self.mock_get_resource_connection.start()
@@ -78,13 +78,17 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     address_family=[
                         dict(
                             afi="ipv4",
-                            af_modifier="unicast",
+                            safi="unicast",
                             dynamic_med=10,
-                            redistribute=dict(
-                                application=dict(name="test1", metric=10),
-                                connected=dict(metric=10),
-                                isis=dict(name="test3", metric=4),
-                            ),
+                            redistribute=[
+                                dict(
+                                    protocol="application",
+                                    id="test1",
+                                    metric=10,
+                                ),
+                                dict(protocol="connected", metric=10),
+                                dict(protocol="isis", id="test3", metric=4),
+                            ],
                             bgp=dict(scan_time=20, attribute_download=True),
                             advertise_best_external=True,
                             allocate_label=dict(all=True),
@@ -104,13 +108,17 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     address_family=[
                         dict(
                             afi="ipv4",
-                            af_modifier="unicast",
+                            safi="unicast",
                             dynamic_med=10,
-                            redistribute=dict(
-                                application=dict(name="test1", metric=10),
-                                connected=dict(metric=10),
-                                isis=dict(name="test3", metric=4),
-                            ),
+                            redistribute=[
+                                dict(
+                                    protocol="application",
+                                    id="test1",
+                                    metric=10,
+                                ),
+                                dict(protocol="connected", metric=10),
+                                dict(protocol="isis", id="test3", metric=4),
+                            ],
                             bgp=dict(scan_time=20, attribute_download=True),
                             advertise_best_external=True,
                             allocate_label=dict(all=True),
@@ -160,13 +168,17 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     address_family=[
                         dict(
                             afi="ipv4",
-                            af_modifier="unicast",
+                            safi="unicast",
                             dynamic_med=4,
-                            redistribute=dict(
-                                application=dict(name="test1", metric=10),
-                                connected=dict(metric=10),
-                                isis=dict(name="test3", metric=4),
-                            ),
+                            redistribute=[
+                                dict(
+                                    protocol="application",
+                                    id="test1",
+                                    metric=10,
+                                ),
+                                dict(protocol="connected", metric=10),
+                                dict(protocol="isis", id="test3", metric=4),
+                            ],
                         )
                     ],
                 ),
@@ -206,13 +218,17 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     address_family=[
                         dict(
                             afi="ipv4",
-                            af_modifier="unicast",
+                            safi="unicast",
                             dynamic_med=4,
-                            redistribute=dict(
-                                application=dict(name="test1", metric=10),
-                                connected=dict(metric=10),
-                                isis=dict(name="test3", metric=4),
-                            ),
+                            redistribute=[
+                                dict(
+                                    protocol="application",
+                                    id="test1",
+                                    metric=10,
+                                ),
+                                dict(protocol="connected", metric=10),
+                                dict(protocol="isis", id="test3", metric=4),
+                            ],
                         )
                     ],
                 ),
@@ -263,13 +279,17 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     address_family=[
                         dict(
                             afi="ipv4",
-                            af_modifier="unicast",
+                            safi="unicast",
                             dynamic_med=10,
-                            redistribute=dict(
-                                application=dict(name="test1", metric=10),
-                                connected=dict(metric=10),
-                                isis=dict(name="test3", metric=4),
-                            ),
+                            redistribute=[
+                                dict(
+                                    protocol="application",
+                                    id="test1",
+                                    metric=10,
+                                ),
+                                dict(protocol="connected", metric=10),
+                                dict(protocol="isis", id="test3", metric=4),
+                            ],
                             bgp=dict(scan_time=20, attribute_download=True),
                             advertise_best_external=True,
                             allocate_label=dict(all=True),
@@ -295,6 +315,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
 
     def test_iosxr_bgp_address_family_parsed(self):
+        self.maxDiff = None
         run_cfg = dedent(
             """\
             router bgp 65536
@@ -303,8 +324,6 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               advertise best-external
               dynamic-med interval 10
               bgp scan-time 20
-              redistribute connected metric 10
-              redistribute isis test3 metric 4
               redistribute application test1 metric 10
               allocate-label all
             """
@@ -315,16 +334,18 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "address_family": [
                 {
                     "advertise_best_external": True,
-                    "af_modifier": "unicast",
+                    "safi": "unicast",
                     "afi": "ipv4",
                     "allocate_label": {"all": True},
                     "bgp": {"attribute_download": True, "scan_time": 20},
                     "dynamic_med": 10,
-                    "redistribute": {
-                        "application": {"metric": 10, "name": "test1"},
-                        "connected": {"metric": 10},
-                        "isis": {"metric": 4, "name": "test3"},
-                    },
+                    "redistribute": [
+                        {
+                            "protocol": "application",
+                            "metric": 10,
+                            "id": "test1",
+                        }
+                    ],
                 }
             ],
             "as_number": "65536",

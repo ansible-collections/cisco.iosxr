@@ -54,7 +54,7 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                 "vpnv6",
                             ],
                         },
-                        "af_modifier": {
+                        "safi": {
                             "type": "str",
                             "choices": [
                                 "flowspec",
@@ -77,7 +77,8 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                         },
                         "advertise_best_external": {"type": "bool"},
                         "aggregate_address": {
-                            "type": "dict",
+                            "type": "list",
+                            "elements": "dict",
                             "options": {
                                 "value": {"type": "str"},
                                 "as_set": {"type": "bool"},
@@ -247,10 +248,11 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                 },
                             },
                         },
-                        "network": {
-                            "type": "dict",
+                        "networks": {
+                            "type": "list",
+                            "elements": "dict",
                             "options": {
-                                "value": {"type": "str"},
+                                "network": {"type": "str"},
                                 "backdoor_route_policy": {"type": "str"},
                                 "route_policy": {"type": "str"},
                             },
@@ -298,102 +300,38 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                             },
                         },
                         "redistribute": {
-                            "type": "dict",
+                            "type": "list",
+                            "elements": "dict",
                             "options": {
-                                "application": {
-                                    "type": "dict",
-                                    "options": {
-                                        "name": {"type": "str"},
-                                        "metric": {"type": "int"},
-                                        "route_policy": {"type": "str"},
-                                    },
+                                "protocol": {
+                                    "type": "str",
+                                    "choices": [
+                                        "ospf",
+                                        "application",
+                                        "eigrp",
+                                        "isis",
+                                        "static",
+                                        "connected",
+                                        "lisp",
+                                        "mobile",
+                                        "rip",
+                                        "subscriber",
+                                    ],
+                                    "required": True,
                                 },
-                                "connected": {
-                                    "type": "dict",
-                                    "options": {
-                                        "metric": {"type": "int"},
-                                        "route_policy": {"type": "str"},
-                                    },
+                                "id": {"type": "str"},
+                                "metric": {"type": "int"},
+                                "route_policy": {"type": "str"},
+                                "internal": {"type": "bool"},
+                                "external": {"type": "bool"},
+                                "level": {
+                                    "type": "str",
+                                    "choices": ["1", "2", "1-inter-area"],
                                 },
-                                "eigrp": {
-                                    "type": "dict",
-                                    "options": {
-                                        "name": {"type": "str"},
-                                        "metric": {"type": "int"},
-                                        "route_policy": {"type": "str"},
-                                        "internal": {"type": "bool"},
-                                        "external": {"type": "bool"},
-                                    },
-                                },
-                                "isis": {
-                                    "type": "dict",
-                                    "options": {
-                                        "name": {"type": "str"},
-                                        "metric": {"type": "int"},
-                                        "route_policy": {"type": "str"},
-                                        "level": {
-                                            "type": "str",
-                                            "choices": [
-                                                "1",
-                                                "2",
-                                                "1-inter-area",
-                                            ],
-                                        },
-                                    },
-                                },
-                                "lisp": {
-                                    "type": "dict",
-                                    "options": {
-                                        "set": {"type": "bool"},
-                                        "metric": {"type": "int"},
-                                        "route_policy": {"type": "str"},
-                                    },
-                                },
-                                "mobile": {
-                                    "type": "dict",
-                                    "options": {
-                                        "set": {"type": "bool"},
-                                        "metric": {"type": "int"},
-                                        "route_policy": {"type": "str"},
-                                    },
-                                },
-                                "ospf": {
-                                    "type": "dict",
-                                    "options": {
-                                        "name": {"type": "str"},
-                                        "metric": {"type": "int"},
-                                        "route_policy": {"type": "str"},
-                                        "internal": {"type": "bool"},
-                                        "nssa_external": {"type": "bool"},
-                                        "external": {
-                                            "type": "int",
-                                            "choices": [1, 2],
-                                        },
-                                    },
-                                },
-                                "rip": {
-                                    "type": "dict",
-                                    "options": {
-                                        "set": {"type": "bool"},
-                                        "metric": {"type": "int"},
-                                        "route_policy": {"type": "str"},
-                                    },
-                                },
-                                "static": {
-                                    "type": "dict",
-                                    "options": {
-                                        "set": {"type": "bool"},
-                                        "metric": {"type": "int"},
-                                        "route_policy": {"type": "str"},
-                                    },
-                                },
-                                "subscriber": {
-                                    "type": "dict",
-                                    "options": {
-                                        "set": {"type": "bool"},
-                                        "metric": {"type": "int"},
-                                        "route_policy": {"type": "str"},
-                                    },
+                                "nssa_external": {"type": "bool"},
+                                "external_ospf": {
+                                    "type": "int",
+                                    "choices": [1, 2],
                                 },
                             },
                         },

@@ -50,7 +50,6 @@ class Bgp_address_family(ResourceModule):
             "router",
             "address_family",
             "advertise_best_external",
-            "aggregate_address",
             "additional_paths",
             "allocate_label",
             "as_path_loopcheck_out_disable",
@@ -72,20 +71,9 @@ class Bgp_address_family(ResourceModule):
             "maximum_paths_eibgp",
             "optimal_route_reflection",
             "nexthop",
-            "network",
             "permanent_network_route_policy",
             "retain_local_label",
             "update",
-            "redistribute_application",
-            "redistribute_connected",
-            "redistribute_isis",
-            "redistribute_eigrp",
-            "redistribute_lisp",
-            "redistribute_mobile",
-            "redistribute_ospf",
-            "redistribute_rip",
-            "redistribute_static",
-            "redistribute_subscriber",
             "global_table_multicast",
             "segmented_multicast",
             "inter_as_install",
@@ -167,13 +155,14 @@ class Bgp_address_family(ResourceModule):
 
             else:
                 self.compare(parsers=self.parsers, want=entry, have=af_have)
+                self._compare_lists(want=entry, have=af_have)
                 if len(self.commands) != begin:
                     self.commands.insert(
                         begin,
                         self._tmplt.render(
                             {
                                 "afi": entry.get("afi"),
-                                "af_modifier": entry.get("af_modifier"),
+                                "safi": entry.get("safi"),
                             },
                             "address_family",
                             False,
@@ -184,14 +173,12 @@ class Bgp_address_family(ResourceModule):
         for waf, haf in vrf_want_have:
             begin = len(self.commands)
             self.compare(parsers=self.parsers, want=waf, have=haf)
+            self._compare_lists(want=waf, have=haf)
             if len(self.commands) != begin:
                 self.commands.insert(
                     begin,
                     self._tmplt.render(
-                        {
-                            "afi": waf.get("afi"),
-                            "af_modifier": waf.get("af_modifier"),
-                        },
+                        {"afi": waf.get("afi"), "safi": waf.get("safi")},
                         "address_family",
                         False,
                     ),
@@ -207,25 +194,46 @@ class Bgp_address_family(ResourceModule):
                 if "vrf" in entry:
                     self.addcmd({"vrf": entry.get("vrf")}, "vrf", False)
                 self.addcmd(
-                    {
-                        "afi": entry.get("afi"),
-                        "af_modifier": entry.get("af_modifier"),
-                    },
+                    {"afi": entry.get("afi"), "safi": entry.get("safi")},
                     "address_family",
                     True,
                 )
+
+    def _compare_lists(self, want, have):
+        for attrib in ["aggregate_address", "networks", "redistribute"]:
+            wdict = want.get(attrib, {})
+            hdict = have.get(attrib, {})
+            for key, entry in iteritems(wdict):
+                if entry != hdict.pop(key, {}):
+                    self.addcmd(entry, attrib.format(attrib), False)
+
+            # remove remaining items in have for replaced
+            for entry in hdict.values():
+                self.addcmd(entry, attrib.format(attrib), True)
 
     def _bgp_list_to_dict(self, entry):
         """Convert list of items to dict of items
            for efficient diff calculation.
         :params entry: data dictionary
         """
+        for item in entry.get("address_family", []):
+            item["aggregate_address"] = {
+                x["value"]: x for x in item.get("aggregate_address", [])
+            }
+            item["networks"] = {
+                x["network"]: x for x in item.get("networks", [])
+            }
+            item["redistribute"] = {
+                (x.get("id"), x["protocol"]): x
+                for x in item.get("redistribute", [])
+            }
+
         if "address_family" in entry:
             entry["address_family"] = {
                 "address_family_"
                 + x["afi"]
                 + "_"
-                + x["af_modifier"]
+                + x["safi"]
                 + "_vrf_"
                 + x.get("vrf", ""): x
                 for x in entry.get("address_family", [])

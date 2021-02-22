@@ -39,7 +39,7 @@ options:
               description: address family.
               type: str
               choices: ['ipv4', 'ipv6', 'l2vpn', 'link-state', 'vpnv4', 'vpnv6']
-            af_modifier:
+            safi:
               description: Address Family modifier
               type: str
               choices: [ 'flowspec', 'mdt', 'multicast', 'mvpn', 'rt-filter', 'tunnel', 'unicast', 'evpn', 'mspw', 'vpls-vpws', 'link-state' ]
@@ -53,9 +53,10 @@ options:
             advertise_best_external: &advertise
               description: Advertise best-external path.
               type: bool
-            aggregate_address: &aggrigate_address
+            aggregate_address:
               description: Configure BGP aggregate entries.
-              type: dict
+              type: list
+              elements: dict
               suboptions:
                 value:
                   type: str
@@ -72,7 +73,7 @@ options:
                 route_policy:
                   description: Policy to condition advertisement, suppression, and attributes.
                   type: str
-            allocate_label: &allocate_label
+            allocate_label:
               type: dict
               description: Allocate labels.
               suboptions:
@@ -82,7 +83,7 @@ options:
                 route_policy:
                   description: Use a route policy to select prefixes for label allocation.
                   type: str
-            as_path_loopcheck_out_disable: &as_path_loopcheck
+            as_path_loopcheck_out_disable:
               type: bool
               description: Configure AS Path loop checking for outbound updates.
             bgp:
@@ -135,7 +136,7 @@ options:
                         disable:
                           type: bool
                           description: disable reflection.
-                dampening: &dampening
+                dampening:
                   type: dict
                   description: Enable route-flap dampening
                   suboptions:
@@ -205,10 +206,10 @@ options:
                 local_routes:
                   type: int
                   description: Distance for local routes <1-255>.
-            dynamic_med: &dynamic_med
+            dynamic_med:
               type: int
               description: Dynamic MED Interval.
-            maximum_paths: &maximum_paths
+            maximum_paths:
               type: dict
               description: Forward packets over multiple paths.
               suboptions:
@@ -264,11 +265,12 @@ options:
                     selective_order_igp_metric:
                       description: Allow multipaths only from marked neighbors
                       type: bool
-            network: &network
-              type: dict
+            networks:
+              type: list
               description: Specify a network to announce via BGP.
+              elements: dict
               suboptions:
-                value:
+                network:
                   type: str
                   description: Specify a network to announce via BGP.
                 backdoor_route_policy:
@@ -277,7 +279,7 @@ options:
                 route_policy:
                   type: str
                   description: Route-policy to modify the attributes.
-            nexthop: &nexthop
+            nexthop:
               type: dict
               description: Nexthop
               suboptions:
@@ -294,7 +296,7 @@ options:
                 trigger_delay_non_critical:
                   type: int
                   description: For non critical notification.
-            optimal_route_reflection: &optimal_rr
+            optimal_route_reflection:
               type: dict
               description: Configure optimal-route-reflection group.
               suboptions:
@@ -313,7 +315,7 @@ options:
             retain_local_label:
               type: int
               description: Label retention time in minutes <3-60>.
-            table_policy: &table_policy
+            table_policy:
               type: str
               description: Configure policy for installation of routes to RIB.
             update:
@@ -340,161 +342,61 @@ options:
                 wait_install:
                   type: bool
                   description: Wait for route install.
-            redistribute: &redistribute
-              type: dict
+            redistribute:
+              type: list
+              elements: dict
               description: Redistribute information from another routing protocol.
               suboptions:
-                application:
-                  type: dict
-                  description: OnePK application routes.
-                  suboptions:
-                    name:
-                      type: str
-                      description: name of application
-                    metric:
-                      type: int
-                      description: Metric for redistributed routes.
-                    route_policy:
-                      type: str
-                      description: Route-policy for reference.
-                connected:
-                  type: dict
-                  description: Connected routes.
-                  suboptions:
-                    metric:
-                      type: int
-                      description: Metric for redistributed routes.
-                    route_policy:
-                      type: str
-                      description: Route-policy for reference.
-                eigrp:
-                  type: dict
-                  description: Enhanced Interior Gateway Routing Protocol (EIGRP).
-                  suboptions:
-                    name:
-                      type: str
-                      description: EIGRP instance name.
-                    metric:
-                      type: int
-                      description: Metric for redistributed routes.
-                    route_policy:
-                      type: str
-                      description: Route-policy for reference.
-                    internal:
-                      type: bool
-                      description: Redistribute EIGRP internal routes.
-                    external:
-                      type: bool
-                      description: Redistribute EIGRP external routes.
-                isis:
-                  type: dict
-                  description: ISO IS-IS.
-                  suboptions:
-                    name:
-                      type: str
-                      description: IS-IS instance name.
-                    metric:
-                      type: int
-                      description: Metric for redistributed routes.
-                    route_policy:
-                      type: str
-                      description: Route-policy for reference.
-                    level:
-                      type: str
-                      description:
-                      - Redistribute routes from the specified ISIS levels.
-                      - Redistribute ISIS level 1 routes
-                      - Redistribute ISIS level 1 inter-area routes
-                      - Redistribute ISIS level 2 ISIS routes
-                      choices: ['1', '2', '1-inter-area']
-                lisp:
-                  type: dict
-                  description: Locator/ID Separation Protocol (LISP).
-                  suboptions:
-                    set:
-                      type: bool
-                      description: set lisp.
-                    metric:
-                      type: int
-                      description: Metric for redistributed routes.
-                    route_policy:
-                      type: str
-                      description: Route-policy for reference.
-                mobile:
-                  type: dict
-                  description: Mobile routes.
-                  suboptions:
-                    set:
-                      type: bool
-                      description: set Mobile routes.
-                    metric:
-                      type: int
-                      description: Metric for redistributed routes.
-                    route_policy:
-                      type: str
-                      description: Route-policy for reference.
-                ospf:
-                  type: dict
-                  description:  Open Shortest Path First (OSPF).
-                  suboptions:
-                    name:
-                      type: str
-                      description: OSPF router tag
-                    metric:
-                      type: int
-                      description: Metric for redistributed routes.
-                    route_policy:
-                      type: str
-                      description: Route-policy for reference.
-                    internal:
-                      type: bool
-                      description: Redistribute OSPF internal routes.
-                    nssa_external:
-                      type: bool
-                      description: Redistribute OSPF NSSA external routes
-                    external:
-                      type: int
-                      description: Redistribute OSPF external routes.
-                      choices: [1, 2]
-                rip:
-                  type: dict
-                  description: Routing Information Protocol (RIP).
-                  suboptions:
-                    set:
-                      type: bool
-                      description: set RIP.
-                    metric:
-                      type: int
-                      description: Metric for redistributed routes.
-                    route_policy:
-                      type: str
-                      description: Route-policy for reference.
-                static:
-                  type: dict
-                  description: Static routes.
-                  suboptions:
-                    set:
-                      type: bool
-                      description: set Static routes.
-                    metric:
-                      type: int
-                      description: Metric for redistributed routes.
-                    route_policy:
-                      type: str
-                      description: Route-policy for reference.
-                subscriber:
-                  type: dict
-                  description: subscriber routes.
-                  suboptions:
-                    set:
-                      type: bool
-                      description: set subscriber routes.
-                    metric:
-                      type: int
-                      description: Metric for redistributed routes.
-                    route_policy:
-                      type: str
-                      description: Route-policy for reference.
+                protocol:
+                  description: Specifies the protocol for configuring redistribute information.
+                  type: str
+                  choices:
+                    - ospf
+                    - application
+                    - eigrp
+                    - isis
+                    - static
+                    - connected
+                    - lisp
+                    - mobile
+                    - rip
+                    - subscriber
+                  required: true
+                id:
+                  type: str
+                  description:
+                    - Identifier for the routing protocol for configuring redistribute
+                      information. Example-application name, eigrp/is-is instance name, ospf tag
+                    - Valid for protocols 'ospf', 'eigrp', 'isis' and 'application'.
+                metric:
+                  description:
+                    - Specifies the metric for redistributed routes.
+                  type: int
+                route_policy:
+                    description:
+                      - Specifies the route policy reference.
+                    type: str
+                internal:
+                  type: bool
+                  description: Redistribute EIGRP internal routes.applicable for eigrp.
+                external:
+                  type: bool
+                  description: Redistribute EIGRP external routes.applicable for eigrp.
+                level:
+                  type: str
+                  description:
+                    - Redistribute routes from the specified ISIS levels.
+                    - Redistribute ISIS level 1 routes
+                    - Redistribute ISIS level 1 inter-area routes
+                    - Redistribute ISIS level 2 ISIS routes
+                  choices: [ '1', '2', '1-inter-area' ]
+                nssa_external:
+                  type: bool
+                  description: Redistribute OSPF NSSA external routes.applicable for ospf.
+                external_ospf:
+                    type: int
+                    description: Redistribute OSPF external routes.applicable for ospf.
+                    choices: [ 1, 2 ]
             inter_as_install:
               type: bool
               description: Install remote mvpn routes in default vrf.This is applicable for mvpn afi.
