@@ -16,7 +16,6 @@ based on the configuration.
 
 from copy import deepcopy
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
@@ -27,11 +26,12 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
     Bgp_neighbor_address_familyArgs,
 )
 
+
 class Bgp_neighbor_address_familyFacts(object):
     """ The iosxr bgp_neighbor_address_family facts class
     """
 
-    def __init__(self, module, subspec='config', options='options'):
+    def __init__(self, module, subspec="config", options="options"):
         self._module = module
         self.argument_spec = Bgp_neighbor_address_familyArgs.argument_spec
         spec = deepcopy(self.argument_spec)
@@ -58,16 +58,15 @@ class Bgp_neighbor_address_familyFacts(object):
         """
         facts = {}
         objs = []
-        bgp_global_config = []
-
         if not data:
             data = self.get_config(connection)
         nbr_data = self._flatten_config(data, "neighbor")
         data = self._flatten_config(nbr_data, "vrf")
         # parse native config using the Bgp_global template
-        bgp_global_parser = Bgp_neighbor_address_familyTemplate(lines=data.splitlines())
+        bgp_global_parser = Bgp_neighbor_address_familyTemplate(
+            lines=data.splitlines()
+        )
         objs = bgp_global_parser.parse()
-        #import epdb;epdb.serve()
 
         if objs:
             top_lvl_nbrs = objs.get("vrfs", {}).pop("vrf_", {})
@@ -84,7 +83,9 @@ class Bgp_neighbor_address_familyFacts(object):
             "bgp_neighbor_address_family", None
         )
 
-        ansible_facts["ansible_network_resources"].pop("bgp_neighbor_address_family", None)
+        ansible_facts["ansible_network_resources"].pop(
+            "bgp_neighbor_address_family", None
+        )
 
         params = utils.remove_empties(
             utils.validate_config(self.argument_spec, {"config": objs})
@@ -108,6 +109,7 @@ class Bgp_neighbor_address_familyFacts(object):
             for nbr in data["neighbors"]:
                 nbr["address_family"] = list(nbr["address_family"].values())
         return data
+
     def _flatten_config(self, data, context):
         """ Flatten different contexts in
             the running-config for easier parsing.
@@ -129,6 +131,3 @@ class Bgp_neighbor_address_familyFacts(object):
             elif in_nbr_cxt:
                 data[data.index(x)] = cur_nbr["nbr"] + " " + x.strip()
         return "\n".join(data)
-
-
-

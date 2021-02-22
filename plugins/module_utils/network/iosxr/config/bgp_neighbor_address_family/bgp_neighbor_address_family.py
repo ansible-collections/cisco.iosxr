@@ -17,7 +17,6 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from copy import deepcopy
 
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
@@ -72,7 +71,7 @@ class Bgp_neighbor_address_family(ResourceModule):
             "soft_reconfiguration",
             "weight",
             "site_of_origin",
-            "validation"
+            "validation",
         ]
 
     def execute_module(self):
@@ -82,7 +81,7 @@ class Bgp_neighbor_address_family(ResourceModule):
         :returns: The result from module execution
         """
         if self.state not in ["parsed", "gathered"]:
-            #import epdb; epdb.serve()
+            # import epdb; epdb.serve()
             self.generate_commands()
             self.run_commands()
         return self.result
@@ -98,7 +97,7 @@ class Bgp_neighbor_address_family(ResourceModule):
         # if state is deleted, clean up global params
         if self.state == "deleted":
             if not self.want or (
-                    self.have.get("as_number") == self.want.get("as_number")
+                self.have.get("as_number") == self.want.get("as_number")
             ):
                 self._compare(
                     want={"as_number": self.want.get("as_number")},
@@ -142,24 +141,17 @@ class Bgp_neighbor_address_family(ResourceModule):
         for name, entry in iteritems(want_nbr):
             have = have_nbr.pop(name, {})
             begin = len(self.commands)
-            self._compare_af( want=entry, have=have)
+            self._compare_af(want=entry, have=have)
             if len(self.commands) != begin:
-                self.commands.insert(
-                    begin, "neighbor {0}".format(name)
-                )
-
+                self.commands.insert(begin, "neighbor {0}".format(name))
 
         # for deleted and overridden state
         if self.state != "replaced":
             for name, entry in iteritems(have_nbr):
                 begin = len(self.commands)
-                self._compare_af( want={}, have=entry)
+                self._compare_af(want={}, have=entry)
                 if len(self.commands) != begin:
-                    self.commands.insert(
-                        begin, "neighbor {0}".format(name)
-                    )
-
-
+                    self.commands.insert(begin, "neighbor {0}".format(name))
 
     def _compare_af(self, want, have):
         """Custom handling of afs option
@@ -176,12 +168,18 @@ class Bgp_neighbor_address_family(ResourceModule):
                 self.commands.insert(
                     begin,
                     self._tmplt.render(
-                        {"afi": entry.get("afi"), "safi": entry.get("safi")}, "address_family", False
+                        {"afi": entry.get("afi"), "safi": entry.get("safi")},
+                        "address_family",
+                        False,
                     ),
                 )
 
         for name, entry in iteritems(hafs):
-            self.addcmd({"afi": entry.get("afi"), "safi": entry.get("safi")}, "address_family", True)
+            self.addcmd(
+                {"afi": entry.get("afi"), "safi": entry.get("safi")},
+                "address_family",
+                True,
+            )
 
     def _compare_vrf(self, want, have):
         """Custom handling of VRFs option
@@ -195,18 +193,13 @@ class Bgp_neighbor_address_family(ResourceModule):
             vrf_have = hvrfs.pop(name, {})
             self._compare_neighbors(want=entry, have=vrf_have)
             if len(self.commands) != begin:
-                self.commands.insert(
-                    begin, "vrf {0}".format(name)
-                )
+                self.commands.insert(begin, "vrf {0}".format(name))
         # for deleted and replaced state
         for name, entry in iteritems(hvrfs):
             begin = len(self.commands)
             self._compare_neighbors(want={}, have=entry)
             if len(self.commands) != begin:
-                self.commands.insert(
-                    begin, "vrf {0}".format(name)
-                )
-
+                self.commands.insert(begin, "vrf {0}".format(name))
 
     def _bgp_list_to_dict(self, data):
         if "neighbors" in data:

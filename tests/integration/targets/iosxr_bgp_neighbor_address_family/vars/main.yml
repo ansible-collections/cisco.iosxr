@@ -67,7 +67,6 @@ merged:
               value: 4
             bestpath_origin_as_allow_invalid: true
 
-
 deleted:
   after:
     as_number: "65536"
@@ -119,4 +118,3 @@ rendered:
     - send-multicast-attributes
     - soft-reconfiguration inbound always
     - weight 5
-

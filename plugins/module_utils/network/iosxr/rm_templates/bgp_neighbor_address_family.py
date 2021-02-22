@@ -8,9 +8,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 """
-The Bgp_neighbor_address_family parser templates file. This contains 
-a list of parser definitions and associated functions that 
-facilitates both facts gathering and native command generation for 
+The Bgp_neighbor_address_family parser templates file. This contains
+a list of parser definitions and associated functions that
+facilitates both facts gathering and native command generation for
 the given network resource.
 """
 
@@ -27,7 +27,7 @@ def _tmpl_aigp(config_data):
         if "set" in conf:
             commands.append("aigp")
         if "disable" in conf:
-           commands.append("aigp disable")
+            commands.append("aigp disable")
         if "send_cost_community_disable" in conf:
             commands.append("aigp send cost-community disable")
         if "send_med" in conf and "set" in conf.get("send_med", {}):
@@ -48,6 +48,7 @@ def _tmpl_validation(config_data):
         if "redirect" in conf:
             command = "validation redirect"
     return command
+
 
 def _tmpl_next_hop_unchanged(config_data):
     conf = config_data.get("next_hop_unchanged", {})
@@ -123,9 +124,12 @@ def _tmpl_default_originate(config_data):
             command = "default-originate route_policy " + conf["route_policy"]
     return command
 
+
 class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
     def __init__(self, lines=None):
-        super(Bgp_neighbor_address_familyTemplate, self).__init__(lines=lines, tmplt=self)
+        super(Bgp_neighbor_address_familyTemplate, self).__init__(
+            lines=lines, tmplt=self
+        )
 
     # fmt: off
     PARSERS = [
@@ -565,7 +569,6 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \soptimal-route-reflection\s(?P<group_name>\S+)
-             
                 $""", re.VERBOSE
             ),
             "setval": "optimal-route-reflection {{optimal_route_reflection_group_name}}",
@@ -826,7 +829,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                                     '{{"address_family_" + afi + "_" + safi }}': {
                                         "send_extended_community_ebgp": {
                                             "set": "{{True if send_extended_community_ebgp is defined and "
-                                                    "inheritance_disable is not defined}}",
+                                            "inheritance_disable is not defined}}",
                                             "inheritance_disable": "{{True if inheritance_disable is defined}}",
                                         }
                                     }
