@@ -1,0 +1,4 @@
+---
+minor_changes:
+ - Add support for single_user_mode.
+ - Re-use device_info dict instead of building it every time.

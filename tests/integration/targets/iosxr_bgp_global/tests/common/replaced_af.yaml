@@ -1,0 +1,41 @@
+---
+- debug:
+    msg: Start nxos_bgp_global deleted_af integration tests connection={{ ansible_connection}}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_af.yml
+
+- block:
+    - name: Replace BGP configuration with provided configuration
+      cisco.iosxr.iosxr_bgp_global: &id002
+        config:
+          as_number: 65536
+          default_metric: 5
+          socket:
+            receive_buffer_size: 514
+            send_buffer_size: 4098
+          bgp:
+            bestpath:
+              med:
+                confed: true
+            cluster_id: 5
+            router_id: 192.0.2.10
+          neighbors:
+            - neighbor: 192.0.2.13
+              remote_as: 65538
+              bfd:
+                fast_detect:
+                  strict_mode: true
+                multiplier: 6
+                minimum_interval: 20
+        state: replaced
+      register: result
+      ignore_errors: true
+
+
+    - name: Assert that the task failed
+      assert:
+        that:
+          - result.failed == True
+          - "'Neighbor 192.0.2.11 has address-family configurations.' in result.msg"
