@@ -4,8 +4,8 @@
     lines:
       - "address-family ipv4 unicast"
       - "address-family ipv6 unicast"
-      - "neighbor 1.1.1.1"
-      - " remote-as 5"
+      - "neighbor 192.0.2.2"
+      - " remote-as 65537"
     parents: "router bgp 65536"
 
   vars:

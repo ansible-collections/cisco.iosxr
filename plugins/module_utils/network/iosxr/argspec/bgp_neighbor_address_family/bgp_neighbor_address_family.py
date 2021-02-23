@@ -43,7 +43,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                     "type": "list",
                     "elements": "dict",
                     "options": {
-                        "neighbor": {"type": "str", "required": True},
+                        "neighbor_address": {"type": "str", "required": True},
                         "address_family": {
                             "type": "list",
                             "elements": "dict",
@@ -201,8 +201,24 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         },
                                     },
                                 },
-                                "send_community_ebgp": {"type": "dict"},
-                                "send_community_gshut_ebgp": {"type": "dict"},
+                                "send_community_ebgp": {
+                                    "type": "dict",
+                                    "options": {
+                                        "set": {"type": "bool"},
+                                        "inheritance_disable": {
+                                            "type": "bool"
+                                        },
+                                    },
+                                },
+                                "send_community_gshut_ebgp": {
+                                    "type": "dict",
+                                    "options": {
+                                        "set": {"type": "bool"},
+                                        "inheritance_disable": {
+                                            "type": "bool"
+                                        },
+                                    },
+                                },
                                 "send_extended_community_ebgp": {
                                     "type": "dict",
                                     "options": {
@@ -256,7 +272,10 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                             "type": "list",
                             "elements": "dict",
                             "options": {
-                                "neighbor": {"type": "str", "required": True},
+                                "neighbor_address": {
+                                    "type": "str",
+                                    "required": True,
+                                },
                                 "address_family": {
                                     "type": "list",
                                     "elements": "dict",
@@ -414,10 +433,22 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                             },
                                         },
                                         "send_community_ebgp": {
-                                            "type": "dict"
+                                            "type": "dict",
+                                            "options": {
+                                                "set": {"type": "bool"},
+                                                "inheritance_disable": {
+                                                    "type": "bool"
+                                                },
+                                            },
                                         },
                                         "send_community_gshut_ebgp": {
-                                            "type": "dict"
+                                            "type": "dict",
+                                            "options": {
+                                                "set": {"type": "bool"},
+                                                "inheritance_disable": {
+                                                    "type": "bool"
+                                                },
+                                            },
                                         },
                                         "send_extended_community_ebgp": {
                                             "type": "dict",

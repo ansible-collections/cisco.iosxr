@@ -35,7 +35,7 @@ options:
             type: list
             elements: dict
             suboptions:
-              neighbor:
+              neighbor_address:
                 description:
                   - Neighbor router address.
                 type: str
@@ -227,7 +227,7 @@ options:
                   send_community_ebgp: &send_community_ebgp
                     description: Send community attribute to this external neighbor.
                     type: dict
-                    suboption:
+                    suboptions:
                       set:
                         type: bool
                         description: set send_community_ebgp.
@@ -237,7 +237,7 @@ options:
                   send_community_gshut_ebgp: &send_community_gshut_ebgp
                     description: Allow the g-shut community to be sent to this external neighbor.
                     type: dict
-                    suboption:
+                    suboptions:
                       set:
                         type: bool
                         description: set send_community_gshut_ebgp.
@@ -310,7 +310,7 @@ options:
                 type: list
                 elements: dict
                 suboptions:
-                  neighbor:
+                  neighbor_address:
                     description:
                       - Neighbor router address.
                     type: str
@@ -367,6 +367,494 @@ options:
       default: merged
 """
 EXAMPLES = """
+# Using merged
+# Before state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.2.1
+#  address-family ipv4 unicast
+#  address-family vpnv4 unicast
+#  neighbor 192.0.2.2
+#   remote-as 65537
+#  neighbor 192.0.2.3
+#   remote-as 65538
+#  vrf vrf1
+#   rd auto
+#   neighbor 192.0.2.4
+#    remote-as 65539
+#  vrf vrf2
+#   rd auto
+#   neighbor 192.0.2.5
+#    remote-as 65540
+
+- name: Merge the provided configuration with the exisiting running configuration
+  cisco.iosxr.iosxr_bgp_neighbor_address_family:
+        config:
+          as_number: 65536
+          neighbors:
+            - neighbor_address: 192.0.2.2
+              address_family:
+                - afi: "ipv4"
+                  safi: "unicast"
+                  multipath: true
+                  default_originate:
+                    set: true
+                  weight: 5
+            - neighbor_address: 192.0.2.3
+              address_family:
+                - afi: "ipv4"
+                  safi: "unicast"
+                  multipath: true
+                  default_originate:
+                    set: true
+                  weight: 4
+          vrfs:
+            - vrf: vrf1
+              neighbors:
+                - neighbor_address: 192.0.2.4
+                  address_family:
+                    - afi: "ipv4"
+                      safi: "unicast"
+                      multipath: true
+                      default_originate:
+                        set: true
+                      capability_orf_prefix: both
+            - vrf: vrf2
+              neighbors:
+                - neighbor_address: 192.0.2.5
+                  address_family:
+                    - afi: "ipv4"
+                      safi: "unicast"
+                      multipath: true
+                      default_originate:
+                        set: true
+                      capability_orf_prefix: both
+# Task output
+# -------------
+# commands:
+# - router bgp 65536
+# - neighbor 192.0.2.2
+# - address-family ipv4 unicast
+# - default-originate
+# - multipath
+# - weight 5
+# - neighbor 192.0.2.3
+# - address-family ipv4 unicast
+# - default-originate
+# - multipath
+# - weight 4
+# - vrf vrf1
+# - neighbor 192.0.2.4
+# - address-family ipv4 unicast
+# - capability orf prefix both
+# - default-originate
+# - multipath
+# - vrf vrf2
+# - neighbor 192.0.2.5
+# - address-family ipv4 unicast
+# - capability orf prefix both
+# - default-originate
+# - multipath
+#
+# after:
+# as_number: 65536
+# neighbors:
+#     - neighbor_address: 192.0.2.2
+#       address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           weight: 5
+#     - neighbor_address: 192.0.2.3
+#       address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           weight: 4
+# vrfs:
+#   - vrf: vrf1
+#     neighbors:
+#       - neighbor_address: 192.0.2.4
+#         address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           capability_orf_prefix: both
+#     - neighbor_address: 192.0.2.5
+#       address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           capability_orf_prefix: both
+# After state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family ipv4 unicast
+#  address-family vpnv4 unicast
+#  neighbor 192.0.2.2
+#   remote-as 65537
+#   address-family ipv4 unicast
+#     multipath
+#     weight 5
+#     default-originate
+#  neighbor 1.1.1.2
+#   remote-as 65538
+#   address-family ipv4 unicast
+#     multipath
+#     weight 5
+#     default-originate
+#  vrf vrf1
+#   rd auto
+#   neighbor 192.0.2.4
+#    remote-as 65539
+#    address-family ipv4 unicast
+#     multipath
+#     capability orf prefix both
+#     default-originate
+#  vrf vrf2
+#   rd auto
+#   neighbor 192.0.2.5
+#    remote-as 65540
+#    address-family ipv4 unicast
+#     multipath
+#     capability orf prefix both
+#     default-originate
+#
+#
+# Using delete
+# Before state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family ipv4 unicast
+#  address-family vpnv4 unicast
+#  neighbor 192.0.2.2
+#   remote-as 65537
+#   address-family ipv4 unicast
+#     multipath
+#     weight 5
+#     default-originate
+#  neighbor 192.0.2.3
+#   remote-as 65538
+#   address-family ipv4 unicast
+#     multipath
+#     weight 5
+#     default-originate
+#  vrf vrf1
+#   rd auto
+#   neighbor 192.0.2.4
+#    remote-as 65539
+#    address-family ipv4 unicast
+#     multipath
+#     capability orf prefix both
+#     default-originate
+#  vrf vrf2
+#   rd auto
+#   neighbor 192.0.2.5
+#    remote-as 65540
+#    address-family ipv4 unicast
+#     multipath
+#     capability orf prefix both
+#     default-originate
+
+- name:  Delete the provided configuration
+  cisco.iosxr.iosxr_bgp_neighbor_address_family:
+        config:
+          as_number: 65536
+          neighbors:
+            - neighbor_address: 192.0.2.2
+              address_family:
+                - afi: "ipv4"
+                  safi: "unicast"
+                  multipath: true
+                  default_originate:
+                    set: true
+                  weight: 5
+# Task output
+# -------------
+#
+# commands:
+# - router bgp 65536
+# - neighbor 192.0.2.2
+# - no address-family ipv4 unicast
+#
+#
+# after:
+# as_number: 65536
+# neighbors:
+#     - neighbor_address: 192.0.2.3
+#       address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           weight: 4
+# vrfs:
+#   - vrf: vrf1
+#     neighbors:
+#       - neighbor_address: 192.0.2.4
+#         address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           capability_orf_prefix: both
+#     - neighbor_address: 192.0.2.5
+#       address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           capability_orf_prefix: both
+#
+#
+# Using Replaced
+# Before state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family ipv4 unicast
+#  address-family vpnv4 unicast
+#  neighbor 192.0.2.2
+#   remote-as 65537
+#   address-family ipv4 unicast
+#     multipath
+#     weight 5
+#     default-originate
+#  neighbor 192.0.2.3
+#   remote-as 65538
+#   address-family ipv4 unicast
+#     multipath
+#     weight 5
+#     default-originate
+#  vrf vrf1
+#   rd auto
+#   neighbor 192.0.2.4
+#    remote-as 65539
+#    address-family ipv4 unicast
+#     multipath
+#     capability orf prefix both
+#     default-originate
+#  vrf vrf2
+#   rd auto
+#   neighbor 192.0.2.5
+#    remote-as 65540
+#    address-family ipv4 unicast
+#     multipath
+#     capability orf prefix both
+#     default-originate
+
+- name: Replace the provided configuration with the exisiting running configuration
+  cisco.iosxr.iosxr_bgp_neighbor_address_family:
+        config:
+          as_number: 65536
+          neighbors:
+            - neighbor_address: 192.0.2.2
+              address_family:
+                - afi: "ipv4"
+                  safi: "unicast"
+                  multipath: true
+                  default_originate:
+                    set: true
+                  weight: 4
+# Task output
+# -------------
+# commands:
+# - router bgp 65536
+# - neighbor 192.0.2.2
+# - address-family ipv4 unicast
+# - default-originate
+# - multipath
+# - weight 4
+#
+# after:
+# as_number: 65536
+# neighbors:
+#     - neighbor_address: 192.0.2.2
+#       address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           weight: 4
+#     - neighbor_address: 192.0.2.3
+#       address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           weight: 5
+# vrfs:
+#   - vrf: vrf1
+#     neighbors:
+#       - neighbor_address: 192.0.2.4
+#         address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           capability_orf_prefix: both
+#     - neighbor_address: 192.0.2.5
+#       address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           capability_orf_prefix: both
+# After state:
+# -------------
+# Nexus9000v# show running-config router bgp
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family ipv4 unicast
+#  address-family vpnv4 unicast
+#  neighbor 192.0.2.2
+#   remote-as 65537
+#   address-family ipv4 unicast
+#     multipath
+#     weight 4
+#     default-originate
+#  neighbor 192.0.2.3
+#   remote-as 65538
+#   address-family ipv4 unicast
+#     multipath
+#     weight 5
+#     default-originate
+#  vrf vrf1
+#   rd auto
+#   neighbor 192.0.2.4
+#    remote-as 65539
+#    address-family ipv4 unicast
+#     multipath
+#     capability orf prefix both
+#     default-originate
+#  vrf vrf2
+#   rd auto
+#   neighbor 192.0.2.5
+#    remote-as 65540
+#    address-family ipv4 unicast
+#     multipath
+#     capability orf prefix both
+#     default-originate
+#
+#
+# Using overridden
+# Before state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family ipv4 unicast
+#  address-family vpnv4 unicast
+#  neighbor 192.0.2.2
+#   remote-as 65537
+#   address-family ipv4 unicast
+#     multipath
+#     weight 5
+#     default-originate
+#  neighbor 192.0.2.3
+#   remote-as 65538
+#   address-family ipv4 unicast
+#     multipath
+#     weight 5
+#     default-originate
+#  vrf vrf1
+#   rd auto
+#   neighbor 192.0.2.4
+#    remote-as 65539
+#    address-family ipv4 unicast
+#     multipath
+#     capability orf prefix both
+#     default-originate
+#  vrf vrf2
+#   rd auto
+#   neighbor 192.0.2.5
+#    remote-as 65540
+#    address-family ipv4 unicast
+#     multipath
+#     capability orf prefix both
+#     default-originate
+
+- name:  override the provided configuration
+  cisco.iosxr.iosxr_bgp_neighbor_address_family:
+        state: overridden
+        config:
+          as_number: 65536
+          neighbors:
+            - neighbor_address: 192.0.2.2
+              address_family:
+                - afi: "ipv4"
+                  safi: "unicast"
+                  multipath: true
+                  default_originate:
+                    set: true
+                  weight: 5
+# Task output
+# -------------
+#
+# commands:
+# - router bgp 65536
+# - neighbor 192.0.2.3
+# - no address-family ipv4 unicast
+# - vrf vrf1
+# - neighbor 192.0.2.4
+# - no address-family ipv4 unicast
+# - vrf vrf1
+# - neighbor 192.0.2.5
+# - no address-family ipv4 unicast
+#
+#
+#
+# after:
+# as_number: 65536
+# neighbors:
+#     - neighbor_address: 192.0.2.2
+#       address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           weight: 5
+#
+# After state:
+# -------------
+# Nexus9000v# show running-config router bgp
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family ipv4 unicast
+#  address-family vpnv4 unicast
+#  neighbor 192.0.2.2
+#   remote-as 65537
+#   address-family ipv4 unicast
+#     multipath
+#     weight 5
+#     default-originate
 """
 
 from ansible.module_utils.basic import AnsibleModule

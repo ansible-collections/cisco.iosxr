@@ -94,24 +94,32 @@ class Bgp_neighbor_address_family(ResourceModule):
         for entry in self.want, self.have:
             self._bgp_list_to_dict(entry)
 
-        # if state is deleted, clean up global params
+        wantd = self.want
+        haved = self.have
+        # if state is merged, merge want onto have and then compare
+        # import epdb;epdb.serve()
+        if self.state == "merged":
+            wantd = dict_merge(self.have, self.want)
+
+        # if state is deleted, empty out wantd and set haved to elements to delete
         if self.state == "deleted":
-            if not self.want or (
-                self.have.get("as_number") == self.want.get("as_number")
-            ):
-                self._compare(
-                    want={"as_number": self.want.get("as_number")},
-                    have=self.have,
-                )
+            if wantd:
+                to_del = {
+                    "neighbors": self._set_to_delete(haved, wantd),
+                    "vrfs": {},
+                }
 
-        else:
-            wantd = self.want
-            # if state is merged, merge want onto have and then compare
-            # import epdb;epdb.serve()
-            if self.state == "merged":
-                wantd = dict_merge(self.have, self.want)
+                for k, hvrf in iteritems(haved.get("vrfs", {})):
+                    wvrf = wantd.get("vrfs", {}).get(k, {})
+                    to_del["vrfs"][k] = {
+                        "neighbors": self._set_to_delete(hvrf, wvrf),
+                        "vrf": k,
+                    }
+                haved.update(to_del)
 
-            self._compare(want=wantd, have=self.have)
+            wantd = {"as_number": haved.get("as_number")}
+
+        self._compare(want=wantd, have=self.have)
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
@@ -138,6 +146,7 @@ class Bgp_neighbor_address_family(ResourceModule):
                 """
         want_nbr = want.get("neighbors", {})
         have_nbr = have.get("neighbors", {})
+        # import epdb;epdb.serve()
         for name, entry in iteritems(want_nbr):
             have = have_nbr.pop(name, {})
             begin = len(self.commands)
@@ -209,9 +218,30 @@ class Bgp_neighbor_address_family(ResourceModule):
                         (x["afi"], x.get("safi")): x
                         for x in nbr["address_family"]
                     }
-            data["neighbors"] = {x["neighbor"]: x for x in data["neighbors"]}
+            data["neighbors"] = {
+                x["neighbor_address"]: x for x in data["neighbors"]
+            }
 
         if "vrfs" in data:
             for vrf in data["vrfs"]:
                 self._bgp_list_to_dict(vrf)
             data["vrfs"] = {x["vrf"]: x for x in data["vrfs"]}
+
+    def _set_to_delete(self, haved, wantd):
+        neighbors = {}
+        h_nbrs = haved.get("neighbors", {})
+        w_nbrs = wantd.get("neighbors", {})
+
+        for k, h_nbr in iteritems(h_nbrs):
+            w_nbr = w_nbrs.pop(k, {})
+            if w_nbr:
+                neighbors[k] = h_nbr
+                afs_to_del = {}
+                h_addrs = h_nbr.get("address_family", {})
+                w_addrs = w_nbr.get("address_family", {})
+                for af, h_addr in iteritems(h_addrs):
+                    if af in w_addrs:
+                        afs_to_del[af] = h_addr
+                neighbors[k]["address_family"] = afs_to_del
+
+        return neighbors

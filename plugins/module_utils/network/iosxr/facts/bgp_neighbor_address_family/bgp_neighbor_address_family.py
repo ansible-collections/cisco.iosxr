@@ -83,10 +83,6 @@ class Bgp_neighbor_address_familyFacts(object):
             "bgp_neighbor_address_family", None
         )
 
-        ansible_facts["ansible_network_resources"].pop(
-            "bgp_neighbor_address_family", None
-        )
-
         params = utils.remove_empties(
             utils.validate_config(self.argument_spec, {"config": objs})
         )
@@ -104,7 +100,7 @@ class Bgp_neighbor_address_familyFacts(object):
         if "neighbors" in data:
             data["neighbors"] = sorted(
                 list(data["neighbors"].values()),
-                key=lambda k, s="neighbor": k[s],
+                key=lambda k, s="neighbor_address": k[s],
             )
             for nbr in data["neighbors"]:
                 nbr["address_family"] = list(nbr["address_family"].values())

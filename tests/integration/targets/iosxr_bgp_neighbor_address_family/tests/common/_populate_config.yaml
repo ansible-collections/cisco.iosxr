@@ -2,7 +2,7 @@
 - name: "Setup"
   cisco.iosxr.iosxr_config:
     lines:
-      - "neighbor 1.1.1.1"
+      - "neighbor 192.0.2.2"
       - " address-family ipv4 unicast"
       - "  origin-as validation disable"
       - "  bestpath origin-as allow invalid"

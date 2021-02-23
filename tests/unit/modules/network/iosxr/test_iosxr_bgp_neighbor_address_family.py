@@ -104,7 +104,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             vrf="vrf1",
                             neighbors=[
                                 dict(
-                                    neighbor="1.2.1.2",
+                                    neighbor_address="1.2.1.2",
                                     address_family=[
                                         dict(
                                             afi="ipv4",
@@ -120,7 +120,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     ],
                     neighbors=[
                         dict(
-                            neighbor="1.1.1.1",
+                            neighbor_address="1.1.1.1",
                             address_family=[
                                 dict(
                                     afi="ipv4",
@@ -182,7 +182,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             vrf="vrf1",
                             neighbors=[
                                 dict(
-                                    neighbor="1.2.1.2",
+                                    neighbor_address="1.2.1.2",
                                     address_family=[
                                         dict(
                                             afi="ipv4",
@@ -198,7 +198,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     ],
                     neighbors=[
                         dict(
-                            neighbor="1.1.1.1",
+                            neighbor_address="1.1.1.1",
                             address_family=[
                                 dict(
                                     afi="ipv4",
@@ -324,7 +324,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             vrf="vrf1",
                             neighbors=[
                                 dict(
-                                    neighbor="1.2.1.2",
+                                    neighbor_address="1.2.1.2",
                                     address_family=[
                                         dict(
                                             afi="ipv4",
@@ -398,7 +398,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             vrf="vrf1",
                             neighbors=[
                                 dict(
-                                    neighbor="1.2.1.2",
+                                    neighbor_address="1.2.1.2",
                                     address_family=[
                                         dict(
                                             afi="ipv4",
@@ -457,7 +457,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 """
         )
         self.get_config.return_value = run_cfg
-        set_module_args(dict(config=dict(as_number="1"), state="deleted"))
+        set_module_args(dict(config=dict(), state="deleted"))
         commands = [
             "router bgp 1",
             "neighbor 1.1.1.1",
@@ -490,7 +490,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             vrf="vrf1",
                             neighbors=[
                                 dict(
-                                    neighbor="1.2.1.2",
+                                    neighbor_address="1.2.1.2",
                                     address_family=[
                                         dict(
                                             afi="ipv4",
@@ -506,7 +506,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     ],
                     neighbors=[
                         dict(
-                            neighbor="1.1.1.1",
+                            neighbor_address="1.1.1.1",
                             address_family=[
                                 dict(
                                     afi="ipv4",
@@ -649,7 +649,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             "validation": {"disable": True, "set": True},
                         },
                     ],
-                    "neighbor": "1.1.1.1",
+                    "neighbor_address": "1.1.1.1",
                 }
             ],
         }
@@ -703,7 +703,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             vrf="vrf1",
                             neighbors=[
                                 dict(
-                                    neighbor="1.2.1.2",
+                                    neighbor_address="1.2.1.2",
                                     address_family=[
                                         dict(
                                             afi="ipv4",

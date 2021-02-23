@@ -164,7 +164,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                         "vrf": "{{ vrf }}",
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
-                                "neighbor": "{{nbr_address.split(" ")[1]}}",
+                                "neighbor_address": "{{nbr_address.split(" ")[1]}}",
                                 "address_family": {
                                     '{{"address_family_" + afi + "_" + safi }}': {
                                         "afi": "{{ afi}}",
