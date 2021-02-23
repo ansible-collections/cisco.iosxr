@@ -109,9 +109,7 @@ class Bgp_address_family(ResourceModule):
         # if state is deleted, clean up global params
         if self.state == "deleted":
             if wantd:
-                to_del = {
-                    "address_family": self._set_to_delete(haved, wantd),
-                }
+                to_del = {"address_family": self._set_to_delete(haved, wantd)}
                 haved.update(to_del)
 
             wantd = {"as_number": haved.get("as_number")}

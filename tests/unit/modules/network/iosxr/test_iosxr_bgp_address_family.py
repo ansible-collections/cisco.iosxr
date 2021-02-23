@@ -277,18 +277,17 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             """
         )
         self.get_config.return_value = run_cfg
-        set_module_args(dict(config=dict(
-                            as_number=65536,
-                            address_family=[
-                                dict(
-                                    afi="ipv6",
-                                    safi="unicast",
-                                    dynamic_med=4
-                                )
-                            ]
-                        ),
-                        state="deleted"
-                    ),)
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number=65536,
+                    address_family=[
+                        dict(afi="ipv6", safi="unicast", dynamic_med=4)
+                    ],
+                ),
+                state="deleted",
+            )
+        )
         commands = ["router bgp 65536", "no address-family ipv6 unicast"]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))

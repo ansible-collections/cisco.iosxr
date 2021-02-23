@@ -37,7 +37,11 @@ merged:
 deleted:
   after:
     as_number: "65536"
-
+  vrf:
+    commands:
+      - router bgp 65536
+      - vrf vrf1
+      - no address-family ipv4 unicast
 
 overridden:
   commands:
