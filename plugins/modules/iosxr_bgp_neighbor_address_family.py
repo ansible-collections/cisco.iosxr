@@ -411,27 +411,27 @@ EXAMPLES = """
               default_originate:
                 set: true
               weight: 4
-        vrfs:
-          - vrf: vrf1
-            neighbors:
-              - neighbor_address: 192.0.2.4
-                address_family:
-                  - afi: "ipv4"
-                    safi: "unicast"
-                    multipath: true
-                    default_originate:
-                      set: true
-                    capability_orf_prefix: both
-          - vrf: vrf2
-            neighbors:
-              - neighbor_address: 192.0.2.5
-                address_family:
-                  - afi: "ipv4"
-                    safi: "unicast"
-                    multipath: true
-                    default_originate:
-                      set: true
-                    capability_orf_prefix: both
+      vrfs:
+        - vrf: vrf1
+          neighbors:
+            - neighbor_address: 192.0.2.4
+              address_family:
+                - afi: "ipv4"
+                  safi: "unicast"
+                  multipath: true
+                  default_originate:
+                    set: true
+                  capability_orf_prefix: both
+        - vrf: vrf2
+          neighbors:
+            - neighbor_address: 192.0.2.5
+              address_family:
+                - afi: "ipv4"
+                  safi: "unicast"
+                  multipath: true
+                  default_originate:
+                    set: true
+                  capability_orf_prefix: both
 # Task output
 # -------------
 # commands:
@@ -913,27 +913,27 @@ EXAMPLES = """
               default_originate:
                 set: true
               weight: 4
-        vrfs:
-          - vrf: vrf1
-            neighbors:
-              - neighbor_address: 192.0.2.4
-                address_family:
-                  - afi: "ipv4"
-                    safi: "unicast"
-                    multipath: true
-                    default_originate:
-                      set: true
-                    capability_orf_prefix: both
-          - vrf: vrf2
-            neighbors:
-              - neighbor_address: 192.0.2.5
-                address_family:
-                  - afi: "ipv4"
-                    safi: "unicast"
-                    multipath: true
-                    default_originate:
-                      set: true
-                    capability_orf_prefix: both
+      vrfs:
+        - vrf: vrf1
+          neighbors:
+            - neighbor_address: 192.0.2.4
+              address_family:
+                - afi: "ipv4"
+                  safi: "unicast"
+                  multipath: true
+                  default_originate:
+                    set: true
+                  capability_orf_prefix: both
+        - vrf: vrf2
+          neighbors:
+            - neighbor_address: 192.0.2.5
+              address_family:
+                - afi: "ipv4"
+                  safi: "unicast"
+                  multipath: true
+                  default_originate:
+                    set: true
+                  capability_orf_prefix: both
 # Task output
 # -------------
 # commands:
@@ -963,8 +963,8 @@ EXAMPLES = """
 #
 # Using parsed
 #
-parsed.cfg
-# ------------
+#parsed.cfg
+#------------
 # router bgp 65536
 #  bgp router-id 192.0.1.1
 #  address-family ipv4 unicast
@@ -1046,8 +1046,8 @@ parsed.cfg
 #               capability_orf_prefix: both
 #
 #
-Using Gathered
------------------
+#Using Gathered
+#-----------------
 # Before state state:
 # -------------
 # RP/0/0/CPU0:iosxr-02#show running-config router bgp
@@ -1136,6 +1136,7 @@ Using Gathered
 #                 set: true
 #               capability_orf_prefix: both
 #
+
 """
 
 from ansible.module_utils.basic import AnsibleModule

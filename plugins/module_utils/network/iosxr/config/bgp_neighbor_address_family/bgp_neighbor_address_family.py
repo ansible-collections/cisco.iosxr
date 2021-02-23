@@ -119,7 +119,7 @@ class Bgp_neighbor_address_family(ResourceModule):
 
             wantd = {"as_number": haved.get("as_number")}
 
-        self._compare(want=wantd, have=self.have)
+        self._compare(want=wantd, have=haved)
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
