@@ -24,14 +24,14 @@ notes:
 - This module works with connection C(network_cli).
 options:
     config:
-      description: A list of configurations for BGP address family.
+      description: BGP neighbor address family configurations.
       type: dict
       suboptions:
         as_number:
           description: Autonomous system number.
           type: str
         neighbors:
-            description: Specify a neighbor router.
+            description: A list of BGP neighbor address family configurations.
             type: list
             elements: dict
             suboptions:
@@ -306,7 +306,7 @@ options:
               description: VRF name.
               type: str
             neighbors:
-                description: Specify a neighbor router.
+                description: A list of BGP neighbor address family configurations.
                 type: list
                 elements: dict
                 suboptions:
