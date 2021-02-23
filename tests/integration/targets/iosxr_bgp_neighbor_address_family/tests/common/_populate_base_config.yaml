@@ -1,0 +1,12 @@
+---
+- name: "Setup"
+  cisco.iosxr.iosxr_config:
+    lines:
+      - "address-family ipv4 unicast"
+      - "address-family ipv6 unicast"
+      - "neighbor 192.0.2.2"
+      - " remote-as 65537"
+    parents: "router bgp 65536"
+
+  vars:
+    ansible_connection: ansible.netcommon.network_cli

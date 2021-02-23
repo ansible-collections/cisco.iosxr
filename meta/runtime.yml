@@ -25,6 +25,10 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr
     bgp_address_family:
       redirect: cisco.iosxr.iosxr
+    iosxr_bgp_neighbor_address_family:
+      redirect: cisco.iosxr.iosxr
+    bgp_neighbor_address_family:
+      redirect: cisco.iosxr.iosxr
     iosxr_command:
       redirect: cisco.iosxr.iosxr
     command:
@@ -168,6 +172,8 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr_system
     user:
       redirect: cisco.iosxr.iosxr_user
+    bgp_neighbor_address_family:
+      redirect: cisco.iosxr.iosxr_bgp_neighbor_address_family
     bgp_address_family:
       redirect: cisco.iosxr.iosxr_bgp_address_family
     bgp_global:
