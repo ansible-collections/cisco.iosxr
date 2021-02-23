@@ -101,19 +101,20 @@ class Bgp_address_family(ResourceModule):
         """ Generate configuration commands to send based on
                     want, have and desired state.
                 """
-
+        wantd = self.want
+        haved = self.have
         for entry in self.want, self.have:
             self._bgp_list_to_dict(entry)
 
         # if state is deleted, clean up global params
         if self.state == "deleted":
-            if not self.want or (
-                self.have.get("as_number") == self.want.get("as_number")
-            ):
-                self._compare(
-                    want={"as_number": self.want.get("as_number")},
-                    have=self.have,
-                )
+            if wantd:
+                to_del = {
+                    "address_family": self._set_to_delete(haved, wantd),
+                }
+                haved.update(to_del)
+
+            wantd = {"as_number": haved.get("as_number")}
 
         else:
             wantd = self.want
@@ -121,7 +122,7 @@ class Bgp_address_family(ResourceModule):
             if self.state == "merged":
                 wantd = dict_merge(self.have, self.want)
 
-            self._compare(want=wantd, have=self.have)
+        self._compare(want=wantd, have=haved)
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
@@ -241,3 +242,12 @@ class Bgp_address_family(ResourceModule):
 
     def _get_config(self):
         return self._connection.get("show running-config router bgp")
+
+    def _set_to_delete(self, haved, wantd):
+        afs_to_del = {}
+        h_addrs = haved.get("address_family", {})
+        w_addrs = wantd.get("address_family", {})
+        for af, h_addr in iteritems(h_addrs):
+            if af in w_addrs:
+                afs_to_del[af] = h_addr
+        return afs_to_del
