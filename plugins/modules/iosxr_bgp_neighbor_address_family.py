@@ -686,7 +686,7 @@ EXAMPLES = """
               safi: "unicast"
               default_originate:
                 set: true
-              weight: 5
+              weight: 4
 # Task output
 # -------------
 # commands:
@@ -1044,7 +1044,98 @@ parsed.cfg
 #               default_originate:
 #                 set: true
 #               capability_orf_prefix: both
+#
+#
+Using Gathered
+-----------------
+# Before state state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family ipv4 unicast
+#  address-family vpnv4 unicast
+#  neighbor 192.0.2.2
+#   remote-as 65537
+#   address-family ipv4 unicast
+#     multipath
+#     weight 5
+#     default-originate
+#  neighbor 1.1.1.2
+#   remote-as 65538
+#   address-family ipv4 unicast
+#     multipath
+#     weight 5
+#     default-originate
+#  vrf vrf1
+#   rd auto
+#   neighbor 192.0.2.4
+#    remote-as 65539
+#    address-family ipv4 unicast
+#     multipath
+#     capability orf prefix both
+#     default-originate
+#  vrf vrf2
+#   rd auto
+#   neighbor 192.0.2.5
+#    remote-as 65540
+#    address-family ipv4 unicast
+#     multipath
+#     capability orf prefix both
+#     default-originate
+#
+#
+#
+- name: Gathered the provided configuration with the exisiting running configuration
+  cisco.iosxr.iosxr_bgp_neighbor_address_family:
+        config:
+        state: gathered
 
+
+# Task output
+# -----------------------
+# gathered:
+#   as_number: 65536
+#   neighbors:
+#     - neighbor_address: 192.0.2.2
+#       address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           weight: 5
+#     - neighbor_address: 192.0.2.3
+#       address_family:
+#         - afi: "ipv4"
+#           safi: "unicast"
+#           multipath: true
+#           default_originate:
+#             set: true
+#           weight: 4
+#   vrfs:
+#     - vrf: vrf1
+#       neighbors:
+#         - neighbor_address: 192.0.2.4
+#           address_family:
+#             - afi: "ipv4"
+#               safi: "unicast"
+#               multipath: true
+#               default_originate:
+#                 set: true
+#               capability_orf_prefix: both
+#     - vrf: vrf2
+#       neighbors:
+#         - neighbor_address: 192.0.2.5
+#           address_family:
+#             - afi: "ipv4"
+#               safi: "unicast"
+#               multipath: true
+#               default_originate:
+#                 set: true
+#               capability_orf_prefix: both
+#
 """
 
 from ansible.module_utils.basic import AnsibleModule
