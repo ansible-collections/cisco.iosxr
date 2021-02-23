@@ -32,11 +32,11 @@ from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
 from .iosxr_module import TestIosxrModule
 
 
-class TestIosxrBgpGlobalModule(TestIosxrModule):
+class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
     module = iosxr_bgp_neighbor_address_family
 
     def setUp(self):
-        super(TestIosxrBgpGlobalModule, self).setUp()
+        super(TestIosxrBgpNeighborAddressFamilyModule, self).setUp()
 
         self.mock_get_resource_connection = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base."
@@ -53,7 +53,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         self.get_config = self.mock_get_config.start()
 
     def tearDown(self):
-        super(TestIosxrBgpGlobalModule, self).tearDown()
+        super(TestIosxrBgpNeighborAddressFamilyModule, self).tearDown()
         self.get_resource_connection.stop()
         self.get_config.stop()
 
@@ -602,9 +602,8 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 "remove-private-AS\n   send-community-gshut-ebgp inheritance-disable\n "
                 "  send-multicast-attributes\n   "
                 "remove-private-AS inbound entire-aspath\n   "
-                "next-hop-unchanged multipath\n  !\n  address-family ipv4 flowspec\n"
-                "   aigp send cost-community disable\n   aigp send med\n   validation disable\n  "
-                "!\n !\n !",
+                "next-hop-unchanged multipath\n  !\n  "
+                "!\n !",
                 state="parsed",
             )
         )
@@ -637,17 +636,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             "send_extended_community_ebgp": {"set": True},
                             "send_multicast_attributes": {"set": True},
                             "weight": 0,
-                        },
-                        {
-                            "afi": "ipv4",
-                            "aigp": {
-                                "send_cost_community_disable": True,
-                                "send_med": {"set": True},
-                                "set": True,
-                            },
-                            "safi": "flowspec",
-                            "validation": {"disable": True, "set": True},
-                        },
+                        }
                     ],
                     "neighbor_address": "1.1.1.1",
                 }
