@@ -7,6 +7,8 @@
       - "bgp router-id 10.0.0.1"
       - "vrf vrf1"
       - " rd auto"
+      - "vrf vrf2"
+      - " rd auto"
     parents: "router bgp 65536"
 
   vars:

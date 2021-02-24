@@ -1,6 +1,6 @@
 ---
 - debug:
-    msg: START iosxr_bgp_address_family gathered integration tests on connection={{ ansible_connection
+    msg: START iosxr_bgp_neighbor_address_family gathered integration tests on connection={{ ansible_connection
       }}
 
 - include_tasks: _remove_config.yaml
@@ -20,7 +20,8 @@
     - name: Assert
       assert:
         that:
-          - - "{{ merged['after']  == result['gathered']}}"
-          - result['changed'] == false
+          - "{{ merged['after']['neighbors'] | symmetric_difference(result['gathered']['neighbors']) |length\
+                         \ == 0 }}"
+          - merged['after']['as_number'] == result['gathered']['as_number']
   always:
     - include_tasks: _remove_config.yaml

@@ -478,6 +478,434 @@ options:
       default: merged
 """
 EXAMPLES = """
+# Using merged
+# Before state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.2.1
+#  address-family vpnv4 unicast
+#  vrf vrf1
+#   rd auto
+- name: Merge the provided configuration with the exisiting running configuration
+  cisco.iosxr.iosxr_bgp_address_family:
+    state: merged
+    config:
+      as_number: "65536"
+      address_family:
+        - afi: "ipv4"
+          safi: "unicast"
+          vrf: vrf1
+          dynamic_med: 9
+          redistribute:
+            - protocol: connected
+              metric: 10
+        - afi: "ipv4"
+          safi: "unicast"
+          dynamic_med: 10
+          redistribute:
+            - protocol: application
+              id: test1
+              metric: 10
+          bgp:
+            scan_time: 20
+            attribute_download: true
+          advertise_best_external: true
+          allocate_label:
+            all: true
+# Task output
+# -------------
+# commands:
+# - router bgp 65536
+# - address-family ipv4 unicast
+# - advertise best-external
+# - allocate-label all
+# - bgp attribute-download
+# - bgp scan-time 20
+# - dynamic-med interval 10
+# - redistribute application test1 metric 10
+# - vrf vrf1
+# - address-family ipv4 unicast
+# - dynamic-med interval 9
+# - redistribute connected metric 10
+#
+#
+# after:
+#   as_number: "65536"
+#   address_family:
+#     - afi: "ipv4"
+#       safi: "unicast"
+#       vrf: vrf1
+#       dynamic_med: 9
+#       redistribute:
+#         - protocol: connected
+#           metric: 10
+#     - afi: "ipv4"
+#       safi: "unicast"
+#       dynamic_med: 10
+#       redistribute:
+#         - protocol: application
+#           id: "test1"
+#           metric: 10
+#       bgp:
+#         scan_time: 20
+#         attribute_download: true
+#       advertise_best_external: true
+#       allocate_label:
+#         all: true
+#
+# After state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family ipv4 unicast
+#    advertise best-external
+#    allocate-label all
+#    bgp attribute-download
+#    bgp scan-time 20
+#  address-family vpnv4 unicast
+#  vrf vrf1
+#   rd auto
+#   address-family ipv4 unicast
+#     dynamic-med interval 9
+#     redistribute connected metric 10
+#
+# Using replaced
+# Before state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family ipv4 unicast
+#    advertise best-external
+#    allocate-label all
+#    bgp attribute-download
+#    bgp scan-time 20
+#  address-family vpnv4 unicast
+#  vrf vrf1
+#   rd auto
+#   address-family ipv4 unicast
+#     dynamic-med interval 9
+#     redistribute connected metric 10
+#
+#
+- name: Replace the provided configuration with the exisiting running configuration
+  cisco.iosxr.iosxr_bgp_address_family:
+    state: replaced
+    config:
+      as_number: "65536"
+      address_family:
+        - afi: "ipv4"
+          safi: "unicast"
+          vrf: vrf1
+          dynamic_med: 10
+# Task output
+# -------------
+# commands:
+# - router bgp 65536
+# - vrf vrf1
+# - address-family ipv4 unicast
+# - dynamic-med interval 10
+# - no redistribute connected metric 10
+#
+# after:
+#   as_number: "65536"
+#   address_family:
+#     - afi: "ipv4"
+#       safi: "unicast"
+#       vrf: vrf1
+#       dynamic_med: 10
+#     - afi: "ipv4"
+#       safi: "unicast"
+#       dynamic_med: 10
+#       redistribute:
+#         - protocol: application
+#           id: "test1"
+#           metric: 10
+#       bgp:
+#         scan_time: 20
+#         attribute_download: true
+#       advertise_best_external: true
+#       allocate_label:
+#         all: true
+# After state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family ipv4 unicast
+#    advertise best-external
+#    allocate-label all
+#    bgp attribute-download
+#    bgp scan-time 20
+#  address-family vpnv4 unicast
+#  vrf vrf1
+#   rd auto
+#   address-family ipv4 unicast
+#     dynamic-med interval 10
+#
+#
+# Using overridden
+# Before state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family ipv4 unicast
+#    advertise best-external
+#    allocate-label all
+#    bgp attribute-download
+#    bgp scan-time 20
+#  address-family vpnv4 unicast
+#  vrf vrf1
+#   rd auto
+#   address-family ipv4 unicast
+#     dynamic-med interval 9
+#     redistribute connected metric 10
+#
+#
+- name: Override the provided configuration with the exisiting running configuration
+  cisco.iosxr.iosxr_bgp_address_family:
+    state: overridden
+    config:
+      as_number: "65536"
+      address_family:
+        - afi: "ipv4"
+          safi: "unicast"
+          vrf: vrf1
+          dynamic_med: 10
+
+# Task output
+# -------------
+# commands:
+# - router bgp 65536
+# - no address-family ipv4 unicast
+# - vrf vrf1
+# - address-family ipv4 unicast
+# - dynamic-med interval 10
+# - no redistribute connected metric 10
+#
+#
+# after:
+#   as_number: "65536"
+#   address_family:
+#     - afi: "ipv4"
+#       safi: "unicast"
+#       vrf: vrf1
+#       dynamic_med: 10
+#
+# After state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family vpnv4 unicast
+#  vrf vrf1
+#   rd auto
+#   address-family ipv4 unicast
+#     dynamic-med interval 10
+#
+#
+# Using deleted
+# Before state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family ipv4 unicast
+#    advertise best-external
+#    allocate-label all
+#    bgp attribute-download
+#    bgp scan-time 20
+#  address-family vpnv4 unicast
+#  vrf vrf1
+#   rd auto
+#   address-family ipv4 unicast
+#     dynamic-med interval 9
+#     redistribute connected metric 10
+#
+#
+- name: Delete the provided configuration
+  cisco.iosxr.iosxr_bgp_address_family:
+    state: deleted
+    config:
+
+# Task output
+# -------------
+# commands:
+# - router bgp 65536
+# - no address-family ipv4 unicast
+# - vrf vrf1
+# - no address-family ipv4 unicast
+#
+#
+# after:
+#   as_number: "65536"
+#
+#
+# After state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config router bgp
+# Sat Feb 20 03:49:43.618 UTC
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family vpnv4 unicast
+#  vrf vrf1
+#   rd auto
+#
+# Using rendered
+# -------------
+#
+- name: rendered state example
+  cisco.iosxr.iosxr_bgp_address_family:
+    state: rendered
+    config:
+      as_number: "65536"
+      address_family:
+        - afi: "ipv4"
+          safi: "unicast"
+          vrf: vrf1
+          dynamic_med: 9
+          redistribute:
+            - protocol: connected
+              metric: 10
+        - afi: "ipv4"
+          safi: "unicast"
+          dynamic_med: 10
+          redistribute:
+            - protocol: application
+              id: test1
+              metric: 10
+          bgp:
+            scan_time: 20
+            attribute_download: true
+          advertise_best_external: true
+          allocate_label:
+            all: true
+# Task output
+# -------------
+# commands:
+# - router bgp 65536
+# - address-family ipv4 unicast
+# - advertise best-external
+# - allocate-label all
+# - bgp attribute-download
+# - bgp scan-time 20
+# - dynamic-med interval 10
+# - redistribute application test1 metric 10
+# - vrf vrf1
+# - address-family ipv4 unicast
+# - dynamic-med interval 9
+# - redistribute connected metric 10
+#
+# Using gathered
+# -------------
+- name: Merge the provided configuration with the exisiting running configuration
+  cisco.iosxr.iosxr_bgp_address_family:
+    state: gathered
+    config:
+      as_number: "65536"
+      address_family:
+        - afi: "ipv4"
+          safi: "unicast"
+          vrf: vrf1
+          dynamic_med: 9
+          redistribute:
+            - protocol: connected
+              metric: 10
+        - afi: "ipv4"
+          safi: "unicast"
+          dynamic_med: 10
+          redistribute:
+            - protocol: application
+              id: test1
+              metric: 10
+          bgp:
+            scan_time: 20
+            attribute_download: true
+          advertise_best_external: true
+          allocate_label:
+            all: true
+# gathered:
+#   as_number: "65536"
+#   address_family:
+#     - afi: "ipv4"
+#       safi: "unicast"
+#       vrf: vrf1
+#       dynamic_med: 9
+#       redistribute:
+#         - protocol: connected
+#           metric: 10
+#     - afi: "ipv4"
+#       safi: "unicast"
+#       dynamic_med: 10
+#       redistribute:
+#         - protocol: application
+#           id: "test1"
+#           metric: 10
+#       bgp:
+#         scan_time: 20
+#         attribute_download: true
+#       advertise_best_external: true
+#       allocate_label:
+#         all: true
+#
+# Using parsed
+#
+#parsed.cfg
+#------------
+# router bgp 65536
+#  bgp router-id 192.0.1.1
+#  address-family ipv4 unicast
+#    advertise best-external
+#    allocate-label all
+#    bgp attribute-download
+#    bgp scan-time 20
+#  address-family vpnv4 unicast
+#  vrf vrf1
+#   rd auto
+#   address-family ipv4 unicast
+#     dynamic-med interval 9
+#     redistribute connected metric 10
+#
+- name: Parse externally provided BGP neighbor AF config
+  cisco.iosxr.iosxr_bgp_address_family:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
+
+# Task output (redacted)
+# -----------------------
+# parsed:
+#   as_number: "65536"
+#   address_family:
+#     - afi: "ipv4"
+#       safi: "unicast"
+#       vrf: vrf1
+#       dynamic_med: 9
+#       redistribute:
+#         - protocol: connected
+#           metric: 10
+#     - afi: "ipv4"
+#       safi: "unicast"
+#       dynamic_med: 10
+#       redistribute:
+#         - protocol: application
+#           id: "test1"
+#           metric: 10
+#       bgp:
+#         scan_time: 20
+#         attribute_download: true
+#       advertise_best_external: true
+#       allocate_label:
+#         all: true
 """
 
 from ansible.module_utils.basic import AnsibleModule
