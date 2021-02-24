@@ -382,14 +382,6 @@ def run(module, result):
             commands = config_diff.split("\n")
 
         if any((module.params["lines"], module.params["src"])):
-            msg = (
-                "To ensure idempotency and correct diff the input configuration lines should be"
-                " similar to how they appear if present in the running configuration on device"
-            )
-            if module.params["src"]:
-                msg += " including the indentation"
-            module.warn(msg)
-
             if module.params["before"]:
                 commands[:0] = module.params["before"]
 
@@ -472,6 +464,21 @@ def main():
 
     if any((module.params["src"], module.params["lines"])):
         run(module, result)
+
+    if result.get("changed") and any(
+        (module.params["src"], module.params["lines"])
+    ):
+        msg = (
+            "To ensure idempotency and correct diff the input configuration lines should be"
+            " similar to how they appear if present in"
+            " the running configuration on device"
+        )
+        if module.params["src"]:
+            msg += " including the indentation"
+        if "warnings" in result:
+            result["warnings"].append(msg)
+        else:
+            result["warnings"] = msg
 
     module.exit_json(**result)
 
