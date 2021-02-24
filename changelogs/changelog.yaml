@@ -165,3 +165,43 @@ releases:
     fragments:
     - iosxr_config_diff_doc_update.yaml
     release_date: '2021-01-28'
+  2.0.0:
+    changes:
+      bugfixes:
+      - Fix to accurately report configuration failure during pseudo-atomic operation
+        fior iosxr-6.6.3 (https://github.com/ansible-collections/cisco.iosxr/issues/92).
+      major_changes:
+      - ipaddress is no longer in ansible.netcommon. For Python versions without ipaddress
+        (< 3.0), the ipaddress package is now required.
+      minor_changes:
+      - Add iosxr_bgp_address_family resource module (https://github.com/ansible-collections/cisco.iosxr/pull/105.).
+      - Add iosxr_bgp_global resource module (https://github.com/ansible-collections/cisco.iosxr/pull/101.).
+      - Add iosxr_bgp_neighbor_address_family resource module (https://github.com/ansible-collections/cisco.iosxr/pull/107.).
+      - Add missing examples for bgp_address_family module.
+      - Add support for single_user_mode.
+      - Fix integration testcases for bgp_address_family and bgp_neighbor_address_family.
+      - Fix issue in delete state in bgp_address_family (https://github.com/ansible-collections/cisco.iosxr/pull/109).
+      - Move iosxr_config idempotent warning message with the task response under
+        `warnings` key if `changed` is `True`
+      - Re-use device_info dict instead of building it every time.
+    fragments:
+    - 102-remove-ipaddress.yaml
+    - 105-bgp_af_resource_module.yaml
+    - 107-bgp-nbr-af-resource-module.yaml
+    - 109-bugfix-bgp-af-delete.yaml
+    - bgp_global_resource_module.yaml
+    - config_module_warning_msg.yaml
+    - fix_iosxr_663_psudoatomic_failure.yaml
+    - single_user_mode.yaml
+    - unittest-fix-for-resource-module-base.yaml
+    modules:
+    - description: Manages BGP Address Family resource module.
+      name: iosxr_bgp_address_family
+      namespace: ''
+    - description: Manages BGP global resource module.
+      name: iosxr_bgp_global
+      namespace: ''
+    - description: Manages BGP neighbor address family resource module.
+      name: iosxr_bgp_neighbor_address_family
+      namespace: ''
+    release_date: '2021-02-24'

@@ -5,6 +5,39 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v2.0.0
+======
+
+Major Changes
+-------------
+
+- ipaddress is no longer in ansible.netcommon. For Python versions without ipaddress (< 3.0), the ipaddress package is now required.
+
+Minor Changes
+-------------
+
+- Add iosxr_bgp_address_family resource module (https://github.com/ansible-collections/cisco.iosxr/pull/105.).
+- Add iosxr_bgp_global resource module (https://github.com/ansible-collections/cisco.iosxr/pull/101.).
+- Add iosxr_bgp_neighbor_address_family resource module (https://github.com/ansible-collections/cisco.iosxr/pull/107.).
+- Add missing examples for bgp_address_family module.
+- Add support for single_user_mode.
+- Fix integration testcases for bgp_address_family and bgp_neighbor_address_family.
+- Fix issue in delete state in bgp_address_family (https://github.com/ansible-collections/cisco.iosxr/pull/109).
+- Move iosxr_config idempotent warning message with the task response under `warnings` key if `changed` is `True`
+- Re-use device_info dict instead of building it every time.
+
+Bugfixes
+--------
+
+- Fix to accurately report configuration failure during pseudo-atomic operation fior iosxr-6.6.3 (https://github.com/ansible-collections/cisco.iosxr/issues/92).
+
+New Modules
+-----------
+
+- iosxr_bgp_address_family - Manages BGP Address Family resource module.
+- iosxr_bgp_global - Manages BGP global resource module.
+- iosxr_bgp_neighbor_address_family - Manages BGP neighbor address family resource module.
+
 v1.2.1
 ======
 
