@@ -512,8 +512,8 @@ EXAMPLES = """
             scan_time: 20
             attribute_download: true
           advertise_best_external: true
-            allocate_label:
-              all: true
+          allocate_label:
+            all: true
 # Task output
 # -------------
 # commands:
@@ -788,8 +788,8 @@ EXAMPLES = """
             scan_time: 20
             attribute_download: true
           advertise_best_external: true
-            allocate_label:
-              all: true
+          allocate_label:
+            all: true
 # Task output
 # -------------
 # commands:
@@ -832,8 +832,8 @@ EXAMPLES = """
             scan_time: 20
             attribute_download: true
           advertise_best_external: true
-            allocate_label:
-              all: true
+          allocate_label:
+            all: true
 # gathered:
 #   as_number: "65536"
 #   address_family:
