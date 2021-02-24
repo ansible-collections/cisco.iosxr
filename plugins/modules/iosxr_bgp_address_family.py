@@ -489,7 +489,7 @@ EXAMPLES = """
 #  vrf vrf1
 #   rd auto
 - name: Merge the provided configuration with the exisiting running configuration
-  cisco.iosxr.iosxr_bgp_neighbor_address_family:
+  cisco.iosxr.iosxr_bgp_address_family:
     state: merged
     config:
       as_number: "65536"
@@ -594,7 +594,7 @@ EXAMPLES = """
 #
 #
 - name: Replace the provided configuration with the exisiting running configuration
-  cisco.iosxr.iosxr_bgp_neighbor_address_family:
+  cisco.iosxr.iosxr_bgp_address_family:
     state: replaced
     config:
       as_number: "65536"
@@ -671,7 +671,7 @@ EXAMPLES = """
 #
 #
 - name: Override the provided configuration with the exisiting running configuration
-  cisco.iosxr.iosxr_bgp_neighbor_address_family:
+  cisco.iosxr.iosxr_bgp_address_family:
     state: overridden
     config:
       as_number: "65536"
@@ -734,7 +734,7 @@ EXAMPLES = """
 #
 #
 - name: Delete the provided configuration
-  cisco.iosxr.iosxr_bgp_neighbor_address_family:
+  cisco.iosxr.iosxr_bgp_address_family:
     state: deleted
     config:
 
@@ -765,7 +765,7 @@ EXAMPLES = """
 # -------------
 #
 - name: rendered state example
-  cisco.iosxr.iosxr_bgp_neighbor_address_family:
+  cisco.iosxr.iosxr_bgp_address_family:
     state: rendered
     config:
       as_number: "65536"
@@ -809,7 +809,7 @@ EXAMPLES = """
 # Using gathered
 # -------------
 - name: Merge the provided configuration with the exisiting running configuration
-  cisco.iosxr.iosxr_bgp_neighbor_address_family:
+  cisco.iosxr.iosxr_bgp_address_family:
     state: gathered
     config:
       as_number: "65536"
