@@ -1,5 +1,0 @@
----
-minor_changes:
-  - Fix issue in delete state in bgp_address_family (https://github.com/ansible-collections/cisco.iosxr/pull/109).
-  - Add missing examples for bgp_address_family module.
-  - Fix integration testcases for bgp_address_family and bgp_neighbor_address_family.
