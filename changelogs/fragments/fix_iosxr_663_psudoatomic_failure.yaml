@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fix to accurately report configuration failure during pseudo-atomic operation fior iosxr-6.6.3 (https://github.com/ansible-collections/cisco.iosxr/issues/92).
