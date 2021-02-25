@@ -106,14 +106,14 @@ releases:
       release_summary:
       - Rereleased 1.0.2 with regenerated documentation.
     fragments:
-    - 1.0.3.yaml
+      - 1.0.3.yaml
     release_date: '2020-07-31'
   1.0.4:
     changes:
       release_summary:
       - Rereleased 1.0.3 with updated changelog.
     fragments:
-    - 1.0.4.yaml
+      - 1.0.4.yaml
     release_date: '2020-08-07'
   1.0.5:
     changes:
@@ -171,6 +171,10 @@ releases:
       - Fix to accurately report configuration failure during pseudo-atomic operation
         fior iosxr-6.6.3 (https://github.com/ansible-collections/cisco.iosxr/issues/92).
       major_changes:
+      - Please refer to ansible.netcommon `changelog <https://github.com/ansible-collections/ansible.netcommon/blob/main/changelogs/CHANGELOG.rst#ansible-netcommon-collection-release-notes>`_
+        for more details.
+      - Requires ansible.netcommon v2.0.0+ to support `ansible_network_single_user_mode`
+        and `ansible_network_import_modules`.
       - ipaddress is no longer in ansible.netcommon. For Python versions without ipaddress
         (< 3.0), the ipaddress package is now required.
       minor_changes:
@@ -192,6 +196,7 @@ releases:
     - bgp_global_resource_module.yaml
     - config_module_warning_msg.yaml
     - fix_iosxr_663_psudoatomic_failure.yaml
+    - major_release.yaml
     - single_user_mode.yaml
     - unittest-fix-for-resource-module-base.yaml
     modules:
