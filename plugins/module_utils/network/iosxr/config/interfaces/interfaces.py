@@ -220,7 +220,7 @@ class Interfaces(ConfigBase):
                   the current configuration
         """
         commands = []
-
+        flag = 0
         for interface in want:
             if self.state == "rendered":
                 commands.extend(self._set_config(interface, dict()))
@@ -230,10 +230,12 @@ class Interfaces(ConfigBase):
                         each["name"] == interface["name"]
                         or interface["name"] in each["name"]
                     ):
+                        flag = 1
                         break
+                if flag == 1:
+                    commands.extend(self._set_config(interface, each))
                 else:
-                    continue
-                commands.extend(self._set_config(interface, each))
+                    commands.extend(self._set_config(interface, dict()))
 
         return commands
 
