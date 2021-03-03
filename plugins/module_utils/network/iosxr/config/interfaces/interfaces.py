@@ -167,7 +167,6 @@ class Interfaces(ConfigBase):
         commands = []
 
         for interface in want:
-            interface["name"] = normalize_interface(interface["name"])
             for each in have:
                 if (
                     each["name"] == interface["name"]
@@ -195,7 +194,6 @@ class Interfaces(ConfigBase):
 
         for each in have:
             for interface in want:
-                interface["name"] = normalize_interface(interface["name"])
                 if (
                     each["name"] == interface["name"]
                     or interface["name"] in each["name"]
@@ -225,7 +223,6 @@ class Interfaces(ConfigBase):
         commands = []
         flag = 0
         for interface in want:
-            interface["name"] = normalize_interface(interface["name"])
             if self.state == "rendered":
                 commands.extend(self._set_config(interface, dict()))
             else:
@@ -253,7 +250,6 @@ class Interfaces(ConfigBase):
 
         if want:
             for interface in want:
-                interface["name"] = normalize_interface(interface["name"])
                 for each in have:
                     if (
                         each["name"] == interface["name"]
@@ -274,6 +270,7 @@ class Interfaces(ConfigBase):
     def _set_config(self, want, have):
         # Set the interface config based on the want and have config
         commands = []
+        want["name"] = normalize_interface(want["name"])
         interface = "interface " + want["name"]
         # Get the diff b/w want and have
         want_dict = dict_to_set(want)
