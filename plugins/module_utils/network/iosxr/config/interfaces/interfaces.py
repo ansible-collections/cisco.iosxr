@@ -26,6 +26,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.fa
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     get_interface_type,
     dict_to_set,
+    normalize_interface,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     remove_command_from_config_list,
@@ -220,7 +221,7 @@ class Interfaces(ConfigBase):
                   the current configuration
         """
         commands = []
-
+        flag = 0
         for interface in want:
             if self.state == "rendered":
                 commands.extend(self._set_config(interface, dict()))
@@ -230,10 +231,12 @@ class Interfaces(ConfigBase):
                         each["name"] == interface["name"]
                         or interface["name"] in each["name"]
                     ):
+                        flag = 1
                         break
+                if flag == 1:
+                    commands.extend(self._set_config(interface, each))
                 else:
-                    continue
-                commands.extend(self._set_config(interface, each))
+                    commands.extend(self._set_config(interface, dict()))
 
         return commands
 
@@ -267,8 +270,8 @@ class Interfaces(ConfigBase):
     def _set_config(self, want, have):
         # Set the interface config based on the want and have config
         commands = []
+        want["name"] = normalize_interface(want["name"])
         interface = "interface " + want["name"]
-
         # Get the diff b/w want and have
         want_dict = dict_to_set(want)
         have_dict = dict_to_set(have)

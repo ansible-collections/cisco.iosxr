@@ -1,0 +1,4 @@
+---
+bugfixes:
+  - Add fix for interfaces which are not in running config should get merged when state is merged.
+    (https://github.com/ansible-collections/cisco.iosxr/issues/106)
