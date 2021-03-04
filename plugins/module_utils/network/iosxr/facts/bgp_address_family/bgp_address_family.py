@@ -25,6 +25,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templ
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.bgp_address_family.bgp_address_family import (
     Bgp_address_familyArgs,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    flatten_config,
+)
 
 
 class Bgp_address_familyFacts(object):
@@ -61,8 +64,8 @@ class Bgp_address_familyFacts(object):
         if not data:
             data = self.get_config(connection)
 
-        nb_data = self._flatten_config(data, "neighbor")
-        data = self._flatten_config(nb_data, "vrf")
+        nb_data = flatten_config(data, "neighbor")
+        data = flatten_config(nb_data, "vrf")
         # parse native config using the Bgp_global template
         bgp_global_parser = Bgp_address_familyTemplate(lines=data.splitlines())
         objs = bgp_global_parser.parse()
@@ -94,25 +97,3 @@ class Bgp_address_familyFacts(object):
         af = obj.get("address_family", {})
         if af:
             obj["address_family"] = list(af.values())
-
-    def _flatten_config(self, data, context):
-        """ Flatten different contexts in
-            the running-config for easier parsing.
-        :param obj: dict
-        :returns: flattened running config
-        """
-        data = data.split("\n")
-        in_nbr_cxt = False
-        cur_nbr = {}
-
-        for x in data:
-            cur_indent = len(x) - len(x.lstrip())
-            if x.strip().startswith(context):
-                in_nbr_cxt = True
-                cur_nbr["nbr"] = x
-                cur_nbr["indent"] = cur_indent
-            elif cur_nbr and (cur_indent <= cur_nbr["indent"]):
-                in_nbr_cxt = False
-            elif in_nbr_cxt:
-                data[data.index(x)] = cur_nbr["nbr"] + " " + x.strip()
-        return "\n".join(data)

@@ -400,3 +400,27 @@ def prefix_to_address_wildcard(prefix):
     wildcard = ".".join(wildcard)
 
     return prefix.split("/")[0], wildcard
+
+
+def flatten_config(data, context):
+    """ Flatten different contexts in
+        the running-config for easier parsing.
+    :param data: dict
+    :param context: str
+    :returns: flattened running config
+    """
+    data = data.split("\n")
+    in_cxt = False
+    cur = {}
+
+    for x in data:
+        cur_indent = len(x) - len(x.lstrip())
+        if x.strip().startswith(context):
+            in_cxt = True
+            cur["context"] = x
+            cur["indent"] = cur_indent
+        elif cur and (cur_indent <= cur["indent"]):
+            in_cxt = False
+        elif in_cxt:
+            data[data.index(x)] = cur["context"] + " " + x.strip()
+    return "\n".join(data)
