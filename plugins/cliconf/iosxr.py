@@ -73,7 +73,6 @@ class Cliconf(CliconfBase):
         data = to_text(reply, errors="surrogate_or_strict").strip()
         return data
 
-
     def get_device_info(self):
         if not self._device_info:
             device_info = dict()

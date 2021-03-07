@@ -83,7 +83,7 @@ class TestPluginCLIConfIOSXR(unittest.TestCase):
             "network_os_version": "6.0.0[Default]",
             "network_os": "iosxr",
             "network_os_hostname": "iosxr01",
-            "network_os_model": "IOS XRv"
+            "network_os_model": "IOS XRv",
         }
 
         self.assertEqual(device_info, mock_device_info)
@@ -92,9 +92,6 @@ class TestPluginCLIConfIOSXR(unittest.TestCase):
         """ Test _get_command_with_output for iosxr
         """
         self._prepare()
-        cmd = self._cliconf.get_command_output(
-            "show running-config hostname"
-        )
+        cmd = self._cliconf.get_command_output("show running-config hostname")
 
         self.assertEqual(cmd, "hostname iosxr01")
-
