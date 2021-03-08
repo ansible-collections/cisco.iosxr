@@ -54,6 +54,8 @@ class TestPluginCLIConfIOSXR(unittest.TestCase):
                     value = args[0]
                 else:
                     value = kwargs.get("command")
+                if b'|' in value:
+                    value = value.replace(b'|', b'')
                 fixture_path = path.abspath(
                     b"%s/%s" % (b_FIXTURE_DIR, b"_".join(value.split(b" ")))
                 )
