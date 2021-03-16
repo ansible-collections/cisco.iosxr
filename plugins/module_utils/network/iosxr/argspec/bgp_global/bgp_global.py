@@ -415,8 +415,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "keychain": {
                             "type": "dict",
+                            "no_log": False,
                             "options": {
-                                "name": {"type": "str"},
+                                "name": {"type": "str", },
                                 "inheritance_disable": {"type": "bool"},
                             },
                         },
@@ -1023,6 +1024,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "keychain": {
                                     "type": "dict",
+                                    "no_log": False,
                                     "options": {
                                         "name": {"type": "str"},
                                         "inheritance_disable": {
