@@ -258,7 +258,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE
             ),
-            "setval": "as-override{{' inheritance-disable' if as_override.inheritance_disable is defined }}",
+            "setval": "as-override{{' inheritance-disable' if as_override.inheritance_disable is defined else ''}}",
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -507,7 +507,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE
             ),
-            "setval": "next-hop-self{{' inheritance-disable' if next_hop_self.inheritance_disable is defined }}",
+            "setval": "next-hop-self{{' inheritance-disable' if next_hop_self.inheritance_disable is defined else ''}}",
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -752,7 +752,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "send-community-ebgp{{' inheritance-disable' "
-                      "if send_community_ebgp.inheritance_disable is defined }}",
+                      "if send_community_ebgp.inheritance_disable is defined else ''}}",
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -785,7 +785,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "send-community-gshut-ebgp{{' inheritance-disable' "
-                      "if send_community_gshut_ebgp.inheritance_disable is defined }}",
+                      "if send_community_gshut_ebgp.inheritance_disable is defined else ''}}",
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -818,7 +818,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "send-extended-community-ebgp{{' inheritance-disable' "
-                      "if send_extended_community_ebgp.inheritance_disable is defined }}",
+                      "if send_extended_community_ebgp.inheritance_disable is defined else ''}}",
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -851,7 +851,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 $""", re.VERBOSE
             ),
             "setval": "send-multicast-attributes{{' disable' "
-                      "if send_multicast_attributes.disable is defined }}",
+                      "if send_multicast_attributes.disable is defined else ''}}",
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
