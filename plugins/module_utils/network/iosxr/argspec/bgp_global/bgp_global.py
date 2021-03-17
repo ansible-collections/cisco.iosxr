@@ -417,7 +417,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "no_log": False,
                             "options": {
-                                "name": {"type": "str", },
+                                "name": {"type": "str"},
                                 "inheritance_disable": {"type": "bool"},
                             },
                         },
