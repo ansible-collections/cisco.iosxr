@@ -94,6 +94,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                         },
                         "authentication_key": {
                             "type": "dict",
+                            "no_log": False,
                             "options": {
                                 "password": {"type": "str", "no_log": False},
                                 "clear": {"type": "str"},
@@ -318,6 +319,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                         "link_down_fast_detect": {"type": "bool"},
                         "message_digest_key": {
                             "type": "dict",
+                            "no_log": False,
                             "options": {
                                 "id": {"type": "int", "required": True},
                                 "md5": {

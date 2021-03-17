@@ -107,6 +107,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         },
                                     },
                                     "type": "dict",
+                                    "no_log": False,
                                 },
                                 "bfd": {
                                     "options": {
@@ -257,6 +258,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                                 },
                                             },
                                             "type": "dict",
+                                            "no_log": False,
                                         },
                                         "dead_interval": {"type": "int"},
                                         "hello_interval": {"type": "int"},
@@ -291,6 +293,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                                 },
                                             },
                                             "type": "dict",
+                                            "no_log": False,
                                         },
                                         "retransmit_interval": {"type": "int"},
                                         "transmit_delay": {"type": "int"},
@@ -328,6 +331,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                 "password": {"type": "str", "no_log": False},
                             },
                             "type": "dict",
+                            "no_log": False,
                         },
                         "auto_cost": {
                             "mutually_exclusive": [
@@ -553,6 +557,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                 },
                             },
                             "type": "dict",
+                            "no_log": False,
                         },
                         "microloop_avoidance": {
                             "mutually_exclusive": [
