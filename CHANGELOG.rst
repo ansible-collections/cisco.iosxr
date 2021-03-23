@@ -26,6 +26,7 @@ Minor Changes
 - Fix issue in delete state in bgp_address_family (https://github.com/ansible-collections/cisco.iosxr/pull/109).
 - Move iosxr_config idempotent warning message with the task response under `warnings` key if `changed` is `True`
 - Re-use device_info dict instead of building it every time.
+- test 2_11 jobs for iosxr
 
 Bugfixes
 --------
