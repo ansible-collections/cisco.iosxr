@@ -1,4 +1,4 @@
-lxml==4.6.2 ; python_version == '3.5'
+lxml
 ncclient
 paramiko
 ipaddress
