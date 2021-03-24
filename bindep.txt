@@ -4,5 +4,5 @@
 gcc-c++ [doc test platform:rpm]
 python3-devel [test platform:rpm]
 python3 [test platform:rpm]
-libxml2          [platform:dpkg]
-libxslt        [platform:dpkg]
+libxml2-dev         [platform:dpkg]
+libxslt-dev        [platform:dpkg]
