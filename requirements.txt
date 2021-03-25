@@ -1,4 +1,3 @@
-lxml
 ncclient
 paramiko
 ipaddress
