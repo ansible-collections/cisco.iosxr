@@ -60,9 +60,18 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                             "type": "str",
                                             "choices": ["md5", "sha1"],
                                         },
-                                        "key": {"type": "str"},
-                                        "clear_key": {"type": "str"},
-                                        "password_key": {"type": "str"},
+                                        "key": {
+                                            "type": "str",
+                                            "no_log": False,
+                                        },
+                                        "clear_key": {
+                                            "type": "str",
+                                            "no_log": False,
+                                        },
+                                        "password_key": {
+                                            "type": "str",
+                                            "no_log": False,
+                                        },
                                     },
                                 },
                             },
@@ -108,10 +117,17 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                     "type": "str",
                                                     "choices": ["md5", "sha1"],
                                                 },
-                                                "key": {"type": "str"},
-                                                "clear_key": {"type": "str"},
+                                                "key": {
+                                                    "type": "str",
+                                                    "no_log": False,
+                                                },
+                                                "clear_key": {
+                                                    "type": "str",
+                                                    "no_log": False,
+                                                },
                                                 "password_key": {
-                                                    "type": "str"
+                                                    "type": "str",
+                                                    "no_log": False,
                                                 },
                                             },
                                         },
@@ -470,12 +486,17 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                                 "sha1",
                                                             ],
                                                         },
-                                                        "key": {"type": "str"},
+                                                        "key": {
+                                                            "type": "str",
+                                                            "no_log": False,
+                                                        },
                                                         "clear_key": {
-                                                            "type": "str"
+                                                            "type": "str",
+                                                            "no_log": False,
                                                         },
                                                         "password_key": {
-                                                            "type": "str"
+                                                            "type": "str",
+                                                            "no_log": False,
                                                         },
                                                     },
                                                 },
@@ -503,13 +524,16 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                                     "type": "dict",
                                                                     "options": {
                                                                         "key": {
-                                                                            "type": "str"
+                                                                            "type": "str",
+                                                                            "no_log": False,
                                                                         },
                                                                         "clear_key": {
-                                                                            "type": "str"
+                                                                            "type": "str",
+                                                                            "no_log": False,
                                                                         },
                                                                         "password_key": {
-                                                                            "type": "str"
+                                                                            "type": "str",
+                                                                            "no_log": False,
                                                                         },
                                                                     },
                                                                 },
@@ -524,13 +548,16 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                                             ],
                                                                         },
                                                                         "key": {
-                                                                            "type": "str"
+                                                                            "type": "str",
+                                                                            "no_log": False,
                                                                         },
                                                                         "clear_key": {
-                                                                            "type": "str"
+                                                                            "type": "str",
+                                                                            "no_log": False,
                                                                         },
                                                                         "password_key": {
-                                                                            "type": "str"
+                                                                            "type": "str",
+                                                                            "no_log": False,
                                                                         },
                                                                     },
                                                                 },
@@ -538,13 +565,16 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                                     "type": "dict",
                                                                     "options": {
                                                                         "key": {
-                                                                            "type": "str"
+                                                                            "type": "str",
+                                                                            "no_log": False,
                                                                         },
                                                                         "clear_key": {
-                                                                            "type": "str"
+                                                                            "type": "str",
+                                                                            "no_log": False,
                                                                         },
                                                                         "password_key": {
-                                                                            "type": "str"
+                                                                            "type": "str",
+                                                                            "no_log": False,
                                                                         },
                                                                     },
                                                                 },
@@ -562,13 +592,16 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                                                     ],
                                                                                 },
                                                                                 "key": {
-                                                                                    "type": "str"
+                                                                                    "type": "str",
+                                                                                    "no_log": False,
                                                                                 },
                                                                                 "clear_key": {
-                                                                                    "type": "str"
+                                                                                    "type": "str",
+                                                                                    "no_log": False,
                                                                                 },
                                                                                 "password_key": {
-                                                                                    "type": "str"
+                                                                                    "type": "str",
+                                                                                    "no_log": False,
                                                                                 },
                                                                             },
                                                                         }
@@ -600,13 +633,16 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                             "type": "dict",
                                                             "options": {
                                                                 "key": {
-                                                                    "type": "str"
+                                                                    "type": "str",
+                                                                    "no_log": False,
                                                                 },
                                                                 "clear_key": {
-                                                                    "type": "str"
+                                                                    "type": "str",
+                                                                    "no_log": False,
                                                                 },
                                                                 "password_key": {
-                                                                    "type": "str"
+                                                                    "type": "str",
+                                                                    "no_log": False,
                                                                 },
                                                             },
                                                         },
@@ -621,13 +657,16 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                                     ],
                                                                 },
                                                                 "key": {
-                                                                    "type": "str"
+                                                                    "type": "str",
+                                                                    "no_log": False,
                                                                 },
                                                                 "clear_key": {
-                                                                    "type": "str"
+                                                                    "type": "str",
+                                                                    "no_log": False,
                                                                 },
                                                                 "password_key": {
-                                                                    "type": "str"
+                                                                    "type": "str",
+                                                                    "no_log": False,
                                                                 },
                                                             },
                                                         },
@@ -635,13 +674,16 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                             "type": "dict",
                                                             "options": {
                                                                 "key": {
-                                                                    "type": "str"
+                                                                    "type": "str",
+                                                                    "no_log": False,
                                                                 },
                                                                 "clear_key": {
-                                                                    "type": "str"
+                                                                    "type": "str",
+                                                                    "no_log": False,
                                                                 },
                                                                 "password_key": {
-                                                                    "type": "str"
+                                                                    "type": "str",
+                                                                    "no_log": False,
                                                                 },
                                                             },
                                                         },
@@ -659,13 +701,16 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                                             ],
                                                                         },
                                                                         "key": {
-                                                                            "type": "str"
+                                                                            "type": "str",
+                                                                            "no_log": False,
                                                                         },
                                                                         "clear_key": {
-                                                                            "type": "str"
+                                                                            "type": "str",
+                                                                            "no_log": False,
                                                                         },
                                                                         "password_key": {
-                                                                            "type": "str"
+                                                                            "type": "str",
+                                                                            "no_log": False,
                                                                         },
                                                                     },
                                                                 }
@@ -752,12 +797,17 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                 "triple_des": {
                                                     "type": "dict",
                                                     "options": {
-                                                        "key": {"type": "str"},
+                                                        "key": {
+                                                            "type": "str",
+                                                            "no_log": False,
+                                                        },
                                                         "clear_key": {
-                                                            "type": "str"
+                                                            "type": "str",
+                                                            "no_log": False,
                                                         },
                                                         "password_key": {
-                                                            "type": "str"
+                                                            "type": "str",
+                                                            "no_log": False,
                                                         },
                                                     },
                                                 },
@@ -771,24 +821,34 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                                 "256",
                                                             ],
                                                         },
-                                                        "key": {"type": "str"},
+                                                        "key": {
+                                                            "type": "str",
+                                                            "no_log": False,
+                                                        },
                                                         "clear_key": {
-                                                            "type": "str"
+                                                            "type": "str",
+                                                            "no_log": False,
                                                         },
                                                         "password_key": {
-                                                            "type": "str"
+                                                            "type": "str",
+                                                            "no_log": False,
                                                         },
                                                     },
                                                 },
                                                 "des": {
                                                     "type": "dict",
                                                     "options": {
-                                                        "key": {"type": "str"},
+                                                        "key": {
+                                                            "type": "str",
+                                                            "no_log": False,
+                                                        },
                                                         "clear_key": {
-                                                            "type": "str"
+                                                            "type": "str",
+                                                            "no_log": False,
                                                         },
                                                         "password_key": {
-                                                            "type": "str"
+                                                            "type": "str",
+                                                            "no_log": False,
                                                         },
                                                     },
                                                 },
@@ -806,13 +866,16 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                                     ],
                                                                 },
                                                                 "key": {
-                                                                    "type": "str"
+                                                                    "type": "str",
+                                                                    "no_log": False,
                                                                 },
                                                                 "clear_key": {
-                                                                    "type": "str"
+                                                                    "type": "str",
+                                                                    "no_log": False,
                                                                 },
                                                                 "password_key": {
-                                                                    "type": "str"
+                                                                    "type": "str",
+                                                                    "no_log": False,
                                                                 },
                                                             },
                                                         }
