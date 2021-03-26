@@ -110,7 +110,9 @@ class Ospfv3Facts(object):
                     areas.append(re.sub("\n", "", command))
         data = config_commands
         ipv4 = {"processes": []}
-        rmmod = NetworkTemplate(lines=data, tmplt=Ospfv3Template(), module=self._module)
+        rmmod = NetworkTemplate(
+            lines=data, tmplt=Ospfv3Template(), module=self._module
+        )
         current = rmmod.parse()
 
         # convert some of the dicts to lists
