@@ -1,0 +1,4 @@
+---
+bugfixes:
+  - Update valid hostname info in iosxr_facs using show running-conf hostname command.
+    (https://github.com/ansible-collections/cisco.iosxr/issues/103)

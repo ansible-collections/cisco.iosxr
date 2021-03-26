@@ -68,14 +68,16 @@ class Cliconf(CliconfBase):
         self._device_info = {}
         super(Cliconf, self).__init__(*args, **kwargs)
 
+    def get_command_output(self, command):
+        reply = self.get(command)
+        data = to_text(reply, errors="surrogate_or_strict").strip()
+        return data
+
     def get_device_info(self):
         if not self._device_info:
-            device_info = {}
-
+            device_info = dict()
             device_info["network_os"] = "iosxr"
-            reply = self.get("show version | utility head -n 20")
-            data = to_text(reply, errors="surrogate_or_strict").strip()
-
+            data = self.get_command_output("show version | utility head -n 20")
             match = re.search(r"Version (\S+)$", data, re.M)
             if match:
                 device_info["network_os_version"] = match.group(1)
@@ -94,7 +96,8 @@ class Cliconf(CliconfBase):
                     device_info["network_os_model"] = match.group(1)
                     break
 
-            match = re.search(r"^(.+) uptime", data, re.M)
+            hostname = self.get_command_output("show running-config hostname")
+            match = re.search(r"hostname\s(\S+)$", hostname, re.M)
             if match:
                 device_info["network_os_hostname"] = match.group(1)
 
