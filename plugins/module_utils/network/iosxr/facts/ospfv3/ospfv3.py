@@ -146,7 +146,7 @@ class Ospfv3Facts(object):
         ansible_facts["ansible_network_resources"].pop("ospfv3", None)
         facts = {}
         if current:
-            params = utils.validate_config(
+            params = rmmod.validate_config(
                 self.argument_spec, {"config": ipv4}, redact=True
             )
             params = utils.remove_empties(params)
