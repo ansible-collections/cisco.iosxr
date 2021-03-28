@@ -328,7 +328,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "password": {
                                             "type": "str",
-                                            "no_log": False,
+                                            "no_log": True,
                                         },
                                         "clear": {"type": "bool"},
                                         "encrypted": {"type": "bool"},
