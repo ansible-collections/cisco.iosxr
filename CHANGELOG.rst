@@ -5,6 +5,20 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v2.0.1
+======
+
+Security Fixes
+--------------
+
+- Properly mask values of sensitive keys in module result.
+
+Bugfixes
+--------
+
+- Add fix for interfaces which are not in running config should get merged when state is merged. (https://github.com/ansible-collections/cisco.iosxr/issues/106)
+- Update valid hostname info in iosxr_facs using show running-conf hostname command. (https://github.com/ansible-collections/cisco.iosxr/issues/103)
+
 v2.0.0
 ======
 
