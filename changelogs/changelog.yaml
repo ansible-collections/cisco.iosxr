@@ -210,3 +210,19 @@ releases:
       name: iosxr_bgp_neighbor_address_family
       namespace: ''
     release_date: '2021-02-24'
+  2.0.1:
+    changes:
+      bugfixes:
+      - Add fix for interfaces which are not in running config should get merged when
+        state is merged. (https://github.com/ansible-collections/cisco.iosxr/issues/106)
+      - Update valid hostname info in iosxr_facs using show running-conf hostname
+        command. (https://github.com/ansible-collections/cisco.iosxr/issues/103)
+      security_fixes:
+      - Properly mask values of sensitive keys in module result.
+    fragments:
+    - 103_bugfix_update_valid_hostname_info.yaml
+    - 112-remove_tests_sanity_requirements.yml
+    - 114_iosxr_interfaces_merged_state_fix.yaml
+    - 115_iosxr_move_common_functionality_to_util.yaml
+    - no_log_fix.yaml
+    release_date: '2021-03-29'

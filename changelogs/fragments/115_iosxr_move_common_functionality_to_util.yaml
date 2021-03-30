@@ -1,4 +1,0 @@
----
-trivial:
-  - Move common functionality across the modules to utils.py.
-    (https://github.com/ansible-collections/cisco.iosxr/issues/113)
