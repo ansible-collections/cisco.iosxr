@@ -204,7 +204,6 @@ requirements:
 - ncclient >= 0.5.3 when using netconf
 - lxml >= 4.1.1 when using netconf
 - base64 when using I(public_key_contents) or I(public_key)
-- paramiko when using I(public_key_contents) or I(public_key)
 """
 
 EXAMPLES = """
@@ -287,7 +286,6 @@ from copy import deepcopy
 import collections
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.compat.paramiko import paramiko
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
 )
@@ -873,11 +871,6 @@ def main():
             module.fail_json(
                 msg="library base64 is required but does not appear to be "
                 "installed. It can be installed using `pip install base64`"
-            )
-        if paramiko is None:
-            module.fail_json(
-                msg="library paramiko is required but does not appear to be "
-                "installed. It can be installed using `pip install paramiko`"
             )
 
     result = {"changed": False, "warnings": []}
