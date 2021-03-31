@@ -357,7 +357,9 @@ class PublicKeyManager(object):
         """
 
         conn = get_connection(self._module)
+        conn.send_command("admin")
         out = conn.send_command(command, prompt="yes/no", answer="yes")
+        conn.send_command("exit")
 
         return out
 
@@ -371,13 +373,13 @@ class PublicKeyManager(object):
                 if self._module.params["aggregate"]:
                     for user in self._module.params["aggregate"]:
                         cmdtodo = (
-                            "admin crypto key import authentication rsa username %s harddisk:/publickey_aggregate.b64"
+                            "crypto key import authentication rsa username %s harddisk:/publickey_aggregate.b64"
                             % (user)
                         )
                         self.addremovekey(cmdtodo)
                 else:
                     cmdtodo = (
-                        "admin crypto key import authentication rsa username %s harddisk:/publickey_%s.b64"
+                        "crypto key import authentication rsa username %s harddisk:/publickey_%s.b64"
                         % (
                             self._module.params["name"],
                             self._module.params["name"],
@@ -389,19 +391,19 @@ class PublicKeyManager(object):
                 if self._module.params["aggregate"]:
                     for user in self._module.params["aggregate"]:
                         cmdtodo = (
-                            "admin crypto key zeroize authentication rsa username %s"
+                            "crypto key zeroize authentication rsa username %s"
                             % (user)
                         )
                         self.addremovekey(cmdtodo)
                 else:
                     cmdtodo = (
-                        "admin crypto key zeroize authentication rsa username %s"
+                        "crypto key zeroize authentication rsa username %s"
                         % (self._module.params["name"])
                     )
                     self.addremovekey(cmdtodo)
         elif self._module.params["purge"] is True:
             if not self._module.check_mode:
-                cmdtodo = "admin crypto key zeroize authentication rsa all"
+                cmdtodo = "crypto key zeroize authentication rsa all"
                 self.addremovekey(cmdtodo)
 
         return self._result
