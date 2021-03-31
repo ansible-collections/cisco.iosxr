@@ -7,15 +7,8 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-
-DOCUMENTATION = """module: iosxr_command
+DOCUMENTATION = """
+module: iosxr_command
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
 short_description: Run commands on remote devices running Cisco IOS XR
 description:
@@ -24,6 +17,7 @@ description:
   a specific condition before returning or timing out if the condition is not met.
 - This module does not support running commands in configuration mode. Please use
   M(iosxr_config) to configure iosxr devices.
+version_added: 1.0.0
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 notes:
@@ -39,6 +33,11 @@ options:
       The resulting output from the command is returned. If the I(wait_for) argument
       is provided, the module is not returned until the condition is satisfied or
       the number of retries has expired.
+    - If a command sent to the device requires answering a prompt, it is possible to pass
+      a dict containing command, answer and prompt. Common answers are 'y' or "\\r"
+      (carriage return, must be double quotes). See examples
+    type: list
+    elements: raw
     required: true
   wait_for:
     description:
@@ -47,6 +46,8 @@ options:
       is not true within the configured number of retries, the task fails. See examples.
     aliases:
     - waitfor
+    type: list
+    elements: str
   match:
     description:
     - The I(match) argument is used in conjunction with the I(wait_for) argument to
@@ -57,46 +58,48 @@ options:
     choices:
     - any
     - all
+    type: str
   retries:
     description:
     - Specifies the number of retries a command should by tried before it is considered
       failed. The command is run on the target device every retry and evaluated against
       the I(wait_for) conditions.
     default: 10
+    type: int
   interval:
     description:
     - Configures the interval in seconds to wait between retries of the command. If
       the command does not pass the specified conditions, the interval indicates how
       long to wait before trying the command again.
     default: 1
+    type: int
 """
 
 EXAMPLES = """
-tasks:
-  - name: run show version on remote devices
-    iosxr_command:
-      commands: show version
+- name: run show version on remote devices
+  cisco.iosxr.iosxr_command:
+    commands: show version
 
-  - name: run show version and check to see if output contains iosxr
-    iosxr_command:
-      commands: show version
-      wait_for: result[0] contains IOS-XR
+- name: run show version and check to see if output contains iosxr
+  cisco.iosxr.iosxr_command:
+    commands: show version
+    wait_for: result[0] contains IOS-XR
 
-  - name: run multiple commands on remote nodes
-    iosxr_command:
-      commands:
-        - show version
-        - show interfaces
-        - { command: example command that prompts, prompt: expected prompt, answer: yes}
+- name: run multiple commands on remote nodes
+  cisco.iosxr.iosxr_command:
+    commands:
+    - show version
+    - show interfaces
+    - {command: example command that prompts, prompt: expected prompt, answer: yes}
 
-  - name: run multiple commands and evaluate the output
-    iosxr_command:
-      commands:
-        - show version
-        - show interfaces
-      wait_for:
-        - result[0] contains IOS-XR
-        - result[1] contains Loopback0
+- name: run multiple commands and evaluate the output
+  cisco.iosxr.iosxr_command:
+    commands:
+    - show version
+    - show interfaces
+    wait_for:
+    - result[0] contains IOS-XR
+    - result[1] contains Loopback0
 """
 
 RETURN = """
@@ -130,9 +133,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     run_commands,
     iosxr_argument_spec,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    command_spec,
-)
 
 
 def parse_commands(module, warnings):
@@ -154,15 +154,14 @@ def parse_commands(module, warnings):
 
 def main():
     argument_spec = dict(
-        commands=dict(type="list", required=True),
-        wait_for=dict(type="list", aliases=["waitfor"]),
+        commands=dict(type="list", required=True, elements="raw"),
+        wait_for=dict(type="list", aliases=["waitfor"], elements="str"),
         match=dict(default="all", choices=["all", "any"]),
         retries=dict(default=10, type="int"),
         interval=dict(default=1, type="int"),
     )
 
     argument_spec.update(iosxr_argument_spec)
-    argument_spec.update(command_spec)
 
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True

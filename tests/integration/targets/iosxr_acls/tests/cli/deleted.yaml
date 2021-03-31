@@ -8,37 +8,6 @@
 - include_tasks: _populate_config.yaml
 
 - block:
-
-    - name: Delete a single ACE
-      register: result
-      cisco.iosxr.iosxr_acls: &id001
-        config:
-
-          - afi: ipv4
-            acls:
-
-              - name: acl_1
-                aces:
-
-                  - sequence: 23
-        state: deleted
-
-    - assert:
-        that:
-          - '"ipv4 access-list acl_1" in result.commands'
-          - '"no 23" in result.commands'
-          - result.commands|length == 2
-
-    - name: Delete a single ACE (IDEMPOTENT)
-      register: result
-      cisco.iosxr.iosxr_acls: *id001
-
-    - name: Assert that the previous task was idempotent
-      assert: &id003
-        that:
-          - result.changed == false
-          - result.commands|length == 0
-
     - name: Delete a single ACL
       register: result
       cisco.iosxr.iosxr_acls: &id002
@@ -60,7 +29,10 @@
       cisco.iosxr.iosxr_acls: *id002
 
     - name: Assert that the previous task was idempotent
-      assert: *id003
+      assert: &id003
+        that:
+          - result.changed == false
+          - result.commands|length == 0
 
     - name: Delete all ACLs under one AFI
       register: result
@@ -110,7 +82,7 @@
 
     - name: Delete all ACLs from the device (IDEMPOTENT)
       register: result
-      cisco.iosxr.iosxr_lag_interfaces: *id005
+      cisco.iosxr.iosxr_acls: *id005
 
     - name: Assert that the previous task was idempotent
       assert:

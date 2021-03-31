@@ -1,0 +1,11 @@
+---
+- name: Remove OSPFv2 Routes
+  vars:
+    lines: "no router ospf 26\n
+            no router ospf 27\n
+            no router ospf 30\n
+            no router ospf 10\n
+            "
+  ignore_errors: true
+  ansible.netcommon.cli_config:
+    config: '{{ lines }}'

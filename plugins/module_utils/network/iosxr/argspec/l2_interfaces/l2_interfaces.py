@@ -42,8 +42,7 @@ class L2_InterfacesArgs(object):
                 "native_vlan": {"type": "int"},
                 "l2transport": {"type": "bool"},
                 "l2protocol": {
-                    "element": "dict",
-                    "type": "list",
+                    "elements": "dict",
                     "options": {
                         "cdp": {
                             "type": "str",
@@ -62,8 +61,9 @@ class L2_InterfacesArgs(object):
                             "choices": ["drop", "forward", "tunnel"],
                         },
                     },
+                    "type": "list",
                 },
-                "q_vlan": {"type": "list"},
+                "q_vlan": {"type": "list", "elements": "int"},
                 "propagate": {"type": "bool"},
             },
             "type": "list",

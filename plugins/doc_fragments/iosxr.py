@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
 
 # Copyright: (c) 2015, Peter Sprygada <psprygada@ansible.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
@@ -23,12 +26,10 @@ class ModuleDocFragment(object):
           over the specified transport.  The value of host is used as the destination
           address for the transport.
         type: str
-        required: true
       port:
         description:
         - Specifies the port to use when building the connection to the remote device.
         type: int
-        default: 22
       username:
         description:
         - Configures the username to use to authenticate the connection to the remote
@@ -49,7 +50,6 @@ class ModuleDocFragment(object):
           for either connecting or sending commands.  If the timeout is exceeded before
           the operation is completed, the module will error.
         type: int
-        default: 10
       ssh_keyfile:
         description:
         - Specifies the SSH key to use to authenticate the connection to the remote
@@ -57,6 +57,14 @@ class ModuleDocFragment(object):
           session. If the value is not specified in the task, the value of environment
           variable C(ANSIBLE_NET_SSH_KEYFILE) will be used instead.
         type: path
+      transport:
+        description:
+        - Specifies the type of connection based transport.
+        type: str
+        default: cli
+        choices:
+        - cli
+        - netconf
 notes:
 - For more information on using Ansible to manage network devices see the :ref:`Ansible
   Network Guide <network_guide>`

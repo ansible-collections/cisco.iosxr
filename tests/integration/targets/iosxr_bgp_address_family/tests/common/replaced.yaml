@@ -1,0 +1,90 @@
+---
+- debug:
+    msg: Start iosxr_bgp_address-family replaced integration tests connection={{ ansible_connection}}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_config1.yaml
+
+- block:
+
+    - name: Replaced given bgp_address_family configuration
+      become: true
+      register: result
+      cisco.iosxr.iosxr_bgp_address_family: &replaced
+        config:
+          as_number: "65536"
+          address_family:
+            - afi: "ipv4"
+              safi: "unicast"
+              dynamic_med: 4
+              redistribute:
+                - protocol: application
+                  id: test1
+                  metric: 10
+                - protocol: connected
+                  metric: 10
+                - protocol: isis
+                  id: test3
+                  metric: 4
+        state: replaced
+
+    - assert:
+        that:
+          - result.commands|length == 6
+          - result.changed == true
+          - "'no router bgp 65536' not in result.commands"
+          - replaced['commands'] == result['commands']
+
+    - name: Idempotency check
+      become: true
+      register: result
+      cisco.iosxr.iosxr_bgp_address_family: *replaced
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+    - include_tasks: _remove_config.yaml
+
+- debug:
+    msg: Start iosxr_bgp_address-family replaced integration tests(VRF) connection={{ ansible_connection}}
+
+- include_tasks: _populate_base_vrf.yaml
+
+- include_tasks: _populate_vrf.yaml
+
+- block:
+
+    - name: Replaced given bgp_address_family configuration
+      become: true
+      register: result
+      cisco.iosxr.iosxr_bgp_address_family: &replaced1
+        config:
+          as_number: "65536"
+          address_family:
+            - afi: "ipv4"
+              safi: "unicast"
+              vrf: vrf1
+              dynamic_med: 8
+        state: replaced
+
+    - assert:
+        that:
+          - result.commands|length == 5
+          - result.changed == true
+          - "'no router bgp 65536' not in result.commands"
+          - replaced['vrf']['commands'] == result['commands']
+
+    - name: Idempotency check
+      become: true
+      register: result
+      cisco.iosxr.iosxr_bgp_address_family: *replaced1
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+    - include_tasks: _remove_config.yaml

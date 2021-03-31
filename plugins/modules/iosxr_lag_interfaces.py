@@ -29,15 +29,9 @@ The module file for iosxr_lag_interfaces
 from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
-
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: iosxr_lag_interfaces
-short_description: Lag Interfaces resiurce module.
+DOCUMENTATION = """
+module: iosxr_lag_interfaces
+short_description: LAG interfaces resource module
 description:
 - This module manages the attributes of LAG/Ether-Bundle interfaces on IOS-XR devices.
 version_added: 1.0.0
@@ -53,91 +47,81 @@ options:
     suboptions:
       name:
         description:
-        - Name/Identifier of the LAG/Ether-Bundle to configure.
+          - Name/Identifier of the LAG/Ether-Bundle to configure.
         type: str
         required: true
       members:
         description:
-        - List of member interfaces for the LAG/Ether-Bundle.
+          - List of member interfaces for the LAG/Ether-Bundle.
         type: list
         elements: dict
         suboptions:
           member:
             description:
-            - Name of the member interface.
+              - Name of the member interface.
             type: str
           mode:
             description:
-            - Specifies the mode of the operation for the member interface.
-            - Mode 'active' runs LACP in active mode.
-            - Mode 'on' does not run LACP over the port.
-            - Mode 'passive' runs LACP in passive mode over the port.
-            - Mode 'inherit' runs LACP as configured in the bundle.
-            choices:
-            - 'on'
-            - active
-            - passive
-            - inherit
+              - Specifies the mode of the operation for the member interface.
+              - Mode 'active' runs LACP in active mode.
+              - Mode 'on' does not run LACP over the port.
+              - Mode 'passive' runs LACP in passive mode over the port.
+              - Mode 'inherit' runs LACP as configured in the bundle.
             type: str
+            choices: ["on", "active", "passive", "inherit"]
       mode:
         description:
-        - LAG mode.
-        - Mode 'active' runs LACP in active mode over the port.
-        - Mode 'on' does not run LACP over the port.
-        - Mode 'passive' runs LACP in passive mode over the port.
-        choices:
-        - 'on'
-        - active
-        - passive
+          - LAG mode.
+          - Mode 'active' runs LACP in active mode over the port.
+          - Mode 'on' does not run LACP over the port.
+          - Mode 'passive' runs LACP in passive mode over the port.
         type: str
+        choices: ["on", "active", "passive"]
       links:
         description:
-        - This dict contains configurable options related to LAG/Ether-Bundle links.
+          - This dict contains configurable options related to LAG/Ether-Bundle links.
         type: dict
         suboptions:
           max_active:
             description:
-            - Specifies the limit on the number of links that can be active in the
-              LAG/Ether-Bundle.
-            - Refer to vendor documentation for valid values.
+              - Specifies the limit on the number of links that can be active in the LAG/Ether-Bundle.
+              - Refer to vendor documentation for valid values.
             type: int
           min_active:
             description:
-            - Specifies the minimum number of active links needed to bring up the
-              LAG/Ether-Bundle.
-            - Refer to vendor documentation for valid values.
+              - Specifies the minimum number of active links needed to bring up the LAG/Ether-Bundle.
+              - Refer to vendor documentation for valid values.
             type: int
       load_balancing_hash:
         description:
-        - Specifies the hash function used for traffic forwarded over the LAG/Ether-Bundle.
-        - Option 'dst-ip' uses the destination IP as the hash function.
-        - Option 'src-ip' uses the source IP as the hash function.
+          - Specifies the hash function used for traffic forwarded over the LAG/Ether-Bundle.
+          - Option 'dst-ip' uses the destination IP as the hash function.
+          - Option 'src-ip' uses the source IP as the hash function.
         type: str
-        choices:
-        - dst-ip
-        - src-ip
+        choices: ["dst-ip", "src-ip"]
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the IOS-XR device by executing
-        the command B(show running-config int).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the IOS-XR device
+      by executing the command B(show running-config int).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     description:
-    - The state of the configuration after module completion.
+      - The state of the configuration after module completion.
     type: str
     choices:
-    - merged
-    - replaced
-    - overridden
-    - deleted
-    - parsed
-    - rendered
-    - gathered
+      - merged
+      - replaced
+      - overridden
+      - deleted
+      - parsed
+      - rendered
+      - gathered
     default: merged
+
 """
 EXAMPLES = """
 # Using merged
@@ -173,25 +157,25 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration
   cisco.iosxr.iosxr_lag_interfaces:
     config:
-      - name: Bundle-Ether10
-        members:
-          - member: GigabitEthernet0/0/0/1
-            mode: inherit
-          - member: GigabitEthernet0/0/0/3
-            mode: inherit
-        mode: active
-        links:
-          max_active: 5
-          min_active: 2
-        load_balancing_hash: src-ip
+    - name: Bundle-Ether10
+      members:
+      - member: GigabitEthernet0/0/0/1
+        mode: inherit
+      - member: GigabitEthernet0/0/0/3
+        mode: inherit
+      mode: active
+      links:
+        max_active: 5
+        min_active: 2
+      load_balancing_hash: src-ip
 
-      - name: Bundle-Ether12
-        members:
-          - member: GigabitEthernet0/0/0/2
-            mode: passive
-          - member: GigabitEthernet0/0/0/4
-            mode: passive
-        load_balancing_hash: dst-ip
+    - name: Bundle-Ether12
+      members:
+      - member: GigabitEthernet0/0/0/2
+        mode: passive
+      - member: GigabitEthernet0/0/0/4
+        mode: passive
+      load_balancing_hash: dst-ip
     state: merged
 #
 #
@@ -283,15 +267,15 @@ EXAMPLES = """
 - name: Replace device configuration of listed Bundles with provided configurations
   cisco.iosxr.iosxr_lag_interfaces:
     config:
-      - name: Bundle-Ether12
-        members:
-          - name: GigabitEthernet0/0/0/2
-        mode: passive
+    - name: Bundle-Ether12
+      members:
+      - name: GigabitEthernet0/0/0/2
+      mode: passive
 
-      - name: Bundle-Ether11
-        members:
-          - name: GigabitEthernet0/0/0/4
-        load_balancing_hash: src-ip
+    - name: Bundle-Ether11
+      members:
+      - name: GigabitEthernet0/0/0/4
+      load_balancing_hash: src-ip
     state: replaced
 #
 #
@@ -392,14 +376,14 @@ EXAMPLES = """
 - name: Overrides all device configuration with provided configuration
   cisco.iosxr.iosxr_lag_interfaces:
     config:
-      - name: Bundle-Ether10
-        members:
-          - member: GigabitEthernet0/0/0/1
-            mode: inherit
-          - member: GigabitEthernet0/0/0/2
-            mode: inherit
-        mode: active
-        load_balancing_hash: dst-ip
+    - name: Bundle-Ether10
+      members:
+      - member: GigabitEthernet0/0/0/1
+        mode: inherit
+      - member: GigabitEthernet0/0/0/2
+        mode: inherit
+      mode: active
+      load_balancing_hash: dst-ip
     state: overridden
 #
 #
@@ -490,12 +474,13 @@ EXAMPLES = """
 #
 #
 
-- name: Delete attributes of given bundles and removes member interfaces from them (Note - This won't delete the bundles themselves)
+- name: Delete attributes of given bundles and removes member interfaces from them
+    (Note - This won't delete the bundles themselves)
   cisco.iosxr.iosxr_lag_interfaces:
     config:
-      - name: Bundle-Ether10
-      - name: Bundle-Ether11
-      - name: Bundle-Ether12
+    - name: Bundle-Ether10
+    - name: Bundle-Ether11
+    - name: Bundle-Ether12
     state: deleted
 
 #
@@ -576,7 +561,8 @@ EXAMPLES = """
 # !
 #
 
-- name: Delete attributes of all bundles and removes member interfaces from them (Note - This won't delete the bundles themselves)
+- name: Delete attributes of all bundles and removes member interfaces from them (Note
+    - This won't delete the bundles themselves)
   cisco.iosxr.iosxr_lag_interfaces:
     state: deleted
 
@@ -650,8 +636,9 @@ EXAMPLES = """
 # !
 #
 - name: Convert lag interfaces config to argspec without connecting to the appliance
-    cisco.iosxr.iosxr_lag_interfaces:
-      running_config: "{{ lookup('file', './parsed.cfg') }}"
+  cisco.iosxr.iosxr_lag_interfaces:
+    running_config: "{{ lookup('file', './parsed.cfg') }}"
+    state: parsed
 
 # --------------
 # Output
@@ -749,25 +736,25 @@ EXAMPLES = """
 - name: Render platform specific commands from task input using rendered state
   cisco.iosxr.iosxr_lag_interfaces:
     config:
-        - name: Bundle-Ether10
-          members:
-          - member: GigabitEthernet0/0/0/1
-            mode: inherit
-          - member: GigabitEthernet0/0/0/3
-            mode: inherit
-        mode: active
-        links:
-          max_active: 5
-          min_active: 2
-        load_balancing_hash: src-ip
+    - name: Bundle-Ether10
+      members:
+      - member: GigabitEthernet0/0/0/1
+        mode: inherit
+      - member: GigabitEthernet0/0/0/3
+        mode: inherit
+      mode: active
+      links:
+        max_active: 5
+        min_active: 2
+      load_balancing_hash: src-ip
 
-      - name: Bundle-Ether12
-        members:
-          - member: GigabitEthernet0/0/0/2
-            mode: passive
-          - member: GigabitEthernet0/0/0/4
-            mode: passive
-        load_balancing_hash: dst-ip
+    - name: Bundle-Ether12
+      members:
+      - member: GigabitEthernet0/0/0/2
+        mode: passive
+      - member: GigabitEthernet0/0/0/4
+        mode: passive
+      load_balancing_hash: dst-ip
     state: rendered
 
 # Output:

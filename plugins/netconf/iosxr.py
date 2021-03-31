@@ -21,13 +21,15 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-DOCUMENTATION = """author: Ansible Networking Team
+DOCUMENTATION = """
+author: Ansible Networking Team
 netconf: iosxr
 short_description: Use iosxr netconf plugin to run netconf commands on Cisco IOSXR
   platform
 description:
 - This iosxr plugin provides low level abstraction apis for sending and receiving
   netconf commands from Cisco iosxr network devices.
+version_added: 1.0.0
 options:
   ncclient_device_handler:
     type: str
@@ -41,7 +43,7 @@ import json
 import re
 import collections
 
-from ansible.module_utils._text import to_native
+from ansible.module_utils._text import to_native, to_text
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.netconf import (
     remove_namespaces,
 )
@@ -145,8 +147,8 @@ class Netconf(NetconfBase):
         result["rpc"] = self.get_base_rpc()
         result["network_api"] = "netconf"
         result["device_info"] = self.get_device_info()
-        result["server_capabilities"] = [c for c in self.m.server_capabilities]
-        result["client_capabilities"] = [c for c in self.m.client_capabilities]
+        result["server_capabilities"] = list(self.m.server_capabilities)
+        result["client_capabilities"] = list(self.m.client_capabilities)
         result["session_id"] = self.m.session_id
         result["device_operations"] = self.get_device_operations(
             result["server_capabilities"]
@@ -253,6 +255,7 @@ class Netconf(NetconfBase):
     def commit(
         self, confirmed=False, timeout=None, persist=None, remove_ns=False
     ):
+        timeout = to_text(timeout, errors="surrogate_or_strict")
         try:
             resp = self.m.commit(
                 confirmed=confirmed, timeout=timeout, persist=persist

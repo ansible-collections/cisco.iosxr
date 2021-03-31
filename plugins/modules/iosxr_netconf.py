@@ -9,13 +9,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: iosxr_netconf
+DOCUMENTATION = """
+module: iosxr_netconf
 author: Kedar Kekan (@kedarX)
 short_description: Configures NetConf sub-system service on Cisco IOS-XR devices
 description:
@@ -23,6 +18,7 @@ description:
   service running on Cisco IOS-XR Software. This module can be used to easily enable
   the Netconf API. Netconf provides a programmatic interface for working with configuration
   and state resources as defined in RFC 6242.
+version_added: 1.0.0
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 options:
@@ -31,6 +27,7 @@ options:
     - This argument specifies the port the netconf service should listen on for SSH
       connections.  The default port as defined in RFC 6242 is 830.
     required: false
+    type: int
     default: 830
     aliases:
     - listens_on
@@ -38,6 +35,7 @@ options:
     description:
     - netconf vrf name
     required: false
+    type: str
     default: default
     aliases:
     - vrf
@@ -47,6 +45,7 @@ options:
       the I(state) argument is set to I(present) the netconf service will be configured.  If
       the I(state) argument is set to I(absent) the netconf service will be removed
       from the configuration.
+    type: str
     required: false
     default: present
     choices:
@@ -59,12 +58,12 @@ notes:
 
 EXAMPLES = """
 - name: enable netconf service on port 830
-  iosxr_netconf:
+  cisco.iosxr.iosxr_netconf:
     listens_on: 830
     state: present
 
 - name: disable netconf service
-  iosxr_netconf:
+  cisco.iosxr.iosxr_netconf:
     state: absent
 """
 

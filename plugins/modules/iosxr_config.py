@@ -8,36 +8,37 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-
-DOCUMENTATION = """module: iosxr_config
+DOCUMENTATION = """
+module: iosxr_config
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
 short_description: Manage Cisco IOS XR configuration sections
 description:
 - Cisco IOS XR configurations use a simple block indent file syntax for segmenting
   configuration into sections.  This module provides an implementation for working
   with IOS XR configuration sections in a deterministic way.
+version_added: 1.0.0
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 notes:
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 - Tested against IOS XRv 6.1.3.
 - This module does not support C(netconf) connection
-- Abbreviated commands are NOT idempotent, see L(Network FAQ,../network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands).
+- Abbreviated commands are NOT idempotent, see L(Network FAQ,../network/user_guide/faq.html
+  #why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands).
 - Avoid service disrupting changes (viz. Management IP) from config replace.
 - Do not use C(end) in the replace config file.
+- To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they
+  appear if present in the running configuration on device including the indentation.
 options:
   lines:
     description:
-    - The ordered set of commands that should be configured in the section.  The commands
-      must be the exact same commands as found in the device running-config.  Be sure
-      to note the configuration command syntax as some commands are automatically
-      modified by the device config parser.
+    - The ordered set of commands that should be configured in the section. The commands
+      must be the exact same commands as found in the device running-config as found in the
+      device running-config to ensure idempotency and correct diff. Be sure to note the
+      configuration command syntax as some commands are automatically modified by the
+      device config parser.
+    type: list
+    elements: str
     aliases:
     - commands
   parents:
@@ -45,23 +46,32 @@ options:
     - The ordered set of parents that uniquely identify the section or hierarchy the
       commands should be checked against.  If the parents argument is omitted, the
       commands are checked against the set of top level or global commands.
+    type: list
+    elements: str
   src:
     description:
     - Specifies the source path to the file that contains the configuration or configuration
-      template to load.  The path to the source file can either be the full path on
+      template to load. The path to the source file can either be the full path on
       the Ansible control host or a relative path from the playbook or role root directory.  This
-      argument is mutually exclusive with I(lines), I(parents).
+      argument is mutually exclusive with I(lines), I(parents). The configuration lines in the
+      source file should be similar to how it will appear if present in the running-configuration
+      of the device to ensure idempotency and correct diff.
+    type: path
   before:
     description:
     - The ordered set of commands to push on to the command stack if a change needs
       to be made.  This allows the playbook designer the opportunity to perform configuration
       commands prior to pushing any changes without affecting how the set of commands
       are matched against the system.
+    type: list
+    elements: str
   after:
     description:
     - The ordered set of commands to append to the end of the command stack if a change
       needs to be made.  Just like with I(before) this allows the playbook designer
       to append a set of commands to be executed after the command set.
+    type: list
+    elements: str
   match:
     description:
     - Instructs the module on the way to perform the matching of the set of commands
@@ -71,6 +81,7 @@ options:
       an equal match.  Finally, if match is set to I(none), the module will not attempt
       to compare the source configuration with the running configuration on the remote
       device.
+    type: str
     default: line
     choices:
     - line
@@ -84,6 +95,7 @@ options:
       the device in configuration mode.  If the replace argument is set to I(block)
       then the entire command block is pushed to the device in configuration mode
       if any line is not correct.
+    type: str
     default: line
     choices:
     - line
@@ -98,7 +110,7 @@ options:
       set the C(match=none) which is idempotent.  This argument will be removed in
       a future release.
     type: bool
-    default: 'no'
+    default: no
   config:
     description:
     - The module, by default, will connect to the remote device and retrieve the current
@@ -106,6 +118,9 @@ options:
       are times when it is not desirable to have the task get the current running-config
       for every task in a playbook.  The I(config) argument allows the implementer
       to pass in the configuration to use as the base config for comparison.
+      The configuration lines for this option should be similar to how it will appear if present
+      in the running-configuration of the device to ensure idempotency and correct diff.
+    type: str
   backup:
     description:
     - This argument will cause the module to create a full backup of the current C(running-config)
@@ -114,25 +129,27 @@ options:
       playbook root directory or role root directory, if playbook is part of an ansible
       role. If the directory does not exist, it is created.
     type: bool
-    default: 'no'
+    default: no
   comment:
     description:
     - Allows a commit description to be specified to be included when the configuration
       is committed.  If the configuration is not changed or committed, this argument
       is ignored.
+    type: str
     default: configured by iosxr_config
   admin:
     description:
     - Enters into administration configuration mode for making config changes to the
       device.
     type: bool
-    default: 'no'
+    default: no
   label:
     description:
     - Allows a commit label to be specified to be included when the configuration
       is committed. A valid label must begin with an alphabet and not exceed 30 characters,
       only alphabets, digits, hyphens and underscores are allowed. If the configuration
       is not changed or committed, this argument is ignored.
+    type: str
   backup_options:
     description:
     - This is a dict object containing configurable options related to backup file
@@ -144,6 +161,7 @@ options:
         - The filename to be used to store the backup configuration. If the filename
           is not given it will be generated based on the hostname, current time and
           date in format defined by <hostname>_config.<current-date>@<current-time>
+        type: str
       dir_path:
         description:
         - This option provides the path ending with directory name in which the backup
@@ -165,32 +183,32 @@ options:
 
 EXAMPLES = """
 - name: configure top level configuration
-  iosxr_config:
+  cisco.iosxr.iosxr_config:
     lines: hostname {{ inventory_hostname }}
 
 - name: configure interface settings
-  iosxr_config:
+  cisco.iosxr.iosxr_config:
     lines:
-      - description test interface
-      - ip address 172.31.1.1 255.255.255.0
+    - description test interface
+    - ip address 172.31.1.1 255.255.255.0
     parents: interface GigabitEthernet0/0/0/0
 
 - name: load a config from disk and replace the current config
-  iosxr_config:
+  cisco.iosxr.iosxr_config:
     src: config.cfg
     replace: config
     backup: yes
 
 - name: for idempotency, use full-form commands
-  iosxr_config:
+  cisco.iosxr.iosxr_config:
     lines:
       # - shut
-      - shutdown
+    - shutdown
     # parents: int g0/0/0/1
     parents: interface GigabitEthernet0/0/0/1
 
 - name: configurable backup path
-  iosxr_config:
+  cisco.iosxr.iosxr_config:
     src: config.cfg
     backup: yes
     backup_options:
@@ -306,7 +324,7 @@ def get_candidate(module):
     if module.params["src"]:
         candidate = module.params["src"]
     elif module.params["lines"]:
-        candidate_obj = NetworkConfig(indent=1)
+        candidate_obj = NetworkConfig(indent=1, comment_tokens=["!"])
         parents = module.params["parents"] or list()
         candidate_obj.add(module.params["lines"], parents=parents)
         candidate = dumps(candidate_obj, "raw")
@@ -395,10 +413,10 @@ def main():
     backup_spec = dict(filename=dict(), dir_path=dict(type="path"))
     argument_spec = dict(
         src=dict(type="path"),
-        lines=dict(aliases=["commands"], type="list"),
-        parents=dict(type="list"),
-        before=dict(type="list"),
-        after=dict(type="list"),
+        lines=dict(aliases=["commands"], type="list", elements="str"),
+        parents=dict(type="list", elements="str"),
+        before=dict(type="list", elements="str"),
+        after=dict(type="list", elements="str"),
         match=dict(
             default="line", choices=["line", "strict", "exact", "none"]
         ),
@@ -446,6 +464,21 @@ def main():
 
     if any((module.params["src"], module.params["lines"])):
         run(module, result)
+
+    if result.get("changed") and any(
+        (module.params["src"], module.params["lines"])
+    ):
+        msg = (
+            "To ensure idempotency and correct diff the input configuration lines should be"
+            " similar to how they appear if present in"
+            " the running configuration on device"
+        )
+        if module.params["src"]:
+            msg += " including the indentation"
+        if "warnings" in result:
+            result["warnings"].append(msg)
+        else:
+            result["warnings"] = msg
 
     module.exit_json(**result)
 

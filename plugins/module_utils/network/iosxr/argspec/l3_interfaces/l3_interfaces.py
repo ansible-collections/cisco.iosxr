@@ -40,7 +40,7 @@ class L3_InterfacesArgs(object):
             "options": {
                 "name": {"type": "str", "required": True},
                 "ipv4": {
-                    "element": "dict",
+                    "elements": "dict",
                     "type": "list",
                     "options": {
                         "address": {"type": "str"},
@@ -48,7 +48,7 @@ class L3_InterfacesArgs(object):
                     },
                 },
                 "ipv6": {
-                    "element": "dict",
+                    "elements": "dict",
                     "type": "list",
                     "options": {"address": {"type": "str"}},
                 },

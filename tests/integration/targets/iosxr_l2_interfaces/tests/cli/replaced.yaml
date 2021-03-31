@@ -1,6 +1,6 @@
 ---
 - debug:
-    msg: START Replaced ios_interfaces state for integration tests on connection={{
+    msg: START Replaced ios_l2_interfaces state for integration tests on connection={{
       ansible_connection }}
 
 - include_tasks: _remove_config.yaml

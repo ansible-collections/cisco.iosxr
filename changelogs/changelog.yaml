@@ -1,0 +1,228 @@
+ancestor: null
+releases:
+  1.0.0:
+    modules:
+    - description: ACL interfaces resource module
+      name: iosxr_acl_interfaces
+      namespace: ''
+    - description: ACLs resource module
+      name: iosxr_acls
+      namespace: ''
+    - description: Manage multiline banners on Cisco IOS XR devices
+      name: iosxr_banner
+      namespace: ''
+    - description: Configure global BGP protocol settings on Cisco IOS-XR
+      name: iosxr_bgp
+      namespace: ''
+    - description: Run commands on remote devices running Cisco IOS XR
+      name: iosxr_command
+      namespace: ''
+    - description: Manage Cisco IOS XR configuration sections
+      name: iosxr_config
+      namespace: ''
+    - description: Get facts about iosxr devices.
+      name: iosxr_facts
+      namespace: ''
+    - description: (deprecated, removed after 2022-06-01) Manage Interface on Cisco
+        IOS XR network devices
+      name: iosxr_interface
+      namespace: ''
+    - description: Interfaces resource module
+      name: iosxr_interfaces
+      namespace: ''
+    - description: L2 interfaces resource module
+      name: iosxr_l2_interfaces
+      namespace: ''
+    - description: L3 interfaces resource module
+      name: iosxr_l3_interfaces
+      namespace: ''
+    - description: LACP resource module
+      name: iosxr_lacp
+      namespace: ''
+    - description: LACP interfaces resource module
+      name: iosxr_lacp_interfaces
+      namespace: ''
+    - description: LAG interfaces resource module
+      name: iosxr_lag_interfaces
+      namespace: ''
+    - description: LLDP resource module
+      name: iosxr_lldp_global
+      namespace: ''
+    - description: LLDP interfaces resource module
+      name: iosxr_lldp_interfaces
+      namespace: ''
+    - description: Configuration management of system logging services on network
+        devices
+      name: iosxr_logging
+      namespace: ''
+    - description: Configures NetConf sub-system service on Cisco IOS-XR devices
+      name: iosxr_netconf
+      namespace: ''
+    - description: OSPFv2 resource module
+      name: iosxr_ospfv2
+      namespace: ''
+    - description: Static routes resource module
+      name: iosxr_static_routes
+      namespace: ''
+    - description: Manage the system attributes on Cisco IOS XR devices
+      name: iosxr_system
+      namespace: ''
+    - description: Manage the aggregate of local users on Cisco IOS XR device
+      name: iosxr_user
+      namespace: ''
+    plugins:
+      cliconf:
+      - description: Use iosxr cliconf to run command on Cisco IOS XR platform
+        name: iosxr
+        namespace: null
+      netconf:
+      - description: Use iosxr netconf plugin to run netconf commands on Cisco IOSXR
+          platform
+        name: iosxr
+        namespace: null
+    release_date: '2020-06-23'
+  1.0.1:
+    changes:
+      minor_changes:
+      - Bring plugin table to correct position (https://github.com/ansible-collections/cisco.iosxr/pull/44)
+    fragments:
+    - 44-plugin-doc-fixes.yaml
+    release_date: '2020-06-23'
+  1.0.2:
+    changes:
+      bugfixes:
+      - Make `src`, `backup` and `backup_options` in iosxr_config work when module
+        alias is used (https://github.com/ansible-collections/cisco.iosxr/pull/63).
+      - Makes sure that docstring and argspec are in sync and removes sanity ignores
+        (https://github.com/ansible-collections/cisco.iosxr/pull/62).
+      - Update docs after sanity fixes to modules.
+    fragments:
+    - handle_src_backup_with_module_alias.yaml
+    - remove_ignores_for_sanity.yaml
+    - update_docs.yaml
+    release_date: '2020-06-23'
+  1.0.3:
+    changes:
+      release_summary:
+      - Rereleased 1.0.2 with regenerated documentation.
+    fragments:
+    - 1.0.3.yaml
+    release_date: '2020-07-31'
+  1.0.4:
+    changes:
+      release_summary:
+      - Rereleased 1.0.3 with updated changelog.
+    fragments:
+    - 1.0.4.yaml
+    release_date: '2020-08-07'
+  1.0.5:
+    changes:
+      bugfixes:
+      - Confirmed commit fails with TypeError in IOS XR netconf plugin (https://github.com/ansible-collections/cisco.iosxr/issues/74)
+      - running config data for interface split when substring interface starts with
+        newline
+    fragments:
+    - 64-incorrect-interface-decription-parsing-fix.yaml
+    - iosxr_netconf_config_commit_fix.yaml
+    release_date: '2020-08-28'
+  1.1.0:
+    changes:
+      minor_changes:
+      - Added iosxr ospfv3 resource module (https://github.com/ansible-collections/cisco.iosxr/pull/81).
+      - Platform supported coments token to be provided when invoking the object.
+    fragments:
+    - 54_iosxr_ospfv3_module_added.yaml
+    - provide_fuctionality_to_utilize_remarks.yaml
+    modules:
+    - description: ospfv3 resource module
+      name: iosxr_ospfv3
+      namespace: ''
+    release_date: '2020-10-01'
+  1.2.0:
+    changes:
+      bugfixes:
+      - Add version key to galaxy.yaml to work around ansible-galaxy bug
+      - Fix iosxr_acls throwing a traceback with overridden (https://github.com/ansible-collections/cisco.iosxr/issues/87).
+      - require one to specify a banner delimiter in order to fix a timeout when using
+        multi-line strings
+      minor_changes:
+      - Added iosxr ospf_interfaces resource module (https://github.com/ansible-collections/cisco.iosxr/pull/84).
+    fragments:
+    - 79-iosxr-multi-line-banner-fix.yaml
+    - fix_iosxr_acls.yaml
+    - galaxy-version.yaml
+    - ospf_interfaces_resource_module_added.yaml
+    modules:
+    - description: OSPF Interfaces Resource Module.
+      name: iosxr_ospf_interfaces
+      namespace: ''
+    release_date: '2020-11-26'
+  1.2.1:
+    changes:
+      bugfixes:
+      - Update docs to clarify the idemptonecy releated caveat and add it in the output
+        warnings (https://github.com/ansible-collections/ansible.netcommon/pull/189)
+    fragments:
+    - iosxr_config_diff_doc_update.yaml
+    release_date: '2021-01-28'
+  2.0.0:
+    changes:
+      bugfixes:
+      - Fix to accurately report configuration failure during pseudo-atomic operation
+        fior iosxr-6.6.3 (https://github.com/ansible-collections/cisco.iosxr/issues/92).
+      major_changes:
+      - Requires ansible.netcommon v2.0.0+ to support `ansible_network_single_user_mode`
+        and `ansible_network_import_modules`.
+      - Please refer to ansible.netcommon `changelog <https://github.com/ansible-collections/ansible.netcommon/blob/main/changelogs/CHANGELOG.rst#ansible-netcommon-collection-release-notes>`_
+        for more details.
+      - ipaddress is no longer in ansible.netcommon. For Python versions without ipaddress
+        (< 3.0), the ipaddress package is now required.
+      minor_changes:
+      - Add iosxr_bgp_address_family resource module (https://github.com/ansible-collections/cisco.iosxr/pull/105.).
+      - Add iosxr_bgp_global resource module (https://github.com/ansible-collections/cisco.iosxr/pull/101.).
+      - Add iosxr_bgp_neighbor_address_family resource module (https://github.com/ansible-collections/cisco.iosxr/pull/107.).
+      - Add missing examples for bgp_address_family module.
+      - Add support for single_user_mode.
+      - Fix integration testcases for bgp_address_family and bgp_neighbor_address_family.
+      - Fix issue in delete state in bgp_address_family (https://github.com/ansible-collections/cisco.iosxr/pull/109).
+      - Move iosxr_config idempotent warning message with the task response under
+        `warnings` key if `changed` is `True`
+      - Re-use device_info dict instead of building it every time.
+    fragments:
+    - 102-remove-ipaddress.yaml
+    - 105-bgp_af_resource_module.yaml
+    - 107-bgp-nbr-af-resource-module.yaml
+    - 109-bugfix-bgp-af-delete.yaml
+    - bgp_global_resource_module.yaml
+    - config_module_warning_msg.yaml
+    - fix_iosxr_663_psudoatomic_failure.yaml
+    - major_release.yaml
+    - single_user_mode.yaml
+    - unittest-fix-for-resource-module-base.yaml
+    modules:
+    - description: Manages BGP Address Family resource module.
+      name: iosxr_bgp_address_family
+      namespace: ''
+    - description: Manages BGP global resource module.
+      name: iosxr_bgp_global
+      namespace: ''
+    - description: Manages BGP neighbor address family resource module.
+      name: iosxr_bgp_neighbor_address_family
+      namespace: ''
+    release_date: '2021-02-24'
+  2.0.1:
+    changes:
+      bugfixes:
+      - Add fix for interfaces which are not in running config should get merged when
+        state is merged. (https://github.com/ansible-collections/cisco.iosxr/issues/106)
+      - Update valid hostname info in iosxr_facs using show running-conf hostname
+        command. (https://github.com/ansible-collections/cisco.iosxr/issues/103)
+      security_fixes:
+      - Properly mask values of sensitive keys in module result.
+    fragments:
+    - 103_bugfix_update_valid_hostname_info.yaml
+    - 112-remove_tests_sanity_requirements.yml
+    - 114_iosxr_interfaces_merged_state_fix.yaml
+    - 115_iosxr_move_common_functionality_to_util.yaml
+    - no_log_fix.yaml
+    release_date: '2021-03-29'

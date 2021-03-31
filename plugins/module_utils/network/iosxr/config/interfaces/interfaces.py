@@ -26,6 +26,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.fa
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     get_interface_type,
     dict_to_set,
+    normalize_interface,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     remove_command_from_config_list,
@@ -167,9 +168,10 @@ class Interfaces(ConfigBase):
 
         for interface in want:
             for each in have:
-                if each["name"] == interface["name"]:
-                    break
-                elif interface["name"] in each["name"]:
+                if (
+                    each["name"] == interface["name"]
+                    or interface["name"] in each["name"]
+                ):
                     break
             else:
                 continue
@@ -192,9 +194,10 @@ class Interfaces(ConfigBase):
 
         for each in have:
             for interface in want:
-                if each["name"] == interface["name"]:
-                    break
-                elif interface["name"] in each["name"]:
+                if (
+                    each["name"] == interface["name"]
+                    or interface["name"] in each["name"]
+                ):
                     break
             else:
                 # We didn't find a matching desired state, which means we can
@@ -218,19 +221,22 @@ class Interfaces(ConfigBase):
                   the current configuration
         """
         commands = []
-
+        flag = 0
         for interface in want:
             if self.state == "rendered":
                 commands.extend(self._set_config(interface, dict()))
             else:
                 for each in have:
-                    if each["name"] == interface["name"]:
+                    if (
+                        each["name"] == interface["name"]
+                        or interface["name"] in each["name"]
+                    ):
+                        flag = 1
                         break
-                    elif interface["name"] in each["name"]:
-                        break
+                if flag == 1:
+                    commands.extend(self._set_config(interface, each))
                 else:
-                    continue
-                commands.extend(self._set_config(interface, each))
+                    commands.extend(self._set_config(interface, dict()))
 
         return commands
 
@@ -245,9 +251,10 @@ class Interfaces(ConfigBase):
         if want:
             for interface in want:
                 for each in have:
-                    if each["name"] == interface["name"]:
-                        break
-                    elif interface["name"] in each["name"]:
+                    if (
+                        each["name"] == interface["name"]
+                        or interface["name"] in each["name"]
+                    ):
                         break
                 else:
                     continue
@@ -263,8 +270,8 @@ class Interfaces(ConfigBase):
     def _set_config(self, want, have):
         # Set the interface config based on the want and have config
         commands = []
+        want["name"] = normalize_interface(want["name"])
         interface = "interface " + want["name"]
-
         # Get the diff b/w want and have
         want_dict = dict_to_set(want)
         have_dict = dict_to_set(have)

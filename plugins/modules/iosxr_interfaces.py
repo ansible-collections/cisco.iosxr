@@ -23,15 +23,15 @@ The module file for iosxr_interfaces
 from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
-ANSIBLE_METADATA = {"metadata_version": "1.1", "supported_by": "Ansible"}
-DOCUMENTATION = """module: iosxr_interfaces
-short_description: INTERFACES resource module
-description: This module manages the interface attributes on Cisco IOS-XR network devices.
+DOCUMENTATION = """
+module: iosxr_interfaces
+short_description: Interfaces resource module
+description: This module manages the interface attributes on Cisco IOS-XR network
+  devices.
 version_added: 1.0.0
 author:
 - Sumit Jaiswal (@justjais)
 - Rohit Thakur (@rohitthakur2590)
-
 notes:
 - Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
@@ -78,12 +78,12 @@ options:
         - half
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the IOS-XR device by executing
-        the command B(show running-config interface).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the IOS-XR device
+      by executing the command B(show running-config interface).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     choices:
@@ -101,9 +101,7 @@ options:
 """
 
 EXAMPLES = """
----
 # Using merged
-
 # Before state:
 # -------------
 #
@@ -123,19 +121,17 @@ EXAMPLES = """
 #  ipv4 address 10.10.0.2 255.255.255.0
 #  dot1q native vlan 1021
 # !
-
 - name: Configure Ethernet interfaces
   cisco.iosxr.iosxr_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/2
-        description: 'Configured by Ansible'
-        enabled: True
-      - name: GigabitEthernet0/0/0/3
-        description: 'Configured by Ansible Network'
-        enabled: False
-        duplex: full
+    - name: GigabitEthernet0/0/0/2
+      description: Configured by Ansible
+      enabled: true
+    - name: GigabitEthernet0/0/0/3
+      description: Configured by Ansible Network
+      enabled: false
+      duplex: full
     state: merged
-
 # After state:
 # ------------
 #
@@ -158,9 +154,7 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 1021
 # !
-
 # Using replaced
-
 # Before state:
 # ------------
 #
@@ -180,20 +174,18 @@ EXAMPLES = """
 #  ipv4 address 10.10.0.2 255.255.255.0
 #  dot1q native vlan 1021
 # !
-
 - name: Configure following interfaces and replace their existing config
   cisco.iosxr.iosxr_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/2
-        description: Configured by Ansible
-        enabled: True
-        mtu: 2000
-      - name: GigabitEthernet0/0/0/3
-        description: 'Configured by Ansible Network'
-        enabled: False
-        duplex: auto
+    - name: GigabitEthernet0/0/0/2
+      description: Configured by Ansible
+      enabled: true
+      mtu: 2000
+    - name: GigabitEthernet0/0/0/3
+      description: Configured by Ansible Network
+      enabled: false
+      duplex: auto
     state: replaced
-
 # After state:
 # ------------
 #
@@ -217,9 +209,7 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 1021
 # !
-
 # Using overridden
-
 # Before state:
 # ------------
 #
@@ -242,20 +232,18 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 1021
 # !
-
 - name: Override interfaces
   cisco.iosxr.iosxr_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/2
-        description: 'Configured by Ansible'
-        enabled: True
-        duplex: auto
-      - name: GigabitEthernet0/0/0/3
-        description: 'Configured by Ansible Network'
-        enabled: False
-        speed: 1000
+    - name: GigabitEthernet0/0/0/2
+      description: Configured by Ansible
+      enabled: true
+      duplex: auto
+    - name: GigabitEthernet0/0/0/3
+      description: Configured by Ansible Network
+      enabled: false
+      speed: 1000
     state: overridden
-
 # After state:
 # ------------
 #
@@ -279,9 +267,7 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 1021
 # !
-
 # Using deleted
-
 # Before state:
 # ------------
 #
@@ -305,14 +291,12 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 1021
 # !
-
 - name: Delete IOSXR interfaces as in given arguments
   cisco.iosxr.iosxr_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/2
-      - name: GigabitEthernet0/0/0/3
+    - name: GigabitEthernet0/0/0/2
+    - name: GigabitEthernet0/0/0/3
     state: deleted
-
 # After state:
 # ------------
 #
@@ -330,10 +314,7 @@ EXAMPLES = """
 #  ipv4 address 10.10.0.2 255.255.255.0
 #  dot1q native vlan 1021
 # !
-
-
 # Using parsed
-
 # parsed.cfg
 # ------------
 #
@@ -356,16 +337,12 @@ EXAMPLES = """
 # interface GigabitEthernet0/0/0/4
 #  shutdown
 # !
-
 # - name: Convert ACL interfaces config to argspec without connecting to the appliance
 #   cisco.iosxr.iosxr_interfaces:
 #     running_config: "{{ lookup('file', './parsed.cfg') }}"
 #     state: parsed
-
-
 # Task Output (redacted)
 # -----------------------
-
 # "parsed": [
 #        {
 #            "name": "MgmtEth0/RP0/CPU0/0"
@@ -417,29 +394,24 @@ EXAMPLES = """
 #        }
 #    ]
 # }
-
-
 # Using rendered
-
 - name: Render platform specific commands from task input using rendered state
   cisco.iosxr.iosxr_interfaces:
     config:
-          - name: GigabitEthernet0/0/0/0
-            description: Configured and Merged by Ansible-Network
-            mtu: 110
-            enabled: true
-            duplex: half
-          - name: GigabitEthernet0/0/0/1
-            description: Configured and Merged by Ansible-Network
-            mtu: 2800
-            enabled: false
-            speed: 100
-            duplex: full
+    - name: GigabitEthernet0/0/0/0
+      description: Configured and Merged by Ansible-Network
+      mtu: 110
+      enabled: true
+      duplex: half
+    - name: GigabitEthernet0/0/0/1
+      description: Configured and Merged by Ansible-Network
+      mtu: 2800
+      enabled: false
+      speed: 100
+      duplex: full
     state: rendered
-
 # Task Output (redacted)
 # -----------------------
-
 # "rendered": [
 #         "interface GigabitEthernet0/0/0/0",
 #         "description Configured and Merged by Ansible-Network",
@@ -453,10 +425,7 @@ EXAMPLES = """
 #         "duplex full",
 #         "shutdown"
 #     ]
-
-
 # Using gathered
-
 # Before state:
 # ------------
 #
@@ -480,12 +449,10 @@ EXAMPLES = """
 # interface GigabitEthernet0/0/0/4
 # shutdown
 # !
-
 - name: Gather IOSXR interfaces as in given arguments
   cisco.iosxr.iosxr_interfaces:
     config:
     state: gathered
-
 # Task Output (redacted)
 # -----------------------
 #
@@ -511,7 +478,6 @@ EXAMPLES = """
 #             "name": "GigabitEthernet0/0/0/4"
 #         }
 #     ]
-
 # After state:
 # ------------
 #
@@ -535,8 +501,6 @@ EXAMPLES = """
 # interface GigabitEthernet0/0/0/4
 # shutdown
 # !
-
-
 """
 
 RETURN = """

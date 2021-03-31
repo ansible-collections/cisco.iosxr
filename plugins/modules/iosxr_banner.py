@@ -9,13 +9,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: iosxr_banner
+DOCUMENTATION = """
+module: iosxr_banner
 author:
 - Trishna Guha (@trishnaguha)
 - Kedar Kekan (@kedarX)
@@ -23,6 +18,7 @@ short_description: Manage multiline banners on Cisco IOS XR devices
 description:
 - This module will configure both exec and motd banners on remote device running Cisco
   IOS XR. It allows playbooks to add or remove banner text from the running configuration.
+version_added: 1.0.0
 requirements:
 - ncclient >= 0.5.3 when using netconf
 - lxml >= 4.1.1 when using netconf
@@ -37,17 +33,22 @@ options:
     description:
     - Specifies the type of banner to configure on remote device.
     required: true
+    type: str
     choices:
     - login
     - motd
   text:
     description:
-    - Banner text to be configured. Accepts multiline string, without empty lines.
+    - Banner text to be configured. Accepts multi line string, without empty lines.
+      When using a multi line string, the first and last characters must be the
+      start and end delimiters for the banner
       Requires I(state=present).
+    type: str
   state:
     description:
     - Existential state of the configuration on the device.
     default: present
+    type: str
     choices:
     - present
     - absent
@@ -55,20 +56,20 @@ options:
 
 EXAMPLES = """
 - name: configure the login banner
-  iosxr_banner:
+  cisco.iosxr.iosxr_banner:
     banner: login
     text: |
-      this is my login banner
+      @this is my login banner
       that contains a multiline
-      string
+      string@
     state: present
 - name: remove the motd banner
-  iosxr_banner:
+  cisco.iosxr.iosxr_banner:
     banner: motd
     state: absent
 - name: Configure banner from file
-  iosxr_banner:
-    banner:  motd
+  cisco.iosxr.iosxr_banner:
+    banner: motd
     text: "{{ lookup('file', './config_partial/raw_banner.cfg') }}"
     state: present
 """
@@ -80,15 +81,14 @@ commands:
   type: list
   sample:
     - banner login
-    - this is my login banner
+    - "@this is my login banner"
     - that contains a multiline
-    - string
+    - string@
 
 xml:
   description: NetConf rpc xml sent to device with transport C(netconf)
   returned: always (empty list when no xml rpc to send)
   type: list
-  version_added: 2.5
   sample:
     - '<config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
             <banners xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-infra-infra-cfg">
@@ -131,7 +131,7 @@ class ConfigBase(object):
     def map_params_to_obj(self):
         text = self._module.params["text"]
         if text:
-            text = "{0!r}".format(str(text).strip())
+            text = "{0}".format(str(text).strip())
         self._want.update(
             {
                 "banner": self._module.params["banner"],
@@ -158,7 +158,7 @@ class CliConfiguration(ConfigBase):
         elif state == "present":
             if self._want["text"] and self._want["text"].encode().decode(
                 "unicode_escape"
-            ).strip("'") != self._have.get("text"):
+            ) != self._have.get("text"):
                 banner_cmd = "banner {0!s} ".format(
                     self._module.params["banner"]
                 )
@@ -177,7 +177,7 @@ class CliConfiguration(ConfigBase):
         output = get_config(self._module, config_filter=cli_filter)
         match = re.search(r"banner (\S+) (.*)", output, re.DOTALL)
         if match:
-            text = match.group(2).strip("'")
+            text = match.group(2)
         else:
             text = None
         obj = {"banner": self._module.params["banner"], "state": "absent"}

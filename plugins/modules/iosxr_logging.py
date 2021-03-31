@@ -9,13 +9,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: iosxr_logging
+DOCUMENTATION = """
+module: iosxr_logging
 author:
 - Trishna Guha (@trishnaguha)
 - Kedar Kekan (@kedarX)
@@ -24,6 +19,7 @@ short_description: Configuration management of system logging services on networ
 description:
 - This module provides declarative management configuration of system logging (syslog)
   on Cisco IOS XR devices.
+version_added: 1.0.0
 requirements:
 - ncclient >= 0.5.3 when using netconf
 - lxml >= 4.1.1 when using netconf
@@ -41,14 +37,17 @@ options:
     - monitor
     - buffered
     - file
+    type: str
   name:
     description:
     - When C(dest) = I(file) name indicates file-name
     - When C(dest) = I(host) name indicates the host-name or ip-address of syslog
       server.
+    type: str
   vrf:
     description:
     - vrf name when syslog server is configured, C(dest) = C(host)
+    type: str
     default: default
   size:
     description:
@@ -56,23 +55,82 @@ options:
       I(307200 to 125000000 bytes). Default 307200
     - Size of file when C(dest) = C(file). The acceptable value is in the range I(1
       to 2097152)KB. Default 2 GB
+    type: int
   facility:
     description:
     - To configure the type of syslog facility in which system logging (syslog) messages
       are sent to syslog servers Optional config for C(dest) = C(host)
     default: local7
+    type: str
   hostnameprefix:
     description:
     - To append a hostname prefix to system logging (syslog) messages logged to syslog
       servers. Optional config for C(dest) = C(host)
+    type: str
   level:
     description:
     - Specifies the severity level for the logging.
+    type: str
     default: debugging
     aliases:
     - severity
+    choices: ["emergencies", "alerts", "critical", "errors", "warning", "notifications", "informational", "debugging"]
   aggregate:
     description: List of syslog logging configuration definitions.
+    type: list
+    elements: dict
+    suboptions:
+      dest:
+        description:
+        - Destination for system logging (syslog) messages.
+        choices:
+        - host
+        - console
+        - monitor
+        - buffered
+        - file
+        type: str
+      name:
+        description:
+        - When C(dest) = I(file) name indicates file-name
+        - When C(dest) = I(host) name indicates the host-name or ip-address of syslog
+          server.
+        type: str
+      vrf:
+        description:
+        - vrf name when syslog server is configured, C(dest) = C(host)
+        type: str
+      size:
+        description:
+        - Size of buffer when C(dest) = C(buffered). The acceptable value is in the range
+          I(307200 to 125000000 bytes). Default 307200
+        - Size of file when C(dest) = C(file). The acceptable value is in the range I(1
+          to 2097152)KB. Default 2 GB
+        type: int
+      facility:
+        description:
+        - To configure the type of syslog facility in which system logging (syslog) messages
+          are sent to syslog servers Optional config for C(dest) = C(host)
+        type: str
+      hostnameprefix:
+        description:
+        - To append a hostname prefix to system logging (syslog) messages logged to syslog
+          servers. Optional config for C(dest) = C(host)
+        type: str
+      level:
+        description:
+        - Specifies the severity level for the logging.
+        type: str
+        aliases:
+        - severity
+        choices: ["emergencies", "alerts", "critical", "errors", "warning", "notifications", "informational", "debugging"]
+      state:
+        description:
+        - Existential state of the logging configuration on the node.
+        choices:
+        - present
+        - absent
+        type: str
   state:
     description:
     - Existential state of the logging configuration on the node.
@@ -80,42 +138,43 @@ options:
     choices:
     - present
     - absent
+    type: str
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 """
 
 EXAMPLES = """
 - name: configure logging for syslog server host
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     dest: host
     name: 10.10.10.1
     level: critical
     state: present
 
 - name: add hostnameprefix configuration
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     hostnameprefix: host1
     state: absent
 
 - name: add facility configuration
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     facility: local1
     state: present
 
 - name: configure console logging level
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     dest: console
     level: debugging
     state: present
 
 - name: configure monitor logging level
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     dest: monitor
     level: errors
     state: present
 
 - name: configure syslog to a file
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     dest: file
     name: file_name
     size: 2048
@@ -123,25 +182,25 @@ EXAMPLES = """
     state: present
 
 - name: configure buffered logging with size
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     dest: buffered
     size: 5100000
 
 - name: Configure logging using aggregate
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     aggregate:
-      - { dest: console, level: warning }
-      - { dest: buffered, size: 4800000 }
-      - { dest: file, name: file3, size: 2048}
-      - { dest: host, name: host3, level: critical}
+    - {dest: console, level: warning}
+    - {dest: buffered, size: 4800000}
+    - {dest: file, name: file3, size: 2048}
+    - {dest: host, name: host3, level: critical}
 
 - name: Delete logging using aggregate
-  iosxr_logging:
+  cisco.iosxr.iosxr_logging:
     aggregate:
-      - { dest: console, level: warning }
-      - { dest: buffered, size: 4800000 }
-      - { dest: file, name: file3, size: 2048}
-      - { dest: host, name: host3, level: critical}
+    - {dest: console, level: warning}
+    - {dest: buffered, size: 4800000}
+    - {dest: file, name: file3, size: 2048}
+    - {dest: host, name: host3, level: critical}
     state: absent
 """
 
@@ -163,7 +222,6 @@ xml:
   description: NetConf rpc xml sent to device with transport C(netconf)
   returned: always (empty list when no xml rpc to send)
   type: list
-  version_added: 2.5
   sample:
     - '<config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
     <syslog xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-infra-syslog-cfg">
@@ -1093,7 +1151,7 @@ def main():
         hostnameprefix=dict(type="str"),
         level=dict(
             type="str",
-            default="informational",
+            default="debugging",
             aliases=["severity"],
             choices=[
                 "emergencies",

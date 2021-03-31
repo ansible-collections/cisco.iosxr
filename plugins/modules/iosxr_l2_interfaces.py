@@ -22,9 +22,9 @@ __metaclass__ = type
 
 GENERATOR_VERSION = "1.0"
 
-ANSIBLE_METADATA = {"metadata_version": "1.1", "supported_by": "Ansible"}
 
-DOCUMENTATION = """module: iosxr_l2_interfaces
+DOCUMENTATION = """
+module: iosxr_l2_interfaces
 short_description: L2 interfaces resource module
 description: This module manages the Layer-2 interface attributes on Cisco IOS-XR
   devices.
@@ -60,6 +60,7 @@ options:
         - Configures Layer 2 protocol tunneling and protocol data unit (PDU) filtering
           on an interface.
         type: list
+        elements: dict
         suboptions:
           cdp:
             description:
@@ -102,6 +103,7 @@ options:
           valid only with respect to Sub-Interface and is not valid when configuring
           for Interface.
         type: list
+        elements: int
       propagate:
         description:
         - Propagate Layer 2 transport events. Note that it will work only when the
@@ -109,12 +111,12 @@ options:
         type: bool
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the IOS-XR device by executing
-        the command B(show running-config interface).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the IOS-XR device
+      by executing the command B(show running-config interface).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     choices:
@@ -132,7 +134,6 @@ options:
 """
 
 EXAMPLES = """
----
 # Using merged
 #
 # Before state:
@@ -153,18 +154,18 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/3
-        native_vlan: 20
-      - name: GigabitEthernet0/0/0/4
-        native_vlan: 40
-        l2transport: True
-        l2protocol:
-        - stp: tunnel
-      - name: GigabitEthernet0/0/0/3.900
-        l2transport: True
-        q_vlan:
-        - 20
-        - 40
+    - name: GigabitEthernet0/0/0/3
+      native_vlan: 20
+    - name: GigabitEthernet0/0/0/4
+      native_vlan: 40
+      l2transport: true
+      l2protocol:
+      - stp: tunnel
+    - name: GigabitEthernet0/0/0/3.900
+      l2transport: true
+      q_vlan:
+      - 20
+      - 40
     state: merged
 
 # After state:
@@ -218,15 +219,15 @@ EXAMPLES = """
 - name: Replaces device configuration of listed interfaces with provided configuration
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/4
-        native_vlan: 40
-        l2transport: True
-        l2protocol:
-        - stp: forward
-      - name: GigabitEthernet0/0/0/3.900
-        q_vlan:
-        - 20
-        - any
+    - name: GigabitEthernet0/0/0/4
+      native_vlan: 40
+      l2transport: true
+      l2protocol:
+      - stp: forward
+    - name: GigabitEthernet0/0/0/3.900
+      q_vlan:
+      - 20
+      - any
     state: replaced
 
 # After state:
@@ -280,15 +281,15 @@ EXAMPLES = """
 - name: Override device configuration of all interfaces with provided configuration
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/4
-        native_vlan: 40
-        l2transport: True
-        l2protocol:
-        - stp: forward
-      - name: GigabitEthernet0/0/0/3.900
-        q_vlan:
-        - 20
-        - any
+    - name: GigabitEthernet0/0/0/4
+      native_vlan: 40
+      l2transport: true
+      l2protocol:
+      - stp: forward
+    - name: GigabitEthernet0/0/0/3.900
+      q_vlan:
+      - 20
+      - any
     state: overridden
 
 # After state:
@@ -339,7 +340,7 @@ EXAMPLES = """
 - name: "Delete L2 attributes of given interfaces (Note: This won't delete the interface itself)"
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/4
+    - name: GigabitEthernet0/0/0/4
     state: deleted
 
 # After state:
@@ -436,10 +437,10 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 40
 # !
-# - name: Convert L2 interfaces config to argspec without connecting to the appliance
-#   cisco.iosxr.iosxr_l2_interfaces:
-#     running_config: "{{ lookup('file', './parsed.cfg') }}"
-#     state: parsed
+- name: Convert L2 interfaces config to argspec without connecting to the appliance
+  cisco.iosxr.iosxr_l2_interfaces:
+    running_config: "{{ lookup('file', './parsed.cfg') }}"
+    state: parsed
 # Task Output (redacted)
 # -----------------------
 # "parsed": [
@@ -482,23 +483,23 @@ EXAMPLES = """
   cisco.iosxr.iosxr_l2_interfaces:
     config:
 
-          - name: GigabitEthernet0/0/0/1
-            native_vlan: 10
-            l2transport: true
-            l2protocol:
+    - name: GigabitEthernet0/0/0/1
+      native_vlan: 10
+      l2transport: true
+      l2protocol:
 
-              - pvst: tunnel
+      - pvst: tunnel
 
-              - cdp: forward
-            propagate: true
+      - cdp: forward
+      propagate: true
 
-          - name: GigabitEthernet0/0/0/3.900
-            q_vlan:
-              - 20
-              - 40
+    - name: GigabitEthernet0/0/0/3.900
+      q_vlan:
+      - 20
+      - 40
 
-          - name: GigabitEthernet0/0/0/4
-            native_vlan: 40
+    - name: GigabitEthernet0/0/0/4
+      native_vlan: 40
     state: rendered
 # Task Output (redacted)
 # -----------------------

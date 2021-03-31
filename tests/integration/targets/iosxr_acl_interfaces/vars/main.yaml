@@ -89,7 +89,6 @@ replaced:
     - interface GigabitEthernet0/0/0/0
     - no ipv4 access-group acl_1 ingress
     - no ipv4 access-group acl_2 egress
-    - no ipv6 access-group acl6_1 ingress
     - no ipv6 access-group acl6_2 egress
     - ipv6 access-group acl6_3 ingress
   after:
@@ -111,7 +110,6 @@ overridden:
     - interface GigabitEthernet0/0/0/0
     - no ipv4 access-group acl_1 ingress
     - no ipv4 access-group acl_2 egress
-    - no ipv6 access-group acl6_1 ingress
     - no ipv6 access-group acl6_2 egress
     - ipv6 access-group acl6_3 ingress
     - interface GigabitEthernet0/0/0/1

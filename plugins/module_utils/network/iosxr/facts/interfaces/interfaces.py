@@ -13,7 +13,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-
 from copy import deepcopy
 import re
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
@@ -58,7 +57,7 @@ class InterfacesFacts(object):
             data = connection.get("show running-config interface")
 
         # operate on a collection of resource x
-        config = data.split("interface ")
+        config = ("\n" + data).split("\ninterface ")
         for conf in config:
             if conf:
                 obj = self.render_config(self.generated_spec, conf)

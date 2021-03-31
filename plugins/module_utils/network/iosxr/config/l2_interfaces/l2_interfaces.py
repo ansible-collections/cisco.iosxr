@@ -13,12 +13,12 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     to_list,
+    remove_empties,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
     Facts,
@@ -163,15 +163,18 @@ class L2_Interfaces(ConfigBase):
                   to the desired configuration
         """
         commands = []
-
         for interface in want:
             interface["name"] = normalize_interface(interface["name"])
             for each in have:
-                if each["name"] == interface["name"]:
+                if (
+                    each["name"] == interface["name"]
+                    or interface["name"] in each["name"]
+                ):
                     break
             else:
                 commands.extend(self._set_config(interface, {}, module))
                 continue
+            interface = remove_empties(interface)
             have_dict = filter_dict_having_none_value(interface, each)
             commands.extend(self._clear_config(dict(), have_dict))
             commands.extend(self._set_config(interface, each, module))
@@ -195,7 +198,7 @@ class L2_Interfaces(ConfigBase):
                 if each["name"] == interface["name"]:
                     in_have.add(interface["name"])
                     break
-                elif interface["name"] != each["name"]:
+                if interface["name"] != each["name"]:
                     not_in_have.add(interface["name"])
             else:
                 # We didn't find a matching desired state, which means we can
@@ -203,6 +206,7 @@ class L2_Interfaces(ConfigBase):
                 interface = dict(name=each["name"])
                 commands.extend(self._clear_config(interface, each))
                 continue
+            interface = remove_empties(interface)
             have_dict = filter_dict_having_none_value(interface, each)
             commands.extend(self._clear_config(dict(), have_dict))
             commands.extend(self._set_config(interface, each, module))
@@ -228,10 +232,12 @@ class L2_Interfaces(ConfigBase):
 
         for interface in want:
             interface["name"] = normalize_interface(interface["name"])
+            interface = remove_empties(interface)
             for each in have:
-                if each["name"] == interface["name"]:
-                    break
-                elif interface["name"] in each["name"]:
+                if (
+                    each["name"] == interface["name"]
+                    or interface["name"] in each["name"]
+                ):
                     break
             else:
                 commands.extend(self._set_config(interface, {}, module))
@@ -252,9 +258,10 @@ class L2_Interfaces(ConfigBase):
             for interface in want:
                 interface["name"] = normalize_interface(interface["name"])
                 for each in have:
-                    if each["name"] == interface["name"]:
-                        break
-                    elif interface["name"] in each["name"]:
+                    if (
+                        each["name"] == interface["name"]
+                        or interface["name"] in each["name"]
+                    ):
                         break
                 else:
                     continue
@@ -272,7 +279,6 @@ class L2_Interfaces(ConfigBase):
         commands = []
         interface = "interface " + want["name"]
         l2_protocol_bool = False
-
         # Get the diff b/w want and have
         want_dict = dict_to_set(want)
         have_dict = dict_to_set(have)
@@ -364,5 +370,4 @@ class L2_Interfaces(ConfigBase):
                 remove_command_from_config_list(
                     interface, "l2transport", commands
                 )
-
         return commands

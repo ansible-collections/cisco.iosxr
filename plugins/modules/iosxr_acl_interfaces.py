@@ -30,18 +30,14 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: iosxr_acl_interfaces
-short_description: Manage Access Control Lists (ACLs) configuration for interfaces
-  in IOS-XR.
+DOCUMENTATION = """
+module: iosxr_acl_interfaces
+short_description: ACL interfaces resource module
 description:
 - This module manages adding and removing Access Control Lists (ACLs) from interfaces
   on devices running IOS-XR software.
+version_added: 1.0.0
 author: Nilashish Chakraborty (@NilashishC)
 options:
   config:
@@ -90,13 +86,12 @@ options:
                 required: true
   running_config:
     description:
-    - The module, by default, will connect to the remote device and retrieve the current
-      running-config to use as a base for comparing against the contents of source.
-      There are times when it is not desirable to have the task get the current running-config
-      for every task in a playbook.  The I(running_config) argument allows the implementer
-      to pass in the configuration to use as the base config for comparison. This
-      value of this option should be the output received from device by executing
-      command B(show running-config interface).
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the IOS-XR device
+      by executing the command B(show running-config interface).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     description:
@@ -111,6 +106,7 @@ options:
     - parsed
     - rendered
     default: merged
+
 """
 EXAMPLES = """
 # Using merged
@@ -131,29 +127,29 @@ EXAMPLES = """
 # !
 
 - name: Merge the provided configuration with the existing running configuration
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/0
-        access_groups:
-          - afi: ipv4
-            acls:
-              - name: acl_1
-                direction: in
-              - name: acl_2
-                direction: out
-          - afi: ipv6
-            acls:
-              - name: acl6_1
-                direction: in
-              - name: acl6_2
-                direction: out
+    - name: GigabitEthernet0/0/0/0
+      access_groups:
+      - afi: ipv4
+        acls:
+        - name: acl_1
+          direction: in
+        - name: acl_2
+          direction: out
+      - afi: ipv6
+        acls:
+        - name: acl6_1
+          direction: in
+        - name: acl6_2
+          direction: out
 
-      - name: GigabitEthernet0/0/0/1
-        access_groups:
-          - afi: ipv4
-            acls:
-              - name: acl_1
-                direction: out
+    - name: GigabitEthernet0/0/0/1
+      access_groups:
+      - afi: ipv4
+        acls:
+        - name: acl_1
+          direction: out
     state: merged
 
 # After state:
@@ -200,16 +196,16 @@ EXAMPLES = """
 #
 
 - name: Update acl_interfaces configuration using merged
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/1
-        access_groups:
-          - afi: ipv4
-            acls:
-              - name: acl_2
-                direction: out
-              - name: acl_1
-                direction: in
+    - name: GigabitEthernet0/0/0/1
+      access_groups:
+      - afi: ipv4
+        acls:
+        - name: acl_2
+          direction: out
+        - name: acl_1
+          direction: in
     state: merged
 
 # After state:
@@ -257,14 +253,14 @@ EXAMPLES = """
 # !
 
 - name: Replace device configurations of listed interface with provided configurations
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/0
-        access_groups:
-          - afi: ipv6
-            acls:
-              - name: acl6_3
-                direction: in
+    - name: GigabitEthernet0/0/0/0
+      access_groups:
+      - afi: ipv6
+        acls:
+        - name: acl6_3
+          direction: in
     state: replaced
 
 # After state:
@@ -309,18 +305,18 @@ EXAMPLES = """
 #
 
 - name: Overridde all interface ACL configuration with provided configuration
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/1
-        access_groups:
-          - afi: ipv4
-            acls:
-              - name: acl_2
-                direction: in
-          - afi: ipv6
-            acls:
-              - name: acl6_3
-                direction: out
+    - name: GigabitEthernet0/0/0/1
+      access_groups:
+      - afi: ipv4
+        acls:
+        - name: acl_2
+          direction: in
+      - afi: ipv6
+        acls:
+        - name: acl6_3
+          direction: out
     state: overridden
 
 # After state:
@@ -365,9 +361,9 @@ EXAMPLES = """
 #
 
 - name: Delete all ACL attributes of GigabitEthernet0/0/0/1
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/1
+    - name: GigabitEthernet0/0/0/1
     state: deleted
 
 # After state:
@@ -384,108 +380,6 @@ EXAMPLES = """
 #  ipv4 access-group acl_2 egress
 #  ipv6 access-group acl6_1 ingress
 #  ipv6 access-group acl6_2 egress
-# !
-# interface GigabitEthernet0/0/0/1
-#  shutdown
-# !
-#
-
-# Using 'deleted' to delete a single attached ACL from an interface
-
-# Before state:
-# -------------
-#
-# RP/0/RP0/CPU0:ios#sh running-config interface
-# Wed Jan 15 12:34:56.689 UTC
-# interface MgmtEth0/RP0/CPU0/0
-#  ipv4 address dhcp
-# !
-# interface GigabitEthernet0/0/0/0
-#  shutdown
-#  ipv4 access-group acl_1 ingress
-#  ipv4 access-group acl_2 egress
-#  ipv6 access-group acl6_1 ingress
-#  ipv6 access-group acl6_2 egress
-# !
-# interface GigabitEthernet0/0/0/1
-#  shutdown
-#  ipv4 access-group acl_1 egress
-# !
-#
-
-- name: Delete a single ACL attached to GigabitEthernet0/0/0/0
-  iosxr_acl_interfaces:
-    config:
-      - name: GigabitEthernet0/0/0/0
-        access_groups:
-          - afi: ipv4
-            acls:
-              - name: acl_2
-                direction: out
-    state: deleted
-
-# After state:
-# -------------
-#
-# RP/0/RP0/CPU0:ios#sh running-config interface
-# Wed Jan 15 12:34:56.689 UTC
-# interface MgmtEth0/RP0/CPU0/0
-#  ipv4 address dhcp
-# !
-# interface GigabitEthernet0/0/0/0
-#  shutdown
-#  ipv4 access-group acl_1 ingress
-#  ipv6 access-group acl6_1 ingress
-#  ipv6 access-group acl6_2 egress
-# !
-# interface GigabitEthernet0/0/0/1
-#  shutdown
-# !
-#
-
-# Using 'deleted' to delete all ACLs of a particular AFI from an interface
-
-# Before state:
-# -------------
-#
-# RP/0/RP0/CPU0:ios#sh running-config interface
-# Wed Jan 15 12:34:56.689 UTC
-# interface MgmtEth0/RP0/CPU0/0
-#  ipv4 address dhcp
-# !
-# interface GigabitEthernet0/0/0/0
-#  shutdown
-#  ipv4 access-group acl_1 ingress
-#  ipv4 access-group acl_2 egress
-#  ipv6 access-group acl6_1 ingress
-#  ipv6 access-group acl6_2 egress
-# !
-# interface GigabitEthernet0/0/0/1
-#  shutdown
-#  ipv4 access-group acl_1 egress
-# !
-#
-
-- name: Delete all IPv6 ACLs attached to GigabitEthernet0/0/0/0
-  iosxr_acl_interfaces:
-    config:
-      - name: GigabitEthernet0/0/0/0
-        access_groups:
-          - afi: ipv6
-    state: deleted
-
-# After state:
-# -------------
-#
-# RP/0/RP0/CPU0:ios#sh running-config interface
-# Wed Jan 15 12:34:56.689 UTC
-# interface MgmtEth0/RP0/CPU0/0
-#  ipv4 address dhcp
-# !
-# interface GigabitEthernet0/0/0/0
-#  shutdown
-#  ipv4 access-group acl_1 ingress
-#  ipv4 access-group acl_2 egress
 # !
 # interface GigabitEthernet0/0/0/1
 #  shutdown
@@ -516,7 +410,7 @@ EXAMPLES = """
 #
 
 - name: Delete all ACL interfaces configuration from the device
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     state: deleted
 
 # After state:
@@ -556,7 +450,7 @@ EXAMPLES = """
 # !
 
 # - name: Convert ACL interfaces config to argspec without connecting to the appliance
-#   iosxr_acl_interfaces:
+#   cisco.iosxr.iosxr_acl_interfaces:
 #     running_config: "{{ lookup('file', './parsed.cfg') }}"
 #     state: parsed
 
@@ -620,7 +514,7 @@ EXAMPLES = """
 # Using gathered
 
 - name: Gather ACL interfaces facts using gathered state
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     state: gathered
 
 
@@ -667,16 +561,16 @@ EXAMPLES = """
 # Using rendered
 
 - name: Render platform specific commands from task input using rendered state
-  iosxr_acl_interfaces:
+  cisco.iosxr.iosxr_acl_interfaces:
     config:
-      - name: GigabitEthernet0/0/0/0
-        access_groups:
-          - afi: ipv4
-            acls:
-              - name: acl_1
-                direction: in
-              - name: acl_2
-                direction: out
+    - name: GigabitEthernet0/0/0/0
+      access_groups:
+      - afi: ipv4
+        acls:
+        - name: acl_1
+          direction: in
+        - name: acl_2
+          direction: out
     state: rendered
 
 # Task Output (redacted)
@@ -740,10 +634,12 @@ def main():
         ("state", "rendered", ("config",)),
         ("state", "parsed", ("running_config",)),
     ]
+    mutually_exclusive = [("config", "running_config")]
 
     module = AnsibleModule(
         argument_spec=Acl_interfacesArgs.argument_spec,
         required_if=required_if,
+        mutually_exclusive=mutually_exclusive,
         supports_check_mode=True,
     )
 

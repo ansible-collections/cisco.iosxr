@@ -1,0 +1,25 @@
+---
+- debug:
+    msg: START iosxr_ospf_interfaces gathered integration tests on connection={{ ansible_connection
+      }}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_config.yaml
+
+- block:
+
+    - name: Gather OSPF interfaces facts from the device using iosxr_ospf_interfaces
+        module
+      register: result
+      cisco.iosxr.iosxr_ospf_interfaces:
+        state: gathered
+
+    - assert:
+        that:
+          - "{{ merged['after'] | symmetric_difference(result['gathered']) | length\
+                      \ == 0 }}"
+          - "result.changed == false"
+  always:
+
+    - include_tasks: _remove_config.yaml

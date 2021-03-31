@@ -56,6 +56,24 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ac
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.static_routes.static_routes import (
     Static_routesFacts,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ospfv2.ospfv2 import (
+    Ospfv2Facts,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ospfv3.ospfv3 import (
+    Ospfv3Facts,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ospf_interfaces.ospf_interfaces import (
+    Ospf_interfacesFacts,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_neighbor_address_family.bgp_neighbor_address_family import (
+    Bgp_neighbor_address_familyFacts,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_address_family.bgp_address_family import (
+    Bgp_address_familyFacts,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_global.bgp_global import (
+    Bgp_globalFacts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -73,6 +91,12 @@ FACT_RESOURCE_SUBSETS = dict(
     acl_interfaces=Acl_interfacesFacts,
     acls=AclsFacts,
     static_routes=Static_routesFacts,
+    ospfv2=Ospfv2Facts,
+    ospfv3=Ospfv3Facts,
+    ospf_interfaces=Ospf_interfacesFacts,
+    bgp_neighbor_address_family=Bgp_neighbor_address_familyFacts,
+    bgp_address_family=Bgp_address_familyFacts,
+    bgp_global=Bgp_globalFacts,
 )
 
 

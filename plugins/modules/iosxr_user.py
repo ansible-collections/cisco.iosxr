@@ -9,13 +9,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: iosxr_user
+DOCUMENTATION = """
+module: iosxr_user
 author:
 - Trishna Guha (@trishnaguha)
 - Sebastiaan van Doesselaar (@sebasdoes)
@@ -26,6 +21,7 @@ description:
   network devices. It allows playbooks to manage either individual usernames or the
   aggregate of usernames in the current running config. It also supports purging usernames
   from the configuration that are not explicitly defined.
+version_added: 1.0.0
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 notes:
@@ -41,11 +37,90 @@ options:
     aliases:
     - users
     - collection
+    type: list
+    elements: dict
+    suboptions:
+      name:
+        description:
+        - The username to be configured on the Cisco IOS XR device. This argument accepts
+          a string value and is mutually exclusive with the C(aggregate) argument. Please
+          note that this option is not same as C(provider username).
+        type: str
+        required: true
+      configured_password:
+        description:
+        - The password to be configured on the Cisco IOS XR device. The password needs
+          to be provided in clear text. Password is encrypted on the device when used
+          with I(cli) and by Ansible when used with I(netconf) using the same MD5 hash
+          technique with salt size of 3. Please note that this option is not same as C(provider
+          password).
+        type: str
+      update_password:
+        description:
+        - Since passwords are encrypted in the device running config, this argument will
+          instruct the module when to change the password.  When set to C(always), the
+          password will always be updated in the device and when set to C(on_create) the
+          password will be updated only if the username is created.
+        type: str
+        choices:
+        - on_create
+        - always
+      group:
+        description:
+        - Configures the group for the username in the device running configuration. The
+          argument accepts a string value defining the group name. This argument does
+          not check if the group has been configured on the device.
+        type: str
+        aliases:
+        - role
+      groups:
+        description:
+        - Configures the groups for the username in the device running configuration.
+          The argument accepts a list of group names. This argument does not check if
+          the group has been configured on the device. It is similar to the aggregate
+          command for usernames, but lets you configure multiple groups for the user(s).
+        type: list
+        elements: str
+      admin:
+        description:
+        - Enters into administration configuration mode for making config changes to the
+          device.
+        - Applicable only when using network_cli transport
+        type: bool
+      state:
+        description:
+        - Configures the state of the username definition as it relates to the device
+          operational configuration. When set to I(present), the username(s) should be
+          configured in the device active configuration and when set to I(absent) the
+          username(s) should not be in the device active configuration
+        type: str
+        choices:
+        - present
+        - absent
+      public_key:
+        description:
+        - Configures the contents of the public keyfile to upload to the IOS-XR node.
+          This enables users to login using the accompanying private key. IOS-XR only
+          accepts base64 decoded files, so this will be decoded and uploaded to the node.
+          Do note that this requires an OpenSSL public key file, PuTTy generated files
+          will not work! Mutually exclusive with public_key_contents. If used with multiple
+          users in aggregates, then the same key file is used for all users.
+        type: str
+      public_key_contents:
+        description:
+        - Configures the contents of the public keyfile to upload to the IOS-XR node.
+          This enables users to login using the accompanying private key. IOS-XR only
+          accepts base64 decoded files, so this will be decoded and uploaded to the node.
+          Do note that this requires an OpenSSL public key file, PuTTy generated files
+          will not work! Mutually exclusive with public_key.If used with multiple users
+          in aggregates, then the same key file is used for all users.
+        type: str
   name:
     description:
     - The username to be configured on the Cisco IOS XR device. This argument accepts
       a string value and is mutually exclusive with the C(aggregate) argument. Please
       note that this option is not same as C(provider username).
+    type: str
   configured_password:
     description:
     - The password to be configured on the Cisco IOS XR device. The password needs
@@ -53,12 +128,14 @@ options:
       with I(cli) and by Ansible when used with I(netconf) using the same MD5 hash
       technique with salt size of 3. Please note that this option is not same as C(provider
       password).
+    type: str
   update_password:
     description:
     - Since passwords are encrypted in the device running config, this argument will
       instruct the module when to change the password.  When set to C(always), the
       password will always be updated in the device and when set to C(on_create) the
       password will be updated only if the username is created.
+    type: str
     default: always
     choices:
     - on_create
@@ -68,6 +145,7 @@ options:
     - Configures the group for the username in the device running configuration. The
       argument accepts a string value defining the group name. This argument does
       not check if the group has been configured on the device.
+    type: str
     aliases:
     - role
   groups:
@@ -76,6 +154,8 @@ options:
       The argument accepts a list of group names. This argument does not check if
       the group has been configured on the device. It is similar to the aggregate
       command for usernames, but lets you configure multiple groups for the user(s).
+    type: list
+    elements: str
   purge:
     description:
     - Instructs the module to consider the resource definition absolute. It will remove
@@ -96,6 +176,7 @@ options:
       operational configuration. When set to I(present), the username(s) should be
       configured in the device active configuration and when set to I(absent) the
       username(s) should not be in the device active configuration
+    type: str
     default: present
     choices:
     - present
@@ -108,6 +189,7 @@ options:
       Do note that this requires an OpenSSL public key file, PuTTy generated files
       will not work! Mutually exclusive with public_key_contents. If used with multiple
       users in aggregates, then the same key file is used for all users.
+    type: str
   public_key_contents:
     description:
     - Configures the contents of the public keyfile to upload to the IOS-XR node.
@@ -116,6 +198,8 @@ options:
       Do note that this requires an OpenSSL public key file, PuTTy generated files
       will not work! Mutually exclusive with public_key.If used with multiple users
       in aggregates, then the same key file is used for all users.
+    type: str
+
 requirements:
 - ncclient >= 0.5.3 when using netconf
 - lxml >= 4.1.1 when using netconf
@@ -125,43 +209,43 @@ requirements:
 
 EXAMPLES = """
 - name: create a new user
-  iosxr_user:
+  cisco.iosxr.iosxr_user:
     name: ansible
     configured_password: mypassword
     state: present
 - name: create a new user in admin configuration mode
-  iosxr_user:
+  cisco.iosxr.iosxr_user:
     name: ansible
     configured_password: mypassword
-    admin: True
+    admin: true
     state: present
 - name: remove all users except admin
-  iosxr_user:
-    purge: True
+  cisco.iosxr.iosxr_user:
+    purge: true
 - name: set multiple users to group sys-admin
-  iosxr_user:
+  cisco.iosxr.iosxr_user:
     aggregate:
-      - name: netop
-      - name: netend
+    - name: netop
+    - name: netend
     group: sysadmin
     state: present
 - name: set multiple users to multiple groups
-  iosxr_user:
+  cisco.iosxr.iosxr_user:
     aggregate:
-      - name: netop
-      - name: netend
+    - name: netop
+    - name: netend
     groups:
-      - sysadmin
-      - root-system
+    - sysadmin
+    - root-system
     state: present
 - name: Change Password for User netop
-  iosxr_user:
+  cisco.iosxr.iosxr_user:
     name: netop
-    configured_password: "{{ new_password }}"
+    configured_password: '{{ new_password }}'
     update_password: always
     state: present
 - name: Add private key authentication for user netop
-  iosxr_user:
+  cisco.iosxr.iosxr_user:
     name: netop
     state: present
     public_key_contents: "{{ lookup('file', '/home/netop/.ssh/id_rsa.pub' }}"
@@ -179,7 +263,6 @@ xml:
   description: NetConf rpc xml sent to device with transport C(netconf)
   returned: always (empty list when no xml rpc to send)
   type: list
-  version_added: 2.5
   sample:
     - '<config xmlns:xc=\"urn:ietf:params:xml:ns:netconf:base:1.0\">
     <aaa xmlns=\"http://cisco.com/ns/yang/Cisco-IOS-XR-aaa-lib-cfg\">
@@ -740,17 +823,19 @@ def main():
     """ main entry point for module execution
     """
     element_spec = dict(
-        name=dict(),
-        configured_password=dict(no_log=True),
+        name=dict(type="str"),
+        configured_password=dict(type="str", no_log=True),
         update_password=dict(
-            default="always", choices=["on_create", "always"]
+            type="str", default="always", choices=["on_create", "always"]
         ),
         admin=dict(type="bool", default=False),
-        public_key=dict(),
-        public_key_contents=dict(),
-        group=dict(aliases=["role"]),
-        groups=dict(type="list", elements="dict"),
-        state=dict(default="present", choices=["present", "absent"]),
+        public_key=dict(type="str"),
+        public_key_contents=dict(type="str"),
+        group=dict(type="str", aliases=["role"]),
+        groups=dict(type="list", elements="str"),
+        state=dict(
+            type="str", default="present", choices=["present", "absent"]
+        ),
     )
     aggregate_spec = deepcopy(element_spec)
     aggregate_spec["name"] = dict(required=True)
@@ -770,7 +855,6 @@ def main():
             elements="dict",
             options=aggregate_spec,
             aliases=["users", "collection"],
-            mutually_exclusive=mutually_exclusive,
         ),
         purge=dict(type="bool", default=False),
     )

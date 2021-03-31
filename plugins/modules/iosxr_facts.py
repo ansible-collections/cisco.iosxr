@@ -12,14 +12,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": [u"preview"],
-    "supported_by": "network",
-}
-
-
-DOCUMENTATION = """module: iosxr_facts
+DOCUMENTATION = """
+module: iosxr_facts
 short_description: Get facts about iosxr devices.
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
@@ -28,6 +22,7 @@ description:
   places the facts gathered in the fact tree keyed by the respective resource name.  The
   facts module will always collect a base set of facts from the device and can enable
   or disable collection of additional facts.
+version_added: 1.0.0
 notes:
 - Tested against IOS-XR 6.1.3.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
@@ -43,6 +38,8 @@ options:
       with an initial C(M(!)) to specify that a specific subset should not be collected.
     required: false
     default: '!config'
+    type: list
+    elements: str
   gather_network_resources:
     description:
     - When supplied, this argument will restrict the facts collected to a given subset.
@@ -51,52 +48,54 @@ options:
       also be used with an initial C(M(!)) to specify that a specific subset should
       not be collected. Valid subsets are 'all', 'lacp', 'lacp_interfaces', 'lldp_global',
       'lldp_interfaces', 'interfaces', 'l2_interfaces', 'l3_interfaces', 'lag_interfaces',
-      'acls', 'acl_interfaces', 'static_routes.
+      'acls', 'acl_interfaces', 'static_routes', 'ospfv2'.
     required: false
+    type: list
+    elements: str
 """
 
 EXAMPLES = """
 # Gather all facts
-- iosxr_facts:
+- cisco.iosxr.iosxr_facts:
     gather_subset: all
     gather_network_resources: all
 
 # Collect only the config and default facts
-- iosxr_facts:
+- cisco.iosxr.iosxr_facts:
     gather_subset:
-      - config
+    - config
 
 # Do not collect hardware facts
-- iosxr_facts:
+- cisco.iosxr.iosxr_facts:
     gather_subset:
-      - "!hardware"
+    - '!hardware'
 
 # Collect only the lacp facts
-- iosxr_facts:
+- cisco.iosxr.iosxr_facts:
     gather_subset:
-      - "!all"
-      - "!min"
+    - '!all'
+    - '!min'
     gather_network_resources:
-      - lacp
+    - lacp
 
 # Do not collect lacp_interfaces facts
-- iosxr_facts:
+- cisco.iosxr.iosxr_facts:
     gather_network_resources:
-      - "!lacp_interfaces"
+    - '!lacp_interfaces'
 
 # Collect lacp and minimal default facts
-- iosxr_facts:
+- cisco.iosxr.iosxr_facts:
     gather_subset: min
     gather_network_resources: lacp
 
 # Collect only the interfaces facts
-- iosxr_facts:
+- cisco.iosxr.iosxr_facts:
     gather_subset:
-      - "!all"
-      - "!min"
+    - '!all'
+    - '!min'
     gather_network_resources:
-      - interfaces
-      - l2_interfaces
+    - interfaces
+    - l2_interfaces
 """
 
 RETURN = """

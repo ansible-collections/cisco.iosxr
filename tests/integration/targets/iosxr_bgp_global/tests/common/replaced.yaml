@@ -1,0 +1,67 @@
+---
+- debug:
+    msg: Start iosxr_bgp_global replaced integration tests connection={{ ansible_connection}}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_config.yaml
+
+- block:
+    - name: Replace BGP configuration with provided configuration
+      cisco.iosxr.iosxr_bgp_global: &id002
+        config:
+          as_number: 65536
+          default_metric: 5
+          socket:
+            receive_buffer_size: 514
+            send_buffer_size: 4098
+          bgp:
+            bestpath:
+              med:
+                confed: true
+            cluster_id: 5
+            router_id: 192.0.2.10
+          neighbors:
+            - neighbor: 192.0.2.13
+              remote_as: 65538
+              bfd:
+                fast_detect:
+                  strict_mode: true
+                multiplier: 6
+                minimum_interval: 20
+        state: replaced
+      register: result
+
+    - name: Assert that correct set of commands were generated
+      assert:
+        that:
+          - "{{ replaced['commands'] | symmetric_difference(result['commands'])\
+            \ |length == 0 }}"
+
+    - name: Assert that after dict is correctly generated
+      assert:
+        that:
+          - replaced['after'] == result['after']
+
+    - name: Assert that before dicts are correctly generated
+      assert:
+        that:
+          - merged['after'] == result['before']
+
+    - name: Replace device configurations of BGP global module
+        (IDEMPOTENT)
+      register: result
+      cisco.iosxr.iosxr_bgp_global: *id002
+
+    - name: Assert that task was idempotent
+      assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
+
+    - name: Assert that before dict is correctly generated
+      assert:
+        that:
+          - replaced['after'] == result['before']
+  always:
+    - include_tasks: _remove_config.yaml

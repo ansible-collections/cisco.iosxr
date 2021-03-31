@@ -95,6 +95,7 @@ rendered:
     - ipv6 address 2001:db8:0:3::/64
 parsed:
   after:
+    - name: Loopback888
     - ipv6:
         - address: 2001:db8:0:3::/64
       ipv4:

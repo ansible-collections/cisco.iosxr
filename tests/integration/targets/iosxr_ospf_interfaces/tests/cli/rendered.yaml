@@ -1,0 +1,51 @@
+---
+- debug:
+    msg: START iosxr_ospf_interfaces rendered integration tests on connection={{ ansible_connection
+      }}
+
+- include_tasks: _remove_config.yaml
+
+- block:
+
+    - name: Use rendered state to convert task input to device specific commands
+      register: result
+      cisco.iosxr.iosxr_ospf_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/0
+            type: gigabitethernet
+            address_family:
+              - afi: ipv4
+                processes:
+                  - process_id: "LAB3"
+                    area:
+                      area_id: 0.0.0.3
+                cost: 20
+                authentication:
+                  message_digest:
+                    keychain: cisco
+              - afi: ipv6
+                processes:
+                  - process_id: "LAB3"
+                    area:
+                      area_id: 0.0.0.2
+                cost: 30
+        state: rendered
+
+    - assert:
+        that:
+          - "{{ merged['commands'] | symmetric_difference(result['rendered'])\
+          \ |length==0 }}"
+          - "result.changed == false"
+
+    - name: Gather Ospf interfaces facts from the device and assert that its empty
+      register: result
+      cisco.iosxr.iosxr_ospf_interfaces:
+        state: gathered
+
+    - name: Make sure that rendered task actually did not make any changes to the
+        device
+      assert:
+        that: "{{ result['gathered'] == [] }}"
+  always:
+
+    - include_tasks: _remove_config.yaml

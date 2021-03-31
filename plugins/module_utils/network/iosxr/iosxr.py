@@ -26,6 +26,9 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
 import json
 import re
 from difflib import Differ
@@ -112,7 +115,10 @@ iosxr_provider_spec = {
 
 iosxr_argument_spec = {
     "provider": dict(
-        type="dict", options=iosxr_provider_spec, removed_in_version=2.14
+        type="dict",
+        options=iosxr_provider_spec,
+        removed_at_date="2022-06-01",
+        removed_from_collection="cisco.iosxr",
     )
 }
 
@@ -129,12 +135,15 @@ CONFIG_MISPLACED_CHILDREN = [re.compile(r"^end-\s*(.+)$")]
 # Hence these objects should be played direcly from candidate
 # configurations
 CONFIG_BLOCKS_FORCED_IN_DIFF = [
-    {"start": re.compile(r"route-policy"), "end": re.compile(r"end-policy")},
-    {"start": re.compile(r"prefix-set"), "end": re.compile(r"end-set")},
-    {"start": re.compile(r"as-path-set"), "end": re.compile(r"end-set")},
-    {"start": re.compile(r"community-set"), "end": re.compile(r"end-set")},
-    {"start": re.compile(r"rd-set"), "end": re.compile(r"end-set")},
-    {"start": re.compile(r"extcommunity-set"), "end": re.compile(r"end-set")},
+    {"start": re.compile(r"^route-policy"), "end": re.compile(r"end-policy$")},
+    {"start": re.compile(r"^prefix-set"), "end": re.compile(r"end-set$")},
+    {"start": re.compile(r"^as-path-set"), "end": re.compile(r"end-set$")},
+    {"start": re.compile(r"^community-set"), "end": re.compile(r"end-set$")},
+    {"start": re.compile(r"^rd-set"), "end": re.compile(r"end-set$")},
+    {
+        "start": re.compile(r"^extcommunity-set"),
+        "end": re.compile(r"end-set$"),
+    },
 ]
 
 
@@ -634,7 +643,7 @@ def mask_config_blocks_from_diff(config, candidate, force_diff_prefix):
                             # otherwise we would be having new start
                             new_block = False
                             break
-                    if new_block:
+                    if new_block and start_index:
                         block_index_start_end.append((start_index, end_index))
 
         for start, end in block_index_start_end:
