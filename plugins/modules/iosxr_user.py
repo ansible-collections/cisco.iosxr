@@ -355,11 +355,14 @@ class PublicKeyManager(object):
     def addremovekey(self, command):
         """ Add or remove key based on command
         """
+        admin = self._module.params.get("admin")
 
         conn = get_connection(self._module)
-        conn.send_command("admin")
+        if admin:
+            conn.send_command("admin")
         out = conn.send_command(command, prompt="yes/no", answer="yes")
-        conn.send_command("exit")
+        if admin:
+            conn.send_command("exit")
 
         return out
 
