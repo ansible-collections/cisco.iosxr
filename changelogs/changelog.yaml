@@ -226,3 +226,13 @@ releases:
     - 115_iosxr_move_common_functionality_to_util.yaml
     - no_log_fix.yaml
     release_date: '2021-03-29'
+  2.0.2:
+    changes:
+      bugfixes:
+      - For versions >=2.0.1, this collection requires ansible.netcommon >=2.0.1.
+      - Re-releasing this collection with ansible.netcommon dependency requirements
+        updated.
+    fragments:
+    - 125-add_ignore_txt.yml
+    - bump_netcommon.yaml
+    release_date: '2021-04-09'

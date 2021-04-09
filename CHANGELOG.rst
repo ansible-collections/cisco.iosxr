@@ -5,6 +5,15 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v2.0.2
+======
+
+Bugfixes
+--------
+
+- For versions >=2.0.1, this collection requires ansible.netcommon >=2.0.1.
+- Re-releasing this collection with ansible.netcommon dependency requirements updated.
+
 v2.0.1
 ======
 
