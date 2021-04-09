@@ -188,7 +188,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
     Facts,
-    FACT_RESOURCE_SUBSETS
+    FACT_RESOURCE_SUBSETS,
 )
 
 
