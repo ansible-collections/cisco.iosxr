@@ -47,10 +47,6 @@ options:
           e.g. GigabitEthernet0/0/0/1 or GigabitEthernet0/0/0/1.100.
         type: str
         required: true
-      native_vlan:
-        description:
-        - Configure a native VLAN ID for the trunk
-        type: int
       l2transport:
         description:
         - Switchport mode access command to configure the interface as a layer 2 access
@@ -59,40 +55,14 @@ options:
         description:
         - Configures Layer 2 protocol tunneling and protocol data unit (PDU) filtering
           on an interface.
-        type: list
-        elements: dict
+        type: dict
         suboptions:
-          cdp:
+          cpsv:
             description:
-            - Cisco Discovery Protocol (CDP) tunneling and data unit parameters.
+            - CDP, PVST+, STP, and VTP protocols.
             choices:
             - drop
-            - forward
-            - tunnel
-            type: str
-          pvst:
-            description:
-            - Configures the per-VLAN Spanning Tree Protocol (PVST) tunneling and
-              data unit parameters.
-            choices:
-            - drop
-            - forward
-            - tunnel
-            type: str
-          stp:
-            description:
-            - Spanning Tree Protocol (STP) tunneling and data unit parameters.
-            choices:
-            - drop
-            - forward
-            - tunnel
-            type: str
-          vtp:
-            description:
-            - VLAN Trunk Protocol (VTP) tunneling and data unit parameters.
-            choices:
-            - drop
-            - forward
+            - reverse-tunnel
             - tunnel
             type: str
       q_vlan:
@@ -154,10 +124,7 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/3
-      native_vlan: 20
     - name: GigabitEthernet0/0/0/4
-      native_vlan: 40
       l2transport: true
       l2protocol:
       - stp: tunnel
@@ -178,17 +145,15 @@ EXAMPLES = """
 #  ipv4 address 10.10.0.2 255.255.255.0
 #  duplex half
 #  shutdown
-#  dot1q native vlan 20
 # !
 # interface GigabitEthernet0/0/0/4
 # description Test description
-#  dot1q native vlan 10
 #  l2transport
 #   l2protocol stp tunnel
 #  !
 # !
 # interface GigabitEthernet0/0/0/3.900 l2transport
-#  dot1q vlan 20 40
+#  encapsulation dot1q 20 second-dot1q 30
 # !
 
 # Using replaced
@@ -203,17 +168,15 @@ EXAMPLES = """
 #  ipv4 address 10.10.0.2 255.255.255.0
 #  duplex half
 #  shutdown
-#  dot1q native vlan 20
 # !
 # interface GigabitEthernet0/0/0/4
 # description Test description
-#  dot1q native vlan 10
 #  l2transport
 #   l2protocol stp tunnel
 #  !
 # !
 # interface GigabitEthernet0/0/0/3.900 l2transport
-#  dot1q vlan 20 40
+#  encapsulation dot1q 1 second-dot1q 1
 # !
 
 - name: Replaces device configuration of listed interfaces with provided configuration

@@ -101,34 +101,25 @@ class L2_InterfacesFacts(object):
             config["name"] = intf
 
             # populate the facts from the configuration
-            native_vlan = re.search(r"dot1q native vlan (\d+)", conf)
-            if native_vlan:
-                config["native_vlan"] = int(native_vlan.group(1))
-
             dot1q = utils.parse_conf_arg(conf, "encapsulation dot1q")
             config["q_vlan"] = []
             if dot1q:
-                config["q_vlan"].append(int(dot1q.split(" ")[0]))
-                if len(dot1q.split(" ")) > 1:
-                    config["q_vlan"].append(int(dot1q.split(" ")[2]))
+                if 'second-dot1q' in dot1q:
+                    config["q_vlan"].extend((dot1q.split(" second-dot1q ")))
+                    #import epdb;epdb.serve()
+                else:
+                    config["q_vlan"].append(int(dot1q.split(" ")[0]))
+                    if len(dot1q.split(" ")) > 1:
+                        config["q_vlan"].append(int(dot1q.split(" ")[2]))
 
             if utils.parse_conf_cmd_arg(conf, "l2transport", True):
                 config["l2transport"] = True
             if utils.parse_conf_arg(conf, "propagate"):
                 config["propagate"] = True
-            config["l2protocol"] = []
+            config["l2protocol"] = {}
 
-            cdp = utils.parse_conf_arg(conf, "l2protocol cdp")
-            pvst = utils.parse_conf_arg(conf, "l2protocol pvst")
-            stp = utils.parse_conf_arg(conf, "l2protocol stp")
-            vtp = utils.parse_conf_arg(conf, "l2protocol vtp")
-            if cdp:
-                config["l2protocol"].append({"cdp": cdp})
-            if pvst:
-                config["l2protocol"].append({"pvst": pvst})
-            if stp:
-                config["l2protocol"].append({"stp": stp})
-            if vtp:
-                config["l2protocol"].append({"vtp": vtp})
+            cpsv = utils.parse_conf_arg(conf, "l2protocol cpsv")
+            if cpsv:
+                config["l2protocol"] = {"cpsv": cpsv}
 
             return utils.remove_empties(config)

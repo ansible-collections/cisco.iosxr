@@ -285,40 +285,21 @@ class L2_Interfaces(ConfigBase):
         diff = want_dict - have_dict
 
         if diff:
+            #import epdb;epdb.serve()
             # For merging with already configured l2protocol
-            if have.get("l2protocol") and len(have.get("l2protocol")) > 1:
-                l2_protocol_diff = []
-                for each in want.get("l2protocol"):
-                    for every in have.get("l2protocol"):
-                        if every == each:
-                            break
-                    if each not in have.get("l2protocol"):
-                        l2_protocol_diff.append(each)
-                l2_protocol_bool = True
-                l2protocol = tuple(l2_protocol_diff)
-            else:
-                l2protocol = {}
 
             diff = dict(diff)
-            wants_native = diff.get("native_vlan")
             l2transport = diff.get("l2transport")
             q_vlan = diff.get("q_vlan")
             propagate = diff.get("propagate")
-            if l2_protocol_bool is False:
-                l2protocol = diff.get("l2protocol")
-
-            if wants_native:
-                cmd = "dot1q native vlan {0}".format(wants_native)
-                add_command_to_config_list(interface, cmd, commands)
+            l2protocol = diff.get("l2protocol")
 
             if l2transport or l2protocol:
-                for each in l2protocol:
-                    each = dict(each)
-                    if isinstance(each, dict):
-                        cmd = "l2transport l2protocol {0} {1}".format(
-                            list(each.keys())[0], list(each.values())[0]
-                        )
-                    add_command_to_config_list(interface, cmd, commands)
+                if l2protocol:
+                    cmd = "l2transport l2protocol {0} {1}".format(
+                        l2protocol[0][0], l2protocol[0][1]
+                    )
+                add_command_to_config_list(interface, cmd, commands)
                 if propagate and not have.get("propagate"):
                     cmd = "l2transport propagate remote-status"
                     add_command_to_config_list(interface, cmd, commands)
@@ -333,7 +314,7 @@ class L2_Interfaces(ConfigBase):
             if q_vlan and "." in interface:
                 q_vlans = " ".join(map(str, want.get("q_vlan")))
                 if q_vlans != have.get("q_vlan"):
-                    cmd = "dot1q vlan {0}".format(q_vlans)
+                    cmd = "encapsulation dot1q {0} second-dot1q {1}".format(q_vlans.split(" ")[0],q_vlans.split(" ")[1])
                     add_command_to_config_list(interface, cmd, commands)
 
         return commands
@@ -346,10 +327,6 @@ class L2_Interfaces(ConfigBase):
             interface = "interface " + want["name"]
         else:
             interface = "interface " + have["name"]
-        if have.get("native_vlan"):
-            remove_command_from_config_list(
-                interface, "dot1q native vlan", commands
-            )
 
         if have.get("q_vlan"):
             remove_command_from_config_list(

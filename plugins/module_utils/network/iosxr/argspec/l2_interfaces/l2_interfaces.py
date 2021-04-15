@@ -39,29 +39,15 @@ class L2_InterfacesArgs(object):
             "elements": "dict",
             "options": {
                 "name": {"type": "str", "required": True},
-                "native_vlan": {"type": "int"},
                 "l2transport": {"type": "bool"},
                 "l2protocol": {
-                    "elements": "dict",
                     "options": {
-                        "cdp": {
+                        "cpsv": {
                             "type": "str",
-                            "choices": ["drop", "forward", "tunnel"],
-                        },
-                        "pvst": {
-                            "type": "str",
-                            "choices": ["drop", "forward", "tunnel"],
-                        },
-                        "stp": {
-                            "type": "str",
-                            "choices": ["drop", "forward", "tunnel"],
-                        },
-                        "vtp": {
-                            "type": "str",
-                            "choices": ["drop", "forward", "tunnel"],
-                        },
+                            "choices": ["drop", "reverse-tunnel", "tunnel"],
+                        }
                     },
-                    "type": "list",
+                    "type": "dict",
                 },
                 "q_vlan": {"type": "list", "elements": "int"},
                 "propagate": {"type": "bool"},
