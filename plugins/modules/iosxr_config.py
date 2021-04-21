@@ -319,6 +319,13 @@ def get_running_config(module):
     return contents
 
 
+def get_os_version(connection):
+    os_version = "7.0.2"
+    if connection.get_device_info():
+        os_version = connection.get_device_info()["network_os_version"]
+        return os_version
+
+
 def get_candidate(module):
     candidate = ""
     if module.params["src"]:
@@ -348,6 +355,7 @@ def run(module, result):
     commands = None
     replace_file_path = None
     connection = get_connection(module)
+
     try:
         response = connection.get_diff(
             candidate=candidate_config,
@@ -450,6 +458,17 @@ def main():
         required_if=required_if,
         supports_check_mode=True,
     )
+
+    connection = get_connection(module)
+    os_version = get_os_version(connection)
+    if os_version > "7.2":
+        argument_spec.update(comment=dict())
+        module = AnsibleModule(
+            argument_spec=argument_spec,
+            mutually_exclusive=mutually_exclusive,
+            required_if=required_if,
+            supports_check_mode=True,
+        )
 
     if module.params["force"] is True:
         module.params["match"] = "none"
