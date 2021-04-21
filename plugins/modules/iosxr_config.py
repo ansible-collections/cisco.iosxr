@@ -136,7 +136,6 @@ options:
       is committed.  If the configuration is not changed or committed, this argument
       is ignored.
     type: str
-    default: configured by iosxr_config
   admin:
     description:
     - Enters into administration configuration mode for making config changes to the
@@ -249,7 +248,7 @@ time:
   sample: "22:28:34"
 """
 import re
-
+from packaging import version
 from ansible.module_utils._text import to_text, to_bytes
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import ConnectionError
@@ -257,6 +256,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     load_config,
     get_config,
     get_connection,
+    get_os_version,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     iosxr_argument_spec,
@@ -317,13 +317,6 @@ def get_running_config(module):
     if not contents:
         contents = get_config(module)
     return contents
-
-
-def get_os_version(connection):
-    os_version = "7.0.2"
-    if connection.get_device_info():
-        os_version = connection.get_device_info()["network_os_version"]
-        return os_version
 
 
 def get_candidate(module):
@@ -434,7 +427,7 @@ def main():
         config=dict(),
         backup=dict(type="bool", default=False),
         backup_options=dict(type="dict", options=backup_spec),
-        comment=dict(default=DEFAULT_COMMIT_COMMENT),
+        comment=dict(),
         admin=dict(type="bool", default=False),
         exclusive=dict(type="bool", default=False),
         label=dict(),
@@ -458,21 +451,24 @@ def main():
         supports_check_mode=True,
     )
 
-    connection = get_connection(module)
-    os_version = get_os_version(connection)
-    if os_version > "7.2":
-        argument_spec.update(comment=dict())
-        module = AnsibleModule(
-            argument_spec=argument_spec,
-            mutually_exclusive=mutually_exclusive,
-            required_if=required_if,
-            supports_check_mode=True,
-        )
+    warnings = list()
+    os_version = get_os_version(module)
+    if version.parse(os_version) > version.parse("7.2"):
+        if module.params["comment"]:
+            msg = (
+                "value of comment option '%s' is ignored as it in not supported by os version '%s'"
+                % (module.params["comment"], os_version)
+            )
+            warnings.append(msg)
+            module.params["comment"] = None
+    else:
+        # for backward compatibility
+        if not module.params["comment"]:
+            module.params["comment"] = DEFAULT_COMMIT_COMMENT
 
     if module.params["force"] is True:
         module.params["match"] = "none"
 
-    warnings = list()
     check_args(module, warnings)
 
     result = dict(changed=False, warnings=warnings)

@@ -55,6 +55,11 @@ class TestIosxrConfigModule(TestIosxrModule):
         )
         self.get_connection = self.mock_get_connection.start()
 
+        self.patcher_get_os_version = patch(
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_config.get_os_version"
+        )
+        self.mock_get_os_version = self.patcher_get_os_version.start()
+
         self.conn = self.get_connection()
         self.conn.edit_config = MagicMock()
 
@@ -66,12 +71,14 @@ class TestIosxrConfigModule(TestIosxrModule):
 
         self.patcher_get_config.stop()
         self.patcher_exec_command.stop()
+        self.patcher_get_os_version.stop()
         self.mock_get_connection.stop()
 
     def load_fixtures(self, commands=None):
         config_file = "iosxr_config_config.cfg"
         self.mock_get_config.return_value = load_fixture(config_file)
         self.mock_exec_command.return_value = "dummy diff"
+        self.mock_get_os_version.return_value = "7.0.2"
 
     def test_iosxr_config_unchanged(self):
         src = load_fixture("iosxr_config_config.cfg")
