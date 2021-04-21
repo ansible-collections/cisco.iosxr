@@ -355,7 +355,6 @@ def run(module, result):
     commands = None
     replace_file_path = None
     connection = get_connection(module)
-
     try:
         response = connection.get_diff(
             candidate=candidate_config,
