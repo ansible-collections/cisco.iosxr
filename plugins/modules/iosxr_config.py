@@ -453,7 +453,7 @@ def main():
 
     warnings = list()
     os_version = get_os_version(module)
-    if version.parse(os_version) > version.parse("7.2"):
+    if os_version and version.parse(os_version) > version.parse("7.2"):
         if module.params["comment"]:
             msg = (
                 "value of comment option '%s' is ignored as it in not supported by os version '%s'"
