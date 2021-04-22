@@ -1,3 +1,4 @@
 ncclient
 paramiko
 ipaddress
+packaging
