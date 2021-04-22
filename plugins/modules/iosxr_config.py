@@ -248,7 +248,7 @@ time:
   sample: "22:28:34"
 """
 import re
-from packaging import version
+from distutils.version import LooseVersion
 from ansible.module_utils._text import to_text, to_bytes
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import ConnectionError
@@ -453,7 +453,7 @@ def main():
 
     warnings = list()
     os_version = get_os_version(module)
-    if os_version and version.parse(os_version) > version.parse("7.2"):
+    if os_version and LooseVersion(os_version) > LooseVersion("7.2"):
         if module.params["comment"]:
             msg = (
                 "value of comment option '%s' is ignored as it in not supported by os version '%s'"

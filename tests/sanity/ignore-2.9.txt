@@ -22,10 +22,3 @@ plugins/modules/iosxr_ospfv3.py import-2.6!skip
 plugins/modules/iosxr_bgp_neighbor_address_family.py import-2.6!skip
 plugins/modules/iosxr_bgp_address_family.py import-2.6!skip
 plugins/modules/iosxr_bgp_global.py import-2.6!skip
-plugins/modules/iosxr_config.py import-2.6 # No module named 'packaging'
-plugins/modules/iosxr_config.py import-2.7 # No module named 'packaging'
-plugins/modules/iosxr_config.py import-3.5 # No module named 'packaging'
-plugins/modules/iosxr_config.py import-3.6 # No module named 'packaging'
-plugins/modules/iosxr_config.py import-3.7 # No module named 'packaging'
-plugins/modules/iosxr_config.py import-3.8 # No module named 'packaging'
-plugins/modules/iosxr_config.py import-3.9 # No module named 'packaging'
