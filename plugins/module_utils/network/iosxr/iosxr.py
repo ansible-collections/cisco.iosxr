@@ -575,7 +575,34 @@ def load_config(
             diff = response.get("show_commit_config_diff")
 
         except ConnectionError as exc:
-            module.fail_json(msg=to_text(exc, errors="surrogate_then_replace"))
+            try:
+                if "Invalid input detected" in str(exc) and "comment" in str(
+                    exc
+                ):
+                    comment = None
+                    response = conn.edit_config(
+                        candidate=command_filter,
+                        commit=commit,
+                        admin=admin,
+                        exclusive=exclusive,
+                        replace=replace,
+                        comment=comment,
+                        label=label,
+                    )
+                    if module._diff:
+                        diff = response.get("diff")
+
+                    # Overwrite the default diff by the IOS XR commit diff.
+                    # See plugins/cliconf/iosxr.py for this key set: show_commit_config_diff
+                    diff = response.get("show_commit_config_diff")
+                else:
+                    module.fail_json(
+                        msg=to_text(exc, errors="surrogate_then_replace")
+                    )
+            except ConnectionError as exc1:
+                module.fail_json(
+                    msg=to_text(exc1, errors="surrogate_then_replace")
+                )
 
     return diff
 
