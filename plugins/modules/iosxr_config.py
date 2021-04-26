@@ -136,7 +136,6 @@ options:
       is committed.  If the configuration is not changed or committed, this argument
       is ignored.
     type: str
-    default: configured by iosxr_config
   admin:
     description:
     - Enters into administration configuration mode for making config changes to the
@@ -249,7 +248,7 @@ time:
   sample: "22:28:34"
 """
 import re
-
+from distutils.version import LooseVersion
 from ansible.module_utils._text import to_text, to_bytes
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import ConnectionError
@@ -257,6 +256,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     load_config,
     get_config,
     get_connection,
+    get_os_version,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     iosxr_argument_spec,
@@ -427,7 +427,7 @@ def main():
         config=dict(),
         backup=dict(type="bool", default=False),
         backup_options=dict(type="dict", options=backup_spec),
-        comment=dict(default=DEFAULT_COMMIT_COMMENT),
+        comment=dict(),
         admin=dict(type="bool", default=False),
         exclusive=dict(type="bool", default=False),
         label=dict(),
@@ -451,10 +451,24 @@ def main():
         supports_check_mode=True,
     )
 
+    warnings = list()
+    os_version = get_os_version(module)
+    if os_version and LooseVersion(os_version) > LooseVersion("7.2"):
+        if module.params["comment"]:
+            msg = (
+                "value of comment option '%s' is ignored as it in not supported by os version '%s'"
+                % (module.params["comment"], os_version)
+            )
+            warnings.append(msg)
+            module.params["comment"] = None
+    else:
+        # for backward compatibility
+        if not module.params["comment"]:
+            module.params["comment"] = DEFAULT_COMMIT_COMMENT
+
     if module.params["force"] is True:
         module.params["match"] = "none"
 
-    warnings = list()
     check_args(module, warnings)
 
     result = dict(changed=False, warnings=warnings)
