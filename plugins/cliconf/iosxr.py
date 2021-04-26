@@ -180,9 +180,11 @@ class Cliconf(CliconfBase):
             try:
                 self.commit(comment=comment, label=label, replace=replace)
             except AnsibleConnectionFailure as exc:
-                if "Invalid input detected" in str(exc) and "comment" in str(
-                    exc
+                error_msg = to_text(exc, errors="surrogate_or_strict").strip()
+                if "Invalid input detected" in str(error_msg) and "comment" in str(
+                    error_msg
                 ):
+                    comment = None
                     self.commit(comment=comment, label=label, replace=replace)
 
         else:
