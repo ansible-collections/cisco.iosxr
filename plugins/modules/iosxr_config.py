@@ -136,6 +136,7 @@ options:
       is committed.  If the configuration is not changed or committed, this argument
       is ignored.
     type: str
+    default: configured by iosxr_config
   admin:
     description:
     - Enters into administration configuration mode for making config changes to the
