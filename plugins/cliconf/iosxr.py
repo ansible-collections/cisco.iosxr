@@ -177,7 +177,17 @@ class Cliconf(CliconfBase):
         resp["show_commit_config_diff"] = self.get("show commit changes diff")
 
         if commit:
-            self.commit(comment=comment, label=label, replace=replace)
+            try:
+                self.commit(comment=comment, label=label, replace=replace)
+            except AnsibleConnectionFailure as exc:
+                error_msg = to_text(exc, errors="surrogate_or_strict").strip()
+                if (
+                    "Invalid input detected" in error_msg
+                    and "comment" in error_msg
+                ):
+                    comment = None
+                    self.commit(comment=comment, label=label, replace=replace)
+
         else:
             self.discard_changes()
 
