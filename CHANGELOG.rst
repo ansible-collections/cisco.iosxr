@@ -5,6 +5,21 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v2.1.0
+======
+
+Minor Changes
+-------------
+
+- Add support for available_network_resources key, which allows to fetch the available resources for a platform (https://github.com/ansible-collections/cisco.iosxr/issues/119).
+- Update psudo-atomic operation scenario tests with correct assertion.
+
+Bugfixes
+--------
+
+- Avoid using default value for comment for iosxr version > 7.2(Module=iosxr_config)
+- Avoid using default value for comment when "comment is not supported" by device.
+
 v2.0.2
 ======
 
@@ -33,6 +48,7 @@ v2.0.0
 
 Major Changes
 -------------
+
 - Requires ansible.netcommon v2.0.0+ to support `ansible_network_single_user_mode` and `ansible_network_import_modules`.
 - Please refer to ansible.netcommon `changelog <https://github.com/ansible-collections/ansible.netcommon/blob/main/changelogs/CHANGELOG.rst#ansible-netcommon-collection-release-notes>`_ for more details.
 - ipaddress is no longer in ansible.netcommon. For Python versions without ipaddress (< 3.0), the ipaddress package is now required.
