@@ -25,7 +25,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.fa
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     normalize_interface,
-    dict_to_set,
+    dict_diff,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     remove_command_from_config_list,
@@ -282,10 +282,7 @@ class L2_Interfaces(ConfigBase):
         interface = "interface " + want["name"]
         l2_protocol_bool = False
         # Get the diff b/w want and have
-        want_dict = dict_to_set(want)
-        have_dict = dict_to_set(have)
-        diff = want_dict - have_dict
-
+        diff = dict_diff(have, want)
         if diff:
             # For merging with already configured l2protocol
             if have.get("l2protocol") and len(have.get("l2protocol")) > 1:
@@ -301,7 +298,6 @@ class L2_Interfaces(ConfigBase):
             else:
                 l2protocol = {}
 
-            diff = dict(diff)
             wants_native = diff.get("native_vlan")
             l2transport = diff.get("l2transport")
             q_vlan = diff.get("q_vlan")
@@ -341,14 +337,15 @@ class L2_Interfaces(ConfigBase):
                         add_command_to_config_list(interface, cmd, commands)
                         break
                 if encapsulation:
-                    if encapsulation[0][0] == 'dot1q':
-                        if len(encapsulation) > 1 and encapsulation[1][0] == "second_dot1q":
+                    encapsulation = dict(encapsulation)
+                    if encapsulation.get('dot1q'):
+                        if encapsulation.get('second_dot1q'):
                             cmd = "encapsulation dot1q {0} second-dot1q {1}".format(
-                                encapsulation[0][1], encapsulation[1][1]
+                                encapsulation.get('dot1q'), encapsulation.get('second_dot1q')
                             )
                         else:
                             cmd = "encapsulation dot1q {0}".format(
-                                encapsulation[0][1]
+                                encapsulation.get('dot1q')
                             )
                         add_command_to_config_list(interface, cmd, commands)
 
