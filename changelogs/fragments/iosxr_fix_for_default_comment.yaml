@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Avoid using default value for comment when "comment is not supported" by device.
