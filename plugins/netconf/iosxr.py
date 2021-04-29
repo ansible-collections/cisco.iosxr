@@ -128,8 +128,6 @@ class Netconf(NetconfBase):
                         break
         except Exception as exc:
             if "bad-namespace" in str(exc):
-                import epdb;
-                epdb.serve()
                 device_info = self.get_device_info_old_version()
             else:
                 self._connection.queue_message(
@@ -346,7 +344,7 @@ class Netconf(NetconfBase):
             ]
         )
 
-        install_filter = build_xml("install",install_meta, opcode="filter",namespace="install_old")
+        install_filter = build_xml("install", install_meta, opcode="filter", namespace="install_old")
         try:
             reply = self.get(install_filter)
             resp = remove_namespaces(
