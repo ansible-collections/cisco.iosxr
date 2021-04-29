@@ -668,7 +668,7 @@ def mask_config_blocks_from_diff(config, candidate, force_diff_prefix):
                 run_conf_start_index = conf_lines.index(candidate_lines[start])
                 for i in range(start, end + 1):
                     conf_lines[run_conf_start_index] = (
-                        conf_lines[run_conf_start_index] + force_diff_pref
+                        conf_lines[run_conf_start_index] + force_diff_prefix
                     )
                     run_conf_start_index = run_conf_start_index + 1
 
