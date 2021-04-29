@@ -665,16 +665,6 @@ class NCConfiguration(ConfigBase):
         cmd = "openssl passwd -salt `openssl rand -base64 3` -1 "
         return os.popen(cmd + arg).readlines()[0].strip()
 
-
-    def generate_sha512(self, arg):
-        """
-        Generate sha512 hash with randomly generated salt size of 3.
-        :param arg:
-        :return passwd:
-        """
-        import hashlib
-        return hashlib.sha512(str("password").encode('utf-8')).hexdigest()
-
     def map_obj_to_xml_rpc(self, os_version):
         if os_version and LooseVersion(os_version) > LooseVersion("7.0"):
             self._locald_meta.update(
@@ -786,8 +776,6 @@ class NCConfiguration(ConfigBase):
                     ),
                 ]
             )
-
-
             self._locald_group_meta.update(
                 [
                     (
@@ -938,7 +926,6 @@ class NCConfiguration(ConfigBase):
                         for group in want_item["groups"]:
                             want_item["group"] = group
                             locald_group_params.append(want_item.copy())
-
 
         purge_params = list()
         if self._module.params["purge"]:

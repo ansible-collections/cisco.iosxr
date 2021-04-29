@@ -96,7 +96,7 @@ options:
             - tunnel
             type: str
           cpsv:
-            description: 
+            description:
               - CDP, PVST+, STP, and VTP protocols.
             choices:
             - drop
@@ -112,7 +112,7 @@ options:
             description: IEEE 802.1Q VLAN-tagged packets.
           second_dot1q:
             type: int
-            description: IEEE 802.1Q VLAN-tagged packets.            
+            description: IEEE 802.1Q VLAN-tagged packets.
       q_vlan:
         description:
         - 802.1Q VLAN configuration. Note that it can accept either 2 VLAN IDs when

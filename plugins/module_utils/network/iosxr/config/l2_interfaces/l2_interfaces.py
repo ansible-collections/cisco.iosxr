@@ -39,6 +39,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     get_os_version,
 )
 
+
 class L2_Interfaces(ConfigBase):
     """
     The iosxr_interfaces class

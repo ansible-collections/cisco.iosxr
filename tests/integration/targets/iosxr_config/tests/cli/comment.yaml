@@ -38,9 +38,8 @@
   ignore_errors: true
   cisco.iosxr.iosxr_config:
     lines:
-      - router bgp 65111
-      - neighbor 10.1.1.1
-      - update-source Loopback0
+      - interface bundle-Ether 10
+      - bundle load-balancing hash dst-ip
 
 - assert:
     that:
@@ -56,5 +55,12 @@
 - assert:
     that:
       - result.failed == false
+
+- name: Remove config
+  register: result
+  ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no interface bundle-Ether 10
 
 - debug: msg="END cli/comment.yaml on connection={{ ansible_connection }}"
