@@ -188,6 +188,8 @@ class Cliconf(CliconfBase):
                 ):
                     comment = None
                     self.commit(comment=comment, label=label, replace=replace)
+                else:
+                    raise ConnectionError(error_msg)
 
         else:
             self.discard_changes()
