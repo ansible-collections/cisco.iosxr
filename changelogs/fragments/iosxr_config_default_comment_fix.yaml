@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Avoid using default value for comment for iosxr version > 7.2(Module=iosxr_config)
