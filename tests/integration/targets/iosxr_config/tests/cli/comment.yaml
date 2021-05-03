@@ -57,11 +57,4 @@
     that:
       - result.failed == false
 
-- name: Remove config
-  register: result
-  ignore_errors: true
-  cisco.iosxr.iosxr_config:
-    lines:
-      - no interface bundle-Ether 10
-
 - debug: msg="END cli/comment.yaml on connection={{ ansible_connection }}"
