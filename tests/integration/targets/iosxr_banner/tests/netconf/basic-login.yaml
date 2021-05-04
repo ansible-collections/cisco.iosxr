@@ -1,8 +1,4 @@
 ---
-- name: Pause for 1 min
-  pause:
-    minutes: 1
-
 - name: setup - remove login
   cisco.iosxr.iosxr_banner:
     banner: login
