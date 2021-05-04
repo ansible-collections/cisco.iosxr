@@ -229,7 +229,3 @@ deleted:
       name: Loopback888
     - enabled: true
       name: Loopback999
-    - enabled: true
-      name: GigabitEthernet0/0/0/0
-    - enabled: true
-      name: GigabitEthernet0/0/0/1

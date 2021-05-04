@@ -7,6 +7,11 @@
 
 - include_tasks: _populate_config.yaml
 
+
+- name: Pause for 1 min
+  pause:
+    minutes: 1
+
 - block:
 
     - name: Delete attributes of all configured interfaces
