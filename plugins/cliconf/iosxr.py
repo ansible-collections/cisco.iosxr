@@ -185,8 +185,15 @@ class Cliconf(CliconfBase):
                     "Invalid input detected" in error_msg
                     and "comment" in error_msg
                 ):
+                    msg = (
+                        "value of comment option '%s' is ignored as it in not supported by IOSXR"
+                        % comment
+                    )
+                    self._connection.queue_message("warning", msg)
                     comment = None
                     self.commit(comment=comment, label=label, replace=replace)
+                else:
+                    raise ConnectionError(error_msg)
 
         else:
             self.discard_changes()
