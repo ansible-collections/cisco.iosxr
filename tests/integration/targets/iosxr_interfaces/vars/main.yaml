@@ -175,8 +175,6 @@ overridden:
       name: Loopback888
     - enabled: true
       name: Loopback999
-    - enabled: true
-      name: GigabitEthernet0/0/0/0
     - description: Configured and Overridden by Ansible-Network
       duplex: full
       enabled: false
@@ -231,7 +229,3 @@ deleted:
       name: Loopback888
     - enabled: true
       name: Loopback999
-    - enabled: true
-      name: GigabitEthernet0/0/0/0
-    - enabled: true
-      name: GigabitEthernet0/0/0/1

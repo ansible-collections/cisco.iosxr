@@ -15,7 +15,7 @@
   loop_control:
     loop_var: test_case_to_run
   tags:
-    - netconf
+    - deprecated
 
 - name: run test case (connection=local)
   include: '{{ test_case_to_run }} ansible_connection=local'
@@ -23,4 +23,4 @@
   loop_control:
     loop_var: test_case_to_run
   tags:
-    - local
+    - deprecated
