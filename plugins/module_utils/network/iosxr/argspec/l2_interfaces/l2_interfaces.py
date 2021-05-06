@@ -63,7 +63,7 @@ class L2_InterfacesArgs(object):
                         "cpsv": {
                             "type": "str",
                             "choices": ["drop", "reverse-tunnel", "tunnel"],
-                        }
+                        },
                     },
                     "type": "list",
                 },
@@ -74,7 +74,7 @@ class L2_InterfacesArgs(object):
                     "options": {
                         "dot1q": {"type": "int"},
                         "second_dot1q": {"type": "int"},
-                    }
+                    },
                 },
             },
             "type": "list",

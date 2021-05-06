@@ -682,7 +682,10 @@ class NCConfiguration(ConfigBase):
                         },
                     ),
                     ("a:name", {"xpath": "aaa/usernames/username/name"}),
-                    ("a:ordering_index", {"xpath": "aaa/usernames/username/ordering-index"}),
+                    (
+                        "a:ordering_index",
+                        {"xpath": "aaa/usernames/username/ordering-index"},
+                    ),
                     (
                         "secret",
                         {
@@ -695,9 +698,8 @@ class NCConfiguration(ConfigBase):
                         "a:type",
                         {
                             "xpath": "aaa/usernames/username/secret/type",
-                            "value": "type5"
+                            "value": "type5",
                         },
-
                     ),
                     (
                         "a:configured_password",
@@ -705,7 +707,6 @@ class NCConfiguration(ConfigBase):
                             "xpath": "aaa/usernames/username/secret/secret5",
                             "operation": "edit",
                         },
-
                     ),
                 ]
             )
@@ -724,7 +725,10 @@ class NCConfiguration(ConfigBase):
                         },
                     ),
                     ("a:name", {"xpath": "aaa/usernames/username/name"}),
-                    ("a:ordering_index", {"xpath": "aaa/usernames/username/ordering-index"}),
+                    (
+                        "a:ordering_index",
+                        {"xpath": "aaa/usernames/username/ordering-index"},
+                    ),
                     (
                         "usergroups",
                         {
@@ -772,7 +776,6 @@ class NCConfiguration(ConfigBase):
                             "xpath": "aaa/usernames/username/secret",
                             "operation": "edit",
                         },
-
                     ),
                 ]
             )
@@ -832,7 +835,12 @@ class NCConfiguration(ConfigBase):
             ordering_index = etree_findall(element, "ordering-index")
             if list_size == 1:
                 self._have.append(
-                    {"name": name_list[0].text, "group": None, "groups": None, "ordering_index": ordering_index[0].text}
+                    {
+                        "name": name_list[0].text,
+                        "group": None,
+                        "groups": None,
+                        "ordering_index": ordering_index[0].text,
+                    }
                 )
             elif list_size == 2:
                 self._have.append(
@@ -862,7 +870,9 @@ class NCConfiguration(ConfigBase):
         locald_params = list()
         locald_group_params = list()
         opcode = None
-        ordering_index_list = [int(user.get("ordering_index")) for user in self._have]
+        ordering_index_list = [
+            int(user.get("ordering_index")) for user in self._have
+        ]
 
         if state == "absent":
             opcode = "delete"
@@ -877,18 +887,20 @@ class NCConfiguration(ConfigBase):
         elif state == "present":
             opcode = "merge"
             for want_item in self._want:
-                obj_in_have = search_obj_in_list(
-                    want_item["name"], self._have
-                )
+                obj_in_have = search_obj_in_list(want_item["name"], self._have)
                 if want_item["name"] not in users:
-                    if os_version and LooseVersion(os_version) > LooseVersion("7.0"):
-                        want_item["configured_password"] = self.generate_md5_hash(
+                    if os_version and LooseVersion(os_version) > LooseVersion(
+                        "7.0"
+                    ):
+                        want_item[
+                            "configured_password"
+                        ] = self.generate_md5_hash(
                             want_item["configured_password"]
                         )
                         new_ordering_index = ordering_index_list[-1] + 1
                         want_item["ordering_index"] = str(new_ordering_index)
                         ordering_index_list.append(new_ordering_index)
-                        want_item['type'] = "type5"
+                        want_item["type"] = "type5"
                     want_item["configured_password"] = self.generate_md5_hash(
                         want_item["configured_password"]
                     )
@@ -900,17 +912,23 @@ class NCConfiguration(ConfigBase):
                             want_item["group"] = group
                             locald_group_params.append(want_item.copy())
                 else:
-                    if os_version and LooseVersion(os_version) > LooseVersion("7.0"):
+                    if os_version and LooseVersion(os_version) > LooseVersion(
+                        "7.0"
+                    ):
                         if obj_in_have:
                             # Add iosxr 7.0 > specific parameters
-                            want_item['type'] = "type5"
-                            want_item["ordering_index"] = obj_in_have["ordering_index"]
+                            want_item["type"] = "type5"
+                            want_item["ordering_index"] = obj_in_have[
+                                "ordering_index"
+                            ]
                     if (
                         self._module.params["update_password"] == "always"
                         and want_item["configured_password"] is not None
                     ):
 
-                        want_item["configured_password"] = self.generate_md5_hash(
+                        want_item[
+                            "configured_password"
+                        ] = self.generate_md5_hash(
                             want_item["configured_password"]
                         )
                         locald_params.append(want_item)
@@ -986,7 +1004,11 @@ class NCConfiguration(ConfigBase):
             self._result["changed"] = True
 
     def run(self):
-        os_version = get_capabilities(self._module).get("device_info").get("network_os_version")
+        os_version = (
+            get_capabilities(self._module)
+            .get("device_info")
+            .get("network_os_version")
+        )
         self.map_params_to_obj()
         self.map_obj_to_xml_rpc(os_version)
 

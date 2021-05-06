@@ -316,7 +316,10 @@ class L2_Interfaces(ConfigBase):
                 if l2transport or l2protocol:
                     for each in l2protocol:
                         each = dict(each)
-                        if isinstance(each, dict) and list(each.keys())[0] != "cpsv":
+                        if (
+                            isinstance(each, dict)
+                            and list(each.keys())[0] != "cpsv"
+                        ):
                             cmd = "l2transport l2protocol {0} {1}".format(
                                 list(each.keys())[0], list(each.values())[0]
                             )
@@ -331,7 +334,10 @@ class L2_Interfaces(ConfigBase):
                 if l2transport or l2protocol:
                     for each in l2protocol:
                         each = dict(each)
-                        if isinstance(each, dict) and list(each.keys())[0] == "cpsv":
+                        if (
+                            isinstance(each, dict)
+                            and list(each.keys())[0] == "cpsv"
+                        ):
                             cmd = "l2transport l2protocol {0} {1}".format(
                                 list(each.keys())[0], list(each.values())[0]
                             )
@@ -339,14 +345,15 @@ class L2_Interfaces(ConfigBase):
                         break
                 if encapsulation:
                     encapsulation = dict(encapsulation)
-                    if encapsulation.get('dot1q'):
-                        if encapsulation.get('second_dot1q'):
+                    if encapsulation.get("dot1q"):
+                        if encapsulation.get("second_dot1q"):
                             cmd = "encapsulation dot1q {0} second-dot1q {1}".format(
-                                encapsulation.get('dot1q'), encapsulation.get('second_dot1q')
+                                encapsulation.get("dot1q"),
+                                encapsulation.get("second_dot1q"),
                             )
                         else:
                             cmd = "encapsulation dot1q {0}".format(
-                                encapsulation.get('dot1q')
+                                encapsulation.get("dot1q")
                             )
                         add_command_to_config_list(interface, cmd, commands)
 
@@ -355,11 +362,11 @@ class L2_Interfaces(ConfigBase):
                     cmd = "l2transport propagate remote-status"
                     add_command_to_config_list(interface, cmd, commands)
             elif want.get("l2transport") is False and (
-                    want.get("l2protocol") or want.get("propagate")
+                want.get("l2protocol") or want.get("propagate")
             ):
                 module.fail_json(
                     msg="L2transport L2protocol or Propagate can only be configured when "
-                        "L2transport set to True!"
+                    "L2transport set to True!"
                 )
 
         return commands

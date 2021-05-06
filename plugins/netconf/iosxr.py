@@ -75,10 +75,7 @@ class Netconf(NetconfBase):
         install_meta = collections.OrderedDict()
         install_meta.update(
             [
-                (
-                    "prepare",
-                    {"xpath": "install/prepare", "tag": True},
-                ),
+                ("prepare", {"xpath": "install/prepare", "tag": True}),
                 (
                     "prepared-boot-image",
                     {
@@ -87,21 +84,17 @@ class Netconf(NetconfBase):
                     },
                 ),
                 ("version", {"xpath": "install/version", "tag": True}),
-                (
-                    "label",
-                    {"xpath": "install/version/label", "tag": True},
-                ),
+                ("label", {"xpath": "install/version/label", "tag": True}),
                 (
                     "hardware-info",
                     {"xpath": "install/version/hardware-info", "tag": True},
                 ),
-                (
-                    "package",
-                    {"xpath": "install/version/package", "tag": True},
-                )
+                ("package", {"xpath": "install/version/package", "tag": True}),
             ]
         )
-        install_filter = build_xml("install", install_meta, opcode="filter", namespace="install")
+        install_filter = build_xml(
+            "install", install_meta, opcode="filter", namespace="install"
+        )
         try:
             reply = self.get(install_filter)
             resp = remove_namespaces(
@@ -135,7 +128,9 @@ class Netconf(NetconfBase):
                 )
         print(device_info)
         try:
-            hostname_filter = build_xml("host-names", opcode="filter", namespace="host-names")
+            hostname_filter = build_xml(
+                "host-names", opcode="filter", namespace="host-names"
+            )
             reply = self.get(hostname_filter)
             resp = remove_namespaces(
                 re.sub(r'<\?xml version="1.0" encoding="UTF-8"\?>', "", reply)
@@ -344,7 +339,9 @@ class Netconf(NetconfBase):
             ]
         )
 
-        install_filter = build_xml("install", install_meta, opcode="filter", namespace="install_old")
+        install_filter = build_xml(
+            "install", install_meta, opcode="filter", namespace="install_old"
+        )
         try:
             reply = self.get(install_filter)
             resp = remove_namespaces(

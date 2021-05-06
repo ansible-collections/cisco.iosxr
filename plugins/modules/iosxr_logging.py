@@ -257,7 +257,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     load_config,
     build_xml,
     get_capabilities,
-    get_os_version
+    get_os_version,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     iosxr_argument_spec,
@@ -473,7 +473,9 @@ class CliConfiguration(ConfigBase):
                 elif dest == "file" and name not in self._file_list:
                     if level == "errors" or level == "informational":
                         level = severity_transpose[level]
-                    if os_version and LooseVersion(os_version) > LooseVersion("7.0"):
+                    if os_version and LooseVersion(os_version) > LooseVersion(
+                        "7.0"
+                    ):
                         commands.append(
                             "logging file {0} path {1} maxfilesize {2} severity {3}".format(
                                 name, path, size, level
@@ -559,7 +561,11 @@ class CliConfiguration(ConfigBase):
                     if isinstance(int_size, int):
                         size = str(match.group(1))
         if dest == "file":
-            match = re.search(r"logging file (\S+) (path\s\S+\s)?maxfilesize (\S+)", line, re.M)
+            match = re.search(
+                r"logging file (\S+) (path\s\S+\s)?maxfilesize (\S+)",
+                line,
+                re.M,
+            )
             if match:
                 try:
                     if "path" in line:
@@ -732,25 +738,30 @@ class NCConfiguration(ConfigBase):
                         "operation": "edit",
                     },
                 ),
-
                 (
                     "a:size",
                     {
-                        "xpath": "syslog/files/file/" + file_attribute_path + "/max-file-size",
+                        "xpath": "syslog/files/file/"
+                        + file_attribute_path
+                        + "/max-file-size",
                         "operation": "edit",
                     },
                 ),
                 (
                     "a:level",
                     {
-                        "xpath": "syslog/files/file/" + file_attribute_path + "/severity",
+                        "xpath": "syslog/files/file/"
+                        + file_attribute_path
+                        + "/severity",
                         "operation": "edit",
                     },
                 ),
                 (
                     "a:path",
                     {
-                        "xpath": "syslog/files/file/" + file_attribute_path + "/path",
+                        "xpath": "syslog/files/file/"
+                        + file_attribute_path
+                        + "/path",
                         "operation": "edit",
                     },
                 ),
@@ -1249,7 +1260,11 @@ def main():
         os_version = get_os_version(module)
     elif is_netconf(module):
         config_object = NCConfiguration(module)
-        os_version = get_capabilities(module).get("device_info").get("network_os_version")
+        os_version = (
+            get_capabilities(module)
+            .get("device_info")
+            .get("network_os_version")
+        )
 
     if config_object:
         result = config_object.run(os_version)

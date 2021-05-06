@@ -112,11 +112,17 @@ class L2_InterfacesFacts(object):
             dot1q = utils.parse_conf_arg(conf, "encapsulation dot1q")
             os_version = get_os_version(self._module)
             if os_version and LooseVersion(os_version) > LooseVersion("7.0.0"):
-                encapsulation = re.search(r"encapsulation dot1q\s(\d+)\s*(second-dot1q\s\d+)?", conf)
+                encapsulation = re.search(
+                    r"encapsulation dot1q\s(\d+)\s*(second-dot1q\s\d+)?", conf
+                )
                 if encapsulation:
-                    config["encapsulation"]["dot1q"] = int(encapsulation.group(1))
+                    config["encapsulation"]["dot1q"] = int(
+                        encapsulation.group(1)
+                    )
                     if encapsulation.group(2):
-                        config["encapsulation"]["second_dot1q"] = int(encapsulation.group(2).split('second-dot1q ')[1])
+                        config["encapsulation"]["second_dot1q"] = int(
+                            encapsulation.group(2).split("second-dot1q ")[1]
+                        )
             else:
                 config["q_vlan"] = []
                 if dot1q:
