@@ -9,7 +9,7 @@ merged:
     - encapsulation dot1q 20 second-dot1q 40
   after:
     - l2protocol:
-       - cpsv: tunnel
+        - cpsv: tunnel
       l2transport: true
       name: GigabitEthernet0/0/0/1
       propagate: true
