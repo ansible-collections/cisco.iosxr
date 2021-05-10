@@ -1,0 +1,3 @@
+---
+major_changes:
+  - Add support for grpc connection plugin
