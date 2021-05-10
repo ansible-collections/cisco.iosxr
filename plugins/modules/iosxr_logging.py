@@ -588,7 +588,9 @@ class CliConfiguration(ConfigBase):
             match = re.search(r"logging file (\S+) (path\s\S+\s)", line, re.M)
             if match:
                 try:
-                    path = to_text(match.group(2), errors="surrogate_or_strict")
+                    path = to_text(
+                        match.group(2), errors="surrogate_or_strict"
+                    )
                 except ValueError:
                     path = None
 
