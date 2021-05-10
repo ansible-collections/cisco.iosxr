@@ -120,13 +120,13 @@ class Netconf(NetconfBase):
                         device_info["network_os_model"] = match.group(1)
                         break
         except Exception as exc:
-            if "bad-namespace" in str(exc):
+            error_msg = to_text(exc, errors="surrogate_or_strict").strip()
+            if "bad-namespace" in error_msg:
                 device_info = self.get_device_info_old_version()
             else:
                 self._connection.queue_message(
                     "vvvv", "Fail to retrieve device info %s" % exc
                 )
-        print(device_info)
         try:
             hostname_filter = build_xml(
                 "host-names", opcode="filter", namespace="host-names"

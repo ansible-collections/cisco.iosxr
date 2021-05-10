@@ -33,7 +33,6 @@ author:
 - Sumit Jaiswal (@justjais)
 - Rohit Thakur (@rohitthakur2590)
 notes:
-- Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 options:
   config:

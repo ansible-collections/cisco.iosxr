@@ -20,7 +20,6 @@ description:
   - This module manages OSPF(v2/v3) configuration of interfaces on devices running Cisco IOS-XR.
 author: Rohit Thakur (@rohitthakur2590)
 notes:
-  - Tested against IOS-XR 6.1.3
   - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html)
 options:
   running_config:

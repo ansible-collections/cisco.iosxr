@@ -20,7 +20,6 @@ description:
 version_added: 2.0.0
 author: Ashwini Mhatre (@amhatre)
 notes:
-- Tested against Cisco IOS-XR 6.1.3.
 - This module works with connection C(network_cli).
 options:
     config:

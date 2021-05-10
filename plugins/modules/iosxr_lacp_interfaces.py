@@ -39,7 +39,6 @@ description:
   on IOS-XR devices.
 version_added: 1.0.0
 notes:
-- Tested against IOS-XR 6.1.3.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 author: Nilashish Chakraborty (@nilashishc)
 options:

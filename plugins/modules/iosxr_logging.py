@@ -26,7 +26,6 @@ requirements:
 notes:
 - This module works with connection C(network_cli) and C(netconf). See L(the IOS-XR
   Platform Options,../network/user_guide/platform_iosxr.html).
-- Tested against IOS XRv 6.1.3
 options:
   dest:
     description:
@@ -251,6 +250,7 @@ import collections
 from copy import deepcopy
 from distutils.version import LooseVersion
 
+from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     get_config,
@@ -588,7 +588,7 @@ class CliConfiguration(ConfigBase):
             match = re.search(r"logging file (\S+) (path\s\S+\s)", line, re.M)
             if match:
                 try:
-                    path = str(match.group(2))
+                    path = to_text(match.group(2), errors="surrogate_or_strict")
                 except ValueError:
                     path = None
 
@@ -1253,9 +1253,6 @@ def main():
     )
     config_object = None
     if is_cliconf(module):
-        # Commenting the below cliconf deprecation support call for Ansible 2.9 as it'll be continued to be supported
-        # module.deprecate("cli support for 'iosxr_interface' is deprecated. Use transport netconf instead",
-        #                  version='2.9')
         config_object = CliConfiguration(module)
         os_version = get_os_version(module)
     elif is_netconf(module):

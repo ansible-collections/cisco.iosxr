@@ -27,7 +27,6 @@ extends_documentation_fragment:
 notes:
 - This module works with connection C(network_cli) and C(netconf). See L(the IOS-XR
   Platform Options,../network/user_guide/platform_iosxr.html).
-- Tested against IOS XRv 6.1.3
 options:
   aggregate:
     description:
