@@ -33,4 +33,28 @@
       - result.changed == false
       - result.updates is not defined
 
+- name: Assert accurately report configuration failure during pseudo-atomic operation
+  register: result
+  ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    lines:
+      - router bgp 65111
+      - neighbor 10.1.1.1
+      - update-source Loopback0
+
+- assert:
+    that:
+      - result.changed == false
+      - result.failed == true
+
+- name: Run show configuration failed
+  register: result
+  cisco.iosxr.iosxr_config:
+    lines:
+      - show configuration failed
+
+- assert:
+    that:
+      - result.failed == false
+
 - debug: msg="END cli/comment.yaml on connection={{ ansible_connection }}"

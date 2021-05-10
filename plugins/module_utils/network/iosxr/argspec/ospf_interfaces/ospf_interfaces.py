@@ -76,19 +76,27 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                             },
                         },
                         "authentication": {
+                            "no_log": False,
                             "type": "dict",
                             "options": {
                                 "message_digest": {
+                                    "no_log": False,
                                     "type": "dict",
-                                    "options": {"keychain": {"type": "str"}},
+                                    "options": {
+                                        "keychain": {
+                                            "type": "str",
+                                            "no_log": False,
+                                        }
+                                    },
                                 },
                                 "null_auth": {"type": "bool"},
                             },
                         },
                         "authentication_key": {
                             "type": "dict",
+                            "no_log": True,
                             "options": {
-                                "password": {"type": "str"},
+                                "password": {"type": "str", "no_log": True},
                                 "clear": {"type": "str"},
                                 "encrypted": {"type": "str"},
                             },
@@ -311,13 +319,17 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                         "link_down_fast_detect": {"type": "bool"},
                         "message_digest_key": {
                             "type": "dict",
+                            "no_log": False,
                             "options": {
                                 "id": {"type": "int", "required": True},
                                 "md5": {
                                     "type": "dict",
                                     "required": True,
                                     "options": {
-                                        "password": {"type": "str"},
+                                        "password": {
+                                            "type": "str",
+                                            "no_log": True,
+                                        },
                                         "clear": {"type": "bool"},
                                         "encrypted": {"type": "bool"},
                                     },

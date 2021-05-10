@@ -1,0 +1,101 @@
+---
+
+merged:
+  commands:
+    - router bgp 65536
+    - address-family ipv4 unicast
+    - advertise best-external
+    - allocate-label all
+    - bgp attribute-download
+    - bgp scan-time 20
+    - dynamic-med interval 10
+    - redistribute application test1 metric 10
+  after:
+    as_number: "65536"
+    address_family:
+      - afi: "ipv4"
+        safi: "unicast"
+        dynamic_med: 10
+        redistribute:
+          - protocol: application
+            id: "test1"
+            metric: 10
+        bgp:
+          scan_time: 20
+          attribute_download: true
+        advertise_best_external: true
+        allocate_label:
+          all: true
+  vrf:
+    commands:
+      - router bgp 65536
+      - vrf vrf1
+      - address-family ipv4 unicast
+      - dynamic-med interval 9
+      - redistribute connected metric 10
+
+deleted:
+  after:
+    as_number: "65536"
+  vrf:
+    commands:
+      - router bgp 65536
+      - vrf vrf1
+      - no address-family ipv4 unicast
+
+overridden:
+  commands:
+    - router bgp 65536
+    - address-family ipv4 unicast
+    - no advertise best-external
+    - no allocate-label all
+    - no bgp attribute-download
+    - dynamic-med interval 4
+    - no address-family ipv4 mvpn
+
+replaced:
+  commands:
+    - router bgp 65536
+    - address-family ipv4 unicast
+    - no advertise best-external
+    - no allocate-label all
+    - no bgp attribute-download
+    - dynamic-med interval 4
+
+  vrf:
+    commands:
+      - router bgp 65536
+      - vrf vrf1
+      - address-family ipv4 unicast
+      - dynamic-med interval 8
+      - no redistribute connected metric 10
+
+
+rendered:
+  commands:
+    - router bgp 65536
+    - address-family ipv4 unicast
+    - advertise best-external
+    - allocate-label all
+    - bgp attribute-download
+    - bgp scan-time 20
+    - dynamic-med interval 10
+    - redistribute application test1 metric 10
+    - redistribute connected metric 10
+    - redistribute isis test3 metric 4
+gathered:
+  after:
+    as_number: "65536"
+    address_family:
+      - afi: "ipv4"
+        safi: "unicast"
+        dynamic_med: 10
+        redistribute:
+          - protocol: application
+            id: "test1"
+            metric: 10
+        bgp:
+          attribute_download: true
+        advertise_best_external: true
+        allocate_label:
+          all: true

@@ -24,20 +24,18 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.provider
     AddressFamily,
 )
 
-REDISTRIBUTE_PROTOCOLS = frozenset(
-    [
-        "ospf",
-        "ospfv3",
-        "eigrp",
-        "isis",
-        "static",
-        "connected",
-        "lisp",
-        "mobile",
-        "rip",
-        "subscriber",
-    ]
-)
+REDISTRIBUTE_PROTOCOLS = [
+    "ospf",
+    "ospfv3",
+    "eigrp",
+    "isis",
+    "static",
+    "connected",
+    "lisp",
+    "mobile",
+    "rip",
+    "subscriber",
+]
 
 
 @register_provider("iosxr", "iosxr_bgp")

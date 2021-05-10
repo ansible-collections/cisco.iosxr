@@ -27,13 +27,16 @@ notes:
   #why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands).
 - Avoid service disrupting changes (viz. Management IP) from config replace.
 - Do not use C(end) in the replace config file.
+- To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they
+  appear if present in the running configuration on device including the indentation.
 options:
   lines:
     description:
-    - The ordered set of commands that should be configured in the section.  The commands
-      must be the exact same commands as found in the device running-config.  Be sure
-      to note the configuration command syntax as some commands are automatically
-      modified by the device config parser.
+    - The ordered set of commands that should be configured in the section. The commands
+      must be the exact same commands as found in the device running-config as found in the
+      device running-config to ensure idempotency and correct diff. Be sure to note the
+      configuration command syntax as some commands are automatically modified by the
+      device config parser.
     type: list
     elements: str
     aliases:
@@ -48,9 +51,11 @@ options:
   src:
     description:
     - Specifies the source path to the file that contains the configuration or configuration
-      template to load.  The path to the source file can either be the full path on
+      template to load. The path to the source file can either be the full path on
       the Ansible control host or a relative path from the playbook or role root directory.  This
-      argument is mutually exclusive with I(lines), I(parents).
+      argument is mutually exclusive with I(lines), I(parents). The configuration lines in the
+      source file should be similar to how it will appear if present in the running-configuration
+      of the device to ensure idempotency and correct diff.
     type: path
   before:
     description:
@@ -113,6 +118,8 @@ options:
       are times when it is not desirable to have the task get the current running-config
       for every task in a playbook.  The I(config) argument allows the implementer
       to pass in the configuration to use as the base config for comparison.
+      The configuration lines for this option should be similar to how it will appear if present
+      in the running-configuration of the device to ensure idempotency and correct diff.
     type: str
   backup:
     description:
@@ -242,7 +249,6 @@ time:
   sample: "22:28:34"
 """
 import re
-
 from ansible.module_utils._text import to_text, to_bytes
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import ConnectionError
@@ -446,8 +452,8 @@ def main():
 
     if module.params["force"] is True:
         module.params["match"] = "none"
-
     warnings = list()
+
     check_args(module, warnings)
 
     result = dict(changed=False, warnings=warnings)
@@ -457,6 +463,21 @@ def main():
 
     if any((module.params["src"], module.params["lines"])):
         run(module, result)
+
+    if result.get("changed") and any(
+        (module.params["src"], module.params["lines"])
+    ):
+        msg = (
+            "To ensure idempotency and correct diff the input configuration lines should be"
+            " similar to how they appear if present in"
+            " the running configuration on device"
+        )
+        if module.params["src"]:
+            msg += " including the indentation"
+        if "warnings" in result:
+            result["warnings"].append(msg)
+        else:
+            result["warnings"] = msg
 
     module.exit_json(**result)
 

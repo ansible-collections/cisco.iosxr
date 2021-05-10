@@ -1,0 +1,25 @@
+---
+- debug:
+    msg: Start iosxr_bgp_global deleted_af integration tests for vrfs connection={{ ansible_connection}}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_vrf.yaml
+
+- block:
+    - name: Remove a neighbor having AF configurations (should fail)
+      cisco.iosxr.iosxr_bgp_global: &deleted
+        config:
+          as_number: "65536"
+        state: deleted
+      register: result
+      ignore_errors: true
+
+    - name: Assert that the task failed
+      assert:
+        that:
+          - result.failed == True
+          - "'VRF vrf1 has address-family configurations.' in result.msg"
+
+  always:
+    - include_tasks: _remove_config.yaml

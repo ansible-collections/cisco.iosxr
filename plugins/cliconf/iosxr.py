@@ -28,6 +28,18 @@ description:
 - This iosxr plugin provides low level abstraction apis for sending and receiving
   CLI commands from Cisco IOS XR network devices.
 version_added: 1.0.0
+options:
+  config_commands:
+    description:
+    - Specifies a list of commands that can make configuration changes
+      to the target device.
+    - When `ansible_network_single_user_mode` is enabled, if a command sent
+      to the device is present in this list, the existing cache is invalidated.
+    version_added: 2.0.0
+    type: list
+    default: []
+    vars:
+    - name: ansible_iosxr_config_commands
 """
 
 import re
@@ -52,36 +64,46 @@ from ansible.plugins.cliconf import CliconfBase
 
 
 class Cliconf(CliconfBase):
-    def get_device_info(self):
-        device_info = {}
+    def __init__(self, *args, **kwargs):
+        self._device_info = {}
+        super(Cliconf, self).__init__(*args, **kwargs)
 
-        device_info["network_os"] = "iosxr"
-        reply = self.get("show version | utility head -n 20")
+    def get_command_output(self, command):
+        reply = self.get(command)
         data = to_text(reply, errors="surrogate_or_strict").strip()
+        return data
 
-        match = re.search(r"Version (\S+)$", data, re.M)
-        if match:
-            device_info["network_os_version"] = match.group(1)
-
-        match = re.search(r'image file is "(.+)"', data)
-        if match:
-            device_info["network_os_image"] = match.group(1)
-
-        model_search_strs = [
-            r"^[Cc]isco (.+) \(revision",
-            r"^[Cc]isco (\S+ \S+).+bytes of .*memory",
-        ]
-        for item in model_search_strs:
-            match = re.search(item, data, re.M)
+    def get_device_info(self):
+        if not self._device_info:
+            device_info = dict()
+            device_info["network_os"] = "iosxr"
+            data = self.get_command_output("show version | utility head -n 20")
+            match = re.search(r"Version (\S+)$", data, re.M)
             if match:
-                device_info["network_os_model"] = match.group(1)
-                break
+                device_info["network_os_version"] = match.group(1)
 
-        match = re.search(r"^(.+) uptime", data, re.M)
-        if match:
-            device_info["network_os_hostname"] = match.group(1)
+            match = re.search(r'image file is "(.+)"', data)
+            if match:
+                device_info["network_os_image"] = match.group(1)
 
-        return device_info
+            model_search_strs = [
+                r"^[Cc]isco (.+) \(revision",
+                r"^[Cc]isco (\S+ \S+).+bytes of .*memory",
+            ]
+            for item in model_search_strs:
+                match = re.search(item, data, re.M)
+                if match:
+                    device_info["network_os_model"] = match.group(1)
+                    break
+
+            hostname = self.get_command_output("show running-config hostname")
+            match = re.search(r"hostname\s(\S+)$", hostname, re.M)
+            if match:
+                device_info["network_os_hostname"] = match.group(1)
+
+            self._device_info = device_info
+
+        return self._device_info
 
     def configure(self, admin=False, exclusive=False):
         prompt = to_text(
@@ -155,7 +177,24 @@ class Cliconf(CliconfBase):
         resp["show_commit_config_diff"] = self.get("show commit changes diff")
 
         if commit:
-            self.commit(comment=comment, label=label, replace=replace)
+            try:
+                self.commit(comment=comment, label=label, replace=replace)
+            except AnsibleConnectionFailure as exc:
+                error_msg = to_text(exc, errors="surrogate_or_strict").strip()
+                if (
+                    "Invalid input detected" in error_msg
+                    and "comment" in error_msg
+                ):
+                    msg = (
+                        "value of comment option '%s' is ignored as it in not supported by IOSXR"
+                        % comment
+                    )
+                    self._connection.queue_message("warning", msg)
+                    comment = None
+                    self.commit(comment=comment, label=label, replace=replace)
+                else:
+                    raise ConnectionError(error_msg)
+
         else:
             self.discard_changes()
 

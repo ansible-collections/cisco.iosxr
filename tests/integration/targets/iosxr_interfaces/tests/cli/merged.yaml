@@ -57,3 +57,59 @@
   always:
 
     - include_tasks: _remove_config.yaml
+
+- debug:
+    msg: START Merged interfaces configuration which are not in running config with iosxr_interfaces module on connection={{
+      ansible_connection }}
+
+- include_tasks: _remove_config.yaml
+- block:
+
+    - name: Merge provided configuration with device configuration
+      register: result
+      cisco.iosxr.iosxr_interfaces: &id002
+        config:
+
+          - name: GigabitEthernet0/0/0/2
+            description: Configured and Merged by Ansible-Network
+            mtu: 110
+            enabled: true
+            duplex: half
+
+          - name: GigabitEthernet0/0/0/3
+            description: Configured and Merged by Ansible-Network
+            mtu: 2800
+            enabled: false
+            speed: 100
+            duplex: full
+        state: merged
+
+    - name: Assert that correct set of commands were generated
+      assert:
+        that:
+          - "{{ merged['preconfigure']['commands'] | symmetric_difference(result['commands']) |\
+            \ length == 0 }}"
+
+    - name: Assert that before dicts are correctly generated
+      assert:
+        that:
+          - "{{ merged['preconfigure']['before'] | symmetric_difference(result['before']) | length\
+          \ == 0 }}"
+
+    - name: Assert that after dict is correctly generated
+      assert:
+        that:
+          - "{{ merged['preconfigure']['after'] | symmetric_difference(result['after']) | length\
+            \ == 0 }}"
+
+    - name: Merge provided configuration with device configuration (IDEMPOTENT)
+      register: result
+      cisco.iosxr.iosxr_interfaces: *id002
+
+    - name: Assert that the previous task was idempotent
+      assert:
+        that:
+          - result['changed'] == false
+  always:
+
+    - include_tasks: _remove_config.yaml

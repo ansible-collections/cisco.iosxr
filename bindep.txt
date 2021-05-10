@@ -4,3 +4,5 @@
 gcc-c++ [doc test platform:rpm]
 python3-devel [test platform:rpm]
 python3 [test platform:rpm]
+
+python38-lxml [platform:centos-8 platform:rhel-8]

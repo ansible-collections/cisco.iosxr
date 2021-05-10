@@ -1,4 +1,4 @@
-lxml
 ncclient
 paramiko
 ansible-pylibssh
+ipaddress

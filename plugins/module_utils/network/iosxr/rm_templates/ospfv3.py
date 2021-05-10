@@ -564,8 +564,10 @@ def _tmplt_timers_graceful_shutdown(config_data):
 
 
 class Ospfv3Template(NetworkTemplate):
-    def __init__(self, lines=None):
-        super(Ospfv3Template, self).__init__(lines=lines, tmplt=self)
+    def __init__(self, lines=None, module=None):
+        super(Ospfv3Template, self).__init__(
+            lines=lines, tmplt=self, module=module
+        )
 
     # fmt: off
     PARSERS = [

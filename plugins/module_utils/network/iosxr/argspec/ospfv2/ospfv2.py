@@ -77,10 +77,16 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         ]
                                     ],
                                     "options": {
-                                        "keychain": {"type": "str"},
+                                        "keychain": {
+                                            "type": "str",
+                                            "no_log": False,
+                                        },
                                         "message_digest": {
                                             "options": {
-                                                "keychain": {"type": "str"}
+                                                "keychain": {
+                                                    "type": "str",
+                                                    "no_log": False,
+                                                }
                                             },
                                             "type": "dict",
                                         },
@@ -95,9 +101,13 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                     "options": {
                                         "clear": {"type": "str"},
                                         "encrypted": {"type": "str"},
-                                        "password": {"type": "str"},
+                                        "password": {
+                                            "type": "str",
+                                            "no_log": True,
+                                        },
                                     },
                                     "type": "dict",
+                                    "no_log": True,
                                 },
                                 "bfd": {
                                     "options": {
@@ -218,11 +228,15 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                                 ]
                                             ],
                                             "options": {
-                                                "keychain": {"type": "str"},
+                                                "keychain": {
+                                                    "type": "str",
+                                                    "no_log": False,
+                                                },
                                                 "message_digest": {
                                                     "options": {
                                                         "keychain": {
-                                                            "type": "str"
+                                                            "type": "str",
+                                                            "no_log": False,
                                                         }
                                                     },
                                                     "type": "dict",
@@ -238,9 +252,13 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                             "options": {
                                                 "clear": {"type": "str"},
                                                 "encrypted": {"type": "str"},
-                                                "password": {"type": "str"},
+                                                "password": {
+                                                    "type": "str",
+                                                    "no_log": True,
+                                                },
                                             },
                                             "type": "dict",
+                                            "no_log": True,
                                         },
                                         "dead_interval": {"type": "int"},
                                         "hello_interval": {"type": "int"},
@@ -266,13 +284,16 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                                             "type": "bool"
                                                         },
                                                         "password": {
-                                                            "type": "str"
+                                                            "type": "str",
+                                                            "no_log": True,
                                                         },
                                                     },
                                                     "type": "dict",
+                                                    "no_log": False,
                                                 },
                                             },
                                             "type": "dict",
+                                            "no_log": False,
                                         },
                                         "retransmit_interval": {"type": "int"},
                                         "transmit_delay": {"type": "int"},
@@ -287,10 +308,13 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                 ["keychain", "message_digest", "no_auth"]
                             ],
                             "options": {
-                                "keychain": {"type": "str"},
+                                "keychain": {"type": "str", "no_log": False},
                                 "message_digest": {
                                     "options": {
-                                        "keychain": {"type": "str"},
+                                        "keychain": {
+                                            "type": "str",
+                                            "no_log": False,
+                                        },
                                         "set": {"type": "bool"},
                                     },
                                     "type": "dict",
@@ -304,9 +328,10 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                             "options": {
                                 "clear": {"type": "bool"},
                                 "encrypted": {"type": "bool"},
-                                "password": {"type": "str"},
+                                "password": {"type": "str", "no_log": True},
                             },
                             "type": "dict",
+                            "no_log": True,
                         },
                         "auto_cost": {
                             "mutually_exclusive": [
@@ -521,13 +546,18 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                     "options": {
                                         "clear": {"type": "bool"},
                                         "encrypted": {"type": "bool"},
-                                        "password": {"type": "str"},
+                                        "password": {
+                                            "type": "str",
+                                            "no_log": True,
+                                        },
                                     },
                                     "required": True,
                                     "type": "dict",
+                                    "no_log": False,
                                 },
                             },
                             "type": "dict",
+                            "no_log": False,
                         },
                         "microloop_avoidance": {
                             "mutually_exclusive": [

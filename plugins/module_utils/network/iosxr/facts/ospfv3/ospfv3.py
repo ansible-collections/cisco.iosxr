@@ -110,7 +110,9 @@ class Ospfv3Facts(object):
                     areas.append(re.sub("\n", "", command))
         data = config_commands
         ipv4 = {"processes": []}
-        rmmod = NetworkTemplate(lines=data, tmplt=Ospfv3Template())
+        rmmod = NetworkTemplate(
+            lines=data, tmplt=Ospfv3Template(), module=self._module
+        )
         current = rmmod.parse()
 
         # convert some of the dicts to lists
@@ -144,8 +146,8 @@ class Ospfv3Facts(object):
         ansible_facts["ansible_network_resources"].pop("ospfv3", None)
         facts = {}
         if current:
-            params = utils.validate_config(
-                self.argument_spec, {"config": ipv4}
+            params = rmmod.validate_config(
+                self.argument_spec, {"config": ipv4}, redact=True
             )
             params = utils.remove_empties(params)
 

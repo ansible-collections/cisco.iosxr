@@ -10,16 +10,21 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 from ansible.module_utils._text import to_text
-from ansible_collections.ansible.netcommon.plugins.module_utils.compat import (
-    ipaddress,
-)
 from ansible.module_utils.six import iteritems
+from ansible.module_utils.basic import missing_required_lib
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_diff,
     is_masklen,
     to_netmask,
     search_obj_in_list,
 )
+
+try:
+    import ipaddress
+
+    HAS_IPADDRESS = True
+except ImportError:
+    HAS_IPADDRESS = False
 
 
 def remove_command_from_config_list(interface, cmd, commands):
@@ -348,6 +353,8 @@ def isipaddress(data):
         Checks if the passed string is
         a valid IPv4 or IPv6 address
     """
+    if not HAS_IPADDRESS:
+        raise Exception(missing_required_lib("ipaddress"))
     isipaddress = True
 
     try:
@@ -363,6 +370,8 @@ def is_ipv4_address(data):
         Checks if the passed string is
         a valid IPv4 address
     """
+    if not HAS_IPADDRESS:
+        raise Exception(missing_required_lib("ipaddress"))
     if "/" in data:
         data = data.split("/")[0]
 
@@ -378,6 +387,8 @@ def prefix_to_address_wildcard(prefix):
 
     :returns: IPv4 address and wildcard mask
     """
+    if not HAS_IPADDRESS:
+        raise Exception(missing_required_lib("ipaddress"))
     wildcard = []
 
     subnet = to_text(ipaddress.IPv4Network(to_text(prefix)).netmask)
@@ -389,3 +400,27 @@ def prefix_to_address_wildcard(prefix):
     wildcard = ".".join(wildcard)
 
     return prefix.split("/")[0], wildcard
+
+
+def flatten_config(data, context):
+    """ Flatten different contexts in
+        the running-config for easier parsing.
+    :param data: dict
+    :param context: str
+    :returns: flattened running config
+    """
+    data = data.split("\n")
+    in_cxt = False
+    cur = {}
+
+    for x in data:
+        cur_indent = len(x) - len(x.lstrip())
+        if x.strip().startswith(context):
+            in_cxt = True
+            cur["context"] = x
+            cur["indent"] = cur_indent
+        elif cur and (cur_indent <= cur["indent"]):
+            in_cxt = False
+        elif in_cxt:
+            data[data.index(x)] = cur["context"] + " " + x.strip()
+    return "\n".join(data)
