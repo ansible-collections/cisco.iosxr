@@ -1,4 +1,4 @@
 ---
 - include: cli.yaml
   tags:
-    - iosxr_nonvoting
+    - network_cli
