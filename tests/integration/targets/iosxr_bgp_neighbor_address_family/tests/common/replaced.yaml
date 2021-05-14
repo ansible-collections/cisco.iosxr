@@ -6,7 +6,6 @@
 - include_tasks: _populate_config.yaml
 
 - block:
-
     - name: Replaced given bgp_nbr_address_family configuration
       become: true
       register: result
@@ -71,7 +70,7 @@
 - include_tasks: _populate_vrf_config.yaml
 
 - block:
-    - name: Merge the provided configuration with the exisiting running configuration
+    - name: Merge the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_bgp_neighbor_address_family: &id002
         state: replaced
         config:
@@ -89,15 +88,14 @@
                       capability_orf_prefix: both
       register: result
 
-
     - name: Assert that correct set of commands were generated
       assert:
         that:
           - "{{ replaced['vrf']['commands'] | symmetric_difference(result['commands']) |length\
             \ == 0 }}"
 
-
-    - name: Merge the provided configuration with the existing running configuration
+    - name:
+        Merge the provided configuration with the existing running configuration
         (IDEMPOTENT)
       cisco.iosxr.iosxr_bgp_neighbor_address_family: *id002
       register: result

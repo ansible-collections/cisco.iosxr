@@ -1,13 +1,13 @@
 ---
 - debug:
-    msg: START iosxr_ospfv2 merged integration tests on connection={{ ansible_connection
+    msg:
+      START iosxr_ospfv2 merged integration tests on connection={{ ansible_connection
       }}
 
 - include_tasks: _remove_config.yaml
 
 - block:
-
-    - name: Merge the provided configuration with the exisiting running configuration
+    - name: Merge the provided configuration with the existing running configuration
       register: result
       cisco.iosxr.iosxr_ospfv2: &id001
         config:
@@ -22,7 +22,7 @@
                 max_adjacency: 20
               authentication:
                 message_digest:
-                  keychain: 'ansible1101pass'
+                  keychain: "ansible1101pass"
             - process_id: 10
               areas:
                 - area_id: 11
@@ -45,7 +45,7 @@
               retransmit_interval: 2
               packet_size: 577
               priority: 1
-              router_id: '2.2.2.2'
+              router_id: "2.2.2.2"
               demand_circuit: enable
               passive: disable
               summary_in: enable
@@ -69,7 +69,8 @@
         that:
           - "{{ merged['after'] == result['after'] }}"
 
-    - name: Merge the provided configuration with the existing running configuration
+    - name:
+        Merge the provided configuration with the existing running configuration
         (IDEMPOTENT)
       register: result
       cisco.iosxr.iosxr_ospfv2: *id001
@@ -102,7 +103,7 @@
                 max_adjacency: 21
               authentication:
                 message_digest:
-                  keychain: 'ansible1101pass'
+                  keychain: "ansible1101pass"
 
     - name: Assert that before dicts were correctly generated
       assert:
@@ -128,5 +129,4 @@
           - result['changed'] == false
           - result.commands|length == 0
   always:
-
     - include_tasks: _remove_config.yaml

@@ -1,13 +1,13 @@
 ---
 - debug:
-    msg: START iosxr_ospf interfaces merged integration tests on connection={{ ansible_connection
+    msg:
+      START iosxr_ospf interfaces merged integration tests on connection={{ ansible_connection
       }}
 
 - include_tasks: _remove_config.yaml
 
 - block:
-
-    - name: Merge the provided configuration with the exisiting running configuration
+    - name: Merge the provided configuration with the existing running configuration
       register: result
       cisco.iosxr.iosxr_ospf_interfaces: &id001
         config:
@@ -35,7 +35,7 @@
       assert:
         that:
           - "{{ merged['before'] | symmetric_difference(result['before']) | length\
-                      \ == 0 }}"
+            \ == 0 }}"
 
     - name: Assert that correct set of commands were generated
       assert:
@@ -47,9 +47,10 @@
       assert:
         that:
           - "{{ merged['after'] | symmetric_difference(result['after']) | length\
-                      \ == 0 }}"
+            \ == 0 }}"
 
-    - name: Merge the provided configuration with the existing running configuration
+    - name:
+        Merge the provided configuration with the existing running configuration
         (IDEMPOTENT)
       register: result
       cisco.iosxr.iosxr_ospf_interfaces: *id001
@@ -64,7 +65,7 @@
       assert:
         that:
           - "{{ merged['after'] | symmetric_difference(result['before']) | length\
-                      \ == 0 }}"
+            \ == 0 }}"
 
     - name: Update existing configuration using merged
       register: result
@@ -93,7 +94,7 @@
       assert:
         that:
           - "{{ merged['after'] | symmetric_difference(result['before']) | length\
-                      \ == 0 }}"
+            \ == 0 }}"
 
     - name: Assert that correct set of commands were generated
       assert:
@@ -105,7 +106,7 @@
       assert:
         that:
           - "{{ merged['update_after'] | symmetric_difference(result['after']) | length\
-                      \ == 0 }}"
+            \ == 0 }}"
 
     - name: Update existing ospf interfaces configuration using merged (IDEMPOTENT)
       register: result
@@ -117,5 +118,4 @@
           - result['changed'] == false
           - result.commands|length == 0
   always:
-
     - include_tasks: _remove_config.yaml

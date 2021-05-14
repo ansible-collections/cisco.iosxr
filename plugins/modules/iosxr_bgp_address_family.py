@@ -488,7 +488,7 @@ EXAMPLES = """
 #  address-family vpnv4 unicast
 #  vrf vrf1
 #   rd auto
-- name: Merge the provided configuration with the exisiting running configuration
+- name: Merge the provided configuration with the existing running configuration
   cisco.iosxr.iosxr_bgp_address_family:
     state: merged
     config:
@@ -593,7 +593,7 @@ EXAMPLES = """
 #     redistribute connected metric 10
 #
 #
-- name: Replace the provided configuration with the exisiting running configuration
+- name: Replace the provided configuration with the existing running configuration
   cisco.iosxr.iosxr_bgp_address_family:
     state: replaced
     config:
@@ -670,7 +670,7 @@ EXAMPLES = """
 #     redistribute connected metric 10
 #
 #
-- name: Override the provided configuration with the exisiting running configuration
+- name: Override the provided configuration with the existing running configuration
   cisco.iosxr.iosxr_bgp_address_family:
     state: overridden
     config:
@@ -808,7 +808,7 @@ EXAMPLES = """
 #
 # Using gathered
 # -------------
-- name: Merge the provided configuration with the exisiting running configuration
+- name: Merge the provided configuration with the existing running configuration
   cisco.iosxr.iosxr_bgp_address_family:
     state: gathered
     config:

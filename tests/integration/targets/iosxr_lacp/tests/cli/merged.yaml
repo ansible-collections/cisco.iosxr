@@ -1,13 +1,13 @@
 ---
 - debug:
-    msg: START iosxr_lacp merged integration tests on connection={{ ansible_connection
+    msg:
+      START iosxr_lacp merged integration tests on connection={{ ansible_connection
       }}
 
 - include_tasks: _remove_config.yaml
 
 - block:
-
-    - name: Merge the provided configuration with the exisiting running configuration
+    - name: Merge the provided configuration with the existing running configuration
       register: result
       cisco.iosxr.iosxr_lacp: &id001
         config:
@@ -32,7 +32,8 @@
         that:
           - "{{ merged['after'] == result['after'] }}"
 
-    - name: Merge the provided configuration with the existing running configuration
+    - name:
+        Merge the provided configuration with the existing running configuration
         (IDEMPOTENT)
       register: result
       cisco.iosxr.iosxr_lacp: *id001
@@ -47,5 +48,4 @@
         that:
           - "{{ merged['after'] == result['before']}}"
   always:
-
     - include_tasks: _remove_config.yaml
