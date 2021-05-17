@@ -33,7 +33,6 @@ author:
 - Sumit Jaiswal (@justjais)
 - Rohit Thakur (@rohitthakur2590)
 notes:
-- Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 options:
   config:
@@ -95,6 +94,24 @@ options:
             - forward
             - tunnel
             type: str
+          cpsv:
+            description:
+              - CDP, PVST+, STP, and VTP protocols.
+            choices:
+            - drop
+            - reverse-tunnel
+            - tunnel
+            type: str
+      encapsulation:
+        description: Specify which packets will be matched by this sub-interface.
+        type: dict
+        suboptions:
+          dot1q:
+            type: int
+            description: IEEE 802.1Q VLAN-tagged packets.
+          second_dot1q:
+            type: int
+            description: IEEE 802.1Q VLAN-tagged packets.
       q_vlan:
         description:
         - 802.1Q VLAN configuration. Note that it can accept either 2 VLAN IDs when

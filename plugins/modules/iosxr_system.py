@@ -26,7 +26,6 @@ extends_documentation_fragment:
 notes:
 - This module works with connection C(network_cli) and C(netconf). See L(the IOS-XR
   Platform Options,../network/user_guide/platform_iosxr.html).
-- Tested against IOS XRv 6.1.3
 - name-servers I(state=absent) operation with C(netconf) transport is a success, but
   with rpc-error. This is due to XR platform issue. Recommended to use I(ignore_errors)
   option with the task as a workaround.

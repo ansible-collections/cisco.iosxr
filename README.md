@@ -3,7 +3,7 @@
 
 The Ansible Cisco IOSXR collection includes a variety of Ansible content to help automate the management of Cisco IOSXR network appliances.
 
-This collection has been tested against Cisco IOSXR version 6.1.3.
+This collection has been tested against Cisco IOSXR version 7.0.2.
 
 <!--start requires_ansible-->
 ## Ansible version compatibility

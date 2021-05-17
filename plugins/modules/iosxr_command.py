@@ -25,7 +25,6 @@ notes:
   width 512 and terminal exec prompt no-timestamp.
 - This module works with C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 - This module does not support C(netconf) connection.
-- Tested against IOS XR 6.1.3
 options:
   commands:
     description:

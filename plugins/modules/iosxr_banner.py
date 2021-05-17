@@ -25,7 +25,6 @@ requirements:
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 notes:
-- Tested against IOS XRv 6.1.3.
 - This module works with connection C(network_cli) and C(netconf). See L(the IOS-XR
   Platform Options,../network/user_guide/platform_iosxr.html).
 options:
