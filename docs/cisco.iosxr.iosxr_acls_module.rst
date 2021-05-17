@@ -3954,7 +3954,7 @@ Examples
     # Thu Feb 20 05:07:45.767 UTC
     # RP/0/RP0/CPU0:ios#
 
-    - name: Merge the provided configuration with the exisiting running configuration
+    - name: Merge the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_acls:
         config:
         - afi: ipv6

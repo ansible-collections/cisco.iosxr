@@ -8,7 +8,6 @@
     gather_subset: default
 
 - block:
-
     - name: Clear existing BGP config
       ignore_errors: true
       cisco.iosxr.iosxr_bgp:
@@ -43,7 +42,6 @@
         config:
           bgp_as: 64496
           neighbors:
-
             - neighbor: 192.0.2.10
               remote_as: 64496
               description: IBGP_NBR_1
@@ -86,7 +84,6 @@
         config:
           bgp_as: 64496
           neighbors:
-
             - neighbor: 192.0.2.15
               remote_as: 64496
               description: IBGP_NBR_2
@@ -127,10 +124,8 @@
         config:
           bgp_as: 64496
           address_family:
-
             - afi: ipv4
               networks:
-
                 - prefix: 198.51.100.48
                   masklen: 28
                   route_map: RMAP_1
@@ -144,7 +139,6 @@
             - afi: ipv4
               safi: multicast
               networks:
-
                 - prefix: 198.51.100.64
                   masklen: 28
 
@@ -174,11 +168,9 @@
         config:
           bgp_as: 64496
           address_family:
-
             - afi: ipv4
               safi: unicast
               networks:
-
                 - prefix: 198.51.100.80
                   masklen: 28
 
@@ -191,7 +183,6 @@
             - afi: ipv4
               safi: multicast
               networks:
-
                 - prefix: 198.51.100.64
                   masklen: 28
 
@@ -213,7 +204,7 @@
         that:
           - result.changed == false
 
-    - name: Override all the exisiting BGP config
+    - name: Override all the existing BGP config
       register: result
       cisco.iosxr.iosxr_bgp:
         operation: override

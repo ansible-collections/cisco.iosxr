@@ -388,7 +388,7 @@ EXAMPLES = """
 #   neighbor 192.0.2.5
 #    remote-as 65540
 
-- name: Merge the provided configuration with the exisiting running configuration
+- name: Merge the provided configuration with the existing running configuration
   cisco.iosxr.iosxr_bgp_neighbor_address_family:
     state: merged
     config:
@@ -673,7 +673,7 @@ EXAMPLES = """
 #     capability orf prefix both
 #     default-originate
 
-- name: Replace the provided configuration with the exisiting running configuration
+- name: Replace the provided configuration with the existing running configuration
   cisco.iosxr.iosxr_bgp_neighbor_address_family:
     state: replaced
     config:
@@ -1086,7 +1086,7 @@ EXAMPLES = """
 #
 #
 #
-- name: Gathered the provided configuration with the exisiting running configuration
+- name: Gathered the provided configuration with the existing running configuration
   cisco.iosxr.iosxr_bgp_neighbor_address_family:
         config:
         state: gathered
