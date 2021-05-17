@@ -5,6 +5,21 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v2.2.0
+======
+
+Minor Changes
+-------------
+
+- Add new keys for iosxr_l2_interface, iosxr_logging.
+- Fix integration tests for iosxr_config, iosxr_smoke,iosxr_facts,iosxr_l2_interfaces,iosxr_lag_interfaces, iosxr_logging,iosxr_user.
+
+Bugfixes
+--------
+
+- Add warning when comment is not supported by IOSXR.
+- Fix issue of commit operation which was not failing for invalid inputs.
+
 v2.1.0
 ======
 
@@ -48,6 +63,7 @@ v2.0.0
 
 Major Changes
 -------------
+
 - Requires ansible.netcommon v2.0.0+ to support `ansible_network_single_user_mode` and `ansible_network_import_modules`.
 - Please refer to ansible.netcommon `changelog <https://github.com/ansible-collections/ansible.netcommon/blob/main/changelogs/CHANGELOG.rst#ansible-netcommon-collection-release-notes>`_ for more details.
 - ipaddress is no longer in ansible.netcommon. For Python versions without ipaddress (< 3.0), the ipaddress package is now required.

@@ -1,4 +1,0 @@
----
-bugfixes:
-  - Fix issue of commit operation which was not failing for invalid inputs.
-  - Add warning when comment is not supported by IOSXR.
