@@ -5,6 +5,21 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v2.2.0
+======
+
+Minor Changes
+-------------
+
+- Add new keys for iosxr_l2_interface, iosxr_logging.
+- Fix integration tests for iosxr_config, iosxr_smoke,iosxr_facts,iosxr_l2_interfaces,iosxr_lag_interfaces, iosxr_logging,iosxr_user.
+
+Bugfixes
+--------
+
+- Add warning when comment is not supported by IOSXR.
+- Fix issue of commit operation which was not failing for invalid inputs.
+
 v2.1.0
 ======
 

@@ -3459,7 +3459,6 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOS-XR 6.1.3.
    - This module works with connection ``network_cli``.
 
 

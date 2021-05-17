@@ -251,3 +251,19 @@ releases:
     - iosxr_fix_for_default_comment.yaml
     - psudoatomic_operation_tests_fix.yaml
     release_date: '2021-04-27'
+  2.2.0:
+    changes:
+      bugfixes:
+      - Add warning when comment is not supported by IOSXR.
+      - Fix issue of commit operation which was not failing for invalid inputs.
+      minor_changes:
+      - Add new keys for iosxr_l2_interface, iosxr_logging.
+      - Fix integration tests for iosxr_config, iosxr_smoke,iosxr_facts,iosxr_l2_interfaces,iosxr_lag_interfaces,
+        iosxr_logging,iosxr_user.
+    fragments:
+    - bugfix-138-handle-errror-when-commit-operation.yaml
+    - changelog_doc_path_update.yaml
+    - docupdate_spelling_correction.yaml
+    - fix-libssh-dependancy.yaml
+    - iosxr-7.0.2-fix-integration-tests.yaml
+    release_date: '2021-05-17'
