@@ -1,7 +1,12 @@
 ---
-
-- name: reset connection
-  meta: reset_connection
+- name: Remove users prior to tests
+  connection: ansible.netcommon.network_cli
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no username ansible1
+      - no username ansible2
+      - no username ansible3
+    provider: '{{ cli }}'
 
 - name: Create user (SetUp)
   connection: ansible.netcommon.netconf
