@@ -705,70 +705,124 @@ class NCConfiguration(ConfigBase):
         file_attribute_path = "file-log-attributes"
         if os_version and LooseVersion(os_version) > LooseVersion("7.0.0"):
             file_attribute_path = "file-specification"
-
-        self._log_file_meta.update(
-            [
-                (
-                    "files",
-                    {
-                        "xpath": "syslog/files",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "file",
-                    {
-                        "xpath": "syslog/files/file",
-                        "tag": True,
-                        "operation": "edit",
-                        "attrib": "operation",
-                    },
-                ),
-                (
-                    "a:name",
-                    {
-                        "xpath": "syslog/files/file/file-name",
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "file-attrib",
-                    {
-                        "xpath": "syslog/files/file/" + file_attribute_path,
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "a:size",
-                    {
-                        "xpath": "syslog/files/file/"
-                        + file_attribute_path
-                        + "/max-file-size",
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "a:level",
-                    {
-                        "xpath": "syslog/files/file/"
-                        + file_attribute_path
-                        + "/severity",
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "a:path",
-                    {
-                        "xpath": "syslog/files/file/"
-                        + file_attribute_path
-                        + "/path",
-                        "operation": "edit",
-                    },
-                ),
-            ]
-        )
+            self._log_file_meta.update(
+                [
+                    (
+                        "files",
+                        {
+                            "xpath": "syslog/files",
+                            "tag": True,
+                            "operation": "edit",
+                        },
+                    ),
+                    (
+                        "file",
+                        {
+                            "xpath": "syslog/files/file",
+                            "tag": True,
+                            "operation": "edit",
+                            "attrib": "operation",
+                        },
+                    ),
+                    (
+                        "a:name",
+                        {
+                            "xpath": "syslog/files/file/file-name",
+                            "operation": "edit",
+                        },
+                    ),
+                    (
+                        "file-attrib",
+                        {
+                            "xpath": "syslog/files/file/" + file_attribute_path,
+                            "tag": True,
+                            "operation": "edit",
+                        },
+                    ),
+                    (
+                        "a:size",
+                        {
+                            "xpath": "syslog/files/file/"
+                                     + file_attribute_path
+                                     + "/max-file-size",
+                            "operation": "edit",
+                        },
+                    ),
+                    (
+                        "a:level",
+                        {
+                            "xpath": "syslog/files/file/"
+                                     + file_attribute_path
+                                     + "/severity",
+                            "operation": "edit",
+                        },
+                    ),
+                    (
+                        "a:path",
+                        {
+                            "xpath": "syslog/files/file/"
+                                     + file_attribute_path
+                                     + "/path",
+                            "operation": "edit",
+                        },
+                    ),
+                ]
+            )
+        else:
+            self._log_file_meta.update(
+                [
+                    (
+                        "files",
+                        {
+                            "xpath": "syslog/files",
+                            "tag": True,
+                            "operation": "edit",
+                        },
+                    ),
+                    (
+                        "file",
+                        {
+                            "xpath": "syslog/files/file",
+                            "tag": True,
+                            "operation": "edit",
+                            "attrib": "operation",
+                        },
+                    ),
+                    (
+                        "a:name",
+                        {
+                            "xpath": "syslog/files/file/file-name",
+                            "operation": "edit",
+                        },
+                    ),
+                    (
+                        "file-attrib",
+                        {
+                            "xpath": "syslog/files/file/" + file_attribute_path,
+                            "tag": True,
+                            "operation": "edit",
+                        },
+                    ),
+                    (
+                        "a:size",
+                        {
+                            "xpath": "syslog/files/file/"
+                                     + file_attribute_path
+                                     + "/max-file-size",
+                            "operation": "edit",
+                        },
+                    ),
+                    (
+                        "a:level",
+                        {
+                            "xpath": "syslog/files/file/"
+                                     + file_attribute_path
+                                     + "/severity",
+                            "operation": "edit",
+                        },
+                    )
+                ]
+            )
         self._log_host_meta.update(
             [
                 (
