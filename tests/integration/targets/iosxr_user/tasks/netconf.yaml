@@ -1,11 +1,4 @@
 ---
-- name: collect all common test cases
-  find:
-    paths: '{{ role_path }}/tests/common'
-    patterns: '{{ testcase }}.yaml'
-  register: common_test_cases
-  delegate_to: localhost
-
 - name: collect all netconf test cases
   find:
     paths: '{{ role_path }}/tests/netconf'
@@ -15,7 +8,7 @@
 
 - set_fact:
     test_cases:
-      files: '{{ common_test_cases.files }} + {{ test_cases.files }}'
+      files: '{{ test_cases.files }}'
 
 - name: set test_items
   set_fact: test_items="{{ test_cases.files | map(attribute='path') | list }}"
@@ -35,3 +28,6 @@
     loop_var: test_case_to_run
   tags:
     - local
+
+- name: reset connection
+  meta: reset_connection
