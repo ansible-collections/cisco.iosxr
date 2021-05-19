@@ -8,6 +8,9 @@
       - no username ansible3
     provider: '{{ cli }}'
 
+- name: reset connection
+  meta: reset_connection
+
 - name: Create user (SetUp)
   connection: ansible.netcommon.netconf
   register: result
