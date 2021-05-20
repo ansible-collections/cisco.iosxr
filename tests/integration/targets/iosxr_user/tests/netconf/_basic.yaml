@@ -1,14 +1,12 @@
 ---
-- name: Delete collection of users
-  connection: ansible.netcommon.netconf
-  register: result
-  cisco.iosxr.iosxr_user:
-    aggregate:
-      - name: ansible1
-      - name: ansible2
-      - name: ansible3
-    state: absent
-    provider: '{{ netconf }}'
+- name: Remove users prior to tests
+  connection: ansible.netcommon.network_cli
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no username ansible1
+      - no username ansible2
+      - no username ansible3
+    provider: '{{ cli }}'
 
 - name: Create user (SetUp)
   connection: ansible.netcommon.netconf
