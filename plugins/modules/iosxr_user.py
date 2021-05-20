@@ -833,11 +833,7 @@ class NCConfiguration(ConfigBase):
             list_size = len(name_list)
             if list_size == 1:
                 self._have.append(
-                    {
-                        "name": name_list[0].text,
-                        "group": None,
-                        "groups": None,
-                    }
+                    {"name": name_list[0].text, "group": None, "groups": None}
                 )
             elif list_size == 2:
                 self._have.append(
@@ -864,13 +860,17 @@ class NCConfiguration(ConfigBase):
             if os_version and LooseVersion(os_version) > LooseVersion("7.0"):
                 ordering_index = etree_findall(element, "ordering-index")
                 if len(self._have) > 0:
-                    self._have[-1].update(ordering_index=ordering_index[0].text)
+                    self._have[-1].update(
+                        ordering_index=ordering_index[0].text
+                    )
 
         locald_params = list()
         locald_group_params = list()
         opcode = None
         ordering_index_list = [
-            int(user.get("ordering_index")) for user in self._have if user.get("ordering_index")
+            int(user.get("ordering_index"))
+            for user in self._have
+            if user.get("ordering_index")
         ]
 
         if state == "absent":
@@ -880,8 +880,12 @@ class NCConfiguration(ConfigBase):
                     obj_in_have = search_obj_in_list(
                         want_item["name"], self._have
                     )
-                    if os_version and LooseVersion(os_version) > LooseVersion("7.0"):
-                        want_item["ordering_index"] = obj_in_have["ordering_index"]
+                    if os_version and LooseVersion(os_version) > LooseVersion(
+                        "7.0"
+                    ):
+                        want_item["ordering_index"] = obj_in_have[
+                            "ordering_index"
+                        ]
                     want_item["configured_password"] = None
                     locald_params.append(want_item)
         elif state == "present":

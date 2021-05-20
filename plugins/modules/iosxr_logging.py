@@ -734,7 +734,8 @@ class NCConfiguration(ConfigBase):
                     (
                         "file-attrib",
                         {
-                            "xpath": "syslog/files/file/" + file_attribute_path,
+                            "xpath": "syslog/files/file/"
+                            + file_attribute_path,
                             "tag": True,
                             "operation": "edit",
                         },
@@ -743,8 +744,8 @@ class NCConfiguration(ConfigBase):
                         "a:size",
                         {
                             "xpath": "syslog/files/file/"
-                                     + file_attribute_path
-                                     + "/max-file-size",
+                            + file_attribute_path
+                            + "/max-file-size",
                             "operation": "edit",
                         },
                     ),
@@ -752,8 +753,8 @@ class NCConfiguration(ConfigBase):
                         "a:level",
                         {
                             "xpath": "syslog/files/file/"
-                                     + file_attribute_path
-                                     + "/severity",
+                            + file_attribute_path
+                            + "/severity",
                             "operation": "edit",
                         },
                     ),
@@ -761,8 +762,8 @@ class NCConfiguration(ConfigBase):
                         "a:path",
                         {
                             "xpath": "syslog/files/file/"
-                                     + file_attribute_path
-                                     + "/path",
+                            + file_attribute_path
+                            + "/path",
                             "operation": "edit",
                         },
                     ),
@@ -798,7 +799,8 @@ class NCConfiguration(ConfigBase):
                     (
                         "file-attrib",
                         {
-                            "xpath": "syslog/files/file/" + file_attribute_path,
+                            "xpath": "syslog/files/file/"
+                            + file_attribute_path,
                             "tag": True,
                             "operation": "edit",
                         },
@@ -807,8 +809,8 @@ class NCConfiguration(ConfigBase):
                         "a:size",
                         {
                             "xpath": "syslog/files/file/"
-                                     + file_attribute_path
-                                     + "/max-file-size",
+                            + file_attribute_path
+                            + "/max-file-size",
                             "operation": "edit",
                         },
                     ),
@@ -816,11 +818,11 @@ class NCConfiguration(ConfigBase):
                         "a:level",
                         {
                             "xpath": "syslog/files/file/"
-                                     + file_attribute_path
-                                     + "/severity",
+                            + file_attribute_path
+                            + "/severity",
                             "operation": "edit",
                         },
-                    )
+                    ),
                 ]
             )
         self._log_host_meta.update(
