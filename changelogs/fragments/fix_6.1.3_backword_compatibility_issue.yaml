@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - fix backword compatibility issue for iosxr 6.x.
