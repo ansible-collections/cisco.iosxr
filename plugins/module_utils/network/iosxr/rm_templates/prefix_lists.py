@@ -24,8 +24,8 @@ def _tmpl_description(config):
     """
     import epdb;epdb.serve()
 class Prefix_listsTemplate(NetworkTemplate):
-    def __init__(self, lines=None):
-        super(Prefix_listsTemplate, self).__init__(lines=lines, tmplt=self)
+    def __init__(self, lines=None, module=None):
+        super(Prefix_listsTemplate, self).__init__(lines=lines, tmplt=self, module=module)
 
     # fmt: off
     PARSERS = [

@@ -89,6 +89,7 @@ options:
     default: merged
 """
 EXAMPLES = """
+
 """
 
 from ansible.module_utils.basic import AnsibleModule

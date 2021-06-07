@@ -34,16 +34,6 @@ class Prefix_listsFacts(object):
     def __init__(self, module, subspec='config', options='options'):
         self._module = module
         self.argument_spec = Prefix_listsArgs.argument_spec
-        spec = deepcopy(self.argument_spec)
-        if subspec:
-            if options:
-                facts_argument_spec = spec[subspec][options]
-            else:
-                facts_argument_spec = spec[subspec]
-        else:
-            facts_argument_spec = spec
-
-        self.generated_spec = utils.generate_dict(facts_argument_spec)
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for Prefix_lists network resource
@@ -62,7 +52,7 @@ class Prefix_listsFacts(object):
             data = connection.get("show running-config")
 
         # parse native config using the Prefix_lists template
-        prefix_lists_parser = Prefix_listsTemplate(lines=data.splitlines())
+        prefix_lists_parser = Prefix_listsTemplate(lines=data.splitlines(), module=self._module)
         objs = prefix_lists_parser.parse()
         for ob in objs.values():
             if ob.get("afi") not in afi_list:
@@ -88,7 +78,9 @@ class Prefix_listsFacts(object):
         ansible_facts['ansible_network_resources'].pop('prefix_lists', None)
         #import epdb;epdb.serve()
         params = utils.remove_empties(
-            utils.validate_config(self.argument_spec, {"config": obj})
+            prefix_lists_parser.validate_config(
+                self.argument_spec, {"config": obj}, redact=True
+            )
         )
 
         facts['prefix_lists'] = params.get('config')
