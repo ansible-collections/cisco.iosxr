@@ -14,8 +14,6 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-from copy import deepcopy
-
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
@@ -27,13 +25,17 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
     Prefix_listsArgs,
 )
 
+
 class Prefix_listsFacts(object):
     """ The iosxr prefix_lists facts class
     """
 
-    def __init__(self, module, subspec='config', options='options'):
+    def __init__(self, module, subspec="config", options="options"):
         self._module = module
         self.argument_spec = Prefix_listsArgs.argument_spec
+
+    def get_config(self, connection):
+        return connection.get("show running-config")
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for Prefix_lists network resource
@@ -46,44 +48,29 @@ class Prefix_listsFacts(object):
         :returns: facts
         """
         facts = {}
-        afi_list = []
-        obj = []
+        objs = []
         if not data:
-            data = connection.get("show running-config")
+            data = self.get_config(connection)
 
         # parse native config using the Prefix_lists template
-        prefix_lists_parser = Prefix_listsTemplate(lines=data.splitlines(), module=self._module)
-        objs = prefix_lists_parser.parse()
-        for ob in objs.values():
-            if ob.get("afi") not in afi_list:
-                afi_list.append(ob.get("afi"))
+        prefix_lists_parser = Prefix_listsTemplate(
+            lines=data.splitlines(), module=self._module
+        )
+        objs = list(prefix_lists_parser.parse().values())
 
-        for afi in afi_list:
-            entry = {"afi": afi, "prefix_lists": []}
-            obj.append(entry)
+        if objs:
+            for item in objs:
+                item["prefix_lists"] = list(item["prefix_lists"].values())
 
-        for item in objs:
-            if "ipv4" in item:
-                for entry in obj:
-                    if entry.get("afi") == "ipv4":
-                        del objs[item]["afi"]
-                        if len(objs[item]) != 0:
-                            entry.get("prefix_lists").append(objs[item])
-            else:
-                for entry in obj:
-                    if entry.get("afi") == "ipv6":
-                        del objs[item]["afi"]
-                        if len(objs[item]) != 0:
-                            entry.get("prefix_lists").append(objs[item])
-        ansible_facts['ansible_network_resources'].pop('prefix_lists', None)
-        #import epdb;epdb.serve()
+        ansible_facts["ansible_network_resources"].pop("prefix_lists", None)
+
         params = utils.remove_empties(
             prefix_lists_parser.validate_config(
-                self.argument_spec, {"config": obj}, redact=True
+                self.argument_spec, {"config": objs}, redact=True
             )
         )
 
-        facts['prefix_lists'] = params.get('config')
-        ansible_facts['ansible_network_resources'].update(facts)
+        facts["prefix_lists"] = params.get("config", [])
+        ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts

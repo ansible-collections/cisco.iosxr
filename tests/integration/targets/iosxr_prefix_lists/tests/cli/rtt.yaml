@@ -1,0 +1,86 @@
+---
+- debug:
+    msg: START iosxr_prefix_lists round trip integration tests on connection={{ ansible_connection
+      }}
+
+- block:
+
+    - include_tasks: _remove_config.yaml
+
+    - name: Apply the provided configuration (base config)
+      register: base_config
+      cisco.iosxr.iosxr_prefix_lists:
+        config:
+          - afi: ipv6
+            prefix_lists:
+              - name: pl1_1
+                entries:
+                  - prefix: 2001:db8:1234::/48
+                    action: deny
+                    sequence: 1
+              - name: pl1_2
+                entries:
+                  - sequence: 2
+                    action: remark
+                    description: TEST_PL1_2_REMARK
+          - afi: ipv4
+            prefix_lists:
+              - name: pl1
+                entries:
+                  - sequence: 3
+                    action: remark
+                    description: TEST_PL1_REMARK
+                  - sequence: 4
+                    action: permit
+                    prefix: 10.0.0.0/24
+              - name: pl2
+                entries:
+                  - sequence: 5
+                    action: remark
+                    description: TEST_PL2_REMARK
+
+        state: merged
+
+    - name: Gather interfaces facts
+      cisco.iosxr.iosxr_facts:
+        gather_subset:
+          - '!all'
+          - '!min'
+        gather_network_resources:
+          - prefix_lists
+
+    - name: Apply the provided configuration (config to be reverted)
+      register: result
+      cisco.iosxr.iosxr_prefix_lists:
+        config:
+          - afi: ipv4
+            prefix_lists:
+              - name: pl3
+                entries:
+                  - sequence: 3
+                    action: remark
+                    description: TEST_PL1_3_REMARK
+                  - sequence: 4
+                    action: permit
+                    prefix: 10.0.0.0/24
+
+        state: overridden
+
+    - name: Assert that changes were applied
+      assert:
+        that: "{{ overridden['after'] | symmetric_difference(result['after']) |length\
+          \ == 0  }}"
+
+    - name: Revert back to base config using facts round trip
+      register: revert
+      cisco.iosxr.iosxr_prefix_lists:
+        config: "{{ ansible_facts['network_resources']['prefix_lists'] }}"
+        state: overridden
+
+    - name: Assert that config was reverted
+      assert:
+        that: "{{ base_config['after'] | symmetric_difference(revert['after']) |length\
+          \ == 0 }}"
+  always:
+
+    - include_tasks: _remove_config.yaml

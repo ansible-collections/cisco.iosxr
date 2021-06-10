@@ -17,7 +17,6 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from copy import deepcopy
 
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
@@ -47,11 +46,7 @@ class Prefix_lists(ResourceModule):
             resource="prefix_lists",
             tmplt=Prefix_listsTemplate(),
         )
-        self.parsers = [
-            "prefix",
-            "description",
-            "prefix_list"
-        ]
+        self.parsers = ["prefix", "description", "prefix_list"]
 
     def execute_module(self):
         """ Execute the module
@@ -68,10 +63,11 @@ class Prefix_lists(ResourceModule):
         """ Generate configuration commands to send based on
             want, have and desired state.
         """
+        wantd = {entry["afi"]: entry for entry in self.want}
+        haved = {entry["afi"]: entry for entry in self.have}
 
-        wantd = self._list_to_dict(self.want)
-        haved = self._list_to_dict(self.have)
-
+        self._prefix_list_to_dict(wantd)
+        self._prefix_list_to_dict(haved)
 
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
@@ -85,23 +81,18 @@ class Prefix_lists(ResourceModule):
             wantd = {}
 
         # remove superfluous config for overridden and deleted
-        if self.state in ["deleted", "overridden"]:
+        if self.state in ["overridden", "deleted"]:
             for k, have in iteritems(haved):
                 if k not in wantd:
-                    cmd = self._tmplt.render(have, "prefix_list", True)
-                    if cmd not in self.commands:
-                        self.commands.append(cmd)
-            # for overridden
-            haved = {}
-
+                    self._compare(want={}, have=have)
 
         for k, want in iteritems(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
-
-        if self.state in ["replaced", "overridden"]:
+            # alligning cmd with negate cmd 1st followed by config cmd
+        if self.state in ["overridden", "replaced"]:
             self.commands = [
-                                each for each in self.commands if "no" in each
-                            ] + [each for each in self.commands if "no" not in each]
+                each for each in self.commands if "no" in each
+            ] + [each for each in self.commands if "no" not in each]
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
@@ -109,19 +100,46 @@ class Prefix_lists(ResourceModule):
            the `want` and `have` data with the `parsers` defined
            for the Prefix_lists network resource.
         """
+        self._compare_plists(
+            want.get("prefix_lists", {}), have.get("prefix_lists", {})
+        )
 
-        self.compare(parsers=self.parsers, want=want, have=have)
+    def _compare_plists(self, want, have):
+        for wk, wentry in iteritems(want):
+            hentry = have.pop(wk, {})
+            # compare sequences
+            self._compare_seqs(
+                wentry.pop("entries", {}), hentry.pop("entries", {})
+            )
 
+        # remove remaining prefix lists
+        if self.state not in ["replaced"]:
+            for h in have.values():
+                self.commands.append(
+                    "no {0} prefix-list {1}".format(h["afi"], h["name"])
+                )
 
-    def _list_to_dict(self, entry):
-         new_entry = {}
-         if len(entry) != 0:
-             for x in entry:
-                 for prefix_list in x.get("prefix_lists", []):
-                     if prefix_list.get("entries"):
-                         for seq in prefix_list.get("entries", []):
-                             seq.update(afi=x.get("afi"))
-                             seq.update(name=prefix_list.get("name"))
-                             new_entry[x.get("afi") + "_" + prefix_list.get("name") + str(seq.get("sequence"))] = seq
+    def _compare_seqs(self, want, have):
+        for wseq, wentry in iteritems(want):
+            hentry = have.pop(wseq, {})
+            self.compare(parsers=self.parsers, want=wentry, have=hentry)
 
-         return new_entry
+        # remove remaining entries from have prefix list
+        for hseq in have.values():
+            self.compare(parsers=self.parsers, want={}, have=hseq)
+
+    def _prefix_list_to_dict(self, entry):
+        for afi, value in iteritems(entry):
+            if "prefix_lists" in value:
+                for plist in value["prefix_lists"]:
+                    plist.update({"afi": afi})
+                    if "entries" in plist:
+                        for seq in plist["entries"]:
+                            seq.update({"afi": afi, "name": plist["name"]})
+                        plist["entries"] = {
+                            x["sequence"]: x for x in plist["entries"]
+                        }
+                value["prefix_lists"] = {
+                    (entry["name"], afi): entry
+                    for entry in value["prefix_lists"]
+                }

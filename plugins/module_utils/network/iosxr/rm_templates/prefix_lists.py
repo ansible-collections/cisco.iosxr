@@ -8,9 +8,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 """
-The Prefix_lists parser templates file. This contains 
-a list of parser definitions and associated functions that 
-facilitates both facts gathering and native command generation for 
+The Prefix_lists parser templates file. This contains
+a list of parser definitions and associated functions that
+facilitates both facts gathering and native command generation for
 the given network resource.
 """
 
@@ -18,14 +18,13 @@ import re
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
-def _tmpl_description(config):
-    """
 
-    """
-    import epdb;epdb.serve()
+
 class Prefix_listsTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
-        super(Prefix_listsTemplate, self).__init__(lines=lines, tmplt=self, module=module)
+        super(Prefix_listsTemplate, self).__init__(
+            lines=lines, tmplt=self, module=module
+        )
 
     # fmt: off
     PARSERS = [
@@ -34,16 +33,20 @@ class Prefix_listsTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                         (?P<afi>^(ipv4|ipv6))
-                        \sprefix-list\s(?P<pl>\S+)
+                        \sprefix-list\s(?P<name>\S+)
                         $""",
                 re.VERBOSE,
             ),
             "setval": "{{afi}} prefix-list {{name}}",
             "result": {
-                "{{afi}}" + "_" + "{{pl}}":  {
-                        "afi": "{{afi}}",
-                        "name": "{{pl}}",
-                }
+                "{{ afi }}": {
+                    "afi": "{{ afi }}",
+                    "prefix_lists": {
+                        "{{ name }}": {
+                            "name": "{{ name }}",
+                        }
+                    }
+                },
 
             },
             "shared": True,
@@ -60,19 +63,22 @@ class Prefix_listsTemplate(NetworkTemplate):
             ),
             "setval": "{{afi}} prefix-list {{name}} {{sequence}} {{action}} {{prefix}}",
             "result": {
-                    "{{afi}}" + "_" + "{{pl}}": {
-                            "afi": "{{afi}}",
-                            "name": "{{pl}}",
+                "{{ afi |d()}}": {
+                    "afi": "{{ afi|d() }}",
+                    "prefix_lists": {
+                        "{{ name|d() }}": {
+                            "name": "{{ name|d()}}",
                             "entries": [
                                 {
-                                    "sequence": "{{sequence}}",
-                                    "action": "{{action}}",
-                                    "prefix": "{{prefix}}"
+                                    "sequence": "{{ sequence|d(None) }}",
+                                    "action": "{{ action }}",
+                                    "prefix": "{{ prefix }}",
                                 }
-
-                            ]
+                            ],
+                        }
                     }
-                }
+                },
+            },
         },
         {
             "name": "description",
@@ -86,19 +92,22 @@ class Prefix_listsTemplate(NetworkTemplate):
             ),
             "setval": "{{afi}} prefix-list {{name}} {{sequence}} {{action}} {{description}}",
             "result": {
-                "{{afi}}" + "_" + "{{pl}}": {
-                    "afi": "{{afi}}",
-                    "name": "{{pl}}",
-                    "entries": [
-                        {
-                            "sequence": "{{sequence}}",
-                            "action": "{{action}}",
-                            "description": "{{desc}}"
+                "{{ afi|d() }}": {
+                    "afi": "{{ afi|d() }}",
+                    "prefix_lists": {
+                        "{{ name|d() }}": {
+                            "name": "{{ name|d() }}",
+                            "entries": [
+                                {
+                                    "sequence": "{{ sequence|d(None) }}",
+                                    "action": "{{ action }}",
+                                    "description": "{{ desc }}",
+                                }
+                            ],
                         }
-
-                    ]
-                }
-            }
+                    }
+                },
+            },
         },
 
     ]
