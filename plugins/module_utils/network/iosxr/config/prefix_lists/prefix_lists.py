@@ -113,11 +113,10 @@ class Prefix_lists(ResourceModule):
             )
 
         # remove remaining prefix lists
-        if self.state not in ["replaced"]:
-            for h in have.values():
-                self.commands.append(
-                    "no {0} prefix-list {1}".format(h["afi"], h["name"])
-                )
+        for h in have.values():
+            self.commands.append(
+                "no {0} prefix-list {1}".format(h["afi"], h["name"])
+            )
 
     def _compare_seqs(self, want, have):
         for wseq, wentry in iteritems(want):

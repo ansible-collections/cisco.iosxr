@@ -8,22 +8,17 @@
 - include_tasks: _populate_config.yaml
 
 - block:
-    - name: Delete Prefix-list by name
+    - name: Delete Prefix-list by afi.
       register: result
       cisco.iosxr.iosxr_prefix_lists: &id002
         config:
-
           - afi: ipv6
-            prefix_lists:
-              - name: pl_2
-              - name: pl_1
         state: deleted
 
     - assert:
         that:
-          - '"no ipv6 prefix-list pl_2" in result.commands'
           - '"no ipv6 prefix-list pl_1" in result.commands'
-          - result.commands|length == 2
+          - result.commands|length == 1
 
     - name: Delete a single Prefix-list by name (IDEMPOTENT)
       register: result

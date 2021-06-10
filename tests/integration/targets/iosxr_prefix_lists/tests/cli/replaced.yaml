@@ -20,18 +20,6 @@
                   - sequence: 3
                     action: permit
                     prefix: 10.0.0.0/24
-          - afi: ipv6
-            prefix_lists:
-              - name: pl_1
-                entries:
-                  - prefix: 2001:db8:1234::/48
-                    action: permit
-                    sequence: 1
-              - name: pl_2
-                entries:
-                  - sequence: 2
-                    action: remark
-                    description: TEST_PL1_2
         state: replaced
 
 

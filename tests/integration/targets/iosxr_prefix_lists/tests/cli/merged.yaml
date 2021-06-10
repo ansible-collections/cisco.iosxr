@@ -18,11 +18,6 @@
                   - prefix: 2001:db8:1234::/48
                     action: deny
                     sequence: 1
-              - name: pl_2
-                entries:
-                  - sequence: 2
-                    action: remark
-                    description: TEST_PL_2_REMARK
           - afi: ipv4
             prefix_lists:
               - name: pl1
@@ -33,11 +28,6 @@
                   - sequence: 4
                     action: permit
                     prefix: 10.0.0.0/24
-              - name: pl2
-                entries:
-                  - sequence: 5
-                    action: remark
-                    description: TEST_PL2_REMARK
 
         state: merged
 
