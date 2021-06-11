@@ -331,28 +331,12 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
     def test_iosxr_prefix_list_parsed(self):
         set_module_args(
             dict(
-                running_config="ipv6 prefix-list test2\n 4 remark test\n!"
-                "\nipv4 prefix-list test1\n 3 remark test1\n 2 permit 10.0.0.0/24\n!",
+                running_config="ipv4 prefix-list test1\n 3 remark test1\n!",
                 state="parsed",
             )
         )
         result = self.execute_module(changed=False)
         parsed_list = [
-            {
-                "afi": "ipv6",
-                "prefix_lists": [
-                    {
-                        "name": "test2",
-                        "entries": [
-                            {
-                                "sequence": 4,
-                                "action": "remark",
-                                "description": "test",
-                            }
-                        ],
-                    }
-                ],
-            },
             {
                 "afi": "ipv4",
                 "prefix_lists": [
@@ -363,16 +347,11 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                 "sequence": 3,
                                 "action": "remark",
                                 "description": "test1",
-                            },
-                            {
-                                "sequence": 2,
-                                "action": "permit",
-                                "prefix": "10.0.0.0/24",
-                            },
+                            }
                         ],
                     }
                 ],
-            },
+            }
         ]
 
         self.assertEqual(parsed_list, result["parsed"])
