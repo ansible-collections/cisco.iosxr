@@ -1,0 +1,34 @@
+---
+- debug:
+    msg: START iosxr_prefix_lists rendered integration tests on connection={{ ansible_connection
+      }}
+
+- name: Render platform specific commands from task input using rendered state
+  register: result
+  cisco.iosxr.iosxr_prefix_lists:
+    config:
+      - afi: ipv6
+        prefix_lists:
+          - name: pl_1
+            entries:
+              - prefix: 2001:db8:1234::/48
+                action: deny
+                sequence: 1
+      - afi: ipv4
+        prefix_lists:
+          - name: pl1
+            entries:
+              - sequence: 3
+                action: remark
+                description: TEST_PL1_2_REMARK
+              - sequence: 4
+                action: permit
+                prefix: 10.0.0.0/24
+
+    state: rendered
+
+- name: Assert that correct set of commands were rendered
+  assert:
+    that:
+      - "{{ merged['commands'] | symmetric_difference(result['rendered']) |length\
+        \ == 0 }}"
