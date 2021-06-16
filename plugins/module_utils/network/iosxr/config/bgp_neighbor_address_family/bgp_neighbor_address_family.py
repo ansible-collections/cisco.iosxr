@@ -73,7 +73,7 @@ class Bgp_neighbor_address_family(ResourceModule):
             "site_of_origin",
             "validation",
             "route_policies.inbound",
-            "route_policies.outbound"
+            "route_policies.outbound",
         ]
 
     def execute_module(self):

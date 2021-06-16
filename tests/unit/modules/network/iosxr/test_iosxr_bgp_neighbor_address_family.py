@@ -148,8 +148,7 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                                         entire_aspath=True,
                                     ),
                                     route_policies=dict(
-                                        inbound="test1",
-                                        outbound="test1"
+                                        inbound="test1", outbound="test1"
                                     ),
                                     maximum_prefix=dict(
                                         max_limit=10,
@@ -230,8 +229,7 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                                         entire_aspath=True,
                                     ),
                                     route_policies=dict(
-                                        inbound="test1",
-                                        outbound="test1"
+                                        inbound="test1", outbound="test1"
                                     ),
                                     maximum_prefix=dict(
                                         max_limit=10,
@@ -347,7 +345,7 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                                             default_originate=dict(set=True),
                                             route_policies=dict(
                                                 inbound="test1",
-                                                outbound="test1"
+                                                outbound="test1",
                                             ),
                                         )
                                     ],

@@ -379,7 +379,7 @@ options:
       choices: [deleted, merged, overridden, replaced, gathered, rendered, parsed]
       default: merged
 """
-EXAMPLES =  """
+EXAMPLES = """
 # Using merged
 # Before state:
 # -------------
