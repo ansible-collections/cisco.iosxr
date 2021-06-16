@@ -674,6 +674,66 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             }
         },
         {
+            "name": "route_policies.inbound",
+            "getval": re.compile(
+                r"""
+                (\s+vrf\s(?P<vrf>\S+))?
+                \s+(?P<nbr_address>neighbor\s\S+)
+                \sroute-policy\s(?P<route_policy>\S+)
+                \sin
+                $""", re.VERBOSE
+            ),
+            "setval": "route-policy {{route_policies.inbound}} in",
+            "result": {
+                "vrfs": {
+                    "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
+                        "neighbors": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "address_family": {
+                                    '{{"address_family_" + afi + "_" + safi }}': {
+                                        "route_policies": {
+                                            "inbound": "{{route_policy}}"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "route_policies.outbound",
+            "getval": re.compile(
+                r"""
+                (\s+vrf\s(?P<vrf>\S+))?
+                \s+(?P<nbr_address>neighbor\s\S+)
+                \sroute-policy\s(?P<route_policy>\S+)
+                \sout
+                $""", re.VERBOSE
+            ),
+            "setval": "route-policy {{route_policies.outbound}} out",
+            "result": {
+                "vrfs": {
+                    "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
+                        "neighbors": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "address_family": {
+                                    '{{"address_family_" + afi + "_" + safi }}': {
+                                        "route_policies": {
+                                            "outbound": "{{route_policy}}"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
             "name": "remove_private_AS",
             "getval": re.compile(
                 r"""

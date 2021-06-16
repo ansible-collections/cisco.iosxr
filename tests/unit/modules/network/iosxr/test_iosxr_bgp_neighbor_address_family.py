@@ -82,6 +82,8 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                    soft-reconfiguration inbound
                    send-multicast-attributes
                    remove-private-AS inbound entire-aspath
+                   route-policy test1 in
+                   route-policy test1 out
                    next-hop-unchanged multipath
                  vrf vrf1
                   rd auto
@@ -144,6 +146,10 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                                         set=True,
                                         inbound=True,
                                         entire_aspath=True,
+                                    ),
+                                    route_policies=dict(
+                                        inbound="test1",
+                                        outbound="test1"
                                     ),
                                     maximum_prefix=dict(
                                         max_limit=10,
@@ -223,6 +229,10 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                                         inbound=True,
                                         entire_aspath=True,
                                     ),
+                                    route_policies=dict(
+                                        inbound="test1",
+                                        outbound="test1"
+                                    ),
                                     maximum_prefix=dict(
                                         max_limit=10,
                                         threshold_value=20,
@@ -262,6 +272,8 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
             "next-hop-unchanged multipath",
             "origin-as validation disable",
             "remove-private-AS inbound entire-aspath",
+            "route-policy test1 in",
+            "route-policy test1 out",
             "send-community-ebgp",
             "send-community-gshut-ebgp",
             "send-extended-community-ebgp",
@@ -312,6 +324,8 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                     multipath
                     capability orf prefix both
                     default-originate
+                    route-policy test2 in
+                    route-policy test2 out
             """
         )
         self.get_config.return_value = run_cfg
@@ -331,6 +345,10 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                                             safi="unicast",
                                             multipath=True,
                                             default_originate=dict(set=True),
+                                            route_policies=dict(
+                                                inbound="test1",
+                                                outbound="test1"
+                                            ),
                                         )
                                     ],
                                 )
@@ -347,6 +365,8 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
             "neighbor 1.2.1.2",
             "address-family ipv4 unicast",
             "no capability orf prefix both",
+            "route-policy test1 in",
+            "route-policy test1 out",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -680,6 +700,8 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                     multipath
                     capability orf prefix both
                     default-originate
+                    route-policy test2 in
+                    route-policy test2 out
             """
         )
         self.get_config.return_value = run_cfg
@@ -715,6 +737,8 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
             "neighbor 1.2.1.2",
             "address-family ipv4 unicast",
             "no capability orf prefix both",
+            "no route-policy test2 in",
+            "no route-policy test2 out",
             "neighbor 1.1.1.1",
             "no address-family ipv4 unicast",
         ]

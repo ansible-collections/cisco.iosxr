@@ -19,6 +19,8 @@
       - "  send-community-gshut-ebgp"
       - "  soft-reconfiguration inbound always"
       - "  send-multicast-attributes"
+      - "  route-policy test1 in"
+      - "  route-policy test1 out"
     parents: "router bgp 65536"
 
   vars:

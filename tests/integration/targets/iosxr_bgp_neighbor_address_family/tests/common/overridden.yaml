@@ -22,11 +22,14 @@
                   default_originate:
                     set: true
                   weight: 5
+                  route_policies:
+                    inbound: test2
+                    outbound: test2
         state: overridden
 
     - assert:
         that:
-          - result.commands|length == 7
+          - result.commands|length == 9
           - result.changed == true
           - "'no router bgp 65536' not in result.commands"
           - overridden['commands'] == result['commands']

@@ -48,7 +48,7 @@
 
     - assert:
         that:
-          - result.commands|length == 5
+          - result.commands|length == 7
           - result.changed == true
           - "'no router bgp 65536' not in result.commands"
           - replaced['commands'] == result['commands']

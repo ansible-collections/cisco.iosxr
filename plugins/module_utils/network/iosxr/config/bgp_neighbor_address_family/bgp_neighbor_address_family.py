@@ -72,6 +72,8 @@ class Bgp_neighbor_address_family(ResourceModule):
             "weight",
             "site_of_origin",
             "validation",
+            "route_policies.inbound",
+            "route_policies.outbound"
         ]
 
     def execute_module(self):
@@ -170,7 +172,7 @@ class Bgp_neighbor_address_family(ResourceModule):
             begin = len(self.commands)
             af_have = hafs.pop(name, {})
             self.compare(parsers=self.parsers, want=entry, have=af_have)
-            if len(self.commands) != begin:
+            if len(self.commands) != begin or (not af_have and entry):
                 self.commands.insert(
                     begin,
                     self._tmplt.render(

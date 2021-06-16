@@ -16,6 +16,8 @@ merged:
     - send-community-ebgp
     - send-community-gshut-ebgp
     - send-extended-community-ebgp
+    - route-policy test1 in
+    - route-policy test1 out
     - send-multicast-attributes
     - soft-reconfiguration inbound always
     - weight 5
@@ -72,6 +74,9 @@ merged:
             origin_as:
               validation:
                 disable: true
+            route_policies:
+              inbound: "test1"
+              outbound: "test1"
             maximum_prefix:
               max_limit: 10
               threshold_value: 20
@@ -96,6 +101,8 @@ overridden:
     - default-originate
     - multipath
     - weight 5
+    - route-policy test2 in
+    - route-policy test2 out
     - no address-family ipv4 unicast
 
 replaced:
@@ -105,6 +112,8 @@ replaced:
     - address-family ipv4 unicast
     - no origin-as validation disable
     - weight 4
+    - no route-policy test1 in
+    - no route-policy test1 out
 
   vrf:
     commands:

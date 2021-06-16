@@ -212,7 +212,20 @@ options:
                         description: Prevent remove-private-AS from being inherited from the parent.
                   route_policy: &route_policy
                     type: str
+                    description:
+                      - Apply route policy to neighbor.
+                      - This option is DEPRECATED and is replaced with route_policies which
+                        accepts dict as input.
+                  route_policies: &route_policies
+                    type: dict
                     description: Apply route policy to neighbor.
+                    suboptions:
+                      inbound:
+                        type: str
+                        description: Apply route policy to inbound routes.
+                      outbound:
+                        type: str
+                        description: Apply route policy to outbound routes.
                   route_reflector_client: &route_reflector_client
                     type: dict
                     description:  Configure a neighbor as Route Reflector client.
@@ -338,6 +351,7 @@ options:
                       orf_route_policy: *orf_rp
                       remove_private_AS: *remove_private_AS
                       route_policy: *route_policy
+                      route_policies: *route_policies
                       route_reflector_client: *route_reflector_client
                       send_community_ebgp: *send_community_ebgp
                       send_community_gshut_ebgp: *send_community_gshut_ebgp
@@ -365,7 +379,7 @@ options:
       choices: [deleted, merged, overridden, replaced, gathered, rendered, parsed]
       default: merged
 """
-EXAMPLES = """
+EXAMPLES =  """
 # Using merged
 # Before state:
 # -------------
