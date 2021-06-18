@@ -1,3 +1,3 @@
 ---
-minor_changes:
-  - To add updated route policies params to Bgp nbr AF RM
+bugfixes:
+  - To add updated route policy params to Bgp nbr AF RM
