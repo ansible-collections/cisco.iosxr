@@ -647,34 +647,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "route_policy",
-            "getval": re.compile(
-                r"""
-                (\s+vrf\s(?P<vrf>\S+))?
-                \s+(?P<nbr_address>neighbor\s\S+)
-                \sroute-policy\s(?P<route_policy>\S+)
-                $""", re.VERBOSE
-            ),
-            "setval": "route-policy {{route_policy}}",
-            "result": {
-                "vrfs": {
-                    "{{ 'vrf_' + vrf|d() }}": {
-                        "vrf": "{{ vrf }}",
-                        "neighbors": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "address_family": {
-                                    '{{"address_family_" + afi + "_" + safi }}': {
-                                        "route_policy": "{{route_policy}}"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "name": "route_policies.inbound",
+            "name": "route_policy.inbound",
             "getval": re.compile(
                 r"""
                 (\s+vrf\s(?P<vrf>\S+))?
@@ -683,7 +656,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 \sin
                 $""", re.VERBOSE
             ),
-            "setval": "route-policy {{route_policies.inbound}} in",
+            "setval": "route-policy {{route_policy.inbound}} in",
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -692,7 +665,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
                                     '{{"address_family_" + afi + "_" + safi }}': {
-                                        "route_policies": {
+                                        "route_policy": {
                                             "inbound": "{{route_policy}}"
                                         }
                                     }
@@ -704,7 +677,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "route_policies.outbound",
+            "name": "route_policy.outbound",
             "getval": re.compile(
                 r"""
                 (\s+vrf\s(?P<vrf>\S+))?
@@ -713,7 +686,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 \sout
                 $""", re.VERBOSE
             ),
-            "setval": "route-policy {{route_policies.outbound}} out",
+            "setval": "route-policy {{route_policy.outbound}} out",
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -722,7 +695,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
                                     '{{"address_family_" + afi + "_" + safi }}': {
-                                        "route_policies": {
+                                        "route_policy": {
                                             "outbound": "{{route_policy}}"
                                         }
                                     }

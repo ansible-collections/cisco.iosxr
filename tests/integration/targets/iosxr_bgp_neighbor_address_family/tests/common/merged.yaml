@@ -28,7 +28,7 @@
                       always: true
                   send_community_gshut_ebgp:
                     set: true
-                  route_policies:
+                  route_policy:
                     inbound: test1
                     outbound: test1
                   send_extended_community_ebgp:

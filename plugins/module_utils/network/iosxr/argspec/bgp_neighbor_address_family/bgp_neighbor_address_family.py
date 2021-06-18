@@ -191,8 +191,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         },
                                     },
                                 },
-                                "route_policy": {"type": "str"},
-                                "route_policies": {
+                                "route_policy": {
                                     "type": "dict",
                                     "options": {
                                         "inbound": {"type": "str"},
@@ -429,8 +428,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                                 },
                                             },
                                         },
-                                        "route_policy": {"type": "str"},
-                                        "route_policies": {
+                                        "route_policy": {
                                             "type": "dict",
                                             "options": {
                                                 "inbound": {"type": "str"},

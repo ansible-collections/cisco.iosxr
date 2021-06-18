@@ -22,7 +22,7 @@
                   default_originate:
                     set: true
                   weight: 5
-                  route_policies:
+                  route_policy:
                     inbound: test2
                     outbound: test2
         state: overridden

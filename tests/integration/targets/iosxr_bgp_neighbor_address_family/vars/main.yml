@@ -74,7 +74,7 @@ merged:
             origin_as:
               validation:
                 disable: true
-            route_policies:
+            route_policy:
               inbound: "test1"
               outbound: "test1"
             maximum_prefix:
