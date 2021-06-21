@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - fix iosxr_config issue for prefix-list config
