@@ -1,3 +1,0 @@
----
-bugfixes:
-  - fix intermittent issue on CI for iosxr_banner module.

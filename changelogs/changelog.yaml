@@ -267,3 +267,27 @@ releases:
     - fix-libssh-dependancy.yaml
     - iosxr-7.0.2-fix-integration-tests.yaml
     release_date: '2021-05-17'
+  2.3.0:
+    changes:
+      bugfixes:
+      - To add updated route policy params to Bgp nbr AF RM
+      - fix backword compatibility issue for iosxr 6.x.
+      - fix intermittent issue on CI for iosxr_banner module.
+      - fix iosxr_config issue for prefix-set,route-policy config
+      - fix static routes interface parsing issue.
+      minor_changes:
+      - Add `iosxr_prefix_lists` resource module.
+    fragments:
+    - 152_fix_static_routes_interface_facts_issue.yaml
+    - docs_fix.yaml
+    - fix_6.1.3_backword_compatibility_issue.yaml
+    - fix_intermittent_iosxr_banner_issue.yaml
+    - fix_iosxr_config_issue.yaml
+    - iosxr_prefix_list.yaml
+    - update_bgp_nbr_af_route_policy.yaml
+    - update_readme_freenode_to_libera.yml
+    modules:
+    - description: Prefix-Lists resource module.
+      name: iosxr_prefix_lists
+      namespace: ''
+    release_date: '2021-06-22'
