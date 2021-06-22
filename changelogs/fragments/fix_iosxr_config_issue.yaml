@@ -1,3 +1,0 @@
----
-bugfixes:
-  - fix iosxr_config issue for prefix-set,route-policy config

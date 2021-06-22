@@ -5,6 +5,28 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v2.3.0
+======
+
+Minor Changes
+-------------
+
+- Add `iosxr_prefix_lists` resource module.
+
+Bugfixes
+--------
+
+- To add updated route policy params to Bgp nbr AF RM
+- fix backword compatibility issue for iosxr 6.x.
+- fix intermittent issue on CI for iosxr_banner module.
+- fix iosxr_config issue for prefix-set,route-policy config
+- fix static routes interface parsing issue.
+
+New Modules
+-----------
+
+- iosxr_prefix_lists - Prefix-Lists resource module.
+
 v2.2.0
 ======
 
