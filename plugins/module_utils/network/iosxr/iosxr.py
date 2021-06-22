@@ -648,7 +648,7 @@ def mask_config_blocks_from_diff(config, candidate, force_diff_prefix):
                             # otherwise we would be having new start
                             new_block = False
                             break
-                    if new_block and start_index:
+                    if new_block and end_index:
                         block_index_start_end.append((start_index, end_index))
 
         for start, end in block_index_start_end:
