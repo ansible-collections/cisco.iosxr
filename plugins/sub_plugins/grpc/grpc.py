@@ -18,7 +18,7 @@ version_added: ""
 import os
 
 from imp import load_source
-from ansible_collections.ansible.netcommon.plugins.subplugins.grpc import (
+from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc import (
     GrpcBase,
 )
 
@@ -30,7 +30,7 @@ class Grpc(GrpcBase):
             "ems_grpc_pb2",
             os.path.join(
                 os.path.dirname(os.path.realpath(__file__)),
-                "iosxr_pb/ems_grpc_pb2",
+                "pb/ems_grpc_pb2.py",
             ),
         )
 
