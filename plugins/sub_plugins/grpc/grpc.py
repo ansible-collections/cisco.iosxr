@@ -16,12 +16,22 @@ description:
 version_added: ""
 """
 import os
+import q
 
 from imp import load_source
+from functools import wraps
+
 from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc import (
     GrpcBase,
 )
 
+def ensure_connect(func):
+    @wraps(func)
+    def wrapped(self, *args, **kwargs):
+        if not self._connected:
+            self._connect()
+        return func(self, *args, **kwargs)
+    return wrapped
 
 class Grpc(GrpcBase):
     def __init__(self, connection):
@@ -66,6 +76,7 @@ class Grpc(GrpcBase):
             output["error"] += response.errors
         return output
 
+    @ensure_connect
     def run_cli(self, command=None, display=None):
         if command is None:
             raise ValueError("command value must be provided")
