@@ -16,21 +16,26 @@ description:
 version_added: ""
 """
 import os
-<<<<<<< HEAD
-import q
 
 from imp import load_source
 
 from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc.base import (
     GrpcBase, ensure_connect
-=======
 
 from imp import load_source
+from functools import wraps
+
 from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc import (
     GrpcBase,
->>>>>>>  Added sub_plugins
 )
 
+def ensure_connect(func):
+    @wraps(func)
+    def wrapped(self, *args, **kwargs):
+        if not self._connected:
+            self._connect()
+        return func(self, *args, **kwargs)
+    return wrapped
 
 class Grpc(GrpcBase):
     def __init__(self, connection):
@@ -75,13 +80,8 @@ class Grpc(GrpcBase):
             output["error"] += response.errors
         return output
 
-<<<<<<< HEAD
     @ensure_connect
     def run_cli(self, command=None, display=None):
-        q("IN RUN_CLI")
-=======
-    def run_cli(self, command=None, display=None):
->>>>>>>  Added sub_plugins
         if command is None:
             raise ValueError("command value must be provided")
 
@@ -89,23 +89,14 @@ class Grpc(GrpcBase):
         stub = self._ems_grpc_pb2.beta_create_gRPCExec_stub(
             self._connection._channel
         )
-<<<<<<< HEAD
         
         message = self._ems_grpc_pb2.ShowCmdArgs(cli=command)
-        q(message, self._connection._channel)
-=======
-        message = self._ems_grpc_pb2.ShowCmdArgs(cli=command)
->>>>>>>  Added sub_plugins
         if display == "text":
             responses = stub.ShowCmdTextOutput(
                 message,
                 self._connection._timeout,
                 metadata=self._connection._login_credentials,
             )
-<<<<<<< HEAD
-            q(responses)
-=======
->>>>>>>  Added sub_plugins
             for response in responses:
                 output["response"] += response.output
                 output["error"] += response.errors
@@ -118,11 +109,6 @@ class Grpc(GrpcBase):
             for response in responses:
                 output["response"] += response.jsonoutput
                 output["error"] += response.errors
-<<<<<<< HEAD
-        q(output)
-=======
-
->>>>>>>  Added sub_plugins
         return output
 
     @property
@@ -134,17 +120,10 @@ class Grpc(GrpcBase):
         capability["supports_cli_command"] = True
         return capability
 
-<<<<<<< HEAD
     @ensure_connect
     def get_capabilities(self):
         result = dict()
         result["rpc"] = self.__rpc__ + ["commit", "discard_changes"]
-        result["network_api"] = "ansible.netcommon.grpc"
-=======
-    def get_capabilities(self):
-        result = dict()
-        result["rpc"] = self.__rpc__ + ["commit", "discard_changes"]
         result["network_api"] = "grpc"
->>>>>>>  Added sub_plugins
         result["server_capabilities"] = self.server_capabilities
         return result
