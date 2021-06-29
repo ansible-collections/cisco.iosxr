@@ -163,7 +163,7 @@ def get_connection(module):
 
     capabilities = get_capabilities(module)
     network_api = capabilities.get("network_api")
-    if network_api == "cliconf":
+    if network_api in ["cliconf", "ansible.netcommon.grpc"]:
         module.connection = Connection(module._socket_path)
     elif network_api == "netconf":
         module.connection = NetconfConnection(module._socket_path)
