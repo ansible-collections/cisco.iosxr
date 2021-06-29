@@ -23,19 +23,11 @@ from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc.base import 
     GrpcBase, ensure_connect
 
 from imp import load_source
-from functools import wraps
 
-from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc import (
-    GrpcBase,
+from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc.base import (
+    GrpcBase, ensure_connect
 )
 
-def ensure_connect(func):
-    @wraps(func)
-    def wrapped(self, *args, **kwargs):
-        if not self._connected:
-            self._connect()
-        return func(self, *args, **kwargs)
-    return wrapped
 
 class Grpc(GrpcBase):
     def __init__(self, connection):
@@ -124,6 +116,6 @@ class Grpc(GrpcBase):
     def get_capabilities(self):
         result = dict()
         result["rpc"] = self.__rpc__ + ["commit", "discard_changes"]
-        result["network_api"] = "grpc"
+        result["network_api"] = "ansible.netcommon.grpc"
         result["server_capabilities"] = self.server_capabilities
         return result
