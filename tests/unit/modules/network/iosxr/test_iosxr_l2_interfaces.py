@@ -22,18 +22,18 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.plugins.modules import iosxr_interfaces
+from ansible_collections.cisco.iosxr.plugins.modules import iosxr_l2_interfaces
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
     set_module_args,
 )
 from .iosxr_module import TestIosxrModule, load_fixture
 
 
-class TestIosxrInterfacesModule(TestIosxrModule):
-    module = iosxr_interfaces
+class TestIosxrL2InterfacesModule(TestIosxrModule):
+    module = iosxr_l2_interfaces
 
     def setUp(self):
-        super(TestIosxrInterfacesModule, self).setUp()
+        super(TestIosxrL2InterfacesModule, self).setUp()
 
         self.mock_get_config = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
@@ -58,43 +58,47 @@ class TestIosxrInterfacesModule(TestIosxrModule):
         self.get_resource_connection_facts = (
             self.mock_get_resource_connection_facts.start()
         )
-
+        self.mock_get_os_version = patch(
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr.get_os_version"
+        )
+        self.get_os_version = self.mock_get_os_version.start()
+        self.get_os_version.return_value = "7.0.2"
         self.mock_execute_show_command = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.interfaces.interfaces.InterfacesFacts.get_config"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l2_interfaces.l2_interfaces.L2_InterfacesFacts.get_config"
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
     def tearDown(self):
-        super(TestIosxrInterfacesModule, self).tearDown()
+        super(TestIosxrL2InterfacesModule, self).tearDown()
         self.mock_get_resource_connection_config.stop()
         self.mock_get_resource_connection_facts.stop()
         self.mock_get_config.stop()
+        self.mock_get_os_version.stop()
         self.mock_load_config.stop()
         self.mock_execute_show_command.stop()
 
     def _prepare(self):
         def load_from_file(*args, **kwargs):
-            return load_fixture("iosxr_interface_config.cfg")
+            return load_fixture("iosxr_l2_interface_config.cfg")
 
         self.execute_show_command.side_effect = load_from_file
 
-    def test_iosxr_interfaces_merged_idempotent(self):
+    def test_iosxr_l2_interfaces_merged_idempotent(self):
         self._prepare()
         set_module_args(
             dict(
                 config=[
                     dict(
-                        name="GigabitEthernet0/0/0/0",
-                        description="Configured and Merged by Ansible-Network",
-                        mtu=110,
-                        enabled=True,
-                        duplex="half"
+                        name="GigabitEthernet0/0/0/1",
+                        l2transport=True,
+                        l2protocol=[dict(cpsv="tunnel")]
                     ),
                     dict(
-                        name="GigabitEthernet0/0/0/1",
-                        description="Configured and Merged by Ansible-Network",
-                        mtu=2800,
-                        speed=100
+                        name="GigabitEthernet0/0/0/3.900",
+                        encapsulation=dict(
+                            dot1q=20,
+                            second_dot1q=40
+                        )
                     ),
                 ],
                 state="merged",
@@ -102,24 +106,21 @@ class TestIosxrInterfacesModule(TestIosxrModule):
         )
         self.execute_module(changed=False, commands=[])
 
-    def test_iosxr_interfaces_merged(self):
+    def test_iosxr_l2_interfaces_merged(self):
         set_module_args(
             dict(
                 config=[
                     dict(
-                        name="GigabitEthernet0/0/0/0",
-                        description="Configured and Merged by Ansible-Network",
-                        mtu=110,
-                        enabled=True,
-                        duplex="half"
+                        name="GigabitEthernet0/0/0/1",
+                        l2transport=True,
+                        l2protocol=[dict(cpsv="tunnel")]
                     ),
                     dict(
-                        name="GigabitEthernet0/0/0/1",
-                        description="Configured and Merged by Ansible-Network",
-                        mtu=2800,
-                        enabled=False,
-                        duplex="full",
-                        speed=100
+                        name="GigabitEthernet0/0/0/3.900",
+                        encapsulation=dict(
+                            dot1q=20,
+                            second_dot1q=40
+                        )
                     ),
                 ],
                 state="merged",
@@ -127,35 +128,24 @@ class TestIosxrInterfacesModule(TestIosxrModule):
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",
-            "description Configured and Merged by Ansible-Network",
-            "mtu 110",
-            "duplex half",
-            "no shutdown",
-            "interface GigabitEthernet0/0/0/1",
-            "description Configured and Merged by Ansible-Network",
-            "mtu 2800",
-            "speed 100",
-            "duplex full",
-            "shutdown"
+            "l2transport l2protocol cpsv tunnel",
+            "l2transport propagate remote-status",
+            "interface GigabitEthernet0/0/0/3.900",
+            "encapsulation dot1q 20 second-dot1q 40",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
-    def test_iosxr_interfaces_replaced(self):
+    def test_iosxr_l2_interfaces_replaced(self):
         self._prepare()
         set_module_args(
             dict(
                 config=[
                     dict(
-                        name="GigabitEthernet0/0/0/0",
-                        description="Configured and Replaced by Ansible-Network",
-                        mtu=110,
-                    ),
-                    dict(
                         name="GigabitEthernet0/0/0/1",
-                        description="Configured and Replaced by Ansible-Network",
-                        speed=100
-                    ),
+                        l2transport=True,
+                        l2protocol=[dict(cpsv="drop")]
+                    )
                 ],
                 state="replaced",
             )
@@ -171,43 +161,35 @@ class TestIosxrInterfacesModule(TestIosxrModule):
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
-    def test_iosxr_interfaces_deleted(self):
+    def test_iosxr_l2_interfaces_deleted(self):
         self._prepare()
         set_module_args(dict(state="deleted"))
 
         commands = [
             "interface GigabitEthernet0/0/0/0",
-            "no description",
-            "no mtu",
-            "no duplex",
-            "interface GigabitEthernet0/0/0/1",
-            "no description",
-            "no speed",
-            "no mtu"
+            "no l2transport l2protocol cpsv tunnel",
+            "no l2transport propagate remote-status",
+            "interface GigabitEthernet0/0/0/3.900",
+            "no encapsulation dot1q 20 second-dot1q 40",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
-
-
-    def test_iosxr_interfaces_rendered(self):
+    def test_iosxr_l2_interfaces_rendered(self):
         set_module_args(
             dict(
                 config=[
                     dict(
-                        name="GigabitEthernet0/0/0/0",
-                        description="Configured and Merged by Ansible-Network",
-                        mtu=110,
-                        enabled=True,
-                        duplex="half"
+                        name="GigabitEthernet0/0/0/1",
+                        l2transport=True,
+                        l2protocol=[dict(cpsv="tunnel")]
                     ),
                     dict(
-                        name="GigabitEthernet0/0/0/1",
-                        description="Configured and Merged by Ansible-Network",
-                        mtu=2800,
-                        enabled=False,
-                        duplex="full",
-                        speed=100
+                        name="GigabitEthernet0/0/0/3.900",
+                        encapsulation=dict(
+                            dot1q=20,
+                            second_dot1q=40
+                        )
                     ),
                 ],
                 state="rendered",
@@ -216,75 +198,56 @@ class TestIosxrInterfacesModule(TestIosxrModule):
 
         commands = [
             "interface GigabitEthernet0/0/0/0",
-            "description Configured and Merged by Ansible-Network",
-            "mtu 110",
-            "duplex half",
-            "no shutdown",
-            "interface GigabitEthernet0/0/0/1",
-            "description Configured and Merged by Ansible-Network",
-            "mtu 2800",
-            "speed 100",
-            "duplex full",
-            "shutdown"
+            "l2transport l2protocol cpsv tunnel",
+            "l2transport propagate remote-status",
+            "interface GigabitEthernet0/0/0/3.900",
+            "encapsulation dot1q 20 second-dot1q 40",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
 
-    def test_iosxr_interfaces_parsed(self):
+    def test_iosxr_l2_interfaces_parsed(self):
         self.maxDiff = None
         set_module_args(
             dict(
-                running_config="interface GigabitEthernet0/0/0/0\n description Configured and Merged by Ansible-Network\n "
-                               "mtu 110\n duplex half\ninterface GigabitEthernet0/0/0/1\n "
-                               "description Configured and Merged by Ansible-Network\n no shutdown\n mtu 2800\n speed 100",
+                running_config="interface GigabitEthernet0/0/0/1\n l2transport\n  l2protocol cpsv tunnel\n  "
+                               "propagate remote-status\n !\n!\ninterface GigabitEthernet0/0/0/3.900\n "
+                               "encapsulation dot1q 20 second-dot1q 40",
                 state="parsed",
             )
         )
         result = self.execute_module(changed=False)
         parsed_list = [
-            {
-                "description": "Configured and Merged by Ansible-Network",
-                "duplex": "half",
-                "enabled": True,
-                "mtu": 110,
-                "name": "GigabitEthernet0/0/0/0"
-            },
-            {
-                "description": "Configured and Merged by Ansible-Network",
-                "enabled": True,
-                "mtu": 2800,
-                "name": "GigabitEthernet0/0/0/1",
-                "speed": 100
-            }
+
         ]
 
         self.assertEqual(parsed_list, result["parsed"])
 
-    def test_iosxr_interfaces_overridden(self):
+    def test_iosxr_l2_interfaces_overridden(self):
         self.maxDiff = None
         self._prepare()
         set_module_args(dict(config=[
                     dict(
-                        name="GigabitEthernet0/0/0/1",
-                        description="Configured and Overridden by Ansible-Network",
-                        mtu=2000,
-                        enabled=False,
-                        duplex="full",
-                        speed=100
+                        name="GigabitEthernet0/0/0/4",
+                        l2transport=True,
+                        l2protocol=[dict(cpsv="tunnel")]
+                    ),
+                    dict(
+                        name="GigabitEthernet0/0/0/3.900",
+                        encapsulation=dict(
+                            dot1q=40,
+                            second_dot1q=60
+                        )
                     ),
                 ],
             state="overridden")
         )
         commands = [
-            "interface GigabitEthernet0/0/0/0",
-            "no description",
-            "no mtu",
-            "no duplex",
-            "interface GigabitEthernet0/0/0/1",
-            "description Configured and Overridden by Ansible-Network",
-            "mtu 2000",
-            "duplex full",
-            "shutdown"
+            "interface GigabitEthernet0/0/0/4",
+            "l2transport l2protocol cpsv tunnel",
+            "l2transport propagate remote-status",
+            "interface GigabitEthernet0/0/0/3.900",
+            "encapsulation dot1q 20 second-dot1q 40",
         ]
 
         result = self.execute_module(changed=True)
