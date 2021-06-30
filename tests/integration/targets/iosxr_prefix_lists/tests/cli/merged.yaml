@@ -44,9 +44,9 @@
             \ == 0 }}"
 
     - name: Assert that before dicts were correctly generated
-        assert:
-          that:
-            "{{ merged['before'] | symmetric_difference(result['before']) |length\
+      assert:
+        that:
+          - "{{ merged['before'] | symmetric_difference(result['before']) |length\
             \ == 0 }}"
 
     - name:
