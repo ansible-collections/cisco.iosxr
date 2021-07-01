@@ -70,6 +70,7 @@ class Grpc(GrpcBase):
 
     @ensure_connect
     def run_cli(self, command=None, display=None):
+        q("IN RUN_CLI")
         if command is None:
             raise ValueError("command value must be provided")
 
@@ -77,13 +78,16 @@ class Grpc(GrpcBase):
         stub = self._ems_grpc_pb2.beta_create_gRPCExec_stub(
             self._connection._channel
         )
+        
         message = self._ems_grpc_pb2.ShowCmdArgs(cli=command)
+        q(message, self._connection._channel)
         if display == "text":
             responses = stub.ShowCmdTextOutput(
                 message,
                 self._connection._timeout,
                 metadata=self._connection._login_credentials,
             )
+            q(responses)
             for response in responses:
                 output["response"] += response.output
                 output["error"] += response.errors
@@ -96,7 +100,7 @@ class Grpc(GrpcBase):
             for response in responses:
                 output["response"] += response.jsonoutput
                 output["error"] += response.errors
-
+        q(output)
         return output
 
     @property
