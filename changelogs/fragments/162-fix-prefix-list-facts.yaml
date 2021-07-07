@@ -1,0 +1,4 @@
+---
+bugfixes:
+  - fix issue in prefix-lists facts code when prefix-lists facts are empty.
+    (https://github.com/ansible-collections/cisco.iosxr/pull/161)
