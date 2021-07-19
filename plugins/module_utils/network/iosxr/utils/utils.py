@@ -413,7 +413,7 @@ def flatten_config(data, context):
     in_cxt = False
     cur = {}
 
-    for x in data:
+    for index, x in enumerate(data):
         cur_indent = len(x) - len(x.lstrip())
         if x.strip().startswith(context):
             in_cxt = True
@@ -422,5 +422,5 @@ def flatten_config(data, context):
         elif cur and (cur_indent <= cur["indent"]):
             in_cxt = False
         elif in_cxt:
-            data[data.index(x)] = cur["context"] + " " + x.strip()
+            data[index] = cur["context"] + " " + x.strip()
     return "\n".join(data)
