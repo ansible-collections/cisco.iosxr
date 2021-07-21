@@ -135,7 +135,7 @@ class Logging_global(ResourceModule):
             "files",
             "source_interfaces",
             "tls_servers",
-            "correlator.rule_set",
+            "correlator.rule_sets",
             "correlator.rules",
             "events.filter_match",
             "buffered.discriminator",
@@ -203,19 +203,19 @@ class Logging_global(ResourceModule):
                 data["correlator"]["rules"] = {
                     x["rule_name"]: x for x in data["correlator"]["rules"]
                 }
-            if "rule_set" in data["correlator"]:
-                rule_set = deepcopy(data["correlator"]["rule_set"])
-                data["correlator"]["rule_set"] = dict()
-                for x in rule_set:
+            if "rule_sets" in data["correlator"]:
+                rule_sets = deepcopy(data["correlator"]["rule_sets"])
+                data["correlator"]["rule_sets"] = dict()
+                for x in rule_sets:
                     if len(x.get("rulename", [])) > 0:
                         for y in x.get("rulename"):
                             new_data = {"rulename": y, "name": x["name"]}
-                            data["correlator"]["rule_set"].update(
+                            data["correlator"]["rule_sets"].update(
                                 {x["name"] + "_" + y: new_data}
                             )
 
                     else:
-                        data["correlator"]["rule_set"].update({x["name"]: x})
+                        data["correlator"]["rule_sets"].update({x["name"]: x})
 
         for x in ["buffered", "monitor", "console"]:
             if x in data:

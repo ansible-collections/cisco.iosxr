@@ -153,7 +153,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     ),
                     correlator=dict(
                         buffer_size=1024,
-                        rule_set=[
+                        rule_sets=[
                             dict(name="test", rulename=["test1", "test"])
                         ],
                         rules=[
@@ -261,7 +261,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     ),
                     correlator=dict(
                         buffer_size=1024,
-                        rule_set=[
+                        rule_sets=[
                             dict(name="test", rulename=["test1", "test"])
                         ],
                         rules=[
@@ -709,7 +709,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     ),
                     correlator=dict(
                         buffer_size=1024,
-                        rule_set=[
+                        rule_sets=[
                             dict(name="test", rulename=["test1", "test"])
                         ],
                         rules=[
@@ -1091,7 +1091,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
             },
             "correlator": {
                 "buffer_size": 1024,
-                "rule_set": [{"name": "test", "rulename": ["test"]}],
+                "rule_sets": [{"name": "test", "rulename": ["test"]}],
                 "rules": [
                     {
                         "context_correlation": True,
@@ -1203,7 +1203,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
             },
             "correlator": {
                 "buffer_size": 1024,
-                "rule_set": [{"name": "test", "rulename": ["test1"]}],
+                "rule_sets": [{"name": "test", "rulename": ["test1"]}],
                 "rules": [
                     {
                         "context_correlation": True,

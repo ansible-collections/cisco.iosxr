@@ -21,8 +21,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 
 
 def tmplt_host(config_data):
-    """
-    """
     command = "logging"
     if config_data.get("host"):
         command += " {host}".format(host=config_data["host"])
@@ -38,8 +36,6 @@ def tmplt_host(config_data):
 
 
 def tmplt_correlator_rule(config_data):
-    """
-    """
     commands = []
     rule_name = config_data.get("rule_name")
     rule_type = config_data.get("rule_type")
@@ -79,8 +75,6 @@ def tmplt_correlator_rule(config_data):
 
 
 def tmplt_correlator_ruleset(config_data):
-    """
-    """
     command = "logging correlator ruleset"
     if config_data.get("name"):
         command += "  {name}".format(name=config_data["name"])
@@ -92,8 +86,6 @@ def tmplt_correlator_ruleset(config_data):
 
 
 def tmplt_files(config_data):
-    """
-    """
     command = "logging"
     if config_data.get("name"):
         command += " file {name}".format(name=config_data["name"])
@@ -120,8 +112,6 @@ def tmplt_source_interface(config_data):
 
 
 def tmplt_tls_servers(config_data):
-    """
-    """
     commands = []
     name = config_data.get("name")
     base_command = "logging tls-server {name}".format(name=name)
@@ -155,8 +145,6 @@ def tmplt_tls_servers(config_data):
 
 
 def rem_tmplt_tls_servers(config_data):
-    """
-    """
     command = "logging tls-server"
     if config_data.get("name"):
         command += " {name}".format(name=config_data["name"])
@@ -416,7 +404,7 @@ class Logging_globalTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "correlator.rule_set",
+            "name": "correlator.rule_sets",
             "getval": re.compile(
                 r"""
                 ^logging\scorrelator\sruleset\s(?P<name>\S+)
@@ -425,7 +413,7 @@ class Logging_globalTemplate(NetworkTemplate):
             "setval": tmplt_correlator_ruleset,
             "result": {
                 "correlator": {
-                    "rule_set": {
+                    "rule_sets": {
                         "{{name}}": {
                             "name": "{{ name }}",
                             "rulename": ["{{ rulename }}"]

@@ -162,12 +162,15 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                                 "reparent": {"type": "bool"},
                             },
                         },
-                        "rule_set": {
+                        "rule_sets": {
                             "type": "list",
                             "elements": "dict",
                             "options": {
                                 "name": {"type": "str"},
-                                "rulename": {"type": "list", "elements": "str"},
+                                "rulename": {
+                                    "type": "list",
+                                    "elements": "str",
+                                },
                             },
                         },
                     },

@@ -79,12 +79,12 @@ class Logging_globalFacts(object):
             objs["correlator"]["rules"] = list(
                 objs.get("correlator", {}).get("rules", {}).values()
             )
-            objs["correlator"]["rule_set"] = list(
-                objs.get("correlator", {}).get("rule_set", {}).values()
+            objs["correlator"]["rule_sets"] = list(
+                objs.get("correlator", {}).get("rule_sets", {}).values()
             )
-            for i, x in enumerate(objs["correlator"]["rule_set"]):
+            for i, x in enumerate(objs["correlator"]["rule_sets"]):
                 if None in x["rulename"]:
-                    objs["correlator"]["rule_set"][i]["rulename"].remove(None)
+                    objs["correlator"]["rule_sets"][i]["rulename"].remove(None)
 
         ansible_facts["ansible_network_resources"].pop("logging_global", None)
 

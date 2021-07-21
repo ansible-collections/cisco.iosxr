@@ -136,7 +136,7 @@ options:
               reparent:
                 type: bool
                 description: Specify reparent of alarm on parent clear.This option is allowed for the rules whose type is stateful.
-          rule_set:
+          rule_sets:
             type: list
             elements: dict
             description: Configure a specified correlation ruleset.
