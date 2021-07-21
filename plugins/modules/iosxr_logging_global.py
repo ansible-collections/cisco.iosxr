@@ -1122,7 +1122,6 @@ EXAMPLES = """
 #         "logging tls-server test vrf test"
 #     ]
 #
-#
 # Using overridden:
 # ---------------------------------------------------------------------------------
 # Before state:
