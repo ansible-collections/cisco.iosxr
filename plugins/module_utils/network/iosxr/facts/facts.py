@@ -104,7 +104,7 @@ FACT_RESOURCE_SUBSETS = dict(
     bgp_address_family=Bgp_address_familyFacts,
     bgp_global=Bgp_globalFacts,
     prefix_lists=Prefix_listsFacts,
-    logging_global=Logging_globalFacts
+    logging_global=Logging_globalFacts,
 )
 
 

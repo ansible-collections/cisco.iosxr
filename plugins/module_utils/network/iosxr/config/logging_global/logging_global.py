@@ -78,8 +78,13 @@ class Logging_global(ResourceModule):
             "monitor.discriminator",
             "history.size",
             "history.severity",
-            "trap"
+            "trap.severity",
+            "trap.state",
+            "monitor.state",
+            "history.state",
+            "console.state",
         ]
+
     def execute_module(self):
         """ Execute the module
 
@@ -125,18 +130,31 @@ class Logging_global(ResourceModule):
         """
             Handles list attributes from config_data
         """
-        for x in ["hosts", "files", "source_interfaces", "tls_servers", "correlator.rule_set",
-                  "correlator.rules", "events.filter_match", "buffered.discriminator", "monitor.discriminator",
-                  "console.discriminator"]:
+        for x in [
+            "hosts",
+            "files",
+            "source_interfaces",
+            "tls_servers",
+            "correlator.rule_set",
+            "correlator.rules",
+            "events.filter_match",
+            "buffered.discriminator",
+            "monitor.discriminator",
+            "console.discriminator",
+        ]:
             wantx = want.get(x, {})
             havex = have.get(x, {})
             if "." in x:
                 complex_parser = x.split(".")
-                wantx = want.get(complex_parser[0], {}).get(complex_parser[1], {})
-                havex = have.get(complex_parser[0], {}).get(complex_parser[1], {})
+                wantx = want.get(complex_parser[0], {}).get(
+                    complex_parser[1], {}
+                )
+                havex = have.get(complex_parser[0], {}).get(
+                    complex_parser[1], {}
+                )
 
             if x in ["tls_servers", "correlator.rules"]:
-                #handling complex parsers for replaced and overridden state
+                # handling complex parsers for replaced and overridden state
 
                 for key, wentry in iteritems(wantx):
                     hentry = havex.pop(key, {})
@@ -161,24 +179,19 @@ class Logging_global(ResourceModule):
 
         data = deepcopy(config)
         if "tls_servers" in data:
-            data["tls_servers"] = {
-                x["name"]: x for x in data["tls_servers"]
-            }
+            data["tls_servers"] = {x["name"]: x for x in data["tls_servers"]}
 
         if "source_interfaces" in data:
             data["source_interfaces"] = {
-                x["interface"]: x for x in data["source_interfaces"]
+                x["interface"] + "_" + x.get("vrf", ""): x
+                for x in data["source_interfaces"]
             }
 
         if "files" in data:
-            data["files"] = {
-                x["name"]: x for x in data["files"]
-            }
+            data["files"] = {x["name"]: x for x in data["files"]}
 
         if "hosts" in data:
-            data["hosts"] = {
-                x["host"]: x for x in data["hosts"]
-            }
+            data["hosts"] = {x["host"]: x for x in data["hosts"]}
         if "events" in data:
             if "filter_match" in data["events"]:
                 data["events"]["filter_match"] = {
@@ -196,11 +209,10 @@ class Logging_global(ResourceModule):
                 for x in rule_set:
                     if len(x.get("rulename", [])) > 0:
                         for y in x.get("rulename"):
-                            new_data = {
-                                "rulename": y,
-                                "name": x["name"]
-                            }
-                            data["correlator"]["rule_set"].update({x["name"] + "_" + y: new_data})
+                            new_data = {"rulename": y, "name": x["name"]}
+                            data["correlator"]["rule_set"].update(
+                                {x["name"] + "_" + y: new_data}
+                            )
 
                     else:
                         data["correlator"]["rule_set"].update({x["name"]: x})
@@ -209,6 +221,7 @@ class Logging_global(ResourceModule):
             if x in data:
                 if "discriminator" in data[x]:
                     data[x]["discriminator"] = {
-                        x["match_params"] + "_" + x["name"]: x for x in data[x]["discriminator"]
-                 }
+                        x["match_params"] + "_" + x["name"]: x
+                        for x in data[x]["discriminator"]
+                    }
         return data

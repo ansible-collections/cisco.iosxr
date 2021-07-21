@@ -14,9 +14,7 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-from copy import deepcopy
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
@@ -30,11 +28,12 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.ut
     flatten_config,
 )
 
+
 class Logging_globalFacts(object):
     """ The iosxr logging_global facts class
     """
 
-    def __init__(self, module, subspec='config', options='options'):
+    def __init__(self, module, subspec="config", options="options"):
         self._module = module
         self.argument_spec = Logging_globalArgs.argument_spec
 
@@ -57,30 +56,45 @@ class Logging_globalFacts(object):
         if not data:
             data = self.get_config(connection)
 
-        flatten_context_list = ["logging archive", "logging tls-server", "logging correlator rule",
-                                "logging correlator ruleset", "logging events filter", "logging buffered discriminator",
-                                "logging monitor discriminator", "logging console discriminator"]
+        flatten_context_list = [
+            "logging archive",
+            "logging tls-server",
+            "logging correlator rule",
+            "logging correlator ruleset",
+            "logging events filter",
+            "logging buffered discriminator",
+            "logging monitor discriminator",
+            "logging console discriminator",
+        ]
 
         for x in flatten_context_list:
             data = flatten_config(data, x)
         # parse native config using the Logging_global template
-        logging_global_parser = Logging_globalTemplate(lines=data.splitlines(), module=self._module)
+        logging_global_parser = Logging_globalTemplate(
+            lines=data.splitlines(), module=self._module
+        )
         objs = logging_global_parser.parse()
         objs["tls_servers"] = list(objs.get("tls_servers", {}).values())
         if objs.get("correlator"):
-            objs["correlator"]["rules"] = list(objs.get("correlator", {}).get("rules", {}).values())
-            objs["correlator"]["rule_set"] = list(objs.get("correlator", {}).get("rule_set", {}).values())
+            objs["correlator"]["rules"] = list(
+                objs.get("correlator", {}).get("rules", {}).values()
+            )
+            objs["correlator"]["rule_set"] = list(
+                objs.get("correlator", {}).get("rule_set", {}).values()
+            )
             for i, x in enumerate(objs["correlator"]["rule_set"]):
                 if None in x["rulename"]:
                     objs["correlator"]["rule_set"][i]["rulename"].remove(None)
 
-        ansible_facts['ansible_network_resources'].pop('logging_global', None)
+        ansible_facts["ansible_network_resources"].pop("logging_global", None)
 
         params = utils.remove_empties(
-            logging_global_parser.validate_config(self.argument_spec, {"config": objs}, redact=True)
+            logging_global_parser.validate_config(
+                self.argument_spec, {"config": objs}, redact=True
+            )
         )
 
-        facts['logging_global'] = params.get('config', {})
-        ansible_facts['ansible_network_resources'].update(facts)
+        facts["logging_global"] = params.get("config", {})
+        ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts

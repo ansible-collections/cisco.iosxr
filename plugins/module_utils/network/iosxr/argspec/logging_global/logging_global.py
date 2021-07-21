@@ -105,6 +105,10 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                 "console": {
                     "type": "dict",
                     "options": {
+                        "state": {
+                            "type": "str",
+                            "choices": ["enabled", "disabled"],
+                        },
                         "severity": {
                             "type": "str",
                             "choices": [
@@ -116,7 +120,6 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                                 "informational",
                                 "notifications",
                                 "warning",
-                                "disable",
                             ],
                         },
                         "discriminator": {
@@ -226,7 +229,7 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                     "options": {
                         "name": {"type": "str"},
                         "path": {"type": "str"},
-                        "maxfilesize": {},
+                        "maxfilesize": {"type": "int"},
                         "severity": {
                             "type": "str",
                             "choices": [
@@ -246,6 +249,10 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                 "history": {
                     "type": "dict",
                     "options": {
+                        "state": {
+                            "type": "str",
+                            "choices": ["enabled", "disabled"],
+                        },
                         "size": {"type": "int"},
                         "severity": {
                             "type": "str",
@@ -258,7 +265,6 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                                 "informational",
                                 "notifications",
                                 "warnings",
-                                "disable",
                             ],
                         },
                     },
@@ -282,6 +288,10 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                 "monitor": {
                     "type": "dict",
                     "options": {
+                        "state": {
+                            "type": "str",
+                            "choices": ["enabled", "disabled"],
+                        },
                         "discriminator": {
                             "type": "list",
                             "elements": "dict",
@@ -311,7 +321,6 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                                 "informational",
                                 "notifications",
                                 "warning",
-                                "disable",
                             ],
                         },
                     },
@@ -357,6 +366,10 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                 "trap": {
                     "type": "dict",
                     "options": {
+                        "state": {
+                            "type": "str",
+                            "choices": ["enabled", "disabled"],
+                        },
                         "severity": {
                             "type": "str",
                             "choices": [
@@ -368,9 +381,8 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                                 "informational",
                                 "notifications",
                                 "warning",
-                                "disable",
                             ],
-                        }
+                        },
                     },
                 },
                 "hosts": {
@@ -391,7 +403,7 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                             ],
                         },
                         "host": {"type": "str"},
-                        "port": {"type": "str"},
+                        "port": {"type": "str", "default": "default"},
                         "vrf": {"type": "str", "default": "default"},
                     },
                 },

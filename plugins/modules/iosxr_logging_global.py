@@ -85,6 +85,10 @@ options:
         description: Set console logging parameters
         type: dict
         suboptions:
+          state: &state
+            description: Enable or disable logging.
+            type: str
+            choices: [ "enabled", "disabled" ]
           severity: &severity1
             description: Logging severity level
             type: str
@@ -97,7 +101,6 @@ options:
               - informational
               - notifications
               - warning
-              - disable
           discriminator: *discriminator
       correlator:
         description: Configure properties of the event correlator
@@ -203,6 +206,7 @@ options:
             description: Set file path.
             type: str
           maxfilesize:
+            type: int
             description: Set max file size.
           severity:
             description: Logging severity level
@@ -223,6 +227,7 @@ options:
         description: Configure syslog history table
         type: dict
         suboptions:
+          state: *state
           size: *size
           severity:
             description: Logging severity level
@@ -236,7 +241,6 @@ options:
               - informational
               - notifications
               - warnings
-              - disable
       hostnameprefix:
         type: str
         description: Hostname prefix to add on msgs to servers.
@@ -258,6 +262,7 @@ options:
         description: Set terminal line (monitor) logging parameters
         type: dict
         suboptions:
+          state: *state
           discriminator: *discriminator
           severity: *severity1
       source_interfaces:
@@ -303,6 +308,7 @@ options:
         description: Set syslog server logging level
         type: dict
         suboptions:
+          state: *state
           severity: *severity1
       hosts:
         description: Set syslog server IP address and parameters
@@ -327,6 +333,7 @@ options:
           port:
             description: Set <0-65535>  non-default Port.
             type: str
+            default: default
           vrf:
             description: Set VRF option
             type: str
@@ -353,18 +360,958 @@ options:
     description:
       - The state the configuration should be left in
     type: str
-required_if:
-  - ["state", "merged", ["config"]]
-  - ["state", "replaced", ["config"]]
-  - ["state", "overridden", ["config"]]
-  - ["state", "rendered", ["config"]]
-  - ["state", "parsed", ["running_config"]]
-mutually_exclusive:
-  - ["config", "running_config"]
-supports_check_mode: True
 """
 EXAMPLES = """
-
+# Using merged
+#-----------------
+# Before state
+#RP/0/0/CPU0:10#show running-config logging
+#Thu Feb  4 09:38:36.245 UTC
+#% No such configuration item(s)
+#RP/0/0/CPU0:10#
+#
+#
+#  - name: Merge the provided configuration with the existing running configuration
+#    cisco.iosxr.iosxr_logging_global:
+#         config:
+#           buffered:
+#             size: 2097152
+#             severity: warnings
+#           correlator:
+#             buffer_size: 1024
+#           events:
+#             display_location: True
+#           files:
+#             - maxfilesize: '1024'
+#               name: test
+#               path: test
+#               severity: info
+#           hostnameprefix: test
+#           hosts:
+#             - host: 1.1.1.1
+#               port: default
+#               severity: critical
+#               vrf: default
+#           ipv4:
+#             dscp: af11
+#           localfilesize: 1024
+#           monitor:
+#             severity: errors
+#           source_interfaces:
+#             - interface: GigabitEthernet0/0/0/0
+#               vrf: test
+#           tls_servers:
+#             - name: test
+#               tls_hostname: test2
+#               trustpoint: test2
+#               vrf: test
+#           trap:
+#             severity: informational
+#         state: merged
+#
+#
+# After state:
+#-------------------------------------------
+#RP/0/0/CPU0:10#show running-config logging
+# Tue Jul 20 18:09:18.491 UTC
+# logging tls-server test
+#  vrf test
+#  trustpoint test2
+#  tls-hostname test2
+# !
+# logging file test path test maxfilesize 1024 severity info
+# logging ipv4 dscp af11
+# logging trap informational
+# logging events display-location
+# logging monitor errors
+# logging buffered 2097152
+# logging buffered warnings
+# logging 1.1.1.1 vrf default severity critical port default
+# logging correlator buffer-size 1024
+# logging localfilesize 1024
+# logging source-interface GigabitEthernet0/0/0/0 vrf test
+# logging hostnameprefix test
+#------------------------------------------------
+#Module execution
+#
+#     "after": {
+#         "buffered": {
+#             "severity": "errors"
+#         },
+#         "correlator": {
+#             "buffer_size": 1024
+#         },
+#         "files": [
+#             {
+#                 "maxfilesize": "1024",
+#                 "name": "test",
+#                 "path": "test1",
+#                 "severity": "info"
+#             }
+#         ],
+#         "hostnameprefix": "test1",
+#         "hosts": [
+#             {
+#                 "host": "1.1.1.3",
+#                 "port": "default",
+#                 "severity": "critical",
+#                 "vrf": "default"
+#             }
+#         ],
+#         "ipv6": {
+#             "dscp": "af11"
+#         },
+#         "localfilesize": 1024,
+#         "source_interfaces": [
+#             {
+#                 "interface": "GigabitEthernet0/0/0/0",
+#                 "vrf": "test1"
+#             }
+#         ],
+#         "tls_servers": [
+#             {
+#                 "name": "test",
+#                 "tls_hostname": "test2",
+#                 "trustpoint": "test",
+#                 "vrf": "test"
+#             }
+#         ]
+#     },
+#     "before": {},
+#     "changed": true,
+#     "commands": [
+#         "logging buffered errors",
+#         "logging correlator buffer-size 1024",
+#         "logging hostnameprefix test1",
+#         "logging ipv6 dscp af11",
+#         "logging localfilesize 1024",
+#         "logging trap disable",
+#         "logging monitor disable",
+#         "logging history disable",
+#         "logging console disable",
+#         "logging 1.1.1.3 vrf default severity critical port default",
+#         "logging file test path test1 maxfilesize 1024 severity info",
+#         "logging source-interface GigabitEthernet0/0/0/0 vrf test1",
+#         "logging tls-server test tls-hostname test2",
+#         "logging tls-server test trustpoint test",
+#         "logging tls-server test vrf test"
+#     ],
+#     "invocation": {
+#         "module_args": {
+#             "config": {
+#                 "archive": null,
+#                 "buffered": {
+#                     "discriminator": null,
+#                     "severity": "errors",
+#                     "size": null
+#                 },
+#                 "console": {
+#                     "discriminator": null,
+#                     "severity": null,
+#                     "state": "disabled"
+#                 },
+#                 "correlator": {
+#                     "buffer_size": 1024,
+#                     "rule_set": null,
+#                     "rules": null
+#                 },
+#                 "events": null,
+#                 "facility": null,
+#                 "files": [
+#                     {
+#                         "maxfilesize": "1024",
+#                         "name": "test",
+#                         "path": "test1",
+#                         "severity": "info"
+#                     }
+#                 ],
+#                 "format": null,
+#                 "history": {
+#                     "severity": null,
+#                     "size": null,
+#                     "state": "disabled"
+#                 },
+#                 "hostnameprefix": "test1",
+#                 "hosts": [
+#                     {
+#                         "host": "1.1.1.3",
+#                         "port": "default",
+#                         "severity": "critical",
+#                         "vrf": "default"
+#                     }
+#                 ],
+#                 "ipv4": null,
+#                 "ipv6": {
+#                     "dscp": "af11",
+#                     "precedence": null
+#                 },
+#                 "localfilesize": 1024,
+#                 "monitor": {
+#                     "discriminator": null,
+#                     "severity": null,
+#                     "state": "disabled"
+#                 },
+#                 "source_interfaces": [
+#                     {
+#                         "interface": "GigabitEthernet0/0/0/0",
+#                         "vrf": "test1"
+#                     }
+#                 ],
+#                 "suppress": null,
+#                 "tls_servers": [
+#                     {
+#                         "name": "test",
+#                         "severity": null,
+#                         "tls_hostname": "test2",
+#                         "trustpoint": "test",
+#                         "vrf": "test"
+#                     }
+#                 ],
+#                 "trap": {
+#                     "severity": null,
+#                     "state": "disabled"
+#                 }
+#             },
+#             "running_config": null,
+#             "state": "merged"
+#         }
+#     }
+# }
+#
+# Using replaced:
+# -----------------------------------------------------------
+#
+#Before state
+#RP/0/0/CPU0:10#show running-config logging
+# Tue Jul 20 18:09:18.491 UTC
+# logging tls-server test
+#  vrf test
+#  trustpoint test2
+#  tls-hostname test2
+# !
+# logging file test path test maxfilesize 1024 severity info
+# logging ipv4 dscp af11
+# logging trap informational
+# logging events display-location
+# logging monitor errors
+# logging buffered 2097152
+# logging buffered warnings
+# logging 1.1.1.1 vrf default severity critical port default
+# logging correlator buffer-size 1024
+# logging localfilesize 1024
+# logging source-interface GigabitEthernet0/0/0/0 vrf test
+# logging hostnameprefix test
+#-----------------------------------------------------------
+#
+# - name: Replace BGP configuration with provided configuration
+#   cisco.iosxr.iosxr_logging_global:
+#     state: replaced
+#     config:
+#           buffered:
+#             severity: errors
+#           correlator:
+#             buffer_size: 1024
+#           files:
+#             - maxfilesize: '1024'
+#               name: test
+#               path: test1
+#               severity: info
+#           hostnameprefix: test1
+#           hosts:
+#             - host: 1.1.1.3
+#               port: default
+#               severity: critical
+#               vrf: default
+#           ipv6:
+#             dscp: af11
+#           localfilesize: 1024
+#           monitor:
+#             severity: errors
+#           tls_servers:
+#             - name: test
+#               tls_hostname: test2
+#               trustpoint: test
+#               vrf: test
+#           trap:
+#             severity: critical
+#
+# After state:
+#RP/0/0/CPU0:10#show running-config logging
+# Tue Jul 20 18:31:51.709 UTC
+# logging tls-server test
+#  vrf test
+#  trustpoint test
+#  tls-hostname test2
+# !
+# logging file test path test1 maxfilesize 1024 severity info
+# logging ipv6 dscp af11
+# logging trap critical
+# logging monitor errors
+# logging buffered errors
+# logging 1.1.1.3 vrf default severity critical port default
+# logging correlator buffer-size 1024
+# logging localfilesize 1024
+# logging hostnameprefix test1
+#-----------------------------------------------------------------
+#
+# Module Execution:
+# "after": {
+#         "buffered": {
+#             "severity": "errors"
+#         },
+#         "correlator": {
+#             "buffer_size": 1024
+#         },
+#         "files": [
+#             {
+#                 "maxfilesize": "1024",
+#                 "name": "test",
+#                 "path": "test1",
+#                 "severity": "info"
+#             }
+#         ],
+#         "hostnameprefix": "test1",
+#         "hosts": [
+#             {
+#                 "host": "1.1.1.3",
+#                 "port": "default",
+#                 "severity": "critical",
+#                 "vrf": "default"
+#             }
+#         ],
+#         "ipv6": {
+#             "dscp": "af11"
+#         },
+#         "localfilesize": 1024,
+#         "monitor": {
+#             "severity": "errors"
+#         },
+#         "tls_servers": [
+#             {
+#                 "name": "test",
+#                 "tls_hostname": "test2",
+#                 "trustpoint": "test",
+#                 "vrf": "test"
+#             }
+#         ],
+#         "trap": {
+#             "severity": "critical"
+#         }
+#     },
+#     "before": {
+#         "buffered": {
+#             "severity": "warnings",
+#             "size": 2097152
+#         },
+#         "correlator": {
+#             "buffer_size": 1024
+#         },
+#         "events": {
+#             "display_location": true
+#         },
+#         "files": [
+#             {
+#                 "maxfilesize": "1024",
+#                 "name": "test",
+#                 "path": "test",
+#                 "severity": "info"
+#             }
+#         ],
+#         "hostnameprefix": "test",
+#         "hosts": [
+#             {
+#                 "host": "1.1.1.1",
+#                 "port": "default",
+#                 "severity": "critical",
+#                 "vrf": "default"
+#             }
+#         ],
+#         "ipv4": {
+#             "dscp": "af11"
+#         },
+#         "localfilesize": 1024,
+#         "monitor": {
+#             "severity": "errors"
+#         },
+#         "source_interfaces": [
+#             {
+#                 "interface": "GigabitEthernet0/0/0/0",
+#                 "vrf": "test"
+#             }
+#         ],
+#         "tls_servers": [
+#             {
+#                 "name": "test",
+#                 "tls_hostname": "test2",
+#                 "trustpoint": "test2",
+#                 "vrf": "test"
+#             }
+#         ],
+#         "trap": {
+#             "severity": "informational"
+#         }
+#     },
+#     "changed": true,
+#     "commands": [
+#         "no logging buffered 2097152",
+#         "no logging events display-location",
+#         "no logging ipv4 dscp af11",
+#         "no logging 1.1.1.1 vrf default severity critical port default",
+#         "no logging source-interface GigabitEthernet0/0/0/0 vrf test",
+#         "logging buffered errors",
+#         "logging hostnameprefix test1",
+#         "logging ipv6 dscp af11",
+#         "logging trap critical",
+#         "logging 1.1.1.3 vrf default severity critical port default",
+#         "logging file test path test1 maxfilesize 1024 severity info",
+#         "logging tls-server test trustpoint test"
+#     ],
+#
+#
+#
+# Using deleted:
+# -----------------------------------------------------------
+# Before state:
+#RP/0/0/CPU0:10#show running-config logging
+# Tue Jul 20 18:09:18.491 UTC
+# logging tls-server test
+#  vrf test
+#  trustpoint test2
+#  tls-hostname test2
+# !
+# logging file test path test maxfilesize 1024 severity info
+# logging ipv4 dscp af11
+# logging trap informational
+# logging events display-location
+# logging monitor errors
+# logging buffered 2097152
+# logging buffered warnings
+# logging 1.1.1.1 vrf default severity critical port default
+# logging correlator buffer-size 1024
+# logging localfilesize 1024
+# logging source-interface GigabitEthernet0/0/0/0 vrf test
+# logging hostnameprefix test
+#
+#-----------------------------------------------------------
+# - name: Delete given logging_global configuration
+#   cisco.iosxr.iosxr_logging_global:
+#     state: deleted
+#
+# After state:
+#RP/0/0/CPU0:10#show running-config
+#
+#-------------------------------------------------------------
+# Module Execution:
+#
+# "after": {},
+#     "before": {
+#         "buffered": {
+#             "severity": "warnings",
+#             "size": 2097152
+#         },
+#         "correlator": {
+#             "buffer_size": 1024
+#         },
+#         "events": {
+#             "display_location": true
+#         },
+#         "files": [
+#             {
+#                 "maxfilesize": "1024",
+#                 "name": "test",
+#                 "path": "test",
+#                 "severity": "info"
+#             }
+#         ],
+#         "hostnameprefix": "test",
+#         "hosts": [
+#             {
+#                 "host": "1.1.1.1",
+#                 "port": "default",
+#                 "severity": "critical",
+#                 "vrf": "default"
+#             }
+#         ],
+#         "ipv4": {
+#             "dscp": "af11"
+#         },
+#         "localfilesize": 1024,
+#         "monitor": {
+#             "severity": "errors"
+#         },
+#         "source_interfaces": [
+#             {
+#                 "interface": "GigabitEthernet0/0/0/0",
+#                 "vrf": "test"
+#             }
+#         ],
+#         "tls_servers": [
+#             {
+#                 "name": "test",
+#                 "tls_hostname": "test2",
+#                 "trustpoint": "test2",
+#                 "vrf": "test"
+#             }
+#         ],
+#         "trap": {
+#             "severity": "informational"
+#         }
+#     },
+#     "changed": true,
+#     "commands": [
+#         "no logging buffered 2097152",
+#         "no logging buffered warnings",
+#         "no logging correlator buffer-size 1024",
+#         "no logging events display-location",
+#         "no logging hostnameprefix test",
+#         "no logging ipv4 dscp af11",
+#         "no logging localfilesize 1024",
+#         "no logging monitor errors",
+#         "no logging trap informational",
+#         "no logging 1.1.1.1 vrf default severity critical port default",
+#         "no logging file test path test maxfilesize 1024 severity info",
+#         "no logging source-interface GigabitEthernet0/0/0/0 vrf test",
+#         "no logging tls-server test"
+#     ],
+#     "invocation": {
+#         "module_args": {
+#             "config": null,
+#             "running_config": null,
+#             "state": "deleted"
+#         }
+#     }
+#
+#
+#
+# using gathered:
+# ------------------------------------------------------------
+# Before state:
+#RP/0/0/CPU0:10#show running-config logging
+# Tue Jul 20 18:09:18.491 UTC
+# logging tls-server test
+#  vrf test
+#  trustpoint test2
+#  tls-hostname test2
+# !
+# logging file test path test maxfilesize 1024 severity info
+# logging ipv4 dscp af11
+# logging trap informational
+# logging events display-location
+# logging monitor errors
+# logging buffered 2097152
+# logging buffered warnings
+# logging 1.1.1.1 vrf default severity critical port default
+# logging correlator buffer-size 1024
+# logging localfilesize 1024
+# logging source-interface GigabitEthernet0/0/0/0 vrf test
+# logging hostnameprefix test
+#
+#
+# - name: Gather iosxr_logging_global facts using gathered state
+#   cisco.iosxr.iosxr_logging_global:
+#     state: gathered
+#
+#-------------------------------------------------------------
+# Module Execution:
+#
+# "changed": false,
+# "gathered": {
+#         "buffered": {
+#             "severity": "warnings",
+#             "size": 2097152
+#         },
+#         "correlator": {
+#             "buffer_size": 1024
+#         },
+#         "events": {
+#             "display_location": true
+#         },
+#         "files": [
+#             {
+#                 "maxfilesize": "1024",
+#                 "name": "test",
+#                 "path": "test",
+#                 "severity": "info"
+#             }
+#         ],
+#         "hostnameprefix": "test",
+#         "hosts": [
+#             {
+#                 "host": "1.1.1.1",
+#                 "port": "default",
+#                 "severity": "critical",
+#                 "vrf": "default"
+#             }
+#         ],
+#         "ipv4": {
+#             "dscp": "af11"
+#         },
+#         "localfilesize": 1024,
+#         "monitor": {
+#             "severity": "errors"
+#         },
+#         "source_interfaces": [
+#             {
+#                 "interface": "GigabitEthernet0/0/0/0",
+#                 "vrf": "test"
+#             }
+#         ],
+#         "tls_servers": [
+#             {
+#                 "name": "test",
+#                 "tls_hostname": "test2",
+#                 "trustpoint": "test2",
+#                 "vrf": "test"
+#             }
+#         ],
+#         "trap": {
+#             "severity": "informational"
+#         }
+#     },
+#     "invocation": {
+#         "module_args": {
+#             "config": null,
+#             "running_config": null,
+#             "state": "gathered"
+#         }
+# }
+#
+#
+# Using parsed:
+#---------------------------------------------------------------
+#
+# parsed.cfg
+#
+# logging tls-server test
+#  vrf test
+#  trustpoint test2
+#  tls-hostname test2
+# !
+# logging file test path test maxfilesize 1024 severity info
+# logging ipv4 dscp af11
+# logging trap informational
+# logging events display-location
+# logging monitor errors
+# logging buffered 2097152
+# logging buffered warnings
+# logging 1.1.1.1 vrf default severity critical port default
+# logging correlator buffer-size 1024
+# logging localfilesize 1024
+# logging source-interface GigabitEthernet0/0/0/0 vrf test
+# logging hostnameprefix test
+#
+#
+# - name: Parse externally provided Prefix_lists config to agnostic model
+#   cisco.iosxr.iosxr_prefix_lists:
+#     running_config: "{{ lookup('file', './fixtures/parsed.cfg') }}"
+#     state: parsed
+#----------------------------------------------------------------
+# Module execution:
+# "changed": false,
+# "parsed": {
+#         "buffered": {
+#             "severity": "warnings",
+#             "size": 2097152
+#         },
+#         "correlator": {
+#             "buffer_size": 1024
+#         },
+#         "events": {
+#             "display_location": true
+#         },
+#         "files": [
+#             {
+#                 "maxfilesize": "1024",
+#                 "name": "test",
+#                 "path": "test",
+#                 "severity": "info"
+#             }
+#         ],
+#         "hostnameprefix": "test",
+#         "hosts": [
+#             {
+#                 "host": "1.1.1.1",
+#                 "port": "default",
+#                 "severity": "critical",
+#                 "vrf": "default"
+#             }
+#         ],
+#         "ipv4": {
+#             "dscp": "af11"
+#         },
+#         "localfilesize": 1024,
+#         "monitor": {
+#             "severity": "errors"
+#         },
+#         "source_interfaces": [
+#             {
+#                 "interface": "GigabitEthernet0/0/0/0",
+#                 "vrf": "test"
+#             }
+#         ],
+#         "tls_servers": [
+#             {
+#                 "name": "test",
+#                 "tls_hostname": "test2",
+#                 "trustpoint": "test2",
+#                 "vrf": "test"
+#             }
+#         ],
+#         "trap": {
+#             "severity": "informational"
+#         }
+#     }
+#
+#
+# Using rendered:
+# ----------------------------------------------------------------------------
+# - name: Render platform specific configuration lines with state rendered (without connecting to the device)
+#   cisco.iosxr.iosxr_logging_global:
+#     state: rendered
+#     config:
+#       buffered:
+#         size: 2097152
+#         severity: warnings
+#       correlator:
+#         buffer_size: 1024
+#       events:
+#         display_location: True
+#       files:
+#         - maxfilesize: '1024'
+#           name: test
+#           path: test
+#           severity: info
+#       hostnameprefix: test
+#       hosts:
+#         - host: 1.1.1.1
+#           port: default
+#           severity: critical
+#           vrf: default
+#       ipv4:
+#         dscp: af11
+#       localfilesize: 1024
+#       monitor:
+#         severity: errors
+#       source_interfaces:
+#         - interface: GigabitEthernet0/0/0/0
+#           vrf: test
+#       tls_servers:
+#         - name: test
+#           tls_hostname: test2
+#           trustpoint: test2
+#           vrf: test
+#       trap:
+#         severity: informational
+#----------------------------------------------------------------
+# Module Execution:
+# "rendered": [
+#         "logging buffered errors",
+#         "logging correlator buffer-size 1024",
+#         "logging hostnameprefix test1",
+#         "logging ipv6 dscp af11",
+#         "logging localfilesize 1024",
+#         "logging trap disable",
+#         "logging monitor disable",
+#         "logging history disable",
+#         "logging console disable",
+#         "logging 1.1.1.3 vrf default severity critical port default",
+#         "logging file test path test1 maxfilesize 1024 severity info",
+#         "logging source-interface GigabitEthernet0/0/0/0 vrf test1",
+#         "logging tls-server test tls-hostname test2",
+#         "logging tls-server test trustpoint test",
+#         "logging tls-server test vrf test"
+#     ]
+#
+#
+# Using overridden:
+# ---------------------------------------------------------------------------------
+# Before state:
+#RP/0/0/CPU0:10#show running-config logging
+# Tue Jul 20 18:09:18.491 UTC
+# logging tls-server test
+#  vrf test
+#  trustpoint test2
+#  tls-hostname test2
+# !
+# logging file test path test maxfilesize 1024 severity info
+# logging ipv4 dscp af11
+# logging trap informational
+# logging events display-location
+# logging monitor errors
+# logging buffered 2097152
+# logging buffered warnings
+# logging 1.1.1.1 vrf default severity critical port default
+# logging correlator buffer-size 1024
+# logging localfilesize 1024
+# logging source-interface GigabitEthernet0/0/0/0 vrf test
+# logging hostnameprefix test
+#
+#-----------------------------------------------------------
+#
+# - name: Overridde BGP configuration with provided configuration
+#   cisco.iosxr.iosxr_logging_global: &id002
+#     state: overridden
+#     config:
+#           buffered:
+#             severity: errors
+#           correlator:
+#             buffer_size: 1024
+#           files:
+#             - maxfilesize: '1024'
+#               name: test
+#               path: test1
+#               severity: info
+#           hostnameprefix: test1
+#           hosts:
+#             - host: 1.1.1.3
+#               port: default
+#               severity: critical
+#               vrf: default
+#           ipv6:
+#             dscp: af11
+#           localfilesize: 1024
+#           monitor:
+#             severity: errors
+#           tls_servers:
+#             - name: test
+#               tls_hostname: test2
+#               trustpoint: test
+#               vrf: test
+#           trap:
+#             severity: critical
+#
+# After state:
+#RP/0/0/CPU0:10#show running-config logging
+# Tue Jul 20 18:31:51.709 UTC
+# logging tls-server test
+#  vrf test
+#  trustpoint test
+#  tls-hostname test2
+# !
+# logging file test path test1 maxfilesize 1024 severity info
+# logging ipv6 dscp af11
+# logging trap critical
+# logging monitor errors
+# logging buffered errors
+# logging 1.1.1.3 vrf default severity critical port default
+# logging correlator buffer-size 1024
+# logging localfilesize 1024
+# logging hostnameprefix test1
+#-----------------------------------------------------------------
+#
+# Module Execution:
+# "after": {
+#         "buffered": {
+#             "severity": "errors"
+#         },
+#         "correlator": {
+#             "buffer_size": 1024
+#         },
+#         "files": [
+#             {
+#                 "maxfilesize": "1024",
+#                 "name": "test",
+#                 "path": "test1",
+#                 "severity": "info"
+#             }
+#         ],
+#         "hostnameprefix": "test1",
+#         "hosts": [
+#             {
+#                 "host": "1.1.1.3",
+#                 "port": "default",
+#                 "severity": "critical",
+#                 "vrf": "default"
+#             }
+#         ],
+#         "ipv6": {
+#             "dscp": "af11"
+#         },
+#         "localfilesize": 1024,
+#         "monitor": {
+#             "severity": "errors"
+#         },
+#         "tls_servers": [
+#             {
+#                 "name": "test",
+#                 "tls_hostname": "test2",
+#                 "trustpoint": "test",
+#                 "vrf": "test"
+#             }
+#         ],
+#         "trap": {
+#             "severity": "critical"
+#         }
+#     },
+#     "before": {
+#         "buffered": {
+#             "severity": "warnings",
+#             "size": 2097152
+#         },
+#         "correlator": {
+#             "buffer_size": 1024
+#         },
+#         "events": {
+#             "display_location": true
+#         },
+#         "files": [
+#             {
+#                 "maxfilesize": "1024",
+#                 "name": "test",
+#                 "path": "test",
+#                 "severity": "info"
+#             }
+#         ],
+#         "hostnameprefix": "test",
+#         "hosts": [
+#             {
+#                 "host": "1.1.1.1",
+#                 "port": "default",
+#                 "severity": "critical",
+#                 "vrf": "default"
+#             }
+#         ],
+#         "ipv4": {
+#             "dscp": "af11"
+#         },
+#         "localfilesize": 1024,
+#         "monitor": {
+#             "severity": "errors"
+#         },
+#         "source_interfaces": [
+#             {
+#                 "interface": "GigabitEthernet0/0/0/0",
+#                 "vrf": "test"
+#             }
+#         ],
+#         "tls_servers": [
+#             {
+#                 "name": "test",
+#                 "tls_hostname": "test2",
+#                 "trustpoint": "test2",
+#                 "vrf": "test"
+#             }
+#         ],
+#         "trap": {
+#             "severity": "informational"
+#         }
+#     },
+#     "changed": true,
+#     "commands": [
+#         "no logging buffered 2097152",
+#         "no logging events display-location",
+#         "no logging ipv4 dscp af11",
+#         "no logging 1.1.1.1 vrf default severity critical port default",
+#         "no logging source-interface GigabitEthernet0/0/0/0 vrf test",
+#         "logging buffered errors",
+#         "logging hostnameprefix test1",
+#         "logging ipv6 dscp af11",
+#         "logging trap critical",
+#         "logging 1.1.1.3 vrf default severity critical port default",
+#         "logging file test path test1 maxfilesize 1024 severity info",
+#         "logging tls-server test trustpoint test"
+#     ],
+#
 """
 
 from ansible.module_utils.basic import AnsibleModule
