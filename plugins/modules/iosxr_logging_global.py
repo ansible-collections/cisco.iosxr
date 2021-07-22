@@ -1313,6 +1313,62 @@ EXAMPLES = """
 #
 """
 
+RETURN = """
+before:
+  description: The configuration prior to the module execution.
+  returned: when state is I(merged), I(replaced), I(overridden), I(deleted) or I(purged)
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+after:
+  description: The resulting configuration after module execution.
+  returned: when changed
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+commands:
+  description: The set of commands pushed to the remote device.
+  returned: when state is I(merged), I(replaced), I(overridden), I(deleted) or I(purged)
+  type: list
+  sample:
+    - "logging file test path test1 maxfilesize 1024 severity info"
+    - "logging ipv6 dscp af11"
+    - "logging trap critical"
+    - "logging monitor errors"
+    - "logging buffered errors"
+    - "logging 1.1.1.3 vrf default severity critical port default"
+rendered:
+  description: The provided configuration in the task rendered in device-native format (offline).
+  returned: when state is I(rendered)
+  type: list
+  sample:
+    - "logging buffered errors"
+    - "logging correlator buffer-size 1024"
+    - "logging hostnameprefix test1"
+    - "logging ipv6 dscp af11"
+    - "logging localfilesize 1024"
+    - "logging trap disable"
+    - "logging monitor disable"
+    - "logging history disable"
+    - "logging console disable"
+gathered:
+  description: Facts about the network resource gathered from the remote device as structured data.
+  returned: when state is I(gathered)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+parsed:
+  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
+  returned: when state is I(parsed)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+"""
+
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.logging_global.logging_global import (
     Logging_globalArgs,

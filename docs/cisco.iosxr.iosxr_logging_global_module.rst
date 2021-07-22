@@ -2715,6 +2715,123 @@ Examples
 
 
 
+Return Values
+-------------
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>after</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when changed</td>
+                <td>
+                            <div>The resulting configuration after module execution.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>before</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when state is <em>merged</em>, <em>replaced</em>, <em>overridden</em>, <em>deleted</em> or <em>purged</em></td>
+                <td>
+                            <div>The configuration prior to the module execution.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>commands</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when state is <em>merged</em>, <em>replaced</em>, <em>overridden</em>, <em>deleted</em> or <em>purged</em></td>
+                <td>
+                            <div>The set of commands pushed to the remote device.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;logging file test path test1 maxfilesize 1024 severity info&#x27;, &#x27;logging ipv6 dscp af11&#x27;, &#x27;logging trap critical&#x27;, &#x27;logging monitor errors&#x27;, &#x27;logging buffered errors&#x27;, &#x27;logging 1.1.1.3 vrf default severity critical port default&#x27;]</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>gathered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when state is <em>gathered</em></td>
+                <td>
+                            <div>Facts about the network resource gathered from the remote device as structured data.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>parsed</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when state is <em>parsed</em></td>
+                <td>
+                            <div>The device native config provided in <em>running_config</em> option parsed into structured data as per module argspec.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>rendered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when state is <em>rendered</em></td>
+                <td>
+                            <div>The provided configuration in the task rendered in device-native format (offline).</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;logging buffered errors&#x27;, &#x27;logging correlator buffer-size 1024&#x27;, &#x27;logging hostnameprefix test1&#x27;, &#x27;logging ipv6 dscp af11&#x27;, &#x27;logging localfilesize 1024&#x27;, &#x27;logging trap disable&#x27;, &#x27;logging monitor disable&#x27;, &#x27;logging history disable&#x27;, &#x27;logging console disable&#x27;]</div>
+                </td>
+            </tr>
+    </table>
+    <br/><br/>
+
 
 Status
 ------
