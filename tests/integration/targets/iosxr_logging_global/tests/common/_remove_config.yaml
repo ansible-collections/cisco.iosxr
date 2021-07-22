@@ -1,0 +1,6 @@
+---
+- name: "Remove logging config"
+  cisco.iosxr.iosxr_logging_global:
+    state: deleted
+  vars:
+    ansible_connection: ansible.netcommon.network_cli

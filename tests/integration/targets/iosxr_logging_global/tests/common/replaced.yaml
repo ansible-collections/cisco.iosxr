@@ -1,0 +1,59 @@
+---
+- debug:
+    msg: Start iosxr_logging_global replaced integration tests connection={{ ansible_connection}}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_config.yaml
+
+- block:
+    - name: Replace BGP configuration with provided configuration
+      cisco.iosxr.iosxr_logging_global:
+        config:
+          buffered:
+            severity: errors
+          correlator:
+            buffer_size: 1024
+          files:
+            - maxfilesize: 1024
+              name: test
+              path: test1
+              severity: info
+          hostnameprefix: test1
+          hosts:
+            - host: 1.1.1.3
+              port: default
+              severity: critical
+              vrf: default
+          ipv6:
+            dscp: af11
+          localfilesize: 1024
+          monitor:
+            severity: errors
+          tls_servers:
+            - name: test
+              tls_hostname: test2
+              trustpoint: test
+              vrf: test
+          trap:
+            severity: critical
+        state: replaced
+      register: result
+
+    - name: Assert that correct set of commands were generated
+      assert:
+        that:
+          - "{{ replaced['commands'] | symmetric_difference(result['commands'])\
+            \ |length == 0 }}"
+
+    - name: Assert that after dict is correctly generated
+      assert:
+        that:
+          - replaced['after'] == result['after']
+
+    - name: Assert that before dicts are correctly generated
+      assert:
+        that:
+          - merged['after'] == result['before']
+  always:
+    - include_tasks: _remove_config.yaml

@@ -20,6 +20,10 @@ description:
 - This module provides declarative management configuration of system logging (syslog)
   on Cisco IOS XR devices.
 version_added: 1.0.0
+deprecated:
+  alternative: iosxr_logging_global
+  why: Updated module released with more functionality.
+  removed_at_date: '2023-08-01'
 requirements:
 - ncclient >= 0.5.3 when using netconf
 - lxml >= 4.1.1 when using netconf

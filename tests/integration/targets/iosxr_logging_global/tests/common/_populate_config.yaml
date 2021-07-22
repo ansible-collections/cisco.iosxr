@@ -1,0 +1,23 @@
+---
+- name: "Setup"
+  cisco.iosxr.iosxr_config:
+    lines:
+      - "logging tls-server test"
+      - "  vrf test"
+      - "  trustpoint test2"
+      - "  tls-hostname test2"
+      - "logging file test path test maxfilesize 1024 severity info"
+      - "logging ipv4 dscp af11"
+      - "logging trap informational"
+      - "logging events display-location"
+      - "logging monitor errors"
+      - "logging buffered 2097152"
+      - "logging buffered warnings"
+      - "logging 1.1.1.1 vrf default severity critical port default"
+      - "logging correlator buffer-size 1024"
+      - "logging localfilesize 1024"
+      - "logging source-interface GigabitEthernet0/0/0/0 vrf test"
+      - "logging hostnameprefix test"
+
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
