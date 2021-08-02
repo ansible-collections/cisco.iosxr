@@ -59,10 +59,15 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
             self.mock_get_resource_connection_facts.start()
         )
         self.mock_get_os_version = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr.get_os_version"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.l2_interfaces.l2_interfaces.get_os_version"
         )
         self.get_os_version = self.mock_get_os_version.start()
         self.get_os_version.return_value = "7.0.2"
+        self.mock_get_os_version1 = patch(
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l2_interfaces.l2_interfaces.get_os_version"
+        )
+        self.get_os_version1 = self.mock_get_os_version1.start()
+        self.get_os_version1.return_value = "7.0.2"
         self.mock_execute_show_command = patch(
             "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l2_interfaces.l2_interfaces.L2_InterfacesFacts.get_config"
         )
@@ -74,6 +79,7 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
         self.mock_get_resource_connection_facts.stop()
         self.mock_get_config.stop()
         self.mock_get_os_version.stop()
+        self.get_os_version1.stop()
         self.mock_load_config.stop()
         self.mock_execute_show_command.stop()
 
@@ -127,9 +133,8 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
             )
         )
         commands = [
-            "interface GigabitEthernet0/0/0/0",
+            "interface GigabitEthernet0/0/0/1",
             "l2transport l2protocol cpsv tunnel",
-            "l2transport propagate remote-status",
             "interface GigabitEthernet0/0/0/3.900",
             "encapsulation dot1q 20 second-dot1q 40",
         ]
@@ -151,12 +156,9 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
             )
         )
         commands = [
-            "interface GigabitEthernet0/0/0/0",
-            "description Configured and Replaced by Ansible-Network",
-            "no duplex",
             "interface GigabitEthernet0/0/0/1",
-            "description Configured and Replaced by Ansible-Network",
-            "no mtu",
+            "l2transport l2protocol cpsv drop",
+            "no l2transport",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -166,11 +168,10 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
         set_module_args(dict(state="deleted"))
 
         commands = [
-            "interface GigabitEthernet0/0/0/0",
-            "no l2transport l2protocol cpsv tunnel",
-            "no l2transport propagate remote-status",
+            "interface GigabitEthernet0/0/0/1",
+            "no l2transport",
             "interface GigabitEthernet0/0/0/3.900",
-            "no encapsulation dot1q 20 second-dot1q 40",
+            "no encapsulation dot1q",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -197,9 +198,8 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
         )
 
         commands = [
-            "interface GigabitEthernet0/0/0/0",
+            "interface GigabitEthernet0/0/0/1",
             "l2transport l2protocol cpsv tunnel",
-            "l2transport propagate remote-status",
             "interface GigabitEthernet0/0/0/3.900",
             "encapsulation dot1q 20 second-dot1q 40",
         ]
@@ -211,16 +211,14 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 running_config="interface GigabitEthernet0/0/0/1\n l2transport\n  l2protocol cpsv tunnel\n  "
-                               "propagate remote-status\n !\n!\ninterface GigabitEthernet0/0/0/3.900\n "
-                               "encapsulation dot1q 20 second-dot1q 40",
+                               "propagate remote-status\n !",
                 state="parsed",
             )
         )
         result = self.execute_module(changed=False)
-        parsed_list = [
-
-        ]
-
+        print(result["parsed"])
+        parsed_list = [{'name': 'GigabitEthernet0/0/0/1', 'l2transport': True,
+                        'l2protocol': [{'cpsv': 'tunnel'}], 'propagate': True}]
         self.assertEqual(parsed_list, result["parsed"])
 
     def test_iosxr_l2_interfaces_overridden(self):
@@ -245,9 +243,10 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
         commands = [
             "interface GigabitEthernet0/0/0/4",
             "l2transport l2protocol cpsv tunnel",
-            "l2transport propagate remote-status",
             "interface GigabitEthernet0/0/0/3.900",
-            "encapsulation dot1q 20 second-dot1q 40",
+            "encapsulation dot1q 40 second-dot1q 60",
+            "interface GigabitEthernet0/0/0/1",
+            "no l2transport"
         ]
 
         result = self.execute_module(changed=True)
