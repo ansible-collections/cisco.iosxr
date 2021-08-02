@@ -203,7 +203,7 @@ EXAMPLES = """
 #             ]
 #         }
 #     ],
-#     "before": {},
+#     "before": [],
 #     "changed": true,
 #     "commands": [
 #         "ipv6 prefix-list pl_1 1 deny 2001:db8:1234::/48",
@@ -471,7 +471,7 @@ EXAMPLES = """
 #
 # Module Execution:
 #
-# "after": {},
+# "after": [],
 #     "before": [
 #         {
 #             "afi": "ipv6",

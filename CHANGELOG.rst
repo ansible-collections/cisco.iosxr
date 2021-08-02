@@ -5,6 +5,51 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v2.4.0
+======
+
+Minor Changes
+-------------
+
+- Add iosxr_logging_global resource module.
+
+Deprecated Features
+-------------------
+
+- The iosxr_logging module has been deprecated in favor of the new iosxr_logging_global resource module and will be removed in a release after '2023-08-01'.
+
+Bugfixes
+--------
+
+- fix issue in prefix-lists facts code when prefix-lists facts are empty. (https://github.com/ansible-collections/cisco.iosxr/pull/161)
+
+New Modules
+-----------
+
+- iosxr_logging_global - Manages logging attributes of Cisco IOSXR network devices
+
+v2.3.0
+======
+
+Minor Changes
+-------------
+
+- Add `iosxr_prefix_lists` resource module.
+
+Bugfixes
+--------
+
+- To add updated route policy params to Bgp nbr AF RM
+- fix backword compatibility issue for iosxr 6.x.
+- fix intermittent issue on CI for iosxr_banner module.
+- fix iosxr_config issue for prefix-set,route-policy config
+- fix static routes interface parsing issue.
+
+New Modules
+-----------
+
+- iosxr_prefix_lists - Prefix-Lists resource module.
+
 v2.2.0
 ======
 

@@ -336,3 +336,49 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
 
         commands = ["no router static"]
         self.execute_module(changed=True, commands=commands)
+
+    def test_iosxr_static_routes_parsed(self):
+        set_module_args(
+            dict(
+                running_config="router static\n address-family ipv4 unicast\n  0.0.0.0/0 172.31.32.1\n  "
+                "10.0.0.0/8 Null0 200\n  11.0.0.0/8 Loopback888\n  203.0.113.0/24 TenGigE0/0/0/0\n !\n!",
+                state="parsed",
+            )
+        )
+        result = self.execute_module(changed=False)
+        parsed_list = [
+            {
+                "address_families": [
+                    {
+                        "afi": "ipv4",
+                        "routes": [
+                            {
+                                "dest": "0.0.0.0/0",
+                                "next_hops": [
+                                    {"forward_router_address": "172.31.32.1"}
+                                ],
+                            },
+                            {
+                                "dest": "10.0.0.0/8",
+                                "next_hops": [
+                                    {
+                                        "admin_distance": 200,
+                                        "interface": "Null0",
+                                    }
+                                ],
+                            },
+                            {
+                                "dest": "11.0.0.0/8",
+                                "next_hops": [{"interface": "Loopback888"}],
+                            },
+                            {
+                                "dest": "203.0.113.0/24",
+                                "next_hops": [{"interface": "TenGigE0/0/0/0"}],
+                            },
+                        ],
+                        "safi": "unicast",
+                    }
+                ]
+            }
+        ]
+        self.assertEqual(parsed_list, result["parsed"])

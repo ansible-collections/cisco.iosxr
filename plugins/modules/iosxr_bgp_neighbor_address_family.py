@@ -211,8 +211,15 @@ options:
                         type: bool
                         description: Prevent remove-private-AS from being inherited from the parent.
                   route_policy: &route_policy
-                    type: str
+                    type: dict
                     description: Apply route policy to neighbor.
+                    suboptions:
+                      inbound:
+                        type: str
+                        description: Apply route policy to inbound routes.
+                      outbound:
+                        type: str
+                        description: Apply route policy to outbound routes.
                   route_reflector_client: &route_reflector_client
                     type: dict
                     description:  Configure a neighbor as Route Reflector client.

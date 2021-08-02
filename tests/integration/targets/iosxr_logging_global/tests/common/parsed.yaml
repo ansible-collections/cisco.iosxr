@@ -1,0 +1,14 @@
+---
+- debug:
+    msg: START iosxr_logging_global parsed integration tests on connection={{ ansible_connection }}
+
+- name: Parse externally provided BGP config
+  register: result
+  cisco.iosxr.iosxr_logging_global:
+    running_config: "{{ lookup('file', './_parsed.cfg') }}"
+    state: parsed
+
+- name: Assert that config was correctly parsed
+  assert:
+    that:
+      - merged['after'] == result['parsed']

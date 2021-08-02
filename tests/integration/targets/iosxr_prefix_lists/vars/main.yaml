@@ -1,5 +1,6 @@
 ---
 merged:
+  before: []
   commands:
     - ipv6 prefix-list pl_1 1 deny 2001:db8:1234::/48
     - ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK
