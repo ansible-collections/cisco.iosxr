@@ -74,6 +74,7 @@ class Lacp(ConfigBase):
         warnings = list()
         commands = list()
 
+
         if self.state in self.ACTION_STATES:
             existing_lacp_facts = self.get_lacp_facts()
         else:
