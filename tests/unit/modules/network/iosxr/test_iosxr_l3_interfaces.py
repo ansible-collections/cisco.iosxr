@@ -84,31 +84,15 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                 config=[
                     dict(
                         name="GigabitEthernet0/0/0/0",
-                        ipv4=[
-                            dict(
-                                address="198.51.100.1/24"
-                            )
-                        ],
-                        ipv6=[
-                            dict(
-                                address="2001:db8::/32"
-                            )
-                        ]
-
-
+                        ipv4=[dict(address="198.51.100.1/24")],
+                        ipv6=[dict(address="2001:db8::/32")],
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         ipv4=[
-                            dict(
-                                address="192.0.2.1/24"
-                            ),
-                            dict(
-                                address="192.0.2.2/24",
-                                secondary=True
-                            ),
-
-                        ]
+                            dict(address="192.0.2.1/24"),
+                            dict(address="192.0.2.2/24", secondary=True),
+                        ],
                     ),
                 ],
                 state="merged",
@@ -122,30 +106,15 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                 config=[
                     dict(
                         name="GigabitEthernet0/0/0/0",
-                        ipv4=[
-                            dict(
-                                address="198.51.100.1/24"
-                            )
-                        ]
-
+                        ipv4=[dict(address="198.51.100.1/24")],
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         ipv4=[
-                            dict(
-                                address="192.0.2.1/24"
-                            ),
-                            dict(
-                                address="192.0.2.2/24",
-                                secondary=True
-                            ),
-
+                            dict(address="192.0.2.1/24"),
+                            dict(address="192.0.2.2/24", secondary=True),
                         ],
-                        ipv6=[
-                            dict(
-                                address="2001:db8:0:3::/64"
-                            ),
-                        ]
+                        ipv6=[dict(address="2001:db8:0:3::/64")],
                     ),
                 ],
                 state="merged",
@@ -157,7 +126,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/1",
             "ipv4 address 192.0.2.2 255.255.255.0 secondary",
             "ipv4 address 192.0.2.1 255.255.255.0",
-            "ipv6 address 2001:db8:0:3::/64"
+            "ipv6 address 2001:db8:0:3::/64",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -170,15 +139,9 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/0",
                         ipv4=[
-                            dict(
-                                address="203.0.113.27/24"
-                            ),
-                            dict(
-                                address="203.0.114.1/24",
-                                secondary=True
-                            )
-                        ]
-
+                            dict(address="203.0.113.27/24"),
+                            dict(address="203.0.114.1/24", secondary=True),
+                        ],
                     )
                 ],
                 state="replaced",
@@ -188,7 +151,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/0",
             "no ipv6 address",
             "ipv4 address 203.0.113.27 255.255.255.0",
-            "ipv4 address 203.0.114.1 255.255.255.0 secondary"
+            "ipv4 address 203.0.114.1 255.255.255.0 secondary",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -202,7 +165,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "no ipv4 address",
             "no ipv6 address",
             "interface GigabitEthernet0/0/0/1",
-            "no ipv4 address"
+            "no ipv4 address",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -213,30 +176,15 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                 config=[
                     dict(
                         name="GigabitEthernet0/0/0/0",
-                        ipv4=[
-                            dict(
-                                address="198.51.100.1/24"
-                            )
-                        ]
-
+                        ipv4=[dict(address="198.51.100.1/24")],
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         ipv4=[
-                            dict(
-                                address="192.0.2.1/24"
-                            ),
-                            dict(
-                                address="192.0.2.2/24",
-                                secondary=True
-                            ),
-
+                            dict(address="192.0.2.1/24"),
+                            dict(address="192.0.2.2/24", secondary=True),
                         ],
-                        ipv6=[
-                            dict(
-                                address="2001:db8:0:3::/64"
-                            ),
-                        ]
+                        ipv6=[dict(address="2001:db8:0:3::/64")],
                     ),
                 ],
                 state="rendered",
@@ -249,7 +197,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/1",
             "ipv4 address 192.0.2.2 255.255.255.0 secondary",
             "ipv4 address 192.0.2.1 255.255.255.0",
-            "ipv6 address 2001:db8:0:3::/64"
+            "ipv6 address 2001:db8:0:3::/64",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
@@ -259,40 +207,43 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 running_config="interface GigabitEthernet0/0/0/0\nipv4 address 198.51.100.1 255.255.255.0\n"
-                               "ipv6 address 2001:db8::/32\ninterface GigabitEthernet0/0/0/1\nipv4 address"
-                               " 192.0.2.1 255.255.255.0\nipv4 address 192.0.2.2 255.255.255.0 secondary\n",
+                "ipv6 address 2001:db8::/32\ninterface GigabitEthernet0/0/0/1\nipv4 address"
+                " 192.0.2.1 255.255.255.0\nipv4 address 192.0.2.2 255.255.255.0 secondary\n",
                 state="parsed",
             )
         )
         result = self.execute_module(changed=False)
         print(result["parsed"])
-        parsed_list = [{'name': 'GigabitEthernet0/0/0/0', 'ipv4': [{'address': '198.51.100.1 255.255.255.0'}], 'ipv6':
-                        [{'address': '2001:db8::/32'}]}, {'name': 'GigabitEthernet0/0/0/1', 'ipv4': [
-                            {'address': '192.0.2.1 255.255.255.0'}, {'address': '192.0.2.2 255.255.255.0',
-                                                                     'secondary': True}]}]
+        parsed_list = [
+            {
+                "name": "GigabitEthernet0/0/0/0",
+                "ipv4": [{"address": "198.51.100.1 255.255.255.0"}],
+                "ipv6": [{"address": "2001:db8::/32"}],
+            },
+            {
+                "name": "GigabitEthernet0/0/0/1",
+                "ipv4": [
+                    {"address": "192.0.2.1 255.255.255.0"},
+                    {"address": "192.0.2.2 255.255.255.0", "secondary": True},
+                ],
+            },
+        ]
         self.assertEqual(parsed_list, result["parsed"])
 
     def test_iosxr_l3_interfaces_overridden(self):
         self.maxDiff = None
         self._prepare()
-        set_module_args(dict(
-            config=[
-                dict(
-                    name="GigabitEthernet0/0/0/1",
-                    ipv4=[
-                        dict(
-                            address="198.51.102.1/24"
-                        )
-
-                    ],
-                    ipv6=[
-                        dict(
-                            address="2001:db8:1::/64"
-                        ),
-                    ]
-                ),
-            ],
-            state="overridden")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/1",
+                        ipv4=[dict(address="198.51.102.1/24")],
+                        ipv6=[dict(address="2001:db8:1::/64")],
+                    )
+                ],
+                state="overridden",
+            )
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",
@@ -301,7 +252,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/1",
             "no ipv4 address",
             "ipv4 address 198.51.102.1 255.255.255.0",
-            "ipv6 address 2001:db8:1::/64"
+            "ipv6 address 2001:db8:1::/64",
         ]
 
         result = self.execute_module(changed=True)

@@ -22,7 +22,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.plugins.modules import iosxr_acl_interfaces
+from ansible_collections.cisco.iosxr.plugins.modules import (
+    iosxr_acl_interfaces,
+)
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
     set_module_args,
 )
@@ -69,47 +71,28 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
                             dict(
                                 afi="ipv4",
                                 acls=[
-                                    dict(
-                                        name="acl_1",
-                                        direction="in"
-                                    ),
-                                    dict(
-                                        name="acl_2",
-                                        direction="out"
-                                    )
-                                ]
+                                    dict(name="acl_1", direction="in"),
+                                    dict(name="acl_2", direction="out"),
+                                ],
                             ),
                             dict(
                                 afi="ipv6",
                                 acls=[
-                                    dict(
-                                        name="acl6_1",
-                                        direction="in"
-                                    ),
-                                    dict(
-                                        name="acl6_2",
-                                        direction="out"
-                                    )
-                                ]
-                            )
-                        ]
-
+                                    dict(name="acl6_1", direction="in"),
+                                    dict(name="acl6_2", direction="out"),
+                                ],
+                            ),
+                        ],
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         access_groups=[
                             dict(
                                 afi="ipv4",
-                                acls=[
-                                    dict(
-                                        name="acl_1",
-                                        direction="out"
-                                    )
-                                ]
-                            ),
-                        ]
-                    )
-
+                                acls=[dict(name="acl_1", direction="out")],
+                            )
+                        ],
+                    ),
                 ],
                 state="merged",
             )
@@ -126,47 +109,28 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
                             dict(
                                 afi="ipv4",
                                 acls=[
-                                    dict(
-                                        name="acl_1",
-                                        direction="in"
-                                    ),
-                                    dict(
-                                        name="acl_2",
-                                        direction="out"
-                                    )
-                                ]
+                                    dict(name="acl_1", direction="in"),
+                                    dict(name="acl_2", direction="out"),
+                                ],
                             ),
                             dict(
                                 afi="ipv6",
                                 acls=[
-                                    dict(
-                                        name="acl6_1",
-                                        direction="in"
-                                    ),
-                                    dict(
-                                        name="acl6_2",
-                                        direction="out"
-                                    )
-                                ]
-                            )
-                        ]
-
+                                    dict(name="acl6_1", direction="in"),
+                                    dict(name="acl6_2", direction="out"),
+                                ],
+                            ),
+                        ],
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         access_groups=[
                             dict(
                                 afi="ipv4",
-                                acls=[
-                                    dict(
-                                        name="acl_1",
-                                        direction="in"
-                                    )
-                                ]
-                            ),
-                        ]
-                    )
-
+                                acls=[dict(name="acl_1", direction="in")],
+                            )
+                        ],
+                    ),
                 ],
                 state="merged",
             )
@@ -178,7 +142,7 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
             "ipv6 access-group acl6_1 ingress",
             "ipv6 access-group acl6_2 egress",
             "interface GigabitEthernet0/0/0/1",
-            "ipv4 access-group acl_1 ingress"
+            "ipv4 access-group acl_1 ingress",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -193,17 +157,10 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
                         access_groups=[
                             dict(
                                 afi="ipv6",
-                                acls=[
-                                    dict(
-                                        name="acl6_3",
-                                        direction="in"
-                                    ),
-                                ]
+                                acls=[dict(name="acl6_3", direction="in")],
                             )
-                        ]
-
+                        ],
                     )
-
                 ],
                 state="replaced",
             )
@@ -213,7 +170,7 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
             "no ipv4 access-group acl_1 ingress",
             "no ipv4 access-group acl_2 egress",
             "no ipv6 access-group acl6_2 egress",
-            "ipv6 access-group acl6_3 ingress"
+            "ipv6 access-group acl6_3 ingress",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -229,7 +186,7 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
             "no ipv6 access-group acl6_1 ingress",
             "no ipv6 access-group acl6_2 egress",
             "interface GigabitEthernet0/0/0/1",
-            "no ipv4 access-group acl_1 egress"
+            "no ipv4 access-group acl_1 egress",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -244,47 +201,28 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
                             dict(
                                 afi="ipv4",
                                 acls=[
-                                    dict(
-                                        name="acl_1",
-                                        direction="in"
-                                    ),
-                                    dict(
-                                        name="acl_2",
-                                        direction="out"
-                                    )
-                                ]
+                                    dict(name="acl_1", direction="in"),
+                                    dict(name="acl_2", direction="out"),
+                                ],
                             ),
                             dict(
                                 afi="ipv6",
                                 acls=[
-                                    dict(
-                                        name="acl6_1",
-                                        direction="in"
-                                    ),
-                                    dict(
-                                        name="acl6_2",
-                                        direction="out"
-                                    )
-                                ]
-                            )
-                        ]
-
+                                    dict(name="acl6_1", direction="in"),
+                                    dict(name="acl6_2", direction="out"),
+                                ],
+                            ),
+                        ],
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         access_groups=[
                             dict(
                                 afi="ipv4",
-                                acls=[
-                                    dict(
-                                        name="acl_1",
-                                        direction="in"
-                                    )
-                                ]
-                            ),
-                        ]
-                    )
-
+                                acls=[dict(name="acl_1", direction="in")],
+                            )
+                        ],
+                    ),
                 ],
                 state="rendered",
             )
@@ -297,7 +235,7 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
             "ipv6 access-group acl6_1 ingress",
             "ipv6 access-group acl6_2 egress",
             "interface GigabitEthernet0/0/0/1",
-            "ipv4 access-group acl_1 ingress"
+            "ipv4 access-group acl_1 ingress",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
@@ -307,66 +245,77 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 running_config="interface GigabitEthernet0/0/0/0\r\n shutdown\r\n ipv4 access-group acl_1 ingress\r\n"
-                               " ipv4 access-group acl_2 egress\r\n ipv6 access-group acl6_1 ingress\r\n ipv6 "
-                               "access-group acl6_2 egress\r\n!\r\ninterface GigabitEthernet0/0/0/1\r\n "
-                               "shutdown\r\n ipv4 access-group acl_1 egress\r\n!",
+                " ipv4 access-group acl_2 egress\r\n ipv6 access-group acl6_1 ingress\r\n ipv6 "
+                "access-group acl6_2 egress\r\n!\r\ninterface GigabitEthernet0/0/0/1\r\n "
+                "shutdown\r\n ipv4 access-group acl_1 egress\r\n!",
                 state="parsed",
             )
         )
         result = self.execute_module(changed=False)
         print(result["parsed"])
-        parsed_list = [{'name': 'GigabitEthernet0/0/0/0', 'access_groups': [{'afi': 'ipv4', 'acls': [{'name': 'acl_1', 'direction': 'in'},
-                    {'name': 'acl_2', 'direction': 'out'}]}, {'afi': 'ipv6', 'acls': [{'name': 'acl6_1', 'direction': 'in'},
-                                                                                      {'name': 'acl6_2', 'direction': 'out'}]}]},
-                       {'name': 'GigabitEthernet0/0/0/1', 'access_groups': [{'afi': 'ipv4', 'acls': [{'name': 'acl_1', 'direction': 'out'}]}]}]
+        parsed_list = [
+            {
+                "name": "GigabitEthernet0/0/0/0",
+                "access_groups": [
+                    {
+                        "afi": "ipv4",
+                        "acls": [
+                            {"name": "acl_1", "direction": "in"},
+                            {"name": "acl_2", "direction": "out"},
+                        ],
+                    },
+                    {
+                        "afi": "ipv6",
+                        "acls": [
+                            {"name": "acl6_1", "direction": "in"},
+                            {"name": "acl6_2", "direction": "out"},
+                        ],
+                    },
+                ],
+            },
+            {
+                "name": "GigabitEthernet0/0/0/1",
+                "access_groups": [
+                    {
+                        "afi": "ipv4",
+                        "acls": [{"name": "acl_1", "direction": "out"}],
+                    }
+                ],
+            },
+        ]
         self.assertEqual(parsed_list, result["parsed"])
 
     def test_iosxr_acl_interfaces_overridden(self):
         self.maxDiff = None
         self._prepare()
-        set_module_args(dict(
-            config=[
-                dict(
-                    name="GigabitEthernet0/0/0/0",
-                    access_groups=[
-                        dict(
-                            afi="ipv6",
-                            acls=[
-                                dict(
-                                    name="acl6_3",
-                                    direction="in"
-                                ),
-                            ]
-                        )
-                    ]
-
-                ),
-                dict(
-                    name="GigabitEthernet0/0/0/1",
-                    access_groups=[
-                        dict(
-                            afi="ipv4",
-                            acls=[
-                                dict(
-                                    name="acl_2",
-                                    direction="in"
-                                )
-                            ]
-                        ),
-                        dict(
-                            afi="ipv6",
-                            acls=[
-                                dict(
-                                    name="acl6_3",
-                                    direction="out"
-                                ),
-                            ]
-                        )
-                    ]
-                )
-
-            ],
-            state="overridden")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        access_groups=[
+                            dict(
+                                afi="ipv6",
+                                acls=[dict(name="acl6_3", direction="in")],
+                            )
+                        ],
+                    ),
+                    dict(
+                        name="GigabitEthernet0/0/0/1",
+                        access_groups=[
+                            dict(
+                                afi="ipv4",
+                                acls=[dict(name="acl_2", direction="in")],
+                            ),
+                            dict(
+                                afi="ipv6",
+                                acls=[dict(name="acl6_3", direction="out")],
+                            ),
+                        ],
+                    ),
+                ],
+                state="overridden",
+            )
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",
@@ -377,7 +326,7 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/1",
             "no ipv4 access-group acl_1 egress",
             "ipv4 access-group acl_2 ingress",
-            "ipv6 access-group acl6_3 egress"
+            "ipv6 access-group acl6_3 egress",
         ]
 
         result = self.execute_module(changed=True)

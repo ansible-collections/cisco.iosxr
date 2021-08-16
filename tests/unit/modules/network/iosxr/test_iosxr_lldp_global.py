@@ -87,9 +87,8 @@ class TestIosxrLldpModule(TestIosxrModule):
                     timer=3000,
                     subinterfaces=True,
                     tlv_select=dict(
-                        management_address=False,
-                        system_description=False
-                    )
+                        management_address=False, system_description=False
+                    ),
                 ),
                 state="merged",
             )
@@ -105,9 +104,8 @@ class TestIosxrLldpModule(TestIosxrModule):
                     timer=3000,
                     subinterfaces=True,
                     tlv_select=dict(
-                        management_address=False,
-                        system_description=False
-                    )
+                        management_address=False, system_description=False
+                    ),
                 ),
                 state="merged",
             )
@@ -118,8 +116,7 @@ class TestIosxrLldpModule(TestIosxrModule):
             "lldp timer 3000",
             "lldp subinterfaces enable",
             "lldp tlv-select system-description disable",
-            "lldp tlv-select management-address disable"
-
+            "lldp tlv-select management-address disable",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -133,8 +130,8 @@ class TestIosxrLldpModule(TestIosxrModule):
                     tlv_select=dict(
                         management_address=False,
                         system_description=False,
-                        port_description=False
-                    )
+                        port_description=False,
+                    ),
                 ),
                 state="replaced",
             )
@@ -143,7 +140,7 @@ class TestIosxrLldpModule(TestIosxrModule):
             "no lldp reinit 2",
             "no lldp subinterfaces enable",
             "no lldp timer 3000",
-            "lldp tlv-select port-description disable"
+            "lldp tlv-select port-description disable",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -158,7 +155,7 @@ class TestIosxrLldpModule(TestIosxrModule):
             "no lldp subinterfaces enable",
             "no lldp timer 3000",
             "no lldp tlv-select management-address disable",
-            "no lldp tlv-select system-description disable"
+            "no lldp tlv-select system-description disable",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -172,9 +169,8 @@ class TestIosxrLldpModule(TestIosxrModule):
                     timer=3000,
                     subinterfaces=True,
                     tlv_select=dict(
-                        management_address=False,
-                        system_description=False
-                    )
+                        management_address=False, system_description=False
+                    ),
                 ),
                 state="rendered",
             )
@@ -186,7 +182,7 @@ class TestIosxrLldpModule(TestIosxrModule):
             "lldp timer 3000",
             "lldp subinterfaces enable",
             "lldp tlv-select system-description disable",
-            "lldp tlv-select management-address disable"
+            "lldp tlv-select management-address disable",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
@@ -196,12 +192,16 @@ class TestIosxrLldpModule(TestIosxrModule):
         set_module_args(
             dict(
                 running_config="lldp reinit 2\nlldp holdtime 100\nlldp timer 3000\nlldp subinterfaces\
-                    \ enable\nlldp tlv-select system-description disable\nlldp tlv-select management-address\
-                \ disable\n",
+                     enable\nlldp tlv-select system-description disable\nlldp tlv-select management-address\
+                 disable\n",
                 state="parsed",
             )
         )
         result = self.execute_module(changed=False)
-        parsed_list = {'holdtime': 100, 'reinit': 2, 'timer': 3000, 'tlv_select': {'system_description': False}}
+        parsed_list = {
+            "holdtime": 100,
+            "reinit": 2,
+            "timer": 3000,
+            "tlv_select": {"system_description": False},
+        }
         self.assertEqual(parsed_list, result["parsed"])
-

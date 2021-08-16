@@ -22,7 +22,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.plugins.modules import iosxr_lacp_interfaces
+from ansible_collections.cisco.iosxr.plugins.modules import (
+    iosxr_lacp_interfaces,
+)
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
     set_module_args,
 )
@@ -86,20 +88,13 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
                         name="Bundle-Ether10",
                         churn_logging="actor",
                         collector_max_delay=100,
-                        switchover_suppress_flaps=500
-
+                        switchover_suppress_flaps=500,
                     ),
                     dict(
                         name="Bundle-Ether11",
-                        system=dict(
-                            mac="00c2.4c00.bd15"
-                        )
-
+                        system=dict(mac="00c2.4c00.bd15"),
                     ),
-                    dict(
-                        name="GigabitEthernet0/0/0/1",
-                        period=200
-                    )
+                    dict(name="GigabitEthernet0/0/0/1", period=200),
                 ],
                 state="merged",
             )
@@ -114,20 +109,13 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
                         name="Bundle-Ether10",
                         churn_logging="actor",
                         collector_max_delay=100,
-                        switchover_suppress_flaps=500
-
+                        switchover_suppress_flaps=500,
                     ),
                     dict(
                         name="Bundle-Ether11",
-                        system=dict(
-                            mac="00c2.4c00.bd15"
-                        )
-
+                        system=dict(mac="00c2.4c00.bd15"),
                     ),
-                    dict(
-                        name="GigabitEthernet0/0/0/1",
-                        period=100
-                    )
+                    dict(name="GigabitEthernet0/0/0/1", period=100),
                 ],
                 state="merged",
             )
@@ -140,8 +128,7 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
             "interface Bundle-Ether11",
             "lacp system mac 00c2.4c00.bd15",
             "interface GigabitEthernet0/0/0/1",
-            "lacp period 100"
-
+            "lacp period 100",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -151,14 +138,8 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 config=[
-                    dict(
-                        name="Bundle-Ether10",
-                        churn_logging="partner",
-                    ),
-                    dict(
-                        name="GigabitEthernet0/0/0/1",
-                        period=300
-                    )
+                    dict(name="Bundle-Ether10", churn_logging="partner"),
+                    dict(name="GigabitEthernet0/0/0/1", period=300),
                 ],
                 state="replaced",
             )
@@ -169,7 +150,7 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
             "no lacp collector-max-delay 100",
             "lacp churn logging partner",
             "interface GigabitEthernet0/0/0/1",
-            "lacp period 300"
+            "lacp period 300",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -186,7 +167,7 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
             "interface Bundle-Ether11",
             "no lacp system mac 00c2.4c00.bd15",
             "interface GigabitEthernet0/0/0/1",
-            "no lacp period 200"
+            "no lacp period 200",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -199,20 +180,13 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
                         name="Bundle-Ether10",
                         churn_logging="actor",
                         collector_max_delay=100,
-                        switchover_suppress_flaps=500
-
+                        switchover_suppress_flaps=500,
                     ),
                     dict(
                         name="Bundle-Ether11",
-                        system=dict(
-                            mac="00c2.4c00.bd15"
-                        )
-
+                        system=dict(mac="00c2.4c00.bd15"),
                     ),
-                    dict(
-                        name="GigabitEthernet0/0/0/1",
-                        period=100
-                    )
+                    dict(name="GigabitEthernet0/0/0/1", period=100),
                 ],
                 state="rendered",
             )
@@ -226,8 +200,7 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
             "interface Bundle-Ether11",
             "lacp system mac 00c2.4c00.bd15",
             "interface GigabitEthernet0/0/0/1",
-            "lacp period 100"
-
+            "lacp period 100",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
@@ -237,41 +210,45 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 running_config="interface Bundle-Ether10\r\n lacp churn logging actor\r\n lacp"
-                               " switchover suppress-flaps 500\r\n "
-                               "lacp collector-max-delay 100\r\n!\r\ninterface "
-                               "Bundle-Ether11\r\n lacp system mac 00c2.4c00.bd15\r"
-                               "\n!\r\ninterface MgmtEth0/RP0/CPU0/0\r\n ipv4 address"
-                               " 192.0.2.11 255.255.255.0\r\n!\r\ninterface "
-                               "GigabitEthernet0/0/0/1\r\n lacp period 200\r\n!",
+                " switchover suppress-flaps 500\r\n "
+                "lacp collector-max-delay 100\r\n!\r\ninterface "
+                "Bundle-Ether11\r\n lacp system mac 00c2.4c00.bd15\r"
+                "\n!\r\ninterface MgmtEth0/RP0/CPU0/0\r\n ipv4 address"
+                " 192.0.2.11 255.255.255.0\r\n!\r\ninterface "
+                "GigabitEthernet0/0/0/1\r\n lacp period 200\r\n!",
                 state="parsed",
             )
         )
         result = self.execute_module(changed=False)
         print(result["parsed"])
-        parsed_list = [{'churn_logging': 'actor', 'collector_max_delay': 100,
-                        'name': 'Bundle-Ether10', 'switchover_suppress_flaps': 500},
-                       {'name': 'Bundle-Ether11','system': {'mac': '00c2.4c00.bd15'}},
-                       {'name': 'GigabitEthernet0/0/0/1', 'period': 200}]
+        parsed_list = [
+            {
+                "churn_logging": "actor",
+                "collector_max_delay": 100,
+                "name": "Bundle-Ether10",
+                "switchover_suppress_flaps": 500,
+            },
+            {"name": "Bundle-Ether11", "system": {"mac": "00c2.4c00.bd15"}},
+            {"name": "GigabitEthernet0/0/0/1", "period": 200},
+        ]
         self.assertEqual(parsed_list, result["parsed"])
 
     def test_iosxr_lag_interfaces_overridden(self):
         self.maxDiff = None
         self._prepare()
-        set_module_args(dict(
-            config=[
-                dict(
-                    name="Bundle-Ether12",
-                    churn_logging="both",
-                    collector_max_delay=100,
-                    switchover_suppress_flaps=500
-
-                ),
-                dict(
-                    name="GigabitEthernet0/0/0/1",
-                    period=300
-                )
-            ],
-            state="overridden")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="Bundle-Ether12",
+                        churn_logging="both",
+                        collector_max_delay=100,
+                        switchover_suppress_flaps=500,
+                    ),
+                    dict(name="GigabitEthernet0/0/0/1", period=300),
+                ],
+                state="overridden",
+            )
         )
         commands = [
             "interface Bundle-Ether10",
@@ -285,8 +262,7 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
             "lacp collector-max-delay 100",
             "lacp switchover suppress-flaps 500",
             "interface GigabitEthernet0/0/0/1",
-            "lacp period 300"
-
+            "lacp period 300",
         ]
 
         result = self.execute_module(changed=True)

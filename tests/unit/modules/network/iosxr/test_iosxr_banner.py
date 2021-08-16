@@ -75,13 +75,10 @@ class TestIosxrBannerModule(TestIosxrModule):
         self.mock_load_config.stop()
         self.mock_is_cliconf.stop()
 
-
     def load_fixtures(self, commands=None):
         self.get_config.return_value = load_fixture("iosxr_banner_config.cfg")
         self.load_config.return_value = dict(diff=None, session="session")
         self.is_cliconf.return_value = True
-
-
 
     def test_iosxr_banner_login_create(self):
         set_module_args(dict(banner="login", text="test\nbanner\nstring"))

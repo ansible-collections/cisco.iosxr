@@ -22,7 +22,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.plugins.modules import iosxr_lldp_interfaces
+from ansible_collections.cisco.iosxr.plugins.modules import (
+    iosxr_lldp_interfaces,
+)
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
     set_module_args,
 )
@@ -82,14 +84,8 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 config=[
-                    dict(
-                        name="GigabitEthernet0/0/0/0",
-                        transmit=False
-                    ),
-                    dict(
-                        name="GigabitEthernet0/0/0/1",
-                        receive=False
-                    ),
+                    dict(name="GigabitEthernet0/0/0/0", transmit=False),
+                    dict(name="GigabitEthernet0/0/0/1", receive=False),
                 ],
                 state="merged",
             )
@@ -100,14 +96,8 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 config=[
-                    dict(
-                        name="GigabitEthernet0/0/0/0",
-                        transmit=False
-                    ),
-                    dict(
-                        name="GigabitEthernet0/0/0/1",
-                        receive=False
-                    ),
+                    dict(name="GigabitEthernet0/0/0/0", transmit=False),
+                    dict(name="GigabitEthernet0/0/0/1", receive=False),
                 ],
                 state="merged",
             )
@@ -116,7 +106,7 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/0",
             "lldp transmit disable",
             "interface GigabitEthernet0/0/0/1",
-            "lldp receive disable"
+            "lldp receive disable",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -125,12 +115,7 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
         self._prepare()
         set_module_args(
             dict(
-                config=[
-                    dict(
-                        name="GigabitEthernet0/0/0/1",
-                        transmit=False
-                    )
-                ],
+                config=[dict(name="GigabitEthernet0/0/0/1", transmit=False)],
                 state="replaced",
             )
         )
@@ -139,7 +124,6 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
             "no lldp receive disable",
             "no lldp destination mac-address ieee-nearest-non-tmpr-bridge",
             "lldp transmit disable",
-
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -154,8 +138,7 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
             "no lldp destination mac-address ieee-nearest-bridge",
             "interface GigabitEthernet0/0/0/1",
             "no lldp destination mac-address ieee-nearest-non-tmpr-bridge",
-            "no lldp receive disable"
-
+            "no lldp receive disable",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -164,14 +147,8 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 config=[
-                    dict(
-                        name="GigabitEthernet0/0/0/0",
-                        transmit=False
-                    ),
-                    dict(
-                        name="GigabitEthernet0/0/0/1",
-                        receive=False
-                    ),
+                    dict(name="GigabitEthernet0/0/0/0", transmit=False),
+                    dict(name="GigabitEthernet0/0/0/1", receive=False),
                 ],
                 state="rendered",
             )
@@ -181,7 +158,7 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/0",
             "lldp transmit disable",
             "interface GigabitEthernet0/0/0/1",
-            "lldp receive disable"
+            "lldp receive disable",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
@@ -191,37 +168,44 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 running_config="interface TenGigE0/0/0/0\r\n ipv4 address 192.0.2.11 255.255.255.192\r\n!\r\ninterface preconfigure "
-                               "GigabitEthernet0/0/0/0\r\n lldp\r\n  transmit disable\r\n  destination mac-address\r\n   "
-                               "ieee-nearest-bridge\r\n  !\r\n !\r\n!\r\ninterface preconfigure GigabitEthernet0/0/0/1\r\n lldp\r\n  "
-                               "receive disable\r\n  destination mac-address\r\n   ieee-nearest-non-tmpr-bridge\r\n",
+                "GigabitEthernet0/0/0/0\r\n lldp\r\n  transmit disable\r\n  destination mac-address\r\n   "
+                "ieee-nearest-bridge\r\n  !\r\n !\r\n!\r\ninterface preconfigure GigabitEthernet0/0/0/1\r\n lldp\r\n  "
+                "receive disable\r\n  destination mac-address\r\n   ieee-nearest-non-tmpr-bridge\r\n",
                 state="parsed",
             )
         )
         result = self.execute_module(changed=False)
         print(result["parsed"])
-        parsed_list = [{'name': 'TenGigE0/0/0/0'}, {'destination': {'mac_address': 'ieee-nearest-bridge'}, 'name': 'GigabitEthernet0/0/0/0',
-                                                    'transmit': False},
-                       {'destination': {'mac_address': 'ieee-nearest-non-tmpr-bridge'}, 'name': 'GigabitEthernet0/0/0/1', 'receive': False}]
+        parsed_list = [
+            {"name": "TenGigE0/0/0/0"},
+            {
+                "destination": {"mac_address": "ieee-nearest-bridge"},
+                "name": "GigabitEthernet0/0/0/0",
+                "transmit": False,
+            },
+            {
+                "destination": {"mac_address": "ieee-nearest-non-tmpr-bridge"},
+                "name": "GigabitEthernet0/0/0/1",
+                "receive": False,
+            },
+        ]
         self.assertEqual(parsed_list, result["parsed"])
 
     def test_iosxr_lldp_interfaces_overridden(self):
         self.maxDiff = None
         self._prepare()
-        set_module_args(dict(
-            config=[
-                dict(
-                    name="GigabitEthernet0/0/0/0",
-                    transmit=False
-                ),
-            ],
-            state="overridden")
+        set_module_args(
+            dict(
+                config=[dict(name="GigabitEthernet0/0/0/0", transmit=False)],
+                state="overridden",
+            )
         )
         commands = [
             "interface GigabitEthernet0/0/0/1",
             "no lldp destination mac-address ieee-nearest-non-tmpr-bridge",
             "no lldp receive disable",
             "interface GigabitEthernet0/0/0/0",
-            "no lldp destination mac-address ieee-nearest-bridge"
+            "no lldp destination mac-address ieee-nearest-bridge",
         ]
 
         result = self.execute_module(changed=True)

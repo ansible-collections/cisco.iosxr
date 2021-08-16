@@ -82,10 +82,7 @@ class TestIosxrLacpModule(TestIosxrModule):
             dict(
                 config=dict(
                     system=dict(
-                        priority=12,
-                        mac=dict(
-                            address="00c1.4c00.bd15"
-                        )
+                        priority=12, mac=dict(address="00c1.4c00.bd15")
                     )
                 ),
                 state="merged",
@@ -93,9 +90,7 @@ class TestIosxrLacpModule(TestIosxrModule):
         )
         commands = [
             "lacp system mac 00c1.4c00.bd15",
-            "lacp system priority 12"
+            "lacp system priority 12",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
-
-

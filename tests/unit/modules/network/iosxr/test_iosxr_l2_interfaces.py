@@ -97,14 +97,11 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         l2transport=True,
-                        l2protocol=[dict(cpsv="tunnel")]
+                        l2protocol=[dict(cpsv="tunnel")],
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/3.900",
-                        encapsulation=dict(
-                            dot1q=20,
-                            second_dot1q=40
-                        )
+                        encapsulation=dict(dot1q=20, second_dot1q=40),
                     ),
                 ],
                 state="merged",
@@ -119,14 +116,11 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         l2transport=True,
-                        l2protocol=[dict(cpsv="tunnel")]
+                        l2protocol=[dict(cpsv="tunnel")],
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/3.900",
-                        encapsulation=dict(
-                            dot1q=20,
-                            second_dot1q=40
-                        )
+                        encapsulation=dict(dot1q=20, second_dot1q=40),
                     ),
                 ],
                 state="merged",
@@ -149,7 +143,7 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         l2transport=True,
-                        l2protocol=[dict(cpsv="drop")]
+                        l2protocol=[dict(cpsv="drop")],
                     )
                 ],
                 state="replaced",
@@ -183,14 +177,11 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         l2transport=True,
-                        l2protocol=[dict(cpsv="tunnel")]
+                        l2protocol=[dict(cpsv="tunnel")],
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/3.900",
-                        encapsulation=dict(
-                            dot1q=20,
-                            second_dot1q=40
-                        )
+                        encapsulation=dict(dot1q=20, second_dot1q=40),
                     ),
                 ],
                 state="rendered",
@@ -211,34 +202,40 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 running_config="interface GigabitEthernet0/0/0/1\n l2transport\n  l2protocol cpsv tunnel\n  "
-                               "propagate remote-status\n !",
+                "propagate remote-status\n !",
                 state="parsed",
             )
         )
         result = self.execute_module(changed=False)
         print(result["parsed"])
-        parsed_list = [{'name': 'GigabitEthernet0/0/0/1', 'l2transport': True,
-                        'l2protocol': [{'cpsv': 'tunnel'}], 'propagate': True}]
+        parsed_list = [
+            {
+                "name": "GigabitEthernet0/0/0/1",
+                "l2transport": True,
+                "l2protocol": [{"cpsv": "tunnel"}],
+                "propagate": True,
+            }
+        ]
         self.assertEqual(parsed_list, result["parsed"])
 
     def test_iosxr_l2_interfaces_overridden(self):
         self.maxDiff = None
         self._prepare()
-        set_module_args(dict(config=[
+        set_module_args(
+            dict(
+                config=[
                     dict(
                         name="GigabitEthernet0/0/0/4",
                         l2transport=True,
-                        l2protocol=[dict(cpsv="tunnel")]
+                        l2protocol=[dict(cpsv="tunnel")],
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/3.900",
-                        encapsulation=dict(
-                            dot1q=40,
-                            second_dot1q=60
-                        )
+                        encapsulation=dict(dot1q=40, second_dot1q=60),
                     ),
                 ],
-            state="overridden")
+                state="overridden",
+            )
         )
         commands = [
             "interface GigabitEthernet0/0/0/4",
@@ -246,7 +243,7 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/3.900",
             "encapsulation dot1q 40 second-dot1q 60",
             "interface GigabitEthernet0/0/0/1",
-            "no l2transport"
+            "no l2transport",
         ]
 
         result = self.execute_module(changed=True)

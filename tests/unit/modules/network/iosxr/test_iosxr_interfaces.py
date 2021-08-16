@@ -88,13 +88,13 @@ class TestIosxrInterfacesModule(TestIosxrModule):
                         description="Configured and Merged by Ansible-Network",
                         mtu=110,
                         enabled=True,
-                        duplex="half"
+                        duplex="half",
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         description="Configured and Merged by Ansible-Network",
                         mtu=2800,
-                        speed=100
+                        speed=100,
                     ),
                 ],
                 state="merged",
@@ -111,7 +111,7 @@ class TestIosxrInterfacesModule(TestIosxrModule):
                         description="Configured and Merged by Ansible-Network",
                         mtu=110,
                         enabled=True,
-                        duplex="half"
+                        duplex="half",
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/1",
@@ -119,7 +119,7 @@ class TestIosxrInterfacesModule(TestIosxrModule):
                         mtu=2800,
                         enabled=False,
                         duplex="full",
-                        speed=100
+                        speed=100,
                     ),
                 ],
                 state="merged",
@@ -136,7 +136,7 @@ class TestIosxrInterfacesModule(TestIosxrModule):
             "mtu 2800",
             "speed 100",
             "duplex full",
-            "shutdown"
+            "shutdown",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -154,7 +154,7 @@ class TestIosxrInterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         description="Configured and Replaced by Ansible-Network",
-                        speed=100
+                        speed=100,
                     ),
                 ],
                 state="replaced",
@@ -183,12 +183,10 @@ class TestIosxrInterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/1",
             "no description",
             "no speed",
-            "no mtu"
+            "no mtu",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
-
-
 
     def test_iosxr_interfaces_rendered(self):
         set_module_args(
@@ -199,7 +197,7 @@ class TestIosxrInterfacesModule(TestIosxrModule):
                         description="Configured and Merged by Ansible-Network",
                         mtu=110,
                         enabled=True,
-                        duplex="half"
+                        duplex="half",
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/1",
@@ -207,7 +205,7 @@ class TestIosxrInterfacesModule(TestIosxrModule):
                         mtu=2800,
                         enabled=False,
                         duplex="full",
-                        speed=100
+                        speed=100,
                     ),
                 ],
                 state="rendered",
@@ -225,7 +223,7 @@ class TestIosxrInterfacesModule(TestIosxrModule):
             "mtu 2800",
             "speed 100",
             "duplex full",
-            "shutdown"
+            "shutdown",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
@@ -235,8 +233,8 @@ class TestIosxrInterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 running_config="interface GigabitEthernet0/0/0/0\n description Configured and Merged by Ansible-Network\n "
-                               "mtu 110\n duplex half\ninterface GigabitEthernet0/0/0/1\n "
-                               "description Configured and Merged by Ansible-Network\n no shutdown\n mtu 2800\n speed 100",
+                "mtu 110\n duplex half\ninterface GigabitEthernet0/0/0/1\n "
+                "description Configured and Merged by Ansible-Network\n no shutdown\n mtu 2800\n speed 100",
                 state="parsed",
             )
         )
@@ -247,15 +245,15 @@ class TestIosxrInterfacesModule(TestIosxrModule):
                 "duplex": "half",
                 "enabled": True,
                 "mtu": 110,
-                "name": "GigabitEthernet0/0/0/0"
+                "name": "GigabitEthernet0/0/0/0",
             },
             {
                 "description": "Configured and Merged by Ansible-Network",
                 "enabled": True,
                 "mtu": 2800,
                 "name": "GigabitEthernet0/0/0/1",
-                "speed": 100
-            }
+                "speed": 100,
+            },
         ]
 
         self.assertEqual(parsed_list, result["parsed"])
@@ -263,17 +261,20 @@ class TestIosxrInterfacesModule(TestIosxrModule):
     def test_iosxr_interfaces_overridden(self):
         self.maxDiff = None
         self._prepare()
-        set_module_args(dict(config=[
+        set_module_args(
+            dict(
+                config=[
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         description="Configured and Overridden by Ansible-Network",
                         mtu=2000,
                         enabled=False,
                         duplex="full",
-                        speed=100
-                    ),
+                        speed=100,
+                    )
                 ],
-            state="overridden")
+                state="overridden",
+            )
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",
@@ -284,7 +285,7 @@ class TestIosxrInterfacesModule(TestIosxrModule):
             "description Configured and Overridden by Ansible-Network",
             "mtu 2000",
             "duplex full",
-            "shutdown"
+            "shutdown",
         ]
 
         result = self.execute_module(changed=True)

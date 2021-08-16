@@ -22,7 +22,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.plugins.modules import iosxr_lag_interfaces
+from ansible_collections.cisco.iosxr.plugins.modules import (
+    iosxr_lag_interfaces,
+)
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
     set_module_args,
 )
@@ -87,32 +89,25 @@ class TestIosxrLagInterfacesModule(TestIosxrModule):
                         mode="active",
                         members=[
                             dict(
-                                member="GigabitEthernet0/0/0/0",
-                                mode="inherit"
+                                member="GigabitEthernet0/0/0/0", mode="inherit"
                             ),
                             dict(
-                                member="GigabitEthernet0/0/0/1",
-                                mode="passive"
-                            )
+                                member="GigabitEthernet0/0/0/1", mode="passive"
+                            ),
                         ],
-                        links=dict(
-                            max_active=10,
-                            min_active=2
-                        )
+                        links=dict(max_active=10, min_active=2),
                     ),
                     dict(
                         name="Bundle-Ether11",
                         mode="active",
                         members=[
                             dict(
-                                member="GigabitEthernet0/0/0/8",
-                                mode="passive"
+                                member="GigabitEthernet0/0/0/8", mode="passive"
                             ),
                             dict(
-                                member="GigabitEthernet0/0/0/9",
-                                mode="passive"
-                            )
-                        ]
+                                member="GigabitEthernet0/0/0/9", mode="passive"
+                            ),
+                        ],
                     ),
                 ],
                 state="merged",
@@ -129,32 +124,25 @@ class TestIosxrLagInterfacesModule(TestIosxrModule):
                         mode="active",
                         members=[
                             dict(
-                                member="GigabitEthernet0/0/0/0",
-                                mode="inherit"
+                                member="GigabitEthernet0/0/0/0", mode="inherit"
                             ),
                             dict(
-                                member="GigabitEthernet0/0/0/1",
-                                mode="passive"
-                            )
+                                member="GigabitEthernet0/0/0/1", mode="passive"
+                            ),
                         ],
-                        links=dict(
-                            max_active=10,
-                            min_active=2
-                        )
+                        links=dict(max_active=10, min_active=2),
                     ),
                     dict(
                         name="Bundle-Ether11",
                         mode="active",
                         members=[
                             dict(
-                                member="GigabitEthernet0/0/0/8",
-                                mode="passive"
+                                member="GigabitEthernet0/0/0/8", mode="passive"
                             ),
                             dict(
-                                member="GigabitEthernet0/0/0/9",
-                                mode="passive"
-                            )
-                        ]
+                                member="GigabitEthernet0/0/0/9", mode="passive"
+                            ),
+                        ],
                     ),
                 ],
                 state="merged",
@@ -174,7 +162,7 @@ class TestIosxrLagInterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/8",
             "bundle id 11 mode passive",
             "interface GigabitEthernet0/0/0/9",
-            "bundle id 11 mode passive"
+            "bundle id 11 mode passive",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -189,15 +177,11 @@ class TestIosxrLagInterfacesModule(TestIosxrModule):
                         mode="passive",
                         members=[
                             dict(
-                                member="GigabitEthernet0/0/0/0",
-                                mode="passive"
+                                member="GigabitEthernet0/0/0/0", mode="passive"
                             )
-                        ]
+                        ],
                     ),
-                    dict(
-                        name="Bundle-Ether12",
-                        mode="active"
-                    )
+                    dict(name="Bundle-Ether12", mode="active"),
                 ],
                 state="replaced",
             )
@@ -212,7 +196,7 @@ class TestIosxrLagInterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/0",
             "bundle id 10 mode passive",
             "interface Bundle-Ether12",
-            "lacp mode active"
+            "lacp mode active",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -235,7 +219,7 @@ class TestIosxrLagInterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/8",
             "no bundle id",
             "interface GigabitEthernet0/0/0/9",
-            "no bundle id"
+            "no bundle id",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -249,32 +233,25 @@ class TestIosxrLagInterfacesModule(TestIosxrModule):
                         mode="active",
                         members=[
                             dict(
-                                member="GigabitEthernet0/0/0/0",
-                                mode="passive"
+                                member="GigabitEthernet0/0/0/0", mode="passive"
                             ),
                             dict(
-                                member="GigabitEthernet0/0/0/1",
-                                mode="passive"
-                            )
+                                member="GigabitEthernet0/0/0/1", mode="passive"
+                            ),
                         ],
-                        links=dict(
-                            max_active=10,
-                            min_active=2
-                        )
+                        links=dict(max_active=10, min_active=2),
                     ),
                     dict(
                         name="Bundle-Ether11",
                         mode="active",
                         members=[
                             dict(
-                                member="GigabitEthernet0/0/0/8",
-                                mode="passive"
+                                member="GigabitEthernet0/0/0/8", mode="passive"
                             ),
                             dict(
-                                member="GigabitEthernet0/0/0/9",
-                                mode="passive"
-                            )
-                        ]
+                                member="GigabitEthernet0/0/0/9", mode="passive"
+                            ),
+                        ],
                     ),
                 ],
                 state="rendered",
@@ -295,7 +272,7 @@ class TestIosxrLagInterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/8",
             "bundle id 11 mode passive",
             "interface GigabitEthernet0/0/0/9",
-            "bundle id 11 mode passive"
+            "bundle id 11 mode passive",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
@@ -305,53 +282,63 @@ class TestIosxrLagInterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 running_config="interface Bundle-Ether10\r\n lacp mode active\r\n bundle maximum-active "
-                               "links 10\r\n bundle minimum-active links 2\r\n!\r\ninterface Bundle-Ether11"
-                               "\r\nlacp mode active\r\n!\r\ninterface GigabitEthernet0/0/0/0\r\n description "
-                               "\"GigabitEthernet - 0\"\r\n bundle id 10 mode inherit\r\n!\r\ninterface "
-                               "GigabitEthernet0/0/0/1"
-                               "\r\n description \"GigabitEthernet - 2\"\r\n  bundle id 10 mode passive\r\n!\r\n"
-                               "interface GigabitEthernet0/0/0/8\r\n description \"GigabitEthernet - 8\""
-                               "\r\n bundle id 11 mode passive"
-                               "\r\n!\r\ninterface GigabitEthernet0/0/0/9\r\n description "
-                               "\"GigabitEthernet - 9\"\r\n bundle id 11 mode passive\r\n!",
+                "links 10\r\n bundle minimum-active links 2\r\n!\r\ninterface Bundle-Ether11"
+                "\r\nlacp mode active\r\n!\r\ninterface GigabitEthernet0/0/0/0\r\n description "
+                '"GigabitEthernet - 0"\r\n bundle id 10 mode inherit\r\n!\r\ninterface '
+                "GigabitEthernet0/0/0/1"
+                '\r\n description "GigabitEthernet - 2"\r\n  bundle id 10 mode passive\r\n!\r\n'
+                'interface GigabitEthernet0/0/0/8\r\n description "GigabitEthernet - 8"'
+                "\r\n bundle id 11 mode passive"
+                "\r\n!\r\ninterface GigabitEthernet0/0/0/9\r\n description "
+                '"GigabitEthernet - 9"\r\n bundle id 11 mode passive\r\n!',
                 state="parsed",
             )
         )
         result = self.execute_module(changed=False)
         print(result["parsed"])
-        parsed_list = [{'links': {'max_active': 10, 'min_active': 2}, 'members': [
-            {'member': 'GigabitEthernet0/0/0/0', 'mode': 'inherit'}, {'member': 'GigabitEthernet0/0/0/1',
-            'mode': 'passive'}], 'mode': 'active', 'name':  'Bundle-Ether10'}, {'members': [
-            {'member': 'GigabitEthernet0/0/0/8', 'mode': 'passive'},
-             {'member': 'GigabitEthernet0/0/0/9', 'mode': 'passive'}],
-            'mode': 'active', 'name': 'Bundle-Ether11'}]
+        parsed_list = [
+            {
+                "links": {"max_active": 10, "min_active": 2},
+                "members": [
+                    {"member": "GigabitEthernet0/0/0/0", "mode": "inherit"},
+                    {"member": "GigabitEthernet0/0/0/1", "mode": "passive"},
+                ],
+                "mode": "active",
+                "name": "Bundle-Ether10",
+            },
+            {
+                "members": [
+                    {"member": "GigabitEthernet0/0/0/8", "mode": "passive"},
+                    {"member": "GigabitEthernet0/0/0/9", "mode": "passive"},
+                ],
+                "mode": "active",
+                "name": "Bundle-Ether11",
+            },
+        ]
         self.assertEqual(parsed_list, result["parsed"])
 
     def test_iosxr_lag_interfaces_overridden(self):
         self.maxDiff = None
         self._prepare()
-        set_module_args(dict(
-            config=[
-                dict(
-                    name="Bundle-Ether11",
-                    mode="active",
-                    members=[
-                        dict(
-                            member="GigabitEthernet0/0/0/0",
-                            mode="active"
-                        ),
-                        dict(
-                            member="GigabitEthernet0/0/0/1",
-                            mode="active"
-                        )
-                    ],
-                    links=dict(
-                        max_active=10,
-                        min_active=5
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="Bundle-Ether11",
+                        mode="active",
+                        members=[
+                            dict(
+                                member="GigabitEthernet0/0/0/0", mode="active"
+                            ),
+                            dict(
+                                member="GigabitEthernet0/0/0/1", mode="active"
+                            ),
+                        ],
+                        links=dict(max_active=10, min_active=5),
                     )
-                )
-            ],
-            state="overridden")
+                ],
+                state="overridden",
+            )
         )
         commands = [
             "interface Bundle-Ether10",
@@ -372,7 +359,7 @@ class TestIosxrLagInterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/0",
             "bundle id 11 mode active",
             "interface GigabitEthernet0/0/0/1",
-            "bundle id 11 mode active"
+            "bundle id 11 mode active",
         ]
 
         result = self.execute_module(changed=True)

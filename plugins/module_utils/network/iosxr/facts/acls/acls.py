@@ -168,7 +168,6 @@ class AclsFacts(object):
         objs = []
 
         acl_lines = data.splitlines()
-
         # We iterate through the data and create a list of ACLs
         # where each ACL is a dictionary in the following format:
         # {'afi': 'ipv4', 'name': 'acl_1', 'aces': ['10 permit 172.16.0.0 0.0.255.255', '20 deny 192.168.34.0 0.0.0.255']}
