@@ -26,3 +26,8 @@ plugins/modules/iosxr_bgp_address_family.py import-2.6!skip
 plugins/modules/iosxr_bgp_global.py import-2.6!skip
 plugins/modules/iosxr_prefix_lists.py import-2.6!skip
 plugins/modules/iosxr_logging_global.py import-2.6!skip
+plugins/cliconf/iosxr.py pylint:arguments-renamed
+plugins/netconf/iosxr.py pylint:arguments-renamed
+tests/unit/mock/loader.py pylint:arguments-renamed
+plugins/module_utils/network/iosxr/config/acls/acls.py pylint:unused-private-member
+plugins/module_utils/network/iosxr/facts/acls/acls.py pylint:unused-private-member
