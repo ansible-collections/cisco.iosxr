@@ -46,6 +46,9 @@ class L3_InterfacesFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_config(self, connection):
+        return connection.get_config(flags="interface")
+
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for interfaces
         :param connection: the device connection
@@ -57,7 +60,7 @@ class L3_InterfacesFacts(object):
         objs = []
 
         if not data:
-            data = connection.get("show running-config interface")
+            data = self.get_config(connection)
         # operate on a collection of resource x
         config = ("\n" + data).split("\ninterface ")
         for conf in config:

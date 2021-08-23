@@ -44,6 +44,9 @@ class Lag_interfacesFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_config(self, connection):
+        return connection.get_config(flags="interface")
+
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for lag_interfaces
         :param connection: the device connection
@@ -54,7 +57,7 @@ class Lag_interfacesFacts(object):
         """
 
         if not data:
-            data = connection.get_config(flags="interface")
+            data = self.get_config(connection)
         interfaces = ("\n" + data).split("\ninterface ")
 
         objs = []

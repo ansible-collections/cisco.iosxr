@@ -334,15 +334,16 @@ class L2_Interfaces(ConfigBase):
                 if l2transport or l2protocol:
                     for each in l2protocol:
                         each = dict(each)
-                        if (
-                            isinstance(each, dict)
-                            and list(each.keys())[0] == "cpsv"
+                        if isinstance(each, dict) and "cpsv" in list(
+                            each.keys()
                         ):
                             cmd = "l2transport l2protocol {0} {1}".format(
-                                list(each.keys())[0], list(each.values())[0]
+                                "cpsv", each.get("cpsv")
                             )
-                        add_command_to_config_list(interface, cmd, commands)
-                        break
+                            add_command_to_config_list(
+                                interface, cmd, commands
+                            )
+                            break
                 if encapsulation:
                     encapsulation = dict(encapsulation)
                     if encapsulation.get("dot1q"):

@@ -45,6 +45,9 @@ class Lacp_interfacesFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_config(self, connection):
+        return connection.get_config(flags="interface")
+
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for lacp_interfaces
         :param connection: the device connection
@@ -55,7 +58,7 @@ class Lacp_interfacesFacts(object):
         """
 
         if not data:
-            data = connection.get_config(flags="interface")
+            data = self.get_config(connection)
         interfaces = ("\n" + data).split("\ninterface ")
 
         objs = []
