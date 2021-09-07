@@ -306,7 +306,10 @@ class AclsFacts(object):
                 else:
                     port_protocol[element] = ace_queue.popleft()
 
-                rendered_ace[direction]["port_protocol"] = port_protocol
+                if rendered_ace.get(direction):
+                    rendered_ace[direction]["port_protocol"] = port_protocol
+                else:
+                    rendered_ace[direction] = {"port_protocol": port_protocol}
 
         def __parse_protocol_options(rendered_ace, ace_queue, protocol):
             """
