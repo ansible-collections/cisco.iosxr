@@ -14,9 +14,6 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-from copy import deepcopy
-
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
@@ -26,6 +23,10 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templ
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.ntp_global.ntp_global import (
     Ntp_globalArgs,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    flatten_config,
+)
+
 
 class Ntp_globalFacts(object):
     """ The iosxr ntp_global facts class
@@ -51,9 +52,22 @@ class Ntp_globalFacts(object):
         if not data:
             data = connection.get("show running-config ntp")
 
+        flatten_context_list = [
+            "interface",
+            "ntp"
+        ]
+
+        for x in flatten_context_list:
+            data = flatten_config(data, x)
         # parse native config using the Ntp_global template
         ntp_global_parser = Ntp_globalTemplate(lines=data.splitlines(), module=self._module)
         objs = ntp_global_parser.parse()
+        if "access_group" in objs:
+            objs["access_group"]["vrfs"] = list(objs.get("access_group", {}).get("vrfs", {}).values())
+        if "interfaces" in objs:
+            objs["interfaces"] = list(objs.get("interfaces", {}).values())
+        if "source_vrfs" in objs:
+            objs["source_vrfs"] = list(objs.get("source_vrfs", {}).values())
 
         ansible_facts['ansible_network_resources'].pop('ntp_global', None)
 
@@ -61,7 +75,7 @@ class Ntp_globalFacts(object):
             ntp_global_parser.validate_config(self.argument_spec, {"config": objs}, redact=True)
         )
 
-        facts['ntp_global'] = params['config']
+        facts["ntp_global"] = params.get("config", {})
         ansible_facts['ansible_network_resources'].update(facts)
 
         return ansible_facts

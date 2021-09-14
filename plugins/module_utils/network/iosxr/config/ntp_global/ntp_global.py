@@ -22,6 +22,7 @@ from copy import deepcopy
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
+    dict_diff,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
     ResourceModule,
@@ -48,6 +49,28 @@ class Ntp_global(ResourceModule):
             tmplt=Ntp_globalTemplate(),
         )
         self.parsers = [
+            "access_group.ipv4.peer",
+            "access_group.ipv4.serve",
+            "access_group.ipv4.serve_only",
+            "access_group.ipv4.query_only",
+            "access_group.ipv6.peer",
+            "access_group.ipv6.serve",
+            "access_group.ipv6.serve_only",
+            "access_group.ipv6.query_only",
+            "authenticate",
+            "log_internal_sync",
+            "broadcastdelay",
+            "drift.aging_time",
+            "drift.file",
+            "ipv4.dscp",
+            "ipv4.precedence",
+            "ipv6.dscp",
+            "ipv6.precedence",
+            "max_associations",
+            "master",
+            "passive",
+            "update_calendar",
+            "source"
         ]
 
     def execute_module(self):
@@ -65,28 +88,22 @@ class Ntp_global(ResourceModule):
         """ Generate configuration commands to send based on
             want, have and desired state.
         """
-        wantd = {entry['name']: entry for entry in self.want}
-        haved = {entry['name']: entry for entry in self.have}
+        wantd = self._ntp_list_to_dict(self.want)
+        haved = self._ntp_list_to_dict(self.have)
 
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
             wantd = dict_merge(haved, wantd)
 
-        # if state is deleted, empty out wantd and set haved to wantd
+        # if state is deleted, empty out wantd
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
             wantd = {}
 
-        # remove superfluous config for overridden and deleted
-        if self.state in ["overridden", "deleted"]:
-            for k, have in iteritems(haved):
-                if k not in wantd:
-                    self._compare(want={}, have=have)
-
-        for k, want in iteritems(wantd):
-            self._compare(want=want, have=haved.pop(k, {}))
+        self._compare(want=wantd, have=haved)
+        if self.state in ["overridden", "replaced"]:
+            self.commands = [
+                each for each in self.commands if "no" in each
+            ] + [each for each in self.commands if "no" not in each]
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
@@ -94,4 +111,71 @@ class Ntp_global(ResourceModule):
            the `want` and `have` data with the `parsers` defined
            for the Ntp_global network resource.
         """
+        self._compare_lists(want=want, have=have)
         self.compare(parsers=self.parsers, want=want, have=have)
+
+    def _compare_lists(self, want, have):
+        keys = ["authentication_keys", "peers", "servers", "trusted_keys", "interfaces", "source_vrfs", "access_group.vrfs"]
+        for x in keys:
+            if "." in x:
+                ag_vrf_list = x.split(".")
+                wantx = want.get(ag_vrf_list[0], {}).get(ag_vrf_list[1], {})
+                havex = have.get(ag_vrf_list[0], {}).get(ag_vrf_list[1], {})
+                x = ag_vrf_list[1]
+            else:
+                wantx = want.get(x, {})
+                havex = have.get(x, {})
+
+            for wkey, wentry in iteritems(wantx):
+                hentry = havex.pop(wkey, {})
+                if wentry != hentry:
+                    if x in keys[1:4] and self.state in [
+                        "overridden",
+                        "replaced",
+                    ]:
+                        # remove existing config else it gets appeneded
+                        self.addcmd(hentry, x, negate=True)
+                    if x == "interfaces":
+                        updates = dict_diff(hentry, wentry)
+                        updates.update(name=wentry.get("name"))
+                        updates.update(vrf=wentry.get("vrf", ""))
+                        self.addcmd(updates, x)
+                    else:
+                        self.addcmd(wentry, x)
+
+            # remove superfluos config
+            for _hkey, hentry in iteritems(havex):
+                if x == "interfaces":
+                    if "vrf" in hentry:
+                        self.commands.append(
+                            "no ntp interface {0} vrf {1}".format(_hkey.split("_")[0], _hkey.split("_")[1])
+                        )
+                    else:
+                        self.commands.append(
+                            "no ntp interface {0}".format(_hkey.split("_")[0]))
+                else:
+                    self.addcmd(hentry, x, negate=True)
+
+    def _ntp_list_to_dict(self, data):
+        """Convert all list to dicts to dicts
+        of dicts
+        """
+        tmp = deepcopy(data)
+        if "access_group" in tmp:
+            if "vrfs" in tmp["access_group"]:
+                tmp["access_group"]["vrfs"] = {
+                    i["name"]: i for i in tmp["access_group"]["vrfs"]
+                }
+        if "interfaces" in tmp:
+            tmp["interfaces"] = {i["name"] + "_" + i.get("vrf", ""): i for i in tmp["interfaces"]}
+        pkey = {
+            "authentication_keys": "id",
+            "peers": "peer",
+            "servers": "server",
+            "trusted_keys": "key_id",
+            "source_vrfs": "vrf"
+        }
+        for k in pkey.keys():
+            if k in tmp:
+                tmp[k] = {i[pkey[k]]: i for i in tmp[k]}
+        return tmp

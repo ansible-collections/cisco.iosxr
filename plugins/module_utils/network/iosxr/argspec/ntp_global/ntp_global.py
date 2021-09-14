@@ -39,8 +39,7 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
             "type": "dict",
             "options": {
                 "access_group": {
-                    "type": "list",
-                    "elements": "dict",
+                    "type": "dict",
                     "options": {
                         "ipv4": {
                             "type": "dict",
@@ -60,8 +59,9 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                                 "serve_only": {"type": "str"},
                             },
                         },
-                        "vrf": {
-                            "type": "dict",
+                        "vrfs": {
+                            "type": "list",
+                            "elements": "dict",
                             "options": {
                                 "name": {"type": "str"},
                                 "ipv4": {
@@ -89,6 +89,8 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                 "authenticate": {"type": "bool"},
                 "authentication_keys": {
                     "type": "list",
+                    "elements": "dict",
+                    "no_log": False,
                     "options": {
                         "id": {"type": "int"},
                         "key": {"type": "str", "no_log": True},
@@ -107,25 +109,17 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                     "type": "list",
                     "elements": "dict",
                     "options": {
+                        "name": {"type": "str"},
+                        "vrf": {"type": "str"},
                         "broadcast_client": {"type": "bool"},
-                        "broadcast": {
-                            "type": "dict",
-                            "options": {
-                                "destination": {"type": "str"},
-                                "key": {"type": "int"},
-                                "version": {"type": "int"},
-                            },
-                        },
-                        "multicast": {
-                            "type": "dict",
-                            "options": {
-                                "key": {"type": "int"},
-                                "ttl": {"type": "int"},
-                                "client": {"type": "str"},
-                                "destination": {"type": "str"},
-                                "version": {"type": "int"},
-                            },
-                        },
+                        "broadcast_destination": {"type": "str"},
+                        "broadcast_key": {"type": "int"},
+                        "broadcast_version": {"type": "int"},
+                        "multicast_key": {"type": "int"},
+                        "multicast_ttl": {"type": "int"},
+                        "multicast_client": {"type": "str"},
+                        "multicast_destination": {"type": "str"},
+                        "multicast_version": {"type": "int"},
                     },
                 },
                 "ipv4": {
@@ -170,9 +164,18 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                 "master": {"type": "int"},
                 "max_associations": {"type": "int"},
                 "passive": {"type": "bool"},
-                "trusted_keys": {"type": "list", "elements": "int"},
+                "trusted_keys": {
+                    "type": "list",
+                    "elements": "dict",
+                    "options": {"key_id": {"type": "int"}},
+                },
                 "update_calendar": {"type": "bool"},
                 "source": {"type": "str"},
+                "source_vrfs": {
+                    "type": "list",
+                    "elements": "dict",
+                    "options": {"name": {"type": "str"}, "vrf": {"type": "str"}},
+                },
                 "servers": {
                     "type": "list",
                     "elements": "dict",

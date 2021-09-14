@@ -30,8 +30,7 @@ options:
     suboptions:
         access_group:
           description: Control NTP access
-          type: list
-          elements: dict
+          type: dict
           suboptions:
             ipv4: &ipv4
               type: dict
@@ -57,8 +56,9 @@ options:
                 query_only: *query_only
                 serve: *serve
                 serve_only: *serve_only
-            vrf:
-              type: dict
+            vrfs:
+              type: list
+              elements: dict
               description: Specify non-default VRF.
               suboptions:
                 name:
@@ -72,7 +72,7 @@ options:
         authentication_keys:
           description: Authentication key for trusted time sources
           type: list
-          elemnets: dict
+          elements: dict
           suboptions:
             id:
               description: <1-65535>  Key number
@@ -80,7 +80,6 @@ options:
             key:
               description: Authentication key.
               type: str
-              no_log: True
             encrypted:
               description: Type of key encrypted or clear-text.
               type: bool
@@ -102,41 +101,39 @@ options:
           elements: dict
           description: Configure NTP on an interface.
           suboptions:
+            name:
+              type: str
+              description: Name of the interface.
+            vrf:
+              type: str
+              description: Name of the vrf.
             broadcast_client:
               type: bool
               description: Listen to NTP broadcasts
-            broadcast:
-              type: dict
-              description: Configure NTP broadcast service.
-              suboptions:
-                destination:
-                  type: str
-                  description: Configure broadcast destination address.
-                key:
-                  type: int
-                  description: Broadcast key number.
-                version:
-                  type: int
-                  description: <2-4>  NTP version number.
-            multicast:
-              type: dict
-              description: Configure NTP multicast service.
-              suboptions:
-                key:
-                  type: int
-                  description: Configure multicast authentication key.
-                ttl:
-                  type: int
-                  description: Configure TTL to use.
-                client:
-                  type: str
-                  description:
-                destination:
-                  type: str
-                  description:
-                version:
-                  type: int
-                  description: <2-4>  NTP version number.
+            broadcast_destination:
+              type: str
+              description: Configure broadcast destination address.
+            broadcast_key:
+              type: int
+              description: Broadcast key number.
+            broadcast_version:
+              type: int
+              description: <2-4>  NTP version number.
+            multicast_key:
+              type: int
+              description: Configure multicast authentication key.
+            multicast_ttl:
+              type: int
+              description: Configure TTL to use.
+            multicast_client:
+              type: str
+              description: Configure multicast client
+            multicast_destination:
+              type: str
+              description: Configure multicast destination
+            multicast_version:
+              type: int
+              description: <2-4>  NTP version number.
         ipv4: &ip
           description: Mark the dscp/precedence bit for ipv4 packets.
           type: dict
@@ -163,14 +160,29 @@ options:
           description: Enable the passive associations.
         trusted_keys:
           type: list
-          elements: int
-          description: Key numbers for trusted time sources.
+          elements: dict
+          description: list of Key numbers for trusted time sources.
+          suboptions:
+            key_id:
+              type: int
+              description: Key numbers for trusted time sources.
         update_calendar:
           type: bool
           description: Periodically update calendar with NTP time.
         source:
           type: str
           description: Configure default interface.
+        source_vrfs:
+          type: list
+          elements: dict
+          description: Configure default interface.
+          suboptions:
+            name:
+              type: str
+              description: Name of source interface.
+            vrf:
+              type: str
+              description: vrf name.
         servers:
           description: Configure NTP server.
           type: list
