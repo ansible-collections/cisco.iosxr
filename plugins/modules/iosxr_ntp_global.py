@@ -661,7 +661,6 @@ EXAMPLES = """
           trusted_keys:
             - key_id: 1
           update_calendar: true
-      register: result
 # Commands Fired:
 # ---------------
 # "commands": [

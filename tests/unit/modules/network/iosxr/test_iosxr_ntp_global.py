@@ -806,7 +806,9 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                 },
             ],
             "drift": {"file": "apphost", "aging_time": 0},
-            "master": 1,
+            "master": {
+                "stratum": 1
+            },
             "access_group": {
                 "vrfs": [
                     {
@@ -825,7 +827,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
             "source_vrfs": [
                 {"name": "GigabitEthernet0/0/0/0", "vrf": "siteE"}
             ],
-            "source": "GigabitEthernet0/0/0/0",
+            "source_interface": "GigabitEthernet0/0/0/0",
             "passive": True,
             "broadcastdelay": 1,
             "update_calendar": True,
@@ -895,7 +897,9 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                 },
             ],
             "drift": {"file": "apphost", "aging_time": 0},
-            "master": 1,
+            "master": {
+                "stratum": 1
+            },
             "access_group": {
                 "vrfs": [{"name": "siteA", "ipv4": {"peer": "PeerAcl3"}}],
                 "ipv4": {
@@ -909,7 +913,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
             "source_vrfs": [
                 {"name": "GigabitEthernet0/0/0/0", "vrf": "siteE"}
             ],
-            "source": "GigabitEthernet0/0/0/0",
+            "source_interface": "GigabitEthernet0/0/0/0",
             "passive": True,
             "broadcastdelay": 1,
             "update_calendar": True,
