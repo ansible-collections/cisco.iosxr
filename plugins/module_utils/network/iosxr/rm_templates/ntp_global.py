@@ -440,14 +440,16 @@ class Ntp_globalTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "master",
+            "name": "master.stratum",
             "getval": re.compile(
                 r"""
                 ^ntp\smaster\s(?P<master>\d+)
                 $""", re.VERBOSE),
-            "setval": "ntp master {{ master }}",
+            "setval": "ntp master {{ master.stratum }}",
             "result": {
-                "master": "{{ master }}",
+                "master": {
+                    "stratum": "{{ master }}"
+                }
             },
         },
         {
@@ -473,14 +475,14 @@ class Ntp_globalTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "source",
+            "name": "source_interface",
             "getval": re.compile(
                 r"""
                 ^ntp\ssource\s(?P<source>\S+)
                 $""", re.VERBOSE),
-            "setval": "ntp source {{ source }}",
+            "setval": "ntp source {{ source_interface }}",
             "result": {
-                "source": "{{ source }}",
+                "source_interface": "{{ source }}",
             },
         },
         {

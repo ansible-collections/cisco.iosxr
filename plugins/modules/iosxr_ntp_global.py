@@ -150,8 +150,12 @@ options:
           type: bool
           description: Logs internal synchronization changes.
         master:
-          type: int
-          description: Use NTP as clock source with stratum number <1-15>
+          description: Act as NTP master clock
+          type: dict
+          suboptions:
+            stratum:
+              description: Use NTP as clock source with stratum number <1-15>
+              type: int
         max_associations:
           type: int
           description: <0-4294967295>  Number of associations.
@@ -169,7 +173,7 @@ options:
         update_calendar:
           type: bool
           description: Periodically update calendar with NTP time.
-        source:
+        source_interface:
           type: str
           description: Configure default interface.
         source_vrfs:
@@ -257,6 +261,7 @@ options:
       - parsed
     default: merged
 """
+
 EXAMPLES = """
 # Using state: merged
 # Before state:
@@ -312,7 +317,6 @@ EXAMPLES = """
           trusted_keys:
             - key_id: 1
           update_calendar: true
-
 # Commands Fired:
 # ------------
 # "commands": [
@@ -342,8 +346,6 @@ EXAMPLES = """
 #         "ntp update-calendar",
 #         "ntp source GigabitEthernet0/0/0/0"
 #     ],
-
-
 # After state:
 # ------------
 # RP/0/0/CPU0:10#show running-config ntp
@@ -376,11 +378,9 @@ EXAMPLES = """
 #  update-calendar
 #  log-internal-sync
 # !
-
 # Using state: deleted
 # Before state:
 # -------------
-
 # RP/0/0/CPU0:10#show running-config ntp
 # ntp
 #  max-associations 10
@@ -411,7 +411,6 @@ EXAMPLES = """
 #  update-calendar
 #  log-internal-sync
 # !
-
 # Deleted play:
 # -------------
 - name: Remove all existing configuration
@@ -444,17 +443,13 @@ EXAMPLES = """
 #         "no ntp update-calendar",
 #         "no ntp source GigabitEthernet0/0/0/0"
 #     ],
-
 # After state:
 # ------------
 # RP/0/0/CPU0:10#show running-config ntp
 # --------------------- EMPTY -----------------
-
-
 # Using state: overridden
 # Before state:
 # -------------
-
 # RP/0/0/CPU0:10#show running-config ntp
 # ntp
 #  max-associations 10
@@ -485,10 +480,8 @@ EXAMPLES = """
 #  update-calendar
 #  log-internal-sync
 # !
-
 # Overridden play:
 # ----------------
-
 - name: Override BGP configuration with provided configuration
   cisco.iosxr.iosxr_ntp_global:
         state: overridden
@@ -537,8 +530,6 @@ EXAMPLES = """
           trusted_keys:
             - key_id: 1
           update_calendar: true
-      register: result
-
 # Commands Fired:
 # ---------------
 # "commands": [
@@ -552,10 +543,8 @@ EXAMPLES = """
 #         "ntp ipv4 dscp af12",
 #         "ntp source GigabitEthernet0/0/0/1"
 #     ],
-
 # After state:
 # ------------
-
 # RP/0/RP0/CPU0:ios#show running-config ntp
 # Mon Sep 13 10:38:22.690 UTC
 # ntp
@@ -589,12 +578,9 @@ EXAMPLES = """
 #  log-internal-sync
 # !
 #
-
-
 # Using state: replaced
 # Before state:
 # -------------
-
 # RP/0/0/CPU0:10#show running-config ntp
 # ntp
 #  max-associations 10
@@ -625,10 +611,8 @@ EXAMPLES = """
 #  update-calendar
 #  log-internal-sync
 # !
-
 # Replaced play:
 # ----------------
-
 - name: Replaced BGP configuration with provided configuration
   cisco.iosxr.iosxr_ntp_global:
         state: replaced
@@ -678,7 +662,6 @@ EXAMPLES = """
             - key_id: 1
           update_calendar: true
       register: result
-
 # Commands Fired:
 # ---------------
 # "commands": [
@@ -692,10 +675,8 @@ EXAMPLES = """
 #         "ntp ipv4 dscp af12",
 #         "ntp source GigabitEthernet0/0/0/1"
 #     ],
-
 # After state:
 # ------------
-
 # RP/0/RP0/CPU0:ios#show running-config ntp
 # Mon Sep 13 10:38:22.690 UTC
 # ntp
@@ -728,12 +709,9 @@ EXAMPLES = """
 #  update-calendar
 #  log-internal-sync
 # !
-
-
 # Using state: gathered
 # Before state:
 # -------------
-
 # RP/0/0/CPU0:10#show running-config ntp
 # ntp
 #  max-associations 10
@@ -764,13 +742,11 @@ EXAMPLES = """
 #  update-calendar
 #  log-internal-sync
 # !
-
 # Gathered play:
 # --------------
 - name: Gather listed ntp config
   cisco.iosxr.iosxr_ntp_global:
     state: gathered
-
 # Module Execution Result:
 # ------------------------
 # "gathered":{
@@ -843,8 +819,6 @@ EXAMPLES = """
 #         ],
 #         "update_calendar": true
 #     }
-
-
 # Using state: rendered
 # Rendered play:
 # --------------
@@ -897,7 +871,6 @@ EXAMPLES = """
         - key_id: 1
       update_calendar: true
   register: result
-
 # Module Execution Result:
 # ------------------------
 # "rendered": [
@@ -927,7 +900,6 @@ EXAMPLES = """
 #         "ntp update-calendar",
 #         "ntp source GigabitEthernet0/0/0/0"
 #     ],
-
 # Using state: parsed
 # File: parsed.cfg
 # ----------------
@@ -966,7 +938,6 @@ EXAMPLES = """
   cisco.iosxr.iosxr_ntp_global:
     running_config: "{{ lookup('file', 'parsed.cfg') }}"
     state: parsed
-
 # Module Execution Result:
 # ------------------------
 # "parsed":{
@@ -1039,6 +1010,53 @@ EXAMPLES = """
 #         ],
 #         "update_calendar": true
 #     }
+"""
+
+RETURN = """
+before:
+  description: The configuration prior to the module execution.
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+after:
+  description: The resulting configuration after module execution.
+  returned: when changed
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+commands:
+  description: The set of commands pushed to the remote device.
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  type: list
+  sample:
+    - sample command 1
+    - sample command 2
+    - sample command 3
+rendered:
+  description: The provided configuration in the task rendered in device-native format (offline).
+  returned: when I(state) is C(rendered)
+  type: list
+  sample:
+    - sample command 1
+    - sample command 2
+    - sample command 3
+gathered:
+  description: Facts about the network resource gathered from the remote device as structured data.
+  returned: when I(state) is C(gathered)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+parsed:
+  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
+  returned: when I(state) is C(parsed)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 """
 
 from ansible.module_utils.basic import AnsibleModule

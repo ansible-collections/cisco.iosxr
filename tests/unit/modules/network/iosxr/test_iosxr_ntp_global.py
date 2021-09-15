@@ -140,7 +140,9 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ipv4=dict(dscp="af11"),
                     ipv6=dict(precedence="routine"),
                     log_internal_sync=True,
-                    master=1,
+                    master=dict(
+                        stratum=1
+                    ),
                     max_associations=10,
                     passive=True,
                     peers=[dict(iburst=True, peer="192.0.2.1", vrf="siteC")],
@@ -158,7 +160,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             version=2,
                         ),
                     ],
-                    source="GigabitEthernet0/0/0/0",
+                    source_interface="GigabitEthernet0/0/0/0",
                     source_vrfs=[
                         dict(name="GigabitEthernet0/0/0/0", vrf="siteE")
                     ],
@@ -213,7 +215,9 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ipv4=dict(dscp="af11"),
                     ipv6=dict(precedence="routine"),
                     log_internal_sync=True,
-                    master=1,
+                    master=dict(
+                        stratum=1
+                    ),
                     max_associations=10,
                     passive=True,
                     peers=[dict(iburst=True, peer="192.0.2.1", vrf="siteC")],
@@ -231,7 +235,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             version=2,
                         ),
                     ],
-                    source="GigabitEthernet0/0/0/0",
+                    source_interface="GigabitEthernet0/0/0/0",
                     source_vrfs=[
                         dict(name="GigabitEthernet0/0/0/0", vrf="siteE")
                     ],
@@ -244,9 +248,9 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
         commands = [
             "ntp authentication-key 1 md5 encrypted testkey",
             "ntp authentication-key 2 md5 encrypted 071B245F5A5B",
-            "ntp peer vrf siteC 192.0.2.1 iburst ",
-            "ntp server vrf siteD 192.0.2.2 burst ",
-            "ntp server 192.0.2.2 burst  iburst  key 1 minpoll 4 maxpoll 5 prefer version 2 source GigabitEthernet0/0/0/0",
+            "ntp peer vrf siteC 192.0.2.1 iburst",
+            "ntp server vrf siteD 192.0.2.2 burst",
+            "ntp server 192.0.2.2 burst iburst key 1 minpoll 4 maxpoll 5 prefer version 2 source GigabitEthernet0/0/0/0",
             "ntp trusted-key 1",
             "ntp trusted-key 2",
             "ntp interface GigabitEthernet0/0/0/0 broadcast client",
@@ -325,9 +329,9 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
         commands = [
             "no ntp authentication-key 1 md5 encrypted testkey",
             "no ntp authentication-key 2 md5 encrypted 071B245F5A5B",
-            "no ntp peer vrf siteC 192.0.2.1 iburst ",
-            "no ntp server vrf siteD 192.0.2.2 burst ",
-            "no ntp server 192.0.2.2 burst  iburst  key 1 minpoll 4 maxpoll 5 prefer version 2 source GigabitEthernet0/0/0/0",
+            "no ntp peer vrf siteC 192.0.2.1 iburst",
+            "no ntp server vrf siteD 192.0.2.2 burst",
+            "no ntp server 192.0.2.2 burst iburst key 1 minpoll 4 maxpoll 5 prefer version 2 source GigabitEthernet0/0/0/0",
             "no ntp trusted-key 1",
             "no ntp trusted-key 2",
             "no ntp interface GigabitEthernet0/0/0/0 vrf siteB",
@@ -441,7 +445,9 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ipv4=dict(dscp="af12"),
                     ipv6=dict(precedence="routine"),
                     log_internal_sync=True,
-                    master=1,
+                    master=dict(
+                        stratum=1
+                    ),
                     max_associations=10,
                     passive=True,
                     peers=[dict(iburst=True, peer="192.0.2.1", vrf="siteC")],
@@ -459,7 +465,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             version=2,
                         ),
                     ],
-                    source="GigabitEthernet0/0/0/0",
+                    source_interface="GigabitEthernet0/0/0/0",
                     source_vrfs=[
                         dict(name="GigabitEthernet0/0/0/0", vrf="siteE")
                     ],
@@ -470,11 +476,11 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
             )
         )
         commands = [
-            "no ntp server vrf siteD 192.0.2.2 burst ",
+            "no ntp server vrf siteD 192.0.2.2 burst",
             "no ntp interface GigabitEthernet0/0/0/0",
             "ntp authentication-key 1 md5 encrypted testkey1",
-            "ntp server vrf siteD 192.0.2.3 burst ",
-            "ntp server 192.0.2.2 burst  iburst  key 1 minpoll 4 maxpoll 5 prefer version 2 source GigabitEthernet0/0/0/1",
+            "ntp server vrf siteD 192.0.2.3 burst",
+            "ntp server 192.0.2.2 burst iburst key 1 minpoll 4 maxpoll 5 prefer version 2 source GigabitEthernet0/0/0/1",
             "ntp interface GigabitEthernet0/0/0/1 broadcast client",
             "ntp interface GigabitEthernet0/0/0/1 multicast destination 224.0.0.8",
             "ntp interface GigabitEthernet0/0/0/1 multicast client 224.0.0.8",
@@ -529,7 +535,9 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ipv4=dict(dscp="af11"),
                     ipv6=dict(precedence="routine"),
                     log_internal_sync=True,
-                    master=1,
+                    master=dict(
+                        stratum=1
+                    ),
                     max_associations=10,
                     passive=True,
                     peers=[dict(iburst=True, peer="192.0.2.1", vrf="siteC")],
@@ -547,7 +555,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             version=2,
                         ),
                     ],
-                    source="GigabitEthernet0/0/0/0",
+                    source_interface="GigabitEthernet0/0/0/0",
                     source_vrfs=[
                         dict(name="GigabitEthernet0/0/0/0", vrf="siteE")
                     ],
@@ -560,9 +568,9 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
         commands = [
             "ntp authentication-key 1 md5 encrypted testkey",
             "ntp authentication-key 2 md5 encrypted 071B245F5A5B",
-            "ntp peer vrf siteC 192.0.2.1 iburst ",
-            "ntp server vrf siteD 192.0.2.2 burst ",
-            "ntp server 192.0.2.2 burst  iburst  key 1 minpoll 4 maxpoll 5 prefer version 2 source GigabitEthernet0/0/0/0",
+            "ntp peer vrf siteC 192.0.2.1 iburst",
+            "ntp server vrf siteD 192.0.2.2 burst",
+            "ntp server 192.0.2.2 burst iburst key 1 minpoll 4 maxpoll 5 prefer version 2 source GigabitEthernet0/0/0/0",
             "ntp trusted-key 1",
             "ntp trusted-key 2",
             "ntp interface GigabitEthernet0/0/0/0 broadcast client",
@@ -677,7 +685,9 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ipv4=dict(dscp="af12"),
                     ipv6=dict(precedence="routine"),
                     log_internal_sync=True,
-                    master=1,
+                    master=dict(
+                        stratum=1
+                    ),
                     max_associations=10,
                     passive=True,
                     peers=[dict(iburst=True, peer="192.0.2.1", vrf="siteC")],
@@ -695,7 +705,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             version=2,
                         ),
                     ],
-                    source="GigabitEthernet0/0/0/0",
+                    source_interface="GigabitEthernet0/0/0/0",
                     source_vrfs=[
                         dict(name="GigabitEthernet0/0/0/0", vrf="siteE")
                     ],
@@ -706,11 +716,11 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
             )
         )
         commands = [
-            "no ntp server vrf siteD 192.0.2.2 burst ",
+            "no ntp server vrf siteD 192.0.2.2 burst",
             "no ntp interface GigabitEthernet0/0/0/0",
             "ntp authentication-key 1 md5 encrypted testkey1",
-            "ntp server vrf siteD 192.0.2.3 burst ",
-            "ntp server 192.0.2.2 burst  iburst  key 1 minpoll 4 maxpoll 5 prefer version 2 source GigabitEthernet0/0/0/1",
+            "ntp server vrf siteD 192.0.2.3 burst",
+            "ntp server 192.0.2.2 burst iburst key 1 minpoll 4 maxpoll 5 prefer version 2 source GigabitEthernet0/0/0/1",
             "ntp interface GigabitEthernet0/0/0/1 broadcast client",
             "ntp interface GigabitEthernet0/0/0/1 multicast destination 224.0.0.8",
             "ntp interface GigabitEthernet0/0/0/1 multicast client 224.0.0.8",

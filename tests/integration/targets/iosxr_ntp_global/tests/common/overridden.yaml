@@ -37,7 +37,8 @@
           ipv6:
             precedence: routine
           log_internal_sync: true
-          master: 1
+          master:
+            stratum: 1
           max_associations: 10
           passive: true
           peers:
@@ -48,7 +49,7 @@
             - burst: true
               server: 192.0.2.2
               vrf: siteD
-          source: GigabitEthernet0/0/0/1
+          source_interface: GigabitEthernet0/0/0/1
           source_vrfs:
             - name: GigabitEthernet0/0/0/0
               vrf: siteE

@@ -68,6 +68,9 @@ class Ntp_globalFacts(object):
             objs["access_group"]["vrfs"] = list(
                 objs.get("access_group", {}).get("vrfs", {}).values()
             )
+            objs["access_group"]["vrfs"] = sorted(
+                objs["access_group"]["vrfs"], key=lambda k: k["name"]
+            )
         if "interfaces" in objs:
             objs["interfaces"] = list(objs.get("interfaces", {}).values())
         if "peers" in objs:
@@ -76,6 +79,19 @@ class Ntp_globalFacts(object):
             objs["servers"] = list(objs.get("servers", {}).values())
         if "source_vrfs" in objs:
             objs["source_vrfs"] = list(objs.get("source_vrfs", {}).values())
+
+        pkey = {
+            "authentication_keys": "id",
+            "peers": "peer",
+            "servers": "server",
+            "trusted_keys": "key_id",
+            "source_vrfs": "name",
+            "interfaces": "name",
+        }
+
+        for x in pkey.keys():
+            if x in objs:
+                objs[x] = sorted(objs[x], key=lambda k: k[pkey[x]])
 
         ansible_facts["ansible_network_resources"].pop("ntp_global", None)
 

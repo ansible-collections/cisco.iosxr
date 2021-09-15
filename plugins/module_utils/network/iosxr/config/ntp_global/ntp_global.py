@@ -67,10 +67,10 @@ class Ntp_global(ResourceModule):
             "ipv6.dscp",
             "ipv6.precedence",
             "max_associations",
-            "master",
+            "master.stratum",
             "passive",
             "update_calendar",
-            "source",
+            "source_interface",
         ]
 
     def execute_module(self):
@@ -104,7 +104,6 @@ class Ntp_global(ResourceModule):
             self.commands = [
                 each for each in self.commands if "no" in each
             ] + [each for each in self.commands if "no" not in each]
-        # import epdb;epdb.serve()
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and

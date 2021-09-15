@@ -31,9 +31,6 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
     """The arg spec for the iosxr_ntp_global module
     """
 
-    def __init__(self, **kwargs):
-        pass
-
     argument_spec = {
         "config": {
             "type": "dict",
@@ -161,7 +158,10 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                     },
                 },
                 "log_internal_sync": {"type": "bool"},
-                "master": {"type": "int"},
+                "master": {
+                    "type": "dict",
+                    "options": {"stratum": {"type": "int"}},
+                },
                 "max_associations": {"type": "int"},
                 "passive": {"type": "bool"},
                 "trusted_keys": {
@@ -171,14 +171,11 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                     "options": {"key_id": {"type": "int"}},
                 },
                 "update_calendar": {"type": "bool"},
-                "source": {"type": "str"},
+                "source_interface": {"type": "str"},
                 "source_vrfs": {
                     "type": "list",
                     "elements": "dict",
-                    "options": {
-                        "name": {"type": "str"},
-                        "vrf": {"type": "str"},
-                    },
+                    "options": {"name": {"type": "str"}, "vrf": {"type": "str"}},
                 },
                 "servers": {
                     "type": "list",
