@@ -70,7 +70,7 @@ class Ntp_global(ResourceModule):
             "master",
             "passive",
             "update_calendar",
-            "source"
+            "source",
         ]
 
     def execute_module(self):
@@ -104,7 +104,7 @@ class Ntp_global(ResourceModule):
             self.commands = [
                 each for each in self.commands if "no" in each
             ] + [each for each in self.commands if "no" not in each]
-        #import epdb;epdb.serve()
+        # import epdb;epdb.serve()
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
@@ -116,7 +116,15 @@ class Ntp_global(ResourceModule):
         self.compare(parsers=self.parsers, want=want, have=have)
 
     def _compare_lists(self, want, have):
-        keys = ["authentication_keys", "peers", "servers", "trusted_keys", "interfaces", "source_vrfs", "access_group.vrfs"]
+        keys = [
+            "authentication_keys",
+            "peers",
+            "servers",
+            "trusted_keys",
+            "interfaces",
+            "source_vrfs",
+            "access_group.vrfs",
+        ]
         for x in keys:
             if "." in x:
                 ag_vrf_list = x.split(".")
@@ -143,11 +151,14 @@ class Ntp_global(ResourceModule):
                 if x == "interfaces":
                     if "vrf" in hentry:
                         self.commands.append(
-                            "no ntp interface {0} vrf {1}".format(_hkey.split("_")[0], _hkey.split("_")[1])
+                            "no ntp interface {0} vrf {1}".format(
+                                _hkey.split("_")[0], _hkey.split("_")[1]
+                            )
                         )
                     else:
                         self.commands.append(
-                            "no ntp interface {0}".format(_hkey.split("_")[0]))
+                            "no ntp interface {0}".format(_hkey.split("_")[0])
+                        )
                 else:
                     self.addcmd(hentry, x, negate=True)
 
@@ -162,16 +173,23 @@ class Ntp_global(ResourceModule):
                     i["name"]: i for i in tmp["access_group"]["vrfs"]
                 }
         if "interfaces" in tmp:
-            tmp["interfaces"] = {i["name"] + "_" + i.get("vrf", ""): i for i in tmp["interfaces"]}
+            tmp["interfaces"] = {
+                i["name"] + "_" + i.get("vrf", ""): i
+                for i in tmp["interfaces"]
+            }
         if "peers" in tmp:
-            tmp["peers"] = {i["peer"] + "_" + i.get("vrf", ""): i for i in tmp["peers"]}
+            tmp["peers"] = {
+                i["peer"] + "_" + i.get("vrf", ""): i for i in tmp["peers"]
+            }
         if "servers" in tmp:
-            tmp["servers"] = {i["server"] + "_" + i.get("vrf", ""): i for i in tmp["servers"]}
+            tmp["servers"] = {
+                i["server"] + "_" + i.get("vrf", ""): i for i in tmp["servers"]
+            }
 
         pkey = {
             "authentication_keys": "id",
             "trusted_keys": "key_id",
-            "source_vrfs": "vrf"
+            "source_vrfs": "vrf",
         }
         for k in pkey.keys():
             if k in tmp:

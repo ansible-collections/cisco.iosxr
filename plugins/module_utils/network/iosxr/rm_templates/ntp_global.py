@@ -29,9 +29,7 @@ def tmplt_interfaces(config_data):
             name=name, vrf=vrf
         )
     else:
-        base_command = "ntp interface {name}".format(
-            name=name
-        )
+        base_command = "ntp interface {name}".format(name=name)
     if config_data.get("broadcast_client"):
         commands.append(
             "{base_command} broadcast client".format(base_command=base_command)
@@ -39,48 +37,57 @@ def tmplt_interfaces(config_data):
     if config_data.get("broadcast_key"):
         commands.append(
             "{base_command} broadcast key {broadcast_key}".format(
-                broadcast_key=config_data.get("broadcast_key"), base_command=base_command)
+                broadcast_key=config_data.get("broadcast_key"),
+                base_command=base_command,
+            )
         )
     if config_data.get("broadcast_destination"):
         commands.append(
             "{base_command} broadcast destination {broadcast_destination}".format(
-                broadcast_destination=config_data.get("broadcast_destination"), base_command=base_command
+                broadcast_destination=config_data.get("broadcast_destination"),
+                base_command=base_command,
             )
         )
     if config_data.get("broadcast_version"):
         commands.append(
             "{base_command} broadcast version {broadcast_version}".format(
-                broadcast_version=config_data.get("broadcast_version"), base_command=base_command
+                broadcast_version=config_data.get("broadcast_version"),
+                base_command=base_command,
             )
         )
     if config_data.get("multicast_destination"):
         commands.append(
             "{base_command} multicast destination {multicast_destination}".format(
-                multicast_destination=config_data.get("multicast_destination"), base_command=base_command
+                multicast_destination=config_data.get("multicast_destination"),
+                base_command=base_command,
             )
         )
     if config_data.get("multicast_client"):
         commands.append(
             "{base_command} multicast client {multicast_client}".format(
-                multicast_client=config_data.get("multicast_client"), base_command=base_command
+                multicast_client=config_data.get("multicast_client"),
+                base_command=base_command,
             )
         )
     if config_data.get("multicast_key"):
         commands.append(
             "{base_command} multicast key {multicast_key}".format(
-                multicast_key=config_data.get("multicast_key"), base_command=base_command
+                multicast_key=config_data.get("multicast_key"),
+                base_command=base_command,
             )
         )
     elif config_data.get("multicast_version"):
         commands.append(
             "{base_command} multicast version {multicast_version}".format(
-                multicast_version=config_data.get("multicast_version"), base_command=base_command
+                multicast_version=config_data.get("multicast_version"),
+                base_command=base_command,
             )
         )
     elif config_data.get("multicast_ttl"):
         commands.append(
             "{base_command} multicast ttl {multicast_ttl}".format(
-                multicast_ttl=config_data.get("multicast_ttl"), base_command=base_command
+                multicast_ttl=config_data.get("multicast_ttl"),
+                base_command=base_command,
             )
         )
     return commands
@@ -89,29 +96,39 @@ def tmplt_interfaces(config_data):
 def tmplt_access_group_vrfs(config_data):
     commands = []
     vrf_name = config_data.get("name")
-    base_command = "ntp access-group vrf {name}".format(
-        name=vrf_name
-    )
+    base_command = "ntp access-group vrf {name}".format(name=vrf_name)
     for ip in ["ipv4", "ipv6"]:
         if config_data.get(ip, {}).get("serve"):
             commands.append(
-                "{base_command} {ip} serve {serve}".format(base_command=base_command, serve=config_data.get(ip, {}).
-                                                           get("serve"), ip=ip)
+                "{base_command} {ip} serve {serve}".format(
+                    base_command=base_command,
+                    serve=config_data.get(ip, {}).get("serve"),
+                    ip=ip,
+                )
             )
         if config_data.get(ip, {}).get("serve_only"):
             commands.append(
                 "{base_command} {ip} serve-only {serve_only}".format(
-                    base_command=base_command, serve_only=config_data.get(ip, {}).get("serve_only"), ip=ip)
+                    base_command=base_command,
+                    serve_only=config_data.get(ip, {}).get("serve_only"),
+                    ip=ip,
+                )
             )
         if config_data.get(ip, {}).get("query_only"):
             commands.append(
                 "{base_command} {ip} query-only {query_only}".format(
-                    base_command=base_command, query_only=config_data.get(ip, {}).get("query_only"), ip=ip)
+                    base_command=base_command,
+                    query_only=config_data.get(ip, {}).get("query_only"),
+                    ip=ip,
+                )
             )
         if config_data.get(ip, {}).get("peer"):
             commands.append(
                 "{base_command} {ip} peer {peer}".format(
-                    base_command=base_command, peer=config_data.get(ip, {}).get("peer"), ip=ip)
+                    base_command=base_command,
+                    peer=config_data.get(ip, {}).get("peer"),
+                    ip=ip,
+                )
             )
 
     return commands
@@ -119,7 +136,9 @@ def tmplt_access_group_vrfs(config_data):
 
 class Ntp_globalTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
-        super(Ntp_globalTemplate, self).__init__(lines=lines, tmplt=self, module=module)
+        super(Ntp_globalTemplate, self).__init__(
+            lines=lines, tmplt=self, module=module
+        )
 
     # fmt: off
     PARSERS = [
@@ -514,8 +533,8 @@ class Ntp_globalTemplate(NetworkTemplate):
             "setval": "ntp peer"
                       "{{ (' vrf ' + vrf) if vrf is defined else '' }}"
                       "{{ ( ' '  + peer ) if peer is defined else '' }}"
-                      "{{ ' burst ' if burst is defined else ''}}"
-                      "{{ ' iburst ' if iburst is defined else ''}}"
+                      "{{ ' burst' if burst is defined else ''}}"
+                      "{{ ' iburst' if iburst is defined else ''}}"
                       "{{ (' key ' + key|string) if key is defined else '' }}"
                       "{{ (' minpoll ' + minpoll|string) if minpoll is defined else '' }}"
                       "{{ (' maxpoll ' + maxpoll|string) if maxpoll is defined else '' }}"
@@ -558,8 +577,8 @@ class Ntp_globalTemplate(NetworkTemplate):
             "setval": "ntp server"
                       "{{ (' vrf ' + vrf) if vrf is defined else '' }}"
                       "{{ ( ' '  + server ) if server is defined else '' }}"
-                      "{{ ' burst ' if burst is defined else ''}}"
-                      "{{ ' iburst ' if iburst is defined else ''}}"
+                      "{{ ' burst' if burst is defined else ''}}"
+                      "{{ ' iburst' if iburst is defined else ''}}"
                       "{{ (' key ' + key|string) if key is defined else '' }}"
                       "{{ (' minpoll ' + minpoll|string) if minpoll is defined else '' }}"
                       "{{ (' maxpoll ' + maxpoll|string) if maxpoll is defined else '' }}"

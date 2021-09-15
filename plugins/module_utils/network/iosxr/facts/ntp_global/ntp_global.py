@@ -32,7 +32,7 @@ class Ntp_globalFacts(object):
     """ The iosxr ntp_global facts class
     """
 
-    def __init__(self, module, subspec='config', options='options'):
+    def __init__(self, module, subspec="config", options="options"):
         self._module = module
         self.argument_spec = Ntp_globalArgs.argument_spec
 
@@ -55,18 +55,19 @@ class Ntp_globalFacts(object):
         if not data:
             data = self.get_config(connection)
 
-        flatten_context_list = [
-            "interface",
-            "ntp"
-        ]
+        flatten_context_list = ["interface", "ntp"]
 
         for x in flatten_context_list:
             data = flatten_config(data, x)
         # parse native config using the Ntp_global template
-        ntp_global_parser = Ntp_globalTemplate(lines=data.splitlines(), module=self._module)
+        ntp_global_parser = Ntp_globalTemplate(
+            lines=data.splitlines(), module=self._module
+        )
         objs = ntp_global_parser.parse()
         if "access_group" in objs:
-            objs["access_group"]["vrfs"] = list(objs.get("access_group", {}).get("vrfs", {}).values())
+            objs["access_group"]["vrfs"] = list(
+                objs.get("access_group", {}).get("vrfs", {}).values()
+            )
         if "interfaces" in objs:
             objs["interfaces"] = list(objs.get("interfaces", {}).values())
         if "peers" in objs:
@@ -76,13 +77,15 @@ class Ntp_globalFacts(object):
         if "source_vrfs" in objs:
             objs["source_vrfs"] = list(objs.get("source_vrfs", {}).values())
 
-        ansible_facts['ansible_network_resources'].pop('ntp_global', None)
+        ansible_facts["ansible_network_resources"].pop("ntp_global", None)
 
         params = utils.remove_empties(
-            ntp_global_parser.validate_config(self.argument_spec, {"config": objs}, redact=True)
+            ntp_global_parser.validate_config(
+                self.argument_spec, {"config": objs}, redact=True
+            )
         )
 
         facts["ntp_global"] = params.get("config", {})
-        ansible_facts['ansible_network_resources'].update(facts)
+        ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts

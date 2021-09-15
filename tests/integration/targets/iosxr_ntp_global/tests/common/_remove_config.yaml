@@ -1,0 +1,6 @@
+---
+- name: "Remove ntp global config"
+  cisco.iosxr.iosxr_ntp_global:
+    state: deleted
+  vars:
+    ansible_connection: ansible.netcommon.network_cli

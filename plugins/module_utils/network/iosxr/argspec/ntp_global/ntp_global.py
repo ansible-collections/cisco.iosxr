@@ -175,7 +175,10 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                 "source_vrfs": {
                     "type": "list",
                     "elements": "dict",
-                    "options": {"name": {"type": "str"}, "vrf": {"type": "str"}},
+                    "options": {
+                        "name": {"type": "str"},
+                        "vrf": {"type": "str"},
+                    },
                 },
                 "servers": {
                     "type": "list",
