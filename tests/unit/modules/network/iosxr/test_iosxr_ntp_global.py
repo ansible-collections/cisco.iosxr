@@ -140,9 +140,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ipv4=dict(dscp="af11"),
                     ipv6=dict(precedence="routine"),
                     log_internal_sync=True,
-                    master=dict(
-                        stratum=1
-                    ),
+                    master=dict(stratum=1),
                     max_associations=10,
                     passive=True,
                     peers=[dict(iburst=True, peer="192.0.2.1", vrf="siteC")],
@@ -215,9 +213,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ipv4=dict(dscp="af11"),
                     ipv6=dict(precedence="routine"),
                     log_internal_sync=True,
-                    master=dict(
-                        stratum=1
-                    ),
+                    master=dict(stratum=1),
                     max_associations=10,
                     passive=True,
                     peers=[dict(iburst=True, peer="192.0.2.1", vrf="siteC")],
@@ -445,9 +441,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ipv4=dict(dscp="af12"),
                     ipv6=dict(precedence="routine"),
                     log_internal_sync=True,
-                    master=dict(
-                        stratum=1
-                    ),
+                    master=dict(stratum=1),
                     max_associations=10,
                     passive=True,
                     peers=[dict(iburst=True, peer="192.0.2.1", vrf="siteC")],
@@ -535,9 +529,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ipv4=dict(dscp="af11"),
                     ipv6=dict(precedence="routine"),
                     log_internal_sync=True,
-                    master=dict(
-                        stratum=1
-                    ),
+                    master=dict(stratum=1),
                     max_associations=10,
                     passive=True,
                     peers=[dict(iburst=True, peer="192.0.2.1", vrf="siteC")],
@@ -685,9 +677,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ipv4=dict(dscp="af12"),
                     ipv6=dict(precedence="routine"),
                     log_internal_sync=True,
-                    master=dict(
-                        stratum=1
-                    ),
+                    master=dict(stratum=1),
                     max_associations=10,
                     passive=True,
                     peers=[dict(iburst=True, peer="192.0.2.1", vrf="siteC")],
