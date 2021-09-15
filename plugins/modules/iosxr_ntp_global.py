@@ -80,7 +80,7 @@ options:
             key:
               description: Authentication key.
               type: str
-            encrypted:
+            encryption:
               description: Type of key encrypted or clear-text.
               type: bool
         broadcastdelay:

@@ -66,6 +66,10 @@ class Ntp_globalFacts(object):
             objs["access_group"]["vrfs"] = list(objs.get("access_group", {}).get("vrfs", {}).values())
         if "interfaces" in objs:
             objs["interfaces"] = list(objs.get("interfaces", {}).values())
+        if "peers" in objs:
+            objs["peers"] = list(objs.get("peers", {}).values())
+        if "servers" in objs:
+            objs["servers"] = list(objs.get("servers", {}).values())
         if "source_vrfs" in objs:
             objs["source_vrfs"] = list(objs.get("source_vrfs", {}).values())
 

@@ -94,7 +94,7 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                     "options": {
                         "id": {"type": "int"},
                         "key": {"type": "str", "no_log": True},
-                        "encrypted": {"type": "bool"},
+                        "encryption": {"type": "bool"},
                     },
                 },
                 "broadcastdelay": {"type": "int"},
@@ -167,6 +167,7 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                 "trusted_keys": {
                     "type": "list",
                     "elements": "dict",
+                    "no_log": False,
                     "options": {"key_id": {"type": "int"}},
                 },
                 "update_calendar": {"type": "bool"},

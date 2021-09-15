@@ -502,13 +502,14 @@ class Ntp_globalTemplate(NetworkTemplate):
                 ^ntp\speer
                 (\svrf\s(?P<vrf>\S+))?
                 \s(?P<peer>\S+)
-                (\s(?P<burst>burst))?
-                (\s(?P<iburst>iburst))?
+                (\sversion\s(?P<version>\d+))?
                 (\skey\s(?P<key>\d+))?
                 (\sminpoll\s(?P<minpoll>\d+))?
                 (\smaxpoll\s(?P<maxpoll>\d+))?
                 (\s(?P<prefer>prefer))?
-                (\sversion\s(?P<version>\d+))?
+                (\s(?P<burst>burst))?
+                (\s(?P<iburst>iburst))?
+                (\ssource\s(?P<source>\S+))?
                 $""", re.VERBOSE),
             "setval": "ntp peer"
                       "{{ (' vrf ' + vrf) if vrf is defined else '' }}"
@@ -519,10 +520,11 @@ class Ntp_globalTemplate(NetworkTemplate):
                       "{{ (' minpoll ' + minpoll|string) if minpoll is defined else '' }}"
                       "{{ (' maxpoll ' + maxpoll|string) if maxpoll is defined else '' }}"
                       "{{ ' prefer' if prefer is defined else ''}}"
-                      "{{ (' version ' + version|string) if version is defined else '' }}",
+                      "{{ (' version ' + version|string) if version is defined else '' }}"
+                      "{{ (' source ' + source|string) if source is defined else '' }}",
             "result": {
-                "peers": [
-                    {
+                "peers": {
+                    "{{peer}}_{{vrf|d()}}": {
                         "peer": "{{ peer }}",
                         "vrf": "{{ vrf }}",
                         "burst": "{{ not not burst }}",
@@ -532,8 +534,9 @@ class Ntp_globalTemplate(NetworkTemplate):
                         "maxpoll": "{{ maxpoll }}",
                         "prefer": "{{ not not prefer }}",
                         "version": "{{ version }}",
+                        "source": "{{source}}"
                     },
-                ],
+                }
             },
         },
         {
@@ -543,13 +546,14 @@ class Ntp_globalTemplate(NetworkTemplate):
                 ^ntp\sserver
                 (\svrf\s(?P<vrf>\S+))?
                 \s(?P<server>\S+)
-                (\s(?P<burst>burst))?
-                (\s(?P<iburst>iburst))?
+                (\sversion\s(?P<version>\d+))?
                 (\skey\s(?P<key>\d+))?
                 (\sminpoll\s(?P<minpoll>\d+))?
                 (\smaxpoll\s(?P<maxpoll>\d+))?
                 (\s(?P<prefer>prefer))?
-                (\sversion\s(?P<version>\d+))?
+                (\s(?P<burst>burst))?
+                (\s(?P<iburst>iburst))?
+                (\ssource\s(?P<source>\S+))?
                 $""", re.VERBOSE),
             "setval": "ntp server"
                       "{{ (' vrf ' + vrf) if vrf is defined else '' }}"
@@ -560,10 +564,11 @@ class Ntp_globalTemplate(NetworkTemplate):
                       "{{ (' minpoll ' + minpoll|string) if minpoll is defined else '' }}"
                       "{{ (' maxpoll ' + maxpoll|string) if maxpoll is defined else '' }}"
                       "{{ ' prefer' if prefer is defined else ''}}"
-                      "{{ (' version ' + version|string) if version is defined else '' }}",
+                      "{{ (' version ' + version|string) if version is defined else '' }}"
+                      "{{ (' source ' + source|string) if source is defined else '' }}",
             "result": {
-                "servers": [
-                    {
+                "servers": {
+                    "{{server}}_{{vrf|d()}}": {
                         "server": "{{ server }}",
                         "vrf": "{{ vrf }}",
                         "burst": "{{ not not burst }}",
@@ -573,8 +578,9 @@ class Ntp_globalTemplate(NetworkTemplate):
                         "maxpoll": "{{ maxpoll }}",
                         "prefer": "{{ not not prefer }}",
                         "version": "{{ version }}",
+                        "source": "{{source}}"
                     },
-                ],
+                }
             },
         },
         {

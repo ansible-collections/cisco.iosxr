@@ -104,6 +104,7 @@ class Ntp_global(ResourceModule):
             self.commands = [
                 each for each in self.commands if "no" in each
             ] + [each for each in self.commands if "no" not in each]
+        #import epdb;epdb.serve()
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
@@ -129,12 +130,6 @@ class Ntp_global(ResourceModule):
             for wkey, wentry in iteritems(wantx):
                 hentry = havex.pop(wkey, {})
                 if wentry != hentry:
-                    if x in keys[1:4] and self.state in [
-                        "overridden",
-                        "replaced",
-                    ]:
-                        # remove existing config else it gets appeneded
-                        self.addcmd(hentry, x, negate=True)
                     if x == "interfaces":
                         updates = dict_diff(hentry, wentry)
                         updates.update(name=wentry.get("name"))
@@ -168,10 +163,13 @@ class Ntp_global(ResourceModule):
                 }
         if "interfaces" in tmp:
             tmp["interfaces"] = {i["name"] + "_" + i.get("vrf", ""): i for i in tmp["interfaces"]}
+        if "peers" in tmp:
+            tmp["peers"] = {i["peer"] + "_" + i.get("vrf", ""): i for i in tmp["peers"]}
+        if "servers" in tmp:
+            tmp["servers"] = {i["server"] + "_" + i.get("vrf", ""): i for i in tmp["servers"]}
+
         pkey = {
             "authentication_keys": "id",
-            "peers": "peer",
-            "servers": "server",
             "trusted_keys": "key_id",
             "source_vrfs": "vrf"
         }
