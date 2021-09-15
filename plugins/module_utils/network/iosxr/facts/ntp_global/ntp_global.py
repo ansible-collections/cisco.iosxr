@@ -36,6 +36,9 @@ class Ntp_globalFacts(object):
         self._module = module
         self.argument_spec = Ntp_globalArgs.argument_spec
 
+    def get_config(self, connection):
+        return connection.get("show running-config ntp")
+
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for Ntp_global network resource
 
@@ -50,7 +53,7 @@ class Ntp_globalFacts(object):
         objs = []
 
         if not data:
-            data = connection.get("show running-config ntp")
+            data = self.get_config(connection)
 
         flatten_context_list = [
             "interface",
