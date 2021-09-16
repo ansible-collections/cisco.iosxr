@@ -205,7 +205,7 @@ options:
             iburst: &iburst
               description: Use initial burst mode.
               type: bool
-            key: &key
+            key_id: &key
               description: SConfigure peer authentication key
               type: int
             source: &source
@@ -232,7 +232,7 @@ options:
             peer: *host
             burst: *burst
             iburst: *iburst
-            key: *key
+            key_id: *key
             source: *source
             maxpoll: *maxpoll
             minpoll: *minpoll

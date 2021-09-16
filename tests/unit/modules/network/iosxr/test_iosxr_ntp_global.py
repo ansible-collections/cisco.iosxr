@@ -150,7 +150,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             iburst=True,
                             burst=True,
                             server="192.0.2.2",
-                            key=1,
+                            key_id=1,
                             maxpoll=5,
                             minpoll=4,
                             prefer=True,
@@ -223,7 +223,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             iburst=True,
                             burst=True,
                             server="192.0.2.2",
-                            key=1,
+                            key_id=1,
                             maxpoll=5,
                             minpoll=4,
                             prefer=True,
@@ -451,7 +451,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             iburst=True,
                             burst=True,
                             server="192.0.2.2",
-                            key=1,
+                            key_id=1,
                             maxpoll=5,
                             minpoll=4,
                             prefer=True,
@@ -539,7 +539,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             iburst=True,
                             burst=True,
                             server="192.0.2.2",
-                            key=1,
+                            key_id=1,
                             maxpoll=5,
                             minpoll=4,
                             prefer=True,
@@ -687,7 +687,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             iburst=True,
                             burst=True,
                             server="192.0.2.2",
-                            key=1,
+                            key_id=1,
                             maxpoll=5,
                             minpoll=4,
                             prefer=True,
@@ -723,6 +723,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_ntp_global_gathered(self):
+        self.maxDiff = None
         run_cfg = dedent(
             """\
                 ntp
@@ -743,7 +744,6 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                  ipv4 dscp af11
                  ipv6 precedence routine
                  peer vrf siteC 192.0.2.1 iburst
-                 server vrf siteD 192.0.2.2 burst
                  server 192.0.2.2 version 2 key 1 minpoll 4 maxpoll 5 prefer burst iburst source GigabitEthernet0/0/0/0
                  drift file apphost
                  drift aging time 0
@@ -792,12 +792,11 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
             "ipv6": {"precedence": "routine"},
             "peers": [{"peer": "192.0.2.1", "vrf": "siteC", "iburst": True}],
             "servers": [
-                {"server": "192.0.2.2", "vrf": "siteD", "burst": True},
                 {
                     "server": "192.0.2.2",
                     "burst": True,
                     "iburst": True,
-                    "key": 1,
+                    "key_id": 1,
                     "minpoll": 4,
                     "maxpoll": 5,
                     "prefer": True,
@@ -806,9 +805,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                 },
             ],
             "drift": {"file": "apphost", "aging_time": 0},
-            "master": {
-                "stratum": 1
-            },
+            "master": {"stratum": 1},
             "access_group": {
                 "vrfs": [
                     {
@@ -844,8 +841,8 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                 "  multicast client 224.0.0.8\n  multicast destination 224.0.0.8\n !\n "
                 "authentication-key 1 md5 encrypted testkey\n authentication-key 2 md5 "
                 "encrypted 071B245F5A5B\n authenticate\n trusted-key 1\n trusted-key 2\n ipv4 dscp "
-                "af11\n ipv6 precedence routine\n peer vrf siteC 192.0.2.1 iburst\n server vrf "
-                "siteD 192.0.2.2 burst\n server 192.0.2.2 version 2 key 1 minpoll 4 maxpoll 5 prefer "
+                "af11\n ipv6 precedence routine\n peer vrf siteC 192.0.2.1 iburst\n"
+                " server 192.0.2.2 version 2 key 1 minpoll 4 maxpoll 5 prefer "
                 "burst iburst source GigabitEthernet0/0/0/0\n drift file apphost\n drift aging time 0\n"
                 " master 1\n access-group vrf siteA ipv4 peer PeerAcl3\n access-group vrf siteA "
                 "ipv4 serve  ServeAcl2\n access-group ipv4 peer PeerAcl1\n access-group ipv4 serve "
@@ -883,12 +880,11 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
             "ipv6": {"precedence": "routine"},
             "peers": [{"peer": "192.0.2.1", "vrf": "siteC", "iburst": True}],
             "servers": [
-                {"server": "192.0.2.2", "vrf": "siteD", "burst": True},
                 {
                     "server": "192.0.2.2",
                     "burst": True,
                     "iburst": True,
-                    "key": 1,
+                    "key_id": 1,
                     "minpoll": 4,
                     "maxpoll": 5,
                     "prefer": True,
@@ -897,9 +893,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                 },
             ],
             "drift": {"file": "apphost", "aging_time": 0},
-            "master": {
-                "stratum": 1
-            },
+            "master": {"stratum": 1},
             "access_group": {
                 "vrfs": [{"name": "siteA", "ipv4": {"peer": "PeerAcl3"}}],
                 "ipv4": {

@@ -105,6 +105,7 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                 "interfaces": {
                     "type": "list",
                     "elements": "dict",
+                    "no_log": False,
                     "options": {
                         "name": {"type": "str"},
                         "vrf": {"type": "str"},
@@ -175,10 +176,7 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                 "source_vrfs": {
                     "type": "list",
                     "elements": "dict",
-                    "options": {
-                        "name": {"type": "str"},
-                        "vrf": {"type": "str"},
-                    },
+                    "options": {"name": {"type": "str"}, "vrf": {"type": "str"}},
                 },
                 "servers": {
                     "type": "list",
@@ -188,7 +186,7 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                         "server": {"type": "str", "required": True},
                         "burst": {"type": "bool"},
                         "iburst": {"type": "bool"},
-                        "key": {"type": "int"},
+                        "key_id": {"type": "int"},
                         "source": {"type": "str"},
                         "maxpoll": {"type": "int"},
                         "minpoll": {"type": "int"},
@@ -204,7 +202,7 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                         "peer": {"type": "str", "required": True},
                         "burst": {"type": "bool"},
                         "iburst": {"type": "bool"},
-                        "key": {"type": "int"},
+                        "key_id": {"type": "int"},
                         "source": {"type": "str"},
                         "maxpoll": {"type": "int"},
                         "minpoll": {"type": "int"},

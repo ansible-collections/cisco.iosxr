@@ -537,7 +537,7 @@ class Ntp_globalTemplate(NetworkTemplate):
                       "{{ ( ' '  + peer ) if peer is defined else '' }}"
                       "{{ ' burst' if burst is defined else ''}}"
                       "{{ ' iburst' if iburst is defined else ''}}"
-                      "{{ (' key ' + key|string) if key is defined else '' }}"
+                      "{{ (' key ' + key_id|string) if key_id is defined else '' }}"
                       "{{ (' minpoll ' + minpoll|string) if minpoll is defined else '' }}"
                       "{{ (' maxpoll ' + maxpoll|string) if maxpoll is defined else '' }}"
                       "{{ ' prefer' if prefer is defined else ''}}"
@@ -550,7 +550,7 @@ class Ntp_globalTemplate(NetworkTemplate):
                         "vrf": "{{ vrf }}",
                         "burst": "{{ not not burst }}",
                         "iburst": "{{ not not iburst }}",
-                        "key": "{{ key }}",
+                        "key_id": "{{ key }}",
                         "minpoll": "{{ minpoll }}",
                         "maxpoll": "{{ maxpoll }}",
                         "prefer": "{{ not not prefer }}",
@@ -581,7 +581,7 @@ class Ntp_globalTemplate(NetworkTemplate):
                       "{{ ( ' '  + server ) if server is defined else '' }}"
                       "{{ ' burst' if burst is defined else ''}}"
                       "{{ ' iburst' if iburst is defined else ''}}"
-                      "{{ (' key ' + key|string) if key is defined else '' }}"
+                      "{{ (' key ' + key_id|string) if key_id is defined else '' }}"
                       "{{ (' minpoll ' + minpoll|string) if minpoll is defined else '' }}"
                       "{{ (' maxpoll ' + maxpoll|string) if maxpoll is defined else '' }}"
                       "{{ ' prefer' if prefer is defined else ''}}"
@@ -594,7 +594,7 @@ class Ntp_globalTemplate(NetworkTemplate):
                         "vrf": "{{ vrf }}",
                         "burst": "{{ not not burst }}",
                         "iburst": "{{ not not iburst }}",
-                        "key": "{{ key }}",
+                        "key_id": "{{ key }}",
                         "minpoll": "{{ minpoll }}",
                         "maxpoll": "{{ maxpoll }}",
                         "prefer": "{{ not not prefer }}",
