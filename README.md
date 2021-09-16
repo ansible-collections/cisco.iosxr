@@ -63,6 +63,7 @@ Name | Description
 [cisco.iosxr.iosxr_logging](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_logging_module.rst)|Configuration management of system logging services on network devices
 [cisco.iosxr.iosxr_logging_global](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_logging_global_module.rst)|Manages logging attributes of Cisco IOSXR network devices
 [cisco.iosxr.iosxr_netconf](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_netconf_module.rst)|Configures NetConf sub-system service on Cisco IOS-XR devices
+[cisco.iosxr.iosxr_ntp_global](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_ntp_global_module.rst)|Manages ntp resource module
 [cisco.iosxr.iosxr_ospf_interfaces](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_ospf_interfaces_module.rst)|OSPF Interfaces Resource Module.
 [cisco.iosxr.iosxr_ospfv2](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_ospfv2_module.rst)|OSPFv2 resource module
 [cisco.iosxr.iosxr_ospfv3](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_ospfv3_module.rst)|ospfv3 resource module
