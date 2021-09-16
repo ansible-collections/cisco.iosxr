@@ -802,7 +802,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     "prefer": True,
                     "version": 2,
                     "source": "GigabitEthernet0/0/0/0",
-                },
+                }
             ],
             "drift": {"file": "apphost", "aging_time": 0},
             "master": {"stratum": 1},
@@ -890,7 +890,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     "prefer": True,
                     "version": 2,
                     "source": "GigabitEthernet0/0/0/0",
-                },
+                }
             ],
             "drift": {"file": "apphost", "aging_time": 0},
             "master": {"stratum": 1},
