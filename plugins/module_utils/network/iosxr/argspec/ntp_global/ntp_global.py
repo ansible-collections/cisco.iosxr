@@ -105,15 +105,14 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                 "interfaces": {
                     "type": "list",
                     "elements": "dict",
-                    "no_log": False,
                     "options": {
                         "name": {"type": "str"},
                         "vrf": {"type": "str"},
                         "broadcast_client": {"type": "bool"},
                         "broadcast_destination": {"type": "str"},
-                        "broadcast_key": {"type": "int"},
+                        "broadcast_key": {"type": "int", "no_log": False},
                         "broadcast_version": {"type": "int"},
-                        "multicast_key": {"type": "int"},
+                        "multicast_key": {"type": "int", "no_log": False},
                         "multicast_ttl": {"type": "int"},
                         "multicast_client": {"type": "str"},
                         "multicast_destination": {"type": "str"},

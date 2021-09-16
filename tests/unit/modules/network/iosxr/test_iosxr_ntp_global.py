@@ -728,9 +728,6 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
             """\
                 ntp
                  max-associations 10
-                 interface GigabitEthernet0/0/0/0 vrf siteB
-                  multicast key 1
-                 !
                  interface GigabitEthernet0/0/0/0
                   broadcast client
                   multicast client 224.0.0.8
@@ -771,16 +768,11 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
             "max_associations": 10,
             "interfaces": [
                 {
-                    "vrf": "siteB",
-                    "name": "GigabitEthernet0/0/0/0",
-                    "multicast_key": 1,
-                },
-                {
                     "name": "GigabitEthernet0/0/0/0",
                     "broadcast_client": True,
                     "multicast_client": "224.0.0.8",
                     "multicast_destination": "224.0.0.8",
-                },
+                }
             ],
             "authentication_keys": [
                 {"id": 1, "key": "testkey", "encryption": True},
@@ -834,10 +826,10 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
         self.assertEqual(gathered, result["gathered"])
 
     def test_iosxr_ntp_global_parsed(self):
+        self.maxDiff = None
         set_module_args(
             dict(
-                running_config="ntp\n max-associations 10\n interface GigabitEthernet0/0/0/0 vrf siteB\n"
-                "  multicast key 1\n !\n interface GigabitEthernet0/0/0/0\n  broadcast client\n"
+                running_config="ntp\n max-associations 10\n interface GigabitEthernet0/0/0/0\n  broadcast client\n"
                 "  multicast client 224.0.0.8\n  multicast destination 224.0.0.8\n !\n "
                 "authentication-key 1 md5 encrypted testkey\n authentication-key 2 md5 "
                 "encrypted 071B245F5A5B\n authenticate\n trusted-key 1\n trusted-key 2\n ipv4 dscp "
@@ -859,16 +851,11 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
             "max_associations": 10,
             "interfaces": [
                 {
-                    "vrf": "siteB",
-                    "name": "GigabitEthernet0/0/0/0",
-                    "multicast_key": 1,
-                },
-                {
                     "name": "GigabitEthernet0/0/0/0",
                     "broadcast_client": True,
                     "multicast_client": "224.0.0.8",
                     "multicast_destination": "224.0.0.8",
-                },
+                }
             ],
             "authentication_keys": [
                 {"id": 1, "key": "testkey", "encryption": True},
