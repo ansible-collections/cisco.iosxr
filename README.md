@@ -25,6 +25,14 @@ Name | Description
 --- | ---
 [cisco.iosxr.iosxr](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_cliconf.rst)|Use iosxr cliconf to run command on Cisco IOS XR platform
 
+### Filter plugins
+Name | Description
+--- | ---
+
+### Inventory plugins
+Name | Description
+--- | ---
+
 ### Netconf plugins
 Name | Description
 --- | ---
