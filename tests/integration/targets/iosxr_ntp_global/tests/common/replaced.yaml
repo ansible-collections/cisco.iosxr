@@ -1,0 +1,80 @@
+---
+- debug:
+    msg: Start iosxr_ntp_global replaced integration tests connection={{ ansible_connection}}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_config.yaml
+
+- block:
+    - name: Replace BGP configuration with provided configuration
+      cisco.iosxr.iosxr_ntp_global:
+        state: replaced
+        config:
+          access_group:
+            ipv4:
+              peer: PeerAcl1
+              query_only: QueryOnlyAcl1
+              serve: ServeAcl4
+              serve_only: ServeOnlyAcl1
+            vrfs:
+              - ipv4:
+                  peer: PeerAcl3
+                  serve: ServeAcl2
+                name: siteA
+          authenticate: true
+          broadcastdelay: 1
+          drift:
+            aging_time: 0
+            file: apphost
+          interfaces:
+            - name: GigabitEthernet0/0/0/1
+              multicast_client: 224.0.0.8
+              multicast_destination: 224.0.0.8
+              broadcast_client: true
+          ipv4:
+            dscp: af12
+          ipv6:
+            precedence: routine
+          log_internal_sync: true
+          master:
+            stratum: 1
+          max_associations: 10
+          passive: true
+          peers:
+            - iburst: true
+              peer: 192.0.2.3
+              vrf: siteC
+          servers:
+            - burst: true
+              server: 192.0.2.2
+              vrf: siteD
+          source_interface: GigabitEthernet0/0/0/1
+          source_vrfs:
+            - name: GigabitEthernet0/0/0/0
+              vrf: siteE
+          trusted_keys:
+            - key_id: 1
+          update_calendar: true
+      register: result
+
+    - debug:
+        msg: "{{ replaced['commands'] | symmetric_difference(result['commands']) }}"
+
+    - name: Assert that correct set of commands were generated
+      assert:
+        that:
+          - "{{ replaced['commands'] | symmetric_difference(result['commands'])\
+            \ |length == 0 }}"
+
+    - name: Assert that after dict is correctly generated
+      assert:
+        that:
+          - replaced['after'] == result['after']
+
+    - name: Assert that before dicts are correctly generated
+      assert:
+        that:
+          - merged['after'] == result['before']
+  always:
+    - include_tasks: _remove_config.yaml

@@ -121,6 +121,10 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr
     logging_global:
       redirect: cisco.iosxr.iosxr
+    iosxr_ntp_global:
+      redirect: cisco.iosxr.iosxr
+    ntp_global:
+      redirect: cisco.iosxr.iosxr
   modules:
     acl_interfaces:
       redirect: cisco.iosxr.iosxr_acl_interfaces
@@ -197,3 +201,5 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr_bgp_global
     prefix_lists:
       redirect: cisco.iosxr.iosxr_prefix_lists
+    ntp_global:
+      redirect: cisco.iosxr.iosxr_ntp_global
