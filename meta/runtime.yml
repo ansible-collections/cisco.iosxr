@@ -18,9 +18,6 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr
     bgp:
       redirect: cisco.iosxr.iosxr
-      deprecation:
-        removal_date: '2023-01-29'
-        warning_text: See the plugin documentation for more details
     iosxr_bgp_address_family:
       redirect: cisco.iosxr.iosxr
     bgp_address_family:
