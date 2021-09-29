@@ -309,3 +309,14 @@ releases:
       name: iosxr_logging_global
       namespace: ''
     release_date: '2021-07-26'
+  2.5.0:
+    changes:
+      doc_changes:
+      - Update valid deprecation date in bgp module.
+      minor_changes:
+      - Added iosxr ntp_global resource module.
+    fragments:
+    - add_iosxr_ntp_global.yaml
+    - improve_test_coverage.yaml
+    - update_docs_bgp.yaml
+    release_date: '2021-09-24'

@@ -1,0 +1,39 @@
+---
+- debug:
+    msg: Start iosxr_ntp_global deleted integration tests connection={{ ansible_connection}}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_config.yaml
+
+- block:
+
+    - name: Delete given ntp_global configuration
+      become: true
+      register: result
+      cisco.iosxr.iosxr_ntp_global: &deleted
+        state: deleted
+
+    - become: true
+      cisco.iosxr.iosxr_facts:
+        gather_network_resources: ntp_global
+
+    - assert:
+        that:
+          - result.commands|length == 23
+          - result.changed == true
+          - ansible_facts.network_resources.ntp_global == result.after
+          - result.after == deleted.after
+
+    - name: Idempotency check
+      become: true
+      register: result
+      cisco.iosxr.iosxr_ntp_global: *deleted
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml

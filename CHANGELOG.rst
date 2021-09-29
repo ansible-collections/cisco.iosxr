@@ -5,6 +5,19 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v2.5.0
+======
+
+Minor Changes
+-------------
+
+- Added iosxr ntp_global resource module.
+
+Documentation Changes
+---------------------
+
+- Update valid deprecation date in bgp module.
+
 v2.4.0
 ======
 
