@@ -264,7 +264,10 @@ class AclsFacts(object):
             element = ace_queue.popleft()
             if element == "host":
                 rendered_ace[direction] = {"host": ace_queue.popleft()}
-
+            elif element == "net-group":
+                rendered_ace[direction] = {"net_group": ace_queue.popleft()}
+            elif element == "port-group":
+                rendered_ace[direction] = {"port_group": ace_queue.popleft()}
             elif element == "any":
                 rendered_ace[direction] = {"any": True}
 

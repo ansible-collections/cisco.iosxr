@@ -370,6 +370,10 @@ class Acls(ConfigBase):
                 cmd += "any "
             elif "host" in dir_dict:
                 cmd += "host {0} ".format(dir_dict["host"])
+            elif "net_group" in dir_dict:
+                cmd += "net-group {0} ".format(dir_dict["net_group"])
+            elif "port_group" in dir_dict:
+                cmd += "port-group {0} ".format(dir_dict["port_group"])
             elif "prefix" in dir_dict:
                 cmd += "{0} ".format(dir_dict["prefix"])
             else:
