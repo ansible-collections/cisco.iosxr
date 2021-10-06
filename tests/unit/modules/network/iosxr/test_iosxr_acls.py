@@ -64,7 +64,7 @@ class TestIosxrAclsModule(TestIosxrModule):
 
         self.execute_show_command.side_effect = load_from_file
 
-    def test_iosxr_acls_merged(self):
+    def test_iosxr_acls_overridden_idempotent(self):
         self._prepare()
         set_module_args(
             dict(
@@ -77,14 +77,6 @@ class TestIosxrAclsModule(TestIosxrModule):
                                 aces=[
                                     dict(
                                         sequence="10",
-                                        grant="permit",
-                                        protocol="ospf",
-                                        source=dict(prefix="192.168.1.0/24"),
-                                        destination=dict(any="true"),
-                                        log="true",
-                                    ),
-                                    dict(
-                                        sequence="20",
                                         grant="deny",
                                         protocol="ipv4",
                                         source=dict(
@@ -96,7 +88,96 @@ class TestIosxrAclsModule(TestIosxrModule):
                                         ),
                                     ),
                                     dict(
+                                        sequence="20",
+                                        grant="deny",
+                                        protocol="ipv4",
+                                        source=dict(
+                                            address="10.233.0.0",
+                                            wildcard_bits="0.0.255.255",
+                                        ),
+                                        destination=dict(
+                                            port_group="portgroup1"
+                                        ),
+                                    ),
+                                ],
+                            ),
+                            dict(
+                                name="acl_2",
+                                aces=[
+                                    dict(
+                                        sequence="10",
+                                        grant="deny",
+                                        protocol="ipv4",
+                                        destination=dict(any="true"),
+                                        source=dict(any="true"),
+                                    ),
+                                    dict(
+                                        sequence="20",
+                                        grant="permit",
+                                        protocol="tcp",
+                                        destination=dict(any="true"),
+                                        source=dict(host="192.168.1.100"),
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                    dict(
+                        afi="ipv6",
+                        acls=[
+                            dict(
+                                name="acl6_1",
+                                aces=[
+                                    dict(
+                                        sequence="10",
+                                        grant="deny",
+                                        protocol="icmpv6",
+                                        destination=dict(any="true"),
+                                        source=dict(any="true"),
+                                    )
+                                ],
+                            )
+                        ],
+                    ),
+                ],
+                state="overridden",
+            )
+        )
+        self.execute_module(changed=False, commands=[])
+
+    def test_iosxr_acls_merged(self):
+        self._prepare()
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        afi="ipv4",
+                        acls=[
+                            dict(
+                                name="acl_1",
+                                aces=[
+                                    dict(
                                         sequence="30",
+                                        grant="permit",
+                                        protocol="ospf",
+                                        source=dict(prefix="192.168.1.0/24"),
+                                        destination=dict(any="true"),
+                                        log="true",
+                                    ),
+                                    dict(
+                                        sequence="40",
+                                        grant="deny",
+                                        protocol="ipv4",
+                                        source=dict(
+                                            address="10.233.0.0",
+                                            wildcard_bits="0.0.255.255",
+                                        ),
+                                        destination=dict(
+                                            net_group="netgroup1"
+                                        ),
+                                    ),
+                                    dict(
+                                        sequence="50",
                                         grant="deny",
                                         protocol="ipv4",
                                         source=dict(
@@ -117,9 +198,9 @@ class TestIosxrAclsModule(TestIosxrModule):
         )
         commands = [
             "ipv4 access-list acl_1",
-            "10 permit ospf 192.168.1.0 0.0.0.255 any log",
-            "20 deny ipv4 10.233.0.0 0.0.255.255 net-group netgroup1",
-            "30 deny ipv4 10.233.0.0 0.0.255.255 port-group portgroup1",
+            "30 permit ospf 192.168.1.0 0.0.0.255 any log",
+            "40 deny ipv4 10.233.0.0 0.0.255.255 net-group netgroup1",
+            "50 deny ipv4 10.233.0.0 0.0.255.255 port-group portgroup1",
         ]
         self.execute_module(changed=True, commands=commands)
 
