@@ -120,6 +120,7 @@ EXAMPLES = """
 #  ipv4 address 10.10.0.2 255.255.255.0
 #  dot1q native vlan 1021
 # !
+# test
 - name: Configure Ethernet interfaces
   cisco.iosxr.iosxr_interfaces:
     config:
