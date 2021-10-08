@@ -1,3 +1,3 @@
 ---
-bugfixes:
+minor_changes:
   - Fix issue of gathered state of acls module

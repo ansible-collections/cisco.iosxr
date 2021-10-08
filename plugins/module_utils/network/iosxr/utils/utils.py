@@ -12,7 +12,6 @@ __metaclass__ = type
 from ansible.module_utils._text import to_text
 from ansible.module_utils.six import iteritems
 from ansible.module_utils.basic import missing_required_lib
-from ansible.module_utils.six import ensure_text
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_diff,
     is_masklen,
@@ -359,7 +358,7 @@ def isipaddress(data):
     isipaddress = True
 
     try:
-        ipaddress.ip_address(ensure_text(data))
+        ipaddress.ip_address(data)
     except ValueError:
         isipaddress = False
 

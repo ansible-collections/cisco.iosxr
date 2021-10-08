@@ -18,6 +18,7 @@ from copy import deepcopy
 
 from collections import deque
 from ansible.module_utils.six import iteritems
+from ansible.module_utils._text import to_text
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
@@ -274,7 +275,7 @@ class AclsFacts(object):
             elif "/" in element:
                 rendered_ace[direction] = {"prefix": element}
 
-            elif isipaddress(element):
+            elif isipaddress(to_text(element)):
                 rendered_ace[direction] = {
                     "address": element,
                     "wildcard_bits": ace_queue.popleft(),
