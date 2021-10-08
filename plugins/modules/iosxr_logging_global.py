@@ -371,43 +371,43 @@ EXAMPLES = """
 #RP/0/0/CPU0:10#
 #
 #
-#  - name: Merge the provided configuration with the existing running configuration
-#    cisco.iosxr.iosxr_logging_global:
-#         config:
-#           buffered:
-#             size: 2097152
-#             severity: warnings
-#           correlator:
-#             buffer_size: 1024
-#           events:
-#             display_location: True
-#           files:
-#             - maxfilesize: '1024'
-#               name: test
-#               path: test
-#               severity: info
-#           hostnameprefix: test
-#           hosts:
-#             - host: 1.1.1.1
-#               port: default
-#               severity: critical
-#               vrf: default
-#           ipv4:
-#             dscp: af11
-#           localfilesize: 1024
-#           monitor:
-#             severity: errors
-#           source_interfaces:
-#             - interface: GigabitEthernet0/0/0/0
-#               vrf: test
-#           tls_servers:
-#             - name: test
-#               tls_hostname: test2
-#               trustpoint: test2
-#               vrf: test
-#           trap:
-#             severity: informational
-#         state: merged
+- name: Merge the provided configuration with the existing running configuration
+  cisco.iosxr.iosxr_logging_global:
+         config:
+           buffered:
+             size: 2097152
+             severity: warnings
+           correlator:
+             buffer_size: 1024
+           events:
+             display_location: True
+           files:
+             - maxfilesize: '1024'
+               name: test
+               path: test
+               severity: info
+           hostnameprefix: test
+           hosts:
+             - host: 1.1.1.1
+               port: default
+               severity: critical
+               vrf: default
+           ipv4:
+             dscp: af11
+           localfilesize: 1024
+           monitor:
+             severity: errors
+           source_interfaces:
+             - interface: GigabitEthernet0/0/0/0
+               vrf: test
+           tls_servers:
+             - name: test
+               tls_hostname: test2
+               trustpoint: test2
+               vrf: test
+           trap:
+             severity: informational
+         state: merged
 #
 #
 # After state:
@@ -603,37 +603,37 @@ EXAMPLES = """
 # logging hostnameprefix test
 #-----------------------------------------------------------
 #
-# - name: Replace BGP configuration with provided configuration
-#   cisco.iosxr.iosxr_logging_global:
-#     state: replaced
-#     config:
-#           buffered:
-#             severity: errors
-#           correlator:
-#             buffer_size: 1024
-#           files:
-#             - maxfilesize: '1024'
-#               name: test
-#               path: test1
-#               severity: info
-#           hostnameprefix: test1
-#           hosts:
-#             - host: 1.1.1.3
-#               port: default
-#               severity: critical
-#               vrf: default
-#           ipv6:
-#             dscp: af11
-#           localfilesize: 1024
-#           monitor:
-#             severity: errors
-#           tls_servers:
-#             - name: test
-#               tls_hostname: test2
-#               trustpoint: test
-#               vrf: test
-#           trap:
-#             severity: critical
+- name: Replace BGP configuration with provided configuration
+  cisco.iosxr.iosxr_logging_global:
+     state: replaced
+     config:
+           buffered:
+             severity: errors
+           correlator:
+             buffer_size: 1024
+           files:
+             - maxfilesize: '1024'
+               name: test
+               path: test1
+               severity: info
+           hostnameprefix: test1
+           hosts:
+             - host: 1.1.1.3
+               port: default
+               severity: critical
+               vrf: default
+           ipv6:
+             dscp: af11
+           localfilesize: 1024
+           monitor:
+             severity: errors
+           tls_servers:
+             - name: test
+               tls_hostname: test2
+               trustpoint: test
+               vrf: test
+           trap:
+             severity: critical
 #
 # After state:
 #RP/0/0/CPU0:10#show running-config logging
@@ -793,9 +793,9 @@ EXAMPLES = """
 # logging hostnameprefix test
 #
 #-----------------------------------------------------------
-# - name: Delete given logging_global configuration
-#   cisco.iosxr.iosxr_logging_global:
-#     state: deleted
+- name: Delete given logging_global configuration
+  cisco.iosxr.iosxr_logging_global:
+     state: deleted
 #
 # After state:
 #RP/0/0/CPU0:10#show running-config
@@ -907,9 +907,9 @@ EXAMPLES = """
 # logging hostnameprefix test
 #
 #
-# - name: Gather iosxr_logging_global facts using gathered state
-#   cisco.iosxr.iosxr_logging_global:
-#     state: gathered
+- name: Gather iosxr_logging_global facts using gathered state
+  cisco.iosxr.iosxr_logging_global:
+     state: gathered
 #
 #-------------------------------------------------------------
 # Module Execution:
@@ -1001,10 +1001,10 @@ EXAMPLES = """
 # logging hostnameprefix test
 #
 #
-# - name: Parse externally provided Prefix_lists config to agnostic model
-#   cisco.iosxr.iosxr_prefix_lists:
-#     running_config: "{{ lookup('file', './fixtures/parsed.cfg') }}"
-#     state: parsed
+- name: Parse externally provided Logging global config to agnostic model
+  cisco.iosxr.iosxr_logging_global:
+     running_config: "{{ lookup('file', './fixtures/parsed.cfg') }}"
+     state: parsed
 #----------------------------------------------------------------
 # Module execution:
 # "changed": false,
@@ -1065,43 +1065,43 @@ EXAMPLES = """
 #
 # Using rendered:
 # ----------------------------------------------------------------------------
-# - name: Render platform specific configuration lines with state rendered (without connecting to the device)
-#   cisco.iosxr.iosxr_logging_global:
-#     state: rendered
-#     config:
-#       buffered:
-#         size: 2097152
-#         severity: warnings
-#       correlator:
-#         buffer_size: 1024
-#       events:
-#         display_location: True
-#       files:
-#         - maxfilesize: '1024'
-#           name: test
-#           path: test
-#           severity: info
-#       hostnameprefix: test
-#       hosts:
-#         - host: 1.1.1.1
-#           port: default
-#           severity: critical
-#           vrf: default
-#       ipv4:
-#         dscp: af11
-#       localfilesize: 1024
-#       monitor:
-#         severity: errors
-#       source_interfaces:
-#         - interface: GigabitEthernet0/0/0/0
-#           vrf: test
-#       tls_servers:
-#         - name: test
-#           tls_hostname: test2
-#           trustpoint: test2
-#           vrf: test
-#       trap:
-#         severity: informational
+- name: Render platform specific configuration lines with state rendered (without connecting to the device)
+  cisco.iosxr.iosxr_logging_global:
+     state: rendered
+     config:
+       buffered:
+         size: 2097152
+         severity: warnings
+       correlator:
+         buffer_size: 1024
+       events:
+         display_location: True
+       files:
+         - maxfilesize: '1024'
+           name: test
+           path: test
+           severity: info
+       hostnameprefix: test
+       hosts:
+         - host: 1.1.1.1
+           port: default
+           severity: critical
+           vrf: default
+       ipv4:
+         dscp: af11
+       localfilesize: 1024
+       monitor:
+         severity: errors
+       source_interfaces:
+         - interface: GigabitEthernet0/0/0/0
+           vrf: test
+       tls_servers:
+         - name: test
+           tls_hostname: test2
+           trustpoint: test2
+           vrf: test
+       trap:
+         severity: informational
 #----------------------------------------------------------------
 # Module Execution:
 # "rendered": [
@@ -1147,37 +1147,37 @@ EXAMPLES = """
 #
 #-----------------------------------------------------------
 #
-# - name: Overridde BGP configuration with provided configuration
-#   cisco.iosxr.iosxr_logging_global: &id002
-#     state: overridden
-#     config:
-#           buffered:
-#             severity: errors
-#           correlator:
-#             buffer_size: 1024
-#           files:
-#             - maxfilesize: '1024'
-#               name: test
-#               path: test1
-#               severity: info
-#           hostnameprefix: test1
-#           hosts:
-#             - host: 1.1.1.3
-#               port: default
-#               severity: critical
-#               vrf: default
-#           ipv6:
-#             dscp: af11
-#           localfilesize: 1024
-#           monitor:
-#             severity: errors
-#           tls_servers:
-#             - name: test
-#               tls_hostname: test2
-#               trustpoint: test
-#               vrf: test
-#           trap:
-#             severity: critical
+- name: Overridde logging global configuration with provided configuration
+  cisco.iosxr.iosxr_logging_global:
+     state: overridden
+     config:
+           buffered:
+             severity: errors
+           correlator:
+             buffer_size: 1024
+           files:
+             - maxfilesize: '1024'
+               name: test
+               path: test1
+               severity: info
+           hostnameprefix: test1
+           hosts:
+             - host: 1.1.1.3
+               port: default
+               severity: critical
+               vrf: default
+           ipv6:
+             dscp: af11
+           localfilesize: 1024
+           monitor:
+             severity: errors
+           tls_servers:
+             - name: test
+               tls_hostname: test2
+               trustpoint: test
+               vrf: test
+           trap:
+             severity: critical
 #
 # After state:
 #RP/0/0/CPU0:10#show running-config logging
