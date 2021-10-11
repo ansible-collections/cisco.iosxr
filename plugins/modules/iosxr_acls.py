@@ -107,6 +107,14 @@ options:
                     description:
                     - The host IP address to match.
                     type: str
+                  net_group:
+                    description:
+                    - Name of net-group.
+                    type: str
+                  port_group:
+                    description:
+                    - Name of port-group.
+                    type: str
                   address:
                     description:
                     - The source IP address to match.
@@ -165,6 +173,14 @@ options:
                   host:
                     description:
                     - The host IP address to match.
+                    type: str
+                  net_group:
+                    description:
+                    - Name of net-group.
+                    type: str
+                  port_group:
+                    description:
+                    - Name of port-group.
                     type: str
                   address:
                     description:

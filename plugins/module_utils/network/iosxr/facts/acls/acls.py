@@ -18,6 +18,7 @@ from copy import deepcopy
 
 from collections import deque
 from ansible.module_utils.six import iteritems
+from ansible.module_utils._text import to_text
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
@@ -264,14 +265,17 @@ class AclsFacts(object):
             element = ace_queue.popleft()
             if element == "host":
                 rendered_ace[direction] = {"host": ace_queue.popleft()}
-
+            elif element == "net-group":
+                rendered_ace[direction] = {"net_group": ace_queue.popleft()}
+            elif element == "port-group":
+                rendered_ace[direction] = {"port_group": ace_queue.popleft()}
             elif element == "any":
                 rendered_ace[direction] = {"any": True}
 
             elif "/" in element:
                 rendered_ace[direction] = {"prefix": element}
 
-            elif isipaddress(element):
+            elif isipaddress(to_text(element)):
                 rendered_ace[direction] = {
                     "address": element,
                     "wildcard_bits": ace_queue.popleft(),
@@ -305,7 +309,10 @@ class AclsFacts(object):
                 else:
                     port_protocol[element] = ace_queue.popleft()
 
-                rendered_ace[direction]["port_protocol"] = port_protocol
+                if rendered_ace.get(direction):
+                    rendered_ace[direction]["port_protocol"] = port_protocol
+                else:
+                    rendered_ace[direction] = {"port_protocol": port_protocol}
 
         def __parse_protocol_options(rendered_ace, ace_queue, protocol):
             """

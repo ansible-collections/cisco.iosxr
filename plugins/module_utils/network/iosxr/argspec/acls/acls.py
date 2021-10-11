@@ -54,16 +54,27 @@ class AclsArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "destination": {
                                     "mutually_exclusive": [
-                                        ["address", "any", "host", "prefix"],
+                                        [
+                                            "address",
+                                            "any",
+                                            "host",
+                                            "prefix",
+                                            "net_group",
+                                            "port_group",
+                                        ],
                                         [
                                             "wildcard_bits",
                                             "any",
                                             "host",
                                             "prefix",
+                                            "net_group",
+                                            "port_group",
                                         ],
                                     ],
                                     "options": {
                                         "host": {"type": "str"},
+                                        "net_group": {"type": "str"},
+                                        "port_group": {"type": "str"},
                                         "address": {"type": "str"},
                                         "any": {"type": "bool"},
                                         "prefix": {"type": "str"},
@@ -439,16 +450,27 @@ class AclsArgs(object):  # pylint: disable=R0903
                                 "sequence": {"type": "int"},
                                 "source": {
                                     "mutually_exclusive": [
-                                        ["address", "any", "host", "prefix"],
+                                        [
+                                            "address",
+                                            "any",
+                                            "host",
+                                            "prefix",
+                                            "net_group",
+                                            "port_group",
+                                        ],
                                         [
                                             "wildcard_bits",
                                             "any",
                                             "host",
                                             "prefix",
+                                            "net_group",
+                                            "port_group",
                                         ],
                                     ],
                                     "options": {
                                         "host": {"type": "str"},
+                                        "net_group": {"type": "str"},
+                                        "port_group": {"type": "str"},
                                         "address": {"type": "str"},
                                         "any": {"type": "bool"},
                                         "prefix": {"type": "str"},
