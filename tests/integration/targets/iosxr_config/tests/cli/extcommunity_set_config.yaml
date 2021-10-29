@@ -1,0 +1,27 @@
+---
+- debug: msg="START cli/extcommunity_set_config.yaml on connection={{ ansible_connection }}"
+
+- name: pre-setup cleanup
+  cisco.iosxr.iosxr_config:
+    commands:
+      - no extcommunity-set rt test_set
+
+- name: setup
+  register: result
+  cisco.iosxr.iosxr_config:
+    lines:
+      - 6667:1234
+      - end-set
+    parents: extcommunity-set rt test_set
+
+- assert:
+    that:
+      - result.changed == true
+
+- name: post-setup cleanup
+  cisco.iosxr.iosxr_config:
+    commands:
+      - no extcommunity-set rt test_set
+
+
+- debug: msg="END cli/ on connection={{ ansible_connection }}"
