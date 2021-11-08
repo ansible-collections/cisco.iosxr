@@ -633,13 +633,14 @@ def mask_config_blocks_from_diff(config, candidate, force_diff_prefix):
 
     for regex in CONFIG_BLOCKS_FORCED_IN_DIFF:
         block_index_start_end = []
+        start_index = None
         for index, line in enumerate(candidate_lines):
             startre = regex["start"].search(line)
             if startre and startre.group(0):
                 start_index = index
             else:
                 endre = regex["end"].search(line)
-                if endre and endre.group(0):
+                if endre and endre.group(0) and start_index:
                     end_index = index
                     new_block = True
                     for prev_start, prev_end in block_index_start_end:
