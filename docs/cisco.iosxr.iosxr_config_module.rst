@@ -470,7 +470,6 @@ Notes
 
 .. note::
    - This module works with connection ``network_cli``. See `the IOS-XR Platform Options <../network/user_guide/platform_iosxr.html>`_.
-   - Tested against IOS XRv 6.1.3.
    - This module does not support ``netconf`` connection
    - Abbreviated commands are NOT idempotent, see L(Network FAQ,../network/user_guide/faq.html
    - Avoid service disrupting changes (viz. Management IP) from config replace.

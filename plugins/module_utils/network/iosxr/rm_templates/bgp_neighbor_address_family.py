@@ -647,15 +647,16 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "route_policy",
+            "name": "route_policy.inbound",
             "getval": re.compile(
                 r"""
                 (\s+vrf\s(?P<vrf>\S+))?
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \sroute-policy\s(?P<route_policy>\S+)
+                \sin
                 $""", re.VERBOSE
             ),
-            "setval": "route-policy {{route_policy}}",
+            "setval": "route-policy {{route_policy.inbound}} in",
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -664,7 +665,39 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
                                     '{{"address_family_" + afi + "_" + safi }}': {
-                                        "route_policy": "{{route_policy}}"
+                                        "route_policy": {
+                                            "inbound": "{{route_policy}}"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "route_policy.outbound",
+            "getval": re.compile(
+                r"""
+                (\s+vrf\s(?P<vrf>\S+))?
+                \s+(?P<nbr_address>neighbor\s\S+)
+                \sroute-policy\s(?P<route_policy>\S+)
+                \sout
+                $""", re.VERBOSE
+            ),
+            "setval": "route-policy {{route_policy.outbound}} out",
+            "result": {
+                "vrfs": {
+                    "{{ 'vrf_' + vrf|d() }}": {
+                        "vrf": "{{ vrf }}",
+                        "neighbors": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "address_family": {
+                                    '{{"address_family_" + afi + "_" + safi }}': {
+                                        "route_policy": {
+                                            "outbound": "{{route_policy}}"
+                                        }
                                     }
                                 }
                             }

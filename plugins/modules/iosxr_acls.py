@@ -107,6 +107,14 @@ options:
                     description:
                     - The host IP address to match.
                     type: str
+                  net_group:
+                    description:
+                    - Name of net-group.
+                    type: str
+                  port_group:
+                    description:
+                    - Name of port-group.
+                    type: str
                   address:
                     description:
                     - The source IP address to match.
@@ -165,6 +173,14 @@ options:
                   host:
                     description:
                     - The host IP address to match.
+                    type: str
+                  net_group:
+                    description:
+                    - Name of net-group.
+                    type: str
+                  port_group:
+                    description:
+                    - Name of port-group.
                     type: str
                   address:
                     description:
@@ -688,7 +704,7 @@ EXAMPLES = """
 # Thu Feb 20 05:07:45.767 UTC
 # RP/0/RP0/CPU0:ios#
 
-- name: Merge the provided configuration with the exisiting running configuration
+- name: Merge the provided configuration with the existing running configuration
   cisco.iosxr.iosxr_acls:
     config:
     - afi: ipv6

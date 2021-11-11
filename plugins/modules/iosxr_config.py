@@ -21,7 +21,6 @@ extends_documentation_fragment:
 - cisco.iosxr.iosxr
 notes:
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
-- Tested against IOS XRv 6.1.3.
 - This module does not support C(netconf) connection
 - Abbreviated commands are NOT idempotent, see L(Network FAQ,../network/user_guide/faq.html
   #why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands).
@@ -249,7 +248,6 @@ time:
   sample: "22:28:34"
 """
 import re
-
 from ansible.module_utils._text import to_text, to_bytes
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import ConnectionError
@@ -453,8 +451,8 @@ def main():
 
     if module.params["force"] is True:
         module.params["match"] = "none"
-
     warnings = list()
+
     check_args(module, warnings)
 
     result = dict(changed=False, warnings=warnings)

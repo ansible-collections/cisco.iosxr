@@ -76,13 +76,37 @@ class TestIosxrAclsModule(TestIosxrModule):
                                 name="acl_1",
                                 aces=[
                                     dict(
-                                        sequence="10",
+                                        sequence="30",
                                         grant="permit",
                                         protocol="ospf",
                                         source=dict(prefix="192.168.1.0/24"),
                                         destination=dict(any="true"),
                                         log="true",
-                                    )
+                                    ),
+                                    dict(
+                                        sequence="40",
+                                        grant="deny",
+                                        protocol="ipv4",
+                                        source=dict(
+                                            address="10.233.0.0",
+                                            wildcard_bits="0.0.255.255",
+                                        ),
+                                        destination=dict(
+                                            net_group="netgroup1"
+                                        ),
+                                    ),
+                                    dict(
+                                        sequence="50",
+                                        grant="deny",
+                                        protocol="ipv4",
+                                        source=dict(
+                                            address="10.233.0.0",
+                                            wildcard_bits="0.0.255.255",
+                                        ),
+                                        destination=dict(
+                                            port_group="portgroup1"
+                                        ),
+                                    ),
                                 ],
                             )
                         ],
@@ -93,7 +117,9 @@ class TestIosxrAclsModule(TestIosxrModule):
         )
         commands = [
             "ipv4 access-list acl_1",
-            "10 permit ospf 192.168.1.0 0.0.0.255 any log",
+            "30 permit ospf 192.168.1.0 0.0.0.255 any log",
+            "40 deny ipv4 10.233.0.0 0.0.255.255 net-group netgroup1",
+            "50 deny ipv4 10.233.0.0 0.0.255.255 port-group portgroup1",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -143,7 +169,31 @@ class TestIosxrAclsModule(TestIosxrModule):
                                         source=dict(prefix="10.0.0.0/8"),
                                         destination=dict(any="true"),
                                         log="true",
-                                    )
+                                    ),
+                                    dict(
+                                        sequence="40",
+                                        grant="deny",
+                                        protocol="ipv4",
+                                        source=dict(
+                                            address="10.233.0.0",
+                                            wildcard_bits="0.0.255.255",
+                                        ),
+                                        destination=dict(
+                                            net_group="netgroup1"
+                                        ),
+                                    ),
+                                    dict(
+                                        sequence="50",
+                                        grant="deny",
+                                        protocol="ipv4",
+                                        source=dict(
+                                            address="10.233.0.0",
+                                            wildcard_bits="0.0.255.255",
+                                        ),
+                                        destination=dict(
+                                            port_group="portgroup1"
+                                        ),
+                                    ),
                                 ],
                             )
                         ],
@@ -157,6 +207,8 @@ class TestIosxrAclsModule(TestIosxrModule):
             "no 10",
             "no 20",
             "30 permit ospf 10.0.0.0 0.255.255.255 any log",
+            "40 deny ipv4 10.233.0.0 0.0.255.255 net-group netgroup1",
+            "50 deny ipv4 10.233.0.0 0.0.255.255 port-group portgroup1",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -213,7 +265,31 @@ class TestIosxrAclsModule(TestIosxrModule):
                                         source=dict(any="true"),
                                         destination=dict(any="true"),
                                         log="true",
-                                    )
+                                    ),
+                                    dict(
+                                        sequence="50",
+                                        grant="deny",
+                                        protocol="ipv4",
+                                        source=dict(
+                                            address="10.233.0.0",
+                                            wildcard_bits="0.0.255.255",
+                                        ),
+                                        destination=dict(
+                                            net_group="netgroup1"
+                                        ),
+                                    ),
+                                    dict(
+                                        sequence="60",
+                                        grant="deny",
+                                        protocol="ipv4",
+                                        source=dict(
+                                            address="10.233.0.0",
+                                            wildcard_bits="0.0.255.255",
+                                        ),
+                                        destination=dict(
+                                            port_group="portgroup1"
+                                        ),
+                                    ),
                                 ],
                             )
                         ],
@@ -224,10 +300,13 @@ class TestIosxrAclsModule(TestIosxrModule):
         )
         commands = [
             "no ipv6 access-list acl6_1",
+            "no ipv4 access-list acl_1",
             "ipv4 access-list acl_2",
             "no 10",
             "no 20",
             "40 permit ospf any any log",
+            "50 deny ipv4 10.233.0.0 0.0.255.255 net-group netgroup1",
+            "60 deny ipv4 10.233.0.0 0.0.255.255 port-group portgroup1",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -239,6 +318,35 @@ class TestIosxrAclsModule(TestIosxrModule):
                     dict(
                         afi="ipv4",
                         acls=[
+                            dict(
+                                name="acl_1",
+                                aces=[
+                                    dict(
+                                        sequence="10",
+                                        grant="deny",
+                                        protocol="ipv4",
+                                        source=dict(
+                                            address="10.233.0.0",
+                                            wildcard_bits="0.0.255.255",
+                                        ),
+                                        destination=dict(
+                                            net_group="netgroup1"
+                                        ),
+                                    ),
+                                    dict(
+                                        sequence="20",
+                                        grant="deny",
+                                        protocol="ipv4",
+                                        source=dict(
+                                            address="10.233.0.0",
+                                            wildcard_bits="0.0.255.255",
+                                        ),
+                                        destination=dict(
+                                            port_group="portgroup1"
+                                        ),
+                                    ),
+                                ],
+                            ),
                             dict(
                                 name="acl_2",
                                 aces=[
@@ -257,7 +365,7 @@ class TestIosxrAclsModule(TestIosxrModule):
                                         source=dict(host="192.168.1.100"),
                                     ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                     dict(
@@ -297,7 +405,7 @@ class TestIosxrAclsModule(TestIosxrModule):
     def test_iosxr_acls_deletedafis(self):
         self._prepare()
         set_module_args(dict(config=[dict(afi="ipv4")], state="deleted"))
-        commands = ["no ipv4 access-list acl_2"]
+        commands = ["no ipv4 access-list acl_2", "no ipv4 access-list acl_1"]
         self.execute_module(changed=True, commands=commands)
 
     def test_iosxr_acls_rendered(self):

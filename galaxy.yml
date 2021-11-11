@@ -2,13 +2,14 @@
 authors:
   - Ansible Network Community (ansible-network)
 dependencies:
-  "ansible.netcommon": ">=2.0.0"
+  "ansible.netcommon": ">=2.0.1"
 license_file: LICENSE
 name: iosxr
 namespace: cisco
 description: Ansible Network Collection for Cisco IOSXR devices.
 readme: README.md
 repository: https://github.com/ansible-collections/cisco.iosxr
+issues: https://github.com/ansible-collections/cisco.iosxr/issues
 tags: [cisco, iosxr, networking, netconf]
 # NOTE(pabelanger): We create an empty version key to keep ansible-galaxy
 # happy. We dynamically inject version info based on git information.

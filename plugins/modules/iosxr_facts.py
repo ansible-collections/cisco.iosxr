@@ -24,7 +24,6 @@ description:
   or disable collection of additional facts.
 version_added: 1.0.0
 notes:
-- Tested against IOS-XR 6.1.3.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 author:
 - Ricardo Carrillo Cruz (@rcarrillocruz)
@@ -52,6 +51,10 @@ options:
     required: false
     type: list
     elements: str
+  available_network_resources:
+    description: When 'True' a list of network resources for which resource modules are available will be provided.
+    type: bool
+    default: false
 """
 
 EXAMPLES = """
@@ -184,6 +187,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
     Facts,
+    FACT_RESOURCE_SUBSETS,
 )
 
 
@@ -206,9 +210,14 @@ def main():
             "default value for `gather_subset` will be changed to `min` from `!config` v2.11 onwards"
         )
 
+    ansible_facts = {}
+    if module.params.get("available_network_resources"):
+        ansible_facts["available_network_resources"] = sorted(
+            FACT_RESOURCE_SUBSETS.keys()
+        )
     result = Facts(module).get_facts()
-
-    ansible_facts, additional_warnings = result
+    additional_facts, additional_warnings = result
+    ansible_facts.update(additional_facts)
     warnings.extend(additional_warnings)
 
     module.exit_json(ansible_facts=ansible_facts, warnings=warnings)

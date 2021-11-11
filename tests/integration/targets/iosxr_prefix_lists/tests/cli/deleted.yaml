@@ -1,0 +1,67 @@
+---
+- debug:
+    msg: Start iosxr_prefix_list deleted integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_config.yaml
+
+- block:
+    - name: Delete Prefix-list by afi.
+      register: result
+      cisco.iosxr.iosxr_prefix_lists: &id002
+        config:
+          - afi: ipv6
+        state: deleted
+
+    - assert:
+        that:
+          - '"no ipv6 prefix-list pl_1" in result.commands'
+          - result.commands|length == 1
+
+    - name: Delete a single Prefix-list by name (IDEMPOTENT)
+      register: result
+      cisco.iosxr.iosxr_prefix_lists: *id002
+
+    - name: Assert that the previous task was idempotent
+      assert:
+        that:
+          - result.changed == false
+          - result.commands|length == 0
+
+    - include_tasks: _populate_config.yaml
+
+
+    - name: Delete all prefix-lists from the device
+      register: result
+      cisco.iosxr.iosxr_prefix_lists: &id003
+        state: deleted
+
+    - name: Assert that the before dicts were correctly generated
+      assert:
+        that:
+          - "{{ merged['after'] | symmetric_difference(result['before']) |length\
+            \ == 0 }}"
+
+    - name: Assert that the correct set of commands were generated
+      assert:
+        that:
+          - "{{ deleted['commands'] | symmetric_difference(result['commands']) |length\
+            \ == 0 }}"
+
+    - name: Assert that before dicts were correctly generated
+      assert:
+        that:
+          - "{{ deleted['after'] | symmetric_difference(result['after']) |length\
+            \ == 0 }}"
+
+    - name: Delete all prefix_lists from the device (IDEMPOTENT)
+      register: result
+      cisco.iosxr.iosxr_prefix_lists: *id003
+
+    - name: Assert that the previous task was idempotent
+      assert:
+        that:
+          - result.changed == false
+          - result.commands|length == 0

@@ -20,7 +20,6 @@ description:
 version_added: 2.0.0
 author: Ashwini Mhatre (@amhatre)
 notes:
-- Tested against Cisco IOS-XR 6.1.3.
 - This module works with connection C(network_cli).
 options:
     config:
@@ -212,8 +211,15 @@ options:
                         type: bool
                         description: Prevent remove-private-AS from being inherited from the parent.
                   route_policy: &route_policy
-                    type: str
+                    type: dict
                     description: Apply route policy to neighbor.
+                    suboptions:
+                      inbound:
+                        type: str
+                        description: Apply route policy to inbound routes.
+                      outbound:
+                        type: str
+                        description: Apply route policy to outbound routes.
                   route_reflector_client: &route_reflector_client
                     type: dict
                     description:  Configure a neighbor as Route Reflector client.
@@ -389,7 +395,7 @@ EXAMPLES = """
 #   neighbor 192.0.2.5
 #    remote-as 65540
 
-- name: Merge the provided configuration with the exisiting running configuration
+- name: Merge the provided configuration with the existing running configuration
   cisco.iosxr.iosxr_bgp_neighbor_address_family:
     state: merged
     config:
@@ -674,7 +680,7 @@ EXAMPLES = """
 #     capability orf prefix both
 #     default-originate
 
-- name: Replace the provided configuration with the exisiting running configuration
+- name: Replace the provided configuration with the existing running configuration
   cisco.iosxr.iosxr_bgp_neighbor_address_family:
     state: replaced
     config:
@@ -1087,7 +1093,7 @@ EXAMPLES = """
 #
 #
 #
-- name: Gathered the provided configuration with the exisiting running configuration
+- name: Gathered the provided configuration with the existing running configuration
   cisco.iosxr.iosxr_bgp_neighbor_address_family:
         config:
         state: gathered

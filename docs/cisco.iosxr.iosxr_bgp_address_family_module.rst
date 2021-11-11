@@ -2640,7 +2640,6 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOS-XR 6.1.3.
    - This module works with connection ``network_cli``.
 
 
@@ -2660,7 +2659,7 @@ Examples
     #  address-family vpnv4 unicast
     #  vrf vrf1
     #   rd auto
-    - name: Merge the provided configuration with the exisiting running configuration
+    - name: Merge the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_bgp_address_family:
         state: merged
         config:
@@ -2765,7 +2764,7 @@ Examples
     #     redistribute connected metric 10
     #
     #
-    - name: Replace the provided configuration with the exisiting running configuration
+    - name: Replace the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_bgp_address_family:
         state: replaced
         config:
@@ -2842,7 +2841,7 @@ Examples
     #     redistribute connected metric 10
     #
     #
-    - name: Override the provided configuration with the exisiting running configuration
+    - name: Override the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_bgp_address_family:
         state: overridden
         config:
@@ -2980,7 +2979,7 @@ Examples
     #
     # Using gathered
     # -------------
-    - name: Merge the provided configuration with the exisiting running configuration
+    - name: Merge the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_bgp_address_family:
         state: gathered
         config:

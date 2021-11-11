@@ -150,9 +150,14 @@ class Static_routesFacts(object):
                 return x
 
     def parse_intf(self, item):
-        match = re.search(r" ((\w+)((?:\d)/(?:\d)/(?:\d)/(?:\d+)))", item)
-        if match:
-            return match.group(1)
+        inf_search_strs = [
+            r" ((\w+)((?:\d)/(?:\d)/(?:\d)/(?:\d+)))",
+            r" (([a-zA-Z]+)(?:\d+))",
+        ]
+        for i in inf_search_strs:
+            match = re.search(i, item, re.M)
+            if match:
+                return match.group(1)
 
     def parse_attrib(self, item, attrib):
         match = re.search(r" %s (\S+)" % attrib, item)

@@ -226,3 +226,97 @@ releases:
     - 115_iosxr_move_common_functionality_to_util.yaml
     - no_log_fix.yaml
     release_date: '2021-03-29'
+  2.0.2:
+    changes:
+      bugfixes:
+      - For versions >=2.0.1, this collection requires ansible.netcommon >=2.0.1.
+      - Re-releasing this collection with ansible.netcommon dependency requirements
+        updated.
+    fragments:
+    - 125-add_ignore_txt.yml
+    - bump_netcommon.yaml
+    release_date: '2021-04-09'
+  2.1.0:
+    changes:
+      bugfixes:
+      - Avoid using default value for comment for iosxr version > 7.2(Module=iosxr_config)
+      - Avoid using default value for comment when "comment is not supported" by device.
+      minor_changes:
+      - Add support for available_network_resources key, which allows to fetch the
+        available resources for a platform (https://github.com/ansible-collections/cisco.iosxr/issues/119).
+      - Update psudo-atomic operation scenario tests with correct assertion.
+    fragments:
+    - available_network_resources.yaml
+    - iosxr_config_default_comment_fix.yaml
+    - iosxr_fix_for_default_comment.yaml
+    - psudoatomic_operation_tests_fix.yaml
+    release_date: '2021-04-27'
+  2.2.0:
+    changes:
+      bugfixes:
+      - Add warning when comment is not supported by IOSXR.
+      - Fix issue of commit operation which was not failing for invalid inputs.
+      minor_changes:
+      - Add new keys for iosxr_l2_interface, iosxr_logging.
+      - Fix integration tests for iosxr_config, iosxr_smoke,iosxr_facts,iosxr_l2_interfaces,iosxr_lag_interfaces,
+        iosxr_logging,iosxr_user.
+    fragments:
+    - bugfix-138-handle-errror-when-commit-operation.yaml
+    - changelog_doc_path_update.yaml
+    - docupdate_spelling_correction.yaml
+    - fix-libssh-dependancy.yaml
+    - iosxr-7.0.2-fix-integration-tests.yaml
+    release_date: '2021-05-17'
+  2.3.0:
+    changes:
+      bugfixes:
+      - To add updated route policy params to Bgp nbr AF RM
+      - fix backword compatibility issue for iosxr 6.x.
+      - fix intermittent issue on CI for iosxr_banner module.
+      - fix iosxr_config issue for prefix-set,route-policy config
+      - fix static routes interface parsing issue.
+      minor_changes:
+      - Add `iosxr_prefix_lists` resource module.
+    fragments:
+    - 152_fix_static_routes_interface_facts_issue.yaml
+    - docs_fix.yaml
+    - fix_6.1.3_backword_compatibility_issue.yaml
+    - fix_intermittent_iosxr_banner_issue.yaml
+    - fix_iosxr_config_issue.yaml
+    - iosxr_prefix_list.yaml
+    - update_bgp_nbr_af_route_policy.yaml
+    - update_readme_freenode_to_libera.yml
+    modules:
+    - description: Prefix-Lists resource module.
+      name: iosxr_prefix_lists
+      namespace: ''
+    release_date: '2021-06-22'
+  2.4.0:
+    changes:
+      bugfixes:
+      - fix issue in prefix-lists facts code when prefix-lists facts are empty. (https://github.com/ansible-collections/cisco.iosxr/pull/161)
+      deprecated_features:
+      - The iosxr_logging module has been deprecated in favor of the new iosxr_logging_global
+        resource module and will be removed in a release after '2023-08-01'.
+      minor_changes:
+      - Add iosxr_logging_global resource module.
+    fragments:
+    - 160-safe-eval-no-concat.yml
+    - 162-fix-prefix-list-facts.yaml
+    - add-iosxr-logging-global-module.yaml
+    modules:
+    - description: Manages logging attributes of Cisco IOSXR network devices
+      name: iosxr_logging_global
+      namespace: ''
+    release_date: '2021-07-26'
+  2.5.0:
+    changes:
+      doc_changes:
+      - Update valid deprecation date in bgp module.
+      minor_changes:
+      - Added iosxr ntp_global resource module.
+    fragments:
+    - add_iosxr_ntp_global.yaml
+    - improve_test_coverage.yaml
+    - update_docs_bgp.yaml
+    release_date: '2021-09-24'

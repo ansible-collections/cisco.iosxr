@@ -246,7 +246,6 @@ Notes
 -----
 
 .. note::
-   - Tested against IOS-XR 6.1.3.
    - This module works with connection ``network_cli``. See `the IOS-XR Platform Options <../network/user_guide/platform_iosxr.html>`_.
 
 

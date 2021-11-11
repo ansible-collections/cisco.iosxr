@@ -5,6 +5,103 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v2.5.0
+======
+
+Minor Changes
+-------------
+
+- Added iosxr ntp_global resource module.
+
+Documentation Changes
+---------------------
+
+- Update valid deprecation date in bgp module.
+
+v2.4.0
+======
+
+Minor Changes
+-------------
+
+- Add iosxr_logging_global resource module.
+
+Deprecated Features
+-------------------
+
+- The iosxr_logging module has been deprecated in favor of the new iosxr_logging_global resource module and will be removed in a release after '2023-08-01'.
+
+Bugfixes
+--------
+
+- fix issue in prefix-lists facts code when prefix-lists facts are empty. (https://github.com/ansible-collections/cisco.iosxr/pull/161)
+
+New Modules
+-----------
+
+- iosxr_logging_global - Manages logging attributes of Cisco IOSXR network devices
+
+v2.3.0
+======
+
+Minor Changes
+-------------
+
+- Add `iosxr_prefix_lists` resource module.
+
+Bugfixes
+--------
+
+- To add updated route policy params to Bgp nbr AF RM
+- fix backword compatibility issue for iosxr 6.x.
+- fix intermittent issue on CI for iosxr_banner module.
+- fix iosxr_config issue for prefix-set,route-policy config
+- fix static routes interface parsing issue.
+
+New Modules
+-----------
+
+- iosxr_prefix_lists - Prefix-Lists resource module.
+
+v2.2.0
+======
+
+Minor Changes
+-------------
+
+- Add new keys for iosxr_l2_interface, iosxr_logging.
+- Fix integration tests for iosxr_config, iosxr_smoke,iosxr_facts,iosxr_l2_interfaces,iosxr_lag_interfaces, iosxr_logging,iosxr_user.
+
+Bugfixes
+--------
+
+- Add warning when comment is not supported by IOSXR.
+- Fix issue of commit operation which was not failing for invalid inputs.
+
+v2.1.0
+======
+
+Minor Changes
+-------------
+
+- Add support for available_network_resources key, which allows to fetch the available resources for a platform (https://github.com/ansible-collections/cisco.iosxr/issues/119).
+- Update psudo-atomic operation scenario tests with correct assertion.
+
+Bugfixes
+--------
+
+- Avoid using default value for comment for iosxr version > 7.2(Module=iosxr_config)
+- Avoid using default value for comment when "comment is not supported" by device.
+
+v2.0.2
+======
+
+Bugfixes
+--------
+
+- For versions >=2.0.1, this collection requires ansible.netcommon >=2.0.1.
+- Re-releasing this collection with ansible.netcommon dependency requirements updated.
+
 v2.0.1
 ======
 

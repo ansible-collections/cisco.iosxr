@@ -18,8 +18,11 @@ description:
 - This module provides configuration management of global BGP parameters on devices
   running Cisco IOS-XR
 version_added: 1.0.0
+deprecated:
+  alternative: iosxr_bgp_global
+  why: Updated module released with more functionality.
+  removed_at_date: '2023-01-29'
 notes:
-- Tested against Cisco IOS XR Software Version 6.1.3
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 options:
   config:

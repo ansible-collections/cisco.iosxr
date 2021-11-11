@@ -1,0 +1,14 @@
+---
+- debug:
+    msg: START iosxr_ntp_global parsed integration tests on connection={{ ansible_connection }}
+
+- name: Parse externally provided NTP_GLOBAL config
+  register: result
+  cisco.iosxr.iosxr_ntp_global:
+    running_config: "{{ lookup('file', './_parsed.cfg') }}"
+    state: parsed
+
+- name: Assert that config was correctly parsed
+  assert:
+    that:
+      - merged['after'] == result['parsed']

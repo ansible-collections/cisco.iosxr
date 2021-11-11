@@ -442,7 +442,7 @@ Examples
     # Sat Feb 22 07:46:30.089 UTC
     # % No such configuration item(s)
     #
-    - name: Merge the provided configuration with the exisiting running configuration
+    - name: Merge the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_static_routes:
         config:
         - address_families:

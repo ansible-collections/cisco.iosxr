@@ -72,6 +72,8 @@ class Bgp_neighbor_address_family(ResourceModule):
             "weight",
             "site_of_origin",
             "validation",
+            "route_policy.inbound",
+            "route_policy.outbound",
         ]
 
     def execute_module(self):
@@ -81,7 +83,6 @@ class Bgp_neighbor_address_family(ResourceModule):
         :returns: The result from module execution
         """
         if self.state not in ["parsed", "gathered"]:
-            # import epdb; epdb.serve()
             self.generate_commands()
             self.run_commands()
         return self.result
@@ -97,7 +98,6 @@ class Bgp_neighbor_address_family(ResourceModule):
         wantd = self.want
         haved = self.have
         # if state is merged, merge want onto have and then compare
-        # import epdb;epdb.serve()
         if self.state == "merged":
             wantd = dict_merge(self.have, self.want)
 
@@ -146,7 +146,6 @@ class Bgp_neighbor_address_family(ResourceModule):
                 """
         want_nbr = want.get("neighbors", {})
         have_nbr = have.get("neighbors", {})
-        # import epdb;epdb.serve()
         for name, entry in iteritems(want_nbr):
             have = have_nbr.pop(name, {})
             begin = len(self.commands)
@@ -173,7 +172,7 @@ class Bgp_neighbor_address_family(ResourceModule):
             begin = len(self.commands)
             af_have = hafs.pop(name, {})
             self.compare(parsers=self.parsers, want=entry, have=af_have)
-            if len(self.commands) != begin:
+            if len(self.commands) != begin or (not af_have and entry):
                 self.commands.insert(
                     begin,
                     self._tmplt.render(

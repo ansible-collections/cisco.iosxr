@@ -1,11 +1,11 @@
 ---
 - debug:
-    msg: START iosxr_lldp_interfaces rendered integration tests on connection={{ ansible_connection
+    msg:
+      START iosxr_lldp_interfaces rendered integration tests on connection={{ ansible_connection
       }}
 
 - block:
-
-    - name: Merge the provided configuration with the exisiting running configuration
+    - name: Merge the provided configuration with the existing running configuration
       register: result
       cisco.iosxr.iosxr_lldp_interfaces:
         config:

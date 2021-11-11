@@ -15,7 +15,7 @@
 
 - set_fact:
     test_cases:
-      files: '{{ common_test_cases.files }} + {{ test_cases.files }}'
+      files: '{{ common_test_cases.files + test_cases.files }}'
 
 - name: set test_items
   set_fact: test_items="{{ test_cases.files | map(attribute='path') | list }}"

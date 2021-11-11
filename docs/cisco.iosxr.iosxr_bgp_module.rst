@@ -14,6 +14,13 @@ Version added: 1.0.0
    :local:
    :depth: 1
 
+DEPRECATED
+----------
+:Removed in collection release after 2023-01-29
+:Why: Updated module released with more functionality.
+:Alternative: iosxr_bgp_global
+
+
 
 Synopsis
 --------
@@ -636,7 +643,6 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOS XR Software Version 6.1.3
    - This module works with connection ``network_cli``. See `the IOS-XR Platform Options <../network/user_guide/platform_iosxr.html>`_.
 
 
@@ -710,6 +716,10 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
 
 Status
 ------
+
+
+- This module will be removed in a release after 2023-01-29. *[deprecated]*
+- For more information see `DEPRECATED`_.
 
 
 Authors

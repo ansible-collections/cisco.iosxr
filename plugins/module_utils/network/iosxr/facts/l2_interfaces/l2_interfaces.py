@@ -25,6 +25,10 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.ut
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.l2_interfaces.l2_interfaces import (
     L2_InterfacesArgs,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    get_os_version,
+)
+from distutils.version import LooseVersion
 
 
 class L2_InterfacesFacts(object):
@@ -45,6 +49,9 @@ class L2_InterfacesFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_config(self, connection):
+        return connection.get_config(flags="interface")
+
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for l2_interfaces
         :param module: the module instance
@@ -55,7 +62,7 @@ class L2_InterfacesFacts(object):
         """
         objs = []
         if not data:
-            data = connection.get("show running-config interface")
+            data = self.get_config(connection)
 
         # operate on a collection of resource x
         config = ("\n" + data).split("\ninterface ")
@@ -106,11 +113,25 @@ class L2_InterfacesFacts(object):
                 config["native_vlan"] = int(native_vlan.group(1))
 
             dot1q = utils.parse_conf_arg(conf, "encapsulation dot1q")
-            config["q_vlan"] = []
-            if dot1q:
-                config["q_vlan"].append(int(dot1q.split(" ")[0]))
-                if len(dot1q.split(" ")) > 1:
-                    config["q_vlan"].append(int(dot1q.split(" ")[2]))
+            os_version = get_os_version(self._module)
+            if os_version and LooseVersion(os_version) > LooseVersion("7.0.0"):
+                encapsulation = re.search(
+                    r"encapsulation dot1q\s(\d+)\s*(second-dot1q\s\d+)?", conf
+                )
+                if encapsulation:
+                    config["encapsulation"]["dot1q"] = int(
+                        encapsulation.group(1)
+                    )
+                    if encapsulation.group(2):
+                        config["encapsulation"]["second_dot1q"] = int(
+                            encapsulation.group(2).split("second-dot1q ")[1]
+                        )
+            else:
+                config["q_vlan"] = []
+                if dot1q:
+                    config["q_vlan"].append(int(dot1q.split(" ")[0]))
+                    if len(dot1q.split(" ")) > 1:
+                        config["q_vlan"].append(int(dot1q.split(" ")[2]))
 
             if utils.parse_conf_cmd_arg(conf, "l2transport", True):
                 config["l2transport"] = True
@@ -122,6 +143,7 @@ class L2_InterfacesFacts(object):
             pvst = utils.parse_conf_arg(conf, "l2protocol pvst")
             stp = utils.parse_conf_arg(conf, "l2protocol stp")
             vtp = utils.parse_conf_arg(conf, "l2protocol vtp")
+            cpsv = utils.parse_conf_arg(conf, "l2protocol cpsv")
             if cdp:
                 config["l2protocol"].append({"cdp": cdp})
             if pvst:
@@ -130,5 +152,7 @@ class L2_InterfacesFacts(object):
                 config["l2protocol"].append({"stp": stp})
             if vtp:
                 config["l2protocol"].append({"vtp": vtp})
+            if cpsv:
+                config["l2protocol"].append({"cpsv": cpsv})
 
             return utils.remove_empties(config)

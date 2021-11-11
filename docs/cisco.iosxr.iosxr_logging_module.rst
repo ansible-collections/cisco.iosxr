@@ -14,6 +14,13 @@ Version added: 1.0.0
    :local:
    :depth: 1
 
+DEPRECATED
+----------
+:Removed in collection release after 2023-08-01
+:Why: Updated module released with more functionality.
+:Alternative: iosxr_logging_global
+
+
 
 Synopsis
 --------
@@ -153,6 +160,22 @@ Parameters
                 <td>
                         <div>When <code>dest</code> = <em>file</em> name indicates file-name</div>
                         <div>When <code>dest</code> = <em>host</em> name indicates the host-name or ip-address of syslog server.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>path</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Set file path.</div>
                 </td>
             </tr>
             <tr>
@@ -302,6 +325,21 @@ Parameters
                 <td>
                         <div>When <code>dest</code> = <em>file</em> name indicates file-name</div>
                         <div>When <code>dest</code> = <em>host</em> name indicates the host-name or ip-address of syslog server.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>path</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Set file path.</div>
                 </td>
             </tr>
             <tr>
@@ -500,7 +538,6 @@ Notes
 
 .. note::
    - This module works with connection ``network_cli`` and ``netconf``. See `the IOS-XR Platform Options <../network/user_guide/platform_iosxr.html>`_.
-   - Tested against IOS XRv 6.1.3
    - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
    - For more information on using Ansible to manage Cisco devices see the `Cisco integration page <https://www.ansible.com/integrations/networks/cisco>`_.
 
@@ -624,6 +661,10 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
 
 Status
 ------
+
+
+- This module will be removed in a release after 2023-08-01. *[deprecated]*
+- For more information see `DEPRECATED`_.
 
 
 Authors

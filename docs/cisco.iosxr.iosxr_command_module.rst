@@ -267,7 +267,6 @@ Notes
    - Make sure the user has been authorized to execute commands terminal length 0, terminal width 512 and terminal exec prompt no-timestamp.
    - This module works with ``network_cli``. See `the IOS-XR Platform Options <../network/user_guide/platform_iosxr.html>`_.
    - This module does not support ``netconf`` connection.
-   - Tested against IOS XR 6.1.3
    - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
    - For more information on using Ansible to manage Cisco devices see the `Cisco integration page <https://www.ansible.com/integrations/networks/cisco>`_.
 

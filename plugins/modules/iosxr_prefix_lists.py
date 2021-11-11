@@ -1,0 +1,954 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# Copyright 2021 Red Hat
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+"""
+The module file for iosxr_prefix_lists
+"""
+
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
+
+DOCUMENTATION = """
+module: iosxr_prefix_lists
+short_description: Prefix-Lists resource module.
+description:
+- This module manages prefix-lists configuration on devices running Cisco IOSXR.
+version_added: 2.3.0
+notes:
+- Tested against IOSXR 7.0.2.
+- This module works with connection C(network_cli).
+author: Ashwini Mhatre (@amhatre)
+options:
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the Iosxr device by
+        executing the command B(show running-config prefix-list).
+      - The state I(parsed) reads the configuration from C(running_config) option and
+        transforms it into Ansible structured data as per the resource module's argspec
+        and the value is then returned in the I(parsed) key within the result.
+    type: str
+  config:
+    description: A list of prefix-lists configuration.
+    type: list
+    elements: dict
+    suboptions:
+      afi:
+        description:
+        - The Address Family Identifier (AFI) for the prefix-lists.
+        type: str
+        choices: ["ipv4", "ipv6"]
+      prefix_lists:
+        description: List of prefix-list configurations.
+        type: list
+        elements: dict
+        suboptions:
+          name:
+            description: Name of the prefix-list.
+            type: str
+          entries:
+            description: List of configurations for the specified prefix-list
+            type: list
+            elements: dict
+            suboptions:
+              sequence:
+                description: Sequence Number.
+                type: int
+              action:
+                description: Prefix-List permit or deny.
+                type: str
+                choices: ["permit", "deny", "remark"]
+              description:
+                description: Description of the prefix list. only applicable for action "remark".
+                type: str
+              prefix:
+                description: IP or IPv6 prefix in A.B.C.D/LEN or A:B::C:D/LEN format. only applicable for action "permit" and "deny"
+                type: str
+  state:
+    description:
+    - The state the configuration should be left in.
+    - Refer to examples for more details.
+    - With state I(replaced), for the listed prefix-lists,
+      sequences that are in running-config but not in the task are negated.
+    - With state I(overridden), all prefix-lists that are in running-config but
+      not in the task are negated.
+    - Please refer to examples for more details.
+    type: str
+    choices:
+    - merged
+    - replaced
+    - overridden
+    - deleted
+    - parsed
+    - gathered
+    - rendered
+    default: merged
+"""
+EXAMPLES = """
+# Using merged
+# Before state
+#RP/0/0/CPU0:10#show running-config
+#Thu Feb  4 09:38:36.245 UTC
+#% No such configuration item(s)
+#RP/0/0/CPU0:10#
+#
+- name: Merge the provided configuration with the existing running configuration
+  cisco.iosxr.iosxr_prefix_lists:
+         state: merged
+         config:
+           - afi: ipv6
+             prefix_lists:
+               - name: pl_1
+                 entries:
+                   - prefix: 2001:db8:1234::/48
+                     action: deny
+                     sequence: 1
+               - name: pl_2
+                 entries:
+                   - sequence: 2
+                     action: remark
+                     description: TEST_PL_2_REMARK
+           - afi: ipv4
+             prefix_lists:
+               - name: pl1
+                 entries:
+                   - sequence: 3
+                     action: remark
+                     description: TEST_PL1_2_REMARK
+                   - sequence: 4
+                     action: permit
+                     prefix: 10.0.0.0/24
+               - name: pl2
+                 entries:
+                   - sequence: 5
+                     action: remark
+                     description: TEST_PL2_REMARK
+#
+# After state:
+#
+#RP/0/0/CPU0:10#show running-config
+# ipv6 prefix-list pl_1
+#  1 deny 2001:db8:1234::/48
+# !
+# ipv6 prefix-list pl_2
+#  2 remark TEST_PL_2_REMARK
+# !
+# ipv4 prefix-list pl1
+#  3 remark TEST_PL1_2_REMARK
+#  4 permit 10.0.0.0/24
+# !
+# ipv4 prefix-list pl2
+#  5 remark TEST_PL2_REMARK
+# !
+#Module execution
+#
+# "after": [
+#         {
+#             "afi": "ipv6",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "deny",
+#                             "prefix": "2001:db8:1234::/48",
+#                             "sequence": 1
+#                         }
+#                     ],
+#                     "name": "pl_1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL_2_REMARK",
+#                             "sequence": 2
+#                         }
+#                     ],
+#                     "name": "pl_2"
+#                 }
+#             ]
+#         },
+#         {
+#             "afi": "ipv4",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL1_2_REMARK",
+#                             "sequence": 3
+#                         },
+#                         {
+#                             "action": "permit",
+#                             "prefix": "10.0.0.0/24",
+#                             "sequence": 4
+#                         }
+#                     ],
+#                     "name": "pl1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL2_REMARK",
+#                             "sequence": 5
+#                         }
+#                     ],
+#                     "name": "pl2"
+#                 }
+#             ]
+#         }
+#     ],
+#     "before": [],
+#     "changed": true,
+#     "commands": [
+#         "ipv6 prefix-list pl_1 1 deny 2001:db8:1234::/48",
+#         "ipv6 prefix-list pl_2 2 remark TEST_PL_2_REMARK",
+#         "ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK",
+#         "ipv4 prefix-list pl1 4 permit 10.0.0.0/24",
+#         "ipv4 prefix-list pl2 5 remark TEST_PL2_REMARK"
+#     ]
+#-----------------------------------------------------------------------
+# Using replaced:
+# --------------
+# Before state
+#RP/0/0/CPU0:10#show running-config
+#
+# ipv6 prefix-list pl_1
+#  1 deny 2001:db8:1234::/48
+# !
+# ipv6 prefix-list pl_2
+#  2 remark TEST_PL_2_REMARK
+# !
+# ipv4 prefix-list pl1
+#  3 remark TEST_PL1_2_REMARK
+#  4 permit 10.0.0.0/24
+# !
+# ipv4 prefix-list pl2
+#  5 remark TEST_PL2_REMARK
+# !
+#
+#
+- name: Replace device configurations of listed prefix lists with provided configurations
+  register: result
+  cisco.iosxr.iosxr_prefix_lists: &id001
+    config:
+           - afi: ipv4
+             prefix_lists:
+               - name: pl1
+                 entries:
+                   - sequence: 3
+                     action: permit
+                     prefix: 10.0.0.0/24
+           - afi: ipv6
+             prefix_lists:
+               - name: pl_1
+                 entries:
+                   - prefix: 2001:db8:1234::/48
+                     action: permit
+                     sequence: 1
+               - name: pl_2
+                 entries:
+                   - sequence: 2
+                     action: remark
+                     description: TEST_PL1_2
+    state: replaced
+# After state:
+#RP/0/0/CPU0:10#show running-config
+#
+# ipv6 prefix-list pl_1
+#  1 deny 2001:db8:1234::/48
+# !
+# ipv6 prefix-list pl_2
+#  2 remark TEST_PL1_2
+# !
+# ipv4 prefix-list pl1
+#  3 permit 10.0.0.0/24
+# !
+# ipv4 prefix-list pl2
+#  5 remark TEST_PL2_REMARK
+#
+# Module Execution:
+#
+# "after": [
+#         {
+#             "afi": "ipv6",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "deny",
+#                             "prefix": "2001:db8:1234::/48",
+#                             "sequence": 1
+#                         }
+#                     ],
+#                     "name": "pl_1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL1_2",
+#                             "sequence": 2
+#                         }
+#                     ],
+#                     "name": "pl_2"
+#                 }
+#             ]
+#         },
+#         {
+#             "afi": "ipv4",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "permit",
+#                             "prefix": "10.0.0.0/24",
+#                             "sequence": 3
+#                         }
+#                     ],
+#                     "name": "pl1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL2_REMARK",
+#                             "sequence": 5
+#                         }
+#                     ],
+#                     "name": "pl2"
+#                 }
+#             ]
+#         }
+#     ],
+#     "before": [
+#         {
+#             "afi": "ipv6",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "deny",
+#                             "prefix": "2001:db8:1234::/48",
+#                             "sequence": 1
+#                         }
+#                     ],
+#                     "name": "pl_1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL_2_REMARK",
+#                             "sequence": 2
+#                         }
+#                     ],
+#                     "name": "pl_2"
+#                 }
+#             ]
+#         },
+#         {
+#             "afi": "ipv4",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL1_2_REMARK",
+#                             "sequence": 3
+#                         },
+#                         {
+#                             "action": "permit",
+#                             "prefix": "10.0.0.0/24",
+#                             "sequence": 4
+#                         }
+#                     ],
+#                     "name": "pl1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL2_REMARK",
+#                             "sequence": 5
+#                         }
+#                     ],
+#                     "name": "pl2"
+#                 }
+#             ]
+#         }
+#     ],
+#     "changed": true,
+#     "commands": [
+#         "no ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK",
+#         "no ipv4 prefix-list pl1 4 permit 10.0.0.0/24",
+#         "ipv4 prefix-list pl1 3 permit 10.0.0.0/24",
+#         "ipv6 prefix-list pl_2 2 remark TEST_PL1_2"
+#     ],
+#     "invocation": {
+#         "module_args": {
+#             "config": [
+#                 {
+#                     "afi": "ipv4",
+#                     "prefix_lists": [
+#                         {
+#                             "entries": [
+#                                 {
+#                                     "action": "permit",
+#                                     "description": null,
+#                                     "prefix": "10.0.0.0/24",
+#                                     "sequence": 3
+#                                 }
+#                             ],
+#                             "name": "pl1"
+#                         }
+#                     ]
+#                 },
+#                 {
+#                     "afi": "ipv6",
+#                     "prefix_lists": [
+#                         {
+#                             "entries": [
+#                                 {
+#                                     "action": "permit",
+#                                     "description": null,
+#                                     "prefix": "2001:db8:1234::/48",
+#                                     "sequence": 1
+#                                 }
+#                             ],
+#                             "name": "pl_1"
+#                         },
+#                         {
+#                             "entries": [
+#                                 {
+#                                     "action": "remark",
+#                                     "description": "TEST_PL1_2",
+#                                     "prefix": null,
+#                                     "sequence": 2
+#                                 }
+#                             ],
+#                             "name": "pl_2"
+#                         }
+#                     ]
+#                 }
+#             ],
+#             "running_config": null,
+#             "state": "replaced"
+#         }
+#     }
+# }
+#------------------------------------------------------------------
+# Using deleted:
+# -------------
+# Before state:
+#RP/0/0/CPU0:10#show running-config
+#
+# ipv6 prefix-list pl_1
+#  1 deny 2001:db8:1234::/48
+# !
+# ipv6 prefix-list pl_2
+#  2 remark TEST_PL_2_REMARK
+# !
+# ipv4 prefix-list pl1
+#  3 remark TEST_PL1_2_REMARK
+#  4 permit 10.0.0.0/24
+# !
+# ipv4 prefix-list pl2
+#  5 remark TEST_PL2_REMARK
+
+- name: Delete all prefix-lists from the device
+  cisco.iosxr.iosxr_prefix_lists:
+    state: deleted
+
+# After state:
+#RP/0/0/CPU0:10#show running-config
+#
+#
+# Module Execution:
+#
+# "after": [],
+#     "before": [
+#         {
+#             "afi": "ipv6",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "deny",
+#                             "prefix": "2001:db8:1234::/48",
+#                             "sequence": 1
+#                         }
+#                     ],
+#                     "name": "pl_1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL1_2",
+#                             "sequence": 2
+#                         }
+#                     ],
+#                     "name": "pl_2"
+#                 }
+#             ]
+#         },
+#         {
+#             "afi": "ipv4",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "permit",
+#                             "prefix": "10.0.0.0/24",
+#                             "sequence": 3
+#                         }
+#                     ],
+#                     "name": "pl1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL2_REMARK",
+#                             "sequence": 5
+#                         }
+#                     ],
+#                     "name": "pl2"
+#                 }
+#             ]
+#         }
+#     ],
+#     "changed": true,
+#     "commands": [
+#         "no ipv6 prefix-list pl_1",
+#         "no ipv6 prefix-list pl_2",
+#         "no ipv4 prefix-list pl1",
+#         "no ipv4 prefix-list pl2"
+#     ],
+#     "invocation": {
+#         "module_args": {
+#             "config": null,
+#             "running_config": null,
+#             "state": "deleted"
+#         }
+#     }
+# }
+#---------------------------------------------------------------------------------
+#
+# using gathered:
+# --------------
+# Before state:
+#RP/0/0/CPU0:10#show running-config
+#
+# ipv6 prefix-list pl_1
+#  1 deny 2001:db8:1234::/48
+# !
+# ipv6 prefix-list pl_2
+#  2 remark TEST_PL_2_REMARK
+# !
+# ipv4 prefix-list pl1
+#  3 remark TEST_PL1_2_REMARK
+#  4 permit 10.0.0.0/24
+# !
+# ipv4 prefix-list pl2
+#  5 remark TEST_PL2_REMARK
+#
+- name: Gather ACL interfaces facts using gathered state
+  cisco.iosxr.iosxr_prefix_lists:
+     state: gathered
+#
+# Module Execution:
+#
+# "gathered": [
+#         {
+#             "afi": "ipv6",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "deny",
+#                             "prefix": "2001:db8:1234::/48",
+#                             "sequence": 1
+#                         }
+#                     ],
+#                     "name": "pl_1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL_2_REMARK",
+#                             "sequence": 2
+#                         }
+#                     ],
+#                     "name": "pl_2"
+#                 }
+#             ]
+#         },
+#         {
+#             "afi": "ipv4",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL1_2_REMARK",
+#                             "sequence": 3
+#                         },
+#                         {
+#                             "action": "permit",
+#                             "prefix": "10.0.0.0/24",
+#                             "sequence": 4
+#                         }
+#                     ],
+#                     "name": "pl1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL2_REMARK",
+#                             "sequence": 5
+#                         }
+#                     ],
+#                     "name": "pl2"
+#                 }
+#             ]
+#         }
+#     ],
+#     "changed": false,
+#--------------------------------------------------------------------------
+# Using parsed:
+# --------------
+#
+# parsed.cfg
+#------------------------------
+# ipv6 prefix-list pl_1
+#  1 deny 2001:db8:1234::/48
+# !
+# ipv6 prefix-list pl_2
+#  2 remark TEST_PL_2_REMARK
+# !
+# ipv4 prefix-list pl1
+#  3 remark TEST_PL1_2_REMARK
+#  4 permit 10.0.0.0/24
+# !
+# ipv4 prefix-list pl2
+#  5 remark TEST_PL2_REMARK
+#
+#
+- name: Parse externally provided Prefix_lists config to agnostic model
+  cisco.iosxr.iosxr_prefix_lists:
+     running_config: "{{ lookup('file', './fixtures/parsed.cfg') }}"
+     state: parsed
+#
+# Module execution:
+#"parsed": [
+#         {
+#             "afi": "ipv6",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "deny",
+#                             "prefix": "2001:db8:1234::/48",
+#                             "sequence": 1
+#                         }
+#                     ],
+#                     "name": "pl_1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL_2_REMARK",
+#                             "sequence": 2
+#                         }
+#                     ],
+#                     "name": "pl_2"
+#                 }
+#             ]
+#         },
+#         {
+#             "afi": "ipv4",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL1_2_REMARK",
+#                             "sequence": 3
+#                         },
+#                         {
+#                             "action": "permit",
+#                             "prefix": "10.0.0.0/24",
+#                             "sequence": 4
+#                         }
+#                     ],
+#                     "name": "pl1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL2_REMARK",
+#                             "sequence": 5
+#                         }
+#                     ],
+#                     "name": "pl2"
+#                 }
+#             ]
+#         }
+#     ]
+#
+#----------------------------------------------------------------------------
+# Using rendered:
+# --------------
+#
+- name: Render platform specific commands from task input using rendered state
+  register: result
+  cisco.iosxr.iosxr_prefix_lists:
+     config:
+       - afi: ipv6
+         prefix_lists:
+           - name: pl_1
+             entries:
+               - prefix: 2001:db8:1234::/48
+                 action: deny
+                 sequence: 1
+           - name: pl_2
+             entries:
+               - sequence: 2
+                 action: remark
+                 description: TEST_PL_2_REMARK
+       - afi: ipv4
+         prefix_lists:
+           - name: pl1
+             entries:
+               - sequence: 3
+                 action: remark
+                 description: TEST_PL1_2_REMARK
+               - sequence: 4
+                 action: permit
+                 prefix: 10.0.0.0/24
+           - name: pl2
+             entries:
+               - sequence: 5
+                 action: remark
+                 description: TEST_PL2_REMARK
+
+     state: rendered
+# After state:
+# Module Execution:
+# "rendered": [
+#         "ipv6 prefix-list pl_1 1 deny 2001:db8:1234::/48",
+#         "ipv6 prefix-list pl_2 2 remark TEST_PL_2_REMARK",
+#         "ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK",
+#         "ipv4 prefix-list pl1 4 permit 10.0.0.0/24",
+#         "ipv4 prefix-list pl2 5 remark TEST_PL2_REMARK"
+#     ]
+#
+#---------------------------------------------------------------------------------
+# Using overridden:
+# --------------
+# Before state:
+#RP/0/0/CPU0:10#show running-config
+#
+# ipv6 prefix-list pl_1
+#  1 deny 2001:db8:1234::/48
+# !
+# ipv6 prefix-list pl_2
+#  2 remark TEST_PL_2_REMARK
+# !
+# ipv4 prefix-list pl1
+#  3 remark TEST_PL1_2_REMARK
+#  4 permit 10.0.0.0/24
+# !
+# ipv4 prefix-list pl2
+#  5 remark TEST_PL2_REMARK
+#
+- name: Overridde all Prefix_lists configuration with provided configuration
+  cisco.iosxr.iosxr_prefix_lists:
+        config:
+           - afi: ipv4
+             prefix_lists:
+               - name: pl3
+                 entries:
+                   - sequence: 3
+                     action: remark
+                     description: TEST_PL1_3_REMARK
+                   - sequence: 4
+                     action: permit
+                     prefix: 10.0.0.0/24
+        state: overridden
+
+# After state:
+#RP/0/0/CPU0:10#show running-config
+#
+#ipv4 prefix-list pl3
+# 3 remark TEST_PL1_3_REMARK
+# 4 permit 10.0.0.0/24
+#!
+# # Module Execution:
+# "after": [
+#         {
+#             "afi": "ipv4",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL1_3_REMARK",
+#                             "sequence": 3
+#                         },
+#                         {
+#                             "action": "permit",
+#                             "prefix": "10.0.0.0/24",
+#                             "sequence": 4
+#                         }
+#                     ],
+#                     "name": "pl3"
+#                 }
+#             ]
+#         }
+#     ],
+#     "before": [
+#         {
+#             "afi": "ipv6",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "deny",
+#                             "prefix": "2001:db8:1234::/48",
+#                             "sequence": 1
+#                         }
+#                     ],
+#                     "name": "pl_1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL_2_REMARK",
+#                             "sequence": 2
+#                         }
+#                     ],
+#                     "name": "pl_2"
+#                 }
+#             ]
+#         },
+#         {
+#             "afi": "ipv4",
+#             "prefix_lists": [
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL1_2_REMARK",
+#                             "sequence": 3
+#                         },
+#                         {
+#                             "action": "permit",
+#                             "prefix": "10.0.0.0/24",
+#                             "sequence": 4
+#                         }
+#                     ],
+#                     "name": "pl1"
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "remark",
+#                             "description": "TEST_PL2_REMARK",
+#                             "sequence": 5
+#                         }
+#                     ],
+#                     "name": "pl2"
+#                 }
+#             ]
+#         }
+#     ],
+#     "changed": true,
+#     "commands": [
+#         "no ipv6 prefix-list pl_1",
+#         "no ipv6 prefix-list pl_2",
+#         "no ipv4 prefix-list pl1",
+#         "no ipv4 prefix-list pl2",
+#         "ipv4 prefix-list pl3 3 remark TEST_PL1_3_REMARK",
+#         "ipv4 prefix-list pl3 4 permit 10.0.0.0/24"
+#     ],
+#     "invocation": {
+#         "module_args": {
+#             "config": [
+#                 {
+#                     "afi": "ipv4",
+#                     "prefix_lists": [
+#                         {
+#                             "entries": [
+#                                 {
+#                                     "action": "remark",
+#                                     "description": "TEST_PL1_3_REMARK",
+#                                     "prefix": null,
+#                                     "sequence": 3
+#                                 },
+#                                 {
+#                                     "action": "permit",
+#                                     "description": null,
+#                                     "prefix": "10.0.0.0/24",
+#                                     "sequence": 4
+#                                 }
+#                             ],
+#                             "name": "pl3"
+#                         }
+#                     ]
+#                 }
+#             ],
+#             "running_config": null,
+#             "state": "overridden"
+#         }
+#     }
+# }
+#
+"""
+
+from ansible.module_utils.basic import AnsibleModule
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.prefix_lists.prefix_lists import (
+    Prefix_listsArgs,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.prefix_lists.prefix_lists import (
+    Prefix_lists,
+)
+
+
+def main():
+    """
+    Main entry point for module execution
+
+    :returns: the result form module invocation
+    """
+    module = AnsibleModule(
+        argument_spec=Prefix_listsArgs.argument_spec,
+        mutually_exclusive=[["config", "running_config"]],
+        required_if=[
+            ["state", "merged", ["config"]],
+            ["state", "replaced", ["config"]],
+            ["state", "overridden", ["config"]],
+            ["state", "rendered", ["config"]],
+            ["state", "parsed", ["running_config"]],
+        ],
+        supports_check_mode=True,
+    )
+
+    result = Prefix_lists(module).execute_module()
+    module.exit_json(**result)
+
+
+if __name__ == "__main__":
+    main()
