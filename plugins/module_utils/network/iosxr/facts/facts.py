@@ -83,6 +83,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.lo
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ntp_global.ntp_global import (
     Ntp_globalFacts,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.snmp_server.snmp_server import (
+    Snmp_serverFacts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -109,6 +112,7 @@ FACT_RESOURCE_SUBSETS = dict(
     prefix_lists=Prefix_listsFacts,
     logging_global=Logging_globalFacts,
     ntp_global=Ntp_globalFacts,
+    snmp_server=Snmp_serverFacts,
 )
 
 
