@@ -22,7 +22,7 @@ version_added: 2.6.0
 author: Ashwini Mhatre (@amhatre)
 notes:
 - Tested against Cisco Iosxr 7.0.2
-- This module works with connection C(network_cli) and C(httpapi).
+- This module works with connection C(network_cli).
 options:
   config:
     description: SNMP server configuration.
@@ -37,10 +37,10 @@ options:
         elements: dict
         suboptions:
           name:
-            description: Community name
+            description: Community name.
             type: str
           acl_v4:
-            description: standard access-list name
+            description: standard access-list name.
             type: str
           acl_v6:
             description: IPv6 access list name.
@@ -49,10 +49,16 @@ options:
             description: Only reads are permitted.
             type: bool
           rw:
-            description: Read-write access
+            description: Read-write access.
             type: bool
-          view:
-            description: MIB view name
+          sdrowner:
+            type: bool
+            description: SDR Owner permissions for MIB Objects.
+          systemowner:
+            type: bool
+            description: System Owner permissions for MIB objects.
+          v4_acl:
+            description: V4 Access-list name.
             type: str
       community_map:
         description: Community Mapping as per RFC-2576.
@@ -69,7 +75,7 @@ options:
             description: Security Name for the community mapping.
             type: str
           target_list:
-            description: list of targets valid with this communit.
+            description: list of targets valid with this community.
             type: str
       correlator:
         description: Configure properties of the event correlator
@@ -97,10 +103,6 @@ options:
               name:
                 type: str
                 description: Name of the ruleset
-              rulename:
-                type: list
-                elements: str
-                description: Name of the rule
       contact:
         description: Person to contact about the syste,.
         type: str
@@ -185,14 +187,14 @@ options:
             description: Notification message SNMP version.
             type: str
             choices: ['1', '2c', '3']
-      if_index:
+      ifindex:
         description: Enable ifindex persistence
         type: bool
       ifmib:
         type: dict
         description: IF-MIB configuration commands.
         suboptions:
-          ifalias_ifalias_long:
+          ifalias_long:
             type: bool
             description: Modify parameters for ifAlias object.
           internal_cache_max_duration:
@@ -261,6 +263,9 @@ options:
         type: list
         elements: dict
         suboptions:
+          name:
+            type: str
+            description: mib schema name.
           object_list:
             type: str
             description: Name of an object List.
@@ -271,6 +276,9 @@ options:
         type: list
         elements: dict
         suboptions:
+          name:
+            type: str
+            description: mib transfer-id name.
           buffer_size:
             type: int
             description: Bulkstat data file maximum size.
@@ -289,6 +297,9 @@ options:
           schema:
             type: str
             description: Schema that contains objects to be collected.
+          transfer_interval:
+            type: int
+            description: transfer-interval
       mroutemib_send_all_vrf:
         type: bool
         description: Configurations related to IPMROUTE-MIB(cisco-support).
@@ -382,8 +393,7 @@ options:
         type: int
       traps:
         description: Enable traps to all configured recipients.
-        type: list
-        elements: dict
+        type: dict
         suboptions:
           addrpool:
             type: dict
@@ -411,7 +421,7 @@ options:
           bulkstat_collection:
             type: bool
             description: Enable Data-Collection-MIB Collection notifications.
-          bulkstat_tranfer:
+          bulkstat_transfer:
             type: bool
             description: Enable Data-Collection-MIB Trnasfer notifications.
           bridgemib:
@@ -420,7 +430,7 @@ options:
           copy_complete:
             type: bool
             description: Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps.
-          cisco_entity-ext:
+          cisco_entity_ext:
             type: bool
             description: Enable SNMP entity traps
           config:
@@ -436,7 +446,7 @@ options:
               peerup:
                 type: bool
                 description: Enable peer connection up notification.
-              permanentfai:
+              permanentfail:
                 type: bool
                 description: Enable permanent failure notification.
               protocolerror:
@@ -566,6 +576,9 @@ options:
               rejected_adjacency:
                 description: rejected-adjacency
                 type: bool
+              protocols_supported_mismatch:
+                description: protocols-supported-mismatch
+                type: bool
               sequence_number_skip:
                 description: sequence-number-skip.
                 type: bool
@@ -589,7 +602,7 @@ options:
             type: dict
             description: Enable L2VPN traps.
             suboptions:
-              ALL:
+              all:
                 type: bool
                 description: Enable L2VPN ALL traps.
               cisco:
@@ -611,28 +624,112 @@ options:
             description: Enable Ospf traps. If set to enabled , all the traps are set.
             type: dict
             suboptions:
-              error:
+              errors:
                 description: error
-                type: bool
+                type: dict
+                suboptions:
+                  bad_packet:
+                    type: bool
+                    description: bad-packet
+                  authentication_failure:
+                    type: bool
+                    description: authentication-failure.
+                  config_error:
+                    type: bool
+                    description: config-error
+                  virt_bad_packet:
+                    type: bool
+                    description: virt-bad-packet
+                  virt_authentication_failure:
+                    type: bool
+                    description: virt-authentication-failure
+                  virt_config_error:
+                    type: bool
+                    description: virt_config_error
               lsa:
                 description: lsa
-                type: bool
+                type: dict
+                suboptions:
+                  lsa_maxage:
+                    type: bool
+                    description: lsa-maxage
+                  lsa_originate:
+                    type: bool
+                    description: lsa-originate
               retransmit:
                 description: retransmit
-                type: bool
+                type: dict
+                suboptions:
+                  packets:
+                    type: bool
+                    description: packets
+                  virt_packets:
+                    type: bool
+                    description: virt-packets
               state_change:
                 description: state-change.
-                type: bool
+                type: dict
+                suboptions:
+                  if_state_change:
+                    type: bool
+                    description: if-state-change
+                  neighbor_state_change:
+                    type: bool
+                    description: neighbor-state-change
+                  virtif_state_change:
+                    type: bool
+                    description: virtif-state-change
+                  virtneighbor_state_change:
+                    type: bool
+                    description: virtneighbor-state-change
           ospfv3:
             description: Enable Ospfv3 traps. If set to enabled , all the traps are set.
             type: dict
             suboptions:
-              error:
+              errors:
                 description: error
-                type: bool
+                type: dict
+                suboptions:
+                  bad_packet:
+                    type: bool
+                    description: bad-packet
+                  config_error:
+                    type: bool
+                    description: config-error
+                  virt_bad_packet:
+                    type: bool
+                    description: virt-bad-packet
+                  virt_config_error:
+                    type: bool
+                    description: virt_config_error
               state_change:
                 description: state-change.
-                type: bool
+                type: dict
+                suboptions:
+                  if_state_change:
+                    type: bool
+                    description: if-state-change
+                  neighbor_state_change:
+                    type: bool
+                    description: neighbor-state-change
+                  virtif_state_change:
+                    type: bool
+                    description: virtif-state-change
+                  virtneighbor_state_change:
+                    type: bool
+                    description: virtneighbor-state-change
+                  nssa_state_change:
+                    type: bool
+                    description: nssa-state-change
+                  restart_status_change:
+                    type: bool
+                    description: restart-status-change
+                  restart_helper_status_change:
+                    type: bool
+                    description: restart-helper-status-change
+                  restart_virtual_helper_status_change:
+                    type: bool
+                    description: restart-virtual-helper-status-change
           power:
             type: bool
             description: Enable SNMP entity power traps.
@@ -652,7 +749,7 @@ options:
               neighbor_change:
                 description: neighbor-change.
                 type: bool
-              rp-mapping-change:
+              rp_mapping_change:
                 description: rp-mapping-change.
                 type: bool
           rsvp:
@@ -703,7 +800,7 @@ options:
             type: dict
             description: Subscriber notification commands.
             suboptions:
-              session_agg_access-interface:
+              session_agg_access_interface:
                 type: bool
                 description: Subscriber notification at access interface level
               session_agg_node:
@@ -758,23 +855,6 @@ options:
             description: snmp security version
             type: str
             choices: ['v1', 'v2c', 'v3']
-      views:
-        description: SNMPv2 MIB view configuration
-        type: list
-        elements: dict
-        suboptions:
-          view:
-            description: SNMP view name
-            type: str
-          mib:
-            description: SNMP MIB name
-            type: str
-          excluded:
-            description: Exclude the named MIB family from the view
-            type: bool
-          included:
-            description: Include the named MIB family from the view
-            type: bool
       vrfs:
         description: Specify the VRF in which the source address is used
         type: list
@@ -785,7 +865,8 @@ options:
             type: str
           context:
             description: Configure the source interface for SNMP notifications
-            type: str
+            type: list
+            elements: str
           hosts: *hosts
   running_config:
     description:

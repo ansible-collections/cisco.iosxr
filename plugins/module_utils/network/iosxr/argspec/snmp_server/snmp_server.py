@@ -45,7 +45,9 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                         "acl_v6": {"type": "str"},
                         "ro": {"type": "bool"},
                         "rw": {"type": "bool"},
-                        "view": {"type": "str"},
+                        "sdrowner": {"type": "bool"},
+                        "systemowner": {"type": "bool"},
+                        "v4_acl": {"type": "str"},
                     },
                 },
                 "community_map": {
@@ -73,13 +75,7 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                         "rule_sets": {
                             "type": "list",
                             "elements": "dict",
-                            "options": {
-                                "name": {"type": "str"},
-                                "rulename": {
-                                    "type": "list",
-                                    "elements": "str",
-                                },
-                            },
+                            "options": {"name": {"type": "str"}},
                         },
                     },
                 },
@@ -130,11 +126,11 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                         },
                     },
                 },
-                "if_index": {"type": "bool"},
+                "ifindex": {"type": "bool"},
                 "ifmib": {
                     "type": "dict",
                     "options": {
-                        "ifalias_ifalias_long": {"type": "bool"},
+                        "ifalias_long": {"type": "bool"},
                         "internal_cache_max_duration": {"type": "int"},
                         "ipsubscriber": {"type": "bool"},
                         "stats": {"type": "bool"},
@@ -180,6 +176,7 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                     "type": "list",
                     "elements": "dict",
                     "options": {
+                        "name": {"type": "str"},
                         "object_list": {"type": "str"},
                         "poll_interval": {"type": "int"},
                     },
@@ -188,12 +185,14 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                     "type": "list",
                     "elements": "dict",
                     "options": {
+                        "name": {"type": "str"},
                         "buffer_size": {"type": "int"},
                         "enable": {"type": "bool"},
                         "format_schemaASCI": {"type": "bool"},
                         "retain": {"type": "int"},
                         "retry": {"type": "int"},
                         "schema": {"type": "str"},
+                        "transfer_interval": {"type": "int"},
                     },
                 },
                 "mroutemib_send_all_vrf": {"type": "bool"},
@@ -247,8 +246,7 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                 "trap_source": {"type": "str"},
                 "trap_timeout": {"type": "int"},
                 "traps": {
-                    "type": "list",
-                    "elements": "dict",
+                    "type": "dict",
                     "options": {
                         "addrpool": {
                             "type": "dict",
@@ -266,17 +264,17 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                             },
                         },
                         "bulkstat_collection": {"type": "bool"},
-                        "bulkstat_tranfer": {"type": "bool"},
+                        "bulkstat_transfer": {"type": "bool"},
                         "bridgemib": {"type": "bool"},
                         "copy_complete": {"type": "bool"},
-                        "cisco_entity-ext": {"type": "bool"},
+                        "cisco_entity_ext": {"type": "bool"},
                         "config": {"type": "bool"},
                         "diameter": {
                             "type": "dict",
                             "options": {
                                 "peerdown": {"type": "bool"},
                                 "peerup": {"type": "bool"},
-                                "permanentfai": {"type": "bool"},
+                                "permanentfail": {"type": "bool"},
                                 "protocolerror": {"type": "bool"},
                                 "transientfail": {"type": "bool"},
                             },
@@ -349,6 +347,9 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                                 "version_skew": {"type": "bool"},
                                 "own_lsp_purge": {"type": "bool"},
                                 "rejected_adjacency": {"type": "bool"},
+                                "protocols_supported_mismatch": {
+                                    "type": "bool"
+                                },
                                 "sequence_number_skip": {"type": "bool"},
                             },
                         },
@@ -364,7 +365,7 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                         "l2vpn": {
                             "type": "dict",
                             "options": {
-                                "ALL": {"type": "bool"},
+                                "all": {"type": "bool"},
                                 "cisco": {"type": "bool"},
                                 "vc_down": {"type": "bool"},
                                 "vc_up": {"type": "bool"},
@@ -375,17 +376,89 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                         "ospf": {
                             "type": "dict",
                             "options": {
-                                "error": {"type": "bool"},
-                                "lsa": {"type": "bool"},
-                                "retransmit": {"type": "bool"},
-                                "state_change": {"type": "bool"},
+                                "errors": {
+                                    "type": "dict",
+                                    "options": {
+                                        "bad_packet": {"type": "bool"},
+                                        "authentication_failure": {
+                                            "type": "bool"
+                                        },
+                                        "config_error": {"type": "bool"},
+                                        "virt_bad_packet": {"type": "bool"},
+                                        "virt_authentication_failure": {
+                                            "type": "bool"
+                                        },
+                                        "virt_config_error": {"type": "bool"},
+                                    },
+                                },
+                                "lsa": {
+                                    "type": "dict",
+                                    "options": {
+                                        "lsa_maxage": {"type": "bool"},
+                                        "lsa_originate": {"type": "bool"},
+                                    },
+                                },
+                                "retransmit": {
+                                    "type": "dict",
+                                    "options": {
+                                        "packets": {"type": "bool"},
+                                        "virt_packets": {"type": "bool"},
+                                    },
+                                },
+                                "state_change": {
+                                    "type": "dict",
+                                    "options": {
+                                        "if_state_change": {"type": "bool"},
+                                        "neighbor_state_change": {
+                                            "type": "bool"
+                                        },
+                                        "virtif_state_change": {
+                                            "type": "bool"
+                                        },
+                                        "virtneighbor_state_change": {
+                                            "type": "bool"
+                                        },
+                                    },
+                                },
                             },
                         },
                         "ospfv3": {
                             "type": "dict",
                             "options": {
-                                "error": {"type": "bool"},
-                                "state_change": {"type": "bool"},
+                                "errors": {
+                                    "type": "dict",
+                                    "options": {
+                                        "bad_packet": {"type": "bool"},
+                                        "config_error": {"type": "bool"},
+                                        "virt_bad_packet": {"type": "bool"},
+                                        "virt_config_error": {"type": "bool"},
+                                    },
+                                },
+                                "state_change": {
+                                    "type": "dict",
+                                    "options": {
+                                        "if_state_change": {"type": "bool"},
+                                        "neighbor_state_change": {
+                                            "type": "bool"
+                                        },
+                                        "virtif_state_change": {
+                                            "type": "bool"
+                                        },
+                                        "virtneighbor_state_change": {
+                                            "type": "bool"
+                                        },
+                                        "nssa_state_change": {"type": "bool"},
+                                        "restart_status_change": {
+                                            "type": "bool"
+                                        },
+                                        "restart_helper_status_change": {
+                                            "type": "bool"
+                                        },
+                                        "restart_virtual_helper_status_change": {
+                                            "type": "bool"
+                                        },
+                                    },
+                                },
                             },
                         },
                         "power": {"type": "bool"},
@@ -396,7 +469,7 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                                 "interface_state_change": {"type": "bool"},
                                 "invalid_message_received": {"type": "bool"},
                                 "neighbor_change": {"type": "bool"},
-                                "rp-mapping-change": {"type": "bool"},
+                                "rp_mapping_change": {"type": "bool"},
                             },
                         },
                         "rsvp": {
@@ -424,7 +497,7 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                         "subscriber": {
                             "type": "dict",
                             "options": {
-                                "session_agg_access-interface": {
+                                "session_agg_access_interface": {
                                     "type": "bool"
                                 },
                                 "session_agg_node": {"type": "bool"},
@@ -459,22 +532,12 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                         },
                     },
                 },
-                "views": {
-                    "type": "list",
-                    "elements": "dict",
-                    "options": {
-                        "view": {"type": "str"},
-                        "mib": {"type": "str"},
-                        "excluded": {"type": "bool"},
-                        "included": {"type": "bool"},
-                    },
-                },
                 "vrfs": {
                     "type": "list",
                     "elements": "dict",
                     "options": {
                         "vrf": {"type": "str"},
-                        "context": {"type": "str"},
+                        "context": {"type": "list", "elements": "str"},
                         "hosts": {
                             "type": "list",
                             "elements": "dict",

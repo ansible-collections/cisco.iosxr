@@ -64,6 +64,8 @@ class Snmp_serverFacts(object):
             "snmp-server mib bulkstat transfer-id",
             "snmp-server correlator rule",
             "snmp-server interface",
+            "snmp-server correlator rule",
+            "snmp-server correlator ruleset",
         ]
 
         for x in flatten_context_list:
@@ -73,6 +75,22 @@ class Snmp_serverFacts(object):
             lines=data.splitlines(), module=self._module
         )
         objs = snmp_server_parser.parse()
+
+        dict_to_list = [
+            "context",
+            "mib_object_lists",
+            "mib_schema",
+            "mib_bulkstat_transfer_ids",
+            "vrfs",
+            "interfaces",
+        ]
+        for i in dict_to_list:
+            if i in objs:
+                objs[i] = list(objs[i].values())
+                if i == "vrfs":
+                    for j in objs[i]:
+                        j["hosts"].remove({})
+                        j["context"] = list(j["context"].values())
 
         ansible_facts["ansible_network_resources"].pop("snmp_server", None)
 
