@@ -69,6 +69,117 @@ class Snmp_server(ResourceModule):
             "throttle_time",
             "trap_source",
             "trap_timeout",
+            "drop.report_IPv4",
+            "drop.report_IPv6",
+            "drop.unknown_user",
+            "ifmib.internal_cache_max_duration",
+            "ifmib.ipsubscriber",
+            "ifmib.stats",
+            "ifmib.ifalias_long",
+            "inform.timeout",
+            "inform.retries",
+            "inform.pending",
+            "notification_log_mib.size",
+            "notification_log_mib.default",
+            "notification_log_mib.disable",
+            "notification_log_mib.GlobalSize",
+            "trap.link_ietf",
+            "trap.authentication_vrf_disable",
+            "trap.throttle_time",
+            "timeouts.threshold",
+            "timeouts.pdu_stats",
+            "timeouts.subagent",
+            "timeouts.inQdrop",
+            "timeouts.duplicate",
+            "traps.addrpool.low",
+            "traps.addrpool.high",
+            "traps.bfd",
+            "traps.bgp.cbgp2",
+            "traps.bgp.updown",
+            "traps.bulkstat_collection",
+            "traps.bulkstat_transfer",
+            "traps.bridgemib",
+            "traps.copy_complete",
+            "traps.cisco_entity_ext",
+            "traps.config",
+            "traps.diameter.peerdown",
+            "traps.diameter.peerup",
+            "traps.diameter.protocolerror",
+            "traps.diameter.permanentfail",
+            "traps.diameter.transientfail",
+            "traps.entity",
+            "traps.entity_redundancy.all",
+            "traps.entity_redundancy.status",
+            "traps.entity_redundancy.switchover",
+            "traps.entity_state.operstatus",
+            "traps.entity_state.switchover",
+            "traps.flash.removal",
+            "traps.flash.insertion",
+            "traps.fru_ctrl",
+            "traps.hsrp",
+            "traps.ipsla",
+            "traps.ipsec.start",
+            "traps.ipsec.stop",
+            "traps.isakmp.start",
+            "traps.isakmp.stop",
+            "traps.isis",
+            "traps.l2tun.pseudowire_status",
+            "traps.l2tun.sessions",
+            "traps.l2tun.tunnel_up",
+            "traps.l2tun.tunnel_down",
+            "traps.l2vpn.all",
+            "traps.l2vpn.cisco",
+            "traps.l2vpn.vc_up",
+            "traps.l2vpn.vc_down",
+            "traps.msdp_peer_state_change",
+            "traps.ospf.lsa.lsa_originate",
+            "traps.ospf.lsa.lsa_maxage",
+            "traps.ospf.errors.bad_packet",
+            "traps.ospf.errors.authentication_failure",
+            "traps.ospf.errors.config_error",
+            "traps.ospf.errors.virt_bad_packet",
+            "traps.ospf.errors.virt_authentication_failure",
+            "traps.ospf.errors.virt_config_error",
+            "traps.ospf.state_change.if_state_change",
+            "traps.ospf.state_change.neighbor_state_change",
+            "traps.ospf.state_change.virtif_state_change",
+            "traps.ospf.state_change.virtneighbor_state_change",
+            "traps.ospfv3.errors.bad_packet",
+            "traps.ospfv3.errors.authentication_failure",
+            "traps.ospfv3.errors.config_error",
+            "traps.ospfv3.errors.virt_bad_packet",
+            "traps.ospfv3.state_change.neighbor_state_change",
+            "traps.ospfv3.state_change.virtif_state_change",
+            "traps.ospfv3.state_change.virtneighbor_state_change",
+            "traps.ospfv3.state_change.restart_status_change",
+            "traps.ospfv3.state_change.restart_helper_status_change",
+            "traps.ospfv3.state_change.restart_virtual_helper_status_change",
+            "traps.ospfv3.state_change.nssa_state_change",
+            "traps.power",
+            "traps.rf",
+            "traps.pim.neighbor_change",
+            "traps.pim.invalid_message_received",
+            "traps.pim.rp_mapping_change",
+            "traps.pim.interface_state_change",
+            "traps.rsvp.lost_flow",
+            "traps.rsvp.new_flow",
+            "traps.rsvp.all",
+            "traps.selective_vrf_download_role_change",
+            "traps.sensor",
+            "traps.vrrp_events",
+            "traps.syslog",
+            "traps.system",
+            "traps.subscriber.session_agg_access_interface",
+            "traps.subscriber.session_agg_node",
+            "traps.vpls.all",
+            "traps.vpls.full_clear",
+            "traps.vpls.full_raise",
+            "traps.vpls.status",
+            "traps.snmp.linkup",
+            "traps.snmp.linkdown",
+            "traps.snmp.coldstart",
+            "traps.snmp.warmstart",
+            "traps.snmp.authentication",
         ]
 
     def execute_module(self):
@@ -111,7 +222,6 @@ class Snmp_server(ResourceModule):
         """
         self.compare(parsers=self.parsers, want=want, have=have)
         self._compare_lists(want, have)
-        self._compare_complex_dict(want, have)
         self._compare_vrfs(want, have)
 
     def _remove_snmp_server(self, begin):
@@ -133,34 +243,8 @@ class Snmp_server(ResourceModule):
                         {"vrf": entry.get("vrf")}, "vrfs", False
                     ),
                 )
-        # cleanup remaining VRFs
-        # but do not negate it entirely
-        # instead remove only those attributes
-        # that this module manages
         for name, entry in iteritems(hvrfs):
             self.addcmd(entry, "vrfs", True)
-
-    def _compare_complex_dict(self, want, have):
-        """
-            Handles dict attributes from config_data
-        """
-        for x in [
-            "inform",
-            "ifmib",
-            "drop",
-            "traps",
-            "notification_log_mib",
-            "timeouts",
-            "trap",
-        ]:
-            wantx = want.get(x, {})
-            havex = have.get(x, {})
-            updates = dict_diff(havex, wantx)
-            updates = {x: updates}
-            self.addcmd(updates, x)
-
-            if havex:
-                self.addcmd({x: havex}, x, negate=True)
 
     def _compare_lists(self, want, have):
         """
@@ -279,16 +363,5 @@ class Snmp_server(ResourceModule):
                 x["host"] + x.get("version", "") + x.get("community", ""): x
                 for x in data["hosts"]
             }
-
-        # if "hosts" in data:
-        #     data["hosts"] = {x["host"]: x for x in data["hosts"]}
-        # if "interfaces" in data:
-        #     data["interfaces"] = {x["name"]: x for x in data["interfaces"]}
-        # if "mib_object_lists" in data:
-        #     data["mib_object_lists"] = {x: {"mib_object": x} for x in data["mib_object_lists"]}
-        # if "mib_schema" in data:
-        #     data["mib_schema"] = {x["name"]: x for x in data["mib_schema"]}
-        # if "mib_bulkstat_transfer_ids" in data:
-        #     data["mib_bulkstat_transfer_ids"] = {x["name"]: x for x in data["mib_bulkstat_transfer_ids"]}
 
         return data

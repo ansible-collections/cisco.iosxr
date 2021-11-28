@@ -521,10 +521,12 @@ def tmplt_traps_isakmp(cmds, ipsec):
     return cmds
 
 
-def tmplt_traps_isis(cmds, isis):
+def tmplt_traps_isis(config_data):
     """
 
     """
+
+    isis = config_data.get("traps", {}).get("isis", {})
     command = "snmp-server traps isis"
     if isis.get("all"):
         command += " all"
@@ -565,9 +567,7 @@ def tmplt_traps_isis(cmds, isis):
             command += " protocols-supported-mismatch"
         if isis.get("sequence_number_skip"):
             command += " sequence-number-skip"
-    cmds.append(command)
-
-    return cmds
+    return command
 
 
 def tmplt_traps_l2tun(cmds, l2tun):
@@ -1113,20 +1113,45 @@ class Snmp_serverTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "drop",
+            "name": "drop.report_IPv4",
             "getval": re.compile(
                 r"""
                 ^snmp-server\sdrop
-                (\sreport\sacl\sIPv6\s(?P<report_IPv6>\S+))?
                 (\sreport\sacl\sIPv4\s(?P<report_IPv4>\S+))?
-                (\sunknown-user(?P<unknown_user>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server drop report acl IPv4 {{drop.report_IPv4}}",
+            "result": {
+                "drop": {
+                    "report_IPv4": "{{report_IPv4}}",
+                }
+            }
+        },
+        {
+            "name": "drop.report_IPv6",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\sdrop
+                (\sreport\sacl\sIPv6\s(?P<report_IPv6>\S+))
 
                 $""", re.VERBOSE),
-            "setval": drop_tmplt,
+            "setval": "snmp-server drop report acl IPv6 {{drop.report_IPv6}}",
             "result": {
                 "drop": {
                     "report_IPv6": "{{report_IPv6}}",
-                    "report_IPv4": "{{report_IPv4}}",
+                }
+            }
+        },
+        {
+            "name": "drop.unknown_user",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\sdrop
+                (\sunknown-user(?P<unknown_user>))
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server drop unknown-user",
+            "result": {
+                "drop": {
                     "unknown_user": "{{True if unknown_user is defined}}",
                 }
             }
@@ -1200,39 +1225,103 @@ class Snmp_serverTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "ifmib",
+            "name": "ifmib.internal_cache_max_duration",
             "getval": re.compile(
                 r"""
                 ^snmp-server\sifmib
                 (\sinternal\scache\smax-duration\s(?P<cache>\S+))?
-                (\sipsubscriber(?P<ipsub>))?
-                (\sstats\scache(?P<s_cache>))?
-                (\sifalias\slong(?P<long>))?
                 $""", re.VERBOSE),
-            "setval": ifmib_tmplt,
+            "setval": "snmp-server ifmib internal cache max-duration {{ifmib.internal_cache_max_duration}}",
+            "result": {
+                "ifmib": {
+                    "internal_cache_max_duration": "{{cache}}",
+                }
+            }
+        },
+        {
+            "name": "ifmib.ipsubscriber",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\sifmib
+                (\sipsubscriber(?P<ipsub>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server ifmib ipsubscriber",
             "result": {
                 "ifmib": {
                     "internal_cache_max_duration": "{{cache}}",
                     "ipsubscriber": "{{True if ipsub is defined}}",
                     "stats": "{{True if s_cache is defined}}",
-                    "ifalias_long":  "{{True if long is defined}}"
+                    "ifalias_long": "{{True if long is defined}}"
                 }
             }
         },
         {
-            "name": "inform",
+            "name": "ifmib.stats",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\sifmib
+                (\sstats\scache(?P<s_cache>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server ifmib stats cache",
+            "result": {
+                "ifmib": {
+                    "stats": "{{True if s_cache is defined}}",
+                }
+            }
+        },
+        {
+            "name": "ifmib.ifalias_long",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\sifmib
+                (\sifalias\slong(?P<long>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server ifmib ifalias long",
+            "result": {
+                "ifmib": {
+                    "ifalias_long": "{{True if long is defined}}"
+                }
+            }
+        },
+        {
+            "name": "inform.pending",
             "getval": re.compile(
                 r"""
                 ^snmp-server\sinform
                 (\spending\s(?P<pending>\d+))?
-                (\sretries\s(?P<retries>\d+))?
-                (\stimeout\s(?P<timeout>\d+))?
                 $""", re.VERBOSE),
-            "setval": inform_tmplt,
+            "setval": "snmp-server inform pending {{inform.pending}}",
             "result": {
                 "inform": {
                     "pending": "{{pending}}",
+
+                }
+            }
+        },
+        {
+            "name": "inform.retries",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\sinform
+                (\sretries\s(?P<retries>\d+))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server inform retries {{inform.retries}}",
+            "result": {
+                "inform": {
                     "retries": "{{retries}}",
+                }
+            }
+        },
+        {
+            "name": "inform.timeout",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\sinform
+                (\stimeout\s(?P<timeout>\d+))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server inform pending {{inform.timeout}}",
+            "result": {
+                "inform": {
                     "timeout": "{{timeout}}"
 
                 }
@@ -1427,21 +1516,57 @@ class Snmp_serverTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "notification_log_mib",
+            "name": "notification_log_mib.size",
             "getval": re.compile(
                 r"""
                 ^snmp-server\snotification-log-mib
                 (\ssize\s(?P<size>\d+))?
-                (\sdefault(?P<default>))?
-                (\sdisable(?P<disable>))?
-                (\sGlobalSize\s(?P<gsize>\d+))?
                 $""", re.VERBOSE),
-            "setval": notification_log_mib_tmplt,
+            "setval": "snmp-server notification-log-mib size {{notification_log_mib.size}}",
             "result": {
                 "notification_log_mib": {
                     "size": "{{size}}",
+                }
+            }
+        },
+        {
+            "name": "notification_log_mib.default",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\snotification-log-mib
+                (\sdefault(?P<default>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server notification-log-mib default",
+            "result": {
+                "notification_log_mib": {
                     "default": "{{True if default is defined}}",
-                    "disable": "{{True if disable is defined}}",
+                }
+            }
+        },
+        {
+            "name": "notification_log_mib.disable",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\snotification-log-mib
+                (\sdisable(?P<disable>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server notification-log-mib disable",
+            "result": {
+                "notification_log_mib": {
+                    "disable": "{{True if disable is defined}}"
+                }
+            }
+        },
+        {
+            "name": "notification_log_mib.GlobalSize",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\snotification-log-mib
+                (\sGlobalSize\s(?P<gsize>\d+))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server notification-log-mib GlobalSize {{notification_log_mib.GlobalSize}}",
+            "result": {
+                "notification_log_mib": {
                     "GlobalSize": "{{gsize}}"
 
                 }
@@ -1527,44 +1652,118 @@ class Snmp_serverTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "timeouts",
+            "name": "timeouts.duplicate",
             "getval": re.compile(
                 r"""
                 ^snmp-server\stimeouts
                 (\sduplicate\s(?P<duplicate>\d+))?
-                (\sinQdrop\s(?P<inQdrop>\d+))?
-                (\ssubagent\s(?P<subagent>\d+))?
-                (\spdu\sstats\s(?P<pdu>\d+))?
-                (\sthreshold\s(?P<threshold>\d+))?
                 $""", re.VERBOSE),
-            "setval": timeouts_tmplt,
+            "setval": "snmp-server timeouts duplicate {{timeouts.duplicate}}",
             "result": {
                 "timeouts": {
-                    "subagent": "{{subagent}}",
-                    "inQdrop": "{{inQdrop}}",
                     "duplicate": "{{duplicate}}",
-                    "threshold": "{{threshold}}",
+                }
+            }
+        },
+        {
+            "name": "timeouts.inQdrop",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\stimeouts
+                (\sinQdrop\s(?P<inQdrop>\d+))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server timeouts inQdrop {{timeouts.inQdrop}}",
+            "result": {
+                "timeouts": {
+                    "inQdrop": "{{inQdrop}}",
+                }
+            }
+        },
+        {
+            "name": "timeouts.subagent",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\stimeouts
+                (\ssubagent\s(?P<subagent>\d+))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server timeouts subagent {{timeouts.subagent}}",
+            "result": {
+                "timeouts": {
+                    "subagent": "{{subagent}}"
+
+                }
+            }
+        },
+        {
+            "name": "timeouts.pdu_stats",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\stimeouts
+                (\spdu\sstats\s(?P<pdu>\d+))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server timeouts pdu stats {{timeouts.pdu_stats}}",
+            "result": {
+                "timeouts": {
                     "pdu_stats": "{{pdu}}"
 
                 }
             }
         },
         {
-            "name": "trap",
+            "name": "timeouts.threshold",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\stimeouts
+                (\sthreshold\s(?P<threshold>\d+))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server timeouts threshold {{timeouts.threshold}}",
+            "result": {
+                "timeouts": {
+                    "threshold": "{{threshold}}",
+                }
+            }
+        },
+        {
+            "name": "trap.throttle_time",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\strap
+                (\sthrottle-time\s(?P<throttle_time>\d+))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server trap throttle-time {{trap.throttle_time}}",
+            "result": {
+                "trap": {
+                    "throttle_time": "{{throttle_time}}",
+
+                }
+            }
+        },
+        {
+            "name": "trap.authentication_vrf_disable",
             "getval": re.compile(
                 r"""
                 ^snmp-server\strap
                 (\sauthentication\svrf\sdisable(?P<authentication_vrf_disable>))?
-                (\slink\sietf(?P<link_ietf>))?
-                (\sthrottle-time\s(?P<throttle_time>\d+))?
                 $""", re.VERBOSE),
-            "setval": trap_tmplt,
+            "setval": "snmp-server trap authentication vrf disable",
             "result": {
                 "trap": {
                     "authentication_vrf_disable": "{{True if authentication_vrf_disable is defined}}",
+                }
+            }
+        },
+        {
+            "name": "trap.link_ietf",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\strap
+                (\slink\sietf(?P<link_ietf>))?
+                (\sthrottle-time\s(?P<throttle_time>\d+))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server trap link ietf",
+            "result": {
+                "trap": {
                     "link_ietf": "{{True if link_ietf is defined}}",
-                    "throttle_time": "{{throttle_time}}",
-
                 }
             }
         },
@@ -1591,41 +1790,552 @@ class Snmp_serverTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "traps",
+            "name": "traps.addrpool.low",
             "getval": re.compile(
                 r"""
                 ^snmp-server\straps
                 (\saddrpool\slow(?P<addrpool_low>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps addrpool low",
+            "result": {
+                "traps": {
+                    "addrpool": {
+                        "low": "{{True if addrpool_low is defined}}",
+                    },
+                }
+
+            }
+        },
+        {
+            "name": "traps.addrpool.high",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\saddrpool\shigh(?P<addrpool_high>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps addrpool high",
+            "result": {
+                "traps": {
+                    "addrpool": {
+                        "high": "{{True if addrpool_high is defined}}",
+                    },
+                }
+
+            }
+        },
+        {
+            "name": "traps.bfd",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sbfd(?P<bfd>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps bfd",
+            "result": {
+                "traps": {
+                    "bfd": "{{True if bfd is defined}}",
+                }
+            }
+        },
+        {
+            "name": "traps.bgp.cbgp2",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sbgp\scbgp2(?P<bgp_cgp2>))?
-                (\sbgp\supdown(?P<updown>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps bgp cbgp2",
+            "result": {
+                "traps": {
+
+                    "bgp": {
+                        "cbgp2": "{{True if bgp_cgp2 is defined}}",
+                    }
+                }
+            }
+        },
+        {
+            "name": "traps.bgp.updown",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sbgp\supdown(?P<bgp_updown>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps bgp updown",
+            "result": {
+                "traps": {
+                    "bgp": {
+                        "updown": "{{True if updown is defined}}"
+                    }
+                }
+            }
+        },
+        {
+            "name": "traps.bulkstat_collection",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+
                 (\sbulkstat\scollection(?P<bulkstat_collection>))?
-                (\sbulkstat\stransfer(?P<bulkstat_transfer>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps bulkstat collection",
+            "result": {
+                "traps": {
+
+                    "bulkstat_collection": "{{True if bulkstat_collection is defined}}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.bulkstat_transfer",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sbulkstat\stransfer(?P<bulkstat_t>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps bulkstat transfer",
+            "result": {
+                "traps": {
+
+                    "bulkstat_transfer": "{{True if bulkstat_t is defined}}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.bridgemib",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sbridgemib(?P<bridgemib>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps bridgemib",
+            "result": {
+                "traps": {
+
+                    "bridgemib": "{{True if bridgemib is defined}}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.copy_complete",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\scopy-complete(?P<copy_complete>))?
-                (\scisco-entity-ext(?P<cisco_entity_ext>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps copy-complete",
+            "result": {
+                "traps": {
+
+                    "copy_complete": "{{True if copy_complete is defined}}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.cisco_entity_ext",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\scisco-entity-ext(?P<cee>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps cisco-entity-ext",
+            "result": {
+                "traps": {
+
+                    "cisco_entity_ext": "{{True if cee is defined}}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.config",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sconfig(?P<config>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps config",
+            "result": {
+                "traps": {
+
+                    "config": "{{True if config is defined}}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.diameter.peerdown",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sdiameter\speerdown(?P<peerdown>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps diameter peerdown",
+            "result": {
+                "traps": {
+                    "diameter": {
+                        "peerdown": "{{True if peerdown is defined}}",
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.diameter.peerup",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sdiameter\speerup(?P<peerup>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps diameter peerup",
+            "result": {
+                "traps": {
+                    "diameter": {
+                        "peerup": "{{True if peerup is defined}}",
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.diameter.protocolerror",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sdiameter\sprotocolerror(?P<protocolerror>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps diameter protocolerror",
+            "result": {
+                "traps": {
+                    "diameter": {
+                        "protocolerror": "{{True if protocolerror is defined}}",
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.diameter.permanentfail",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sdiameter\spermanentfail(?P<permanentfail>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps diameter permanentfail",
+            "result": {
+                "traps": {
+                    "diameter": {
+                        "permanentfail": "{{True if permanentfail is defined}}",
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.diameter.transientfail",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sdiameter\stransientfail(?P<transientfail>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps diameter transientfail",
+            "result": {
+                "traps": {
+                    "diameter": {
+                        "transientfail": "{{True if transientfail is defined}}",
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.entity",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sentity(?P<entity>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps entity",
+            "result": {
+                "traps": {
+                        "entity": "{{True if entity is defined}}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.entity_redundancy.all",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sentity-redundancy\sall(?P<all>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps entity-redundancy all",
+            "result": {
+                "traps": {
+                    "entity_redundancy": {
+                        "all": "{{True if all is defined }}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.entity_redundancy.status",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sentity-redundancy\sstatus(?P<status>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps entity-redundancy status",
+            "result": {
+                "traps": {
+                    "entity_redundancy": {
+                        "status": "{{True if status is defined }}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.entity_redundancy.switchover",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sentity-redundancy\sswitchover(?P<switchover>))?
-                (\sentity-state\soperstatus(?P<e_s_status>))?
-                (\sentity-state\sswitchover(?P<e_s_switchover>))?
-                (\sflash\sinsertion(?P<f_insertion>))?
-                (\sflash\sremoval(?P<f_removal>))?
-                (\sfru_ctrl(?P<fru_ctrl>))?
-                (\shsrp(?P<hsrp>))?
-                (\sipsla(?P<ipsla>))?
-                (\sipsec\stunnel\sstart(?P<ipsec_start>))?
-                (\sipsec\stunnel\sstop(?P<ipsec_stop>))?
-                (\sisakmp\stunnel\sstart(?P<isakmp_start>))?
-                (\sisakmp\stunnel\sstart(?P<isakmp_stop>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps entity-redundancy switchover",
+            "result": {
+                "traps": {
+                    "entity_redundancy": {
+                        "switchover": "{{True if switchover is defined }}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.entity_state.operstatus",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sentity-state\soperstatus(?P<operstatus>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps entity-state operstatus",
+            "result": {
+                "traps": {
+                    "entity_state": {
+                        "operstatus": "{{True if operstatus is defined }}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.entity_state.switchover",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sentity-state\sswitchover(?P<switchover>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps entity-state switchover",
+            "result": {
+                "traps": {
+                    "entity_state": {
+                        "switchover": "{{True if switchover is defined }}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.flash.insertion",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                 (\sflash\sinsertion(?P<f_insertion>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps flash insertion",
+            "result": {
+                "traps": {
+                    "flash": {
+                        "insertion": "{{True if f_insertion is defined }}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.flash.removal",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                 (\sflash\sremoval(?P<f_removal>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps flash removal",
+            "result": {
+                "traps": {
+                    "flash": {
+                        "removal": "{{True if f_removal is defined }}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.fru_ctrl",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                 (\sfru-ctrl(?P<fru_ctrl>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps fru-ctrl",
+            "result": {
+                "traps": {
+
+                        "fru_ctrl": "{{True if fru_ctrl is defined }}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.hsrp",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                 (\shsrp(?P<hsrp>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps hsrp",
+            "result": {
+                "traps": {
+
+                    "hsrp": "{{True if hsrp is defined }}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.ipsla",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                 (\sipsla(?P<ipsla>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ipsla",
+            "result": {
+                "traps": {
+
+                    "ipsla": "{{True if ipsla is defined }}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.ipsec.start",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                 (\sipsec\stunnel\sstart(?P<ipsec_start>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ipsec tunnel start",
+            "result": {
+                "traps": {
+                   "ipsec": {
+                       "start": "{{True if ipsec_start is defined}}",
+                   }
+
+                }
+            }
+        },
+        {
+            "name": "traps.ipsec.stop",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                 (\sipsec\stunnel\sstop(?P<ipsec_stop>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ipsec tunnel stop",
+            "result": {
+                "traps": {
+                    "ipsec": {
+                        "stop": "{{True if ipsec_stop is defined}}",
+                    }
+
+                }
+            }
+        },
+        {
+            "name": "traps.isakmp.start",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                 (\sisakmp\stunnel\sstart(?P<isakmp_start>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps isakmp tunnel start",
+            "result": {
+                "traps": {
+                    "isakmp": {
+                        "start": "{{True if isakmp_start is defined}}",
+                    }
+
+                }
+            }
+        },
+        {
+            "name": "traps.isakmp.stop",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                 (\sisakmp\stunnel\sstop(?P<isakmp_stop>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps isakmp tunnel stop",
+            "result": {
+                "traps": {
+                    "isakmp": {
+                        "stop": "{{True if isakmp_stop is defined}}",
+                    }
+
+                }
+            }
+        },
+        {
+            "name": "traps.isis",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
                 (\sisis\sall(?P<isis_all>))?
                 (\sisis(\sdatabase-overload(?P<database_overload>))?(\smanual-address-drops(?P<manual_address_drops>))?
                 (\scorrupted-lsp-detected(?P<corrupted_lsp_detected>))?
@@ -1644,117 +2354,12 @@ class Snmp_serverTemplate(NetworkTemplate):
                 (\sprotocols-supported-mismatch(?P<protocols_supported_mismatch>))?
                 (\sadjacency-change(?P<adjacency_change>))?
                 (\slsp-error-detected(?P<lsp_error_detected>))?)?
-                (\sl2tun\spseudowire-status(?P<pseudowire_status>))?
-                (\sl2tun\ssessions(?P<sessions>))?
-                (\sl2tun\stunnel-down(?P<tunnel_down>))?
-                (\sl2tun\stunnel-up(?P<tunnel_up>))?
-                (\sl2vpn\sall(?P<l2vpn_all>))?
-                (\sl2vpn\scisco(?P<l2vpn_cisco>))?
-                (\sl2vpn\svc-up(?P<vc_up>))?
-                (\sl2vpn\svc-down(?P<vc_down>))?
-                (\smsdp\speer-state-change(?P<msdp>))?
-                (\sospf\slsa\slsa-maxage(?P<lsa_maxage>))?
-                (\sospf\slsa\slsa-originate(?P<lsa_originate>))?
-                (\sospf\serrors\sbad-packet(?P<bad_packet>))?
-                (\sospf\serrors\sauthentication-failure(?P<authentication_failure_ospf>))?
-                (\sospf\serrors\sconfig-error(?P<config_error>))?
-                (\sospf\serrors\svirt-bad-packet(?P<virt_bad_packet>))?
-                (\sospf\serrors\svirt-authentication-failure(?P<virt_authentication_failure>))?
-                (\sospf\serrors\svirt-config-error(?P<virt_config_error>))?
-                (\sospf\sretransmit\spackets(?P<packets>))?
-                (\sospf\sretransmit\svirt-packets(?P<virt_packets>))?
-                (\sospf\sstate-change\sif-state-change(?P<if_state_change>))?
-                (\sospf\sstate-change\sneighbor-state-change(?P<neighbor_state_change>))?
-                (\sospf\sstate-change\svirtif-state-change(?P<virtif_state_change>))?
-                (\sospf\sstate-change\svirtneighbor-state-change(?P<virtneighbor_state_change>))?
-                (\sospfv3\serrors\sbad-packet(?P<bad_packet_v3>))?
-                (\sospfv3\serrors\svirt-config-error(?P<virt_config_error_v3>))?
-                (\sospfv3\serrors\sconfig-error(?P<config_error_v3>))?
-                (\sospf3\serrors\svirt-bad-packet(?P<virt_bad_packet_v3>))?
-                (\sospfv3\sstate-change\sif-state-change(?P<if_state_change_3>))?
-                (\sospfv3\sstate-change\sneighbor-state-change(?P<neighbor_state_change_v3>))?
-                (\sospfv3\sstate-change\svirtif-state-change(?P<virtif_state_change_v3>))?
-                (\sospfv3\sstate-change\svirtneighbor-state-change(?P<virtneighbor_state_change_v3>))?
-                (\sospfv3\sstate-change\srestart-status-change(?P<restart_status_change>))?
-                (\sospfv3\sstate-change\srestart-helper-status-change(?P<restart_helper_status_change>))?
-                (\sospfv3\sstate-change\srestart-virtual-helper-status-change(?P<restart_virtual_helper_status_change>))?
-                (\sospfv3\sstate-change\snssa_state_change(?P<nssa_state_change>))?
-                (\spower(?P<power>))?
-                (\srf(?P<rf>))?
-                (\spim\sneighbor-change(?P<neighbor_change>))?
-                (\spim\sinvalid-message-received(?P<invalid_message_received>))?
-                (\spim\srp-mapping-change(?P<rp_mapping_change>))?
-                (\spim\sinterface-state-change(?P<interface_state_change>))?
-                (\srsvp\slost-flow(?P<lost_flow>))?
-                (\srsvp\snew-flow(?P<new_flow>))?
-                (\srsvp\sall(?P<rsvpall>))?
-                (\sselective-vrf-download\srole-change(?P<selective_vrf_download_role_change>))?
-                (\ssensor(?P<sensor>))?
-                (\svrrp\sevents(?P<vrrp_events>))?
-                (\ssyslog(?P<syslog>))?
-                (\ssystem(?P<system>))?
-                (\ssubscriber\ssession-agg\saccess-interface(?P<session_agg_access_interface>))?
-                (\ssubscriber\ssession-agg\snode(?P<session_agg_node>))?
-                (\svpls\sall(?P<vpls_all>))?
-                (\svpls\sfull-clear(?P<full_clear>))?
-                (\svpls\sfull-raise(?P<full_raise>))?
-                (\svpls\sstatus(?P<vpls_status>))?
-                (\ssnmp\slinkup(?P<linkup>))?
-                (\ssnmp\slinkdown(?P<linkdown>))?
-                (\ssnmp\scoldstart(?P<coldstart>))?
-                (\ssnmp\swarmstart(?P<warmstart>))?
-                (\ssnmp\sauthentication(?P<authentication>))?
+
                 $""", re.VERBOSE),
-            "setval": traps_tmplt,
+            "setval": tmplt_traps_isis,
             "result": {
                 "traps": {
-                    "addrpool": {
-                        "low": "{{True if addrpool_low is defined}}",
-                        "high": "{{True if addrpool_high is defined}}",
-                    },
-                    "bfd": "{{True if bfd is defined}}",
-                    "bgp": {
-                        "cbgp2": "{{True if bgp_cgp2 is defined}}",
-                        "updown": "{{True if updown is defined}}"
-                    },
-                    "bulkstat_collection": "{{True if bulkstat_collection is defined}}",
-                    "bulkstat_transfer": "{{True if bulkstat_tranfer is defined}}",
-                    "bridgemib": "{{True if bridgemib is defined}}",
-                    "copy_complete": "{{True if copy_complete is defined}}",
-                    "cisco_entity_ext": "{{True if cisco_entity_ext is defined}}",
-                    "config": "{{True if config is defined}}",
-                    "diameter": {
-                        "peerdown": "{{True if peerdown is defined}}",
-                        "peerup": "{{True if peerup is defined}}",
-                        "protocolerror": "{{True if protocolerror is defined }}",
-                        "permanentfail": "{{True if permanentfail is defined}}",
-                        "transientfail": "{{True if transientfail is defined}}"
-                    },
-                    "entity": "{{True if entity is defined}}",
-                    "entity_redundancy": {
-                        "all": "{{True if all is defined }}",
-                        "status": "{{True if status is defined}}",
-                        "switchover": "{{True if switchover is defined}}"
-                    },
-                    "entity_state": {
-                        "operstatus": "{{True if e_s_status is defined }}",
-                        "switchover": "{{True if e_s_switchover is defined }}"
-                    },
-                    "flash": {
-                        "insertion": "{{True if f_insertion is defined }}",
-                        "removal": "{{True if f_removal is defined }}"
-                    },
-                    "fru_ctrl": "{{True if fru_ctrl is defined}}",
-                    "hsrp": "{{True if hsrp is defined}}",
-                    "ipsla": "{{True if ipsla is defined}}",
-                    "ipsec": {
-                        "start": "{{True if ipsec_start is defined}}",
-                        "stop": "{{True if ipsec_stop is defined}}",
-                    },
-                    "isakmp": {
-                        "start":"{{True if isakmp_start is defined}}",
-                        "stop": "{{True if isakmp_stop is defined}}",
-                    },
+
                     "isis": {
                         "all": "{{True if isis_all is defined}}",
                         "id_len_mismatch": "{{True if id_len_mismatch is defined}}",
@@ -1764,7 +2369,7 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "attempt_to_exceed_max_sequence": "{{True if attempt_to_exceed_max_sequence is defined}}",
                         "max_area_addresses_mismatch": "{{True if max_area_addresses_mismatch is defined}}",
                         "own_lsp_purge": "{{True if own_lsp_purge is defined}}",
-                        "sequence_number_skip":"{{True if sequence_number_skip is defined}}",
+                        "sequence_number_skip": "{{True if sequence_number_skip is defined}}",
                         "authentication_type_failure": "{{True if authentication_type_failure is defined}}",
                         "authentication_failure": "{{True if authentication_failure is defined}}",
                         "version_skew": "{{True if version_skew is defined}}",
@@ -1777,98 +2382,1202 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "lsp_error_detected": "{{True if lsp_error_detected is defined}}"
 
                     },
+
+                }
+            }
+        },
+        {
+            "name": "traps.l2tun.pseudowire_status",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sl2tun\spseudowire-status(?P<pseudowire_status>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps l2tun pseudowire-status",
+            "result": {
+                "traps": {
+
                     "l2tun": {
                         "pseudowire_status": "{{True if pseudowire_status is defined}}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.l2tun.sessions",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sl2tun\ssessions(?P<sessions>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps l2tun sessions",
+            "result": {
+                "traps": {
+
+                    "l2tun": {
                         "sessions": "{{True if sessions is defined}}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.l2tun.tunnel_down",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sl2tun\stunnel-down(?P<tunnel_down>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps l2tun tunnel-down",
+            "result": {
+                "traps": {
+
+                    "l2tun": {
                         "tunnel_down": "{{True if tunnel_down is defined}}",
-                        "tunnel_up": "{{True if tunnel_up is defined }}"
+
                     },
+
+                }
+            }
+        },
+        {
+            "name": "traps.l2tun.tunnel_up",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sl2tun\stunnel-up(?P<tunnel_up>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps l2tun tunnel-up",
+            "result": {
+                "traps": {
+
+                    "l2tun": {
+                        "tunnel_up": "{{True if tunnel_up is defined}}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.l2vpn.all",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sl2vpn\sall(?P<vpnall>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps l2vpn all",
+            "result": {
+                "traps": {
+
                     "l2vpn": {
-                        "all": "{{True if l2vpn_all is defined}}",
-                        "cisco": "{{True if cisco is defined}}",
-                        "vc_up": "{{True if vc_up is defined}}",
-                        "vc_down": "{{True if vc_down is defined}}",
+                        "all": "{{True if vpnall is defined}}",
+
                     },
-                    "msdp_peer_state_change": "{{True if msdp is defined}}",
-                    "ntp": "{{True if ntp is defined}}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.l2vpn.cisco",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sl2vpn\scisco(?P<cisco>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps l2vpn cisco",
+            "result": {
+                "traps": {
+
+                    "l2vpn": {
+                        "cisco": "{{True if cisco is defined}}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.l2vpn.vc_up",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sl2vpn\svc-up(?P<vc_up>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps l2vpn vc-up",
+            "result": {
+                "traps": {
+
+                    "l2vpn": {
+                        "vc_up": "{{True if vc_up is defined}}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.l2vpn.vc_down",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sl2vpn\svc-down(?P<vc_down>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps l2vpn vc-down",
+            "result": {
+                "traps": {
+
+                    "l2vpn": {
+                        "vc_down": "{{True if vc_down is defined}}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.msdp_peer_state_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                 (\smsdp\speer-state-change(?P<msdp>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps msdp peer-state-change",
+            "result": {
+                "traps": {
+
+                    "msdp_peer_state_change": "{{True if msdp is defined }}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospf.lsa.lsa_maxage",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\slsa\slsa-maxage(?P<lsa_maxage>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf lsa lsa-maxage",
+            "result": {
+                "traps": {
+
                     "ospf": {
-                        "errors": {
-                            "bad_packet": "{{True if bad_packet is defined}}",
-                            "authentication_failure": "{{True if authentication_failure_ospf is defined}}",
-                            "config_error": "{{True if config_error is defined}}",
-                            "virt_bad_packet": "{{True if virt_bad_packet is defined}}",
-                            "virt_authentication_failure": "{{True if virt_authentication_failure is defined}}",
-                            "virt_config_error": "{{True if virt_config_error is defined}}"
-                        },
+
                         "lsa": {
                             "lsa_maxage": "{{True if lsa_maxage is defined}}",
-                            "lsa_originate": "{{True if lsa_originate is defined}}"
+
                         },
-                        "retransmit": {
-                            "packets": "{{True if packets is defined}}",
-                            "virt_packets": "{{True if virt_packets is defined}}"
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospf.lsa.lsa_originate",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\slsa\slsa-originate(?P<lsa_originate>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf lsa lsa-originate",
+            "result": {
+                "traps": {
+
+                    "ospf": {
+
+                        "lsa": {
+                            "lsa_originate": "{{True if lsa_originate is defined}}",
+
                         },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospf.errors.bad_packet",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\serrors\sbad-packet(?P<bad_packet>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf errors bad-packet",
+            "result": {
+                "traps": {
+
+                    "ospf": {
+
+                        "errors": {
+                            "bad_packet": "{{True if bad_packet is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospf.errors.authentication_failure",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\serrors\sauthentication-failure(?P<authentication_failure_ospf>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf errors authentication-failure",
+            "result": {
+                "traps": {
+
+                    "ospf": {
+
+                        "errors": {
+                            "authentication_failure": "{{True if authentication_failure_ospf is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospf.errors.config_error",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\serrors\sconfig-error(?P<config_error>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf errors config-error",
+            "result": {
+                "traps": {
+
+                    "ospf": {
+
+                        "errors": {
+                            "config_error": "{{True if config_error is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospf.errors.virt_bad_packet",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\serrors\svirt-bad-packet(?P<virt_bad_packet>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf errors virt-bad-packet",
+            "result": {
+                "traps": {
+
+                    "ospf": {
+
+                        "errors": {
+                            "virt_bad_packet": "{{True if virt_bad_packet is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospf.errors.virt_authentication_failure",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\serrors\svirt-authentication-failure(?P<virt_authentication_failure>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf errors virt-authentication-failure",
+            "result": {
+                "traps": {
+
+                    "ospf": {
+
+                        "errors": {
+                            "virt_authentication_failure": "{{True if virt_authentication_failure is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospf.errors.virt_config_error",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\serrors\svirt-config-error(?P<virt_config_error>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf errors virt-config-error",
+            "result": {
+                "traps": {
+
+                    "ospf": {
+
+                        "errors": {
+                            "virt_config_error": "{{True if virt_config_error is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospf.state_change.if_state_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\sstate-change\sif-state-change(?P<if_state_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf state-change if-state-change",
+            "result": {
+                "traps": {
+
+                    "ospf": {
+
                         "state_change": {
                             "if_state_change": "{{True if if_state_change is defined}}",
-                            "neighbor_state_change": "{{True if neighbor_state_change is defined}}",
-                            "virtif_state_change": "{{True if virtif_state_change is defined}}",
-                            "virtneighbor_state_change": "{{True if virtneighbor_state_change is defined}}"
-                        }
 
-                    },
-                    "ospfv3": {
-                        "errors": {
-                            "bad_packet": "{{True if bad_packet_v3 is defined}}",
-                            "config_error": "{{True if config_error_v3 is defined}}",
-                            "virt_bad_packet": "{{True if virt_bad_packet_v3 is defined}}",
-                            "virt_config_error": "{{True if virt_config_error_v3 is defined}}"
                         },
-                        "state_change": {
-                            "if_state_change": "{{True if if_state_change_v3 is defined}}",
-                            "neighbor_state_change": "{{True if neighbor_state_change_v3 is defined}}",
-                            "virtif_state_change": "{{True if virtif_state_change_v3 is defined}}",
-                            "virtneighbor_state_change": "{{True if virtneighbor_state_change_v3 is defined}}",
-                            "nssa_state_change": "{{True if nssa_state_change is defined}}",
-                            "restart_status_change": "{{True if restart_status_change is defined}}",
-                            "restart_helper_status_change": "{{True if restart_helper_status_change is defined}}",
-                            "restart_virtual_helper_status_change": "{{True if restart_virtual_helper_status_change is defined}}"
-                        }
 
                     },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospf.state_change.neighbor_state_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\sstate-change\sneighbor-state-change(?P<neighbor_state_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf state-change neighbor-state-change",
+            "result": {
+                "traps": {
+
+                    "ospf": {
+
+                        "state_change": {
+                            "neighbor_state_change": "{{True if neighbor_state_change is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospf.state_change.virtif_state_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\sstate-change\svirtif-state-change(?P<virtif_state_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf state-change virtif-state-change",
+            "result": {
+                "traps": {
+
+                    "ospf": {
+
+                        "state_change": {
+                            "virtif_state_change": "{{True if virtif_state_change is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospf.state_change.virtneighbor_state_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\sstate-change\svirtneighbor-state-change(?P<virtneighbor_state_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf state-change virtneighbor-state-change",
+            "result": {
+                "traps": {
+
+                    "ospf": {
+
+                        "state_change": {
+                            "virtneighbor_state_change": "{{True if virtneighbor_state_change is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospfv3.errors.bad_packet",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospfv3\serrors\sbad-packet(?P<bad_packet>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospfv3 errors bad-packet",
+            "result": {
+                "traps": {
+
+                    "ospfv3": {
+
+                        "errors": {
+                            "bad_packet": "{{True if bad_packet is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospfv3.errors.authentication_failure",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospfv3\serrors\sauthentication-failure(?P<authentication_failure_ospf>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospfv3 errors authentication-failure",
+            "result": {
+                "traps": {
+
+                    "ospfv3": {
+
+                        "errors": {
+                            "authentication_failure": "{{True if authentication_failure_ospf is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospfv3.errors.config_error",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospfv3\serrors\sconfig-error(?P<config_error>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospfv3 errors config-error",
+            "result": {
+                "traps": {
+
+                    "ospfv3": {
+
+                        "errors": {
+                            "config_error": "{{True if config_error is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospfv3.errors.virt_bad_packet",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospfv3\serrors\svirt-bad-packet(?P<virt_bad_packet>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospfv3 errors virt-bad-packet",
+            "result": {
+                "traps": {
+
+                    "ospfv3": {
+
+                        "errors": {
+                            "virt_bad_packet": "{{True if virt_bad_packet is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospfv3.state_change.if_state_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospfv3\sstate-change\sif-state-change(?P<if_state_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospfv3 state-change if-state-change",
+            "result": {
+                "traps": {
+
+                    "ospfv3": {
+
+                        "state_change": {
+                            "if_state_change": "{{True if if_state_change is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospfv3.state_change.neighbor_state_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospfv3\sstate-change\sneighbor-state-change(?P<neighbor_state_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospfv3 state-change neighbor-state-change",
+            "result": {
+                "traps": {
+
+                    "ospfv3": {
+
+                        "state_change": {
+                            "neighbor_state_change": "{{True if neighbor_state_change is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospfv3.state_change.virtif_state_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospfv3\sstate-change\svirtif-state-change(?P<virtif_state_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospfv3 state-change virtif-state-change",
+            "result": {
+                "traps": {
+
+                    "ospfv3": {
+
+                        "state_change": {
+                            "virtif_state_change": "{{True if virtif_state_change is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospfv3.state_change.virtneighbor_state_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospfv3\sstate-change\svirtneighbor-state-change(?P<virtneighbor_state_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospfv3 state-change virtneighbor-state-change",
+            "result": {
+                "traps": {
+
+                    "ospfv3": {
+
+                        "state_change": {
+                            "virtneighbor_state_change": "{{True if virtneighbor_state_change is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospfv3.state_change.restart_status_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospfv3\sstate-change\srestart-status-change(?P<restart_status_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospfv3 state-change restart-status-change",
+            "result": {
+                "traps": {
+
+                    "ospfv3": {
+
+                        "state_change": {
+                            "restart_status_change": "{{True if restart_status_change is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospfv3.state_change.restart_helper_status_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospfv3\sstate-change\srestart-helper-status-change(?P<restart_helper_status_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospfv3 state-change restart-helper-status-change",
+            "result": {
+                "traps": {
+
+                    "ospfv3": {
+
+                        "state_change": {
+                            "restart_helper_status_change": "{{True if restart_helper_status_change is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospfv3.state_change.restart_virtual_helper_status_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospfv3\sstate-change\srestart-virtual-helper-status-change(?P<restart_virtual_helper_status_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospfv3 state-change restart-virtual-helper-status-change",
+            "result": {
+                "traps": {
+
+                    "ospfv3": {
+
+                        "state_change": {
+                            "restart_virtual_helper_status_change": "{{True if restart_virtual_helper_status_change is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospfv3.state_change.nssa_state_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospfv3\sstate-change\snssa-state-change(?P<nssa_state_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospfv3 state-change nssa-state-change",
+            "result": {
+                "traps": {
+
+                    "ospfv3": {
+
+                        "state_change": {
+                            "nssa_state_change": "{{True if nssa_state_change is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.power",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\spower(?P<power>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps power",
+            "result": {
+                "traps": {
                     "power": "{{True if power is defined }}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.rf",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+
+
+                (\spower(?P<power>))?
+                (\srf(?P<rf>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps rf",
+            "result": {
+                "traps": {
                     "rf": "{{True if rf is defined}}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.pim.neighbor_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\spim\sneighbor-change(?P<neighbor_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps pim neighbor-change",
+            "result": {
+                "traps": {
+
+                    "pim": {
+
+                        "neighbor_change": "{{True if neighbor_change is defined}}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.pim.invalid_message_received",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+
+
+
+                (\spim\sinvalid-message-received(?P<invalid_message_received>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps pim invalid-message-received",
+            "result": {
+                "traps": {
+
+                    "pim": {
+
+                        "invalid_message_received": "{{True if invalid_message_received is defined}}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.pim.rp_mapping_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+
+
+
+                (\spim\srp-mapping-change(?P<rp_mapping_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps pim rp-mapping-change",
+            "result": {
+                "traps": {
+
+                    "pim": {
+
+                        "rp_mapping_change": "{{True if rp_mapping_change is defined}}",
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.pim.interface_state_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\spim\sinterface-state-change(?P<interface_state_change>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps pim interface-state-change",
+            "result": {
+                "traps": {
                     "pim": {
                         "interface_state_change": "{{True if interface_state_change is defined}}",
-                        "invalid_message_received": "{{True if invalid_message_received is defined}}",
-                        "neighbor_change": "{{True if neighbor_change is defined}}",
-                        "rp_mapping_change": "{{True if rp_mapping_change is defined}}"
-                     },
-                    "rsvp": {
-                        "all": "{{True if rsvpall is defined}}",
-                        "lost_flow": "{{True if lost_flow is defined}}",
-                        "new_flow": "{{True if new_flow is defined}}"
                     },
-                    "selective_vrf_download_role_change": "{{True if selective_vrf_download_role_change is defined}}",
-                    "sensor": "{{True if sensor is defined}}",
-                    "vrrp_events": "{{True if vrrp_events is defined}}",
-                    "syslog": "{{True if syslog is defined}}",
-                    "system": "{{True if system is defined}}",
+
+                }
+            }
+        },
+        {
+            "name": "traps.rsvp.lost_flow",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\srsvp\slost-flow(?P<lost_flow>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps rsvp lost-flow",
+            "result": {
+                "traps": {
+                    "rsvp": {
+                        "lost_flow": "{{True if lost_flow is defined}}",
+                    },
+                }
+            }
+        },
+        {
+                "name": "traps.rsvp.new_flow",
+                "getval": re.compile(
+                    r"""
+                    ^snmp-server\straps
+                    (\srsvp\snew-flow(?P<new_flow>))?
+
+                    $""", re.VERBOSE),
+                "setval": "snmp-server traps rsvp new-flow",
+                "result": {
+                    "traps": {
+                        "rsvp": {
+                            "new_flow": "{{True if new_flow is defined}}",
+                        },
+
+                    }
+
+                }
+            },
+        {
+            "name": "traps.rsvp.all",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\srsvp\sall(?P<all>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps rsvp all",
+            "result": {
+                "traps": {
+                    "rsvp": {
+                        "all": "{{True if all is defined}}",
+                    },
+
+                }
+
+            }
+        },
+        {
+            "name": "traps.selective_vrf_download_role_change",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sselective-vrf-download\srole-change(?P<selective_vrf_download_role_change>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps selective-vrf-download role-change",
+            "result": {
+                "traps": {"selective_vrf_download_role_change": "{{True if selective_vrf_download_role_change is defined}}"}
+            }
+    },
+        {
+            "name": "traps.sensor",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\ssensor(?P<sensor>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps sensor",
+            "result": {
+                "traps":{"sensor": "{{True if sensor is defined}}"}
+            }
+        },
+        {
+            "name": "traps.vrrp_events",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\svrrp\sevents(?P<vrrp_events>))?
+
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps vrrp events",
+            "result": {
+
+                "traps": {
+                "vrrp_events": "{{True if vrrp_events is defined}}"}
+
+            }
+        },
+        {
+            "name": "traps.syslog",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\ssyslog(?P<syslog>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps syslog",
+            "result": {
+                "traps": {"syslog": "{{True if syslog is defined}}"}
+
+            }
+        },
+        {
+            "name": "traps.system",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\ssystem(?P<system>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps system",
+            "result": {
+                "traps": {"system": "{{True if system is defined}}"}
+
+            }
+        },
+        {
+            "name": "traps.subscriber.session_agg_access_interface",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+
+                (\ssubscriber\ssession-agg\saccess-interface(?P<session_agg_access_interface>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps subscriber session-agg access-interface",
+            "result": {
+                "traps": {
                     "subscriber": {
                         "session_agg_access_interface": "{{True if session_agg_access_interface is defined}}",
+                    },
+
+                }
+            }
+
+    },
+        {
+            "name": "traps.subscriber.session_agg_node",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\ssubscriber\ssession-agg\snode(?P<session_agg_node>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps subscriber session-agg node",
+            "result": {
+                "traps": {
+                    "subscriber": {
                         "session_agg_node": "{{True if session_agg_node is defined}}"
                     },
+
+                }
+            }
+
+        },
+        {
+            "name": "traps.vpls.all",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+
+                (\svpls\sall(?P<vpls_all>))?
+
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps vpls all",
+            "result": {
+                "traps": {
+
                     "vpls": {
                         "all": "{{True if vpls_all is defined}}",
-                        "status": "{{True if vpls_status is defined}}",
-                        "full_clear": "{{True if full_clear is defined}}",
-                        "full_raise": "{{True if full_raise is defined}}"
+
                     },
+
+                }
+            }
+        },
+        {
+            "name": "traps.vpls.full_clear",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\svpls\sfull-clear(?P<full_clear>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps vpls full-clear",
+            "result": {
+                "traps": {
+                    "vpls": {
+                        "full_clear": "{{True if full_clear is defined}}",
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.vpls.full_raise",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\svpls\sfull-raise(?P<full_raise>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps vpls full-raise",
+            "result": {
+                "traps": {
+                    "vpls": {
+                        "full_raise": "{{True if full_raise is defined}}",
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.vpls.status",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\svpls\sstatus(?P<vpls_status>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps vpls status",
+            "result": {
+                "traps": {
+                    "vpls": {
+                        "status": "{{True if vpls_status is defined}}",
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.snmp.linkup",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\ssnmp\slinkup(?P<linkup>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps snmp linkup",
+            "result": {
+                "traps": {
+                    "snmp": {
+                        "linkup": "{{True if linkup is defined}}"
+                    }
+                }
+            }
+        },
+        {
+            "name": "traps.snmp.linkdown",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\ssnmp\slinkdown(?P<linkdown>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps snmp linkdown",
+            "result": {
+                "traps": {
+
+                    "snmp": {
+                        "linkdown": "{{True if linkdown is defined}}"
+                    }
+                }
+            }
+        },
+        {
+            "name": "traps.snmp.coldstart",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\ssnmp\scoldstart(?P<coldstart>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps snmp coldstart",
+            "result": {
+                "traps": {
+
+                    "snmp": {
+
+                        "coldstart": "{{True if coldstart is defined}}",
+
+                    }
+                }
+            }
+        },
+        {
+            "name": "traps.snmp.warmstart",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\ssnmp\swarmstart(?P<warmstart>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps snmp warmstart",
+            "result": {
+                "traps": {
+
+                    "snmp": {
+                        "warmstart": "{{True if warmstart is defined}}",
+                    }
+                }
+            }
+        },
+        {
+            "name": "traps.snmp.authentication",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\ssnmp\sauthentication(?P<authentication>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps snmp authentication",
+            "result": {
+                "traps": {
+
                     "snmp": {
                         "authentication": "{{True if authentication is defined}}",
-                        "coldstart": "{{True if coldstart is defined}}",
-                        "warmstart": "{{True if warmstart is defined}}",
-                        "linkdown": "{{True if linkdown is defined}}",
-                        "linkup": "{{True if linkup is defined}}"
                     }
                 }
             }
