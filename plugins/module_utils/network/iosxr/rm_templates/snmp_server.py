@@ -1974,9 +1974,8 @@ class Snmp_serverTemplate(NetworkTemplate):
                 "traps": {
 
                     "ospf": {
-
                         "retransmit": {
-                            "virt_packets": "{{True if virt-packets is defined}}",
+                            "virt_packets": "{{True if virt_packets is defined}}",
 
                         },
 
