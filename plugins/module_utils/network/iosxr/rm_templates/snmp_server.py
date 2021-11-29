@@ -72,28 +72,6 @@ def tmplt_correlator_rule(config_data):
     return command
 
 
-def drop_tmplt(config_data):
-    """
-
-    """
-    commands = []
-    command = ""
-    if config_data.get("drop", {}).get("report_IPv4", ""):
-        command += "snmp-server drop report acl IPv4 {report_IPv4}".format(
-            report_IPv4=config_data.get("drop").get("report_IPv4")
-        )
-        commands.append(command)
-    if config_data.get("drop", {}).get("report_IPv6", ""):
-        command += "snmp-server drop report acl IPv6 {report_IPv6}".format(
-            report_IPv6=config_data.get("drop").get("report_IPv6")
-        )
-        commands.append(command)
-    if config_data.get("drop", {}).get("unknown_user", ""):
-        command = "snmp-server drop unknown-user"
-        commands.append(command)
-    return commands
-
-
 def group_tmplt(config_data):
     """
 
@@ -142,34 +120,6 @@ def host_tmplt(config_data):
     return command
 
 
-def ifmib_tmplt(config_data):
-    """
-
-    """
-    config_data = config_data.get("ifmib", {})
-    cmds = []
-    if config_data.get("ifalias_long"):
-        command = "snmp-server ifmib ifalias long"
-        cmds.append(command)
-    if config_data.get("ipsubscriber"):
-        command = "snmp-server ifmib ipsubscriber"
-        cmds.append(command)
-    if config_data.get("stats"):
-        command = "snmp-server ifmib stats cache"
-        cmds.append(command)
-    if config_data.get("internal_cache_max_duration"):
-        command = (
-            "snmp-server ifmib internal cache max-duration "
-            "{internal_cache_max_duration}".format(
-                internal_cache_max_duration=config_data[
-                    "internal_cache_max_duration"
-                ]
-            )
-        )
-        cmds.append(command)
-    return cmds
-
-
 def interfaces_tmplt(config_data):
     """
 
@@ -198,31 +148,6 @@ def interfaces_tmplt(config_data):
     ):
         command = "snmp-server interface {interface}".format(
             interface=interface
-        )
-        cmds.append(command)
-    return cmds
-
-
-def inform_tmplt(config_data):
-    """
-
-    """
-    config_data = config_data.get("inform", {})
-    cmds = []
-
-    if config_data.get("pending"):
-        command = "snmp-server inform pending {pending}".format(
-            pending=config_data["pending"]
-        )
-        cmds.append(command)
-    if config_data.get("retries"):
-        command = "snmp-server inform retries {retries}".format(
-            retries=config_data["retries"]
-        )
-        cmds.append(command)
-    if config_data.get("timeout"):
-        command = "snmp-server inform timeout {timeout}".format(
-            timeout=config_data["timeout"]
         )
         cmds.append(command)
     return cmds
@@ -317,31 +242,6 @@ def mib_bulkstat_transfer_ids_tmplt(config_data):
     return cmds
 
 
-def notification_log_mib_tmplt(config_data):
-    """
-
-    """
-    config_data = config_data.get("notification_log_mib", {})
-    cmds = []
-    if config_data.get("size"):
-        command = "snmp-server notification-log-mib size {size}".format(
-            size=config_data["size"]
-        )
-        cmds.append(command)
-    if config_data.get("default"):
-        command = "snmp-server notification-log-mib default"
-        cmds.append(command)
-    if config_data.get("disable"):
-        command = "snmp-server notification-log-mib disable"
-        cmds.append(command)
-    if config_data.get("GlobalSize"):
-        command = "snmp-server notification-log-mib GlobalSize {GlobalSize}".format(
-            GlobalSize=config_data["GlobalSize"]
-        )
-        cmds.append(command)
-    return cmds
-
-
 def overload_control_tmplt(config_data):
     """
 
@@ -369,156 +269,6 @@ def targets_tmplt(config_data):
     if config_data.get("vrf"):
         command += " vrf {vrf}".format(vrf=config_data["vrf"])
     return command
-
-
-def timeouts_tmplt(config_data):
-    """
-
-    """
-    config_data = config_data.get("timeouts", {})
-    cmds = []
-    if config_data.get("duplicate"):
-        command = "snmp-server timeouts duplicate {duplicate}".format(
-            duplicate=config_data["duplicate"]
-        )
-        cmds.append(command)
-    if config_data.get("inQdrop"):
-        command = "snmp-server timeouts inQdrop {inQdrop}".format(
-            inQdrop=config_data["inQdrop"]
-        )
-        cmds.append(command)
-    if config_data.get("pdu_stats"):
-        command = "snmp-server timeouts pdu stats {pdu_stats}".format(
-            pdu_stats=config_data["pdu_stats"]
-        )
-        cmds.append(command)
-    if config_data.get("subagent"):
-        command = "snmp-server timeouts subagent {subagent}".format(
-            subagent=config_data["subagent"]
-        )
-        cmds.append(command)
-    if config_data.get("threshold"):
-        command = "snmp-server timeouts threshold {threshold}".format(
-            threshold=config_data["threshold"]
-        )
-        cmds.append(command)
-    return cmds
-
-
-def trap_tmplt(config_data):
-    """
-
-    """
-    config_data = config_data.get("trap", {})
-    cmds = []
-    if config_data.get("authentication_vrf_disable"):
-        command = "snmp-server trap authentication vrf disable"
-        cmds.append(command)
-    if config_data.get("link_ietf"):
-        command = "snmp-server trap link ietf"
-        cmds.append(command)
-    if config_data.get("throttle_time"):
-        command = "snmp-server trap throttle-time {throttle_time}".format(
-            throttle_time=config_data["throttle_time"]
-        )
-        cmds.append(command)
-    return cmds
-
-
-def tmplt_traps_diameter(cmds, diameter):
-    """
-
-    """
-    if diameter:
-        if diameter.get("peerdown"):
-            command = "snmp-server traps diameter peerdown"
-            cmds.append(command)
-        if diameter.get("peerup"):
-            command = "snmp-server traps diameter peerup"
-            cmds.append(command)
-        if diameter.get("permanentfail"):
-            command = "snmp-server traps diameter permanentfail"
-            cmds.append(command)
-        if diameter.get("protocolerror"):
-            command = "snmp-server traps diameter protocolerror"
-            cmds.append(command)
-        if diameter.get("transientfail"):
-            command = "snmp-server traps diameter transientfail"
-            cmds.append(command)
-    return cmds
-
-
-def tmplt_traps_entity_redundancy(cmds, entity_redundancy):
-    """
-
-    """
-    if entity_redundancy:
-        if entity_redundancy.get("all"):
-            command = "snmp-server traps entity-redundancy all"
-            cmds.append(command)
-        if entity_redundancy.get("status"):
-            command = "snmp-server traps entity-redundancy status"
-            cmds.append(command)
-        if entity_redundancy.get("switchover"):
-            command = "snmp-server traps entity-redundancy switchover"
-            cmds.append(command)
-    return cmds
-
-
-def tmplt_traps_entity_state(cmds, entity_state):
-    """
-
-    """
-    if entity_state:
-        if entity_state.get("operstatus"):
-            command = "snmp-server traps entity-state operstatus"
-            cmds.append(command)
-        if entity_state.get("switchover"):
-            command = "snmp-server traps entity-state switchover"
-            cmds.append(command)
-    return cmds
-
-
-def tmplt_traps_flash(cmds, flash):
-    """
-
-    """
-    if flash:
-        if flash.get("insertion"):
-            command = "snmp-server traps flash insertion"
-            cmds.append(command)
-        if flash.get("removal"):
-            command = "snmp-server traps flash removal"
-            cmds.append(command)
-    return cmds
-
-
-def tmplt_traps_ipsec(cmds, ipsec):
-    """
-
-    """
-    if ipsec:
-        if ipsec.get("start"):
-            command = "snmp-server traps ipsec tunnel start"
-            cmds.append(command)
-        if ipsec.get("stop"):
-            command = "snmp-server traps ipsec tunnel stop"
-            cmds.append(command)
-    return cmds
-
-
-def tmplt_traps_isakmp(cmds, ipsec):
-    """
-
-    """
-    if ipsec:
-        if ipsec.get("start"):
-            command = "snmp-server traps isakmp tunnel start"
-            cmds.append(command)
-        if ipsec.get("stop"):
-            command = "snmp-server traps isakmp tunnel stop"
-            cmds.append(command)
-    return cmds
 
 
 def tmplt_traps_isis(config_data):
@@ -570,382 +320,6 @@ def tmplt_traps_isis(config_data):
     return command
 
 
-def tmplt_traps_l2tun(cmds, l2tun):
-    """
-
-    """
-    if l2tun:
-        if l2tun.get("pseudowire_status"):
-            command = "snmp-server traps l2tun pseudowire-status"
-            cmds.append(command)
-        if l2tun.get("sessions"):
-            command = "snmp-server traps l2tun sessions"
-            cmds.append(command)
-        if l2tun.get("tunnel_down"):
-            command = "snmp-server traps l2tun tunnel-down"
-            cmds.append(command)
-        if l2tun.get("tunnel_up"):
-            command = "snmp-server traps l2tun tunnel-up"
-            cmds.append(command)
-    return cmds
-
-
-def tmplt_traps_l2vpn(cmds, l2vpn):
-    """
-
-    """
-    if l2vpn:
-        if l2vpn.get("all"):
-            command = "snmp-server traps l2vpn all"
-            cmds.append(command)
-        if l2vpn.get("cisco"):
-            command = "snmp-server traps l2vpn cisco"
-            cmds.append(command)
-        if l2vpn.get("vc_down"):
-            command = "snmp-server traps l2vpn vc-down"
-            cmds.append(command)
-        if l2vpn.get("vc_up"):
-            command = "snmp-server traps l2vpn vc-up"
-            cmds.append(command)
-    return cmds
-
-
-def tmplt_traps_ospf(cmds, ospf):
-    """
-
-    """
-    errors = ospf.get("errors")
-    lsa = ospf.get("lsa")
-    retransmit = ospf.get("retransmit")
-    state_change = ospf.get("state_change")
-    if errors:
-        if errors.get("bad_packet"):
-            command = "snmp-server traps ospf errors bad-packet"
-            cmds.append(command)
-        if errors.get("authentication_failure"):
-            command = "snmp-server traps ospf errors authentication-failure"
-            cmds.append(command)
-        if errors.get("config_error"):
-            command = "snmp-server traps ospf errors config-error"
-            cmds.append(command)
-        if errors.get("virt_bad_packet"):
-            command = "snmp-server traps ospf errors virt-bad-packet"
-            cmds.append(command)
-        if errors.get("virt_authentication_failure"):
-            command = (
-                "snmp-server traps ospf errors virt-authentication-failure"
-            )
-            cmds.append(command)
-        if errors.get("virt_config_error"):
-            command = "snmp-server traps ospf errors virt-config-error"
-            cmds.append(command)
-    if lsa:
-        if lsa.get("lsa_maxage"):
-            command = "snmp-server traps ospf lsa lsa-maxage"
-            cmds.append(command)
-        if lsa.get("lsa_originate"):
-            command = "snmp-server traps ospf lsa lsa-originate"
-            cmds.append(command)
-    if retransmit:
-        if retransmit.get("packets"):
-            command = "snmp-server traps ospf retransmit packets"
-            cmds.append(command)
-        if retransmit.get("virt_packets"):
-            command = "snmp-server traps ospf retransmit virt-packets"
-            cmds.append(command)
-    if state_change:
-        if state_change.get("if_state_change"):
-            command = "snmp-server traps ospf state-change if-state-change"
-            cmds.append(command)
-        if state_change.get("neighbor_state_change"):
-            command = (
-                "snmp-server traps ospf state-change neighbor-state-change"
-            )
-            cmds.append(command)
-        if state_change.get("virtif_state_change"):
-            command = "snmp-server traps ospf state-change virtif-state-change"
-            cmds.append(command)
-        if state_change.get("virtneighbor_state_change"):
-            command = (
-                "snmp-server traps ospf state-change virtneighbor-state-change"
-            )
-            cmds.append(command)
-    return cmds
-
-
-def tmplt_traps_ospfv3(cmds, ospfv3):
-    """
-
-    """
-    errors = ospfv3.get("errors")
-    state_change = ospfv3.get("state_change")
-    if errors:
-        if errors.get("bad_packet"):
-            command = "snmp-server traps ospfv3 errors bad-packet"
-            cmds.append(command)
-        if errors.get("config_error"):
-            command = "snmp-server traps ospfv3 errors config-error"
-            cmds.append(command)
-        if errors.get("virt_bad_packet"):
-            command = "snmp-server traps ospfv3 errors virt-bad-packet"
-            cmds.append(command)
-        if errors.get("virt_config_error"):
-            command = "snmp-server traps ospfv3 errors virt-config-error"
-            cmds.append(command)
-    if state_change:
-        if state_change.get("if_state_change"):
-            command = "snmp-server traps ospfv3 state-change if-state-change"
-            cmds.append(command)
-        if state_change.get("neighbor_state_change"):
-            command = (
-                "snmp-server traps ospfv3 state-change neighbor-state-change"
-            )
-            cmds.append(command)
-        if state_change.get("virtif_state_change"):
-            command = (
-                "snmp-server traps ospfv3 state-change virtif-state-change"
-            )
-            cmds.append(command)
-        if state_change.get("virtneighbor_state_change"):
-            command = "snmp-server traps ospfv3 state-change virtneighbor-state-change"
-            cmds.append(command)
-        if state_change.get("nssa_state_change"):
-            command = "snmp-server traps ospfv3 state-change nssa-state-change"
-            cmds.append(command)
-        if state_change.get("restart_status_change"):
-            command = (
-                "snmp-server traps ospfv3 state-change restart-status-change"
-            )
-            cmds.append(command)
-        if state_change.get("restart_helper_status_change"):
-            command = "snmp-server traps ospfv3 state-change restart-helper-status-change"
-            cmds.append(command)
-        if state_change.get("restart_virtual_helper_status_change"):
-            command = "snmp-server traps ospfv3 state-change restart-virtual-helper-status-change"
-            cmds.append(command)
-    return cmds
-
-
-def tmplt_traps_rsvp(cmds, rsvp):
-    """
-
-    """
-    if rsvp:
-        if rsvp.get("all"):
-            command = "snmp-server traps rsvp all"
-            cmds.append(command)
-        if rsvp.get("lost_flow"):
-            command = "snmp-server traps rsvp lost-flow"
-            cmds.append(command)
-        if rsvp.get("new_flow"):
-            command = "snmp-server traps rsvp new-flow"
-            cmds.append(command)
-    return cmds
-
-
-def tmplt_traps_pim(cmds, pim):
-    """
-
-    """
-    if pim:
-        if pim.get("interface_state_change"):
-            command = "snmp-server traps pim interface-state-change"
-            cmds.append(command)
-        if pim.get("invalid_message_received"):
-            command = "snmp-server traps pim invalid-message-received"
-            cmds.append(command)
-        if pim.get("neighbor_change"):
-            command = "snmp-server traps pim neighbor-change"
-            cmds.append(command)
-        if pim.get("neighbor_change"):
-            command = "snmp-server traps pim neighbor-change"
-            cmds.append(command)
-        if pim.get("rp_mapping_change"):
-            command = "snmp-server traps pim rp-mapping-change"
-            cmds.append(command)
-    return cmds
-
-
-def tmplt_traps_snmp(cmds, snmp):
-    """
-
-    """
-    if snmp:
-        if snmp.get("authentication"):
-            command = "snmp-server traps snmp authentication"
-            cmds.append(command)
-        if snmp.get("linkdown"):
-            command = "snmp-server traps snmp linkdown"
-            cmds.append(command)
-        if snmp.get("linkup"):
-            command = "snmp-server traps snmp linkup"
-            cmds.append(command)
-        if snmp.get("coldstart"):
-            command = "snmp-server traps snmp coldstart"
-            cmds.append(command)
-        if snmp.get("warmstart"):
-            command = "snmp-server traps snmp warmstart"
-            cmds.append(command)
-    return cmds
-
-
-def tmplt_traps_subscriber(cmds, subscriber):
-    """
-
-    """
-    if subscriber:
-        if subscriber.get("session_agg_access_interface"):
-            command = (
-                "snmp-server traps subscriber session-agg access-interface"
-            )
-            cmds.append(command)
-        if subscriber.get("session_agg_node"):
-            command = "snmp-server traps subscriber session-agg node"
-            cmds.append(command)
-
-    return cmds
-
-
-def tmplt_traps_vpls(cmds, vpls):
-    """
-
-    """
-    if vpls:
-        if vpls.get("all"):
-            command = "snmp-server traps vpls all"
-            cmds.append(command)
-        if vpls.get("full_raise"):
-            command = "snmp-server traps vpls full-raise"
-            cmds.append(command)
-        if vpls.get("full_clear"):
-            command = "snmp-server traps vpls full-clear"
-            cmds.append(command)
-        if vpls.get("status"):
-            command = "snmp-server traps vpls status"
-            cmds.append(command)
-    return cmds
-
-
-def traps_tmplt(config_data):
-    """
-
-    """
-    config_data = config_data.get("traps", {})
-    cmds = []
-    addrpool = config_data.get("addrpool", {})
-    bgp = config_data.get("bgp", {})
-
-    if addrpool:
-        if addrpool.get("low"):
-            command = "snmp-server traps addrpool low"
-            cmds.append(command)
-        if addrpool.get("high"):
-            command = "snmp-server traps addrpool high"
-            cmds.append(command)
-    if config_data.get("bfd"):
-        command = "snmp-server traps bfd"
-        cmds.append(command)
-    if bgp:
-        if bgp.get("cbgp2"):
-            command = "snmp-server traps bgp cbgp2"
-            cmds.append(command)
-        if bgp.get("updown"):
-            command = "snmp-server traps bgp updown"
-            cmds.append(command)
-    if config_data.get("bulkstat_collection"):
-        command = "snmp-server traps bulkstat collection"
-        cmds.append(command)
-    if config_data.get("bulkstat_transfer"):
-        command = "snmp-server traps bulkstat transfer"
-        cmds.append(command)
-    if config_data.get("bridgemib"):
-        command = "snmp-server traps bridgemib"
-        cmds.append(command)
-    if config_data.get("copy_complete"):
-        command = "snmp-server traps copy-complete"
-        cmds.append(command)
-    if config_data.get("cisco_entity_ext"):
-        command = "snmp-server traps cisco-entity-ext"
-        cmds.append(command)
-    if config_data.get("config"):
-        command = "snmp-server traps config"
-        cmds.append(command)
-    if config_data.get("diameter"):
-        cmds = tmplt_traps_diameter(cmds, config_data.get("diameter"))
-    if config_data.get("entity"):
-        command = "snmp-server traps entity"
-        cmds.append(command)
-    if config_data.get("entity_redundancy"):
-        cmds = tmplt_traps_entity_redundancy(
-            cmds, config_data.get("entity_redundancy")
-        )
-    if config_data.get("entity_state"):
-        cmds = tmplt_traps_entity_state(cmds, config_data.get("entity_state"))
-    if config_data.get("flash"):
-        cmds = tmplt_traps_flash(cmds, config_data.get("flash"))
-    if config_data.get("fru_ctrl"):
-        command = "snmp-server traps fru-ctrl"
-        cmds.append(command)
-    if config_data.get("hsrp"):
-        command = "snmp-server traps hsrp"
-        cmds.append(command)
-    if config_data.get("ipsla"):
-        command = "snmp-server traps ipsla"
-        cmds.append(command)
-    if config_data.get("ipsec"):
-        cmds = tmplt_traps_ipsec(cmds, config_data.get("ipsec"))
-    if config_data.get("isakmp"):
-        cmds = tmplt_traps_isakmp(cmds, config_data.get("isakmp"))
-    if config_data.get("isis"):
-        cmds = tmplt_traps_isis(cmds, config_data.get("isis"))
-    if config_data.get("l2tun"):
-        cmds = tmplt_traps_l2tun(cmds, config_data.get("l2tun"))
-    if config_data.get("l2vpn"):
-        cmds = tmplt_traps_l2vpn(cmds, config_data.get("l2vpn"))
-    if config_data.get("msdp_peer_state_change"):
-        command = "snmp-server traps msdp peer-state-change"
-        cmds.append(command)
-    if config_data.get("ntp"):
-        command = "snmp-server traps ntp"
-        cmds.append(command)
-    if config_data.get("ospf"):
-        cmds = tmplt_traps_ospf(cmds, config_data.get("ospf"))
-    if config_data.get("ospfv3"):
-        cmds = tmplt_traps_ospfv3(cmds, config_data.get("ospfv3"))
-    if config_data.get("power"):
-        command = "snmp-server traps power"
-        cmds.append(command)
-    if config_data.get("rf"):
-        command = "snmp-server traps rf"
-        cmds.append(command)
-    if config_data.get("pim"):
-        cmds = tmplt_traps_pim(cmds, config_data.get("pim"))
-    if config_data.get("rsvp"):
-        cmds = tmplt_traps_rsvp(cmds, config_data.get("rsvp"))
-    if config_data.get("snmp"):
-        cmds = tmplt_traps_snmp(cmds, config_data.get("snmp"))
-    if config_data.get("selective_vrf_download_role_change"):
-        command = "snmp-server traps selective-vrf-download role-change"
-        cmds.append(command)
-    if config_data.get("sensor"):
-        command = "snmp-server traps sensor"
-        cmds.append(command)
-    if config_data.get("vrrp_events"):
-        command = "snmp-server traps vrrp events"
-        cmds.append(command)
-    if config_data.get("syslog"):
-        command = "snmp-server traps syslog"
-        cmds.append(command)
-    if config_data.get("system"):
-        command = "snmp-server traps system"
-        cmds.append(command)
-    if config_data.get("subscriber"):
-        cmds = tmplt_traps_subscriber(cmds, config_data.get("subscriber"))
-    if config_data.get("vpls"):
-        cmds = tmplt_traps_vpls(cmds, config_data.get("vpls"))
-    return cmds
-
-
 def user_tmplt(config_data):
     user = config_data.get("user", "")
     group = config_data.get("group", "")
@@ -959,9 +333,9 @@ def user_tmplt(config_data):
         command += " IPv6 {IPv6}".format(IPv6=config_data["Ipv6_acl"])
     if config_data.get("v4_acl"):
         command += " {v4_acl}".format(v4_acl=config_data["v4_acl"])
-    if config_data.get("sdrowner"):
+    if config_data.get("SDROwner"):
         command += " SDROwner"
-    elif config_data.get("systemowner"):
+    elif config_data.get("SystemOwner"):
         command += " SystemOwner"
     return command
 
@@ -2564,6 +1938,54 @@ class Snmp_serverTemplate(NetworkTemplate):
             }
         },
         {
+            "name": "traps.ospf.retransmit.packets",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\sretransmit\spackets(?P<packets>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf retransmit packets",
+            "result": {
+                "traps": {
+
+                    "ospf": {
+
+                        "retransmit": {
+                            "packets": "{{True if packets is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospf.retransmit.virt_packets",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospf\sretransmit\svirt-packets(?P<virt_packets>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospf retransmit virt-packets",
+            "result": {
+                "traps": {
+
+                    "ospf": {
+
+                        "retransmit": {
+                            "virt_packets": "{{True if virt-packets is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
             "name": "traps.ospf.lsa.lsa_maxage",
             "getval": re.compile(
                 r"""
@@ -2915,6 +2337,30 @@ class Snmp_serverTemplate(NetworkTemplate):
 
                         "errors": {
                             "config_error": "{{True if config_error is defined}}",
+
+                        },
+
+                    },
+
+                }
+            }
+        },
+        {
+            "name": "traps.ospfv3.errors.virt_config_error",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\sospfv3\serrors\svirt-config-error(?P<virt_config_error>))?
+
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps ospfv3 errors virt-config-error",
+            "result": {
+                "traps": {
+
+                    "ospfv3": {
+
+                        "errors": {
+                            "virt_config_error": "{{True if virt_config_error is defined}}",
 
                         },
 
