@@ -122,6 +122,10 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr
     ntp_global:
       redirect: cisco.iosxr.iosxr
+    iosxr_snmp_server:
+      redirect: cisco.iosxr.iosxr
+    snmp_server:
+      redirect: cisco.iosxr.iosxr
   modules:
     acl_interfaces:
       redirect: cisco.iosxr.iosxr_acl_interfaces
@@ -200,3 +204,5 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr_prefix_lists
     ntp_global:
       redirect: cisco.iosxr.iosxr_ntp_global
+    snmp_server:
+      redirect: cisco.iosxr.iosxr_snmp_server

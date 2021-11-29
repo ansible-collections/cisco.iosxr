@@ -437,12 +437,13 @@ class Snmp_serverTemplate(NetworkTemplate):
             "setval": tmplt_correlator_rule,
             "result": {
                 "correlator": {
-                    "rules": [{
+                    "rules": [
+                        {
                             "rule_name": "{{ name }}",
                             "timeout": "{{ timeout }}",
 
-                    }
-                ]
+                        }
+                    ]
                 }
             }
         },
@@ -1444,8 +1445,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             "setval": "snmp-server traps entity",
             "result": {
                 "traps": {
-                        "entity": "{{True if entity is defined}}",
-
+                    "entity": "{{True if entity is defined}}",
                 }
             }
         },
@@ -1593,9 +1593,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             "setval": "snmp-server traps fru-ctrl",
             "result": {
                 "traps": {
-
-                        "fru_ctrl": "{{True if fru_ctrl is defined }}",
-
+                    "fru_ctrl": "{{True if fru_ctrl is defined }}",
                 }
             }
         },
@@ -1610,9 +1608,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             "setval": "snmp-server traps hsrp",
             "result": {
                 "traps": {
-
                     "hsrp": "{{True if hsrp is defined }}",
-
                 }
             }
         },
@@ -1627,9 +1623,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             "setval": "snmp-server traps ipsla",
             "result": {
                 "traps": {
-
                     "ipsla": "{{True if ipsla is defined }}",
-
                 }
             }
         },
@@ -1644,10 +1638,9 @@ class Snmp_serverTemplate(NetworkTemplate):
             "setval": "snmp-server traps ipsec tunnel start",
             "result": {
                 "traps": {
-                   "ipsec": {
-                       "start": "{{True if ipsec_start is defined}}",
-                   }
-
+                    "ipsec": {
+                        "start": "{{True if ipsec_start is defined}}",
+                    }
                 }
             }
         },
@@ -1665,7 +1658,6 @@ class Snmp_serverTemplate(NetworkTemplate):
                     "ipsec": {
                         "stop": "{{True if ipsec_stop is defined}}",
                     }
-
                 }
             }
         },
@@ -1701,7 +1693,6 @@ class Snmp_serverTemplate(NetworkTemplate):
                     "isakmp": {
                         "stop": "{{True if isakmp_stop is defined}}",
                     }
-
                 }
             }
         },
@@ -1728,7 +1719,6 @@ class Snmp_serverTemplate(NetworkTemplate):
                 (\sprotocols-supported-mismatch(?P<protocols_supported_mismatch>))?
                 (\sadjacency-change(?P<adjacency_change>))?
                 (\slsp-error-detected(?P<lsp_error_detected>))?)?
-
                 $""", re.VERBOSE),
             "setval": tmplt_traps_isis,
             "result": {
@@ -2723,24 +2713,23 @@ class Snmp_serverTemplate(NetworkTemplate):
             }
         },
         {
-                "name": "traps.rsvp.new_flow",
-                "getval": re.compile(
-                    r"""
-                    ^snmp-server\straps
-                    (\srsvp\snew-flow(?P<new_flow>))?
-
-                    $""", re.VERBOSE),
-                "setval": "snmp-server traps rsvp new-flow",
-                "result": {
-                    "traps": {
-                        "rsvp": {
-                            "new_flow": "{{True if new_flow is defined}}",
-                        },
-
-                    }
+            "name": "traps.rsvp.new_flow",
+            "getval": re.compile(
+                r"""
+                ^snmp-server\straps
+                (\srsvp\snew-flow(?P<new_flow>))?
+                $""", re.VERBOSE),
+            "setval": "snmp-server traps rsvp new-flow",
+            "result": {
+                "traps": {
+                    "rsvp": {
+                        "new_flow": "{{True if new_flow is defined}}",
+                    },
 
                 }
-            },
+
+            }
+        },
         {
             "name": "traps.rsvp.all",
             "getval": re.compile(
@@ -2769,9 +2758,10 @@ class Snmp_serverTemplate(NetworkTemplate):
                 $""", re.VERBOSE),
             "setval": "snmp-server traps selective-vrf-download role-change",
             "result": {
-                "traps": {"selective_vrf_download_role_change": "{{True if selective_vrf_download_role_change is defined}}"}
+                "traps": {
+                    "selective_vrf_download_role_change": "{{True if selective_vrf_download_role_change is defined}}"}
             }
-    },
+        },
         {
             "name": "traps.sensor",
             "getval": re.compile(
@@ -2782,7 +2772,7 @@ class Snmp_serverTemplate(NetworkTemplate):
                 $""", re.VERBOSE),
             "setval": "snmp-server traps sensor",
             "result": {
-                "traps":{"sensor": "{{True if sensor is defined}}"}
+                "traps": {"sensor": "{{True if sensor is defined}}"}
             }
         },
         {
@@ -2798,8 +2788,8 @@ class Snmp_serverTemplate(NetworkTemplate):
             "result": {
 
                 "traps": {
-                "vrrp_events": "{{True if vrrp_events is defined}}"}
-
+                    "vrrp_events": "{{True if vrrp_events is defined}}"
+                }
             }
         },
         {
@@ -2843,11 +2833,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                     "subscriber": {
                         "session_agg_access_interface": "{{True if session_agg_access_interface is defined}}",
                     },
-
                 }
             }
-
-    },
+        },
         {
             "name": "traps.subscriber.session_agg_node",
             "getval": re.compile(
@@ -3070,7 +3058,6 @@ class Snmp_serverTemplate(NetworkTemplate):
                 (\sversion\s(?P<version>1|2c|3))?
                 (\s(?P<community>\S+))?
                 (\sudp-port\s(?P<port>\d+))?)?
-
                 $""", re.VERBOSE),
             "setval": "snmp-server vrf {{vrf}}",
             "result": {
@@ -3081,23 +3068,18 @@ class Snmp_serverTemplate(NetworkTemplate):
                             "{{context if context is defined}}": "{{context if context is defined}}"
                         },
                         "hosts": [
-                                    {
-                                        "host": "{{ host }}",
-                                        "traps": "{{True if traps is defined}}",
-                                        "informs": "{{True if informs is defined}}",
-                                        "community": "{{community}}",
-                                        "udp_port": "{{port}}",
-                                        "version": "{{version}}"
-                                    }
+                            {
+                                "host": "{{ host }}",
+                                "traps": "{{True if traps is defined}}",
+                                "informs": "{{True if informs is defined}}",
+                                "community": "{{community}}",
+                                "udp_port": "{{port}}",
+                                "version": "{{version}}"
+                            }
                         ]
                     }
                 }
             }
         },
-
-
-
-
-
     ]
     # fmt: on

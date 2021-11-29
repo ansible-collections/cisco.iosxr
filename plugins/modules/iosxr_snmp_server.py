@@ -257,11 +257,13 @@ options:
         type: int
         description: per process memory limit in kilo bytes
       mib_object_lists:
+        description: mib object lists
         type: list
         elements: str
       mib_schema:
         type: list
         elements: dict
+        description: mib schema
         suboptions:
           name:
             type: str
@@ -273,6 +275,7 @@ options:
             type: int
             description: Periodicity for polling of objects in this schema in Min.
       mib_bulkstat_transfer_ids:
+        description: mib bulkstat transfer ids.
         type: list
         elements: dict
         suboptions:
@@ -304,6 +307,7 @@ options:
         type: bool
         description: Configurations related to IPMROUTE-MIB(cisco-support).
       notification_log_mib:
+        description: notification log mib.
         type: dict
         suboptions:
           GlobalSize:
@@ -340,6 +344,7 @@ options:
       targets:
         type: list
         elements: dict
+        description: targets
         suboptions:
           name:
             type: str
@@ -358,7 +363,7 @@ options:
         description: SNMP timeouts
         suboptions:
           duplicate:
-            decsription: Duplicate request feature timeout
+            description: Duplicate request feature timeout
             type: int
           inQdrop:
             type: int
@@ -487,7 +492,7 @@ options:
             suboptions:
               insertion:
                 type: bool
-                descriptioon: Enable ciscoFlashDeviceInsertedNotif.
+                description: Enable ciscoFlashDeviceInsertedNotif.
               removal:
                 type: bool
                 description: Enable ciscoFlashDeviceRemovedNotif.
@@ -616,7 +621,7 @@ options:
                 description: Enable L2VPN VC UP traps.
           msdp_peer_state_change:
             type: bool
-            decsription: Enable SNMP MSDP traps
+            description: Enable SNMP MSDP traps
           ntp:
             type: bool
             description: Enable SNMP Cisco Ntp traps.
@@ -889,7 +894,1345 @@ options:
 """
 
 EXAMPLES = """
+# Using state: merged
+# Before state:
+# -------------
+# RP/0/RP0/CPU0:test2#show running-config snmp-server
+# --------------------- EMPTY -----------------
+# Merged play:
+# ------------
+- name: Merge the provided configuration with the existing running configuration
+  cisco.iosxr.iosxr_snmp_server:
+        config:
+          vrfs:
+            - hosts:
+                - community: test1
+                  host: 1.1.1.1
+                  traps: true
+              vrf: vrf1
+          users:
+            - Ipv4_acl: test1
+              Ipv6_acl: test2
+              group: test2
+              user: u1
+              version: v1
+          timeouts:
+            duplicate: 0
+            inQdrop: 0
+          trap:
+            throttle_time: 12
+          targets:
+            - host: 1.1.1.2
+              name: test
 
+          ifmib:
+            internal_cache_max_duration: 4
+          inform:
+            retries: 7
+          chassis_id: test2
+          packetsize: 490
+          queue_length: 2
+          throttle_time: 60
+          trap_source: GigabitEthernet0/0/0/2
+          trap_timeout: 3
+          context:
+            - c1
+            - c2
+          contact: t1
+          correlator:
+            buffer_size: 1024
+          community:
+            - name: test2
+              ro: true
+              sdrowner: true
+              acl_v4: test
+              acl_v6: test1
+          community_map:
+            - name: cm1
+              context: c1
+              target_list: t1
+              security_name: s1
+          drop:
+            report_IPv4: test1
+            unknown_user: true
+          ipv6:
+            precedence: routine
+          ipv4:
+            dscp: af11
+          location: test1
+          logging_threshold_oid_processing: 1
+          logging_threshold_pdu_processing: 1
+          mib_bulkstat_max_procmem_size: 101
+          mroutemib_send_all_vrf: true
+          overload_control:
+            overload_drop_time: 4
+            overload_throttle_rate: 6
+          notification_log_mib:
+            GlobalSize: 5
+            size: 5
+          traps:
+            hsrp: true
+            ipsla: true
+            ipsec:
+              start: true
+              stop: true
+            bridgemib: true
+            bulkstat_collection: true
+            cisco_entity_ext: true
+            config: true
+            copy_complete: true
+            addrpool:
+              high: true
+              low: true
+            bfd: true
+            bgp:
+              cbgp2: true
+            l2tun:
+              sessions: true
+              tunnel_down: true
+              tunnel_up: true
+            l2vpn:
+              all: true
+              vc_down: true
+              vc_up: true
+            msdp_peer_state_change: true
+#
+# Commands Fired:
+# ------------
+# "commands": [
+#         "snmp-server chassis-id test2",
+#         "snmp-server correlator buffer-size 1024",
+#         "snmp-server contact t1",
+#         "snmp-server ipv4 dscp af11",
+#         "snmp-server ipv6 precedence routine",
+#         "snmp-server location test1",
+#         "snmp-server logging threshold oid-processing 1",
+#         "snmp-server logging threshold pdu-processing 1",
+#         "snmp-server mib bulkstat max-procmem-size 101",
+#         "snmp-server mroutemib send-all-vrf",
+#         "snmp-server overload-control 4 6",
+#         "snmp-server packetsize 490",
+#         "snmp-server queue-length 2",
+#         "snmp-server throttle-time 60",
+#         "snmp-server trap-source GigabitEthernet0/0/0/2",
+#         "snmp-server trap-timeout 3",
+#         "snmp-server drop report acl IPv4 test1",
+#         "snmp-server drop unknown-user",
+#         "snmp-server ifmib internal cache max-duration 4",
+#         "snmp-server inform retries 7",
+#         "snmp-server notification-log-mib size 5",
+#         "snmp-server notification-log-mib GlobalSize 5",
+#         "snmp-server trap throttle-time 12",
+#         "snmp-server timeouts inQdrop 0",
+#         "snmp-server timeouts duplicate 0",
+#         "snmp-server traps addrpool low",
+#         "snmp-server traps addrpool high",
+#         "snmp-server traps bfd",
+#         "snmp-server traps bgp cbgp2",
+#         "snmp-server traps bulkstat collection",
+#         "snmp-server traps bridgemib",
+#         "snmp-server traps copy-complete",
+#         "snmp-server traps cisco-entity-ext",
+#         "snmp-server traps config",
+#         "snmp-server traps hsrp",
+#         "snmp-server traps ipsla",
+#         "snmp-server traps ipsec tunnel start",
+#         "snmp-server traps ipsec tunnel stop",
+#         "snmp-server traps l2tun sessions",
+#         "snmp-server traps l2tun tunnel-up",
+#         "snmp-server traps l2tun tunnel-down",
+#         "snmp-server traps l2vpn all",
+#         "snmp-server traps l2vpn vc-up",
+#         "snmp-server traps l2vpn vc-down",
+#         "snmp-server traps msdp peer-state-change",
+#         "snmp-server community test2 RO SDROwner IPv4 test IPv6 test1",
+#         "snmp-server community-map cm1 context c1 security-name s1 target-list t1",
+#         "snmp-server context c1",
+#         "snmp-server context c2",
+#         "snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2",
+#         "snmp-server target list test2 vrf vrf2",
+#         "snmp-server target list test host 1.1.1.2",
+#         "snmp-server vrf vrf1",
+#         "host 1.1.1.1 traps test1"
+#
+#     ],
+# After state:
+# ------------
+# RP/0/RP0/CPU0:test2#show running-config snmp-server
+# Mon Nov 29 12:49:29.521 UTC
+# snmp-server vrf vrf1
+#  host 1.1.1.1 traps test1
+# !
+# snmp-server drop report acl IPv4 test1
+# snmp-server drop unknown-user
+# snmp-server ipv4 dscp af11
+# snmp-server ipv6 precedence routine
+# snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2
+# snmp-server community test2 RO SDROwner IPv4 test IPv6 test1
+# snmp-server queue-length 2
+# snmp-server trap-timeout 3
+# snmp-server trap throttle-time 12
+# snmp-server traps bfd
+# snmp-server traps bgp cbgp2
+# snmp-server traps copy-complete
+# snmp-server traps hsrp
+# snmp-server traps ipsla
+# snmp-server traps msdp peer-state-change
+# snmp-server traps ipsec tunnel stop
+# snmp-server traps ipsec tunnel start
+# snmp-server traps config
+# snmp-server traps l2tun sessions
+# snmp-server traps l2tun tunnel-up
+# snmp-server traps l2tun tunnel-down
+# snmp-server traps bulkstat collection
+# snmp-server traps l2vpn all
+# snmp-server traps l2vpn vc-up
+# snmp-server traps l2vpn vc-down
+# snmp-server traps bridgemib
+# snmp-server traps addrpool low
+# snmp-server traps addrpool high
+# snmp-server traps cisco-entity-ext
+# snmp-server chassis-id test2
+# snmp-server contact t1
+# snmp-server location test1
+# snmp-server target list test host 1.1.1.2
+# snmp-server target list test2 vrf vrf2
+# snmp-server context c1
+# snmp-server context c2
+# snmp-server logging threshold oid-processing 1
+# snmp-server logging threshold pdu-processing 1
+# snmp-server mib bulkstat max-procmem-size 101
+# snmp-server timeouts duplicate 0
+# snmp-server timeouts inQdrop 0
+# snmp-server packetsize 490
+# snmp-server correlator buffer-size 1024
+# snmp-server trap-source GigabitEthernet0/0/0/2
+# snmp-server throttle-time 60
+# snmp-server community-map cm1 context c1 security-name s1 target-list t1
+# snmp-server inform retries 7
+# snmp-server overload-control 4 6
+# snmp-server ifmib internal cache max-duration 4
+# snmp-server mroutemib send-all-vrf
+# snmp-server notification-log-mib size 5
+# snmp-server notification-log-mib GlobalSize 5
+#
+#
+# Using state: deleted
+# Before state:
+# -------------
+# RP/0/RP0/CPU0:test2#show running-config snmp-server
+# Mon Nov 29 12:49:29.521 UTC
+# snmp-server vrf vrf1
+#  host 1.1.1.1 traps test1
+# !
+# snmp-server drop report acl IPv4 test1
+# snmp-server drop unknown-user
+# snmp-server ipv4 dscp af11
+# snmp-server ipv6 precedence routine
+# snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2
+# snmp-server community test2 RO SDROwner IPv4 test IPv6 test1
+# snmp-server queue-length 2
+# snmp-server trap-timeout 3
+# snmp-server trap throttle-time 12
+# snmp-server traps bfd
+# snmp-server traps bgp cbgp2
+# snmp-server traps copy-complete
+# snmp-server traps hsrp
+# snmp-server traps ipsla
+# snmp-server traps msdp peer-state-change
+# snmp-server traps ipsec tunnel stop
+# snmp-server traps ipsec tunnel start
+# snmp-server traps config
+# snmp-server traps l2tun sessions
+# snmp-server traps l2tun tunnel-up
+# snmp-server traps l2tun tunnel-down
+# snmp-server traps bulkstat collection
+# snmp-server traps l2vpn all
+# snmp-server traps l2vpn vc-up
+# snmp-server traps l2vpn vc-down
+# snmp-server traps bridgemib
+# snmp-server traps addrpool low
+# snmp-server traps addrpool high
+# snmp-server traps cisco-entity-ext
+# snmp-server chassis-id test2
+# snmp-server contact t1
+# snmp-server location test1
+# snmp-server target list test host 1.1.1.2
+# snmp-server target list test2 vrf vrf2
+# snmp-server context c1
+# snmp-server context c2
+# snmp-server logging threshold oid-processing 1
+# snmp-server logging threshold pdu-processing 1
+# snmp-server mib bulkstat max-procmem-size 101
+# snmp-server timeouts duplicate 0
+# snmp-server timeouts inQdrop 0
+# snmp-server packetsize 490
+# snmp-server correlator buffer-size 1024
+# snmp-server trap-source GigabitEthernet0/0/0/2
+# snmp-server throttle-time 60
+# snmp-server community-map cm1 context c1 security-name s1 target-list t1
+# snmp-server inform retries 7
+# snmp-server overload-control 4 6
+# snmp-server ifmib internal cache max-duration 4
+# snmp-server mroutemib send-all-vrf
+# snmp-server notification-log-mib size 5
+# snmp-server notification-log-mib GlobalSize 5
+# Deleted play:
+# -------------
+- name: Remove all existing configuration
+  cisco.iosxr.iosxr_snmp_server_global:
+    state: deleted
+# Commands Fired:
+# ---------------
+# "commands": [
+#        "no snmp-server chassis-id test2",
+#         "no snmp-server correlator buffer-size 1024",
+#         "no snmp-server contact t1",
+#         "no snmp-server ipv4 dscp af11",
+#         "no snmp-server ipv6 precedence routine",
+#         "no snmp-server location test1",
+#         "no snmp-server logging threshold oid-processing 1",
+#         "no snmp-server logging threshold pdu-processing 1",
+#         "no snmp-server mib bulkstat max-procmem-size 101",
+#         "no snmp-server mroutemib send-all-vrf",
+#         "no snmp-server overload-control 4 6",
+#         "no snmp-server packetsize 490",
+#         "no snmp-server queue-length 2",
+#         "no snmp-server throttle-time 60",
+#         "no snmp-server trap-source GigabitEthernet0/0/0/2",
+#         "no snmp-server trap-timeout 3",
+#         "no snmp-server drop report acl IPv4 test1",
+#         "no snmp-server drop unknown-user",
+#         "no snmp-server ifmib internal cache max-duration 4",
+#         "no snmp-server inform retries 7",
+#         "no snmp-server notification-log-mib size 5",
+#         "no snmp-server notification-log-mib GlobalSize 5",
+#         "no snmp-server trap throttle-time 12",
+#         "no snmp-server timeouts inQdrop 0",
+#         "no snmp-server timeouts duplicate 0",
+#         "no snmp-server traps addrpool low",
+#         "no snmp-server traps addrpool high",
+#         "no snmp-server traps bfd",
+#         "no snmp-server traps bgp cbgp2",
+#         "no snmp-server traps bulkstat collection",
+#         "no snmp-server traps bridgemib",
+#         "no snmp-server traps copy-complete",
+#         "no snmp-server traps cisco-entity-ext",
+#         "no snmp-server traps config",
+#         "no snmp-server traps hsrp",
+#         "no snmp-server traps ipsla",
+#         "no snmp-server traps ipsec tunnel start",
+#         "no snmp-server traps ipsec tunnel stop",
+#         "no snmp-server traps l2tun sessions",
+#         "no snmp-server traps l2tun tunnel-up",
+#         "no snmp-server traps l2tun tunnel-down",
+#         "no snmp-server traps l2vpn all",
+#         "no snmp-server traps l2vpn vc-up",
+#         "no snmp-server traps l2vpn vc-down",
+#         "no snmp-server traps msdp peer-state-change",
+#         "no snmp-server community test2 RO SDROwner IPv4 test IPv6 test1",
+#         "no snmp-server community-map cm1 context c1 security-name s1 target-list t1",
+#         "no snmp-server context c1",
+#         "no snmp-server context c2",
+#         "no snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2",
+#         "no snmp-server target list test host 1.1.1.2",
+#         "no snmp-server target list test2 vrf vrf2",
+#         "no snmp-server vrf vrf1"
+#     ],
+# After state:
+# ------------
+# RP/0/0/CPU0:10#show running-config ntp
+# --------------------- EMPTY -----------------
+# Using state: overridden
+# Before state:
+# -------------
+# RP/0/0/CPU0:10#show running-config snmp-server
+# snmp-server vrf vrf1
+#  host 1.1.1.1 traps test1
+# !
+# snmp-server drop report acl IPv4 test1
+# snmp-server drop unknown-user
+# snmp-server ipv4 dscp af11
+# snmp-server ipv6 precedence routine
+# snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2
+# snmp-server community test2 RO SDROwner IPv4 test IPv6 test1
+# snmp-server queue-length 2
+# snmp-server trap-timeout 3
+# snmp-server trap throttle-time 12
+# snmp-server traps bfd
+# snmp-server traps bgp cbgp2
+# snmp-server traps copy-complete
+# snmp-server traps hsrp
+# snmp-server traps ipsla
+# snmp-server traps msdp peer-state-change
+# snmp-server traps ipsec tunnel stop
+# snmp-server traps ipsec tunnel start
+# snmp-server traps config
+# snmp-server traps l2tun sessions
+# snmp-server traps l2tun tunnel-up
+# snmp-server traps l2tun tunnel-down
+# snmp-server traps bulkstat collection
+# snmp-server traps l2vpn all
+# snmp-server traps l2vpn vc-up
+# snmp-server traps l2vpn vc-down
+# snmp-server traps bridgemib
+# snmp-server traps addrpool low
+# snmp-server traps addrpool high
+# snmp-server traps cisco-entity-ext
+# snmp-server chassis-id test2
+# snmp-server contact t1
+# snmp-server location test1
+# snmp-server target list test host 1.1.1.2
+# snmp-server target list test2 vrf vrf2
+# snmp-server context c1
+# snmp-server context c2
+# snmp-server logging threshold oid-processing 1
+# snmp-server logging threshold pdu-processing 1
+# snmp-server mib bulkstat max-procmem-size 101
+# snmp-server timeouts duplicate 0
+# snmp-server timeouts inQdrop 0
+# snmp-server packetsize 490
+# snmp-server correlator buffer-size 1024
+# snmp-server trap-source GigabitEthernet0/0/0/2
+# snmp-server throttle-time 60
+# snmp-server community-map cm1 context c1 security-name s1 target-list t1
+# snmp-server inform retries 7
+# snmp-server overload-control 4 6
+# snmp-server ifmib internal cache max-duration 4
+# snmp-server mroutemib send-all-vrf
+# snmp-server notification-log-mib size 5
+# snmp-server notification-log-mib GlobalSize 5
+# Overridden play:
+# ----------------
+- name: Override Snmp-server configuration with provided configuration
+  cisco.iosxr.iosxr_snmp_server:
+        config:
+          timeouts:
+            duplicate: 0
+            inQdrop: 0
+          trap:
+            throttle_time: 13
+          targets:
+            - host: 1.1.1.2
+              name: test
+
+          ifmib:
+            internal_cache_max_duration: 5
+          inform:
+            retries: 7
+          chassis_id: test
+          packetsize: 491
+          queue_length: 2
+          throttle_time: 60
+          trap_source: GigabitEthernet0/0/0/2
+          trap_timeout: 3
+          context:
+            - c1
+            - c2
+          contact: t1
+          correlator:
+            buffer_size: 1025
+          community:
+            - name: test1
+              ro: true
+              sdrowner: true
+              acl_v4: test
+              acl_v6: test1
+          community_map:
+            - name: cm2
+              context: c1
+              target_list: t1
+              security_name: s1
+          drop:
+            report_IPv4: test2
+            unknown_user: true
+          ipv6:
+            precedence: routine
+          ipv4:
+            dscp: af11
+          location: test1
+          logging_threshold_oid_processing: 2
+          logging_threshold_pdu_processing: 2
+          mib_bulkstat_max_procmem_size: 101
+          mroutemib_send_all_vrf: true
+          overload_control:
+            overload_drop_time: 4
+            overload_throttle_rate: 6
+          notification_log_mib:
+            GlobalSize: 5
+            size: 5
+          traps:
+            hsrp: true
+            ipsla: true
+            ipsec:
+              start: true
+              stop: true
+            bridgemib: true
+            bulkstat_collection: true
+            cisco_entity_ext: true
+            config: true
+            copy_complete: true
+            l2vpn:
+              all: true
+              vc_down: true
+              vc_up: true
+            msdp_peer_state_change: true
+        state: overridden
+# Commands Fired:
+# ---------------
+# "commands": [
+#        "no snmp-server traps addrpool low",
+#         "no snmp-server traps addrpool high",
+#         "no snmp-server traps bfd",
+#         "no snmp-server traps bgp cbgp2",
+#         "no snmp-server traps l2tun sessions",
+#         "no snmp-server traps l2tun tunnel-up",
+#         "no snmp-server traps l2tun tunnel-down",
+#         "no snmp-server community test2 RO SDROwner IPv4 test IPv6 test1",
+#         "no snmp-server community-map cm1 context c1 security-name s1 target-list t1",
+#         "no snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2",
+#         "no snmp-server vrf vrf1",
+#         "snmp-server chassis-id test",
+#         "snmp-server correlator buffer-size 1025",
+#         "snmp-server logging threshold oid-processing 2",
+#         "snmp-server logging threshold pdu-processing 2",
+#         "snmp-server packetsize 491",
+#         "snmp-server drop report acl IPv4 test2",
+#         "snmp-server ifmib internal cache max-duration 5",
+#         "snmp-server trap throttle-time 13",
+#         "snmp-server community test1 RO SDROwner IPv4 test IPv6 test1",
+#         "snmp-server community-map cm2 context c1 security-name s1 target-list t1"
+#     ],
+# After state:
+# ------------
+# RP/0/RP0/CPU0:test2#show running-config snmp-server
+# Mon Nov 29 12:57:34.182 UTC
+# snmp-server drop report acl IPv4 test2
+# snmp-server drop unknown-user
+# snmp-server ipv4 dscp af11
+# snmp-server ipv6 precedence routine
+# snmp-server community test1 RO SDROwner IPv4 test IPv6 test1
+# snmp-server queue-length 2
+# snmp-server trap-timeout 3
+# snmp-server trap throttle-time 13
+# snmp-server traps copy-complete
+# snmp-server traps hsrp
+# snmp-server traps ipsla
+# snmp-server traps msdp peer-state-change
+# snmp-server traps ipsec tunnel stop
+# snmp-server traps ipsec tunnel start
+# snmp-server traps config
+# snmp-server traps bulkstat collection
+# snmp-server traps l2vpn all
+# snmp-server traps l2vpn vc-up
+# snmp-server traps l2vpn vc-down
+# snmp-server traps bridgemib
+# snmp-server traps cisco-entity-ext
+# snmp-server chassis-id test
+# snmp-server contact t1
+# snmp-server location test1
+# snmp-server target list test host 1.1.1.2
+# snmp-server target list test2 vrf vrf2
+# snmp-server context c1
+# snmp-server context c2
+# snmp-server logging threshold oid-processing 2
+# snmp-server logging threshold pdu-processing 2
+# snmp-server mib bulkstat max-procmem-size 101
+# snmp-server timeouts duplicate 0
+# snmp-server timeouts inQdrop 0
+# snmp-server packetsize 491
+# snmp-server correlator buffer-size 1025
+# snmp-server trap-source GigabitEthernet0/0/0/2
+# snmp-server throttle-time 60
+# snmp-server community-map cm2 context c1 security-name s1 target-list t1
+# snmp-server inform retries 7
+# snmp-server overload-control 4 6
+# snmp-server ifmib internal cache max-duration 5
+# snmp-server mroutemib send-all-vrf
+# snmp-server notification-log-mib size 5
+# snmp-server notification-log-mib GlobalSize 5
+#
+# Using state: replaced
+# Before state:
+# -------------
+# RP/0/0/CPU0:10#show running-config snmp-server
+# snmp-server vrf vrf1
+#  host 1.1.1.1 traps test1
+# !
+# snmp-server drop report acl IPv4 test1
+# snmp-server drop unknown-user
+# snmp-server ipv4 dscp af11
+# snmp-server ipv6 precedence routine
+# snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2
+# snmp-server community test2 RO SDROwner IPv4 test IPv6 test1
+# snmp-server queue-length 2
+# snmp-server trap-timeout 3
+# snmp-server trap throttle-time 12
+# snmp-server traps bfd
+# snmp-server traps bgp cbgp2
+# snmp-server traps copy-complete
+# snmp-server traps hsrp
+# snmp-server traps ipsla
+# snmp-server traps msdp peer-state-change
+# snmp-server traps ipsec tunnel stop
+# snmp-server traps ipsec tunnel start
+# snmp-server traps config
+# snmp-server traps l2tun sessions
+# snmp-server traps l2tun tunnel-up
+# snmp-server traps l2tun tunnel-down
+# snmp-server traps bulkstat collection
+# snmp-server traps l2vpn all
+# snmp-server traps l2vpn vc-up
+# snmp-server traps l2vpn vc-down
+# snmp-server traps bridgemib
+# snmp-server traps addrpool low
+# snmp-server traps addrpool high
+# snmp-server traps cisco-entity-ext
+# snmp-server chassis-id test2
+# snmp-server contact t1
+# snmp-server location test1
+# snmp-server target list test host 1.1.1.2
+# snmp-server target list test2 vrf vrf2
+# snmp-server context c1
+# snmp-server context c2
+# snmp-server logging threshold oid-processing 1
+# snmp-server logging threshold pdu-processing 1
+# snmp-server mib bulkstat max-procmem-size 101
+# snmp-server timeouts duplicate 0
+# snmp-server timeouts inQdrop 0
+# snmp-server packetsize 490
+# snmp-server correlator buffer-size 1024
+# snmp-server trap-source GigabitEthernet0/0/0/2
+# snmp-server throttle-time 60
+# snmp-server community-map cm1 context c1 security-name s1 target-list t1
+# snmp-server inform retries 7
+# snmp-server overload-control 4 6
+# snmp-server ifmib internal cache max-duration 4
+# snmp-server mroutemib send-all-vrf
+# snmp-server notification-log-mib size 5
+# snmp-server notification-log-mib GlobalSize 5
+#
+#
+# Replaced play:
+# ----------------
+- name: Replace Snmp-server configuration with provided configuration
+  cisco.iosxr.iosxr_snmp_server:
+        state: replaced
+        config:
+          timeouts:
+            duplicate: 0
+            inQdrop: 0
+          trap:
+            throttle_time: 13
+          targets:
+            - host: 1.1.1.2
+              name: test
+
+          ifmib:
+            internal_cache_max_duration: 5
+          inform:
+            retries: 7
+          chassis_id: test
+          packetsize: 491
+          queue_length: 2
+          throttle_time: 60
+          trap_source: GigabitEthernet0/0/0/2
+          trap_timeout: 3
+          context:
+            - c1
+            - c2
+          contact: t1
+          correlator:
+            buffer_size: 1025
+          community:
+            - name: test1
+              ro: true
+              sdrowner: true
+              acl_v4: test
+              acl_v6: test1
+          community_map:
+            - name: cm2
+              context: c1
+              target_list: t1
+              security_name: s1
+          drop:
+            report_IPv4: test2
+            unknown_user: true
+          ipv6:
+            precedence: routine
+          ipv4:
+            dscp: af11
+          location: test1
+          logging_threshold_oid_processing: 2
+          logging_threshold_pdu_processing: 2
+          mib_bulkstat_max_procmem_size: 101
+          mroutemib_send_all_vrf: true
+          overload_control:
+            overload_drop_time: 4
+            overload_throttle_rate: 6
+          notification_log_mib:
+            GlobalSize: 5
+            size: 5
+          traps:
+            hsrp: true
+            ipsla: true
+            ipsec:
+              start: true
+              stop: true
+            bridgemib: true
+            bulkstat_collection: true
+            cisco_entity_ext: true
+            config: true
+            copy_complete: true
+            l2vpn:
+              all: true
+              vc_down: true
+              vc_up: true
+            msdp_peer_state_change: true
+#
+# Commands Fired:
+# ---------------
+# "commands": [
+#         "no snmp-server traps addrpool low",
+#         "no snmp-server traps addrpool high",
+#         "no snmp-server traps bfd",
+#         "no snmp-server traps bgp cbgp2",
+#         "no snmp-server traps l2tun sessions",
+#         "no snmp-server traps l2tun tunnel-up",
+#         "no snmp-server traps l2tun tunnel-down",
+#         "no snmp-server community test2 RO SDROwner IPv4 test IPv6 test1",
+#         "no snmp-server community-map cm1 context c1 security-name s1 target-list t1",
+#         "no snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2",
+#         "no snmp-server vrf vrf1",
+#         "snmp-server chassis-id test",
+#         "snmp-server correlator buffer-size 1025",
+#         "snmp-server logging threshold oid-processing 2",
+#         "snmp-server logging threshold pdu-processing 2",
+#         "snmp-server packetsize 491",
+#         "snmp-server drop report acl IPv4 test2",
+#         "snmp-server ifmib internal cache max-duration 5",
+#         "snmp-server trap throttle-time 13",
+#         "snmp-server community test1 RO SDROwner IPv4 test IPv6 test1",
+#         "snmp-server community-map cm2 context c1 security-name s1 target-list t1"
+#     ],
+# After state:
+# ------------
+# RP/0/RP0/CPU0:ios#show running-config snmp-server
+# Mon Sep 13 10:38:22.690 UTC
+# RP/0/0/CPU0:10#show running-config snmp-server
+# snmp-server vrf vrf1
+#  host 1.1.1.1 traps test1
+# !
+# snmp-server drop report acl IPv4 test1
+# snmp-server drop unknown-user
+# snmp-server ipv4 dscp af11
+# snmp-server ipv6 precedence routine
+# snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2
+# snmp-server community test2 RO SDROwner IPv4 test IPv6 test1
+# snmp-server queue-length 2
+# snmp-server trap-timeout 3
+# snmp-server trap throttle-time 12
+# snmp-server traps bfd
+# snmp-server traps bgp cbgp2
+# snmp-server traps copy-complete
+# snmp-server traps hsrp
+# snmp-server traps ipsla
+# snmp-server traps msdp peer-state-change
+# snmp-server traps ipsec tunnel stop
+# snmp-server traps ipsec tunnel start
+# snmp-server traps config
+# snmp-server traps l2tun sessions
+# snmp-server traps l2tun tunnel-up
+# snmp-server traps l2tun tunnel-down
+# snmp-server traps bulkstat collection
+# snmp-server traps l2vpn all
+# snmp-server traps l2vpn vc-up
+# snmp-server traps l2vpn vc-down
+# snmp-server traps bridgemib
+# snmp-server traps addrpool low
+# snmp-server traps addrpool high
+# snmp-server traps cisco-entity-ext
+# snmp-server chassis-id test2
+# snmp-server contact t1
+# snmp-server location test1
+# snmp-server target list test host 1.1.1.2
+# snmp-server target list test2 vrf vrf2
+# snmp-server context c1
+# snmp-server context c2
+# snmp-server logging threshold oid-processing 1
+# snmp-server logging threshold pdu-processing 1
+# snmp-server mib bulkstat max-procmem-size 101
+# snmp-server timeouts duplicate 0
+# snmp-server timeouts inQdrop 0
+# snmp-server packetsize 490
+# snmp-server correlator buffer-size 1024
+# snmp-server trap-source GigabitEthernet0/0/0/2
+# snmp-server throttle-time 60
+# snmp-server community-map cm1 context c1 security-name s1 target-list t1
+# snmp-server inform retries 7
+# snmp-server overload-control 4 6
+# snmp-server ifmib internal cache max-duration 4
+# snmp-server mroutemib send-all-vrf
+# snmp-server notification-log-mib size 5
+# snmp-server notification-log-mib GlobalSize 5
+#
+#
+# Using state: gathered
+# Before state:
+# -------------
+# RP/0/RP0/CPU0:test2#show running-config snmp-server
+# Mon Nov 29 12:49:29.521 UTC
+# snmp-server vrf vrf1
+#  host 1.1.1.1 traps test1
+# !
+# snmp-server drop report acl IPv4 test1
+# snmp-server drop unknown-user
+# snmp-server ipv4 dscp af11
+# snmp-server ipv6 precedence routine
+# snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2
+# snmp-server community test2 RO SDROwner IPv4 test IPv6 test1
+# snmp-server queue-length 2
+# snmp-server trap-timeout 3
+# snmp-server trap throttle-time 12
+# snmp-server traps bfd
+# snmp-server traps bgp cbgp2
+# snmp-server traps copy-complete
+# snmp-server traps hsrp
+# snmp-server traps ipsla
+# snmp-server traps msdp peer-state-change
+# snmp-server traps ipsec tunnel stop
+# snmp-server traps ipsec tunnel start
+# snmp-server traps config
+# snmp-server traps l2tun sessions
+# snmp-server traps l2tun tunnel-up
+# snmp-server traps l2tun tunnel-down
+# snmp-server traps bulkstat collection
+# snmp-server traps l2vpn all
+# snmp-server traps l2vpn vc-up
+# snmp-server traps l2vpn vc-down
+# snmp-server traps bridgemib
+# snmp-server traps addrpool low
+# snmp-server traps addrpool high
+# snmp-server traps cisco-entity-ext
+# snmp-server chassis-id test2
+# snmp-server contact t1
+# snmp-server location test1
+# snmp-server target list test host 1.1.1.2
+# snmp-server target list test2 vrf vrf2
+# snmp-server context c1
+# snmp-server context c2
+# snmp-server logging threshold oid-processing 1
+# snmp-server logging threshold pdu-processing 1
+# snmp-server mib bulkstat max-procmem-size 101
+# snmp-server timeouts duplicate 0
+# snmp-server timeouts inQdrop 0
+# snmp-server packetsize 490
+# snmp-server correlator buffer-size 1024
+# snmp-server trap-source GigabitEthernet0/0/0/2
+# snmp-server throttle-time 60
+# snmp-server community-map cm1 context c1 security-name s1 target-list t1
+# snmp-server inform retries 7
+# snmp-server overload-control 4 6
+# snmp-server ifmib internal cache max-duration 4
+# snmp-server mroutemib send-all-vrf
+# snmp-server notification-log-mib size 5
+# snmp-server notification-log-mib GlobalSize 5
+# Gathered play:
+# --------------
+- name: Gather listed ntp config
+  cisco.iosxr.iosxr_ntp_global:
+    state: gathered
+# Module Execution Result:
+# ------------------------
+# "gathered": {
+#         "chassis_id": "test2",
+#         "community": [
+#             {
+#                 "acl_v4": "test",
+#                 "acl_v6": "test1",
+#                 "name": "test2",
+#                 "ro": true,
+#                 "sdrowner": true
+#             }
+#         ],
+#         "community_map": [
+#             {
+#                 "context": "c1",
+#                 "name": "cm1",
+#                 "security_name": "s1",
+#                 "target_list": "t1"
+#             }
+#         ],
+#         "contact": "t1",
+#         "context": [
+#             "c1",
+#             "c2"
+#         ],
+#         "correlator": {
+#             "buffer_size": 1024
+#         },
+#         "drop": {
+#             "report_IPv4": "test1",
+#             "unknown_user": true
+#         },
+#         "ifmib": {
+#             "internal_cache_max_duration": 4
+#         },
+#         "inform": {
+#             "retries": 7
+#         },
+#         "ipv4": {
+#             "dscp": "af11"
+#         },
+#         "ipv6": {
+#             "precedence": "routine"
+#         },
+#         "location": "test1",
+#         "logging_threshold_oid_processing": 1,
+#         "logging_threshold_pdu_processing": 1,
+#         "mib_bulkstat_max_procmem_size": 101,
+#         "mroutemib_send_all_vrf": true,
+#         "notification_log_mib": {
+#             "GlobalSize": 5,
+#             "size": 5
+#         },
+#         "overload_control": {
+#             "overload_drop_time": 4,
+#             "overload_throttle_rate": 6
+#         },
+#         "packetsize": 490,
+#         "queue_length": 2,
+#         "targets": [
+#             {
+#                 "host": "1.1.1.2",
+#                 "name": "test"
+#             },
+#             {
+#                 "name": "test2",
+#                 "vrf": "vrf2"
+#             }
+#         ],
+#         "throttle_time": 60,
+#         "timeouts": {
+#             "duplicate": 0,
+#             "inQdrop": 0
+#         },
+#         "trap": {
+#             "throttle_time": 12
+#         },
+#         "trap_source": "GigabitEthernet0/0/0/2",
+#         "trap_timeout": 3,
+#         "traps": {
+#             "addrpool": {
+#                 "high": true,
+#                 "low": true
+#             },
+#             "bfd": true,
+#             "bgp": {
+#                 "cbgp2": true
+#             },
+#             "bridgemib": true,
+#             "bulkstat_collection": true,
+#             "cisco_entity_ext": true,
+#             "config": true,
+#             "copy_complete": true,
+#             "hsrp": true,
+#             "ipsec": {
+#                 "start": true,
+#                 "stop": true
+#             },
+#             "ipsla": true,
+#             "l2tun": {
+#                 "sessions": true,
+#                 "tunnel_down": true,
+#                 "tunnel_up": true
+#             },
+#             "l2vpn": {
+#                 "all": true,
+#                 "vc_down": true,
+#                 "vc_up": true
+#             },
+#             "msdp_peer_state_change": true
+#         },
+#         "users": [
+#             {
+#                 "Ipv4_acl": "test1",
+#                 "Ipv6_acl": "test2",
+#                 "group": "test2",
+#                 "user": "u1",
+#                 "version": "v1"
+#             }
+#         ],
+#         "vrfs": [
+#             {
+#                 "hosts": [
+#                     {
+#                         "community": "test1",
+#                         "host": "1.1.1.1",
+#                         "traps": true
+#                     }
+#                 ],
+#                 "vrf": "vrf1"
+#             }
+#         ]
+#     }
+#
+#
+# Using state: rendered
+# Rendered play:
+# --------------
+- name: Render platform specific configuration lines with state rendered (without connecting to the device)
+  cisco.iosxr.iosxr_snmp_server:
+    state: rendered
+    config:
+      vrfs:
+        - hosts:
+            - community: test1
+              host: 1.1.1.1
+              traps: true
+          vrf: vrf1
+      users:
+        - Ipv4_acl: test1
+          Ipv6_acl: test2
+          group: test2
+          user: u1
+          version: v1
+      timeouts:
+        duplicate: 0
+        inQdrop: 0
+      trap:
+        throttle_time: 12
+      targets:
+        - host: 1.1.1.2
+          name: test
+
+      ifmib:
+        internal_cache_max_duration: 4
+      inform:
+        retries: 7
+      chassis_id: test2
+      packetsize: 490
+      queue_length: 2
+      throttle_time: 60
+      trap_source: GigabitEthernet0/0/0/2
+      trap_timeout: 3
+      context:
+        - c1
+        - c2
+      contact: t1
+      correlator:
+        buffer_size: 1024
+      community:
+        - name: test2
+          ro: true
+          sdrowner: true
+          acl_v4: test
+          acl_v6: test1
+      community_map:
+        - name: cm1
+          context: c1
+          target_list: t1
+          security_name: s1
+      drop:
+        report_IPv4: test1
+        unknown_user: true
+      ipv6:
+        precedence: routine
+      ipv4:
+        dscp: af11
+      location: test1
+      logging_threshold_oid_processing: 1
+      logging_threshold_pdu_processing: 1
+      mib_bulkstat_max_procmem_size: 101
+      mroutemib_send_all_vrf: true
+      overload_control:
+        overload_drop_time: 4
+        overload_throttle_rate: 6
+      notification_log_mib:
+        GlobalSize: 5
+        size: 5
+      traps:
+        hsrp: true
+        ipsla: true
+        ipsec:
+          start: true
+          stop: true
+        bridgemib: true
+        bulkstat_collection: true
+        cisco_entity_ext: true
+        config: true
+        copy_complete: true
+        addrpool:
+          high: true
+          low: true
+        bfd: true
+        bgp:
+          cbgp2: true
+        l2tun:
+          sessions: true
+          tunnel_down: true
+          tunnel_up: true
+        l2vpn:
+          all: true
+          vc_down: true
+          vc_up: true
+        msdp_peer_state_change: true
+  register: result
+# Module Execution Result:
+# ------------------------
+# "rendered": [
+#         "snmp-server chassis-id test2",
+#         "snmp-server correlator buffer-size 1024",
+#         "snmp-server contact t1",
+#         "snmp-server ipv4 dscp af11",
+#         "snmp-server ipv6 precedence routine",
+#         "snmp-server location test1",
+#         "snmp-server logging threshold oid-processing 1",
+#         "snmp-server logging threshold pdu-processing 1",
+#         "snmp-server mib bulkstat max-procmem-size 101",
+#         "snmp-server mroutemib send-all-vrf",
+#         "snmp-server overload-control 4 6",
+#         "snmp-server packetsize 490",
+#         "snmp-server queue-length 2",
+#         "snmp-server throttle-time 60",
+#         "snmp-server trap-source GigabitEthernet0/0/0/2",
+#         "snmp-server trap-timeout 3",
+#         "snmp-server drop report acl IPv4 test1",
+#         "snmp-server drop unknown-user",
+#         "snmp-server ifmib internal cache max-duration 4",
+#         "snmp-server inform retries 7",
+#         "snmp-server notification-log-mib size 5",
+#         "snmp-server notification-log-mib GlobalSize 5",
+#         "snmp-server trap throttle-time 12",
+#         "snmp-server timeouts inQdrop 0",
+#         "snmp-server timeouts duplicate 0",
+#         "snmp-server traps addrpool low",
+#         "snmp-server traps addrpool high",
+#         "snmp-server traps bfd",
+#         "snmp-server traps bgp cbgp2",
+#         "snmp-server traps bulkstat collection",
+#         "snmp-server traps bridgemib",
+#         "snmp-server traps copy-complete",
+#         "snmp-server traps cisco-entity-ext",
+#         "snmp-server traps config",
+#         "snmp-server traps hsrp",
+#         "snmp-server traps ipsla",
+#         "snmp-server traps ipsec tunnel start",
+#         "snmp-server traps ipsec tunnel stop",
+#         "snmp-server traps l2tun sessions",
+#         "snmp-server traps l2tun tunnel-up",
+#         "snmp-server traps l2tun tunnel-down",
+#         "snmp-server traps l2vpn all",
+#         "snmp-server traps l2vpn vc-up",
+#         "snmp-server traps l2vpn vc-down",
+#         "snmp-server traps msdp peer-state-change",
+#         "snmp-server community test2 RO SDROwner IPv4 test IPv6 test1",
+#         "snmp-server community-map cm1 context c1 security-name s1 target-list t1",
+#         "snmp-server context c1",
+#         "snmp-server context c2",
+#         "snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2",
+#         "snmp-server target list test2 vrf vrf2",
+#         "snmp-server target list test host 1.1.1.2",
+#         "snmp-server vrf vrf1",
+#         "host 1.1.1.1 traps test1"
+#     ],
+# Using state: parsed
+# File: parsed.cfg
+# ----------------
+# snmp-server vrf vrf1
+#  host 1.1.1.1 traps test1
+# !
+# snmp-server drop report acl IPv4 test1
+# snmp-server drop unknown-user
+# snmp-server ipv4 dscp af11
+# snmp-server ipv6 precedence routine
+# snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2
+# snmp-server community test2 RO SDROwner IPv4 test IPv6 test1
+# snmp-server queue-length 2
+# snmp-server trap-timeout 3
+# snmp-server trap throttle-time 12
+# snmp-server traps bfd
+# snmp-server traps bgp cbgp2
+# snmp-server traps copy-complete
+# snmp-server traps hsrp
+# snmp-server traps ipsla
+# snmp-server traps msdp peer-state-change
+# snmp-server traps ipsec tunnel stop
+# snmp-server traps ipsec tunnel start
+# snmp-server traps config
+# snmp-server traps l2tun sessions
+# snmp-server traps l2tun tunnel-up
+# snmp-server traps l2tun tunnel-down
+# snmp-server traps bulkstat collection
+# snmp-server traps l2vpn all
+# snmp-server traps l2vpn vc-up
+# snmp-server traps l2vpn vc-down
+# snmp-server traps bridgemib
+# snmp-server traps addrpool low
+# snmp-server traps addrpool high
+# snmp-server traps cisco-entity-ext
+# snmp-server chassis-id test2
+# snmp-server contact t1
+# snmp-server location test1
+# snmp-server target list test host 1.1.1.2
+# snmp-server target list test2 vrf vrf2
+# snmp-server context c1
+# snmp-server context c2
+# snmp-server logging threshold oid-processing 1
+# snmp-server logging threshold pdu-processing 1
+# snmp-server mib bulkstat max-procmem-size 101
+# snmp-server timeouts duplicate 0
+# snmp-server timeouts inQdrop 0
+# snmp-server packetsize 490
+# snmp-server correlator buffer-size 1024
+# snmp-server trap-source GigabitEthernet0/0/0/2
+# snmp-server throttle-time 60
+# snmp-server community-map cm1 context c1 security-name s1 target-list t1
+# snmp-server inform retries 7
+# snmp-server overload-control 4 6
+# snmp-server ifmib internal cache max-duration 4
+# snmp-server mroutemib send-all-vrf
+# snmp-server notification-log-mib size 5
+# snmp-server notification-log-mib GlobalSize 5
+# ------------
+- name: Parse the provided configuration with the existing running configuration
+  cisco.iosxr.iosxr_snmp_server:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
+# Module Execution Result:
+# ------------------------
+# "parsed":{
+#         "chassis_id": "test2",
+#         "community": [
+#             {
+#                 "acl_v4": "test",
+#                 "acl_v6": "test1",
+#                 "name": "test2",
+#                 "ro": true,
+#                 "sdrowner": true
+#             }
+#         ],
+#         "community_map": [
+#             {
+#                 "context": "c1",
+#                 "name": "cm1",
+#                 "security_name": "s1",
+#                 "target_list": "t1"
+#             }
+#         ],
+#         "contact": "t1",
+#         "context": [
+#             "c1",
+#             "c2"
+#         ],
+#         "correlator": {
+#             "buffer_size": 1024
+#         },
+#         "drop": {
+#             "report_IPv4": "test1",
+#             "unknown_user": true
+#         },
+#         "ifmib": {
+#             "internal_cache_max_duration": 4
+#         },
+#         "inform": {
+#             "retries": 7
+#         },
+#         "ipv4": {
+#             "dscp": "af11"
+#         },
+#         "ipv6": {
+#             "precedence": "routine"
+#         },
+#         "location": "test1",
+#         "logging_threshold_oid_processing": 1,
+#         "logging_threshold_pdu_processing": 1,
+#         "mib_bulkstat_max_procmem_size": 101,
+#         "mroutemib_send_all_vrf": true,
+#         "notification_log_mib": {
+#             "GlobalSize": 5,
+#             "size": 5
+#         },
+#         "overload_control": {
+#             "overload_drop_time": 4,
+#             "overload_throttle_rate": 6
+#         },
+#         "packetsize": 490,
+#         "queue_length": 2,
+#         "targets": [
+#             {
+#                 "host": "1.1.1.2",
+#                 "name": "test"
+#             },
+#             {
+#                 "name": "test2",
+#                 "vrf": "vrf2"
+#             }
+#         ],
+#         "throttle_time": 60,
+#         "timeouts": {
+#             "duplicate": 0,
+#             "inQdrop": 0
+#         },
+#         "trap": {
+#             "throttle_time": 12
+#         },
+#         "trap_source": "GigabitEthernet0/0/0/2",
+#         "trap_timeout": 3,
+#         "traps": {
+#             "addrpool": {
+#                 "high": true,
+#                 "low": true
+#             },
+#             "bfd": true,
+#             "bgp": {
+#                 "cbgp2": true
+#             },
+#             "bridgemib": true,
+#             "bulkstat_collection": true,
+#             "cisco_entity_ext": true,
+#             "config": true,
+#             "copy_complete": true,
+#             "hsrp": true,
+#             "ipsec": {
+#                 "start": true,
+#                 "stop": true
+#             },
+#             "ipsla": true,
+#             "l2tun": {
+#                 "sessions": true,
+#                 "tunnel_down": true,
+#                 "tunnel_up": true
+#             },
+#             "l2vpn": {
+#                 "all": true,
+#                 "vc_down": true,
+#                 "vc_up": true
+#             },
+#             "msdp_peer_state_change": true
+#         },
+#         "users": [
+#             {
+#                 "Ipv4_acl": "test1",
+#                 "Ipv6_acl": "test2",
+#                 "group": "test2",
+#                 "user": "u1",
+#                 "version": "v1"
+#             }
+#         ],
+#         "vrfs": [
+#             {
+#                 "hosts": [
+#                     {
+#                         "community": "test1",
+#                         "host": "1.1.1.1",
+#                         "traps": true
+#                     }
+#                 ],
+#                 "vrf": "vrf1"
+#             }
+#         ]
+#     }
 """
 
 RETURN = """

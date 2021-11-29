@@ -96,7 +96,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 snmp-server traps power
                 snmp-server traps config
                 snmp-server traps entity
-                snmp-server traps isis database-overload manual-address-drops corrupted-lsp-detected attempt-to-exceed-max-sequence id-len-mismatch max-area-addresses-mismatch own-lsp-purge sequence-number-skip authentication-type-failure authentication-failure version-skew area-mismatch rejected-adjacency lsp-too-large-to-propagate orig-lsp-buff-size-mismatch protocols-supported-mismatch adjacency-change lsp-error-detected
                 snmp-server traps sensor
                 snmp-server traps selective-vrf-download role-change
                 snmp-server traps syslog
@@ -402,26 +401,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             status=True,
                         ),
                         vrrp_events=True,
-                        isis=dict(
-                            adjacency_change=True,
-                            area_mismatch=True,
-                            attempt_to_exceed_max_sequence=True,
-                            authentication_failure=True,
-                            authentication_type_failure=True,
-                            corrupted_lsp_detected=True,
-                            database_overload=True,
-                            id_len_mismatch=True,
-                            lsp_error_detected=True,
-                            lsp_too_large_to_propagate=True,
-                            manual_address_drops=True,
-                            max_area_addresses_mismatch=True,
-                            orig_lsp_buff_size_mismatch=True,
-                            own_lsp_purge=True,
-                            protocols_supported_mismatch=True,
-                            rejected_adjacency=True,
-                            sequence_number_skip=True,
-                            version_skew=True,
-                        ),
                     ),
                 ),
                 state="merged",
@@ -680,8 +659,8 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "snmp-server inform retries 7",
             "snmp-server notification-log-mib size 5",
             "snmp-server notification-log-mib GlobalSize 5",
-            "snmp-server trap throttle-time 12",
             "snmp-server trap link ietf",
+            "snmp-server trap throttle-time 12",
             "snmp-server timeouts threshold 0",
             "snmp-server timeouts pdu stats 1",
             "snmp-server timeouts subagent 1",
@@ -713,7 +692,11 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "snmp-server traps ipsla",
             "snmp-server traps ipsec tunnel start",
             "snmp-server traps ipsec tunnel stop",
-            "snmp-server traps isis adjacency-change area-mismatch attempt-to-exceed-max-sequence authentication-failure authentication-type-failure corrupted-lsp-detected database-overload id-len-mismatch lsp-error-detected lsp-too-large-to-propagate manual-address-drops max-area-addresses-mismatch orig-lsp-buff-size-mismatch version-skew own-lsp-purge rejected-adjacency protocols-supported-mismatch sequence-number-skip",
+            "snmp-server traps isis adjacency-change area-mismatch attempt-to-exceed-max-sequence "
+            "authentication-failure authentication-type-failure corrupted-lsp-detected database-overload "
+            "id-len-mismatch lsp-error-detected lsp-too-large-to-propagate manual-address-drops"
+            " max-area-addresses-mismatch orig-lsp-buff-size-mismatch version-skew own-lsp-purge"
+            " rejected-adjacency protocols-supported-mismatch sequence-number-skip",
             "snmp-server traps l2tun sessions",
             "snmp-server traps l2tun tunnel-up",
             "snmp-server traps l2tun tunnel-down",
@@ -721,6 +704,8 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "snmp-server traps l2vpn vc-up",
             "snmp-server traps l2vpn vc-down",
             "snmp-server traps msdp peer-state-change",
+            "snmp-server traps ospf retransmit virt-packets",
+            "snmp-server traps ospf retransmit packets",
             "snmp-server traps ospf lsa lsa-originate",
             "snmp-server traps ospf lsa lsa-maxage",
             "snmp-server traps ospf errors bad-packet",
@@ -735,6 +720,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "snmp-server traps ospf state-change virtneighbor-state-change",
             "snmp-server traps ospfv3 errors bad-packet",
             "snmp-server traps ospfv3 errors config-error",
+            "snmp-server traps ospfv3 errors virt-config-error",
             "snmp-server traps ospfv3 state-change neighbor-state-change",
             "snmp-server traps ospfv3 state-change virtif-state-change",
             "snmp-server traps ospfv3 state-change virtneighbor-state-change",
@@ -834,7 +820,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 snmp-server traps power
                 snmp-server traps config
                 snmp-server traps entity
-                snmp-server traps isis database-overload manual-address-drops corrupted-lsp-detected attempt-to-exceed-max-sequence id-len-mismatch max-area-addresses-mismatch own-lsp-purge sequence-number-skip authentication-type-failure authentication-failure version-skew area-mismatch rejected-adjacency lsp-too-large-to-propagate orig-lsp-buff-size-mismatch protocols-supported-mismatch adjacency-change lsp-error-detected
                 snmp-server traps sensor
                 snmp-server traps selective-vrf-download role-change
                 snmp-server traps syslog
@@ -938,6 +923,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "no snmp-server mib bulkstat max-procmem-size 101",
             "no snmp-server mroutemib send-all-vrf",
             "no snmp-server overload-control 4 6",
+            "no snmp-server packetsize 490",
             "no snmp-server queue-length 2",
             "no snmp-server throttle-time 60",
             "no snmp-server trap-source GigabitEthernet0/0/0/2",
@@ -980,7 +966,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "no snmp-server traps ipsla",
             "no snmp-server traps ipsec tunnel start",
             "no snmp-server traps ipsec tunnel stop",
-            "no snmp-server traps isis adjacency-change area-mismatch attempt-to-exceed-max-sequence authentication-failure authentication-type-failure corrupted-lsp-detected database-overload id-len-mismatch lsp-error-detected lsp-too-large-to-propagate manual-address-drops max-area-addresses-mismatch orig-lsp-buff-size-mismatch version-skew own-lsp-purge rejected-adjacency protocols-supported-mismatch sequence-number-skip",
             "no snmp-server traps l2tun sessions",
             "no snmp-server traps l2tun tunnel-up",
             "no snmp-server traps l2tun tunnel-down",
@@ -988,6 +973,8 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "no snmp-server traps l2vpn vc-up",
             "no snmp-server traps l2vpn vc-down",
             "no snmp-server traps msdp peer-state-change",
+            "no snmp-server traps ospf retransmit virt-packets",
+            "no snmp-server traps ospf retransmit packets",
             "no snmp-server traps ospf lsa lsa-originate",
             "no snmp-server traps ospf lsa lsa-maxage",
             "no snmp-server traps ospf errors bad-packet",
@@ -1002,6 +989,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "no snmp-server traps ospf state-change virtneighbor-state-change",
             "no snmp-server traps ospfv3 errors bad-packet",
             "no snmp-server traps ospfv3 errors config-error",
+            "no snmp-server traps ospfv3 errors virt-config-error",
             "no snmp-server traps ospfv3 state-change neighbor-state-change",
             "no snmp-server traps ospfv3 state-change virtif-state-change",
             "no snmp-server traps ospfv3 state-change virtneighbor-state-change",
@@ -1090,7 +1078,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 snmp-server traps power
                 snmp-server traps config
                 snmp-server traps entity
-                snmp-server traps isis database-overload manual-address-drops corrupted-lsp-detected attempt-to-exceed-max-sequence id-len-mismatch max-area-addresses-mismatch own-lsp-purge sequence-number-skip authentication-type-failure authentication-failure version-skew area-mismatch rejected-adjacency lsp-too-large-to-propagate orig-lsp-buff-size-mismatch protocols-supported-mismatch adjacency-change lsp-error-detected
                 snmp-server traps sensor
                 snmp-server traps selective-vrf-download role-change
                 snmp-server traps syslog
@@ -1394,7 +1381,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "no snmp-server contact t1",
             "no snmp-server traps hsrp",
             "no snmp-server traps ipsla",
-            "no snmp-server traps isis adjacency-change area-mismatch attempt-to-exceed-max-sequence authentication-failure authentication-type-failure corrupted-lsp-detected database-overload id-len-mismatch lsp-error-detected lsp-too-large-to-propagate manual-address-drops max-area-addresses-mismatch orig-lsp-buff-size-mismatch version-skew own-lsp-purge rejected-adjacency protocols-supported-mismatch sequence-number-skip",
             "no snmp-server traps ospfv3 state-change neighbor-state-change",
             "no snmp-server traps ospfv3 state-change virtif-state-change",
             "no snmp-server traps ospfv3 state-change virtneighbor-state-change",
@@ -1404,7 +1390,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "no snmp-server vrf vrf1",
             "snmp-server location test",
             "snmp-server logging threshold oid-processing 2",
-            "snmp-server overload-control 4 6",
             "snmp-server user u1 test2  IPv4 test1 IPv6 test2 v4acl",
             "snmp-server vrf vrf2",
             "host 1.1.1.1 traps test1",
@@ -1615,26 +1600,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             status=True,
                         ),
                         vrrp_events=True,
-                        isis=dict(
-                            adjacency_change=True,
-                            area_mismatch=True,
-                            attempt_to_exceed_max_sequence=True,
-                            authentication_failure=True,
-                            authentication_type_failure=True,
-                            corrupted_lsp_detected=True,
-                            database_overload=True,
-                            id_len_mismatch=True,
-                            lsp_error_detected=True,
-                            lsp_too_large_to_propagate=True,
-                            manual_address_drops=True,
-                            max_area_addresses_mismatch=True,
-                            orig_lsp_buff_size_mismatch=True,
-                            own_lsp_purge=True,
-                            protocols_supported_mismatch=True,
-                            rejected_adjacency=True,
-                            sequence_number_skip=True,
-                            version_skew=True,
-                        ),
                     ),
                 ),
                 state="rendered",
@@ -1694,7 +1659,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "snmp-server traps ipsla",
             "snmp-server traps ipsec tunnel start",
             "snmp-server traps ipsec tunnel stop",
-            "snmp-server traps isis adjacency-change area-mismatch attempt-to-exceed-max-sequence authentication-failure authentication-type-failure corrupted-lsp-detected database-overload id-len-mismatch lsp-error-detected lsp-too-large-to-propagate manual-address-drops max-area-addresses-mismatch orig-lsp-buff-size-mismatch version-skew own-lsp-purge rejected-adjacency protocols-supported-mismatch sequence-number-skip",
             "snmp-server traps l2tun sessions",
             "snmp-server traps l2tun tunnel-up",
             "snmp-server traps l2tun tunnel-down",
@@ -1702,6 +1666,8 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "snmp-server traps l2vpn vc-up",
             "snmp-server traps l2vpn vc-down",
             "snmp-server traps msdp peer-state-change",
+            "snmp-server traps ospf retransmit virt-packets",
+            "snmp-server traps ospf retransmit packets",
             "snmp-server traps ospf lsa lsa-originate",
             "snmp-server traps ospf lsa lsa-maxage",
             "snmp-server traps ospf errors bad-packet",
@@ -1716,6 +1682,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "snmp-server traps ospf state-change virtneighbor-state-change",
             "snmp-server traps ospfv3 errors bad-packet",
             "snmp-server traps ospfv3 errors config-error",
+            "snmp-server traps ospfv3 errors virt-config-error",
             "snmp-server traps ospfv3 state-change neighbor-state-change",
             "snmp-server traps ospfv3 state-change virtif-state-change",
             "snmp-server traps ospfv3 state-change virtneighbor-state-change",
@@ -1770,7 +1737,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "snmp-server vrf vrf1",
             "host 1.1.1.1 traps test1",
         ]
-
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
 
@@ -1815,7 +1781,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 snmp-server traps power
                 snmp-server traps config
                 snmp-server traps entity
-                snmp-server traps isis database-overload manual-address-drops corrupted-lsp-detected attempt-to-exceed-max-sequence id-len-mismatch max-area-addresses-mismatch own-lsp-purge sequence-number-skip authentication-type-failure authentication-failure version-skew area-mismatch rejected-adjacency lsp-too-large-to-propagate orig-lsp-buff-size-mismatch protocols-supported-mismatch adjacency-change lsp-error-detected
                 snmp-server traps sensor
                 snmp-server traps selective-vrf-download role-change
                 snmp-server traps syslog
@@ -1922,7 +1887,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             """
         )
         self.get_config.return_value = run_cfg
-        print(self.get_config.return_value)
         set_module_args(dict(state="gathered"))
         gathered = {
             "vrfs": [
@@ -2000,26 +1964,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 "power": True,
                 "config": True,
                 "entity": True,
-                "isis": {
-                    "id_len_mismatch": True,
-                    "database_overload": True,
-                    "manual_address_drops": True,
-                    "corrupted_lsp_detected": True,
-                    "attempt_to_exceed_max_sequence": True,
-                    "max_area_addresses_mismatch": True,
-                    "own_lsp_purge": True,
-                    "sequence_number_skip": True,
-                    "authentication_type_failure": True,
-                    "authentication_failure": True,
-                    "version_skew": True,
-                    "area_mismatch": True,
-                    "rejected_adjacency": True,
-                    "lsp_too_large_to_propagate": True,
-                    "orig_lsp_buff_size_mismatch": True,
-                    "protocols_supported_mismatch": True,
-                    "adjacency_change": True,
-                    "lsp_error_detected": True,
-                },
                 "sensor": True,
                 "selective_vrf_download_role_change": True,
                 "syslog": True,
@@ -2034,6 +1978,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         "virt_authentication_failure": True,
                         "virt_config_error": True,
                     },
+                    "retransmit": {"packets": True, "virt_packets": True},
                     "state_change": {
                         "if_state_change": True,
                         "neighbor_state_change": True,
@@ -2064,7 +2009,11 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 "l2vpn": {"all": True, "vc_up": True, "vc_down": True},
                 "bridgemib": True,
                 "ospfv3": {
-                    "errors": {"bad_packet": True, "config_error": True},
+                    "errors": {
+                        "bad_packet": True,
+                        "config_error": True,
+                        "virt_config_error": True,
+                    },
                     "state_change": {
                         "neighbor_state_change": True,
                         "virtif_state_change": True,
@@ -2156,7 +2105,104 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
         self.maxDiff = None
         set_module_args(
             dict(
-                running_config="snmp-server vrf test1\n host 1.1.1.1 traps test1\n host 1.1.1.2 traps test1\n context test2\n!\nsnmp-server drop report acl IPv6 test\nsnmp-server drop unknown-user\nsnmp-server host 1.1.1.1 traps test udp-port 1\nsnmp-server host 1.1.1.2 informs version 2c test\nsnmp-server host 1.1.1.3 traps test\nsnmp-server user test1 test2 v1 IPv4 test1 IPv6 test2 SDROwner\nsnmp-server community test RO IPv4 test IPv6 test\nsnmp-server community test1 RO\nsnmp-server group test v1 notify test1\nsnmp-server group test1 v1 read test1 write test2 context test3 IPv4 test IPv6 test1\nsnmp-server group test2 v1 notify test read test1\nsnmp-server group test4 v1 notify t1 context test\nsnmp-server queue-length 1\nsnmp-server trap-timeout 1\nsnmp-server trap throttle-time 10\nsnmp-server traps rf\nsnmp-server traps bfd\nsnmp-server traps bgp cbgp2\nsnmp-server traps bgp updown\nsnmp-server traps ntp\nsnmp-server traps pim neighbor-change\nsnmp-server traps pim invalid-message-received\nsnmp-server traps pim rp-mapping-change\nsnmp-server traps pim interface-state-change\nsnmp-server traps copy-complete\nsnmp-server traps hsrp\nsnmp-server traps ipsla\nsnmp-server traps msdp peer-state-change\nsnmp-server traps vrrp events\nsnmp-server traps flash removal\nsnmp-server traps flash insertion\nsnmp-server traps ipsec tunnel stop\nsnmp-server traps ipsec tunnel start\nsnmp-server traps power\nsnmp-server traps config\nsnmp-server traps entity\nsnmp-server traps isakmp tunnel stop\nsnmp-server traps isakmp tunnel start\nsnmp-server traps isis database-overload manual-address-drops corrupted-lsp-detected attempt-to-exceed-max-sequence id-len-mismatch max-area-addresses-mismatch own-lsp-purge sequence-number-skip authentication-type-failure authentication-failure version-skew area-mismatch rejected-adjacency lsp-too-large-to-propagate orig-lsp-buff-size-mismatch protocols-supported-mismatch adjacency-change lsp-error-detected\nsnmp-server traps sensor\nsnmp-server traps selective-vrf-download role-change\nsnmp-server traps syslog\nsnmp-server traps system\nsnmp-server traps ospf lsa lsa-maxage\nsnmp-server traps ospf lsa lsa-originate\nsnmp-server traps ospf errors bad-packet\nsnmp-server traps ospf errors authentication-failure\nsnmp-server traps ospf errors config-error\nsnmp-server traps ospf errors virt-bad-packet\nsnmp-server traps ospf errors virt-authentication-failure\nsnmp-server traps ospf errors virt-config-error\nsnmp-server traps ospf retransmit packets\nsnmp-server traps ospf retransmit virt-packets\nsnmp-server traps ospf state-change if-state-change\nsnmp-server traps ospf state-change neighbor-state-change\nsnmp-server traps ospf state-change virtif-state-change\nsnmp-server traps ospf state-change virtneighbor-state-change\nsnmp-server traps rsvp all\nsnmp-server traps rsvp new-flow\nsnmp-server traps rsvp lost-flow\nsnmp-server traps l2tun sessions\nsnmp-server traps l2tun tunnel-up\nsnmp-server traps l2tun tunnel-down\nsnmp-server traps l2tun pseudowire status\nsnmp-server traps vpls all\nsnmp-server traps vpls status\nsnmp-server traps vpls full-clear\nsnmp-server traps vpls full-raise\nsnmp-server traps snmp linkup\nsnmp-server traps snmp linkdown\nsnmp-server traps snmp coldstart\nsnmp-server traps snmp warmstart\nsnmp-server traps snmp authentication\nsnmp-server traps bulkstat transfer\nsnmp-server traps bulkstat collection\nsnmp-server traps diameter peerup\nsnmp-server traps diameter peerdown\nsnmp-server traps diameter protocolerror\nsnmp-server traps diameter permanentfail\nsnmp-server traps diameter transientfail\nsnmp-server traps l2vpn all\nsnmp-server traps l2vpn cisco\nsnmp-server traps l2vpn vc-up\nsnmp-server traps l2vpn vc-down\nsnmp-server traps bridgemib\nsnmp-server traps ospfv3 errors bad-packet\nsnmp-server traps ospfv3 errors config-error\nsnmp-server traps ospfv3 errors virt-bad-packet\nsnmp-server traps ospfv3 errors virt-config-error\nsnmp-server traps ospfv3 state-change if-state-change\nsnmp-server traps ospfv3 state-change neighbor-state-change\nsnmp-server traps ospfv3 state-change nssa-state-change\nsnmp-server traps ospfv3 state-change virtif-state-change\nsnmp-server traps ospfv3 state-change virtneighbor-state-change\nsnmp-server traps ospfv3 state-change restart-status-change\nsnmp-server traps ospfv3 state-change restart-helper-status-change\nsnmp-server traps ospfv3 state-change restart-virtual-helper-status-change\nsnmp-server traps fru-ctrl\nsnmp-server traps subscriber session-agg node\nsnmp-server traps subscriber session-agg access-interface\nsnmp-server traps addrpool low\nsnmp-server traps addrpool high\nsnmp-server traps cisco-entity-ext\nsnmp-server traps entity-state operstatus\nsnmp-server traps entity-state switchover\nsnmp-server traps entity-redundancy all\nsnmp-server traps entity-redundancy status\nsnmp-server traps entity-redundancy switchover\nsnmp-server chassis-id test2\nsnmp-server contact test\nsnmp-server location test\nsnmp-server target list test1 vrf vrf1\nsnmp-server target list test1 host 1.1.1.1\nsnmp-server context test\nsnmp-server context test2\nsnmp-server logging threshold oid-processing 0\nsnmp-server logging threshold pdu-processing 0\nsnmp-server mib bulkstat max-procmem-size 100\nsnmp-server mib bulkstat object-list test\n!\nsnmp-server mib bulkstat transfer-id test1\n retry 1\n buffer-size 1024\n enable\n format schemaASCII\n retain 1\n schema test\n!\nsnmp-server timeouts duplicate 0\nsnmp-server timeouts inQdrop 0\nsnmp-server timeouts subagent 1\nsnmp-server timeouts pdu stats 1\nsnmp-server timeouts threshold 0\nsnmp-server packetsize 485\nsnmp-server correlator buffer-size 1024\nsnmp-server trap-source GigabitEthernet0/0/0/1\nsnmp-server throttle-time 50\nsnmp-server community-map test context test security-name test2\nsnmp-server community-map test1 context test security-name test2\nsnmp-server inform pending 1\nsnmp-server inform retries 1\nsnmp-server inform timeout 1\nsnmp-server oid-poll-stats\nsnmp-server overload-control 0 0\nsnmp-server trap authentication vrf disable\nsnmp-server interface GigabitEthernet0/0/0/0\n notification linkupdown disable\n index persistence\n!\nsnmp-server ifmib ifalias long\nsnmp-server ifindex persist\nsnmp-server ifmib internal cache max-duration 0\nsnmp-server ifmib ipsubscriber\nsnmp-server ifmib stats cache\nsnmp-server trap link ietf\nsnmp-server location test\nsnmp-server mroutemib send-all-vrf\nsnmp-server notification-log-mib size 1\nsnmp-server notification-log-mib default\nsnmp-server notification-log-mib disable\nsnmp-server notification-log-mib GlobalSize 1",
+                running_config="snmp-server vrf test1\n host 1.1.1.1 traps test1\n host 1.1.1.2 traps test1\n "
+                "context test2\n!\nsnmp-server drop report acl IPv6 test\nsnmp-server drop unknown-user"
+                "\nsnmp-server host 1.1.1.1 traps test udp-port 1\nsnmp-server host 1.1.1.2 informs "
+                "version 2c test\nsnmp-server host 1.1.1.3 traps test\nsnmp-server user test1 test2 v1 "
+                "IPv4 test1 IPv6 test2 SDROwner\nsnmp-server "
+                "community test RO IPv4 test IPv6 test\nsnmp-"
+                "server community test1 RO\nsnmp-server group "
+                "test v1 notify test1\nsnmp-server group test1 "
+                "v1 read test1 write test2 context test3 IPv4 test"
+                " IPv6 test1\nsnmp-server group test2 v1 "
+                "notify test read test1\nsnmp-server group test4 "
+                "v1 notify t1 context test\nsnmp-server queue-length "
+                "1\nsnmp-server trap-timeout 1\nsnmp-server trap "
+                "throttle-time 10\nsnmp-server traps rf\nsnmp-server traps "
+                "bfd\nsnmp-server traps bgp cbgp2\nsnmp-server "
+                "traps bgp updown\nsnmp-server traps ntp\nsnmp-server "
+                "traps pim neighbor-change\nsnmp-server traps "
+                "pim invalid-message-received\nsnmp-server traps pim "
+                "rp-mapping-change\nsnmp-server traps pim interface-state-change"
+                "\nsnmp-server traps copy-complete\nsnmp-server "
+                "traps hsrp\nsnmp-server traps ipsla\nsnmp-server traps msdp "
+                "peer-state-change\nsnmp-server traps vrrp events\nsnmp-server "
+                "traps flash removal\nsnmp-server traps flash insertion\nsnmp-server "
+                "traps ipsec tunnel stop\nsnmp-server traps ipsec tunnel start\nsnmp-server "
+                "traps power\nsnmp-server traps config\nsnmp-server traps entity\nsnmp-server "
+                "traps isakmp tunnel stop\nsnmp-server traps isakmp tunnel start\nsnmp-server "
+                "traps isis database-overload manual-address-drops corrupted-lsp-detected "
+                "attempt-to-exceed-max-sequence id-len-mismatch max-area-addresses-mismatch"
+                " own-lsp-purge sequence-number-skip authentication-type-failure "
+                "authentication-failure version-skew area-mismatch rejected-adjacency "
+                "lsp-too-large-to-propagate orig-lsp-buff-size-mismatch protocols-supported-mismatch"
+                " adjacency-change lsp-error-detected\nsnmp-server traps sensor\nsnmp-server"
+                " traps selective-vrf-download role-change\nsnmp-server traps syslog"
+                "\nsnmp-server traps system\nsnmp-server traps ospf lsa lsa-maxage"
+                "\nsnmp-server traps ospf lsa lsa-originate\nsnmp-server traps ospf"
+                " errors bad-packet\nsnmp-server traps ospf errors authentication-failure"
+                "\nsnmp-server traps ospf errors config-error\nsnmp-server traps ospf"
+                " errors virt-bad-packet\nsnmp-server traps ospf errors "
+                "virt-authentication-failure\nsnmp-server traps ospf errors"
+                " virt-config-error\nsnmp-server traps ospf retransmit"
+                " packets\nsnmp-server traps ospf retransmit virt-packets"
+                "\nsnmp-server traps ospf state-change if-state-change"
+                "\nsnmp-server traps ospf state-change neighbor-state-change"
+                "\nsnmp-server traps ospf state-change virtif-state-change\n"
+                "snmp-server traps ospf state-change virtneighbor-state-change"
+                "\nsnmp-server traps rsvp all\nsnmp-server traps rsvp new-flow\n"
+                "snmp-server traps rsvp lost-flow\nsnmp-server traps l2tun sessions\n"
+                "snmp-server traps l2tun tunnel-up\nsnmp-server traps l2tun tunnel-down"
+                "\nsnmp-server traps l2tun pseudowire status\nsnmp-server traps vpls all\n"
+                "snmp-server traps vpls status\nsnmp-server traps vpls full-clear\nsnmp-server "
+                "traps vpls full-raise\nsnmp-server traps snmp linkup\nsnmp-server traps snmp "
+                "linkdown\nsnmp-server traps snmp coldstart\nsnmp-server traps snmp warmstart"
+                "\nsnmp-server traps snmp authentication\nsnmp-server traps bulkstat transfer"
+                "\nsnmp-server traps bulkstat collection\nsnmp-server traps diameter peerup\
+                               nsnmp-server traps diameter peerdown\nsnmp-server traps diameter protocolerror"
+                "\nsnmp-server traps diameter permanentfail\nsnmp-server traps diameter transientfail"
+                "\nsnmp-server traps l2vpn all\nsnmp-server traps l2vpn cisco\nsnmp-server traps "
+                "l2vpn vc-up\nsnmp-server traps l2vpn vc-down\nsnmp-server traps bridgemib\nsnmp-"
+                "server traps ospfv3 errors bad-packet\nsnmp-server traps ospfv3 errors config-error"
+                "\nsnmp-server traps ospfv3 errors virt-bad-packet\nsnmp-server traps ospfv3 errors "
+                "virt-config-error\nsnmp-server traps ospfv3 state-change if-state-change\nsnmp-"
+                "server traps ospfv3 state-change neighbor-state-change\nsnmp-server traps ospfv3 "
+                "state-change nssa-state-change\nsnmp-server traps ospfv3 state-change "
+                "virtif-state-change\nsnmp-server traps ospfv3 state-change "
+                "virtneighbor-state-change\nsnmp-server traps ospfv3 state-change "
+                "restart-status-change\nsnmp-server traps ospfv3 state-change "
+                "restart-helper-status-change\nsnmp-server traps ospfv3 state-change "
+                "restart-virtual-helper-status-change\nsnmp-server traps fru-ctrl"
+                "\nsnmp-server traps subscriber session-agg node\nsnmp-server traps "
+                "subscriber session-agg access-interface\nsnmp-server traps addrpool "
+                "low\nsnmp-server traps addrpool high\nsnmp-server traps cisco-entity-ext"
+                "\nsnmp-server traps entity-state operstatus\nsnmp-server traps entity-state "
+                "switchover\nsnmp-server traps entity-redundancy all"
+                "\nsnmp-server traps entity-redundancy "
+                "status\nsnmp-server traps entity-redundancy switchover\nsnmp-server chassis-id test2"
+                "\nsnmp-server contact test\nsnmp-server location test\nsnmp-server target list test1 "
+                "vrf vrf1\nsnmp-server target list test1 host 1.1.1.1\nsnmp-server context test\n"
+                "snmp-server context test2\nsnmp-server logging threshold oid-processing 0\n"
+                "snmp-server logging threshold pdu-processing 0\nsnmp-server mib bulkstat max-"
+                "procmem-size 100\nsnmp-server mib bulkstat object-list test\n!\nsnmp-server mib "
+                "bulkstat transfer-id test1\n retry 1\n buffer-size 1024\n enable\n format schemaASCII\n"
+                " retain 1\n schema test\n!\nsnmp-server timeouts duplicate 0\nsnmp-server timeouts"
+                " inQdrop 0\nsnmp-server timeouts subagent 1\nsnmp-server timeouts pdu stats"
+                " 1\nsnmp-server timeouts threshold 0\nsnmp-server packetsize 485\nsnmp-server"
+                " correlator buffer-size 1024\nsnmp-server trap-source GigabitEthernet0/0/0/1"
+                "\nsnmp-server throttle-time 50\nsnmp-server community-map test context test "
+                "security-name test2\nsnmp-server community-map test1 context test security-name "
+                "test2\nsnmp-server inform pending 1\nsnmp-server inform retries 1\nsnmp-server "
+                "inform timeout 1\nsnmp-server oid-poll-stats\nsnmp-server overload-control 0 0"
+                "\nsnmp-server trap authentication vrf disable\nsnmp-server "
+                "interface GigabitEthernet0/0/0/0\n notification linkupdown disable\n "
+                "index persistence\n!\nsnmp-server ifmib ifalias long\nsnmp-server "
+                "ifindex persist\nsnmp-server ifmib internal cache max-duration "
+                "0\nsnmp-server ifmib ipsubscriber\nsnmp-server ifmib stats cache"
+                "\nsnmp-server trap link ietf\nsnmp-server location test\nsnmp-server"
+                " mroutemib send-all-vrf\nsnmp-server notification-log-mib size 1\nsnmp-server "
+                "notification-log-mib default\nsnmp-server notification-log-mib disable\nsnmp-server"
+                " notification-log-mib GlobalSize 1",
                 state="parsed",
             )
         )
@@ -2301,6 +2347,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         "virt_authentication_failure": True,
                         "virt_config_error": True,
                     },
+                    "retransmit": {"packets": True, "virt_packets": True},
                     "state_change": {
                         "if_state_change": True,
                         "neighbor_state_change": True,
@@ -2330,8 +2377,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 "bulkstat_transfer": True,
                 "bulkstat_collection": True,
                 "diameter": {
-                    "peerup": True,
-                    "peerdown": True,
                     "protocolerror": True,
                     "permanentfail": True,
                     "transientfail": True,
@@ -2348,6 +2393,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         "bad_packet": True,
                         "config_error": True,
                         "virt_bad_packet": True,
+                        "virt_config_error": True,
                     },
                     "state_change": {
                         "if_state_change": True,
