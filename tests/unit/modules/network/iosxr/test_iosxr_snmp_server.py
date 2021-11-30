@@ -1844,7 +1844,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 snmp-server target list test host 1.1.1.2
                 snmp-server target list test2 vrf vrf2
                 snmp-server context c1
-                snmp-server context c2
                 snmp-server logging threshold oid-processing 1
                 snmp-server logging threshold pdu-processing 1
                 snmp-server mib bulkstat max-procmem-size 101
@@ -2043,7 +2042,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 {"name": "test", "host": "1.1.1.2"},
                 {"name": "test2", "vrf": "vrf2"},
             ],
-            "context": ["c1", "c2"],
+            "context": ["c1"],
             "logging_threshold_oid_processing": 1,
             "logging_threshold_pdu_processing": 1,
             "mib_bulkstat_max_procmem_size": 101,

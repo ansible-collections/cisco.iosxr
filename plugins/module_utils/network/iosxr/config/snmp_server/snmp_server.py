@@ -362,9 +362,25 @@ class Snmp_server(ResourceModule):
                 for x in data["targets"]
             }
         if "hosts" in data:
-            data["hosts"] = {
-                x["host"] + x.get("version", "") + x.get("community", ""): x
-                for x in data["hosts"]
-            }
-
+            host_dict = {}
+            for el in data["hosts"]:
+                tr = ""
+                inf = ""
+                if el.get("traps"):
+                    tr = "traps"
+                if el.get("informs"):
+                    inf = "informs"
+                host_dict.update(
+                    {
+                        (
+                            el.get("host"),
+                            el.get("community"),
+                            el.get("version"),
+                            inf,
+                            tr,
+                            el.get("udp_port"),
+                        ): el
+                    }
+                )
+            data["hosts"] = host_dict
         return data

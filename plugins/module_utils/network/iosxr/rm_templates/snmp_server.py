@@ -41,9 +41,6 @@ def community_tmplt(config_data):
 
 
 def community_map_tmplt(config_data):
-    """
-
-    """
     name = config_data.get("name", "")
     command = "snmp-server community-map {name}".format(name=name)
     if config_data.get("context"):
@@ -60,9 +57,6 @@ def community_map_tmplt(config_data):
 
 
 def tmplt_correlator_rule(config_data):
-    """
-
-    """
     rule_name = config_data.get("rule_name")
     command = "snmp-server correlator rule {rule_name}".format(
         rule_name=rule_name
@@ -73,9 +67,6 @@ def tmplt_correlator_rule(config_data):
 
 
 def group_tmplt(config_data):
-    """
-
-    """
     group = config_data.get("group", "")
     command = "snmp-server group {group}".format(group=group)
     if config_data.get("version"):
@@ -98,9 +89,6 @@ def group_tmplt(config_data):
 
 
 def host_tmplt(config_data):
-    """
-
-    """
     host = config_data.get("host", "")
     command = "snmp-server host {host}".format(host=host)
     if config_data.get("informs"):
@@ -121,9 +109,6 @@ def host_tmplt(config_data):
 
 
 def interfaces_tmplt(config_data):
-    """
-
-    """
     interface = config_data.get("name", "")
     notification_linkupdown_disable = config_data.get(
         "notification_linkupdown_disable", ""
@@ -243,9 +228,6 @@ def mib_bulkstat_transfer_ids_tmplt(config_data):
 
 
 def overload_control_tmplt(config_data):
-    """
-
-    """
     config_data = config_data.get("overload_control", {})
     command = "snmp-server overload-control"
     if config_data.get("overload_drop_time"):
@@ -272,10 +254,6 @@ def targets_tmplt(config_data):
 
 
 def tmplt_traps_isis(config_data):
-    """
-
-    """
-
     isis = config_data.get("traps", {}).get("isis", {})
     command = "snmp-server traps isis"
     if isis.get("all"):
@@ -3065,7 +3043,7 @@ class Snmp_serverTemplate(NetworkTemplate):
                     "{{vrf}}": {
                         "vrf": "{{vrf}}",
                         "context": {
-                            "{{context if context is defined}}": "{{context if context is defined}}"
+                            "name_{{context|d()}}": "{{context}}"
                         },
                         "hosts": [
                             {
