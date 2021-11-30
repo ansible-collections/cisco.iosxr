@@ -156,27 +156,27 @@ deleted:
 
 replaced:
   commands:
-      - no snmp-server traps addrpool low
-      - no snmp-server traps addrpool high
-      - no snmp-server traps bfd
-      - no snmp-server traps bgp cbgp2
-      - no snmp-server traps l2tun sessions
-      - no snmp-server traps l2tun tunnel-up
-      - no snmp-server traps l2tun tunnel-down
-      - no snmp-server community test2 RO SDROwner IPv4 test IPv6 test1
-      - no snmp-server community-map cm1 context c1 security-name s1 target-list t1
-      - no snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2
-      - no snmp-server vrf vrf1
-      - snmp-server chassis-id test
-      - snmp-server correlator buffer-size 1025
-      - snmp-server logging threshold oid-processing 2
-      - snmp-server logging threshold pdu-processing 2
-      - snmp-server packetsize 491
-      - snmp-server drop report acl IPv4 test2
-      - snmp-server ifmib internal cache max-duration 5
-      - snmp-server trap throttle-time 13
-      - snmp-server community test1 RO SDROwner IPv4 test IPv6 test1
-      - snmp-server community-map cm2 context c1 security-name s1 target-list t1
+    - no snmp-server traps addrpool low
+    - no snmp-server traps addrpool high
+    - no snmp-server traps bfd
+    - no snmp-server traps bgp cbgp2
+    - no snmp-server traps l2tun sessions
+    - no snmp-server traps l2tun tunnel-up
+    - no snmp-server traps l2tun tunnel-down
+    - no snmp-server community test2 RO SDROwner IPv4 test IPv6 test1
+    - no snmp-server community-map cm1 context c1 security-name s1 target-list t1
+    - no snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2
+    - no snmp-server vrf vrf1
+    - snmp-server chassis-id test
+    - snmp-server correlator buffer-size 1025
+    - snmp-server logging threshold oid-processing 2
+    - snmp-server logging threshold pdu-processing 2
+    - snmp-server packetsize 491
+    - snmp-server drop report acl IPv4 test2
+    - snmp-server ifmib internal cache max-duration 5
+    - snmp-server trap throttle-time 13
+    - snmp-server community test1 RO SDROwner IPv4 test IPv6 test1
+    - snmp-server community-map cm2 context c1 security-name s1 target-list t1
 
   after:
     timeouts:
