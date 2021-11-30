@@ -33,3 +33,6 @@ plugins/netconf/iosxr.py pylint:arguments-renamed
 tests/unit/mock/loader.py pylint:arguments-renamed
 plugins/module_utils/network/iosxr/config/acls/acls.py pylint:unused-private-member
 plugins/module_utils/network/iosxr/facts/acls/acls.py pylint:unused-private-member
+plugins/modules/iosxr_command.py validate-modules:invalid-documentation-markup
+plugins/modules/iosxr_facts.py validate-modules:invalid-documentation-markup
+plugins/modules/iosxr_facts.py validate-modules:invalid-documentation-markup
