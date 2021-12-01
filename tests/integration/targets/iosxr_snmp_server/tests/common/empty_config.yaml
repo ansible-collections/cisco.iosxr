@@ -33,7 +33,7 @@
 
 - assert:
     that:
-      - result.msg == 'value of config parameter must not be empty for state Overridden'
+      - result.msg == 'value of config parameter must not be empty for state overridden'
 
 - name: Rendered with empty config should give appropriate error message
   register: result
