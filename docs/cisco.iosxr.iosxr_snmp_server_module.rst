@@ -68,7 +68,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>community</b>
+                    <b>communities</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
@@ -238,7 +238,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>community_map</b>
+                    <b>community_maps</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
@@ -5453,13 +5453,13 @@ Examples
               contact: t1
               correlator:
                 buffer_size: 1024
-              community:
+              communities:
                 - name: test2
                   ro: true
                   sdrowner: true
                   acl_v4: test
                   acl_v6: test1
-              community_map:
+              community_maps:
                 - name: cm1
                   context: c1
                   target_list: t1
@@ -5692,7 +5692,7 @@ Examples
     # Deleted play:
     # -------------
     - name: Remove all existing configuration
-      cisco.iosxr.iosxr_snmp_server_global:
+      cisco.iosxr.iosxr_snmp_server:
         state: deleted
     # Commands Fired:
     # ---------------
@@ -5844,13 +5844,13 @@ Examples
               contact: t1
               correlator:
                 buffer_size: 1025
-              community:
+              communities:
                 - name: test1
                   ro: true
                   sdrowner: true
                   acl_v4: test
                   acl_v6: test1
-              community_map:
+              community_maps:
                 - name: cm2
                   context: c1
                   target_list: t1
@@ -6056,13 +6056,13 @@ Examples
               contact: t1
               correlator:
                 buffer_size: 1025
-              community:
+              communities:
                 - name: test1
                   ro: true
                   sdrowner: true
                   acl_v4: test
                   acl_v6: test1
-              community_map:
+              community_maps:
                 - name: cm2
                   context: c1
                   target_list: t1
@@ -6251,14 +6251,14 @@ Examples
     # snmp-server notification-log-mib GlobalSize 5
     # Gathered play:
     # --------------
-    - name: Gather listed ntp config
-      cisco.iosxr.iosxr_ntp_global:
+    - name: Gather listed snmp server
+      cisco.iosxr.iosxr_snmp_server:
         state: gathered
     # Module Execution Result:
     # ------------------------
     # "gathered": {
     #         "chassis_id": "test2",
-    #         "community": [
+    #         "communities": [
     #             {
     #                 "acl_v4": "test",
     #                 "acl_v6": "test1",
@@ -6267,7 +6267,7 @@ Examples
     #                 "sdrowner": true
     #             }
     #         ],
-    #         "community_map": [
+    #         "community_maps": [
     #             {
     #                 "context": "c1",
     #                 "name": "cm1",
@@ -6434,13 +6434,13 @@ Examples
           contact: t1
           correlator:
             buffer_size: 1024
-          community:
+          communities:
             - name: test2
               ro: true
               sdrowner: true
               acl_v4: test
               acl_v6: test1
-          community_map:
+          community_maps:
             - name: cm1
               context: c1
               target_list: t1
@@ -6615,7 +6615,7 @@ Examples
     # ------------------------
     # "parsed":{
     #         "chassis_id": "test2",
-    #         "community": [
+    #         "communities": [
     #             {
     #                 "acl_v4": "test",
     #                 "acl_v6": "test1",
@@ -6624,7 +6624,7 @@ Examples
     #                 "sdrowner": true
     #             }
     #         ],
-    #         "community_map": [
+    #         "community_maps": [
     #             {
     #                 "context": "c1",
     #                 "name": "cm1",

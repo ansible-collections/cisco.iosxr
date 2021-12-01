@@ -6,7 +6,7 @@
 
 - block:
     - name: Merge the provided configuration with the existing running configuration
-      cisco.iosxr.iosxr_snmp_server:
+      cisco.iosxr.iosxr_snmp_server: &merged
         config:
           vrfs:
             - hosts:
@@ -45,13 +45,13 @@
           contact: t1
           correlator:
             buffer_size: 1024
-          community:
+          communities:
             - name: test2
               ro: true
               sdrowner: true
               acl_v4: test
               acl_v6: test1
-          community_map:
+          community_maps:
             - name: cm1
               context: c1
               target_list: t1
@@ -117,6 +117,16 @@
       assert:
         that:
           - merged['after'] == result['after']
+
+    - name: Merge the provided configuration with the existing running configuration (IDEMPOTENT)
+      register: result
+      cisco.iosxr.iosxr_snmp_server: *merged
+
+    - name: Assert that the previous task was idempotent
+      assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
 
   always:
     - include_tasks: _remove_config.yaml

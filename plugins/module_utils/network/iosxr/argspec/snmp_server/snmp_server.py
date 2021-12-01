@@ -36,7 +36,7 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
             "type": "dict",
             "options": {
                 "chassis_id": {"type": "str"},
-                "community": {
+                "communities": {
                     "type": "list",
                     "elements": "dict",
                     "options": {
@@ -50,7 +50,7 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                         "v4_acl": {"type": "str"},
                     },
                 },
-                "community_map": {
+                "community_maps": {
                     "type": "list",
                     "elements": "dict",
                     "options": {

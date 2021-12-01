@@ -254,8 +254,8 @@ class Snmp_server(ResourceModule):
             Handles list attributes from config_data
         """
         for x in [
-            "community",
-            "community_map",
+            "communities",
+            "community_maps",
             "correlator.rule_sets",
             "correlator.rules",
             "context",
@@ -310,6 +310,30 @@ class Snmp_server(ResourceModule):
             for key, hentry in iteritems(havex):
                 self.addcmd(hentry, x, negate=True)
 
+    def _host_list_to_dict(self, data):
+        host_dict = {}
+        host_data = deepcopy(data)
+        for el in host_data["hosts"]:
+            tr = ""
+            inf = ""
+            if el.get("traps"):
+                tr = "traps"
+            if el.get("informs"):
+                inf = "informs"
+            host_dict.update(
+                {
+                    (
+                        el.get("host"),
+                        el.get("community"),
+                        el.get("version"),
+                        inf,
+                        tr,
+                        el.get("udp_port"),
+                    ): el
+                }
+            )
+        return host_dict
+
     def list_to_dict(self, config):
 
         data = deepcopy(config)
@@ -319,16 +343,11 @@ class Snmp_server(ResourceModule):
                 if "context" in x:
                     x["context"] = {y: {"name": y} for y in x["context"]}
                 if "hosts" in x:
-                    x["hosts"] = {
-                        y["host"]
-                        + y.get("version", "")
-                        + y.get("community", ""): y
-                        for y in x["hosts"]
-                    }
+                    x["hosts"] = self._host_list_to_dict(x)
 
         pkey = {
-            "community": "name",
-            "community_map": "name",
+            "communities": "name",
+            "community_maps": "name",
             "interfaces": "name",
             "mib_schema": "name",
             "groups": "group",
@@ -362,25 +381,5 @@ class Snmp_server(ResourceModule):
                 for x in data["targets"]
             }
         if "hosts" in data:
-            host_dict = {}
-            for el in data["hosts"]:
-                tr = ""
-                inf = ""
-                if el.get("traps"):
-                    tr = "traps"
-                if el.get("informs"):
-                    inf = "informs"
-                host_dict.update(
-                    {
-                        (
-                            el.get("host"),
-                            el.get("community"),
-                            el.get("version"),
-                            inf,
-                            tr,
-                            el.get("udp_port"),
-                        ): el
-                    }
-                )
-            data["hosts"] = host_dict
+            data["hosts"] = self._host_list_to_dict(data)
         return data

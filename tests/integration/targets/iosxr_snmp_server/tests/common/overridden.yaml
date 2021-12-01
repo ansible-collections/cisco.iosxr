@@ -8,7 +8,7 @@
 
 - block:
     - name: Override Snmp-server configuration with provided configuration
-      cisco.iosxr.iosxr_snmp_server:
+      cisco.iosxr.iosxr_snmp_server: &override
         config:
           timeouts:
             duplicate: 0
@@ -35,13 +35,13 @@
           contact: t1
           correlator:
             buffer_size: 1025
-          community:
+          communities:
             - name: test1
               ro: true
               sdrowner: true
               acl_v4: test
               acl_v6: test1
-          community_map:
+          community_maps:
             - name: cm2
               context: c1
               target_list: t1
@@ -99,5 +99,16 @@
       assert:
         that:
           - merged['after'] == result['before']
+
+    - name: Override the provided configuration with the existing running configuration (IDEMPOTENT)
+      register: result
+      cisco.iosxr.iosxr_snmp_server: *override
+
+    - name: Assert that the previous task was idempotent
+      assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
+
   always:
     - include_tasks: _remove_config.yaml

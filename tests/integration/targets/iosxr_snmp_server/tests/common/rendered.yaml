@@ -45,13 +45,13 @@
       contact: t1
       correlator:
         buffer_size: 1024
-      community:
+      communities:
         - name: test2
           ro: true
           sdrowner: true
           acl_v4: test
           acl_v6: test1
-      community_map:
+      community_maps:
         - name: cm1
           context: c1
           target_list: t1
@@ -106,13 +106,3 @@
   assert:
     that:
       - merged['commands'] == result['rendered']
-
-- name: Gather BGP facts
-  cisco.iosxr.iosxr_snmp_server:
-    state: gathered
-  register: result
-
-- name: Ensure that no configuration changes were made
-  assert:
-    that:
-      - result.gathered == {}

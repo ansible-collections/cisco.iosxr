@@ -252,7 +252,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         rule_sets=[dict(name="rule1")],
                         rules=[dict(rule_name="rule1", timeout=5)],
                     ),
-                    community=[
+                    communities=[
                         dict(
                             name="test2",
                             rw=True,
@@ -261,7 +261,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             acl_v6="test1",
                         )
                     ],
-                    community_map=[
+                    community_maps=[
                         dict(
                             name="cm1",
                             context="c1",
@@ -462,7 +462,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         rule_sets=[dict(name="rule1")],
                         rules=[dict(rule_name="rule1", timeout=5)],
                     ),
-                    community=[
+                    communities=[
                         dict(
                             name="test2",
                             ro=True,
@@ -471,7 +471,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             acl_v6="test1",
                         )
                     ],
-                    community_map=[
+                    community_maps=[
                         dict(
                             name="cm1",
                             context="c1",
@@ -1034,7 +1034,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "no snmp-server vrf vrf1",
         ]
         result = self.execute_module(changed=True)
-        print(result["commands"])
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_snmp_server_replaced(self):
@@ -1233,7 +1232,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         rule_sets=[dict(name="rule1")],
                         rules=[dict(rule_name="rule1", timeout=5)],
                     ),
-                    community=[
+                    communities=[
                         dict(
                             name="test2",
                             ro=True,
@@ -1242,7 +1241,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             acl_v6="test1",
                         )
                     ],
-                    community_map=[
+                    community_maps=[
                         dict(
                             name="cm1",
                             context="c1",
@@ -1395,8 +1394,1073 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "host 1.1.1.1 traps test1",
         ]
         result = self.execute_module(changed=True)
-        print(result["commands"])
         self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_snmp_server_replaced_idempotent(self):
+        self.maxDiff = None
+        run_cfg = dedent(
+            """\
+                snmp-server vrf vrf1
+                 host 1.1.1.1 traps test1
+                !
+                snmp-server drop report acl IPv4 test1
+                snmp-server drop unknown-user
+                snmp-server ipv4 dscp af11
+                snmp-server ipv6 precedence routine
+                snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2 v4acl
+                snmp-server community test2 RW SystemOwner IPv4 test IPv6 test1
+                snmp-server group g2 v1 read test1 write test2 context test3 IPv4 test IPv6 test1
+                snmp-server queue-length 2
+                snmp-server trap-timeout 3
+                snmp-server trap throttle-time 12
+                snmp-server traps rf
+                snmp-server traps bfd
+                snmp-server traps bgp cbgp2
+                snmp-server traps pim neighbor-change
+                snmp-server traps pim invalid-message-received
+                snmp-server traps pim rp-mapping-change
+                snmp-server traps pim interface-state-change
+                snmp-server traps copy-complete
+                snmp-server traps hsrp
+                snmp-server traps ipsla
+                snmp-server traps msdp peer-state-change
+                snmp-server traps snmp linkup
+                snmp-server traps snmp linkdown
+                snmp-server traps snmp coldstart
+                snmp-server traps snmp warmstart
+                snmp-server traps snmp authentication
+                snmp-server traps vrrp events
+                snmp-server traps flash removal
+                snmp-server traps flash insertion
+                snmp-server traps ipsec tunnel stop
+                snmp-server traps ipsec tunnel start
+                snmp-server traps power
+                snmp-server traps config
+                snmp-server traps entity
+                snmp-server traps sensor
+                snmp-server traps selective-vrf-download role-change
+                snmp-server traps syslog
+                snmp-server traps system
+                snmp-server traps ospf lsa lsa-maxage
+                snmp-server traps ospf lsa lsa-originate
+                snmp-server traps ospf errors bad-packet
+                snmp-server traps ospf errors authentication-failure
+                snmp-server traps ospf errors config-error
+                snmp-server traps ospf errors virt-bad-packet
+                snmp-server traps ospf errors virt-authentication-failure
+                snmp-server traps ospf errors virt-config-error
+                snmp-server traps ospf retransmit packets
+                snmp-server traps ospf retransmit virt-packets
+                snmp-server traps ospf state-change if-state-change
+                snmp-server traps ospf state-change neighbor-state-change
+                snmp-server traps ospf state-change virtif-state-change
+                snmp-server traps ospf state-change virtneighbor-state-change
+                snmp-server traps rsvp all
+                snmp-server traps rsvp new-flow
+                snmp-server traps rsvp lost-flow
+                snmp-server traps l2tun sessions
+                snmp-server traps l2tun tunnel-up
+                snmp-server traps l2tun tunnel-down
+                snmp-server traps vpls all
+                snmp-server traps vpls status
+                snmp-server traps vpls full-clear
+                snmp-server traps vpls full-raise
+                snmp-server traps bulkstat collection
+                snmp-server traps diameter peerup
+                snmp-server traps diameter peerdown
+                snmp-server traps diameter protocolerror
+                snmp-server traps diameter permanentfail
+                snmp-server traps diameter transientfail
+                snmp-server traps l2vpn all
+                snmp-server traps l2vpn vc-up
+                snmp-server traps l2vpn vc-down
+                snmp-server traps bridgemib
+                snmp-server traps ospfv3 errors bad-packet
+                snmp-server traps ospfv3 errors config-error
+                snmp-server traps ospfv3 errors virt-config-error
+                snmp-server traps ospfv3 state-change neighbor-state-change
+                snmp-server traps ospfv3 state-change virtif-state-change
+                snmp-server traps ospfv3 state-change virtneighbor-state-change
+                snmp-server traps ospfv3 state-change restart-status-change
+                snmp-server traps ospfv3 state-change restart-helper-status-change
+                snmp-server traps ospfv3 state-change restart-virtual-helper-status-change
+                snmp-server traps subscriber session-agg node
+                snmp-server traps subscriber session-agg access-interface
+                snmp-server traps addrpool low
+                snmp-server traps addrpool high
+                snmp-server traps cisco-entity-ext
+                snmp-server traps entity-state operstatus
+                snmp-server traps entity-state switchover
+                snmp-server traps entity-redundancy all
+                snmp-server traps entity-redundancy status
+                snmp-server traps entity-redundancy switchover
+                snmp-server chassis-id test2
+                snmp-server location test1
+                snmp-server target list test host 1.1.1.2
+                snmp-server target list test2 vrf vrf2
+                snmp-server context c1
+                snmp-server context c2
+                snmp-server logging threshold oid-processing 1
+                snmp-server logging threshold pdu-processing 1
+                snmp-server mib bulkstat max-procmem-size 101
+                snmp-server mib bulkstat object-list test1
+                !
+                snmp-server mib bulkstat schema mib1
+                 object-list test1
+                 poll-interval 1
+                !
+                snmp-server mib bulkstat transfer-id test2
+                 retry 1
+                 buffer-size 1024
+                 enable
+                 format schemaASCII
+                 retain 1
+                 schema test2
+                !
+                snmp-server timeouts duplicate 0
+                snmp-server timeouts inQdrop 0
+                snmp-server timeouts subagent 1
+                snmp-server timeouts pdu stats 1
+                snmp-server timeouts threshold 0
+                snmp-server packetsize 490
+                snmp-server correlator rule rule1
+                 timeout 5
+                !
+                snmp-server correlator ruleset rule1
+                !
+                snmp-server correlator buffer-size 1024
+                snmp-server trap-source GigabitEthernet0/0/0/2
+                snmp-server throttle-time 60
+                snmp-server community-map cm1 context c1 security-name s1 target-list t1
+                snmp-server inform retries 7
+                snmp-server overload-control 4 6
+                snmp-server ifmib internal cache max-duration 4
+                snmp-server mroutemib send-all-vrf
+                snmp-server notification-log-mib size 5
+                snmp-server notification-log-mib GlobalSize 5
+                !
+            """
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    vrfs=[
+                        dict(
+                            vrf="vrf1",
+                            hosts=[
+                                dict(
+                                    community="test1",
+                                    host="1.1.1.1",
+                                    traps=True,
+                                )
+                            ],
+                        )
+                    ],
+                    users=[
+                        dict(
+                            Ipv4_acl="test1",
+                            Ipv6_acl="test2",
+                            group="test2",
+                            user="u1",
+                            v4_acl="v4acl",
+                            version="v1",
+                        )
+                    ],
+                    timeouts=dict(
+                        duplicate=0,
+                        inQdrop=0,
+                        pdu_stats=1,
+                        subagent=1,
+                        threshold=0,
+                    ),
+                    trap=dict(throttle_time=12),
+                    targets=[
+                        dict(name="test2", vrf="vrf2"),
+                        dict(host="1.1.1.2", name="test"),
+                    ],
+                    ifmib=dict(internal_cache_max_duration=4),
+                    inform=dict(retries=7),
+                    chassis_id="test2",
+                    packetsize=490,
+                    queue_length=2,
+                    throttle_time=60,
+                    trap_source="GigabitEthernet0/0/0/2",
+                    trap_timeout=3,
+                    context=["c1", "c2"],
+                    correlator=dict(
+                        buffer_size=1024,
+                        rule_sets=[dict(name="rule1")],
+                        rules=[dict(rule_name="rule1", timeout=5)],
+                    ),
+                    communities=[
+                        dict(
+                            name="test2",
+                            rw=True,
+                            systemowner=True,
+                            acl_v4="test",
+                            acl_v6="test1",
+                        )
+                    ],
+                    community_maps=[
+                        dict(
+                            name="cm1",
+                            context="c1",
+                            target_list="t1",
+                            security_name="s1",
+                        )
+                    ],
+                    drop=dict(report_IPv4="test1", unknown_user=True),
+                    ipv6=dict(precedence="routine"),
+                    ipv4=dict(dscp="af11"),
+                    groups=[
+                        dict(
+                            Ipv4_acl="test",
+                            Ipv6_acl="test1",
+                            context="test3",
+                            group="g2",
+                            read="test1",
+                            version="v1",
+                            write="test2",
+                        )
+                    ],
+                    location="test1",
+                    logging_threshold_oid_processing=1,
+                    logging_threshold_pdu_processing=1,
+                    mib_bulkstat_max_procmem_size=101,
+                    mroutemib_send_all_vrf=True,
+                    mib_object_lists=["test1"],
+                    overload_control=dict(
+                        overload_drop_time=4, overload_throttle_rate=6
+                    ),
+                    mib_schema=[
+                        dict(name="mib1", object_list="test1", poll_interval=1)
+                    ],
+                    notification_log_mib=dict(GlobalSize=5, size=5),
+                    mib_bulkstat_transfer_ids=[
+                        dict(
+                            buffer_size=1024,
+                            enable=True,
+                            format_schemaASCI=True,
+                            name="test2",
+                            retain=1,
+                            retry=1,
+                            schema="test2",
+                        )
+                    ],
+                    traps=dict(
+                        diameter=dict(
+                            peerdown=True,
+                            peerup=True,
+                            permanentfail=True,
+                            protocolerror=True,
+                            transientfail=True,
+                        ),
+                        entity=True,
+                        entity_redundancy=dict(
+                            all=True, status=True, switchover=True
+                        ),
+                        entity_state=dict(operstatus=True, switchover=True),
+                        flash=dict(insertion=True, removal=True),
+                        hsrp=True,
+                        ipsla=True,
+                        ipsec=dict(start=True, stop=True),
+                        bridgemib=True,
+                        bulkstat_collection=True,
+                        cisco_entity_ext=True,
+                        config=True,
+                        copy_complete=True,
+                        addrpool=dict(high=True, low=True),
+                        bfd=True,
+                        bgp=dict(cbgp2=True),
+                        l2tun=dict(
+                            sessions=True, tunnel_down=True, tunnel_up=True
+                        ),
+                        l2vpn=dict(all=True, vc_down=True, vc_up=True),
+                        msdp_peer_state_change=True,
+                        ospf=dict(
+                            errors=dict(
+                                authentication_failure=True,
+                                bad_packet=True,
+                                config_error=True,
+                                virt_authentication_failure=True,
+                                virt_bad_packet=True,
+                                virt_config_error=True,
+                            ),
+                            lsa=dict(lsa_maxage=True, lsa_originate=True),
+                            retransmit=dict(packets=True, virt_packets=True),
+                            state_change=dict(
+                                if_state_change=True,
+                                neighbor_state_change=True,
+                                virtif_state_change=True,
+                                virtneighbor_state_change=True,
+                            ),
+                        ),
+                        ospfv3=dict(
+                            errors=dict(
+                                bad_packet=True,
+                                config_error=True,
+                                virt_config_error=True,
+                            ),
+                            state_change=dict(
+                                neighbor_state_change=True,
+                                virtif_state_change=True,
+                                virtneighbor_state_change=True,
+                                restart_helper_status_change=True,
+                                restart_status_change=True,
+                                restart_virtual_helper_status_change=True,
+                            ),
+                        ),
+                        pim=dict(
+                            interface_state_change=True,
+                            invalid_message_received=True,
+                            neighbor_change=True,
+                            rp_mapping_change=True,
+                        ),
+                        power=True,
+                        rf=True,
+                        rsvp=dict(all=True, lost_flow=True, new_flow=True),
+                        selective_vrf_download_role_change=True,
+                        sensor=True,
+                        snmp=dict(
+                            authentication=True,
+                            coldstart=True,
+                            linkdown=True,
+                            linkup=True,
+                            warmstart=True,
+                        ),
+                        subscriber=dict(
+                            session_agg_access_interface=True,
+                            session_agg_node=True,
+                        ),
+                        syslog=True,
+                        system=True,
+                        vpls=dict(
+                            all=True,
+                            full_clear=True,
+                            full_raise=True,
+                            status=True,
+                        ),
+                        vrrp_events=True,
+                    ),
+                ),
+                state="replaced",
+            )
+        )
+        self.execute_module(changed=False, commands=[])
+
+    def test_iosxr_snmp_server_overridden(self):
+        self.maxDiff = None
+        run_cfg = dedent(
+            """\
+                snmp-server vrf vrf1
+                 host 1.1.1.1 traps test1
+                !
+                snmp-server drop report acl IPv4 test1
+                snmp-server drop unknown-user
+                snmp-server ipv4 dscp af11
+                snmp-server ipv6 precedence routine
+                snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2 v4acl
+                snmp-server community test2 RO SDROwner IPv4 test IPv6 test1
+                snmp-server group g2 v1 read test1 write test2 context test3 IPv4 test IPv6 test1
+                snmp-server queue-length 2
+                snmp-server trap-timeout 3
+                snmp-server trap throttle-time 12
+                snmp-server traps rf
+                snmp-server traps bfd
+                snmp-server traps bgp cbgp2
+                snmp-server traps pim neighbor-change
+                snmp-server traps pim invalid-message-received
+                snmp-server traps pim rp-mapping-change
+                snmp-server traps pim interface-state-change
+                snmp-server traps copy-complete
+                snmp-server traps hsrp
+                snmp-server traps ipsla
+                snmp-server traps msdp peer-state-change
+                snmp-server traps snmp linkup
+                snmp-server traps snmp linkdown
+                snmp-server traps snmp coldstart
+                snmp-server traps snmp warmstart
+                snmp-server traps snmp authentication
+                snmp-server traps vrrp events
+                snmp-server traps flash removal
+                snmp-server traps flash insertion
+                snmp-server traps ipsec tunnel stop
+                snmp-server traps ipsec tunnel start
+                snmp-server traps power
+                snmp-server traps config
+                snmp-server traps entity
+                snmp-server traps sensor
+                snmp-server traps selective-vrf-download role-change
+                snmp-server traps syslog
+                snmp-server traps system
+                snmp-server traps ospf lsa lsa-maxage
+                snmp-server traps ospf lsa lsa-originate
+                snmp-server traps ospf errors bad-packet
+                snmp-server traps ospf errors authentication-failure
+                snmp-server traps ospf errors config-error
+                snmp-server traps ospf errors virt-bad-packet
+                snmp-server traps ospf errors virt-authentication-failure
+                snmp-server traps ospf errors virt-config-error
+                snmp-server traps ospf retransmit packets
+                snmp-server traps ospf retransmit virt-packets
+                snmp-server traps ospf state-change if-state-change
+                snmp-server traps ospf state-change neighbor-state-change
+                snmp-server traps ospf state-change virtif-state-change
+                snmp-server traps ospf state-change virtneighbor-state-change
+                snmp-server traps rsvp all
+                snmp-server traps rsvp new-flow
+                snmp-server traps rsvp lost-flow
+                snmp-server traps l2tun sessions
+                snmp-server traps l2tun tunnel-up
+                snmp-server traps l2tun tunnel-down
+                snmp-server traps vpls all
+                snmp-server traps vpls status
+                snmp-server traps vpls full-clear
+                snmp-server traps vpls full-raise
+                snmp-server traps bulkstat collection
+                snmp-server traps diameter peerup
+                snmp-server traps diameter peerdown
+                snmp-server traps diameter protocolerror
+                snmp-server traps diameter permanentfail
+                snmp-server traps diameter transientfail
+                snmp-server traps l2vpn all
+                snmp-server traps l2vpn vc-up
+                snmp-server traps l2vpn vc-down
+                snmp-server traps bridgemib
+                snmp-server traps ospfv3 errors bad-packet
+                snmp-server traps ospfv3 errors config-error
+                snmp-server traps ospfv3 errors virt-config-error
+                snmp-server traps ospfv3 state-change neighbor-state-change
+                snmp-server traps ospfv3 state-change virtif-state-change
+                snmp-server traps ospfv3 state-change virtneighbor-state-change
+                snmp-server traps ospfv3 state-change restart-status-change
+                snmp-server traps ospfv3 state-change restart-helper-status-change
+                snmp-server traps ospfv3 state-change restart-virtual-helper-status-change
+                snmp-server traps subscriber session-agg node
+                snmp-server traps subscriber session-agg access-interface
+                snmp-server traps addrpool low
+                snmp-server traps addrpool high
+                snmp-server traps cisco-entity-ext
+                snmp-server traps entity-state operstatus
+                snmp-server traps entity-state switchover
+                snmp-server traps entity-redundancy all
+                snmp-server traps entity-redundancy status
+                snmp-server traps entity-redundancy switchover
+                snmp-server chassis-id test2
+                snmp-server contact t1
+                snmp-server location test1
+                snmp-server target list test host 1.1.1.2
+                snmp-server target list test2 vrf vrf2
+                snmp-server context c1
+                snmp-server context c2
+                snmp-server logging threshold oid-processing 1
+                snmp-server logging threshold pdu-processing 1
+                snmp-server mib bulkstat max-procmem-size 101
+                snmp-server mib bulkstat object-list test1
+                !
+                snmp-server mib bulkstat schema mib1
+                 object-list test1
+                 poll-interval 1
+                !
+                snmp-server mib bulkstat transfer-id test2
+                 retry 1
+                 buffer-size 1024
+                 enable
+                 format schemaASCII
+                 retain 1
+                 schema test2
+                !
+                snmp-server timeouts duplicate 0
+                snmp-server timeouts inQdrop 0
+                snmp-server timeouts subagent 1
+                snmp-server timeouts pdu stats 1
+                snmp-server timeouts threshold 0
+                snmp-server packetsize 490
+                snmp-server correlator rule rule1
+                 timeout 5
+                !
+                snmp-server correlator ruleset rule1
+                !
+                snmp-server correlator buffer-size 1024
+                snmp-server trap-source GigabitEthernet0/0/0/2
+                snmp-server throttle-time 60
+                snmp-server community-map cm1 context c1 security-name s1 target-list t1
+                snmp-server inform retries 7
+                snmp-server overload-control 4 6
+                snmp-server ifmib internal cache max-duration 4
+                snmp-server mroutemib send-all-vrf
+                snmp-server notification-log-mib size 5
+                snmp-server notification-log-mib GlobalSize 5
+            """
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    vrfs=[
+                        dict(
+                            vrf="vrf2",
+                            hosts=[
+                                dict(
+                                    community="test1",
+                                    host="1.1.1.1",
+                                    traps=True,
+                                )
+                            ],
+                        )
+                    ],
+                    users=[
+                        dict(
+                            Ipv4_acl="test1",
+                            Ipv6_acl="test2",
+                            group="test2",
+                            user="u1",
+                            v4_acl="v4acl",
+                        )
+                    ],
+                    timeouts=dict(
+                        duplicate=0,
+                        inQdrop=0,
+                        pdu_stats=1,
+                        subagent=1,
+                        threshold=0,
+                    ),
+                    trap=dict(throttle_time=12),
+                    targets=[
+                        dict(name="test2", vrf="vrf2"),
+                        dict(host="1.1.1.2", name="test"),
+                    ],
+                    ifmib=dict(internal_cache_max_duration=4),
+                    inform=dict(retries=7),
+                    chassis_id="test2",
+                    packetsize=490,
+                    queue_length=2,
+                    throttle_time=60,
+                    trap_source="GigabitEthernet0/0/0/2",
+                    trap_timeout=3,
+                    context=["c1", "c2"],
+                    correlator=dict(
+                        buffer_size=1024,
+                        rule_sets=[dict(name="rule1")],
+                        rules=[dict(rule_name="rule1", timeout=5)],
+                    ),
+                    communities=[
+                        dict(
+                            name="test2",
+                            ro=True,
+                            sdrowner=True,
+                            acl_v4="test",
+                            acl_v6="test1",
+                        )
+                    ],
+                    community_maps=[
+                        dict(
+                            name="cm1",
+                            context="c1",
+                            target_list="t1",
+                            security_name="s1",
+                        )
+                    ],
+                    drop=dict(report_IPv4="test1", unknown_user=True),
+                    ipv6=dict(precedence="routine"),
+                    ipv4=dict(dscp="af11"),
+                    groups=[
+                        dict(
+                            Ipv4_acl="test",
+                            Ipv6_acl="test1",
+                            context="test3",
+                            group="g2",
+                            read="test1",
+                            version="v1",
+                            write="test2",
+                        )
+                    ],
+                    location="test",
+                    logging_threshold_oid_processing=2,
+                    logging_threshold_pdu_processing=1,
+                    mib_bulkstat_max_procmem_size=101,
+                    mroutemib_send_all_vrf=True,
+                    mib_object_lists=["test1"],
+                    overload_control=dict(
+                        overload_drop_time=4, overload_throttle_rate=6
+                    ),
+                    mib_schema=[
+                        dict(name="mib1", object_list="test1", poll_interval=1)
+                    ],
+                    notification_log_mib=dict(GlobalSize=5, size=5),
+                    mib_bulkstat_transfer_ids=[
+                        dict(
+                            buffer_size=1024,
+                            enable=True,
+                            format_schemaASCI=True,
+                            name="test2",
+                            retain=1,
+                            retry=1,
+                            schema="test2",
+                        )
+                    ],
+                    traps=dict(
+                        diameter=dict(
+                            peerdown=True,
+                            peerup=True,
+                            permanentfail=True,
+                            protocolerror=True,
+                            transientfail=True,
+                        ),
+                        entity=True,
+                        entity_redundancy=dict(
+                            all=True, status=True, switchover=True
+                        ),
+                        entity_state=dict(operstatus=True, switchover=True),
+                        flash=dict(insertion=True, removal=True),
+                        ipsec=dict(start=True, stop=True),
+                        bridgemib=True,
+                        bulkstat_collection=True,
+                        cisco_entity_ext=True,
+                        config=True,
+                        copy_complete=True,
+                        addrpool=dict(high=True, low=True),
+                        bfd=True,
+                        bgp=dict(cbgp2=True),
+                        l2tun=dict(
+                            sessions=True, tunnel_down=True, tunnel_up=True
+                        ),
+                        l2vpn=dict(all=True, vc_down=True, vc_up=True),
+                        msdp_peer_state_change=True,
+                        ospf=dict(
+                            errors=dict(
+                                authentication_failure=True,
+                                bad_packet=True,
+                                config_error=True,
+                                virt_authentication_failure=True,
+                                virt_bad_packet=True,
+                                virt_config_error=True,
+                            ),
+                            lsa=dict(lsa_maxage=True, lsa_originate=True),
+                            retransmit=dict(packets=True, virt_packets=True),
+                            state_change=dict(
+                                if_state_change=True,
+                                neighbor_state_change=True,
+                                virtif_state_change=True,
+                                virtneighbor_state_change=True,
+                            ),
+                        ),
+                        ospfv3=dict(
+                            errors=dict(
+                                bad_packet=True,
+                                config_error=True,
+                                virt_config_error=True,
+                            )
+                        ),
+                        pim=dict(
+                            interface_state_change=True,
+                            invalid_message_received=True,
+                            neighbor_change=True,
+                            rp_mapping_change=True,
+                        ),
+                        power=True,
+                        rf=True,
+                        rsvp=dict(all=True, lost_flow=True, new_flow=True),
+                        selective_vrf_download_role_change=True,
+                        sensor=True,
+                        snmp=dict(
+                            authentication=True,
+                            coldstart=True,
+                            linkdown=True,
+                            linkup=True,
+                            warmstart=True,
+                        ),
+                        subscriber=dict(
+                            session_agg_access_interface=True,
+                            session_agg_node=True,
+                        ),
+                        syslog=True,
+                        system=True,
+                        vpls=dict(
+                            all=True,
+                            full_clear=True,
+                            full_raise=True,
+                            status=True,
+                        ),
+                        vrrp_events=True,
+                    ),
+                ),
+                state="overridden",
+            )
+        )
+        commands = [
+            "no snmp-server contact t1",
+            "no snmp-server traps hsrp",
+            "no snmp-server traps ipsla",
+            "no snmp-server traps ospfv3 state-change neighbor-state-change",
+            "no snmp-server traps ospfv3 state-change virtif-state-change",
+            "no snmp-server traps ospfv3 state-change virtneighbor-state-change",
+            "no snmp-server traps ospfv3 state-change restart-status-change",
+            "no snmp-server traps ospfv3 state-change restart-helper-status-change",
+            "no snmp-server traps ospfv3 state-change restart-virtual-helper-status-change",
+            "no snmp-server vrf vrf1",
+            "snmp-server location test",
+            "snmp-server logging threshold oid-processing 2",
+            "snmp-server user u1 test2  IPv4 test1 IPv6 test2 v4acl",
+            "snmp-server vrf vrf2",
+            "host 1.1.1.1 traps test1",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_snmp_server_overridden_idempotent(self):
+        self.maxDiff = None
+        run_cfg = dedent(
+            """\
+                snmp-server vrf vrf1
+                 host 1.1.1.1 traps test1
+                !
+                snmp-server drop report acl IPv4 test1
+                snmp-server drop unknown-user
+                snmp-server ipv4 dscp af11
+                snmp-server ipv6 precedence routine
+                snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2 v4acl
+                snmp-server community test2 RW SystemOwner IPv4 test IPv6 test1
+                snmp-server group g2 v1 read test1 write test2 context test3 IPv4 test IPv6 test1
+                snmp-server queue-length 2
+                snmp-server trap-timeout 3
+                snmp-server trap throttle-time 12
+                snmp-server traps rf
+                snmp-server traps bfd
+                snmp-server traps bgp cbgp2
+                snmp-server traps pim neighbor-change
+                snmp-server traps pim invalid-message-received
+                snmp-server traps pim rp-mapping-change
+                snmp-server traps pim interface-state-change
+                snmp-server traps copy-complete
+                snmp-server traps hsrp
+                snmp-server traps ipsla
+                snmp-server traps msdp peer-state-change
+                snmp-server traps snmp linkup
+                snmp-server traps snmp linkdown
+                snmp-server traps snmp coldstart
+                snmp-server traps snmp warmstart
+                snmp-server traps snmp authentication
+                snmp-server traps vrrp events
+                snmp-server traps flash removal
+                snmp-server traps flash insertion
+                snmp-server traps ipsec tunnel stop
+                snmp-server traps ipsec tunnel start
+                snmp-server traps power
+                snmp-server traps config
+                snmp-server traps entity
+                snmp-server traps sensor
+                snmp-server traps selective-vrf-download role-change
+                snmp-server traps syslog
+                snmp-server traps system
+                snmp-server traps ospf lsa lsa-maxage
+                snmp-server traps ospf lsa lsa-originate
+                snmp-server traps ospf errors bad-packet
+                snmp-server traps ospf errors authentication-failure
+                snmp-server traps ospf errors config-error
+                snmp-server traps ospf errors virt-bad-packet
+                snmp-server traps ospf errors virt-authentication-failure
+                snmp-server traps ospf errors virt-config-error
+                snmp-server traps ospf retransmit packets
+                snmp-server traps ospf retransmit virt-packets
+                snmp-server traps ospf state-change if-state-change
+                snmp-server traps ospf state-change neighbor-state-change
+                snmp-server traps ospf state-change virtif-state-change
+                snmp-server traps ospf state-change virtneighbor-state-change
+                snmp-server traps rsvp all
+                snmp-server traps rsvp new-flow
+                snmp-server traps rsvp lost-flow
+                snmp-server traps l2tun sessions
+                snmp-server traps l2tun tunnel-up
+                snmp-server traps l2tun tunnel-down
+                snmp-server traps vpls all
+                snmp-server traps vpls status
+                snmp-server traps vpls full-clear
+                snmp-server traps vpls full-raise
+                snmp-server traps bulkstat collection
+                snmp-server traps diameter peerup
+                snmp-server traps diameter peerdown
+                snmp-server traps diameter protocolerror
+                snmp-server traps diameter permanentfail
+                snmp-server traps diameter transientfail
+                snmp-server traps l2vpn all
+                snmp-server traps l2vpn vc-up
+                snmp-server traps l2vpn vc-down
+                snmp-server traps bridgemib
+                snmp-server traps ospfv3 errors bad-packet
+                snmp-server traps ospfv3 errors config-error
+                snmp-server traps ospfv3 errors virt-config-error
+                snmp-server traps ospfv3 state-change neighbor-state-change
+                snmp-server traps ospfv3 state-change virtif-state-change
+                snmp-server traps ospfv3 state-change virtneighbor-state-change
+                snmp-server traps ospfv3 state-change restart-status-change
+                snmp-server traps ospfv3 state-change restart-helper-status-change
+                snmp-server traps ospfv3 state-change restart-virtual-helper-status-change
+                snmp-server traps subscriber session-agg node
+                snmp-server traps subscriber session-agg access-interface
+                snmp-server traps addrpool low
+                snmp-server traps addrpool high
+                snmp-server traps cisco-entity-ext
+                snmp-server traps entity-state operstatus
+                snmp-server traps entity-state switchover
+                snmp-server traps entity-redundancy all
+                snmp-server traps entity-redundancy status
+                snmp-server traps entity-redundancy switchover
+                snmp-server chassis-id test2
+                snmp-server location test1
+                snmp-server target list test host 1.1.1.2
+                snmp-server target list test2 vrf vrf2
+                snmp-server context c1
+                snmp-server context c2
+                snmp-server logging threshold oid-processing 1
+                snmp-server logging threshold pdu-processing 1
+                snmp-server mib bulkstat max-procmem-size 101
+                snmp-server mib bulkstat object-list test1
+                !
+                snmp-server mib bulkstat schema mib1
+                 object-list test1
+                 poll-interval 1
+                !
+                snmp-server mib bulkstat transfer-id test2
+                 retry 1
+                 buffer-size 1024
+                 enable
+                 format schemaASCII
+                 retain 1
+                 schema test2
+                !
+                snmp-server timeouts duplicate 0
+                snmp-server timeouts inQdrop 0
+                snmp-server timeouts subagent 1
+                snmp-server timeouts pdu stats 1
+                snmp-server timeouts threshold 0
+                snmp-server packetsize 490
+                snmp-server correlator rule rule1
+                 timeout 5
+                !
+                snmp-server correlator ruleset rule1
+                !
+                snmp-server correlator buffer-size 1024
+                snmp-server trap-source GigabitEthernet0/0/0/2
+                snmp-server throttle-time 60
+                snmp-server community-map cm1 context c1 security-name s1 target-list t1
+                snmp-server inform retries 7
+                snmp-server overload-control 4 6
+                snmp-server ifmib internal cache max-duration 4
+                snmp-server mroutemib send-all-vrf
+                snmp-server notification-log-mib size 5
+                snmp-server notification-log-mib GlobalSize 5
+                !
+            """
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    vrfs=[
+                        dict(
+                            vrf="vrf1",
+                            hosts=[
+                                dict(
+                                    community="test1",
+                                    host="1.1.1.1",
+                                    traps=True,
+                                )
+                            ],
+                        )
+                    ],
+                    users=[
+                        dict(
+                            Ipv4_acl="test1",
+                            Ipv6_acl="test2",
+                            group="test2",
+                            user="u1",
+                            v4_acl="v4acl",
+                            version="v1",
+                        )
+                    ],
+                    timeouts=dict(
+                        duplicate=0,
+                        inQdrop=0,
+                        pdu_stats=1,
+                        subagent=1,
+                        threshold=0,
+                    ),
+                    trap=dict(throttle_time=12),
+                    targets=[
+                        dict(name="test2", vrf="vrf2"),
+                        dict(host="1.1.1.2", name="test"),
+                    ],
+                    ifmib=dict(internal_cache_max_duration=4),
+                    inform=dict(retries=7),
+                    chassis_id="test2",
+                    packetsize=490,
+                    queue_length=2,
+                    throttle_time=60,
+                    trap_source="GigabitEthernet0/0/0/2",
+                    trap_timeout=3,
+                    context=["c1", "c2"],
+                    correlator=dict(
+                        buffer_size=1024,
+                        rule_sets=[dict(name="rule1")],
+                        rules=[dict(rule_name="rule1", timeout=5)],
+                    ),
+                    communities=[
+                        dict(
+                            name="test2",
+                            rw=True,
+                            systemowner=True,
+                            acl_v4="test",
+                            acl_v6="test1",
+                        )
+                    ],
+                    community_maps=[
+                        dict(
+                            name="cm1",
+                            context="c1",
+                            target_list="t1",
+                            security_name="s1",
+                        )
+                    ],
+                    drop=dict(report_IPv4="test1", unknown_user=True),
+                    ipv6=dict(precedence="routine"),
+                    ipv4=dict(dscp="af11"),
+                    groups=[
+                        dict(
+                            Ipv4_acl="test",
+                            Ipv6_acl="test1",
+                            context="test3",
+                            group="g2",
+                            read="test1",
+                            version="v1",
+                            write="test2",
+                        )
+                    ],
+                    location="test1",
+                    logging_threshold_oid_processing=1,
+                    logging_threshold_pdu_processing=1,
+                    mib_bulkstat_max_procmem_size=101,
+                    mroutemib_send_all_vrf=True,
+                    mib_object_lists=["test1"],
+                    overload_control=dict(
+                        overload_drop_time=4, overload_throttle_rate=6
+                    ),
+                    mib_schema=[
+                        dict(name="mib1", object_list="test1", poll_interval=1)
+                    ],
+                    notification_log_mib=dict(GlobalSize=5, size=5),
+                    mib_bulkstat_transfer_ids=[
+                        dict(
+                            buffer_size=1024,
+                            enable=True,
+                            format_schemaASCI=True,
+                            name="test2",
+                            retain=1,
+                            retry=1,
+                            schema="test2",
+                        )
+                    ],
+                    traps=dict(
+                        diameter=dict(
+                            peerdown=True,
+                            peerup=True,
+                            permanentfail=True,
+                            protocolerror=True,
+                            transientfail=True,
+                        ),
+                        entity=True,
+                        entity_redundancy=dict(
+                            all=True, status=True, switchover=True
+                        ),
+                        entity_state=dict(operstatus=True, switchover=True),
+                        flash=dict(insertion=True, removal=True),
+                        hsrp=True,
+                        ipsla=True,
+                        ipsec=dict(start=True, stop=True),
+                        bridgemib=True,
+                        bulkstat_collection=True,
+                        cisco_entity_ext=True,
+                        config=True,
+                        copy_complete=True,
+                        addrpool=dict(high=True, low=True),
+                        bfd=True,
+                        bgp=dict(cbgp2=True),
+                        l2tun=dict(
+                            sessions=True, tunnel_down=True, tunnel_up=True
+                        ),
+                        l2vpn=dict(all=True, vc_down=True, vc_up=True),
+                        msdp_peer_state_change=True,
+                        ospf=dict(
+                            errors=dict(
+                                authentication_failure=True,
+                                bad_packet=True,
+                                config_error=True,
+                                virt_authentication_failure=True,
+                                virt_bad_packet=True,
+                                virt_config_error=True,
+                            ),
+                            lsa=dict(lsa_maxage=True, lsa_originate=True),
+                            retransmit=dict(packets=True, virt_packets=True),
+                            state_change=dict(
+                                if_state_change=True,
+                                neighbor_state_change=True,
+                                virtif_state_change=True,
+                                virtneighbor_state_change=True,
+                            ),
+                        ),
+                        ospfv3=dict(
+                            errors=dict(
+                                bad_packet=True,
+                                config_error=True,
+                                virt_config_error=True,
+                            ),
+                            state_change=dict(
+                                neighbor_state_change=True,
+                                virtif_state_change=True,
+                                virtneighbor_state_change=True,
+                                restart_helper_status_change=True,
+                                restart_status_change=True,
+                                restart_virtual_helper_status_change=True,
+                            ),
+                        ),
+                        pim=dict(
+                            interface_state_change=True,
+                            invalid_message_received=True,
+                            neighbor_change=True,
+                            rp_mapping_change=True,
+                        ),
+                        power=True,
+                        rf=True,
+                        rsvp=dict(all=True, lost_flow=True, new_flow=True),
+                        selective_vrf_download_role_change=True,
+                        sensor=True,
+                        snmp=dict(
+                            authentication=True,
+                            coldstart=True,
+                            linkdown=True,
+                            linkup=True,
+                            warmstart=True,
+                        ),
+                        subscriber=dict(
+                            session_agg_access_interface=True,
+                            session_agg_node=True,
+                        ),
+                        syslog=True,
+                        system=True,
+                        vpls=dict(
+                            all=True,
+                            full_clear=True,
+                            full_raise=True,
+                            status=True,
+                        ),
+                        vrrp_events=True,
+                    ),
+                ),
+                state="overridden",
+            )
+        )
+        self.execute_module(changed=False, commands=[])
 
     def test_iosxr_snmp_server_rendered(self):
         self.maxDiff = None
@@ -1450,7 +2514,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         rule_sets=[dict(name="rule1")],
                         rules=[dict(rule_name="rule1", timeout=5)],
                     ),
-                    community=[
+                    communities=[
                         dict(
                             name="test2",
                             ro=True,
@@ -1459,7 +2523,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             acl_v6="test1",
                         )
                     ],
-                    community_map=[
+                    community_maps=[
                         dict(
                             name="cm1",
                             context="c1",
@@ -1913,7 +2977,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     "version": "v1",
                 }
             ],
-            "community": [
+            "communities": [
                 {
                     "name": "test2",
                     "ro": True,
@@ -2079,7 +3143,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             },
             "trap_source": "GigabitEthernet0/0/0/2",
             "throttle_time": 60,
-            "community_map": [
+            "community_maps": [
                 {
                     "name": "cm1",
                     "context": "c1",
@@ -2097,7 +3161,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "notification_log_mib": {"size": 5, "GlobalSize": 5},
         }
         result = self.execute_module(changed=False)
-        print(result["gathered"])
         self.assertEqual(gathered, result["gathered"])
 
     def test_iosxr_snmp_server_parsed(self):
@@ -2251,7 +3314,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     "version": "v1",
                 }
             ],
-            "community": [
+            "communities": [
                 {
                     "name": "test",
                     "ro": True,
@@ -2453,7 +3516,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "correlator": {"buffer_size": 1024},
             "trap_source": "GigabitEthernet0/0/0/1",
             "throttle_time": 50,
-            "community_map": [
+            "community_maps": [
                 {"name": "test", "context": "test", "security_name": "test2"},
                 {"name": "test1", "context": "test", "security_name": "test2"},
             ],
@@ -2484,5 +3547,4 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 "GlobalSize": 1,
             },
         }
-        print(result["parsed"])
         self.assertEqual(parsed_list, result["parsed"])

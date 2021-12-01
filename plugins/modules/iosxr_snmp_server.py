@@ -31,7 +31,7 @@ options:
       chassis_id:
         description: SNMP chassis identifier.
         type: str
-      community:
+      communities:
         description: Enable SNMP;  set community string and access privileges.
         type: list
         elements: dict
@@ -60,7 +60,7 @@ options:
           v4_acl:
             description: V4 Access-list name.
             type: str
-      community_map:
+      community_maps:
         description: Community Mapping as per RFC-2576.
         type: list
         elements: dict
@@ -941,13 +941,13 @@ EXAMPLES = """
           contact: t1
           correlator:
             buffer_size: 1024
-          community:
+          communities:
             - name: test2
               ro: true
               sdrowner: true
               acl_v4: test
               acl_v6: test1
-          community_map:
+          community_maps:
             - name: cm1
               context: c1
               target_list: t1
@@ -1180,7 +1180,7 @@ EXAMPLES = """
 # Deleted play:
 # -------------
 - name: Remove all existing configuration
-  cisco.iosxr.iosxr_snmp_server_global:
+  cisco.iosxr.iosxr_snmp_server:
     state: deleted
 # Commands Fired:
 # ---------------
@@ -1332,13 +1332,13 @@ EXAMPLES = """
           contact: t1
           correlator:
             buffer_size: 1025
-          community:
+          communities:
             - name: test1
               ro: true
               sdrowner: true
               acl_v4: test
               acl_v6: test1
-          community_map:
+          community_maps:
             - name: cm2
               context: c1
               target_list: t1
@@ -1544,13 +1544,13 @@ EXAMPLES = """
           contact: t1
           correlator:
             buffer_size: 1025
-          community:
+          communities:
             - name: test1
               ro: true
               sdrowner: true
               acl_v4: test
               acl_v6: test1
-          community_map:
+          community_maps:
             - name: cm2
               context: c1
               target_list: t1
@@ -1739,14 +1739,14 @@ EXAMPLES = """
 # snmp-server notification-log-mib GlobalSize 5
 # Gathered play:
 # --------------
-- name: Gather listed ntp config
-  cisco.iosxr.iosxr_ntp_global:
+- name: Gather listed snmp server
+  cisco.iosxr.iosxr_snmp_server:
     state: gathered
 # Module Execution Result:
 # ------------------------
 # "gathered": {
 #         "chassis_id": "test2",
-#         "community": [
+#         "communities": [
 #             {
 #                 "acl_v4": "test",
 #                 "acl_v6": "test1",
@@ -1755,7 +1755,7 @@ EXAMPLES = """
 #                 "sdrowner": true
 #             }
 #         ],
-#         "community_map": [
+#         "community_maps": [
 #             {
 #                 "context": "c1",
 #                 "name": "cm1",
@@ -1922,13 +1922,13 @@ EXAMPLES = """
       contact: t1
       correlator:
         buffer_size: 1024
-      community:
+      communities:
         - name: test2
           ro: true
           sdrowner: true
           acl_v4: test
           acl_v6: test1
-      community_map:
+      community_maps:
         - name: cm1
           context: c1
           target_list: t1
@@ -2103,7 +2103,7 @@ EXAMPLES = """
 # ------------------------
 # "parsed":{
 #         "chassis_id": "test2",
-#         "community": [
+#         "communities": [
 #             {
 #                 "acl_v4": "test",
 #                 "acl_v6": "test1",
@@ -2112,7 +2112,7 @@ EXAMPLES = """
 #                 "sdrowner": true
 #             }
 #         ],
-#         "community_map": [
+#         "community_maps": [
 #             {
 #                 "context": "c1",
 #                 "name": "cm1",

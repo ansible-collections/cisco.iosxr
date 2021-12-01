@@ -20,7 +20,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.r
 )
 
 
-def community_tmplt(config_data):
+def communities_tmplt(config_data):
     name = config_data.get("name", "")
     command = "snmp-server community {name}".format(name=name)
     if config_data.get("rw"):
@@ -40,7 +40,7 @@ def community_tmplt(config_data):
     return command
 
 
-def community_map_tmplt(config_data):
+def community_maps_tmplt(config_data):
     name = config_data.get("name", "")
     command = "snmp-server community-map {name}".format(name=name)
     if config_data.get("context"):
@@ -339,7 +339,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "community",
+            "name": "communities",
             "getval": re.compile(
                 r"""
                 ^snmp-server\scommunity
@@ -352,9 +352,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                 (\sIPv6\s(?P<ipv6>\S+))?
                 (\s(?P<v4acl>\S+))?
                 $""", re.VERBOSE),
-            "setval": community_tmplt,
+            "setval": communities_tmplt,
             "result": {
-                "community": [
+                "communities": [
                     {
                         "name": "{{ name }}",
                         "rw": "{{ True if rw is defined }}",
@@ -369,7 +369,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "community_map",
+            "name": "community_maps",
             "getval": re.compile(
                 r"""
                 ^snmp-server\scommunity-map
@@ -378,9 +378,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                 (\ssecurity-name\s(?P<security_name>\S+))?
                 (\starget-list\s(?P<target_list>\S+))?
                 $""", re.VERBOSE),
-            "setval": community_map_tmplt,
+            "setval": community_maps_tmplt,
             "result": {
-                "community_map": [
+                "community_maps": [
                     {
                         "name": "{{ name }}",
                         "context": "{{context}}",
