@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Added support for keys net_group, port_group to resolve issue with fact gathering against IOS-XR 6.6.3.
