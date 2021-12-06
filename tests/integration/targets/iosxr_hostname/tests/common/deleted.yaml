@@ -1,0 +1,30 @@
+---
+- debug:
+    msg: Start Deleted integration state for iosxr_hostname ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate_config.yaml
+
+- block:
+
+    - name: iosxr_hostname deleted - Play
+      register: result
+      cisco.iosxr.iosxr_hostname:
+        config:
+        state: deleted
+
+    - name: iosxr_hostname deleted - Assert commands
+      assert:
+        that:
+          - deleted['commands'] == result['commands']
+
+    - name: iosxr_hostname deleted - Assert before
+      assert:
+        that:
+          - deleted['before'] == result['before']
+
+  always:
+
+    - include_tasks: _remove_config.yaml

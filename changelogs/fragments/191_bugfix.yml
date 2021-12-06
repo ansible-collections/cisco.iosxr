@@ -1,3 +1,0 @@
----
-bugfixes:
-  - fix issue of local variable 'start_index' referenced before assignment with cisco.iosxr.iosxr_config.
