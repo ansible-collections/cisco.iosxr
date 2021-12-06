@@ -4,6 +4,30 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v2.6.0
+======
+
+Minor Changes
+-------------
+
+- Add iosxr_snmp_server resource module.
+- Added support for keys net_group, port_group to resolve issue with fact gathering against IOS-XR 6.6.3.
+
+Bugfixes
+--------
+
+- fix issue of local variable 'start_index' referenced before assignment with cisco.iosxr.iosxr_config.
+- iosxr_user - replaced custom paramiko sftp and ssh usage with native "copy_file" and "send_command" functions. Fixed issue when ssh key copying doesn't work with network_cli or netconf plugin by deleting "provider" usage. Fixed improper handling of "No such configuration item" when getting data for username section, without that ansible always tried to delete user "No" when purging if there is no any user in config. Fixed one-line admin mode commands not work anymore for ssh key management on IOS XR Software, Version 7.1.3, and add support of "admin" module property (https://github.com/ansible-collections/cisco.iosxr/pull/15)
+
+Documentation Changes
+---------------------
+
+- Update valid docs for iosxr_logging_global and prefix_list
+
+New Modules
+-----------
+
+- iosxr_snmp_server - Manages snmp-server resource module
 
 v2.5.0
 ======
