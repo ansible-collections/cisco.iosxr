@@ -351,4 +351,4 @@ releases:
       - description: Manages snmp-server resource module
         name: iosxr_snmp_server
         namespace: ''
-    release_date: '2021-12-06'
+    release_date: '2021-12-07'
