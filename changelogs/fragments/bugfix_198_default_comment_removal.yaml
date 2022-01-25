@@ -1,0 +1,3 @@
+---
+bugfixes:
+    - Remove support of default comment by iosxr_config module as its not supported by iosxr device.

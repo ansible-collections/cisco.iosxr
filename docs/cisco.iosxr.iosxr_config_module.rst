@@ -161,7 +161,6 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">"configured by iosxr_config"</div>
                 </td>
                 <td>
                         <div>Allows a commit description to be specified to be included when the configuration is committed.  If the configuration is not changed or committed, this argument is ignored.</div>
