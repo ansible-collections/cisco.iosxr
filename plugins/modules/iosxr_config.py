@@ -135,7 +135,6 @@ options:
       is committed.  If the configuration is not changed or committed, this argument
       is ignored.
     type: str
-    default: configured by iosxr_config
   admin:
     description:
     - Enters into administration configuration mode for making config changes to the
@@ -265,7 +264,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     dumps,
 )
 
-DEFAULT_COMMIT_COMMENT = "configured by iosxr_config"
 
 
 def copy_file_to_node(module):
@@ -425,7 +423,7 @@ def main():
         config=dict(),
         backup=dict(type="bool", default=False),
         backup_options=dict(type="dict", options=backup_spec),
-        comment=dict(default=DEFAULT_COMMIT_COMMENT),
+        comment=dict(),
         admin=dict(type="bool", default=False),
         exclusive=dict(type="bool", default=False),
         label=dict(),
