@@ -1,0 +1,3 @@
+---
+trivial:
+  - "`iosxr_hostname` - add required redirects in runtime configuration"
