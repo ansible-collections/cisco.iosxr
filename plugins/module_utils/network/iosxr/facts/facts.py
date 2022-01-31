@@ -86,6 +86,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.nt
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.snmp_server.snmp_server import (
     Snmp_serverFacts,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.hostname.hostname import (
+    HostnameFacts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -113,6 +116,7 @@ FACT_RESOURCE_SUBSETS = dict(
     logging_global=Logging_globalFacts,
     ntp_global=Ntp_globalFacts,
     snmp_server=Snmp_serverFacts,
+    hostname=HostnameFacts,
 )
 
 
