@@ -4,6 +4,19 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v2.7.0
+======
+
+Minor Changes
+-------------
+
+- `iosxr_hostname` - New Resource module added.
+
+New Modules
+-----------
+
+- iosxr_hostname - Manages hostname resource module
+
 v2.6.0
 ======
 
