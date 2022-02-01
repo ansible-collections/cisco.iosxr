@@ -457,7 +457,10 @@ def main():
 
     if module.params["force"] is True:
         module.params["match"] = "none"
-    if module.params["disable_default_comment"] is False and module.params["comment"] is None:
+    if (
+        module.params["disable_default_comment"] is False
+        and module.params["comment"] is None
+    ):
         module.params["comment"] = DEFAULT_COMMIT_COMMENT
     warnings = list()
 
