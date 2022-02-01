@@ -57,4 +57,20 @@
     that:
       - result.failed == false
 
+- name: configure device without default comment
+  register: result
+  cisco.iosxr.iosxr_config:
+    lines: hostname iosxr1
+    disable_default_comment: True
+
+- name: check details of latest commit
+  iosxr_command:
+    commands:
+      - show configuration commit list 1 detail
+  register: result
+
+- assert:
+    that:
+      - "'configured by iosxr_config' not in result.stdout[0]"
+
 - debug: msg="END cli/comment.yaml on connection={{ ansible_connection }}"

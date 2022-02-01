@@ -135,6 +135,7 @@ options:
       is committed.  If the configuration is not changed or committed, this argument
       is ignored.
     type: str
+    default: configured by iosxr_config
   admin:
     description:
     - Enters into administration configuration mode for making config changes to the
@@ -175,6 +176,11 @@ options:
     description:
     - Enters into exclusive configuration mode that locks out all users from committing
       configuration changes until the exclusive session ends.
+    type: bool
+    default: false
+  disable_default_comment:
+    description:
+    - disable default comment when set to True.
     type: bool
     default: false
 """
@@ -264,6 +270,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     dumps,
 )
 
+DEFAULT_COMMIT_COMMENT = "configured by iosxr_config"
 
 
 def copy_file_to_node(module):
@@ -425,6 +432,7 @@ def main():
         backup_options=dict(type="dict", options=backup_spec),
         comment=dict(),
         admin=dict(type="bool", default=False),
+        disable_default_comment=dict(type="bool", default=False),
         exclusive=dict(type="bool", default=False),
         label=dict(),
     )
@@ -449,6 +457,8 @@ def main():
 
     if module.params["force"] is True:
         module.params["match"] = "none"
+    if module.params["disable_default_comment"] is False and module.params["comment"] is None:
+        module.params["comment"] = DEFAULT_COMMIT_COMMENT
     warnings = list()
 
     check_args(module, warnings)
