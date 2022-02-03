@@ -52,7 +52,10 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     etree_find,
 )
 from ansible.errors import AnsibleConnectionFailure
-from ansible.plugins.netconf import NetconfBase, ensure_ncclient
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.netconf_base import (
+    NetconfBase,
+    ensure_ncclient,
+)
 
 try:
     from ncclient import manager
