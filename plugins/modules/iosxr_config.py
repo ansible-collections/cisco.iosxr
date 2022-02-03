@@ -430,7 +430,7 @@ def main():
         config=dict(),
         backup=dict(type="bool", default=False),
         backup_options=dict(type="dict", options=backup_spec),
-        comment=dict(),
+        comment=dict(default=DEFAULT_COMMIT_COMMENT),
         admin=dict(type="bool", default=False),
         disable_default_comment=dict(type="bool", default=False),
         exclusive=dict(type="bool", default=False),
@@ -458,10 +458,10 @@ def main():
     if module.params["force"] is True:
         module.params["match"] = "none"
     if (
-        module.params["disable_default_comment"] is False
-        and module.params["comment"] is None
+        module.params["disable_default_comment"] is True
+        and module.params["comment"] == DEFAULT_COMMIT_COMMENT
     ):
-        module.params["comment"] = DEFAULT_COMMIT_COMMENT
+        module.params["comment"] = None
     warnings = list()
 
     check_args(module, warnings)

@@ -61,7 +61,7 @@
   register: result
   cisco.iosxr.iosxr_config:
     lines: hostname iosxr1
-    disable_default_comment: True
+    disable_default_comment: true
 
 - name: check details of latest commit
   iosxr_command:
