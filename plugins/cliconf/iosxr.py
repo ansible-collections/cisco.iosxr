@@ -216,7 +216,8 @@ class Cliconf(CliconfBase):
         else:
             self.discard_changes()
 
-        self.abort(admin=admin)
+        if not self.get_option("confirmed"):
+            self.abort(admin=admin)
 
         resp["request"] = requests
         resp["response"] = results
@@ -332,6 +333,7 @@ class Cliconf(CliconfBase):
             cmd_obj["prompt"] = "(C|c)onfirm"
             cmd_obj["answer"] = "y"
         self.send_command(**cmd_obj)
+
 
     def run_commands(self, commands=None, check_rc=True):
         if commands is None:
