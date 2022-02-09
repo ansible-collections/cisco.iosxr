@@ -1,0 +1,3 @@
+---
+minor_changes:
+    - Add disable_default_comment option to disable default comment in iosxr_config module.

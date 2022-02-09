@@ -178,6 +178,11 @@ options:
       configuration changes until the exclusive session ends.
     type: bool
     default: false
+  disable_default_comment:
+    description:
+    - disable default comment when set to True.
+    type: bool
+    default: false
 """
 
 EXAMPLES = """
@@ -427,6 +432,7 @@ def main():
         backup_options=dict(type="dict", options=backup_spec),
         comment=dict(default=DEFAULT_COMMIT_COMMENT),
         admin=dict(type="bool", default=False),
+        disable_default_comment=dict(type="bool", default=False),
         exclusive=dict(type="bool", default=False),
         label=dict(),
     )
@@ -451,6 +457,11 @@ def main():
 
     if module.params["force"] is True:
         module.params["match"] = "none"
+    if (
+        module.params["disable_default_comment"] is True
+        and module.params["comment"] == DEFAULT_COMMIT_COMMENT
+    ):
+        module.params["comment"] = None
     warnings = list()
 
     check_args(module, warnings)
