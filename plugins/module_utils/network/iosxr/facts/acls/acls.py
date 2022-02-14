@@ -153,7 +153,11 @@ class AclsFacts(object):
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
     def get_device_data(self, connection):
-        return connection.get("show access-lists afi-all")
+        ipv4_data = connection.get("show running-config ipv4 access-list")
+        ipv6_data = connection.get("show running-config ipv6 access-list")
+        data = ipv4_data + '\n' + ipv6_data
+        data = data.replace("\n!", "")
+        return data
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for acls
