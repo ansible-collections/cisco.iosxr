@@ -40,7 +40,7 @@ options:
     - name: ansible_iosxr_confirmed
   timeout:
     type: int
-    description: 
+    description:
     - Commits the configuration on a trial basis for the time specified in seconds or minutes.
     env:
     - name: ANSIBLE_IOSXR_TIMEOUT
@@ -315,7 +315,9 @@ class Cliconf(CliconfBase):
             ] = "This commit will replace or remove the entire running configuration"
             cmd_obj["answer"] = "yes"
         elif self.get_option("confirmed") and self.get_option("timeout"):
-            cmd_obj["command"] = "commit confirmed {0}".format(self.get_option("timeout"))
+            cmd_obj["command"] = "commit confirmed {0}".format(
+                self.get_option("timeout")
+            )
         else:
             if comment and label:
                 cmd_obj["command"] = "commit label {0} comment {1}".format(
@@ -333,7 +335,6 @@ class Cliconf(CliconfBase):
             cmd_obj["prompt"] = "(C|c)onfirm"
             cmd_obj["answer"] = "y"
         self.send_command(**cmd_obj)
-
 
     def run_commands(self, commands=None, check_rc=True):
         if commands is None:
