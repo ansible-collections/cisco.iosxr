@@ -420,7 +420,7 @@ class Cliconf(CliconfBase):
         Make sure we are in the operational cli mode
         :return: None
         """
-        if self._connection.connected:
+        if self._connection.connected and not self.get_option("confirmed"):
             self._update_cli_prompt_context(
                 config_context=")#", exit_command="abort"
             )
