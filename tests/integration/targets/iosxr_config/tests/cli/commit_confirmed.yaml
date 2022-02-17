@@ -3,7 +3,7 @@
 
 - name: test commit confirmed functionality
   vars:
-    ansible_iosxr_confirmed: True
+    ansible_iosxr_confirmed: true
     ansible_iosxr_timeout: 90
   cisco.iosxr.iosxr_config:
     lines:
@@ -11,12 +11,12 @@
 
 - name: "get hostname"
   vars:
-    ansible_iosxr_confirmed: True
+    ansible_iosxr_confirmed: true
   register: get_hostname1
   iosxr_command:
     commands:
       - "show running-config hostname"
-  ignore_errors: True
+  ignore_errors: true
 
 
 - name: Sleep for 90 secs as rollback to happen.
@@ -28,7 +28,7 @@
   iosxr_command:
     commands:
       - "show running-config hostname"
-  ignore_errors: True
+  ignore_errors: true
 
 - assert:
     that:
