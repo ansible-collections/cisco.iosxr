@@ -29,23 +29,23 @@ description:
   CLI commands from Cisco IOS XR network devices.
 version_added: 1.0.0
 options:
-  confirmed:
+  commit_confirmed:
     type: boolean
     default: false
     description:
     - enable or disable commit confirmed mode
     env:
-    - name: ANSIBLE_IOSXR_CONFIRMED
+    - name: ANSIBLE_IOSXR_COMMIT_CONFIRMED
     vars:
-    - name: ansible_iosxr_confirmed
-  timeout:
+    - name: ansible_iosxr_commit_confirmed
+  commit_confirmed_timeout:
     type: int
     description:
     - Commits the configuration on a trial basis for the time specified in seconds or minutes.
     env:
-    - name: ANSIBLE_IOSXR_TIMEOUT
+    - name: ANSIBLE_IOSXR_COMMIT_CONFIRMED_TIMEOUT
     vars:
-    - name: ansible_iosxr_timeout
+    - name: ansible_iosxr_commit_confirmed_timeout
   config_commands:
     description:
     - Specifies a list of commands that can make configuration changes
@@ -216,7 +216,7 @@ class Cliconf(CliconfBase):
         else:
             self.discard_changes()
 
-        if not self.get_option("confirmed"):
+        if not self.get_option("commit_confirmed"):
             self.abort(admin=admin)
 
         resp["request"] = requests
@@ -314,9 +314,9 @@ class Cliconf(CliconfBase):
                 "prompt"
             ] = "This commit will replace or remove the entire running configuration"
             cmd_obj["answer"] = "yes"
-        elif self.get_option("confirmed") and self.get_option("timeout"):
+        elif self.get_option("commit_confirmed") and self.get_option("commit_confirmed_timeout"):
             cmd_obj["command"] = "commit confirmed {0}".format(
-                self.get_option("timeout")
+                self.get_option("commit_confirmed_timeout")
             )
         else:
             if comment and label:
@@ -421,7 +421,7 @@ class Cliconf(CliconfBase):
         Make sure we are in the operational cli mode
         :return: None
         """
-        if self._connection.connected and not self.get_option("confirmed"):
+        if self._connection.connected and not self.get_option("commit_confirmed"):
             self._update_cli_prompt_context(
                 config_context=")#", exit_command="abort"
             )
