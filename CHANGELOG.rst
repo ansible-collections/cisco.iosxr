@@ -4,6 +4,14 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v2.8.0
+======
+
+Minor Changes
+-------------
+
+- Add disable_default_comment option to disable default comment in iosxr_config module.
+
 v2.7.0
 ======
 
