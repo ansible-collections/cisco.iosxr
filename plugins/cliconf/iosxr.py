@@ -314,7 +314,9 @@ class Cliconf(CliconfBase):
                 "prompt"
             ] = "This commit will replace or remove the entire running configuration"
             cmd_obj["answer"] = "yes"
-        elif self.get_option("commit_confirmed") and self.get_option("commit_confirmed_timeout"):
+        elif self.get_option("commit_confirmed") and self.get_option(
+            "commit_confirmed_timeout"
+        ):
             cmd_obj["command"] = "commit confirmed {0}".format(
                 self.get_option("commit_confirmed_timeout")
             )
@@ -421,7 +423,9 @@ class Cliconf(CliconfBase):
         Make sure we are in the operational cli mode
         :return: None
         """
-        if self._connection.connected and not self.get_option("commit_confirmed"):
+        if self._connection.connected and not self.get_option(
+            "commit_confirmed"
+        ):
             self._update_cli_prompt_context(
                 config_context=")#", exit_command="abort"
             )
