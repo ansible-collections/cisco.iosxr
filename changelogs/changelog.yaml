@@ -373,4 +373,4 @@ releases:
     fragments:
       - 199_add_commit_confirmed_feature.yaml
       - bugfix_198_default_comment_removal.yaml
-    release_date: '2022-02-21'
+    release_date: '2022-02-23'
