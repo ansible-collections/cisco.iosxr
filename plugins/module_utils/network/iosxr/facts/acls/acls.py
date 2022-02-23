@@ -28,6 +28,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     isipaddress,
 )
+import re
 
 PROTOCOL_OPTIONS = {
     "tcp": ("ack", "fin", "psh", "rst", "syn", "urg", "established"),
@@ -153,11 +154,7 @@ class AclsFacts(object):
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
     def get_device_data(self, connection):
-        ipv4_data = connection.get("show running-config ipv4 access-list")
-        ipv6_data = connection.get("show running-config ipv6 access-list")
-        data = ipv4_data + '\n' + ipv6_data
-        data = data.replace("\n!", "")
-        return data
+        return connection.get("show access-lists afi-all")
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for acls
@@ -179,6 +176,8 @@ class AclsFacts(object):
         if acl_lines:
             acl, acls = {}, []
             for line in acl_lines:
+                if "matches" in line:
+                    line = re.sub(r"\([^()]*\)", "", line)
                 if line.startswith("ip"):
                     if acl:
                         acls.append(acl)
