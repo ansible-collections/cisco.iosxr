@@ -1,0 +1,36 @@
+---
+- debug: msg="START cli/commit_confirmed.yaml on connection={{ ansible_connection }}"
+
+- name: test commit confirmed functionality
+  vars:
+    ansible_iosxr_commit_confirmed: true
+    ansible_iosxr_commit_confirmed_timeout: 90
+  cisco.iosxr.iosxr_config:
+    lines:
+      - hostname iosxr_commit_confirmed
+
+- name: "get hostname"
+  vars:
+    ansible_iosxr_commit_confirmed: true
+  register: get_hostname1
+  iosxr_command:
+    commands:
+      - "show running-config hostname"
+  ignore_errors: true
+
+
+- name: Sleep for 90 secs as rollback to happen.
+  wait_for:
+    timeout: 90
+
+- name: "get hostname"
+  register: get_hostname2
+  iosxr_command:
+    commands:
+      - "show running-config hostname"
+  ignore_errors: true
+
+- assert:
+    that:
+      - "'iosxr_commit_confirmed' in get_hostname1.stdout[0]"
+      - "'iosxr_commit_confirmed' not in get_hostname2.stdout[0]"
