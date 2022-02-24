@@ -476,7 +476,23 @@ class TestIosxrAclsModule(TestIosxrModule):
             )
         )
         result = self.execute_module(changed=False)
-        parsed_list = [{'acls': [{'name': 'ACL_NAME', 'aces': [{'sequence': 5, 'grant': 'permit', 'protocol': 'ipv4', 'source': {'host': 'x.x.x.x'}, 'destination': {'any': True}}]}], 'afi': 'ipv4'}]
-        print(result)
+        parsed_list = [
+            {
+                "acls": [
+                    {
+                        "name": "ACL_NAME",
+                        "aces": [
+                            {
+                                "sequence": 5,
+                                "grant": "permit",
+                                "protocol": "ipv4",
+                                "source": {"host": "x.x.x.x"},
+                                "destination": {"any": True},
+                            }
+                        ],
+                    }
+                ],
+                "afi": "ipv4",
+            }
+        ]
         self.assertEqual(parsed_list, result["parsed"])
-
