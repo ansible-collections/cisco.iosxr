@@ -28,6 +28,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     isipaddress,
 )
+import re
 
 PROTOCOL_OPTIONS = {
     "tcp": ("ack", "fin", "psh", "rst", "syn", "urg", "established"),
@@ -175,6 +176,8 @@ class AclsFacts(object):
         if acl_lines:
             acl, acls = {}, []
             for line in acl_lines:
+                if "matches" in line:
+                    line = re.sub(r"\([^()]*\)", "", line)
                 if line.startswith("ip"):
                     if acl:
                         acls.append(acl)

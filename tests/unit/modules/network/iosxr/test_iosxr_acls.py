@@ -467,3 +467,32 @@ class TestIosxrAclsModule(TestIosxrModule):
         )
         cmds = ["ipv4 access-list acl_1", "10 deny ip any any"]
         self.execute_module(changed=True, commands=cmds)
+
+    def test_iosxr_acls_parsed_matches(self):
+        set_module_args(
+            dict(
+                running_config="""ipv4 access-list ACL_NAME\n5 permit ipv4 host x.x.x.x any (409 matches)""",
+                state="parsed",
+            )
+        )
+        result = self.execute_module(changed=False)
+        parsed_list = [
+            {
+                "acls": [
+                    {
+                        "name": "ACL_NAME",
+                        "aces": [
+                            {
+                                "sequence": 5,
+                                "grant": "permit",
+                                "protocol": "ipv4",
+                                "source": {"host": "x.x.x.x"},
+                                "destination": {"any": True},
+                            }
+                        ],
+                    }
+                ],
+                "afi": "ipv4",
+            }
+        ]
+        self.assertEqual(parsed_list, result["parsed"])
