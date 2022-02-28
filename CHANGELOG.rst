@@ -4,6 +4,14 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v2.8.1
+======
+
+Bugfixes
+--------
+
+- `iosxr_acls` - fix acl for parsing wrong command on ( num matches ) data
+
 v2.8.0
 ======
 

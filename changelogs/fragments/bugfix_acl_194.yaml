@@ -1,3 +1,0 @@
----
-bugfixes:
-  - "`iosxr_acls` - fix acl for parsing wrong command on ( num matches ) data"
