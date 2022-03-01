@@ -367,10 +367,17 @@ releases:
   2.8.0:
     changes:
       minor_changes:
-        - Add commit_confirmed functionality in IOSXR.
-        - Add disable_default_comment option to disable default comment in iosxr_config
+      - Add commit_confirmed functionality in IOSXR.
+      - Add disable_default_comment option to disable default comment in iosxr_config
           module.
     fragments:
-      - 199_add_commit_confirmed_feature.yaml
-      - bugfix_198_default_comment_removal.yaml
+    - 199_add_commit_confirmed_feature.yaml
+    - bugfix_198_default_comment_removal.yaml
     release_date: '2022-02-23'
+  2.8.1:
+    changes:
+      bugfixes:
+      - '`iosxr_acls` - fix acl for parsing wrong command on ( num matches ) data'
+    fragments:
+    - bugfix_acl_194.yaml
+    release_date: '2022-02-28'
