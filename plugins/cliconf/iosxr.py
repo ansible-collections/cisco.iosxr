@@ -21,7 +21,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = """
-author: Ansible Networking Team (@network-team)
+author: Ansible Networking Team (@ansible-network)
 name: iosxr
 short_description: Use iosxr cliconf to run command on Cisco IOS XR platform
 description:
