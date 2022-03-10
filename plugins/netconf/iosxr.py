@@ -23,7 +23,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 author: Ansible Networking Team (@ansible-network)
-netconf: iosxr
+name: iosxr
 short_description: Use iosxr netconf plugin to run netconf commands on Cisco IOSXR
   platform
 description:
