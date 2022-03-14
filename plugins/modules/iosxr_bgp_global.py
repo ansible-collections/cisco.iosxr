@@ -324,6 +324,8 @@ options:
               description:
                 - Neighbor router address.
               type: str
+              aliases:
+                - neighbor_address
               required: true
             advertisement_interval:
               description: Minimum interval between sending BGP routing updates.Example-<0-600>.

@@ -259,7 +259,11 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                     "type": "list",
                     "elements": "dict",
                     "options": {
-                        "neighbor": {"type": "str", "aliases": ["neighbor_address"], "required": True},
+                        "neighbor": {
+                            "type": "str",
+                            "aliases": ["neighbor_address"],
+                            "required": True,
+                        },
                         "advertisement_interval": {"type": "int"},
                         "bfd": {
                             "type": "dict",
@@ -846,7 +850,11 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "type": "list",
                             "elements": "dict",
                             "options": {
-                                "neighbor": {"type": "str", "required": True},
+                                "neighbor": {
+                                    "type": "str",
+                                    "aliases": ["neighbor_address"],
+                                    "required": True,
+                                },
                                 "advertisement_interval": {"type": "int"},
                                 "bfd": {
                                     "type": "dict",
