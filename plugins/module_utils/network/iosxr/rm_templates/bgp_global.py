@@ -1288,20 +1288,20 @@ class Bgp_globalTemplate(NetworkTemplate):
             }
         },
         {
-            "name": "neighbor",
+            "name": "neighbor_address",
             "getval": re.compile(
                 r"""
                 \s+neighbor\s(?P<value>\S+)
                 $""", re.VERBOSE
             ),
-            "setval": "neighbor {{ neighbor }}",
+            "setval": "neighbor {{ neighbor_address }}",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{value}}":
                                 {
-                                    "neighbor": "{{ value }}",
+                                    "neighbor_address": "{{value}}"
                                 }
                         }
                     }
