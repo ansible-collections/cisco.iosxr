@@ -319,16 +319,18 @@ class Bgp_global(ResourceModule):
             have = have_nbr.pop(name, {})
             begin = len(self.commands)
             self.compare(parsers=neighbor_parsers, want=entry, have=have)
-            neighbor_address = entry.get("neighbor", "")
+            neighbor_address = entry.get("neighbor_address", "")
             if len(self.commands) != begin:
                 self.commands.insert(
                     begin,
                     self._tmplt.render(
-                        {"neighbor": neighbor_address}, "neighbor", False
+                        {"neighbor_address": neighbor_address},
+                        "neighbor_address",
+                        False,
                     ),
                 )
         for name, entry in iteritems(have_nbr):
-            if self._check_af("neighbor", name):
+            if self._check_af("neighbor_address", name):
                 self._module.fail_json(
                     msg="Neighbor {0} has address-family configurations. "
                     "Please use the iosxr_bgp_neighbor_address_family module to remove those first.".format(
@@ -336,7 +338,7 @@ class Bgp_global(ResourceModule):
                     )
                 )
             else:
-                self.addcmd(entry, "neighbor", True)
+                self.addcmd(entry, "neighbor_address", True)
 
     def _vrfs_compare(self, want, have):
         """Custom handling of VRFs option
@@ -398,7 +400,7 @@ class Bgp_global(ResourceModule):
             }
         if "neighbors" in entry:
             entry["neighbors"] = {
-                x["neighbor"]: x for x in entry.get("neighbors", [])
+                x["neighbor_address"]: x for x in entry.get("neighbors", [])
             }
 
         if "vrfs" in entry:

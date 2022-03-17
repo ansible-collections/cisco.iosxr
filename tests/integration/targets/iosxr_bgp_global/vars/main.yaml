@@ -32,10 +32,10 @@ merged:
       cluster_id: "5"
       router_id: "192.0.2.10"
     neighbors:
-      - neighbor: 192.0.2.11
+      - neighbor_address: 192.0.2.11
         remote_as: 65537
         cluster_id: "3"
-      - neighbor: "192.0.2.14"
+      - neighbor_address: "192.0.2.14"
         remote_as: 65538
         bfd:
           fast_detect:
@@ -72,7 +72,7 @@ replaced:
       cluster_id: "5"
       router_id: "192.0.2.10"
     neighbors:
-      - neighbor: "192.0.2.13"
+      - neighbor_address: "192.0.2.13"
         remote_as: 65538
         bfd:
           fast_detect:

@@ -445,7 +445,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "neighbors": [
                 {
                     "cluster_id": "3",
-                    "neighbor": "192.0.2.11",
+                    "neighbor_address": "192.0.2.11",
                     "remote_as": 65537,
                 },
                 {
@@ -454,7 +454,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                         "minimum_interval": 20,
                         "multiplier": 6,
                     },
-                    "neighbor": "192.0.2.14",
+                    "neighbor_address": "192.0.2.14",
                     "remote_as": 65538,
                 },
             ],
