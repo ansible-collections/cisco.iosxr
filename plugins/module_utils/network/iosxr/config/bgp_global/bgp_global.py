@@ -324,7 +324,9 @@ class Bgp_global(ResourceModule):
                 self.commands.insert(
                     begin,
                     self._tmplt.render(
-                        {"neighbor_address": neighbor_address}, "neighbor_address", False
+                        {"neighbor_address": neighbor_address},
+                        "neighbor_address",
+                        False,
                     ),
                 )
         for name, entry in iteritems(have_nbr):

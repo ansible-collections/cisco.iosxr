@@ -138,7 +138,8 @@ class Bgp_globalFacts(object):
         neighbors = obj.get("neighbors", [])
         if neighbors:
             obj["neighbors"] = sorted(
-                list(neighbors.values()), key=lambda k, sk="neighbor_address": k[sk]
+                list(neighbors.values()),
+                key=lambda k, sk="neighbor_address": k[sk],
             )
         rpki_servers = obj.get("rpki", {}).get("servers", [])
         if rpki_servers:
