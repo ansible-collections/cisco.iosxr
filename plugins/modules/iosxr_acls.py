@@ -26,10 +26,6 @@
 The module file for iosxr_acls
 """
 
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-
 
 DOCUMENTATION = """
 module: iosxr_acls
