@@ -535,7 +535,7 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "notify": "{{notify}}",
                         "read": "{{read}}",
                         "write": "{{write}}",
-                        "v4acl": "{{v4acl}}",
+                        "v4_acl": "{{v4acl}}",
                         "version": "{{version}}"
                     }
                 ]
