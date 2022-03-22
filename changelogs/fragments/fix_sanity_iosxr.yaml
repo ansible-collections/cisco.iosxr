@@ -1,0 +1,3 @@
+---
+trivial:
+  - IOSXR - Fix sanity for missing elements tag under list type attribute.
