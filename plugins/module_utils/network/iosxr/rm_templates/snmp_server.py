@@ -79,10 +79,10 @@ def group_tmplt(config_data):
         command += " write {write}".format(write=config_data["write"])
     if config_data.get("context"):
         command += " context {context}".format(context=config_data["context"])
-    if config_data.get("Ipv4_acl"):
-        command += " IPv4 {Ipv4_acl}".format(Ipv4_acl=config_data["Ipv4_acl"])
-    if config_data.get("Ipv6_acl"):
-        command += " IPv6 {Ipv6_acl}".format(Ipv6_acl=config_data["Ipv6_acl"])
+    if config_data.get("acl_v4"):
+        command += " IPv4 {acl_v4}".format(acl_v4=config_data["acl_v4"])
+    if config_data.get("acl_v6"):
+        command += " IPv6 {acl_v6}".format(acl_v6=config_data["acl_v6"])
     if config_data.get("v4_acl"):
         command += " {v4_acl}".format(v4_acl=config_data["v4_acl"])
     return command
@@ -305,10 +305,10 @@ def user_tmplt(config_data):
     command = "snmp-server user {user} {group} {version}".format(
         user=user, group=group, version=version
     )
-    if config_data.get("Ipv4_acl"):
-        command += " IPv4 {IPv4}".format(IPv4=config_data["Ipv4_acl"])
-    if config_data.get("Ipv4_acl"):
-        command += " IPv6 {IPv6}".format(IPv6=config_data["Ipv6_acl"])
+    if config_data.get("acl_v4"):
+        command += " IPv4 {acl_v4}".format(acl_v4=config_data["acl_v4"])
+    if config_data.get("acl_v6"):
+        command += " IPv6 {acl_v6}".format(acl_v6=config_data["acl_v6"])
     if config_data.get("v4_acl"):
         command += " {v4_acl}".format(v4_acl=config_data["v4_acl"])
     if config_data.get("SDROwner"):
@@ -529,8 +529,8 @@ class Snmp_serverTemplate(NetworkTemplate):
                 "groups": [
                     {
                         "group": "{{ group }}",
-                        "Ipv4_acl": "{{IPv4}}",
-                        "Ipv6_acl": "{{IPv6}}",
+                        "acl_v4": "{{IPv4}}",
+                        "acl_v6": "{{IPv6}}",
                         "context": "{{context}}",
                         "notify": "{{notify}}",
                         "read": "{{read}}",
@@ -3013,8 +3013,8 @@ class Snmp_serverTemplate(NetworkTemplate):
                     {
                         "user": "{{ name }}",
                         "group": "{{ group }}",
-                        "Ipv4_acl": "{{ipv4}}",
-                        "Ipv6_acl": "{{ipv6}}",
+                        "acl_v4": "{{ipv4}}",
+                        "acl_v6": "{{ipv6}}",
                         "SDROwner": "{{True if sdowner is defined}}",
                         "SystemOwner": "{{True if systemowner is defined }}",
                         "v4_acl": "{{v4acl}}",
