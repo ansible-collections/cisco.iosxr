@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - "`iosxr_snmp_server` - Add aliases for access-lists in snmp-server(https://github.com/ansible-collections/cisco.iosxr/pull/225)."
