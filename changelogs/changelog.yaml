@@ -381,3 +381,19 @@ releases:
     fragments:
     - bugfix_acl_194.yaml
     release_date: '2022-02-28'
+  2.9.0:
+    changes:
+      bugfixes:
+      - Add symlink of modules under plugins/action.
+      - '`iosxr_snmp_server` - Add aliases for access-lists in snmp-server(https://github.com/ansible-collections/cisco.iosxr/pull/225).'
+      - iosxr_bgp_global - Add alias for neighbor_address (https://github.com/ansible-collections/cisco.iosxr/issues/216)
+      - iosxr_snmp_server - Fix gather_facts issue in snmp_servers (https://github.com/ansible-collections/cisco.iosxr/issues/215)
+      minor_changes:
+      - IOSXR - Fix sanity for missing elements tag under list type attribute.
+    fragments:
+    - add_symlink.yaml
+    - bugfix_iosxr.yaml
+    - bugfix_snmp_server.yaml
+    - fix_sanity.yaml
+    - fix_sanity_iosxr.yaml
+    release_date: '2022-03-29'
