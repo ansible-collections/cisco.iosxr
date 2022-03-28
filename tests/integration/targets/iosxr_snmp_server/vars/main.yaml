@@ -64,8 +64,8 @@ merged:
             traps: true
         vrf: vrf1
     users:
-      - Ipv4_acl: test1
-        Ipv6_acl: test2
+      - acl_v4: test1
+        acl_v6: test2
         group: test2
         user: u1
         version: v1

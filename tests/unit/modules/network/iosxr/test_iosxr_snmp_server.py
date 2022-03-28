@@ -2971,8 +2971,8 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 {
                     "user": "u1",
                     "group": "test2",
-                    "Ipv4_acl": "test1",
-                    "Ipv6_acl": "test2",
+                    "acl_v4": "test1",
+                    "acl_v6": "test2",
                     "v4_acl": "v4acl",
                     "version": "v1",
                 }
@@ -2989,8 +2989,8 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "groups": [
                 {
                     "group": "g2",
-                    "Ipv4_acl": "test",
-                    "Ipv6_acl": "test1",
+                    "acl_v4": "test",
+                    "acl_v6": "test1",
                     "context": "test3",
                     "read": "test1",
                     "write": "test2",
@@ -3308,8 +3308,8 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 {
                     "user": "test1",
                     "group": "test2",
-                    "Ipv4_acl": "test1",
-                    "Ipv6_acl": "test2",
+                    "acl_v4": "test1",
+                    "acl_v6": "test2",
                     "v4_acl": "SDROwner",
                     "version": "v1",
                 }
@@ -3327,8 +3327,8 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 {"group": "test", "notify": "test1", "version": "v1"},
                 {
                     "group": "test1",
-                    "Ipv4_acl": "test",
-                    "Ipv6_acl": "test1",
+                    "acl_v4": "test",
+                    "acl_v6": "test1",
                     "context": "test3",
                     "read": "test1",
                     "write": "test2",

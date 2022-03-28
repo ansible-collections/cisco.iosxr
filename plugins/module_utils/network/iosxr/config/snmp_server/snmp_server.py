@@ -196,10 +196,21 @@ class Snmp_server(ResourceModule):
             self.run_commands()
         return self.result
 
+    def handle_alieses(self, want):
+        for x in [want.get("groups", []), want.get("users", [])]:
+            for y in x:
+                if y.get("Ipv4_acl"):
+                    del y["Ipv4_acl"]
+                if y.get("Ipv6_acl"):
+                    del y["Ipv6_acl"]
+        return want
+
     def generate_commands(self):
         """ Generate configuration commands to send based on
             want, have and desired state.
         """
+
+        self.want = self.handle_alieses(self.want)
         wantd = self.list_to_dict(self.want)
         haved = self.list_to_dict(self.have)
 

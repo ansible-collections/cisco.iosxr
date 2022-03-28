@@ -96,7 +96,6 @@ class Snmp_serverFacts(object):
                 self.argument_spec, {"config": objs}, redact=True
             )
         )
-
         facts["snmp_server"] = params.get("config", {})
         ansible_facts["ansible_network_resources"].update(facts)
 
