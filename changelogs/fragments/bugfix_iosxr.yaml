@@ -1,3 +1,0 @@
----
-bugfixes:
-  - "iosxr_bgp_global - Add alias for neighbor_address (https://github.com/ansible-collections/cisco.iosxr/issues/216)"

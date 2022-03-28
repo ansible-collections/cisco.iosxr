@@ -4,6 +4,23 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+
+v2.9.0
+======
+
+Minor Changes
+-------------
+
+- IOSXR - Fix sanity for missing elements tag under list type attribute.
+
+Bugfixes
+--------
+
+- Add symlink of modules under plugins/action.
+- `iosxr_snmp_server` - Add aliases for access-lists in snmp-server(https://github.com/ansible-collections/cisco.iosxr/pull/225).
+- iosxr_bgp_global - Add alias for neighbor_address (https://github.com/ansible-collections/cisco.iosxr/issues/216)
+- iosxr_snmp_server - Fix gather_facts issue in snmp_servers (https://github.com/ansible-collections/cisco.iosxr/issues/215)
+
 v2.8.1
 ======
 
