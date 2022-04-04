@@ -27,8 +27,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 
 
 class HostnameFacts(object):
-    """ The iosxr hostname facts class
-    """
+    """The iosxr hostname facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -38,7 +37,7 @@ class HostnameFacts(object):
         return connection.get("show running-config hostname")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Hostname network resource
+        """Populate the facts for Hostname network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary

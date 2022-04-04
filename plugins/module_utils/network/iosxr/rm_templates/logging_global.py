@@ -39,8 +39,10 @@ def tmplt_correlator_rule(config_data):
     commands = []
     rule_name = config_data.get("rule_name")
     rule_type = config_data.get("rule_type")
-    base_command = "logging correlator rule {rule_name} type {rule_type}".format(
-        rule_type=rule_type, rule_name=rule_name
+    base_command = (
+        "logging correlator rule {rule_name} type {rule_type}".format(
+            rule_type=rule_type, rule_name=rule_name
+        )
     )
     if config_data.get("timeout"):
         commands.append(

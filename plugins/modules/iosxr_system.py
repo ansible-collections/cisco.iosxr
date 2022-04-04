@@ -904,8 +904,7 @@ class NCConfiguration(ConfigBase):
 
 
 def main():
-    """ Main entry point for Ansible module execution
-    """
+    """Main entry point for Ansible module execution"""
     argument_spec = dict(
         hostname=dict(type="str"),
         vrf=dict(type="str", default="default"),

@@ -32,8 +32,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.ut
 
 
 class Bgp_globalFacts(object):
-    """ The iosxr bgp_global facts class
-    """
+    """The iosxr bgp_global facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -53,7 +52,7 @@ class Bgp_globalFacts(object):
         return connection.get("show running-config router bgp")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Bgp_global network resource
+        """Populate the facts for Bgp_global network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
@@ -131,7 +130,7 @@ class Bgp_globalFacts(object):
         return ansible_facts
 
     def _post_parse(self, obj):
-        """ Converts the intermediate data structure
+        """Converts the intermediate data structure
             to valid format as per argspec.
         :param obj: dict
         """

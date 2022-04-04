@@ -274,8 +274,7 @@ DEFAULT_COMMIT_COMMENT = "configured by iosxr_config"
 
 
 def copy_file_to_node(module):
-    """ Copy config file to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well.
-    """
+    """Copy config file to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well."""
     src = "/tmp/ansible_config.txt"
     file = open(src, "wb")
     file.write(to_bytes(module.params["src"], errors="surrogate_or_strict"))
@@ -411,8 +410,7 @@ def run(module, result):
 
 
 def main():
-    """main entry point for module execution
-    """
+    """main entry point for module execution"""
     backup_spec = dict(filename=dict(), dir_path=dict(type="path"))
     argument_spec = dict(
         src=dict(type="path"),

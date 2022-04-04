@@ -114,11 +114,9 @@ class Provider(CliProvider):
                 return "%s disable" % cmd
 
     def _render_neighbors(self, config):
-        """ generate bgp neighbor configuration
-        """
+        """generate bgp neighbor configuration"""
         return Neighbors(self.params).render(config)
 
     def _render_address_family(self, config):
-        """ generate address-family configuration
-        """
+        """generate address-family configuration"""
         return AddressFamily(self.params).render(config)

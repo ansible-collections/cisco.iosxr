@@ -30,8 +30,7 @@ from ansible.module_utils._text import to_bytes, to_text
 
 
 class TestPluginCLIConfIOSXR(unittest.TestCase):
-    """ Test class for IOSXR CLI Conf Methods
-    """
+    """Test class for IOSXR CLI Conf Methods"""
 
     def setUp(self):
         self._mock_connection = MagicMock()
@@ -76,8 +75,7 @@ class TestPluginCLIConfIOSXR(unittest.TestCase):
         pass
 
     def test_get_device_info_iosxr(self):
-        """ Test get_device_info for nxos
-        """
+        """Test get_device_info for nxos"""
         device_info = self._cliconf.get_device_info()
 
         mock_device_info = {
@@ -91,8 +89,7 @@ class TestPluginCLIConfIOSXR(unittest.TestCase):
         self.assertEqual(device_info, mock_device_info)
 
     def test_get_command_output_iosxr(self):
-        """ Test _get_command_with_output for iosxr
-        """
+        """Test _get_command_with_output for iosxr"""
         self._prepare()
         cmd = self._cliconf.get_command_output("show running-config hostname")
 

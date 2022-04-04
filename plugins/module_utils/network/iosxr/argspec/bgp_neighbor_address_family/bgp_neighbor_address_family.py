@@ -28,8 +28,7 @@ The arg spec for the iosxr_bgp_neighbor_address_family module
 
 
 class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
-    """The arg spec for the iosxr_bgp_neighbor_address_family module
-    """
+    """The arg spec for the iosxr_bgp_neighbor_address_family module"""
 
     def __init__(self, **kwargs):
         pass
