@@ -27,8 +27,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 
 
 class InterfacesFacts(object):
-    """ The iosxr interfaces fact class
-    """
+    """The iosxr interfaces fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -48,7 +47,7 @@ class InterfacesFacts(object):
         return connection.get_config(flags="interface")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for interfaces
+        """Populate the facts for interfaces
         :param module: the module instance
         :param connection: the device connection
         :param data: previously collected conf

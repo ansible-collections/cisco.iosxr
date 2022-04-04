@@ -31,8 +31,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 
 
 class Ospfv2Facts(object):
-    """ The iosxr snmp fact class
-    """
+    """The iosxr snmp fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -53,7 +52,7 @@ class Ospfv2Facts(object):
         return connection.get("show running-config router ospf")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for interfaces
+        """Populate the facts for interfaces
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf

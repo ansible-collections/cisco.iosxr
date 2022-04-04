@@ -13,8 +13,7 @@ __metaclass__ = type
 
 
 class FactsArgs(object):  # pylint: disable=R0903
-    """ The arg spec for the iosxr facts module
-    """
+    """The arg spec for the iosxr facts module"""
 
     def __init__(self, **kwargs):
         pass

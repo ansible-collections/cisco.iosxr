@@ -49,7 +49,7 @@ class Prefix_lists(ResourceModule):
         self.parsers = ["prefix", "description", "prefix_list"]
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -60,8 +60,8 @@ class Prefix_lists(ResourceModule):
         return self.result
 
     def generate_commands(self):
-        """ Generate configuration commands to send based on
-            want, have and desired state.
+        """Generate configuration commands to send based on
+        want, have and desired state.
         """
         wantd = {entry["afi"]: entry for entry in self.want}
         haved = {entry["afi"]: entry for entry in self.have}
@@ -96,9 +96,9 @@ class Prefix_lists(ResourceModule):
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
-           populates the list of commands to be run by comparing
-           the `want` and `have` data with the `parsers` defined
-           for the Prefix_lists network resource.
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Prefix_lists network resource.
         """
         self._compare_plists(
             want.get("prefix_lists", {}), have.get("prefix_lists", {})

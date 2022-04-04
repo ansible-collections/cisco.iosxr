@@ -28,8 +28,7 @@ The arg spec for the iosxr_hostname module
 
 
 class HostnameArgs(object):  # pylint: disable=R0903
-    """The arg spec for the iosxr_hostname module
-    """
+    """The arg spec for the iosxr_hostname module"""
 
     argument_spec = {
         "config": {"type": "dict", "options": {"hostname": {"type": "str"}}},
