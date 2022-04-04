@@ -83,7 +83,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                             default_metric=10,
                             cost=2,
                             areas=[dict(area_id="11", default_cost=5)],
-                            log_adjacency_changes=dict(set=True)
+                            log_adjacency_changes=dict(set=True),
                         )
                     ]
                 ),
@@ -95,7 +95,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
             "cost 2",
             "default-metric 10",
             "area 11 default-cost 5",
-            "log adjacency changes"
+            "log adjacency changes",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -178,7 +178,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                             default_metric=10,
                             cost=2,
                             areas=[dict(area_id="11", default_cost=5)],
-                            log_adjacency_changes=dict(set=True)
+                            log_adjacency_changes=dict(set=True),
                         )
                     ]
                 ),
@@ -195,7 +195,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
             "cost 2",
             "default-metric 10",
             "area 11 default-cost 5",
-            "log adjacency changes"
+            "log adjacency changes",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
