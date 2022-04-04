@@ -178,7 +178,7 @@ class Ospfv2(ResourceModule):
             "link_down_fast_detect",
             "nsr",
             "database_filter",
-            "log_adjacency",
+            "log_adjacency_changes",
             "distribute_bgp_ls",
             "distribute_link_state",
             "max_lsa",

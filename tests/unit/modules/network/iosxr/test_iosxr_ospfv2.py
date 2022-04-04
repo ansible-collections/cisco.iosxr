@@ -83,6 +83,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                             default_metric=10,
                             cost=2,
                             areas=[dict(area_id="11", default_cost=5)],
+                            log_adjacency_changes=dict(set=True),
                         )
                     ]
                 ),
@@ -94,6 +95,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
             "cost 2",
             "default-metric 10",
             "area 11 default-cost 5",
+            "log adjacency changes",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -176,6 +178,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                             default_metric=10,
                             cost=2,
                             areas=[dict(area_id="11", default_cost=5)],
+                            log_adjacency_changes=dict(set=True),
                         )
                     ]
                 ),
@@ -192,6 +195,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
             "cost 2",
             "default-metric 10",
             "area 11 default-cost 5",
+            "log adjacency changes",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -259,6 +263,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                             default_metric=10,
                             cost=2,
                             areas=[dict(area_id="11", default_cost=5)],
+                            log_adjacency_changes=dict(set=True),
                         )
                     ]
                 ),
@@ -268,8 +273,9 @@ class TestIosxrOspfV2Module(TestIosxrModule):
         commands = [
             "area 11 default-cost 5",
             "cost 2",
+            "log adjacency changes",
             "default-metric 10",
             "router ospf 60",
         ]
         result = self.execute_module(changed=False)
-        self.assertEqual(sorted(result["rendered"]), commands)
+        self.assertEqual(sorted(result["rendered"]), sorted(commands))

@@ -2458,7 +2458,7 @@ class Ospfv2Template(NetworkTemplate):
             },
         },
         {
-            "name": "log_adjacency",
+            "name": "log_adjacency_changes",
             "getval": re.compile(
                 r"""
                     ^router
@@ -2476,7 +2476,7 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "log_adjacency_changes": {
-                            "set": "{{ True changes id defined and disable is undefined and detail is undefined }}",
+                            "set": "{{ True if changes is defined }}",
                             "disable": "{{ True if disable is defined }}",
                             "details": "{{ True if details is defined }}",
                         },
