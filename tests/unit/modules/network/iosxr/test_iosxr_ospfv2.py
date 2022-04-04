@@ -278,5 +278,4 @@ class TestIosxrOspfV2Module(TestIosxrModule):
             "router ospf 60",
         ]
         result = self.execute_module(changed=False)
-        print (result)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
