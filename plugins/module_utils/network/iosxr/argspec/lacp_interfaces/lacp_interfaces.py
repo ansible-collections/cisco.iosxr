@@ -32,8 +32,7 @@ __metaclass__ = type
 
 
 class Lacp_interfacesArgs(object):  # pylint: disable=R0903
-    """The arg spec for the iosxr_lacp_interfaces module
-    """
+    """The arg spec for the iosxr_lacp_interfaces module"""
 
     def __init__(self, **kwargs):
         pass

@@ -991,8 +991,7 @@ class NCConfiguration(ConfigBase):
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     element_spec = dict(
         name=dict(type="str"),
         description=dict(type="str"),

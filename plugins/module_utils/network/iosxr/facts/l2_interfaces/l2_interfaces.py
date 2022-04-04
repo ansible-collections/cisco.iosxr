@@ -32,8 +32,7 @@ from distutils.version import LooseVersion
 
 
 class L2_InterfacesFacts(object):
-    """ The iosxr l2_interfaces fact class
-    """
+    """The iosxr l2_interfaces fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -53,7 +52,7 @@ class L2_InterfacesFacts(object):
         return connection.get_config(flags="interface")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for l2_interfaces
+        """Populate the facts for l2_interfaces
         :param module: the module instance
         :param connection: the device connection
         :param data: previously collected conf

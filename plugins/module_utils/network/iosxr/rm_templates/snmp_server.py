@@ -192,8 +192,10 @@ def mib_bulkstat_transfer_ids_tmplt(config_data):
         )
         cmds.append(command)
     if retry:
-        command = "snmp-server mib bulkstat transfer-id {name} retry {retry}".format(
-            name=name, retry=retry
+        command = (
+            "snmp-server mib bulkstat transfer-id {name} retry {retry}".format(
+                name=name, retry=retry
+            )
         )
         cmds.append(command)
     if schema:
