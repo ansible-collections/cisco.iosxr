@@ -151,6 +151,60 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>eq</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Exact prefix length to be matched.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>ge</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Minimum prefix length to be matched.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>le</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Maximum prefix length to be matched.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>prefix</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -302,6 +356,13 @@ Examples
                        - sequence: 5
                          action: remark
                          description: TEST_PL2_REMARK
+                   - name: pl3
+                     entries:
+                       - sequence: 6
+                         action: permit
+                         prefix: 35.0.0.0/8
+                         eq: 0
+
     #
     # After state:
     #
@@ -319,6 +380,10 @@ Examples
     # ipv4 prefix-list pl2
     #  5 remark TEST_PL2_REMARK
     # !
+    # ipv4 prefix-list pl3
+    #  6 permit 35.0.0.0/8 eq 0
+    # !
+
     #Module execution
     #
     # "after": [
@@ -374,7 +439,18 @@ Examples
     #                         }
     #                     ],
     #                     "name": "pl2"
-    #                 }
+    #                 },
+    #                 {
+    #                     "entries": [
+    #                         {
+    #                             "action": "permit",
+    #                             "prefix": "35.0.0.0/8",
+    #                             "sequence": 6,
+    #                             "eq": 0
+    #                         }
+    #                     ],
+    #                     "name": "pl3"
+    #                 },
     #             ]
     #         }
     #     ],
@@ -386,6 +462,7 @@ Examples
     #         "ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK",
     #         "ipv4 prefix-list pl1 4 permit 10.0.0.0/24",
     #         "ipv4 prefix-list pl2 5 remark TEST_PL2_REMARK"
+    #         "ipv4 prefix-list pl3 6 permit 35.0.0.0/8 eq 0"
     #     ]
     #-----------------------------------------------------------------------
     # Using replaced:
@@ -635,6 +712,8 @@ Examples
     # !
     # ipv4 prefix-list pl2
     #  5 remark TEST_PL2_REMARK
+    # ipv4 prefix-list pl3
+    #  6 permit 35.0.0.0/8 eq 0
 
     - name: Delete all prefix-lists from the device
       cisco.iosxr.iosxr_prefix_lists:
@@ -695,7 +774,18 @@ Examples
     #                         }
     #                     ],
     #                     "name": "pl2"
-    #                 }
+    #                 },
+    #                 {
+    #                     "entries": [
+    #                         {
+    #                             "action": "permit",
+    #                             "prefix": " 35.0.0.0/8",
+    #                             "sequence": 6,
+    #                             "eq": 0
+    #                         }
+    #                     ],
+    #                     "name": "pl3"
+    #                 },
     #             ]
     #         }
     #     ],
@@ -705,6 +795,7 @@ Examples
     #         "no ipv6 prefix-list pl_2",
     #         "no ipv4 prefix-list pl1",
     #         "no ipv4 prefix-list pl2"
+    #         "no ipv4 prefix-list pl3"
     #     ],
     #     "invocation": {
     #         "module_args": {
@@ -733,7 +824,10 @@ Examples
     # !
     # ipv4 prefix-list pl2
     #  5 remark TEST_PL2_REMARK
-    #
+    #!
+    # ipv4 prefix-list pl3
+    #  6 permit 35.0.0.0/8 eq 0
+    #!
     - name: Gather ACL interfaces facts using gathered state
       cisco.iosxr.iosxr_prefix_lists:
          state: gathered
@@ -793,7 +887,18 @@ Examples
     #                         }
     #                     ],
     #                     "name": "pl2"
-    #                 }
+    #                 },
+    #                 {
+    #                     "entries": [
+    #                         {
+    #                             "action": "permit",
+    #                             "prefix": "35.0.0.0/8",
+    #                             "sequence": 6,
+    #                             "eq": 0
+    #                         }
+    #                     ],
+    #                     "name": "pl3"
+    #                 },
     #             ]
     #         }
     #     ],
@@ -816,6 +921,9 @@ Examples
     # !
     # ipv4 prefix-list pl2
     #  5 remark TEST_PL2_REMARK
+    #!
+    # ipv4 prefix-list pl3
+    #  6 permit 35.0.0.0/8 eq 0
     #
     #
     - name: Parse externally provided Prefix_lists config to agnostic model
@@ -877,7 +985,18 @@ Examples
     #                         }
     #                     ],
     #                     "name": "pl2"
-    #                 }
+    #                 },
+    #                  {
+    #                     "entries": [
+    #                         {
+    #                             "action": "permit",
+    #                             "prefix": "35.0.0.0/8",
+    #                             "sequence": 6,
+    #                             "eq": 0
+    #                         }
+    #                     ],
+    #                     "name": "pl3"
+    #                 },
     #             ]
     #         }
     #     ]
@@ -917,6 +1036,10 @@ Examples
                    - sequence: 5
                      action: remark
                      description: TEST_PL2_REMARK
+                   - sequence: 6
+                     action: permit
+                     prefix: 35.0.0.0/8
+                     eq: 0
 
          state: rendered
     # After state:
@@ -926,7 +1049,8 @@ Examples
     #         "ipv6 prefix-list pl_2 2 remark TEST_PL_2_REMARK",
     #         "ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK",
     #         "ipv4 prefix-list pl1 4 permit 10.0.0.0/24",
-    #         "ipv4 prefix-list pl2 5 remark TEST_PL2_REMARK"
+    #         "ipv4 prefix-list pl2 5 remark TEST_PL2_REMARK",
+    #         "ipv4 prefix-list pl2 6 permit 35.0.0.0/8 eq 0"
     #     ]
     #
     #---------------------------------------------------------------------------------
@@ -961,6 +1085,10 @@ Examples
                        - sequence: 4
                          action: permit
                          prefix: 10.0.0.0/24
+                       - sequence: 6
+                         action: permit
+                         prefix: 35.0.0.0/8
+                         eq: 0
             state: overridden
 
     # After state:
@@ -969,6 +1097,8 @@ Examples
     #ipv4 prefix-list pl3
     # 3 remark TEST_PL1_3_REMARK
     # 4 permit 10.0.0.0/24
+    # 6 permit 35.0.0.0/8 eq 0
+    # !
     #!
     # # Module Execution:
     # "after": [
@@ -986,6 +1116,12 @@ Examples
     #                             "action": "permit",
     #                             "prefix": "10.0.0.0/24",
     #                             "sequence": 4
+    #                         },
+    #                         {
+    #                             "action": "permit",
+    #                             "prefix": "35.0.0.0/8",
+    #                             "sequence": 6,
+    #                             "eq": 0
     #                         }
     #                     ],
     #                     "name": "pl3"
@@ -1057,7 +1193,8 @@ Examples
     #         "no ipv4 prefix-list pl1",
     #         "no ipv4 prefix-list pl2",
     #         "ipv4 prefix-list pl3 3 remark TEST_PL1_3_REMARK",
-    #         "ipv4 prefix-list pl3 4 permit 10.0.0.0/24"
+    #         "ipv4 prefix-list pl3 4 permit 10.0.0.0/24",
+    #         "ipv4 prefix-list pl3 6 permit 35.0.0.0/8 eq 0"
     #     ],
     #     "invocation": {
     #         "module_args": {
@@ -1071,13 +1208,28 @@ Examples
     #                                     "action": "remark",
     #                                     "description": "TEST_PL1_3_REMARK",
     #                                     "prefix": null,
-    #                                     "sequence": 3
+    #                                     "sequence": 3,
+    #                                     "ge": null,
+    #                                     "le": null,
+    #                                     "eq": null
     #                                 },
     #                                 {
     #                                     "action": "permit",
     #                                     "description": null,
     #                                     "prefix": "10.0.0.0/24",
-    #                                     "sequence": 4
+    #                                     "sequence": 4,
+    #                                     "ge": null,
+    #                                     "le": null,
+    #                                     "eq": null
+    #                                 },
+    #                                 {
+    #                                     "action": "permit",
+    #                                     "description": null,
+    #                                     "prefix": "35.0.0.0/8",
+    #                                     "sequence": 6,
+    #                                     "ge": null,
+    #                                     "le": null,
+    #                                     "eq": 0
     #                                 }
     #                             ],
     #                             "name": "pl3"
@@ -1093,6 +1245,123 @@ Examples
     #
 
 
+
+Return Values
+-------------
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>after</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when changed</td>
+                <td>
+                            <div>The resulting configuration after module execution.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>before</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
+                <td>
+                            <div>The configuration prior to the module execution.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>commands</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
+                <td>
+                            <div>The set of commands pushed to the remote device.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;ipv6 prefix-list pl_1 1 deny 2001:db8:1234::/48&#x27;, &#x27;ipv6 prefix-list pl_2 2 remark TEST_PL_2_REMARK&#x27;, &#x27;ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK&#x27;, &#x27;ipv4 prefix-list pl1 4 permit 10.0.0.0/24&#x27;, &#x27;ipv4 prefix-list pl2 5 remark TEST_PL2_REMARK&#x27;]</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>gathered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>gathered</code></td>
+                <td>
+                            <div>Facts about the network resource gathered from the remote device as structured data.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>parsed</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>parsed</code></td>
+                <td>
+                            <div>The device native config provided in <em>running_config</em> option parsed into structured data as per module argspec.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>rendered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>rendered</code></td>
+                <td>
+                            <div>The provided configuration in the task rendered in device-native format (offline).</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;ipv6 prefix-list pl_1 1 deny 2001:db8:1234::/48&#x27;, &#x27;ipv6 prefix-list pl_2 2 remark TEST_PL_2_REMARK&#x27;, &#x27;ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK&#x27;, &#x27;ipv4 prefix-list pl1 4 permit 10.0.0.0/24&#x27;, &#x27;ipv4 prefix-list pl2 5 remark TEST_PL2_REMARK&#x27;]</div>
+                </td>
+            </tr>
+    </table>
+    <br/><br/>
 
 
 Status

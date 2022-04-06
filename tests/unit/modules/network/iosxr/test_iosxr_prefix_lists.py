@@ -142,7 +142,18 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         prefix="10.0.0.0/24",
                                     ),
                                 ],
-                            )
+                            ),
+                            dict(
+                                name="test3",
+                                entries=[
+                                    dict(
+                                        sequence=5,
+                                        action="permit",
+                                        eq="3",
+                                        prefix="32.0.0.0/8",
+                                    )
+                                ],
+                            ),
                         ],
                     ),
                 ],
@@ -153,6 +164,7 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
             "ipv6 prefix-list test2 4 remark test",
             "ipv4 prefix-list test1 2 permit 10.0.0.0/24",
             "ipv4 prefix-list test1 3 remark test1",
+            "ipv4 prefix-list test3 5 permit 32.0.0.0/8 eq 3",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -189,6 +201,17 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                     )
                                 ],
                             ),
+                            dict(
+                                name="test3",
+                                entries=[
+                                    dict(
+                                        sequence=5,
+                                        action="permit",
+                                        eq="3",
+                                        prefix="32.0.0.0/8",
+                                    )
+                                ],
+                            ),
                         ],
                     )
                 ],
@@ -198,6 +221,7 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
         commands = [
             "no ipv4 prefix-list test1 3 remark test1",
             "ipv4 prefix-list test2 2 permit 10.0.0.0/24",
+            "ipv4 prefix-list test3 5 permit 32.0.0.0/8 eq 3",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -312,7 +336,18 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         prefix="10.0.0.0/24",
                                     ),
                                 ],
-                            )
+                            ),
+                            dict(
+                                name="test3",
+                                entries=[
+                                    dict(
+                                        sequence=5,
+                                        action="permit",
+                                        eq="3",
+                                        prefix="32.0.0.0/8",
+                                    )
+                                ],
+                            ),
                         ],
                     ),
                 ],
@@ -324,6 +359,7 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
             "ipv6 prefix-list test2 4 remark test",
             "ipv4 prefix-list test1 2 permit 10.0.0.0/24",
             "ipv4 prefix-list test1 3 remark test1",
+            "ipv4 prefix-list test3 5 permit 32.0.0.0/8 eq 3",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))

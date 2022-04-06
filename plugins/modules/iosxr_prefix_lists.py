@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright 2021 Red Hat
+# Copyright 2022 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
@@ -68,6 +68,15 @@ options:
               prefix:
                 description: IP or IPv6 prefix in A.B.C.D/LEN or A:B::C:D/LEN format. only applicable for action "permit" and "deny"
                 type: str
+              eq:
+                description: Exact prefix length to be matched.
+                type: int
+              ge:
+                description: Minimum prefix length to be matched.
+                type: int
+              le:
+                description: Maximum prefix length to be matched.
+                type: int
   state:
     description:
     - The state the configuration should be left in.
@@ -88,6 +97,7 @@ options:
     - rendered
     default: merged
 """
+
 EXAMPLES = """
 # Using merged
 # Before state
@@ -127,6 +137,13 @@ EXAMPLES = """
                    - sequence: 5
                      action: remark
                      description: TEST_PL2_REMARK
+               - name: pl3
+                 entries:
+                   - sequence: 6
+                     action: permit
+                     prefix: 35.0.0.0/8
+                     eq: 0
+
 #
 # After state:
 #
@@ -144,6 +161,10 @@ EXAMPLES = """
 # ipv4 prefix-list pl2
 #  5 remark TEST_PL2_REMARK
 # !
+# ipv4 prefix-list pl3
+#  6 permit 35.0.0.0/8 eq 0
+# !
+
 #Module execution
 #
 # "after": [
@@ -199,7 +220,18 @@ EXAMPLES = """
 #                         }
 #                     ],
 #                     "name": "pl2"
-#                 }
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "permit",
+#                             "prefix": "35.0.0.0/8",
+#                             "sequence": 6,
+#                             "eq": 0
+#                         }
+#                     ],
+#                     "name": "pl3"
+#                 },
 #             ]
 #         }
 #     ],
@@ -211,6 +243,7 @@ EXAMPLES = """
 #         "ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK",
 #         "ipv4 prefix-list pl1 4 permit 10.0.0.0/24",
 #         "ipv4 prefix-list pl2 5 remark TEST_PL2_REMARK"
+#         "ipv4 prefix-list pl3 6 permit 35.0.0.0/8 eq 0"
 #     ]
 #-----------------------------------------------------------------------
 # Using replaced:
@@ -460,6 +493,8 @@ EXAMPLES = """
 # !
 # ipv4 prefix-list pl2
 #  5 remark TEST_PL2_REMARK
+# ipv4 prefix-list pl3
+#  6 permit 35.0.0.0/8 eq 0
 
 - name: Delete all prefix-lists from the device
   cisco.iosxr.iosxr_prefix_lists:
@@ -520,7 +555,18 @@ EXAMPLES = """
 #                         }
 #                     ],
 #                     "name": "pl2"
-#                 }
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "permit",
+#                             "prefix": " 35.0.0.0/8",
+#                             "sequence": 6,
+#                             "eq": 0
+#                         }
+#                     ],
+#                     "name": "pl3"
+#                 },
 #             ]
 #         }
 #     ],
@@ -530,6 +576,7 @@ EXAMPLES = """
 #         "no ipv6 prefix-list pl_2",
 #         "no ipv4 prefix-list pl1",
 #         "no ipv4 prefix-list pl2"
+#         "no ipv4 prefix-list pl3"
 #     ],
 #     "invocation": {
 #         "module_args": {
@@ -558,7 +605,10 @@ EXAMPLES = """
 # !
 # ipv4 prefix-list pl2
 #  5 remark TEST_PL2_REMARK
-#
+#!
+# ipv4 prefix-list pl3
+#  6 permit 35.0.0.0/8 eq 0
+#!
 - name: Gather ACL interfaces facts using gathered state
   cisco.iosxr.iosxr_prefix_lists:
      state: gathered
@@ -618,7 +668,18 @@ EXAMPLES = """
 #                         }
 #                     ],
 #                     "name": "pl2"
-#                 }
+#                 },
+#                 {
+#                     "entries": [
+#                         {
+#                             "action": "permit",
+#                             "prefix": "35.0.0.0/8",
+#                             "sequence": 6,
+#                             "eq": 0
+#                         }
+#                     ],
+#                     "name": "pl3"
+#                 },
 #             ]
 #         }
 #     ],
@@ -641,6 +702,9 @@ EXAMPLES = """
 # !
 # ipv4 prefix-list pl2
 #  5 remark TEST_PL2_REMARK
+#!
+# ipv4 prefix-list pl3
+#  6 permit 35.0.0.0/8 eq 0
 #
 #
 - name: Parse externally provided Prefix_lists config to agnostic model
@@ -702,7 +766,18 @@ EXAMPLES = """
 #                         }
 #                     ],
 #                     "name": "pl2"
-#                 }
+#                 },
+#                  {
+#                     "entries": [
+#                         {
+#                             "action": "permit",
+#                             "prefix": "35.0.0.0/8",
+#                             "sequence": 6,
+#                             "eq": 0
+#                         }
+#                     ],
+#                     "name": "pl3"
+#                 },
 #             ]
 #         }
 #     ]
@@ -742,6 +817,10 @@ EXAMPLES = """
                - sequence: 5
                  action: remark
                  description: TEST_PL2_REMARK
+               - sequence: 6
+                 action: permit
+                 prefix: 35.0.0.0/8
+                 eq: 0
 
      state: rendered
 # After state:
@@ -751,7 +830,8 @@ EXAMPLES = """
 #         "ipv6 prefix-list pl_2 2 remark TEST_PL_2_REMARK",
 #         "ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK",
 #         "ipv4 prefix-list pl1 4 permit 10.0.0.0/24",
-#         "ipv4 prefix-list pl2 5 remark TEST_PL2_REMARK"
+#         "ipv4 prefix-list pl2 5 remark TEST_PL2_REMARK",
+#         "ipv4 prefix-list pl2 6 permit 35.0.0.0/8 eq 0"
 #     ]
 #
 #---------------------------------------------------------------------------------
@@ -786,6 +866,10 @@ EXAMPLES = """
                    - sequence: 4
                      action: permit
                      prefix: 10.0.0.0/24
+                   - sequence: 6
+                     action: permit
+                     prefix: 35.0.0.0/8
+                     eq: 0
         state: overridden
 
 # After state:
@@ -794,6 +878,8 @@ EXAMPLES = """
 #ipv4 prefix-list pl3
 # 3 remark TEST_PL1_3_REMARK
 # 4 permit 10.0.0.0/24
+# 6 permit 35.0.0.0/8 eq 0
+# !
 #!
 # # Module Execution:
 # "after": [
@@ -811,6 +897,12 @@ EXAMPLES = """
 #                             "action": "permit",
 #                             "prefix": "10.0.0.0/24",
 #                             "sequence": 4
+#                         },
+#                         {
+#                             "action": "permit",
+#                             "prefix": "35.0.0.0/8",
+#                             "sequence": 6,
+#                             "eq": 0
 #                         }
 #                     ],
 #                     "name": "pl3"
@@ -882,7 +974,8 @@ EXAMPLES = """
 #         "no ipv4 prefix-list pl1",
 #         "no ipv4 prefix-list pl2",
 #         "ipv4 prefix-list pl3 3 remark TEST_PL1_3_REMARK",
-#         "ipv4 prefix-list pl3 4 permit 10.0.0.0/24"
+#         "ipv4 prefix-list pl3 4 permit 10.0.0.0/24",
+#         "ipv4 prefix-list pl3 6 permit 35.0.0.0/8 eq 0"
 #     ],
 #     "invocation": {
 #         "module_args": {
@@ -896,13 +989,28 @@ EXAMPLES = """
 #                                     "action": "remark",
 #                                     "description": "TEST_PL1_3_REMARK",
 #                                     "prefix": null,
-#                                     "sequence": 3
+#                                     "sequence": 3,
+#                                     "ge": null,
+#                                     "le": null,
+#                                     "eq": null
 #                                 },
 #                                 {
 #                                     "action": "permit",
 #                                     "description": null,
 #                                     "prefix": "10.0.0.0/24",
-#                                     "sequence": 4
+#                                     "sequence": 4,
+#                                     "ge": null,
+#                                     "le": null,
+#                                     "eq": null
+#                                 },
+#                                 {
+#                                     "action": "permit",
+#                                     "description": null,
+#                                     "prefix": "35.0.0.0/8",
+#                                     "sequence": 6,
+#                                     "ge": null,
+#                                     "le": null,
+#                                     "eq": 0
 #                                 }
 #                             ],
 #                             "name": "pl3"
@@ -916,6 +1024,57 @@ EXAMPLES = """
 #     }
 # }
 #
+"""
+
+RETURN = """
+before:
+  description: The configuration prior to the module execution.
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+after:
+  description: The resulting configuration after module execution.
+  returned: when changed
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+commands:
+  description: The set of commands pushed to the remote device.
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  type: list
+  sample:
+    - "ipv6 prefix-list pl_1 1 deny 2001:db8:1234::/48"
+    - "ipv6 prefix-list pl_2 2 remark TEST_PL_2_REMARK"
+    - "ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK"
+    - "ipv4 prefix-list pl1 4 permit 10.0.0.0/24"
+    - "ipv4 prefix-list pl2 5 remark TEST_PL2_REMARK"
+rendered:
+  description: The provided configuration in the task rendered in device-native format (offline).
+  returned: when I(state) is C(rendered)
+  type: list
+  sample:
+    - "ipv6 prefix-list pl_1 1 deny 2001:db8:1234::/48"
+    - "ipv6 prefix-list pl_2 2 remark TEST_PL_2_REMARK"
+    - "ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK"
+    - "ipv4 prefix-list pl1 4 permit 10.0.0.0/24"
+    - "ipv4 prefix-list pl2 5 remark TEST_PL2_REMARK"
+gathered:
+  description: Facts about the network resource gathered from the remote device as structured data.
+  returned: when I(state) is C(gathered)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+parsed:
+  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
+  returned: when I(state) is C(parsed)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 """
 
 from ansible.module_utils.basic import AnsibleModule
