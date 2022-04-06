@@ -135,8 +135,7 @@ PROTOCOL_OPTIONS = {
 
 
 class AclsFacts(object):
-    """ The iosxr acls fact class
-    """
+    """The iosxr acls fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -157,7 +156,7 @@ class AclsFacts(object):
         return connection.get("show access-lists afi-all")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for acls
+        """Populate the facts for acls
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf

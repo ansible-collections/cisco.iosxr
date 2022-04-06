@@ -87,7 +87,7 @@ class Bgp_address_family(ResourceModule):
         ]
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -98,9 +98,9 @@ class Bgp_address_family(ResourceModule):
         return self.result
 
     def generate_commands(self):
-        """ Generate configuration commands to send based on
-                    want, have and desired state.
-                """
+        """Generate configuration commands to send based on
+        want, have and desired state.
+        """
         wantd = self.want
         haved = self.have
         for entry in self.want, self.have:
@@ -124,9 +124,9 @@ class Bgp_address_family(ResourceModule):
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
-           populates the list of commands to be run by comparing
-           the `want` and `have` data with the `parsers` defined
-           for the Bgp_global network resource.
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Bgp_global network resource.
         """
 
         self._compare_af(want=want, have=have)
@@ -140,8 +140,8 @@ class Bgp_address_family(ResourceModule):
 
     def _compare_af(self, want, have):
         """Custom handling of afs option
-               :params want: the want BGP dictionary
-               :params have: the have BGP dictionary
+        :params want: the want BGP dictionary
+        :params have: the have BGP dictionary
         """
         wafs = want.get("address_family", {})
         hafs = have.get("address_family", {})

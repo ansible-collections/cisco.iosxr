@@ -318,8 +318,7 @@ class PublicKeyManager(object):
         self._result = result
 
     def convert_key_to_base64(self):
-        """ IOS-XR only accepts base64 decoded files, this converts the public key to a temp file.
-        """
+        """IOS-XR only accepts base64 decoded files, this converts the public key to a temp file."""
         if self._module.params["aggregate"]:
             name = "aggregate"
         else:
@@ -340,8 +339,7 @@ class PublicKeyManager(object):
         return "/tmp/publickey_%s.b64" % (name)
 
     def copy_key_to_node(self, base64keyfile):
-        """ Copy key to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well.
-        """
+        """Copy key to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well."""
 
         if self._module.params["aggregate"]:
             name = "aggregate"
@@ -354,8 +352,7 @@ class PublicKeyManager(object):
         copy_file(self._module, src, dst)
 
     def addremovekey(self, command):
-        """ Add or remove key based on command
-        """
+        """Add or remove key based on command"""
         admin = self._module.params.get("admin")
 
         conn = get_connection(self._module)
@@ -955,8 +952,7 @@ class NCConfiguration(ConfigBase):
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     element_spec = dict(
         name=dict(type="str"),
         configured_password=dict(type="str", no_log=True),

@@ -184,8 +184,7 @@ def map_params_to_obj(module):
 
 
 def main():
-    """main entry point for module execution
-    """
+    """main entry point for module execution"""
     argument_spec = dict(
         netconf_port=dict(type="int", default=830, aliases=["listens_on"]),
         netconf_vrf=dict(aliases=["vrf"], default="default"),
