@@ -109,7 +109,7 @@ class Bgp_global(ResourceModule):
         ]
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -120,9 +120,9 @@ class Bgp_global(ResourceModule):
         return self.result
 
     def generate_commands(self):
-        """ Generate configuration commands to send based on
-                    want, have and desired state.
-                """
+        """Generate configuration commands to send based on
+        want, have and desired state.
+        """
         if self.state in ["merged", "replaced"]:
             w_asn = self.want.get("as_number")
             h_asn = self.have.get("as_number")
@@ -161,9 +161,9 @@ class Bgp_global(ResourceModule):
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
-           populates the list of commands to be run by comparing
-           the `want` and `have` data with the `parsers` defined
-           for the Bgp_global network resource.
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Bgp_global network resource.
         """
 
         self.compare(parsers=self.parsers, want=want, have=have)
@@ -181,10 +181,10 @@ class Bgp_global(ResourceModule):
 
     def _compare_rpki_server(self, want, have):
         """Leverages the base class `compare()` method and
-                   populates the list of commands to be run by comparing
-                   the `want` and `have` data with the `parsers` defined
-                   for the Bgp_global rpki servers resource.
-                """
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Bgp_global rpki servers resource.
+        """
         rpki_server_parsers = [
             "rpki_server_purge_time",
             "rpki_server_refresh_time",
@@ -239,10 +239,10 @@ class Bgp_global(ResourceModule):
 
     def _compare_neighbors(self, want, have, vrf=None):
         """Leverages the base class `compare()` method and
-                   populates the list of commands to be run by comparing
-                   the `want` and `have` data with the `parsers` defined
-                   for the Bgp_global neighbor resource.
-                """
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Bgp_global neighbor resource.
+        """
         neighbor_parsers = [
             "advertisement_interval",
             "bfd_fast_detect_disable",

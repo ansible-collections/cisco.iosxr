@@ -366,7 +366,7 @@ class Cliconf(CliconfBase):
                     out = to_text(out, errors="surrogate_or_strict").strip()
                 except UnicodeError:
                     raise ConnectionError(
-                        message=u"Failed to decode output from %s: %s"
+                        message="Failed to decode output from %s: %s"
                         % (cmd, to_text(out))
                     )
 

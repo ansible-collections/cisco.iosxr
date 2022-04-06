@@ -31,8 +31,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.ut
 
 
 class Bgp_neighbor_address_familyFacts(object):
-    """ The iosxr bgp_neighbor_address_family facts class
-    """
+    """The iosxr bgp_neighbor_address_family facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -52,7 +51,7 @@ class Bgp_neighbor_address_familyFacts(object):
         return connection.get("show running-config router bgp")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Bgp_address_family network resource
+        """Populate the facts for Bgp_address_family network resource
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
@@ -96,7 +95,7 @@ class Bgp_neighbor_address_familyFacts(object):
         return ansible_facts
 
     def _post_parse(self, data):
-        """ Converts the intermediate data structure
+        """Converts the intermediate data structure
             to valid format as per argspec.
         :param obj: dict
         """
