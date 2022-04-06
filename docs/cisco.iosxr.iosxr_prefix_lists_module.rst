@@ -445,7 +445,7 @@ Examples
     #                         {
     #                             "action": "permit",
     #                             "prefix": "35.0.0.0/8",
-    #                             "sequence": 6
+    #                             "sequence": 6,
     #                             "eq": 0
     #                         }
     #                     ],
@@ -893,7 +893,7 @@ Examples
     #                         {
     #                             "action": "permit",
     #                             "prefix": "35.0.0.0/8",
-    #                             "sequence": 6
+    #                             "sequence": 6,
     #                             "eq": 0
     #                         }
     #                     ],
@@ -991,7 +991,7 @@ Examples
     #                         {
     #                             "action": "permit",
     #                             "prefix": "35.0.0.0/8",
-    #                             "sequence": 6
+    #                             "sequence": 6,
     #                             "eq": 0
     #                         }
     #                     ],
