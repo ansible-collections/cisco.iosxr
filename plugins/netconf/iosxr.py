@@ -22,8 +22,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = """
-author: Ansible Networking Team
-netconf: iosxr
+author: Ansible Networking Team (@ansible-network)
+name: iosxr
 short_description: Use iosxr netconf plugin to run netconf commands on Cisco IOSXR
   platform
 description:

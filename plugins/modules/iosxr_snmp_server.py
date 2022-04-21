@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright 2021 Red Hat
+# Copyright 2022 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
@@ -40,7 +40,7 @@ options:
             description: Community name.
             type: str
           acl_v4:
-            description: standard access-list name.
+            description: Ipv4 access list.
             type: str
           acl_v6:
             description: IPv6 access list name.
@@ -154,12 +154,16 @@ options:
           write:
             description: View to restrict write access
             type: str
-          Ipv4_acl:
+          acl_v4:
             description: Ipv4 Type of Access-list
             type: str
-          Ipv6_acl:
+            aliases:
+              - Ipv4_acl
+          acl_v6:
             description: Ipv6 Type of Access-list
             type: str
+            aliases:
+              - Ipv6_acl
           v4_acl:
             description: V4 Access-list name
             type: str
@@ -841,12 +845,16 @@ options:
           group:
             description: SNMP group for the user.
             type: str
-          Ipv4_acl:
-            description: Type of Access-list
+          acl_v4:
+            description: Ipv4 Type of Access-list
             type: str
-          Ipv6_acl:
-            description: Type of Access-list
+            aliases:
+              - Ipv4_acl
+          acl_v6:
+            description: Ipv6 Type of Access-list
             type: str
+            aliases:
+              - Ipv6_acl
           SDROwner:
             description:  SDR Owner permissions for MIB Objects.
             type: bool

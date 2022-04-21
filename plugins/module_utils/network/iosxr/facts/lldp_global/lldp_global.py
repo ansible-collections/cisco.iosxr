@@ -26,8 +26,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 
 
 class Lldp_globalFacts(object):
-    """ The iosxr lldp fact class
-    """
+    """The iosxr lldp fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -47,7 +46,7 @@ class Lldp_globalFacts(object):
         return connection.get_config(flags="lldp")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for lldp
+        """Populate the facts for lldp
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf

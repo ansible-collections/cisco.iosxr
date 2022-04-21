@@ -3370,6 +3370,7 @@ Parameters
                 </td>
                 <td>
                         <div>Neighbor router address.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: neighbor_address</div>
                 </td>
             </tr>
             <tr>
@@ -7638,6 +7639,7 @@ Parameters
                 </td>
                 <td>
                         <div>Neighbor router address.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: neighbor_address</div>
                 </td>
             </tr>
             <tr>

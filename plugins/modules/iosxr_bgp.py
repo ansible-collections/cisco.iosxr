@@ -279,8 +279,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.provider
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     network_spec = {
         "network": dict(aliases=["prefix"], required=True),
         "masklen": dict(type="int", required=True),

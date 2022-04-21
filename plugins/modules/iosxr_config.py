@@ -178,6 +178,11 @@ options:
       configuration changes until the exclusive session ends.
     type: bool
     default: false
+  disable_default_comment:
+    description:
+    - disable default comment when set to True.
+    type: bool
+    default: false
 """
 
 EXAMPLES = """
@@ -269,8 +274,7 @@ DEFAULT_COMMIT_COMMENT = "configured by iosxr_config"
 
 
 def copy_file_to_node(module):
-    """ Copy config file to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well.
-    """
+    """Copy config file to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well."""
     src = "/tmp/ansible_config.txt"
     file = open(src, "wb")
     file.write(to_bytes(module.params["src"], errors="surrogate_or_strict"))
@@ -406,8 +410,7 @@ def run(module, result):
 
 
 def main():
-    """main entry point for module execution
-    """
+    """main entry point for module execution"""
     backup_spec = dict(filename=dict(), dir_path=dict(type="path"))
     argument_spec = dict(
         src=dict(type="path"),
@@ -427,6 +430,7 @@ def main():
         backup_options=dict(type="dict", options=backup_spec),
         comment=dict(default=DEFAULT_COMMIT_COMMENT),
         admin=dict(type="bool", default=False),
+        disable_default_comment=dict(type="bool", default=False),
         exclusive=dict(type="bool", default=False),
         label=dict(),
     )
@@ -451,6 +455,11 @@ def main():
 
     if module.params["force"] is True:
         module.params["match"] = "none"
+    if (
+        module.params["disable_default_comment"] is True
+        and module.params["comment"] == DEFAULT_COMMIT_COMMENT
+    ):
+        module.params["comment"] = None
     warnings = list()
 
     check_args(module, warnings)

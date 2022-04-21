@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2021 Red Hat
+# Copyright 2022 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
@@ -28,8 +28,7 @@ The arg spec for the iosxr_snmp_server module
 
 
 class Snmp_serverArgs(object):  # pylint: disable=R0903
-    """The arg spec for the iosxr_snmp_server module
-    """
+    """The arg spec for the iosxr_snmp_server module"""
 
     argument_spec = {
         "config": {
@@ -106,8 +105,8 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                         "notify": {"type": "str"},
                         "read": {"type": "str"},
                         "write": {"type": "str"},
-                        "Ipv4_acl": {"type": "str"},
-                        "Ipv6_acl": {"type": "str"},
+                        "acl_v4": {"type": "str", "aliases": ["Ipv4_acl"]},
+                        "acl_v6": {"type": "str", "aliases": ["Ipv6_acl"]},
                         "v4_acl": {"type": "str"},
                     },
                 },
@@ -521,8 +520,8 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                     "options": {
                         "user": {"type": "str"},
                         "group": {"type": "str"},
-                        "Ipv4_acl": {"type": "str"},
-                        "Ipv6_acl": {"type": "str"},
+                        "acl_v4": {"type": "str", "aliases": ["Ipv4_acl"]},
+                        "acl_v6": {"type": "str", "aliases": ["Ipv6_acl"]},
                         "SDROwner": {"type": "bool"},
                         "SystemOwner": {"type": "bool"},
                         "v4_acl": {"type": "str"},

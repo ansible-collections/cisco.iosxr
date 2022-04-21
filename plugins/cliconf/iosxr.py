@@ -21,14 +21,31 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = """
-author: Ansible Networking Team
-cliconf: iosxr
+author: Ansible Networking Team (@ansible-network)
+name: iosxr
 short_description: Use iosxr cliconf to run command on Cisco IOS XR platform
 description:
 - This iosxr plugin provides low level abstraction apis for sending and receiving
   CLI commands from Cisco IOS XR network devices.
 version_added: 1.0.0
 options:
+  commit_confirmed:
+    type: boolean
+    default: false
+    description:
+    - enable or disable commit confirmed mode
+    env:
+    - name: ANSIBLE_IOSXR_COMMIT_CONFIRMED
+    vars:
+    - name: ansible_iosxr_commit_confirmed
+  commit_confirmed_timeout:
+    type: int
+    description:
+    - Commits the configuration on a trial basis for the time specified in seconds or minutes.
+    env:
+    - name: ANSIBLE_IOSXR_COMMIT_CONFIRMED_TIMEOUT
+    vars:
+    - name: ansible_iosxr_commit_confirmed_timeout
   config_commands:
     description:
     - Specifies a list of commands that can make configuration changes
@@ -37,6 +54,7 @@ options:
       to the device is present in this list, the existing cache is invalidated.
     version_added: 2.0.0
     type: list
+    elements: str
     default: []
     vars:
     - name: ansible_iosxr_config_commands
@@ -201,7 +219,8 @@ class Cliconf(CliconfBase):
         else:
             self.discard_changes()
 
-        self.abort(admin=admin)
+        if not self.get_option("commit_confirmed"):
+            self.abort(admin=admin)
 
         resp["request"] = requests
         resp["response"] = results
@@ -298,6 +317,12 @@ class Cliconf(CliconfBase):
                 "prompt"
             ] = "This commit will replace or remove the entire running configuration"
             cmd_obj["answer"] = "yes"
+        elif self.get_option("commit_confirmed") and self.get_option(
+            "commit_confirmed_timeout"
+        ):
+            cmd_obj["command"] = "commit confirmed {0}".format(
+                self.get_option("commit_confirmed_timeout")
+            )
         else:
             if comment and label:
                 cmd_obj["command"] = "commit label {0} comment {1}".format(
@@ -314,7 +339,6 @@ class Cliconf(CliconfBase):
             # proceeding further
             cmd_obj["prompt"] = "(C|c)onfirm"
             cmd_obj["answer"] = "y"
-
         self.send_command(**cmd_obj)
 
     def run_commands(self, commands=None, check_rc=True):
@@ -344,7 +368,7 @@ class Cliconf(CliconfBase):
                     out = to_text(out, errors="surrogate_or_strict").strip()
                 except UnicodeError:
                     raise ConnectionError(
-                        message=u"Failed to decode output from %s: %s"
+                        message="Failed to decode output from %s: %s"
                         % (cmd, to_text(out))
                     )
 
@@ -402,7 +426,9 @@ class Cliconf(CliconfBase):
         Make sure we are in the operational cli mode
         :return: None
         """
-        if self._connection.connected:
+        if self._connection.connected and not self.get_option(
+            "commit_confirmed"
+        ):
             self._update_cli_prompt_context(
                 config_context=")#", exit_command="abort"
             )

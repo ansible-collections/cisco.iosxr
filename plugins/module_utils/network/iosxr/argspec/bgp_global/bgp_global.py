@@ -28,8 +28,7 @@ The arg spec for the iosxr_bgp_global module
 
 
 class Bgp_globalArgs(object):  # pylint: disable=R0903
-    """The arg spec for the iosxr_bgp_global module
-    """
+    """The arg spec for the iosxr_bgp_global module"""
 
     def __init__(self, **kwargs):
         pass
@@ -259,7 +258,11 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                     "type": "list",
                     "elements": "dict",
                     "options": {
-                        "neighbor": {"type": "str", "required": True},
+                        "neighbor_address": {
+                            "type": "str",
+                            "aliases": ["neighbor"],
+                            "required": True,
+                        },
                         "advertisement_interval": {"type": "int"},
                         "bfd": {
                             "type": "dict",
@@ -846,7 +849,11 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "type": "list",
                             "elements": "dict",
                             "options": {
-                                "neighbor": {"type": "str", "required": True},
+                                "neighbor_address": {
+                                    "type": "str",
+                                    "aliases": ["neighbor"],
+                                    "required": True,
+                                },
                                 "advertisement_interval": {"type": "int"},
                                 "bfd": {
                                     "type": "dict",

@@ -186,7 +186,7 @@ class Snmp_server(ResourceModule):
         ]
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -196,10 +196,21 @@ class Snmp_server(ResourceModule):
             self.run_commands()
         return self.result
 
+    def handle_alieses(self, want):
+        for x in [want.get("groups", []), want.get("users", [])]:
+            for y in x:
+                if y.get("Ipv4_acl"):
+                    del y["Ipv4_acl"]
+                if y.get("Ipv6_acl"):
+                    del y["Ipv6_acl"]
+        return want
+
     def generate_commands(self):
-        """ Generate configuration commands to send based on
-            want, have and desired state.
+        """Generate configuration commands to send based on
+        want, have and desired state.
         """
+
+        self.want = self.handle_alieses(self.want)
         wantd = self.list_to_dict(self.want)
         haved = self.list_to_dict(self.have)
 
@@ -219,9 +230,9 @@ class Snmp_server(ResourceModule):
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
-           populates the list of commands to be run by comparing
-           the `want` and `have` data with the `parsers` defined
-           for the Logging_global network resource.
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Logging_global network resource.
         """
         self.compare(parsers=self.parsers, want=want, have=have)
         self._compare_lists(want, have)
@@ -251,7 +262,7 @@ class Snmp_server(ResourceModule):
 
     def _compare_lists(self, want, have):
         """
-            Handles list attributes from config_data
+        Handles list attributes from config_data
         """
         for x in [
             "communities",

@@ -58,10 +58,16 @@ class Prefix_listsTemplate(NetworkTemplate):
                         \s(?P<sequence>\d+)
                         \s(?P<action>deny|permit)
                         \s(?P<prefix>\S+)
+                        (\seq\s(?P<eq>\d+))?
+                        (\sge\s(?P<ge>\d+))?
+                        (\sle\s(?P<le>\d+))?
                         $""",
                 re.VERBOSE,
             ),
-            "setval": "{{afi}} prefix-list {{name}} {{sequence}} {{action}} {{prefix}}",
+            "setval": "{{afi}} prefix-list {{name}} {{sequence}} {{action}} {{prefix}}"
+                      "{{ (' eq ' + eq|string) if eq|d('') else '' }}"
+                      "{{ (' ge ' + ge|string) if ge|d('') else '' }}"
+                      "{{ (' le ' + le|string) if le|d('') else '' }}",
             "result": {
                 "{{ afi |d()}}": {
                     "afi": "{{ afi|d() }}",
@@ -73,6 +79,9 @@ class Prefix_listsTemplate(NetworkTemplate):
                                     "sequence": "{{ sequence|d(None) }}",
                                     "action": "{{ action }}",
                                     "prefix": "{{ prefix }}",
+                                    "eq": "{{ eq }}",
+                                    "ge": "{{ ge }}",
+                                    "le": "{{ le }}",
                                 }
                             ],
                         }

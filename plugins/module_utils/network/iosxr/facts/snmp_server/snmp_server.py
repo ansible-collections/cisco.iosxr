@@ -29,8 +29,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.ut
 
 
 class Snmp_serverFacts(object):
-    """ The iosxr snmp_server facts class
-    """
+    """The iosxr snmp_server facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -40,7 +39,7 @@ class Snmp_serverFacts(object):
         return connection.get("show running-config snmp-server")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Snmp_server network resource
+        """Populate the facts for Snmp_server network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
@@ -96,7 +95,6 @@ class Snmp_serverFacts(object):
                 self.argument_spec, {"config": objs}, redact=True
             )
         )
-
         facts["snmp_server"] = params.get("config", {})
         ansible_facts["ansible_network_resources"].update(facts)
 

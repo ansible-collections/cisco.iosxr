@@ -271,8 +271,7 @@ def validate_n_expand_ipv4(module, want):
 
 
 def normalize_interface(name):
-    """Return the normalized interface name
-    """
+    """Return the normalized interface name"""
     if not name:
         return
 
@@ -321,8 +320,7 @@ def normalize_interface(name):
 
 
 def get_interface_type(interface):
-    """Gets the type of interface
-    """
+    """Gets the type of interface"""
 
     if interface.upper().startswith("GI"):
         return "GigabitEthernet"
@@ -350,8 +348,8 @@ def get_interface_type(interface):
 
 def isipaddress(data):
     """
-        Checks if the passed string is
-        a valid IPv4 or IPv6 address
+    Checks if the passed string is
+    a valid IPv4 or IPv6 address
     """
     if not HAS_IPADDRESS:
         raise Exception(missing_required_lib("ipaddress"))
@@ -367,8 +365,8 @@ def isipaddress(data):
 
 def is_ipv4_address(data):
     """
-        Checks if the passed string is
-        a valid IPv4 address
+    Checks if the passed string is
+    a valid IPv4 address
     """
     if not HAS_IPADDRESS:
         raise Exception(missing_required_lib("ipaddress"))
@@ -382,7 +380,7 @@ def is_ipv4_address(data):
 
 
 def prefix_to_address_wildcard(prefix):
-    """ Converts a IPv4 prefix into address and
+    """Converts a IPv4 prefix into address and
         wildcard mask
 
     :returns: IPv4 address and wildcard mask
@@ -403,7 +401,7 @@ def prefix_to_address_wildcard(prefix):
 
 
 def flatten_config(data, context):
-    """ Flatten different contexts in
+    """Flatten different contexts in
         the running-config for easier parsing.
     :param data: dict
     :param context: str
