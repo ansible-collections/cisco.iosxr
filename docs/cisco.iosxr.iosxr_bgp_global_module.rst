@@ -3359,7 +3359,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="6">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>neighbor</b>
+                    <b>neighbor_address</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -3370,7 +3370,7 @@ Parameters
                 </td>
                 <td>
                         <div>Neighbor router address.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: neighbor_address</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: neighbor</div>
                 </td>
             </tr>
             <tr>
@@ -7628,7 +7628,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="5">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>neighbor</b>
+                    <b>neighbor_address</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -7639,7 +7639,7 @@ Parameters
                 </td>
                 <td>
                         <div>Neighbor router address.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: neighbor_address</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: neighbor</div>
                 </td>
             </tr>
             <tr>
