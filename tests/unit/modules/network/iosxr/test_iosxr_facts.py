@@ -93,18 +93,21 @@ class TestIosxrFacts(TestIosxrModule):
         set_module_args(dict())
         result = self.execute_module()
         ansible_facts = result["ansible_facts"]
-        op = {
-            "ansible_network_resources": {},
-            "ansible_net_gather_network_resources": [],
-            "ansible_net_gather_subset": ["default"],
-            "ansible_net_system": "iosxr",
-            "ansible_net_image": "bootflash:disk0/xrvr-os-mbi-6.1.3/mbixrvr-rp.vm",
-            "ansible_net_version": "6.1.3[Default]",
-            "ansible_net_hostname": "iosxr01",
-            "ansible_net_api": "cliconf",
-            "ansible_net_python_version": "3.8.13",
-        }
-        self.assertEqual(op, ansible_facts)
+        self.assertIn("default", ansible_facts["ansible_net_gather_subset"][0])
+        self.assertEqual(
+            [], ansible_facts["ansible_net_gather_network_resources"]
+        )
+        self.assertEqual("iosxr", ansible_facts["ansible_net_system"])
+        self.assertEqual(
+            True, True if ansible_facts.get("ansible_net_version") else False
+        )
+        self.assertEqual(
+            True,
+            True if ansible_facts.get("ansible_net_python_version") else False,
+        )
+        self.assertEqual(
+            True, True if ansible_facts.get("ansible_net_api") else False
+        )
 
     def test_iosxr_facts_gather_subset_config(self):
         set_module_args({"gather_subset": "config"})
