@@ -36,7 +36,7 @@ options:
       specify a list of values to include a larger subset.  Values can also be used
       with an initial C(!) to specify that a specific subset should not be collected.
     required: false
-    default: '!config'
+    default: 'min'
     type: list
     elements: str
   gather_network_resources:

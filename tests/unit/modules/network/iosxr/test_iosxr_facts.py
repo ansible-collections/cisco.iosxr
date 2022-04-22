@@ -93,19 +93,21 @@ class TestIosxrFacts(TestIosxrModule):
         set_module_args(dict())
         result = self.execute_module()
         ansible_facts = result["ansible_facts"]
-        self.assertIn("hardware", ansible_facts["ansible_net_gather_subset"])
-        self.assertIn("default", ansible_facts["ansible_net_gather_subset"])
-        self.assertIn("interfaces", ansible_facts["ansible_net_gather_subset"])
-        self.assertEqual("iosxr01", ansible_facts["ansible_net_hostname"])
+        self.assertIn("default", ansible_facts["ansible_net_gather_subset"][0])
         self.assertEqual(
-            ["disk0:", "flash0:"], ansible_facts["ansible_net_filesystems"]
+            [], ansible_facts["ansible_net_gather_network_resources"]
         )
-        self.assertIn(
-            "GigabitEthernet0/0/0/0",
-            ansible_facts["ansible_net_interfaces"].keys(),
+        self.assertEqual("iosxr", ansible_facts["ansible_net_system"])
+        self.assertEqual(
+            True, True if ansible_facts.get("ansible_net_version") else False
         )
-        self.assertEqual("3095", ansible_facts["ansible_net_memtotal_mb"])
-        self.assertEqual("1499", ansible_facts["ansible_net_memfree_mb"])
+        self.assertEqual(
+            True,
+            True if ansible_facts.get("ansible_net_python_version") else False,
+        )
+        self.assertEqual(
+            True, True if ansible_facts.get("ansible_net_api") else False
+        )
 
     def test_iosxr_facts_gather_subset_config(self):
         set_module_args({"gather_subset": "config"})

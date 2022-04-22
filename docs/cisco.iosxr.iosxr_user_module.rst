@@ -28,7 +28,6 @@ The below requirements are needed on the host that executes this module.
 - ncclient >= 0.5.3 when using netconf
 - lxml >= 4.1.1 when using netconf
 - base64 when using *public_key_contents* or *public_key*
-- paramiko when using *public_key_contents* or *public_key*
 
 
 Parameters
