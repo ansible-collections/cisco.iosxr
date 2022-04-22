@@ -93,19 +93,18 @@ class TestIosxrFacts(TestIosxrModule):
         set_module_args(dict())
         result = self.execute_module()
         ansible_facts = result["ansible_facts"]
-        self.assertIn("hardware", ansible_facts["ansible_net_gather_subset"])
-        self.assertIn("default", ansible_facts["ansible_net_gather_subset"])
-        self.assertIn("interfaces", ansible_facts["ansible_net_gather_subset"])
-        self.assertEqual("iosxr01", ansible_facts["ansible_net_hostname"])
-        self.assertEqual(
-            ["disk0:", "flash0:"], ansible_facts["ansible_net_filesystems"]
-        )
-        self.assertIn(
-            "GigabitEthernet0/0/0/0",
-            ansible_facts["ansible_net_interfaces"].keys(),
-        )
-        self.assertEqual("3095", ansible_facts["ansible_net_memtotal_mb"])
-        self.assertEqual("1499", ansible_facts["ansible_net_memfree_mb"])
+        op = {
+            "ansible_network_resources": {},
+            "ansible_net_gather_network_resources": [],
+            "ansible_net_gather_subset": ["default"],
+            "ansible_net_system": "iosxr",
+            "ansible_net_image": "bootflash:disk0/xrvr-os-mbi-6.1.3/mbixrvr-rp.vm",
+            "ansible_net_version": "6.1.3[Default]",
+            "ansible_net_hostname": "iosxr01",
+            "ansible_net_api": "cliconf",
+            "ansible_net_python_version": "3.8.13",
+        }
+        self.assertEqual(op, ansible_facts)
 
     def test_iosxr_facts_gather_subset_config(self):
         set_module_args({"gather_subset": "config"})
