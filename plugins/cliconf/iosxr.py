@@ -78,7 +78,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     sanitize_config,
     mask_config_blocks_from_diff,
 )
-from ansible.plugins.cliconf import CliconfBase
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.cliconf_base import (
+    CliconfBase,
+)
 
 
 class Cliconf(CliconfBase):

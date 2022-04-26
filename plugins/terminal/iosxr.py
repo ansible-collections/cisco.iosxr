@@ -22,8 +22,10 @@ __metaclass__ = type
 
 import re
 
-from ansible.plugins.terminal import TerminalBase
 from ansible.errors import AnsibleConnectionFailure
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.terminal_base import (
+    TerminalBase,
+)
 
 
 class TerminalModule(TerminalBase):
