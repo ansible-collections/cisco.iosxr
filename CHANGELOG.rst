@@ -5,6 +5,26 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v3.0.0
+======
+
+Major Changes
+-------------
+
+- Minimum required ansible.netcommon version is 2.5.1.
+- Updated base plugin references to ansible.netcommon.
+- `facts` - default value for `gather_subset` is changed to min instead of !config.
+
+Minor Changes
+-------------
+
+- Add new keys ge, eq, le for iosxr_prefix_lists.
+
+Bugfixes
+--------
+
+- Fix iosxr_ospfv2 throwing a traceback with gathered (https://github.com/ansible-collections/cisco.iosxr/issues/227).
+
 v2.9.0
 ======
 
@@ -192,8 +212,9 @@ v2.0.0
 
 Major Changes
 -------------
-- Requires ansible.netcommon v2.0.0+ to support `ansible_network_single_user_mode` and `ansible_network_import_modules`.
+
 - Please refer to ansible.netcommon `changelog <https://github.com/ansible-collections/ansible.netcommon/blob/main/changelogs/CHANGELOG.rst#ansible-netcommon-collection-release-notes>`_ for more details.
+- Requires ansible.netcommon v2.0.0+ to support `ansible_network_single_user_mode` and `ansible_network_import_modules`.
 - ipaddress is no longer in ansible.netcommon. For Python versions without ipaddress (< 3.0), the ipaddress package is now required.
 
 Minor Changes
@@ -275,18 +296,8 @@ Bugfixes
 v1.0.4
 ======
 
-Release Summary
----------------
-
-- Rereleased 1.0.3 with updated changelog.
-
 v1.0.3
 ======
-
-Release Summary
----------------
-
-- Rereleased 1.0.2 with regenerated documentation.
 
 v1.0.2
 ======
