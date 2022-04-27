@@ -102,10 +102,14 @@ releases:
     - update_docs.yaml
     release_date: '2020-06-23'
   1.0.3:
+    changes:
+      release_summary: Rereleased 1.0.2 with regenerated documentation.
     fragments:
     - 1.0.3.yaml
     release_date: '2020-07-31'
   1.0.4:
+    changes:
+      release_summary: Rereleased 1.0.3 with updated changelog.
     fragments:
     - 1.0.4.yaml
     release_date: '2020-08-07'

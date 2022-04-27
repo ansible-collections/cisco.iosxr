@@ -296,8 +296,18 @@ Bugfixes
 v1.0.4
 ======
 
+Release Summary
+---------------
+
+Rereleased 1.0.3 with updated changelog.
+
 v1.0.3
 ======
+
+Release Summary
+---------------
+
+Rereleased 1.0.2 with regenerated documentation.
 
 v1.0.2
 ======
