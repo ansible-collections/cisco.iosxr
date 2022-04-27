@@ -1,3 +1,0 @@
----
-minor_changes:
-      - Add new keys ge, eq, le for iosxr_prefix_lists.

@@ -103,15 +103,13 @@ releases:
     release_date: '2020-06-23'
   1.0.3:
     changes:
-      release_summary:
-      - Rereleased 1.0.2 with regenerated documentation.
+      release_summary: Rereleased 1.0.2 with regenerated documentation.
     fragments:
     - 1.0.3.yaml
     release_date: '2020-07-31'
   1.0.4:
     changes:
-      release_summary:
-      - Rereleased 1.0.3 with updated changelog.
+      release_summary: Rereleased 1.0.3 with updated changelog.
     fragments:
     - 1.0.4.yaml
     release_date: '2020-08-07'
@@ -171,10 +169,10 @@ releases:
       - Fix to accurately report configuration failure during pseudo-atomic operation
         fior iosxr-6.6.3 (https://github.com/ansible-collections/cisco.iosxr/issues/92).
       major_changes:
-      - Requires ansible.netcommon v2.0.0+ to support `ansible_network_single_user_mode`
-        and `ansible_network_import_modules`.
       - Please refer to ansible.netcommon `changelog <https://github.com/ansible-collections/ansible.netcommon/blob/main/changelogs/CHANGELOG.rst#ansible-netcommon-collection-release-notes>`_
         for more details.
+      - Requires ansible.netcommon v2.0.0+ to support `ansible_network_single_user_mode`
+        and `ansible_network_import_modules`.
       - ipaddress is no longer in ansible.netcommon. For Python versions without ipaddress
         (< 3.0), the ipaddress package is now required.
       minor_changes:
@@ -369,7 +367,7 @@ releases:
       minor_changes:
       - Add commit_confirmed functionality in IOSXR.
       - Add disable_default_comment option to disable default comment in iosxr_config
-          module.
+        module.
     fragments:
     - 199_add_commit_confirmed_feature.yaml
     - bugfix_198_default_comment_removal.yaml
@@ -397,3 +395,23 @@ releases:
     - fix_sanity.yaml
     - fix_sanity_iosxr.yaml
     release_date: '2022-03-29'
+  3.0.0:
+    changes:
+      bugfixes:
+      - Fix iosxr_ospfv2 throwing a traceback with gathered (https://github.com/ansible-collections/cisco.iosxr/issues/227).
+      major_changes:
+      - Minimum required ansible.netcommon version is 2.5.1.
+      - Updated base plugin references to ansible.netcommon.
+      - '`facts` - default value for `gather_subset` is changed to min instead of
+        !config.'
+      minor_changes:
+      - Add new keys ge, eq, le for iosxr_prefix_lists.
+    fragments:
+    - 0-ignore.yml
+    - add_missing_keys_iosxr_prefix_lists.yaml
+    - fix_fqcn_netcommon.yml
+    - gather_subset_update.yml
+    - iosxr_ospfv2_gathered_fixed.yaml
+    - netcommon_ref_update.yaml
+    - update_black_version.yaml
+    release_date: '2022-04-26'
