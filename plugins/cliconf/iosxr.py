@@ -311,29 +311,43 @@ class Cliconf(CliconfBase):
 
     def commit(self, comment=None, label=None, replace=None):
         cmd_obj = {}
+        if self.get_option("commit_confirmed") and self.get_option(
+            "commit_confirmed_timeout"
+        ):
+            confirmed_timeout = self.get_option("commit_confirmed_timeout")
+            timeout = (
+                confirmed_timeout if confirmed_timeout is not None else ""
+            )
+            confirmed_cmd_str = (
+                " confirmed"
+                if timeout == ""
+                else " confirmed {0}".format(timeout)
+            )
+        else:
+            confirmed_cmd_str = ""
         if replace:
             cmd_obj["command"] = "commit replace"
             cmd_obj[
                 "prompt"
             ] = "This commit will replace or remove the entire running configuration"
             cmd_obj["answer"] = "yes"
-        elif self.get_option("commit_confirmed") and self.get_option(
-            "commit_confirmed_timeout"
-        ):
-            cmd_obj["command"] = "commit confirmed {0}".format(
-                self.get_option("commit_confirmed_timeout")
-            )
         else:
             if comment and label:
-                cmd_obj["command"] = "commit label {0} comment {1}".format(
-                    label, comment
+                cmd_obj["command"] = "commit label {0}{1} comment {2}".format(
+                    label, confirmed_cmd_str, comment
                 )
             elif comment:
-                cmd_obj["command"] = "commit comment {0}".format(comment)
+                cmd_obj["command"] = "commit{0} comment {1}".format(
+                    confirmed_cmd_str, comment
+                )
             elif label:
-                cmd_obj["command"] = "commit label {0}".format(label)
+                cmd_obj["command"] = "commit label {0}{1}".format(
+                    label, confirmed_cmd_str
+                )
             else:
-                cmd_obj["command"] = "commit show-error"
+                cmd_obj["command"] = "commit{0} show-error".format(
+                    confirmed_cmd_str
+                )
             # In some cases even a normal commit, i.e., !replace,
             # throws a prompt and we need to handle it before
             # proceeding further
