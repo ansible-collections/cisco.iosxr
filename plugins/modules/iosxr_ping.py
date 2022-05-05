@@ -32,7 +32,7 @@ options:
     description:
     - Repeat count the number of packets to send.
     type: int
-  ping_type:
+  afi:
     description:
     - Define echo type ipv4 or ipv6.
     choices:

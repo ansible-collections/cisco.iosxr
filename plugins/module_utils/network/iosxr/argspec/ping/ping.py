@@ -32,11 +32,7 @@ class PingArgs(object):  # pylint: disable=R0903
 
     argument_spec = {
         "count": {"type": "int"},
-        "ping_type": {
-            "choices": ["ipv4", "ipv6"],
-            "default": "ipv4",
-            "type": "str",
-        },
+        "afi": {"choices": ["ipv4", "ipv6"], "default": "ipv4", "type": "str"},
         "dest": {"required": True, "type": "str"},
         "df_bit": {"default": False, "type": "bool"},
         "sweep": {"default": False, "type": "bool"},

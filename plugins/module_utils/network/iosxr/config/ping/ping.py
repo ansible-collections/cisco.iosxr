@@ -70,8 +70,8 @@ class Ping:  # ResourceModule
         cmd = "ping"
         if params.get("vrf"):
             cmd += " vrf " + params.get("vrf")
-        if params.get("ping_type"):
-            cmd += " " + params.get("ping_type")
+        if params.get("afi"):
+            cmd += " " + params.get("afi")
         if params.get("dest"):
             cmd += " " + params.get("dest")
         if params.get("count"):
