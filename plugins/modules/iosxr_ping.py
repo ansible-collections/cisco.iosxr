@@ -167,10 +167,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.ping.ping import (
     Ping,
 )
-import debugpy
-
-debugpy.listen(3000)
-debugpy.wait_for_client()
 
 
 def main():
