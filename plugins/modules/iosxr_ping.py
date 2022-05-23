@@ -26,6 +26,12 @@ description:
 notes:
 - Tested against IOSXR 7.2.2.
 - This module works with connection C(network_cli).
+- For a general purpose network module, see the L(net_ping,https://docs.ansible.com/ansible/latest/collections/ansible/netcommon/net_ping_module.html)
+  module.
+- For Windows targets, use the L(win_ping,https://docs.ansible.com/ansible/latest/collections/ansible/windows/win_ping_module.html)
+  module instead.
+- For targets running Python, use the L(ping,https://docs.ansible.com/ansible/latest/collections/ansible/builtin/ping_module.html) module instead.
+
 author: Sagar Paul (@KB-perByte)
 options:
   count:
@@ -80,37 +86,41 @@ options:
     description:
     - The VRF to use for forwarding.
     type: str
-notes:
-- For a general purpose network module, see the L(net_ping,https://docs.ansible.com/ansible/latest/collections/ansible/netcommon/net_ping_module.html)
-  module.
-- For Windows targets, use the L(win_ping,https://docs.ansible.com/ansible/latest/collections/ansible/windows/win_ping_module.html)
-  module instead.
-- For targets running Python, use the L(ping,https://docs.ansible.com/ansible/latest/collections/ansible/builtin/ping_module.html) module instead.
 """
 
 EXAMPLES = """
-- name: Test reachability to 10.10.10.10 using default vrf
+- name: Test reachability to 198.51.100.251 using default vrf
   cisco.iosxr.iosxr_ping:
-    dest: 10.10.10.10
-- name: Test reachability to 10.20.20.20 using prod vrf
+    dest: 198.51.100.251
+
+- name: Test reachability to 198.51.100.252 using prod vrf
   cisco.iosxr.iosxr_ping:
-    dest: 10.20.20.20
+    dest: 198.51.100.252
     vrf: prod
-- name: Test unreachability to 10.30.30.30 using default vrf
+    afi: ipv4
+
+- name: Test unreachability to 198.51.100.253 using default vrf
   cisco.iosxr.iosxr_ping:
-    dest: 10.30.30.30
+    dest: 198.51.100.253
     state: absent
-- name: Test reachability to 10.40.40.40 using prod vrf and setting count and source
+
+- name: Test reachability to 198.51.100.250 using prod vrf and setting count and source
   cisco.iosxr.iosxr_ping:
-    dest: 10.40.40.40
+    dest: 198.51.100.250
     source: loopback0
     vrf: prod
     count: 20
-- name: Test reachability to 10.50.50.50 using df-bit and size
+
+- name: Test reachability to 198.51.100.249 using df-bit and size
   cisco.iosxr.iosxr_ping:
-    dest: 10.50.50.50
+    dest: 198.51.100.249
     df_bit: true
     size: 1400
+
+- name: Test reachability to ipv6 address
+  cisco.iosxr.iosxr_ping:
+    dest: 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff
+    afi: ipv6
 """
 
 RETURN = """
@@ -133,17 +143,17 @@ commands:
   returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
   type: list
   sample:
-    - sample command 1
-    - sample command 2
-    - sample command 3
+    - ping ipv4 8.8.8.8 count 2
+    - ping ipv4 8.8.8.8 count 2 df-bit sweep
+    - ping ipv6 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff
 rendered:
   description: The provided configuration in the task rendered in device-native format (offline).
   returned: when I(state) is C(rendered)
   type: list
   sample:
-    - sample command 1
-    - sample command 2
-    - sample command 3
+    - ping ipv4 8.8.8.8 count 2
+    - ping ipv4 8.8.8.8 count 2 df-bit sweep
+    - ping ipv6 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff
 gathered:
   description: Facts about the network resource gathered from the remote device as structured data.
   returned: when I(state) is C(gathered)

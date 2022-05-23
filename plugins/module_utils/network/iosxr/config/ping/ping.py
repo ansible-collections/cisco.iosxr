@@ -17,14 +17,14 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
+    utils,
+)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     run_commands,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ping import (
     PingTemplate,
-)
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
 )
 
 
@@ -53,22 +53,6 @@ class Ping:
         cmd = tmplt.render(params, "rate", False)
         return cmd
 
-    def parse_ping(self, ping_stats):
-        """
-        Function used to parse the statistical information from the ping response.
-        Example: "Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/8 ms"
-        Returns the percent of packet loss, received packets, transmitted packets, and RTT data.
-        """
-        ping_data = PingTemplate(lines=ping_stats.splitlines())
-        obj = list(ping_data.parse().values())
-        return (
-            obj[0].get("loss_percentage"),
-            obj[0].get("rx"),
-            obj[0].get("tx"),
-            obj[0].get("rtt"),
-            obj[0].get("loss"),
-        )
-
     def validate_results(self, module, loss, results):
         """
         This function is used to validate whether the ping results were unexpected per "state" param.
@@ -95,12 +79,22 @@ class Ping:
         return ping_results
 
     def process_result(self, ping_results):
-        (
-            self.result["packet_loss"],
-            self.result["packets_rx"],
-            self.result["packets_tx"],
-            self.result["rtt"],
-            loss,
-        ) = self.parse_ping(ping_results[0])
+        """
+        Function used to parse the statistical information from the ping response.
+        Example: "Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/8 ms"
+        Returns the percent of packet loss, received packets, transmitted packets, and RTT data.
+        """
+
+        if type(ping_results) == list:
+            ping_results = ping_results[0]
+
+        ping_data = PingTemplate(lines=ping_results.splitlines())
+        obj = list(ping_data.parse().values())
+
+        self.result["packet_loss"] = obj[0].get("loss_percentage")
+        self.result["packets_rx"] = obj[0].get("rx")
+        self.result["packets_tx"] = obj[0].get("tx")
+        self.result["rtt"] = obj[0].get("rtt")
+        loss = obj[0].get("loss")
         self.validate_results(self.module, loss, self.result)
         return self.result
