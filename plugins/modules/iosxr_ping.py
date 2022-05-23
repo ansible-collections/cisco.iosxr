@@ -124,50 +124,31 @@ EXAMPLES = """
 """
 
 RETURN = """
-before:
-  description: The configuration prior to the module execution.
-  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
-  type: dict
-  sample: >
-    This output will always be in the same format as the
-    module argspec.
-after:
-  description: The resulting configuration after module execution.
-  returned: when changed
-  type: dict
-  sample: >
-    This output will always be in the same format as the
-    module argspec.
 commands:
-  description: The set of commands pushed to the remote device.
-  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  description: Show the command sent.
+  returned: always
   type: list
-  sample:
-    - ping ipv4 8.8.8.8 count 2
-    - ping ipv4 8.8.8.8 count 2 df-bit sweep
-    - ping ipv6 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff
-rendered:
-  description: The provided configuration in the task rendered in device-native format (offline).
-  returned: when I(state) is C(rendered)
-  type: list
-  sample:
-    - ping ipv4 8.8.8.8 count 2
-    - ping ipv4 8.8.8.8 count 2 df-bit sweep
-    - ping ipv6 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff
-gathered:
-  description: Facts about the network resource gathered from the remote device as structured data.
-  returned: when I(state) is C(gathered)
-  type: list
-  sample: >
-    This output will always be in the same format as the
-    module argspec.
-parsed:
-  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
-  returned: when I(state) is C(parsed)
-  type: list
-  sample: >
-    This output will always be in the same format as the
-    module argspec.
+  sample: ["ping vrf prod 10.40.40.40 count 20 source loopback0"]
+packet_loss:
+  description: Percentage of packets lost.
+  returned: always
+  type: str
+  sample: "0%"
+packets_rx:
+  description: Packets successfully received.
+  returned: always
+  type: int
+  sample: 20
+packets_tx:
+  description: Packets successfully transmitted.
+  returned: always
+  type: int
+  sample: 20
+rtt:
+  description: Show RTT stats.
+  returned: always
+  type: dict
+  sample: {"avg": 2, "max": 8, "min": 1}
 """
 
 from ansible.module_utils.basic import AnsibleModule

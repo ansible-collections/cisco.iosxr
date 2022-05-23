@@ -277,103 +277,86 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>after</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>when changed</td>
-                <td>
-                            <div>The resulting configuration after module execution.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>before</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
-                <td>
-                            <div>The configuration prior to the module execution.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>commands</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">list</span>
                     </div>
                 </td>
-                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
+                <td>always</td>
                 <td>
-                            <div>The set of commands pushed to the remote device.</div>
+                            <div>Show the command sent.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;ping ipv4 8.8.8.8 count 2&#x27;, &#x27;ping ipv4 8.8.8.8 count 2 df-bit sweep&#x27;, &#x27;ping ipv6 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff&#x27;]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;ping vrf prod 10.40.40.40 count 20 source loopback0&#x27;]</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>gathered</b>
+                    <b>packet_loss</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">list</span>
+                      <span style="color: purple">string</span>
                     </div>
                 </td>
-                <td>when <em>state</em> is <code>gathered</code></td>
+                <td>always</td>
                 <td>
-                            <div>Facts about the network resource gathered from the remote device as structured data.</div>
+                            <div>Percentage of packets lost.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">0%</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>parsed</b>
+                    <b>packets_rx</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">list</span>
+                      <span style="color: purple">integer</span>
                     </div>
                 </td>
-                <td>when <em>state</em> is <code>parsed</code></td>
+                <td>always</td>
                 <td>
-                            <div>The device native config provided in <em>running_config</em> option parsed into structured data as per module argspec.</div>
+                            <div>Packets successfully received.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">20</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>rendered</b>
+                    <b>packets_tx</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">list</span>
+                      <span style="color: purple">integer</span>
                     </div>
                 </td>
-                <td>when <em>state</em> is <code>rendered</code></td>
+                <td>always</td>
                 <td>
-                            <div>The provided configuration in the task rendered in device-native format (offline).</div>
+                            <div>Packets successfully transmitted.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;ping ipv4 8.8.8.8 count 2&#x27;, &#x27;ping ipv4 8.8.8.8 count 2 df-bit sweep&#x27;, &#x27;ping ipv6 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff&#x27;]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">20</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>rtt</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>Show RTT stats.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;avg&#x27;: 2, &#x27;max&#x27;: 8, &#x27;min&#x27;: 1}</div>
                 </td>
             </tr>
     </table>
