@@ -1,0 +1,4 @@
+---
+minor_changes:
+  - Update commit_confirmed to be able to use labels and other commit options.
+...
