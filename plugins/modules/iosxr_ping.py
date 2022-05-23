@@ -128,7 +128,7 @@ commands:
   description: Show the command sent.
   returned: always
   type: list
-  sample: ["ping vrf prod 10.40.40.40 count 20 source loopback0"]
+  sample: ["ping vrf prod 198.51.100.251 count 20 source loopback0"]
 packet_loss:
   description: Percentage of packets lost.
   returned: always

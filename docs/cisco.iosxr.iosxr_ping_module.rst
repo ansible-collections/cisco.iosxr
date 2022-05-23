@@ -288,7 +288,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>Show the command sent.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;ping vrf prod 10.40.40.40 count 20 source loopback0&#x27;]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;ping vrf prod 198.51.100.251 count 20 source loopback0&#x27;]</div>
                 </td>
             </tr>
             <tr>
