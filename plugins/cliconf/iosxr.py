@@ -324,7 +324,6 @@ class Cliconf(CliconfBase):
             label (string, optional): Defaults to None.
             replace (string, optional): Defaults to None.
         """
-        cmd_obj = {}
 
         if replace:
             self.send_command(
@@ -350,21 +349,16 @@ class Cliconf(CliconfBase):
                     "commit show-error", prompt="yes/no", answer="yes"
                 )
 
+        cmt_cnf_cmd = ""
         if self.get_option("commit_confirmed"):
-            self.send_command("commit confirmed")
+            cmt_cnf_cmd = "commit confirmed"
         if self.get_option("commit_confirmed_timeout"):
-            self.send_command(
-                "commit confirmed{0}".format(
-                    self.get_option("commit_confirmed_timeout")
-                )
+            cmt_cnf_cmd = "commit confirmed {0}".format(
+                self.get_option("commit_confirmed_timeout")
             )
 
-        if any(
-            [
-                self.get_option("commit_confirmed"),
-                self.get_option("commit_confirmed_timeout"),
-            ]
-        ):
+        if cmt_cnf_cmd:
+            self.send_command(cmt_cnf_cmd)
             self.send_command("commit")
 
     def run_commands(self, commands=None, check_rc=True):
