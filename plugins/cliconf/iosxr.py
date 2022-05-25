@@ -310,50 +310,62 @@ class Cliconf(CliconfBase):
         )
 
     def commit(self, comment=None, label=None, replace=None):
+        """
+        commit confirmed operation is different than commit operation
+
+        replaced/ comment/ label
+        is invoked when replaced is specified in config calls
+
+        commit_confirmed/commit_confirmed_timeout
+        is invoked when cliconf gets option from the play itself
+
+        Args:
+            comment (string, optional): Defaults to None.
+            label (string, optional): Defaults to None.
+            replace (string, optional): Defaults to None.
+        """
         cmd_obj = {}
-        if self.get_option("commit_confirmed") and self.get_option(
-            "commit_confirmed_timeout"
-        ):
-            confirmed_timeout = self.get_option("commit_confirmed_timeout")
-            timeout = (
-                confirmed_timeout if confirmed_timeout is not None else ""
-            )
-            confirmed_cmd_str = (
-                " confirmed"
-                if timeout == ""
-                else " confirmed {0}".format(timeout)
-            )
-        else:
-            confirmed_cmd_str = ""
+
         if replace:
-            cmd_obj["command"] = "commit replace"
-            cmd_obj[
-                "prompt"
-            ] = "This commit will replace or remove the entire running configuration"
-            cmd_obj["answer"] = "yes"
+            self.send_command(
+                "commit replace",
+                prompt="This commit will replace or remove the entire running configuration",
+                answer="yes",
+            )
         else:
-            if comment and label:
-                cmd_obj["command"] = "commit label {0}{1} comment {2}".format(
-                    label, confirmed_cmd_str, comment
+            if comment:
+                self.send_command(
+                    "commit comment {0}".format(comment),
+                    prompt="yes/no",
+                    answer="yes",
                 )
-            elif comment:
-                cmd_obj["command"] = "commit{0} comment {1}".format(
-                    confirmed_cmd_str, comment
+            if label:
+                self.send_command(
+                    "commit label {0}".format(label),
+                    prompt="yes/no",
+                    answer="yes",
                 )
-            elif label:
-                cmd_obj["command"] = "commit label {0}{1}".format(
-                    label, confirmed_cmd_str
+            if not any([comment, label]):
+                self.send_command(
+                    "commit show-error", prompt="yes/no", answer="yes"
                 )
-            else:
-                cmd_obj["command"] = "commit{0} show-error".format(
-                    confirmed_cmd_str
+
+        if self.get_option("commit_confirmed"):
+            self.send_command("commit confirmed")
+        if self.get_option("commit_confirmed_timeout"):
+            self.send_command(
+                "commit confirmed{0}".format(
+                    self.get_option("commit_confirmed_timeout")
                 )
-            # In some cases even a normal commit, i.e., !replace,
-            # throws a prompt and we need to handle it before
-            # proceeding further
-            cmd_obj["prompt"] = "(C|c)onfirm"
-            cmd_obj["answer"] = "y"
-        self.send_command(**cmd_obj)
+            )
+
+        if any(
+            [
+                self.get_option("commit_confirmed"),
+                self.get_option("commit_confirmed_timeout"),
+            ]
+        ):
+            self.send_command("commit")
 
     def run_commands(self, commands=None, check_rc=True):
         if commands is None:
