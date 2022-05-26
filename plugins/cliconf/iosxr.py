@@ -352,10 +352,10 @@ class Cliconf(CliconfBase):
         cmt_cnf_cmd = ""
         if self.get_option("commit_confirmed"):
             cmt_cnf_cmd = "commit confirmed"
-        if self.get_option("commit_confirmed_timeout"):
-            cmt_cnf_cmd = "commit confirmed {0}".format(
-                self.get_option("commit_confirmed_timeout")
-            )
+            if self.get_option("commit_confirmed_timeout"):
+                cmt_cnf_cmd += " {0}".format(
+                    self.get_option("commit_confirmed_timeout")
+                )
 
         if cmt_cnf_cmd:
             self.send_command(cmt_cnf_cmd)
