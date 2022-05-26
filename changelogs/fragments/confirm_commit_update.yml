@@ -1,0 +1,3 @@
+---
+minor_changes:
+  - Update commit_confirmed to add proper commands on supported IOXR versions.
