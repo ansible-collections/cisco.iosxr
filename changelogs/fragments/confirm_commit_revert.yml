@@ -1,0 +1,3 @@
+---
+trivial:
+  - revert https://github.com/ansible-collections/cisco.iosxr/pull/241
