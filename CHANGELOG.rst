@@ -5,6 +5,19 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v3.1.0
+======
+
+Minor Changes
+-------------
+
+- `iosxr_ping` - Add iosxr_ping module.
+
+Bugfixes
+--------
+
+- Remove irrelevant warning from facts.
+
 v3.0.0
 ======
 
