@@ -415,3 +415,14 @@ releases:
     - netcommon_ref_update.yaml
     - update_black_version.yaml
     release_date: '2022-04-26'
+  3.1.0:
+    changes:
+      bugfixes:
+      - Remove irrelevant warning from facts.
+      minor_changes:
+      - '`iosxr_ping` - Add iosxr_ping module.'
+    fragments:
+    - confirm_commit_revert.yml
+    - ping_module_add.yaml
+    - remove_facts_warning.yml
+    release_date: '2022-06-03'
