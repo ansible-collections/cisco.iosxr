@@ -116,6 +116,11 @@ iosxr_provider_spec = {
     "transport": dict(type="str", default="cli", choices=["cli", "netconf"]),
 }
 
+iosxr_commit_option_spec = {
+    "label": dict(type="str"),
+    "comment": dict(type="str"),
+}
+
 iosxr_argument_spec = {
     "provider": dict(
         type="dict",
@@ -123,6 +128,10 @@ iosxr_argument_spec = {
         removed_at_date="2022-06-01",
         removed_from_collection="cisco.iosxr",
     )
+}
+
+iosxr_commit_spec = {
+    "commit": dict(type="dict", options=iosxr_commit_option_spec)
 }
 
 command_spec = {
@@ -152,6 +161,10 @@ CONFIG_BLOCKS_FORCED_IN_DIFF = [
 
 def get_provider_argspec():
     return iosxr_provider_spec
+
+
+def get_commit_argspec():
+    return iosxr_commit_spec
 
 
 def get_connection(module):

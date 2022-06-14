@@ -26,6 +26,9 @@ import copy
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     iosxr_provider_spec,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    iosxr_commit_spec,
+)
 from ansible_collections.ansible.netcommon.plugins.action.network import (
     ActionModule as ActionNetworkModule,
 )
@@ -36,8 +39,26 @@ from ansible.utils.display import Display
 
 display = Display()
 
+import debugpy
+
+debugpy.listen(3000)
+debugpy.wait_for_client()
+
 
 class ActionModule(ActionNetworkModule):
+    def load_commit(self, spec, args):
+        commit = args.get("commit") or {}
+        # for key, value in dict(spec.get("commit").get("options")):
+        #     if key not in commit:
+        #         if "fallback" in value:
+        #             commit[key] = _fallback(value["fallback"])
+        #         elif "default" in value:
+        #             commit[key] = value["default"]
+        #         else:
+        #             commit[key] = None
+        args["commit"] = commit
+        return commit
+
     def run(self, tmp=None, task_vars=None):
         del tmp  # tmp no longer has any effect
 
@@ -138,7 +159,10 @@ class ActionModule(ActionNetworkModule):
                     "msg": "Connection type %s is not valid for module %s"
                     % (self._play_context.connection, module_name),
                 }
+            commit_data = self.load_commit(iosxr_commit_spec, self._task.args)
             provider = self._task.args.get("provider", {})
+            # commit_data = self._task.args.get("commit", {})
+            del self._task.args["commit"]
             if any(provider.values()):
                 display.warning(
                     "provider is unnecessary when using {0} and will be ignored".format(
@@ -154,6 +178,12 @@ class ActionModule(ActionNetworkModule):
             }
 
         result = super(ActionModule, self).run(task_vars=task_vars)
+
+        if commit_data and result.get("changed"):
+            self._connection.commit(
+                comment=commit_data.get("comment", None),
+                label=commit_data.get("label", None),
+            )
         if warnings:
             if "warnings" in result:
                 result["warnings"].extend(warnings)
