@@ -158,12 +158,10 @@ class Cliconf(CliconfBase):
         if not prompt.endswith(")#"):
             if admin and "admin-" not in prompt:
                 self.send_command("admin")
-            if exclusive:
+            if exclusive or self.get_option("config_mode_exclusive"):
                 self.send_command("configure exclusive")
                 return
             self.send_command("configure terminal")
-            if self.get_option("config_mode_exclusive"):
-                self.send_command("configuration mode exclusive")
 
     def abort(self, admin=False):
         prompt = to_text(
