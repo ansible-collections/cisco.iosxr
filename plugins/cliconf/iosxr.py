@@ -74,6 +74,15 @@ options:
     default: []
     vars:
     - name: ansible_iosxr_config_commands
+  config_mode_exclusive:
+    type: boolean
+    default: false
+    description:
+    - enable or disable config mode exclusive
+    env:
+    - name: ANSIBLE_IOSXR_CONFIG_MODE_EXCLUSIVE
+    vars:
+    - name: ansible_iosxr_config_mode_exclusive
 """
 
 import re
@@ -153,6 +162,8 @@ class Cliconf(CliconfBase):
                 self.send_command("configure exclusive")
                 return
             self.send_command("configure terminal")
+            if self.get_option("config_mode_exclusive"):
+                self.send_command("configuration mode exclusive")
 
     def abort(self, admin=False):
         prompt = to_text(
