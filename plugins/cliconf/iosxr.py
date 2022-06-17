@@ -385,9 +385,6 @@ class Cliconf(CliconfBase):
             # proceeding further
             cmd_obj["prompt"] = "(C|c)onfirm"
             cmd_obj["answer"] = "y"
-        import q
-
-        q(cmd_obj)
         self.send_command(**cmd_obj)
 
     def run_commands(self, commands=None, check_rc=True):
