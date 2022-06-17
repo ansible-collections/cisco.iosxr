@@ -350,29 +350,34 @@ class Cliconf(CliconfBase):
                 "prompt"
             ] = "This commit will replace or remove the entire running configuration"
             cmd_obj["answer"] = "yes"
-        elif any(
-            [
-                self.get_option("commit_confirmed"),
-                self.get_option("commit_confirmed_timeout"),
-                self.get_option("commit_confirmed_label"),
-                self.get_option("commit_confirmed_comment"),
-            ]
+
+        elif self.get_option("commit_confirmed") or self.get_option(
+            "commit_confirmed_timeout"
         ):
-            cmd_obj["command"] = self.commit_confirmed(
-                cmd="commit confirmed",
-                timeout=self.get_option("commit_confirmed_timeout"),
-                comment=self.get_option("commit_confirmed_comment"),
-                label=self.get_option("commit_confirmed_label"),
+            cmd_obj["command"] = "commit confirmed {0}".format(
+                self.get_option("commit_confirmed_timeout")
             )
+            if self.get_option("commit_confirmed_label"):
+                cmd_obj["command"] += " label {0}".format(
+                    self.get_option("commit_confirmed_label")
+                )
+            if self.get_option("commit_confirmed_comment"):
+                cmd_obj["command"] += " comment {0}".format(
+                    self.get_option("commit_confirmed_comment")
+                )
+
         else:
             if not label and self.get_option("commit_confirmed_label"):
                 label = self.get_option("commit_confirmed_label")
             if not comment and self.get_option("commit_confirmed_comment"):
                 comment = self.get_option("commit_confirmed_comment")
-            if any([comment, label]):
-                cmd_obj["command"] = self.commit_confirmed(
-                    cmd="commit", comment=comment, label=label
-                )
+
+            if comment or label:
+                cmd_obj["command"] = "commit"
+                if comment:
+                    cmd_obj["command"] += " comment {0}".format(comment)
+                if label:
+                    cmd_obj["command"] += " label {0}".format(label)
             else:
                 cmd_obj["command"] = "commit show-error"
             # In some cases even a normal commit, i.e., !replace,
@@ -380,16 +385,10 @@ class Cliconf(CliconfBase):
             # proceeding further
             cmd_obj["prompt"] = "(C|c)onfirm"
             cmd_obj["answer"] = "y"
-        self.send_command(**cmd_obj)
+        import q
 
-    def commit_confirmed(self, cmd, timeout=None, comment=None, label=None):
-        if timeout:
-            cmd += " {0}".format(timeout)
-        if label:
-            cmd += " label {0}".format(label)
-        if comment:
-            cmd += " comment {0}".format(comment)
-        return cmd
+        q(cmd_obj)
+        self.send_command(**cmd_obj)
 
     def run_commands(self, commands=None, check_rc=True):
         if commands is None:
