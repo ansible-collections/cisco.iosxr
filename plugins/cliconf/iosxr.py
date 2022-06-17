@@ -358,14 +358,21 @@ class Cliconf(CliconfBase):
                 self.get_option("commit_confirmed_comment"),
             ]
         ):
-            cmd_obj["command"] = self.commit_confirmed()
+            cmd_obj["command"] = self.commit_confirmed(
+                cmd="commit confirmed",
+                timeout=self.get_option("commit_confirmed_timeout"),
+                comment=self.get_option("commit_confirmed_comment"),
+                label=self.get_option("commit_confirmed_label"),
+            )
         else:
+            if not label and self.get_option("commit_confirmed_label"):
+                label = self.get_option("commit_confirmed_label")
+            if not comment and self.get_option("commit_confirmed_comment"):
+                comment = self.get_option("commit_confirmed_comment")
             if any([comment, label]):
-                cmd_obj["command"] = "commit"
-                if label:
-                    cmd_obj["command"] += " label {0}".format(label)
-                if comment:
-                    cmd_obj["command"] += " comment {0}".format(comment)
+                cmd_obj["command"] = self.commit_confirmed(
+                    cmd="commit", comment=comment, label=label
+                )
             else:
                 cmd_obj["command"] = "commit show-error"
             # In some cases even a normal commit, i.e., !replace,
@@ -375,19 +382,13 @@ class Cliconf(CliconfBase):
             cmd_obj["answer"] = "y"
         self.send_command(**cmd_obj)
 
-    def commit_confirmed(self):
-        cmd = "commit confirmed"
-
-        if self.get_option("commit_confirmed_timeout"):
-            cmd += " {0}".format(self.get_option("commit_confirmed_timeout"))
-        if self.get_option("commit_confirmed_label"):
-            cmd += " label {0}".format(
-                self.get_option("commit_confirmed_label")
-            )
-        if self.get_option("commit_confirmed_comment"):
-            cmd += " comment {0}".format(
-                self.get_option("commit_confirmed_comment")
-            )
+    def commit_confirmed(self, cmd, timeout=None, comment=None, label=None):
+        if timeout:
+            cmd += " {0}".format(timeout)
+        if label:
+            cmd += " label {0}".format(label)
+        if comment:
+            cmd += " comment {0}".format(comment)
         return cmd
 
     def run_commands(self, commands=None, check_rc=True):
