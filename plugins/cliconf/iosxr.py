@@ -367,10 +367,8 @@ class Cliconf(CliconfBase):
                 )
 
         else:
-            if not label and self.get_option("commit_confirmed_label"):
-                label = self.get_option("commit_confirmed_label")
-            if not comment and self.get_option("commit_confirmed_comment"):
-                comment = self.get_option("commit_confirmed_comment")
+            label = label or self.get_option("commit_label")
+            comment = comment or self.get_option("commit_comment")
 
             if comment or label:
                 cmd_obj["command"] = "commit"
