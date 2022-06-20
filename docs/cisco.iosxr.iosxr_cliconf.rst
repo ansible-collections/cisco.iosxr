@@ -57,6 +57,44 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>commit_confirmed_comment</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                    <td>
+                                <div>env:ANSIBLE_IOSXR_COMMIT_CONFIRMED_COMMENT</div>
+                                <div>var: ansible_iosxr_commit_confirmed_comment</div>
+                    </td>
+                <td>
+                        <div>Adds comment to commit confirmed..</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>commit_confirmed_label</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                    <td>
+                                <div>env:ANSIBLE_IOSXR_COMMIT_CONFIRMED_LABEL</div>
+                                <div>var: ansible_iosxr_commit_confirmed_label</div>
+                    </td>
+                <td>
+                        <div>Adds label to commit confirmed.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>commit_confirmed_timeout</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -93,6 +131,26 @@ Parameters
                 <td>
                         <div>Specifies a list of commands that can make configuration changes to the target device.</div>
                         <div>When `ansible_network_single_user_mode` is enabled, if a command sent to the device is present in this list, the existing cache is invalidated.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>config_mode_exclusive</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
+                </td>
+                    <td>
+                                <div>env:ANSIBLE_IOSXR_CONFIG_MODE_EXCLUSIVE</div>
+                                <div>var: ansible_iosxr_config_mode_exclusive</div>
+                    </td>
+                <td>
+                        <div>enable or disable config mode exclusive</div>
                 </td>
             </tr>
     </table>
