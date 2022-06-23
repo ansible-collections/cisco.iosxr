@@ -85,6 +85,40 @@ options:
     - name: ansible_iosxr_config_mode_exclusive
 """
 
+EXAMPLES = """
+- name: Commit confirmed with a task
+  vars:
+    ansible_iosxr_commit_confirmed: True
+    ansible_iosxr_commit_confirmed_timeout: 50
+    ansible_iosxr_commit_confirmed_label: TestLabel
+    ansible_iosxr_commit_confirmed_comment: I am a test comment
+  cisco.iosxr.iosxr_logging_global:
+    state: merged
+    config:
+      buffered:
+        severity: errors #alerts #informational
+      correlator:
+        buffer_size: 2024
+
+# Commands
+# ["commit confirmed 50 label TestLabel comment I am a test comment"]
+
+- name: Configure with a task
+  vars:
+    ansible_iosxr_config_mode_exclusive: True
+  cisco.iosxr.iosxr_interfaces:
+    config:
+        - name: GigabitEthernet0/0/0/2
+        description: Configured via Ansible
+        - name: GigabitEthernet0/0/0/3
+        description: Configured via Ansible
+    state: merged
+
+# Commands
+# ["configure exclusive"]
+
+"""
+
 import re
 import json
 
@@ -354,9 +388,12 @@ class Cliconf(CliconfBase):
         elif self.get_option("commit_confirmed") or self.get_option(
             "commit_confirmed_timeout"
         ):
-            cmd_obj["command"] = "commit confirmed {0}".format(
-                self.get_option("commit_confirmed_timeout")
-            )
+            if self.get_option("commit_confirmed"):
+                cmd_obj["command"] += "commit confirmed"
+            if self.get_option("commit_confirmed_timeout"):
+                cmd_obj["command"] += " {0}".format(
+                    self.get_option("commit_confirmed_timeout")
+                )
             if self.get_option("commit_confirmed_label"):
                 cmd_obj["command"] += " label {0}".format(
                     self.get_option("commit_confirmed_label")
