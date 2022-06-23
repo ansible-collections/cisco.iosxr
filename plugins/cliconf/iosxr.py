@@ -103,7 +103,7 @@ EXAMPLES = """
 # Commands
 # ["commit confirmed 50 label TestLabel comment I am a test comment"]
 
-- name: Configure with a task
+- name: Configure exclusive mode with a task
   vars:
     ansible_iosxr_config_mode_exclusive: True
   cisco.iosxr.iosxr_interfaces:
