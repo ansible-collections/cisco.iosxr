@@ -100,7 +100,7 @@ EXAMPLES = """
       correlator:
         buffer_size: 2024
 
-# Commands
+# Commands (cliconf specific)
 # ["commit confirmed 50 label TestLabel comment I am a test comment"]
 
 - name: Configure exclusive mode with a task
@@ -114,7 +114,7 @@ EXAMPLES = """
         description: Configured via Ansible
     state: merged
 
-# Commands
+# Commands (cliconf specific)
 # ["configure exclusive"]
 
 """
