@@ -28,6 +28,10 @@ description:
 - This iosxr plugin provides low level abstraction apis for sending and receiving
   CLI commands from Cisco IOS XR network devices.
 version_added: 1.0.0
+notes:
+- IOSXR commit confirmed command varies with IOSXR version releases,
+  commit_confirmed_comment and commit_confirmed_label may or may not
+  be valid together as per the device version.
 options:
   commit_confirmed:
     type: boolean
@@ -86,6 +90,8 @@ options:
 """
 
 EXAMPLES = """
+# Use commit confirmed within a task with timeout, label and comment
+
 - name: Commit confirmed with a task
   vars:
     ansible_iosxr_commit_confirmed: True
@@ -103,20 +109,59 @@ EXAMPLES = """
 # Commands (cliconf specific)
 # ["commit confirmed 50 label TestLabel comment I am a test comment"]
 
+# Use commit within a task with label
+
+- name: Commit label with a task
+  vars:
+    ansible_iosxr_commit_confirmed_label: lblTest
+  cisco.iosxr.iosxr_hostname:
+    state: merged
+    config:
+      hostname: R1
+
+# Commands (cliconf specific)
+# ["commit label lblt1"]
+
+# Use commit confirm with timeout and confirm the commit
+
+# NOTE - IOSXR waits for a `commit confirmed` when the command
+# executed is `commit confirmed <timeout>` within the timeout
+# period for the config to commit successfully, else a rollback
+# happens.
+
+vars:
+  ansible_iosxr_commit_confirmed: True
+  ansible_iosxr_commit_confirmed_timeout: 60
+tasks:
+  - name: "Commit confirmed with timeout"
+    cisco.iosxr.iosxr_hostname:
+      state: merged
+      config:
+        hostname: R1
+
+  - name: "Confirm the Commit"
+    cisco.iosxr.iosxr_command:
+      commands:
+        - commit confirmed
+
+# Commands (cliconf specific)
+# ["commit confirmed 60"]
+
+# Use exclusive mode with a task
+
 - name: Configure exclusive mode with a task
   vars:
     ansible_iosxr_config_mode_exclusive: True
   cisco.iosxr.iosxr_interfaces:
+    state: merged
     config:
         - name: GigabitEthernet0/0/0/2
         description: Configured via Ansible
         - name: GigabitEthernet0/0/0/3
         description: Configured via Ansible
-    state: merged
 
 # Commands (cliconf specific)
 # ["configure exclusive"]
-
 """
 
 import re
@@ -377,6 +422,8 @@ class Cliconf(CliconfBase):
             label (str, optional): commit label. Defaults to None.
             replace (bool, optional): Flag to replace commit. Defaults to None.
         """
+        import q
+
         cmd_obj = {}
         if replace:
             cmd_obj["command"] = "commit replace"
@@ -404,8 +451,8 @@ class Cliconf(CliconfBase):
                 )
 
         else:
-            label = label or self.get_option("commit_label")
-            comment = comment or self.get_option("commit_comment")
+            label = label or self.get_option("commit_confirmed_label")
+            comment = comment or self.get_option("commit_confirmed_comment")
 
             if comment or label:
                 cmd_obj["command"] = "commit"
@@ -420,6 +467,7 @@ class Cliconf(CliconfBase):
             # proceeding further
             cmd_obj["prompt"] = "(C|c)onfirm"
             cmd_obj["answer"] = "y"
+        q(cmd_obj)
         self.send_command(**cmd_obj)
 
     def run_commands(self, commands=None, check_rc=True):
