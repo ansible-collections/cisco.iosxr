@@ -157,12 +157,20 @@ Parameters
     <br/>
 
 
+Notes
+-----
+
+.. note::
+   - IOSXR commit confirmed command varies with IOSXR version releases, commit_confirmed_comment and commit_confirmed_label may or may not be valid together as per the device version.
+
 
 
 Examples
 --------
 
 .. code-block:: yaml
+
+    # Use commit confirmed within a task with timeout, label and comment
 
     - name: Commit confirmed with a task
       vars:
@@ -181,16 +189,56 @@ Examples
     # Commands (cliconf specific)
     # ["commit confirmed 50 label TestLabel comment I am a test comment"]
 
+    # Use commit within a task with label
+
+    - name: Commit label with a task
+      vars:
+        ansible_iosxr_commit_confirmed_label: lblTest
+      cisco.iosxr.iosxr_hostname:
+        state: merged
+        config:
+          hostname: R1
+
+    # Commands (cliconf specific)
+    # ["commit label lblt1"]
+
+    # Use commit confirm with timeout and confirm the commit
+
+    # NOTE - IOSXR waits for a `commit confirmed` when the command
+    # executed is `commit confirmed <timeout>` within the timeout
+    # period for the config to commit successfully, else a rollback
+    # happens.
+
+    vars:
+      ansible_iosxr_commit_confirmed: True
+      ansible_iosxr_commit_confirmed_timeout: 60
+    tasks:
+      - name: "Commit confirmed with timeout"
+        cisco.iosxr.iosxr_hostname:
+          state: merged
+          config:
+            hostname: R1
+
+      - name: "Confirm the Commit"
+        cisco.iosxr.iosxr_command:
+          commands:
+            - commit confirmed
+
+    # Commands (cliconf specific)
+    # ["commit confirmed 60"]
+
+    # Use exclusive mode with a task
+
     - name: Configure exclusive mode with a task
       vars:
         ansible_iosxr_config_mode_exclusive: True
       cisco.iosxr.iosxr_interfaces:
+        state: merged
         config:
             - name: GigabitEthernet0/0/0/2
             description: Configured via Ansible
             - name: GigabitEthernet0/0/0/3
             description: Configured via Ansible
-        state: merged
 
     # Commands (cliconf specific)
     # ["configure exclusive"]
