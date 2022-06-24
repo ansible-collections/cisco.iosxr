@@ -37,6 +37,25 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>commit_comment</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                    <td>
+                                <div>env:ANSIBLE_IOSXR_COMMIT_COMMENT</div>
+                                <div>var: ansible_iosxr_commit_comment</div>
+                    </td>
+                <td>
+                        <div>Adds comment to commit confirmed..</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>commit_confirmed</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -57,44 +76,6 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>commit_confirmed_comment</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                    <td>
-                                <div>env:ANSIBLE_IOSXR_COMMIT_CONFIRMED_COMMENT</div>
-                                <div>var: ansible_iosxr_commit_confirmed_comment</div>
-                    </td>
-                <td>
-                        <div>Adds comment to commit confirmed..</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>commit_confirmed_label</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                    <td>
-                                <div>env:ANSIBLE_IOSXR_COMMIT_CONFIRMED_LABEL</div>
-                                <div>var: ansible_iosxr_commit_confirmed_label</div>
-                    </td>
-                <td>
-                        <div>Adds label to commit confirmed.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>commit_confirmed_timeout</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -109,6 +90,25 @@ Parameters
                     </td>
                 <td>
                         <div>Commits the configuration on a trial basis for the time specified in seconds or minutes.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>commit_label</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                    <td>
+                                <div>env:ANSIBLE_IOSXR_COMMIT_LABEL</div>
+                                <div>var: ansible_iosxr_commit_label</div>
+                    </td>
+                <td>
+                        <div>Adds label to commit confirmed.</div>
                 </td>
             </tr>
             <tr>
@@ -161,7 +161,7 @@ Notes
 -----
 
 .. note::
-   - IOSXR commit confirmed command varies with IOSXR version releases, commit_confirmed_comment and commit_confirmed_label may or may not be valid together as per the device version.
+   - IOSXR commit confirmed command varies with IOSXR version releases, commit_comment and commit_label may or may not be valid together as per the device version.
 
 
 
@@ -176,8 +176,8 @@ Examples
       vars:
         ansible_iosxr_commit_confirmed: True
         ansible_iosxr_commit_confirmed_timeout: 50
-        ansible_iosxr_commit_confirmed_label: TestLabel
-        ansible_iosxr_commit_confirmed_comment: I am a test comment
+        ansible_iosxr_commit_label: TestLabel
+        ansible_iosxr_commit_comment: I am a test comment
       cisco.iosxr.iosxr_logging_global:
         state: merged
         config:
@@ -193,7 +193,7 @@ Examples
 
     - name: Commit label with a task
       vars:
-        ansible_iosxr_commit_confirmed_label: lblTest
+        ansible_iosxr_commit_label: lblTest
       cisco.iosxr.iosxr_hostname:
         state: merged
         config:

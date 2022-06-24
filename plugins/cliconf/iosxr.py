@@ -30,7 +30,7 @@ description:
 version_added: 1.0.0
 notes:
 - IOSXR commit confirmed command varies with IOSXR version releases,
-  commit_confirmed_comment and commit_confirmed_label may or may not
+  commit_comment and commit_label may or may not
   be valid together as per the device version.
 options:
   commit_confirmed:
@@ -50,22 +50,22 @@ options:
     - name: ANSIBLE_IOSXR_COMMIT_CONFIRMED_TIMEOUT
     vars:
     - name: ansible_iosxr_commit_confirmed_timeout
-  commit_confirmed_label:
+  commit_label:
     type: str
     description:
     - Adds label to commit confirmed.
     env:
-    - name: ANSIBLE_IOSXR_COMMIT_CONFIRMED_LABEL
+    - name: ANSIBLE_IOSXR_COMMIT_LABEL
     vars:
-    - name: ansible_iosxr_commit_confirmed_label
-  commit_confirmed_comment:
+    - name: ansible_iosxr_commit_label
+  commit_comment:
     type: str
     description:
     - Adds comment to commit confirmed..
     env:
-    - name: ANSIBLE_IOSXR_COMMIT_CONFIRMED_COMMENT
+    - name: ANSIBLE_IOSXR_COMMIT_COMMENT
     vars:
-    - name: ansible_iosxr_commit_confirmed_comment
+    - name: ansible_iosxr_commit_comment
   config_commands:
     description:
     - Specifies a list of commands that can make configuration changes
@@ -96,8 +96,8 @@ EXAMPLES = """
   vars:
     ansible_iosxr_commit_confirmed: True
     ansible_iosxr_commit_confirmed_timeout: 50
-    ansible_iosxr_commit_confirmed_label: TestLabel
-    ansible_iosxr_commit_confirmed_comment: I am a test comment
+    ansible_iosxr_commit_label: TestLabel
+    ansible_iosxr_commit_comment: I am a test comment
   cisco.iosxr.iosxr_logging_global:
     state: merged
     config:
@@ -113,7 +113,7 @@ EXAMPLES = """
 
 - name: Commit label with a task
   vars:
-    ansible_iosxr_commit_confirmed_label: lblTest
+    ansible_iosxr_commit_label: lblTest
   cisco.iosxr.iosxr_hostname:
     state: merged
     config:
@@ -423,7 +423,6 @@ class Cliconf(CliconfBase):
             label (str, optional): commit label. Defaults to None.
             replace (bool, optional): Flag to replace commit. Defaults to None.
         """
-        import q
 
         cmd_obj = {}
         if replace:
@@ -433,34 +432,33 @@ class Cliconf(CliconfBase):
             ] = "This commit will replace or remove the entire running configuration"
             cmd_obj["answer"] = "yes"
 
-        elif self.get_option("commit_confirmed") or self.get_option(
-            "commit_confirmed_timeout"
-        ):
+        elif self.get_option("commit_confirmed"):
             if self.get_option("commit_confirmed"):
-                cmd_obj["command"] += "commit confirmed"
+                cmd_obj["command"] = "commit confirmed"
             if self.get_option("commit_confirmed_timeout"):
                 cmd_obj["command"] += " {0}".format(
                     self.get_option("commit_confirmed_timeout")
                 )
-            if self.get_option("commit_confirmed_label"):
+            if self.get_option("commit_label"):
                 cmd_obj["command"] += " label {0}".format(
-                    self.get_option("commit_confirmed_label")
+                    self.get_option("commit_label")
                 )
-            if self.get_option("commit_confirmed_comment"):
+            if self.get_option("commit_comment"):
                 cmd_obj["command"] += " comment {0}".format(
-                    self.get_option("commit_confirmed_comment")
+                    self.get_option("commit_comment")
                 )
 
         else:
-            label = label or self.get_option("commit_confirmed_label")
-            comment = comment or self.get_option("commit_confirmed_comment")
+            label = label or self.get_option("commit_label")
+            comment = comment or self.get_option("commit_comment")
 
             if comment or label:
                 cmd_obj["command"] = "commit"
-                if comment:
-                    cmd_obj["command"] += " comment {0}".format(comment)
                 if label:
                     cmd_obj["command"] += " label {0}".format(label)
+                if comment:
+                    cmd_obj["command"] += " comment {0}".format(comment)
+
             else:
                 cmd_obj["command"] = "commit show-error"
             # In some cases even a normal commit, i.e., !replace,
@@ -468,7 +466,6 @@ class Cliconf(CliconfBase):
             # proceeding further
             cmd_obj["prompt"] = "(C|c)onfirm"
             cmd_obj["answer"] = "y"
-        q(cmd_obj)
         self.send_command(**cmd_obj)
 
     def run_commands(self, commands=None, check_rc=True):
