@@ -433,8 +433,7 @@ class Cliconf(CliconfBase):
             cmd_obj["answer"] = "yes"
 
         elif self.get_option("commit_confirmed"):
-            if self.get_option("commit_confirmed"):
-                cmd_obj["command"] = "commit confirmed"
+            cmd_obj["command"] = "commit confirmed"
             if self.get_option("commit_confirmed_timeout"):
                 cmd_obj["command"] += " {0}".format(
                     self.get_option("commit_confirmed_timeout")
