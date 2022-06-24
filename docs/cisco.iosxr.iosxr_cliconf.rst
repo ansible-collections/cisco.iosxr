@@ -209,20 +209,21 @@ Examples
     # period for the config to commit successfully, else a rollback
     # happens.
 
-    vars:
-      ansible_iosxr_commit_confirmed: True
-      ansible_iosxr_commit_confirmed_timeout: 60
-    tasks:
-      - name: "Commit confirmed with timeout"
-        cisco.iosxr.iosxr_hostname:
-          state: merged
-          config:
-            hostname: R1
+    - name: Example commit confirmed
+      vars:
+        ansible_iosxr_commit_confirmed: True
+        ansible_iosxr_commit_confirmed_timeout: 60
+      tasks:
+        - name: "Commit confirmed with timeout"
+          cisco.iosxr.iosxr_hostname:
+            state: merged
+            config:
+              hostname: R1
 
-      - name: "Confirm the Commit"
-        cisco.iosxr.iosxr_command:
-          commands:
-            - commit confirmed
+        - name: "Confirm the Commit"
+          cisco.iosxr.iosxr_command:
+            commands:
+              - commit confirmed
 
     # Commands (cliconf specific)
     # ["commit confirmed 60"]
@@ -235,9 +236,9 @@ Examples
       cisco.iosxr.iosxr_interfaces:
         state: merged
         config:
-            - name: GigabitEthernet0/0/0/2
+          - name: GigabitEthernet0/0/0/2
             description: Configured via Ansible
-            - name: GigabitEthernet0/0/0/3
+          - name: GigabitEthernet0/0/0/3
             description: Configured via Ansible
 
     # Commands (cliconf specific)
