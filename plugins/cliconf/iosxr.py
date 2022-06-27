@@ -28,6 +28,10 @@ description:
 - This iosxr plugin provides low level abstraction apis for sending and receiving
   CLI commands from Cisco IOS XR network devices.
 version_added: 1.0.0
+notes:
+- IOSXR commit confirmed command varies with IOSXR version releases,
+  commit_comment and commit_label may or may not
+  be valid together as per the device version.
 options:
   commit_confirmed:
     type: boolean
@@ -46,6 +50,22 @@ options:
     - name: ANSIBLE_IOSXR_COMMIT_CONFIRMED_TIMEOUT
     vars:
     - name: ansible_iosxr_commit_confirmed_timeout
+  commit_label:
+    type: str
+    description:
+    - Adds label to commit confirmed.
+    env:
+    - name: ANSIBLE_IOSXR_COMMIT_LABEL
+    vars:
+    - name: ansible_iosxr_commit_label
+  commit_comment:
+    type: str
+    description:
+    - Adds comment to commit confirmed..
+    env:
+    - name: ANSIBLE_IOSXR_COMMIT_COMMENT
+    vars:
+    - name: ansible_iosxr_commit_comment
   config_commands:
     description:
     - Specifies a list of commands that can make configuration changes
@@ -58,6 +78,91 @@ options:
     default: []
     vars:
     - name: ansible_iosxr_config_commands
+  config_mode_exclusive:
+    type: boolean
+    default: false
+    description:
+    - enable or disable config mode exclusive
+    env:
+    - name: ANSIBLE_IOSXR_CONFIG_MODE_EXCLUSIVE
+    vars:
+    - name: ansible_iosxr_config_mode_exclusive
+"""
+
+EXAMPLES = """
+# Use commit confirmed within a task with timeout, label and comment
+
+- name: Commit confirmed with a task
+  vars:
+    ansible_iosxr_commit_confirmed: True
+    ansible_iosxr_commit_confirmed_timeout: 50
+    ansible_iosxr_commit_label: TestLabel
+    ansible_iosxr_commit_comment: I am a test comment
+  cisco.iosxr.iosxr_logging_global:
+    state: merged
+    config:
+      buffered:
+        severity: errors #alerts #informational
+      correlator:
+        buffer_size: 2024
+
+# Commands (cliconf specific)
+# ["commit confirmed 50 label TestLabel comment I am a test comment"]
+
+# Use commit within a task with label
+
+- name: Commit label with a task
+  vars:
+    ansible_iosxr_commit_label: lblTest
+  cisco.iosxr.iosxr_hostname:
+    state: merged
+    config:
+      hostname: R1
+
+# Commands (cliconf specific)
+# ["commit label lblt1"]
+
+# Use commit confirm with timeout and confirm the commit
+
+# NOTE - IOSXR waits for a `commit confirmed` when the command
+# executed is `commit confirmed <timeout>` within the timeout
+# period for the config to commit successfully, else a rollback
+# happens.
+
+- name: Example commit confirmed
+  vars:
+    ansible_iosxr_commit_confirmed: True
+    ansible_iosxr_commit_confirmed_timeout: 60
+  tasks:
+    - name: "Commit confirmed with timeout"
+      cisco.iosxr.iosxr_hostname:
+        state: merged
+        config:
+          hostname: R1
+
+    - name: "Confirm the Commit"
+      cisco.iosxr.iosxr_command:
+        commands:
+          - commit confirmed
+
+# Commands (cliconf specific)
+# ["commit confirmed 60"]
+
+# Use exclusive mode with a task
+
+- name: Configure exclusive mode with a task
+  vars:
+    ansible_iosxr_config_mode_exclusive: True
+  cisco.iosxr.iosxr_interfaces:
+    state: merged
+    config:
+      - name: GigabitEthernet0/0/0/2
+        description: Configured via Ansible
+      - name: GigabitEthernet0/0/0/3
+        description: Configured via Ansible
+
+# Commands (cliconf specific)
+# ["configure exclusive"]
 """
 
 import re
@@ -133,7 +238,7 @@ class Cliconf(CliconfBase):
         if not prompt.endswith(")#"):
             if admin and "admin-" not in prompt:
                 self.send_command("admin")
-            if exclusive:
+            if exclusive or self.get_option("config_mode_exclusive"):
                 self.send_command("configure exclusive")
                 return
             self.send_command("configure terminal")
@@ -192,9 +297,9 @@ class Cliconf(CliconfBase):
             results.append(self.send_command(**line))
             requests.append(cmd)
 
-        # Before any commit happend, we can get a real configuration
+        # Before any commit happened, we can get a real configuration
         # diff from the device and make it available by the iosxr_config module.
-        # This information can be usefull either in check mode or normal mode.
+        # This information can be useful either in check mode or normal mode.
         resp["show_commit_config_diff"] = self.get("show commit changes diff")
 
         if commit:
@@ -310,6 +415,15 @@ class Cliconf(CliconfBase):
         )
 
     def commit(self, comment=None, label=None, replace=None):
+        """Implements commit functionality of config module
+        and commit confirmed functionality of cliconf module
+
+        Args:
+            comment (str, optional): commit comment. Defaults to None.
+            label (str, optional): commit label. Defaults to None.
+            replace (bool, optional): Flag to replace commit. Defaults to None.
+        """
+
         cmd_obj = {}
         if replace:
             cmd_obj["command"] = "commit replace"
@@ -317,21 +431,33 @@ class Cliconf(CliconfBase):
                 "prompt"
             ] = "This commit will replace or remove the entire running configuration"
             cmd_obj["answer"] = "yes"
-        elif self.get_option("commit_confirmed") and self.get_option(
-            "commit_confirmed_timeout"
-        ):
-            cmd_obj["command"] = "commit confirmed {0}".format(
-                self.get_option("commit_confirmed_timeout")
-            )
-        else:
-            if comment and label:
-                cmd_obj["command"] = "commit label {0} comment {1}".format(
-                    label, comment
+
+        elif self.get_option("commit_confirmed"):
+            cmd_obj["command"] = "commit confirmed"
+            if self.get_option("commit_confirmed_timeout"):
+                cmd_obj["command"] += " {0}".format(
+                    self.get_option("commit_confirmed_timeout")
                 )
-            elif comment:
-                cmd_obj["command"] = "commit comment {0}".format(comment)
-            elif label:
-                cmd_obj["command"] = "commit label {0}".format(label)
+            if self.get_option("commit_label"):
+                cmd_obj["command"] += " label {0}".format(
+                    self.get_option("commit_label")
+                )
+            if self.get_option("commit_comment"):
+                cmd_obj["command"] += " comment {0}".format(
+                    self.get_option("commit_comment")
+                )
+
+        else:
+            label = label or self.get_option("commit_label")
+            comment = comment or self.get_option("commit_comment")
+
+            if comment or label:
+                cmd_obj["command"] = "commit"
+                if label:
+                    cmd_obj["command"] += " label {0}".format(label)
+                if comment:
+                    cmd_obj["command"] += " comment {0}".format(comment)
+
             else:
                 cmd_obj["command"] = "commit show-error"
             # In some cases even a normal commit, i.e., !replace,

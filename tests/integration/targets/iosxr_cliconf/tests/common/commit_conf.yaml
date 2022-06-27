@@ -1,0 +1,35 @@
+---
+- debug:
+    msg:
+      START iosxr_cliconf integration tests on connection={{ ansible_connection
+      }}
+
+- name: Apply interface description
+  register: result
+  cisco.iosxr.iosxr_interfaces:
+    state: merged
+    config:
+      - name: GigabitEthernet0/0/0/2
+        description: TestCommitConfirmed
+
+- name: Do commit confirmed
+  cisco.iosxr.iosxr_command:
+    commands:
+      - commit confirmed
+  when: result["changed"] == true
+
+- name: Sleep for 35 sec.
+  wait_for:
+    timeout: 35
+  when: result["changed"] == true
+
+- name: Get interface description
+  register: get_desc
+  iosxr_command:
+    commands:
+      - "show interfaces GigabitEthernet 0/0/0/2 | include Description"
+  ignore_errors: true
+
+- assert:
+    that:
+      - "'TestCommitConfirmed' in get_desc.stdout[0]"
