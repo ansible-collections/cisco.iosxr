@@ -426,3 +426,13 @@ releases:
     - ping_module_add.yaml
     - remove_facts_warning.yml
     release_date: '2022-06-03'
+  3.2.0:
+    changes:
+      bugfixes:
+      - Fix commit confirmed for IOSXR versions with atomic commands.
+      - Fix commit confirmed to render proper command without timeout.
+      minor_changes:
+      - Add label and comment to commit_confirmed functionality in IOSXR.
+    fragments:
+    - fix_comm_confirmed.yml
+    release_date: '2022-06-28'
