@@ -5,6 +5,20 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v3.2.0
+======
+
+Minor Changes
+-------------
+
+- Add label and comment to commit_confirmed functionality in IOSXR.
+
+Bugfixes
+--------
+
+- Fix commit confirmed for IOSXR versions with atomic commands.
+- Fix commit confirmed to render proper command without timeout.
+
 v3.1.0
 ======
 

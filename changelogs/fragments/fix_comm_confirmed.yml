@@ -1,6 +1,0 @@
----
-minor_changes:
-  - Add label and comment to commit_confirmed functionality in IOSXR.
-bugfixes:
-  - Fix commit confirmed for IOSXR versions with atomic commands.
-  - Fix commit confirmed to render proper command without timeout.
