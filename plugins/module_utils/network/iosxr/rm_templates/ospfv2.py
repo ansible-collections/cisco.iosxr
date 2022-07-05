@@ -190,7 +190,7 @@ def _tmplt_microloop_avoidance(config_data):
             command += " segment_routing"
         if "rib_update_delay" in config_data["microloop_avoidance"]:
             command += " rin-update-delay {0}".config_data["microloop_avoidance"].get(
-                "rib_update_delay"
+                "rib_update_delay",
             )
         return command
 
@@ -247,7 +247,7 @@ def _tmplt_ospf_authentication(config_data):
 def _tmplt_ospf_adjacency_stagger(config_data):
     if "adjacency_stagger" in config_data:
         command = "adjacency stagger".format(**config_data)
-        if config_data["adjacency_stagger"].get("min_adjacency",) and config_data[
+        if config_data["adjacency_stagger"].get("min_adjacency") and config_data[
             "adjacency_stagger"
         ].get("min_adjacency"):
             command += " {0} {1}".format(

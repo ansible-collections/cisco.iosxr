@@ -192,7 +192,7 @@ def _tmplt_microloop_avoidance(config_data):
             command += " segment_routing"
         if "rib_update_delay" in config_data["microloop_avoidance"]:
             command += " rin-update-delay {0}".config_data["microloop_avoidance"].get(
-                "rib_update_delay"
+                "rib_update_delay",
             )
         return command
 
