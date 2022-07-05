@@ -20,9 +20,7 @@ import re
 
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.static_routes.static_routes import (
     Static_routesArgs,
@@ -112,11 +110,11 @@ class Static_routesFacts(object):
                 for route_entry in cfg:
                     exit_point = {}
                     exit_point["forward_router_address"] = self.parse_faddr(
-                        route_entry
+                        route_entry,
                     )
                     exit_point["interface"] = self.parse_intf(route_entry)
                     exit_point["admin_distance"] = self.parse_admin_distance(
-                        route_entry
+                        route_entry,
                     )
 
                     for x in [
@@ -129,14 +127,16 @@ class Static_routesFacts(object):
                         "dest_vrf",
                     ]:
                         exit_point[x.replace("-", "_")] = self.parse_attrib(
-                            route_entry, x.replace("dest_vrf", "vrf")
+                            route_entry,
+                            x.replace("dest_vrf", "vrf"),
                         )
 
                     route["next_hops"].append(exit_point)
 
                 routes.append(route)
                 address_family["routes"] = sorted(
-                    routes, key=lambda i: i["dest"]
+                    routes,
+                    key=lambda i: i["dest"],
                 )
             config["address_families"].append(address_family)
 
@@ -190,10 +190,7 @@ class Static_routesFacts(object):
             return [
                 i
                 for i in split_item
-                if "." not in i
-                and ":" not in i
-                and ord(i[0]) > 48
-                and ord(i[0]) < 57
+                if "." not in i and ":" not in i and ord(i[0]) > 48 and ord(i[0]) < 57
             ][0]
         except IndexError:
             return None

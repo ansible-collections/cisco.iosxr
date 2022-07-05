@@ -24,13 +24,9 @@ __metaclass__ = type
 
 from textwrap import dedent
 
-from ansible_collections.cisco.iosxr.plugins.modules import (
-    iosxr_bgp_address_family,
-)
+from ansible_collections.cisco.iosxr.plugins.modules import iosxr_bgp_address_family
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule
 
@@ -42,14 +38,12 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         super(TestIosxrBgpGlobalModule, self).setUp()
 
         self.mock_get_resource_connection = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
-        self.get_resource_connection = (
-            self.mock_get_resource_connection.start()
-        )
+        self.get_resource_connection = self.mock_get_resource_connection.start()
 
         self.mock_get_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_address_family.bgp_address_family.Bgp_address_familyFacts.get_config"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_address_family.bgp_address_family.Bgp_address_familyFacts.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
@@ -71,7 +65,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               redistribute isis test3 metric 4
               redistribute application test1 metric 10
               allocate-label all
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -95,11 +89,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             bgp=dict(scan_time=20, attribute_download=True),
                             advertise_best_external=True,
                             allocate_label=dict(all=True),
-                        )
+                        ),
                     ],
                 ),
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -125,11 +119,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             bgp=dict(scan_time=20, attribute_download=True),
                             advertise_best_external=True,
                             allocate_label=dict(all=True),
-                        )
+                        ),
                     ],
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = [
             "router bgp 65536",
@@ -160,7 +154,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               redistribute application test1 metric 10
               allocate-label all
             address-family ipv4 mvpn
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
 
@@ -182,11 +176,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                                 dict(protocol="connected", metric=10),
                                 dict(protocol="isis", id="test3", metric=4),
                             ],
-                        )
+                        ),
                     ],
                 ),
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "router bgp 65536",
@@ -210,7 +204,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               redistribute isis test3 metric 4
               redistribute application test1 metric 10
             address-family ipv4 mvpn
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
 
@@ -232,11 +226,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                                 dict(protocol="connected", metric=10),
                                 dict(protocol="isis", id="test3", metric=4),
                             ],
-                        )
+                        ),
                     ],
                 ),
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -253,7 +247,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               redistribute isis test3 metric 4
               redistribute application test1 metric 10
               allocate-label all
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(config=dict(), state="deleted"))
@@ -277,7 +271,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               redistribute isis test3 metric 4
               redistribute application test1 metric 10
               allocate-label all
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -285,11 +279,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 config=dict(
                     as_number=65536,
                     address_family=[
-                        dict(afi="ipv6", safi="unicast", dynamic_med=4)
+                        dict(afi="ipv6", safi="unicast", dynamic_med=4),
                     ],
                 ),
                 state="deleted",
-            )
+            ),
         )
         commands = ["router bgp 65536", "no address-family ipv6 unicast"]
         result = self.execute_module(changed=True)
@@ -299,7 +293,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         run_cfg = dedent(
             """\
             "router bgp 65536"
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(config=dict(as_number="65536"), state="deleted"))
@@ -329,11 +323,11 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             bgp=dict(scan_time=20, attribute_download=True),
                             advertise_best_external=True,
                             allocate_label=dict(all=True),
-                        )
+                        ),
                     ],
                 ),
                 state="rendered",
-            )
+            ),
         )
         commands = [
             "router bgp 65536",
@@ -362,7 +356,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               bgp scan-time 20
               redistribute application test1 metric 10
               allocate-label all
-            """
+            """,
         )
         set_module_args(dict(running_config=run_cfg, state="parsed"))
         result = self.execute_module(changed=False)
@@ -380,9 +374,9 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             "protocol": "application",
                             "metric": 10,
                             "id": "test1",
-                        }
+                        },
                     ],
-                }
+                },
             ],
             "as_number": "65536",
         }

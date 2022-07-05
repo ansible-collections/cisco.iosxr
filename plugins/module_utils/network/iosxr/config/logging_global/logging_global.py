@@ -29,9 +29,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     dict_merge,
 )
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.logging_global import (
     Logging_globalTemplate,
 )
@@ -115,9 +113,9 @@ class Logging_global(ResourceModule):
 
         self._compare(want=wantd, have=haved)
         if self.state in ["overridden", "replaced"]:
-            self.commands = [
-                each for each in self.commands if "no" in each
-            ] + [each for each in self.commands if "no" not in each]
+            self.commands = [each for each in self.commands if "no" in each] + [
+                each for each in self.commands if "no" not in each
+            ]
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
@@ -149,10 +147,12 @@ class Logging_global(ResourceModule):
             if "." in x:
                 complex_parser = x.split(".")
                 wantx = want.get(complex_parser[0], {}).get(
-                    complex_parser[1], {}
+                    complex_parser[1],
+                    {},
                 )
                 havex = have.get(complex_parser[0], {}).get(
-                    complex_parser[1], {}
+                    complex_parser[1],
+                    {},
                 )
 
             if x in ["tls_servers", "correlator.rules"]:
@@ -185,8 +185,7 @@ class Logging_global(ResourceModule):
 
         if "source_interfaces" in data:
             data["source_interfaces"] = {
-                x["interface"] + "_" + x.get("vrf", ""): x
-                for x in data["source_interfaces"]
+                x["interface"] + "_" + x.get("vrf", ""): x for x in data["source_interfaces"]
             }
 
         if "files" in data:
@@ -213,7 +212,7 @@ class Logging_global(ResourceModule):
                         for y in x.get("rulename"):
                             new_data = {"rulename": y, "name": x["name"]}
                             data["correlator"]["rule_sets"].update(
-                                {x["name"] + "_" + y: new_data}
+                                {x["name"] + "_" + y: new_data},
                             )
 
                     else:
@@ -223,7 +222,6 @@ class Logging_global(ResourceModule):
             if x in data:
                 if "discriminator" in data[x]:
                     data[x]["discriminator"] = {
-                        x["match_params"] + "_" + x["name"]: x
-                        for x in data[x]["discriminator"]
+                        x["match_params"] + "_" + x["name"]: x for x in data[x]["discriminator"]
                     }
         return data

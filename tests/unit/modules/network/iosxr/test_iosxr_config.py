@@ -24,13 +24,8 @@ __metaclass__ = type
 
 from ansible_collections.cisco.iosxr.plugins.cliconf.iosxr import Cliconf
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_config
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import (
-    MagicMock,
-    patch,
-)
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.compat.mock import MagicMock, patch
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
 
@@ -43,17 +38,17 @@ class TestIosxrConfigModule(TestIosxrModule):
         super(TestIosxrConfigModule, self).setUp()
 
         self.patcher_get_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_config.get_config"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_config.get_config",
         )
         self.mock_get_config = self.patcher_get_config.start()
 
         self.patcher_exec_command = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_config.load_config"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_config.load_config",
         )
         self.mock_exec_command = self.patcher_exec_command.start()
 
         self.mock_get_connection = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_config.get_connection"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_config.get_connection",
         )
         self.get_connection = self.mock_get_connection.start()
 
@@ -79,7 +74,7 @@ class TestIosxrConfigModule(TestIosxrModule):
         src = load_fixture("iosxr_config_config.cfg")
         set_module_args(dict(src=src))
         self.conn.get_diff = MagicMock(
-            return_value=self.cliconf_obj.get_diff(src, src)
+            return_value=self.cliconf_obj.get_diff(src, src),
         )
         self.execute_module()
 
@@ -87,7 +82,7 @@ class TestIosxrConfigModule(TestIosxrModule):
         src = load_fixture("iosxr_config_src.cfg")
         set_module_args(dict(src=src))
         self.conn.get_diff = MagicMock(
-            return_value=self.cliconf_obj.get_diff(src, self.running_config)
+            return_value=self.cliconf_obj.get_diff(src, self.running_config),
         )
         commands = [
             "hostname foo",
@@ -106,8 +101,9 @@ class TestIosxrConfigModule(TestIosxrModule):
         set_module_args(dict(lines=lines))
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(
-                "\n".join(lines), self.running_config
-            )
+                "\n".join(lines),
+                self.running_config,
+            ),
         )
         commands = ["hostname foo"]
         self.execute_module(changed=True, commands=commands)
@@ -121,8 +117,9 @@ class TestIosxrConfigModule(TestIosxrModule):
         candidate_config = iosxr_config.get_candidate(module)
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(
-                candidate_config, self.running_config
-            )
+                candidate_config,
+                self.running_config,
+            ),
         )
         commands = ["interface GigabitEthernet0/0", "shutdown"]
         self.execute_module(changed=True, commands=commands)
@@ -133,8 +130,9 @@ class TestIosxrConfigModule(TestIosxrModule):
         commands = ["test1", "test2", "hostname foo"]
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(
-                "\n".join(lines), self.running_config
-            )
+                "\n".join(lines),
+                self.running_config,
+            ),
         )
         self.execute_module(changed=True, commands=commands, sort=False)
 
@@ -144,8 +142,9 @@ class TestIosxrConfigModule(TestIosxrModule):
         commands = ["hostname foo", "test1", "test2"]
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(
-                "\n".join(lines), self.running_config
-            )
+                "\n".join(lines),
+                self.running_config,
+            ),
         )
         self.execute_module(changed=True, commands=commands, sort=False)
 
@@ -156,12 +155,13 @@ class TestIosxrConfigModule(TestIosxrModule):
                 lines=lines,
                 before=["test1", "test2"],
                 after=["test3", "test4"],
-            )
+            ),
         )
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(
-                "\n".join(lines), self.running_config
-            )
+                "\n".join(lines),
+                self.running_config,
+            ),
         )
         self.execute_module()
 
@@ -170,7 +170,7 @@ class TestIosxrConfigModule(TestIosxrModule):
         lines = ["hostname router"]
         set_module_args(dict(lines=["hostname router"], config=config))
         self.conn.get_diff = MagicMock(
-            return_value=self.cliconf_obj.get_diff("\n".join(lines), config)
+            return_value=self.cliconf_obj.get_diff("\n".join(lines), config),
         )
         commands = ["hostname router"]
         self.execute_module(changed=True, commands=commands)
@@ -190,7 +190,7 @@ class TestIosxrConfigModule(TestIosxrModule):
                 self.running_config,
                 diff_replace="block",
                 path=parents,
-            )
+            ),
         )
         self.execute_module(changed=True, commands=commands)
 
@@ -199,8 +199,10 @@ class TestIosxrConfigModule(TestIosxrModule):
         set_module_args(dict(lines=lines, force=True))
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(
-                "\n".join(lines), self.running_config, diff_match="none"
-            )
+                "\n".join(lines),
+                self.running_config,
+                diff_match="none",
+            ),
         )
         self.execute_module(changed=True, commands=lines)
 
@@ -209,8 +211,9 @@ class TestIosxrConfigModule(TestIosxrModule):
         set_module_args(dict(lines=lines, admin=True))
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(
-                "\n".join(lines), self.running_config
-            )
+                "\n".join(lines),
+                self.running_config,
+            ),
         )
         self.execute_module(changed=True, commands=lines)
 
@@ -228,7 +231,7 @@ class TestIosxrConfigModule(TestIosxrModule):
                 self.running_config,
                 diff_match="none",
                 path=parents,
-            )
+            ),
         )
 
         self.execute_module(changed=True, commands=commands, sort=False)
@@ -251,7 +254,7 @@ class TestIosxrConfigModule(TestIosxrModule):
                 self.running_config,
                 diff_match="strict",
                 path=parents,
-            )
+            ),
         )
 
         self.execute_module(changed=True, commands=commands, sort=False)
@@ -274,7 +277,7 @@ class TestIosxrConfigModule(TestIosxrModule):
                 self.running_config,
                 diff_match="exact",
                 path=parents,
-            )
+            ),
         )
 
         self.execute_module(changed=True, commands=commands, sort=False)

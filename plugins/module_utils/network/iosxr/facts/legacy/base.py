@@ -41,7 +41,9 @@ class FactsBase(object):
 
     def populate(self):
         self.responses = run_commands(
-            self.module, list(self.COMMANDS), check_rc=False
+            self.module,
+            list(self.COMMANDS),
+            check_rc=False,
         )
 
 
@@ -165,7 +167,7 @@ class Interfaces(FactsBase):
     def parse_neighbors(self, neighbors):
         facts = dict()
         nbors = neighbors.split(
-            "------------------------------------------------"
+            "------------------------------------------------",
         )
         for entry in nbors[1:]:
             if entry == "":

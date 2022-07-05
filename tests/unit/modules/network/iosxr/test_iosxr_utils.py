@@ -7,9 +7,7 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    Version,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import Version
 from ansible_collections.cisco.iosxr.tests.unit.compat import unittest
 
 

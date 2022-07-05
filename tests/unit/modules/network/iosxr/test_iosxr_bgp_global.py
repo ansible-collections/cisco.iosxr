@@ -26,9 +26,7 @@ from textwrap import dedent
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_bgp_global
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule
 
@@ -41,15 +39,13 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
 
         self.mock_get_resource_connection = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base."
-            "get_resource_connection"
+            "get_resource_connection",
         )
-        self.get_resource_connection = (
-            self.mock_get_resource_connection.start()
-        )
+        self.get_resource_connection = self.mock_get_resource_connection.start()
 
         self.mock_get_config = patch(
             "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_global.bgp_global."
-            "Bgp_globalFacts.get_config"
+            "Bgp_globalFacts.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
@@ -79,7 +75,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 bfd minimum-interval 20
               vrf vrf1
                 default-metric 5
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -88,7 +84,8 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     as_number="65536",
                     default_metric=4,
                     socket=dict(
-                        receive_buffer_size=514, send_buffer_size=4098
+                        receive_buffer_size=514,
+                        send_buffer_size=4098,
                     ),
                     bgp=dict(
                         confederation=dict(identifier=4),
@@ -115,7 +112,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     vrfs=[dict(vrf="vrf1", default_metric=5)],
                 ),
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -126,7 +123,8 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     as_number="65536",
                     default_metric=4,
                     socket=dict(
-                        receive_buffer_size=514, send_buffer_size=4098
+                        receive_buffer_size=514,
+                        send_buffer_size=4098,
                     ),
                     bgp=dict(
                         confederation=dict(identifier=4),
@@ -153,7 +151,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     vrfs=[dict(vrf="vrf1", default_metric=5)],
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = [
             "router bgp 65536",
@@ -199,7 +197,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 bfd minimum-interval 20
               vrf vrf1
                 default-metric 5
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -208,7 +206,8 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     as_number="65536",
                     default_metric=5,
                     socket=dict(
-                        receive_buffer_size=514, send_buffer_size=4098
+                        receive_buffer_size=514,
+                        send_buffer_size=4098,
                     ),
                     bgp=dict(
                         confederation=dict(identifier=4),
@@ -225,12 +224,12 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                                 minimum_interval=20,
                                 fast_detect=dict(strict_mode=True),
                             ),
-                        )
+                        ),
                     ],
                     vrfs=[dict(vrf="vrf1", default_metric=5)],
                 ),
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "router bgp 65536",
@@ -267,7 +266,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 bfd minimum-interval 20
               vrf vrf1
                 default-metric 5
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -276,7 +275,8 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     as_number="65536",
                     default_metric=4,
                     socket=dict(
-                        receive_buffer_size=514, send_buffer_size=4098
+                        receive_buffer_size=514,
+                        send_buffer_size=4098,
                     ),
                     bgp=dict(
                         confederation=dict(identifier=4),
@@ -303,7 +303,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     vrfs=[dict(vrf="vrf1", default_metric=5)],
                 ),
                 state="replaced",
-            )
+            ),
         )
 
         self.execute_module(changed=False, commands=[])
@@ -329,7 +329,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 bfd minimum-interval 20
               vrf vrf1
                 default-metric 5
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(config=dict(as_number="65536"), state="deleted"))
@@ -353,7 +353,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
     def test_iosxr_bgp_global_deleted_idempotent(self):
         run_cfg = dedent(
             """\
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(config=dict(as_number="65536"), state="deleted"))
@@ -368,7 +368,8 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     as_number="65536",
                     default_metric=4,
                     socket=dict(
-                        receive_buffer_size=514, send_buffer_size=4098
+                        receive_buffer_size=514,
+                        send_buffer_size=4098,
                     ),
                     bgp=dict(
                         confederation=dict(identifier=4),
@@ -395,7 +396,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     vrfs=[dict(vrf="vrf1", default_metric=5)],
                 ),
                 state="rendered",
-            )
+            ),
         )
 
         commands = [
@@ -433,7 +434,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 " bfd fast-detect strict-mode\n "
                 " bfd multiplier 6\n  bfd minimum-interval 20\n !\n!",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         parsed_list = {
@@ -487,7 +488,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 bfd minimum-interval 20
               vrf vrf1
                 default-metric 5
-            """
+            """,
         )
 
         self.get_config.return_value = run_cfg

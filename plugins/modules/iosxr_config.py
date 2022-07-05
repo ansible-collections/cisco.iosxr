@@ -292,13 +292,13 @@ def check_args(module, warnings):
     if module.params["comment"]:
         if len(module.params["comment"]) > 60:
             module.fail_json(
-                msg="comment argument cannot be more than 60 characters"
+                msg="comment argument cannot be more than 60 characters",
             )
     if module.params["label"]:
         label = module.params["label"]
         if len(label) > 30:
             module.fail_json(
-                msg="label argument cannot be more than 30 characters"
+                msg="label argument cannot be more than 30 characters",
             )
         if not label[0].isalpha():
             module.fail_json(msg="label argument must begin with an alphabet")
@@ -306,13 +306,13 @@ def check_args(module, warnings):
         if not valid_chars:
             module.fail_json(
                 msg="label argument must only contain alphabets,"
-                + "digits, underscores or hyphens"
+                + "digits, underscores or hyphens",
             )
     if module.params["force"]:
         warnings.append(
             "The force argument is deprecated, please use "
             "match=none instead.  This argument will be "
-            "removed in the future"
+            "removed in the future",
         )
 
 
@@ -421,7 +421,8 @@ def main():
         before=dict(type="list", elements="str"),
         after=dict(type="list", elements="str"),
         match=dict(
-            default="line", choices=["line", "strict", "exact", "none"]
+            default="line",
+            choices=["line", "strict", "exact", "none"],
         ),
         replace=dict(default="line", choices=["line", "block", "config"]),
         # this argument is deprecated in favor of setting match: none
@@ -475,7 +476,7 @@ def main():
         run(module, result)
 
     if result.get("changed") and any(
-        (module.params["src"], module.params["lines"])
+        (module.params["src"], module.params["lines"]),
     ):
         msg = (
             "To ensure idempotency and correct diff the input configuration lines should be"

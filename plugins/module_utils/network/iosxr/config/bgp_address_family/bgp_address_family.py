@@ -27,9 +27,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     dict_merge,
 )
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.bgp_address_family import (
     Bgp_address_familyTemplate,
 )
@@ -136,7 +134,9 @@ class Bgp_address_family(ResourceModule):
             self.commands.insert(
                 0,
                 self._tmplt.render(
-                    {"as_number": want["as_number"]}, "router", False
+                    {"as_number": want["as_number"]},
+                    "router",
+                    False,
                 ),
             )
 
@@ -218,25 +218,15 @@ class Bgp_address_family(ResourceModule):
         :params entry: data dictionary
         """
         for item in entry.get("address_family", []):
-            item["aggregate_address"] = {
-                x["value"]: x for x in item.get("aggregate_address", [])
-            }
-            item["networks"] = {
-                x["network"]: x for x in item.get("networks", [])
-            }
+            item["aggregate_address"] = {x["value"]: x for x in item.get("aggregate_address", [])}
+            item["networks"] = {x["network"]: x for x in item.get("networks", [])}
             item["redistribute"] = {
-                (x.get("id"), x["protocol"]): x
-                for x in item.get("redistribute", [])
+                (x.get("id"), x["protocol"]): x for x in item.get("redistribute", [])
             }
 
         if "address_family" in entry:
             entry["address_family"] = {
-                "address_family_"
-                + x["afi"]
-                + "_"
-                + x["safi"]
-                + "_vrf_"
-                + x.get("vrf", ""): x
+                "address_family_" + x["afi"] + "_" + x["safi"] + "_vrf_" + x.get("vrf", ""): x
                 for x in entry.get("address_family", [])
             }
 

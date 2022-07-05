@@ -24,9 +24,7 @@ __metaclass__ = type
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_l2_interfaces
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
 
@@ -38,40 +36,36 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
         super(TestIosxrL2InterfacesModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
         self.mock_get_os_version = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.l2_interfaces.l2_interfaces.get_os_version"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.l2_interfaces.l2_interfaces.get_os_version",
         )
         self.get_os_version = self.mock_get_os_version.start()
         self.get_os_version.return_value = "7.0.2"
         self.mock_get_os_version1 = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l2_interfaces.l2_interfaces.get_os_version"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l2_interfaces.l2_interfaces.get_os_version",
         )
         self.get_os_version1 = self.mock_get_os_version1.start()
         self.get_os_version1.return_value = "7.0.2"
         self.mock_execute_show_command = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l2_interfaces.l2_interfaces.L2_InterfacesFacts.get_config"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l2_interfaces.l2_interfaces.L2_InterfacesFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -107,7 +101,7 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
                     ),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -126,7 +120,7 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
                     ),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "interface GigabitEthernet0/0/0/1",
@@ -146,10 +140,10 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
                         name="GigabitEthernet0/0/0/1",
                         l2transport=True,
                         l2protocol=[dict(cpsv="drop")],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "interface GigabitEthernet0/0/0/1",
@@ -187,7 +181,7 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
                     ),
                 ],
                 state="rendered",
-            )
+            ),
         )
 
         commands = [
@@ -206,7 +200,7 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
                 running_config="interface GigabitEthernet0/0/0/1\n l2transport\n  l2protocol cpsv tunnel\n  "
                 "propagate remote-status\n !",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         print(result["parsed"])
@@ -216,7 +210,7 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
                 "l2transport": True,
                 "l2protocol": [{"cpsv": "tunnel"}],
                 "propagate": True,
-            }
+            },
         ]
         self.assertEqual(parsed_list, result["parsed"])
 
@@ -237,7 +231,7 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
                     ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "interface GigabitEthernet0/0/0/4",

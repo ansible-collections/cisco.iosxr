@@ -26,9 +26,7 @@ from textwrap import dedent
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_hostname
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule
 
@@ -41,15 +39,13 @@ class TestIosxrHostnameModule(TestIosxrModule):
 
         self.mock_get_resource_connection = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base."
-            "get_resource_connection"
+            "get_resource_connection",
         )
-        self.get_resource_connection = (
-            self.mock_get_resource_connection.start()
-        )
+        self.get_resource_connection = self.mock_get_resource_connection.start()
 
         self.mock_get_config = patch(
             "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.hostname.hostname."
-            "HostnameFacts.get_config"
+            "HostnameFacts.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
@@ -63,7 +59,7 @@ class TestIosxrHostnameModule(TestIosxrModule):
         run_cfg = dedent(
             """\
                 hostname iosxr1
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(config=dict(hostname="iosxr1"), state="merged"))
@@ -81,7 +77,7 @@ class TestIosxrHostnameModule(TestIosxrModule):
         run_cfg = dedent(
             """\
                 hostname iosxr1
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(state="deleted"))
@@ -101,7 +97,7 @@ class TestIosxrHostnameModule(TestIosxrModule):
         run_cfg = dedent(
             """\
                 hostname iosxr1
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         print(self.get_config.return_value)

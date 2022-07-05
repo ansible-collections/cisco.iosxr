@@ -25,9 +25,7 @@ import json
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_facts
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
 
@@ -40,19 +38,17 @@ class TestIosxrFacts(TestIosxrModule):
         super(TestIosxrFacts, self).setUp()
 
         self.mock_run_commands = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.legacy.base.run_commands"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.legacy.base.run_commands",
         )
         self.run_commands = self.mock_run_commands.start()
 
         self.mock_get_resource_connection = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection = (
-            self.mock_get_resource_connection.start()
-        )
+        self.get_resource_connection = self.mock_get_resource_connection.start()
 
         self.mock_get_capabilities = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.legacy.base.get_capabilities"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.legacy.base.get_capabilities",
         )
         self.get_capabilities = self.mock_get_capabilities.start()
         self.get_capabilities.return_value = {
@@ -97,18 +93,21 @@ class TestIosxrFacts(TestIosxrModule):
         ansible_facts = result["ansible_facts"]
         self.assertIn("default", ansible_facts["ansible_net_gather_subset"][0])
         self.assertEqual(
-            [], ansible_facts["ansible_net_gather_network_resources"]
+            [],
+            ansible_facts["ansible_net_gather_network_resources"],
         )
         self.assertEqual("iosxr", ansible_facts["ansible_net_system"])
         self.assertEqual(
-            True, True if ansible_facts.get("ansible_net_version") else False
+            True,
+            True if ansible_facts.get("ansible_net_version") else False,
         )
         self.assertEqual(
             True,
             True if ansible_facts.get("ansible_net_python_version") else False,
         )
         self.assertEqual(
-            True, True if ansible_facts.get("ansible_net_api") else False
+            True,
+            True if ansible_facts.get("ansible_net_api") else False,
         )
 
     def test_iosxr_facts_gather_subset_config(self):

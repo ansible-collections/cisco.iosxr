@@ -20,9 +20,7 @@ import re
 
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lag_interfaces.lag_interfaces import (
     Lag_interfacesArgs,
@@ -67,7 +65,9 @@ class Lag_interfacesFacts(object):
         for interface in interfaces:
             if interface.startswith("Bundle-Ether"):
                 obj = self.render_config(
-                    self.generated_spec, interface, interfaces
+                    self.generated_spec,
+                    interface,
+                    interfaces,
                 )
                 if obj:
                     objs.append(obj)
@@ -98,14 +98,17 @@ class Lag_interfacesFacts(object):
         if match:
             config["name"] = match.group(1) + match.group(2)
             config["load_balancing_hash"] = utils.parse_conf_arg(
-                conf, "bundle load-balancing hash"
+                conf,
+                "bundle load-balancing hash",
             )
             config["mode"] = utils.parse_conf_arg(conf, "lacp mode")
             config["links"]["max_active"] = utils.parse_conf_arg(
-                conf, "bundle maximum-active links"
+                conf,
+                "bundle maximum-active links",
             )
             config["links"]["min_active"] = utils.parse_conf_arg(
-                conf, "bundle minimum-active links"
+                conf,
+                "bundle minimum-active links",
             )
             config["members"] = self.parse_members(match.group(2), data)
 
@@ -132,7 +135,9 @@ class Lag_interfacesFacts(object):
         for interface in interfaces:
             if not interface.startswith("Bu"):
                 match = re.search(
-                    r"bundle id (\d+) mode (\S+)", interface, re.M
+                    r"bundle id (\d+) mode (\S+)",
+                    interface,
+                    re.M,
                 )
                 if match:
                     if bundle_id == match.group(1):
@@ -140,7 +145,7 @@ class Lag_interfacesFacts(object):
                             {
                                 "member": _parse_interface(interface),
                                 "mode": match.group(2),
-                            }
+                            },
                         )
 
         return members

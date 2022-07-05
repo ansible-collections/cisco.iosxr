@@ -16,9 +16,7 @@ based on the configuration.
 """
 
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.hostname.hostname import (
     HostnameArgs,
@@ -56,7 +54,8 @@ class HostnameFacts(object):
 
         # parse native config using the Hostname template
         hostname_parser = HostnameTemplate(
-            lines=data.splitlines(), module=self._module
+            lines=data.splitlines(),
+            module=self._module,
         )
         objs = hostname_parser.parse()
 
@@ -64,8 +63,10 @@ class HostnameFacts(object):
 
         params = utils.remove_empties(
             hostname_parser.validate_config(
-                self.argument_spec, {"config": objs}, redact=True
-            )
+                self.argument_spec,
+                {"config": objs},
+                redact=True,
+            ),
         )
 
         facts["hostname"] = params.get("config", {})

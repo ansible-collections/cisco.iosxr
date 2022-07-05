@@ -24,9 +24,7 @@ __metaclass__ = type
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_lldp_global
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
 
@@ -38,30 +36,26 @@ class TestIosxrLldpModule(TestIosxrModule):
         super(TestIosxrLldpModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
         self.mock_execute_show_command = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.lldp_global.lldp_global.Lldp_globalFacts.get_config"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.lldp_global.lldp_global.Lldp_globalFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -89,11 +83,12 @@ class TestIosxrLldpModule(TestIosxrModule):
                     timer=3000,
                     subinterfaces=True,
                     tlv_select=dict(
-                        management_address=False, system_description=False
+                        management_address=False,
+                        system_description=False,
                     ),
                 ),
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -106,11 +101,12 @@ class TestIosxrLldpModule(TestIosxrModule):
                     timer=3000,
                     subinterfaces=True,
                     tlv_select=dict(
-                        management_address=False, system_description=False
+                        management_address=False,
+                        system_description=False,
                     ),
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = [
             "lldp reinit 2",
@@ -136,7 +132,7 @@ class TestIosxrLldpModule(TestIosxrModule):
                     ),
                 ),
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "no lldp reinit 2",
@@ -171,11 +167,12 @@ class TestIosxrLldpModule(TestIosxrModule):
                     timer=3000,
                     subinterfaces=True,
                     tlv_select=dict(
-                        management_address=False, system_description=False
+                        management_address=False,
+                        system_description=False,
                     ),
                 ),
                 state="rendered",
-            )
+            ),
         )
 
         commands = [
@@ -197,7 +194,7 @@ class TestIosxrLldpModule(TestIosxrModule):
                      enable\nlldp tlv-select system-description disable\nlldp tlv-select management-address\
                  disable\n",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         parsed_list = {

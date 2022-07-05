@@ -177,12 +177,8 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     NetworkConfig,
     dumps,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
-from ansible_collections.ansible.netcommon.plugins.plugin_utils.cliconf_base import (
-    CliconfBase,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.cliconf_base import CliconfBase
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     mask_config_blocks_from_diff,
@@ -235,7 +231,8 @@ class Cliconf(CliconfBase):
 
     def configure(self, admin=False, exclusive=False):
         prompt = to_text(
-            self._connection.get_prompt(), errors="surrogate_or_strict"
+            self._connection.get_prompt(),
+            errors="surrogate_or_strict",
         ).strip()
         if not prompt.endswith(")#"):
             if admin and "admin-" not in prompt:
@@ -247,7 +244,8 @@ class Cliconf(CliconfBase):
 
     def abort(self, admin=False):
         prompt = to_text(
-            self._connection.get_prompt(), errors="surrogate_or_strict"
+            self._connection.get_prompt(),
+            errors="surrogate_or_strict",
         ).strip()
         if prompt.endswith(")#"):
             self.send_command("abort")
@@ -257,7 +255,7 @@ class Cliconf(CliconfBase):
     def get_config(self, source="running", format="text", flags=None):
         if source not in ["running"]:
             raise ValueError(
-                "fetching configuration from %s is not supported" % source
+                "fetching configuration from %s is not supported" % source,
             )
 
         lookup = {"running": "running-config"}
@@ -280,7 +278,11 @@ class Cliconf(CliconfBase):
     ):
         operations = self.get_device_operations()
         self.check_edit_config_capability(
-            operations, candidate, commit, replace, comment
+            operations,
+            candidate,
+            commit,
+            replace,
+            comment,
         )
 
         resp = {}
@@ -309,10 +311,7 @@ class Cliconf(CliconfBase):
                 self.commit(comment=comment, label=label, replace=replace)
             except AnsibleConnectionFailure as exc:
                 error_msg = to_text(exc, errors="surrogate_or_strict").strip()
-                if (
-                    "Invalid input detected" in error_msg
-                    and "comment" in error_msg
-                ):
+                if "Invalid input detected" in error_msg and "comment" in error_msg:
                     msg = (
                         "value of comment option '%s' is ignored as it in not supported by IOSXR"
                         % comment
@@ -348,19 +347,19 @@ class Cliconf(CliconfBase):
 
         if candidate is None and device_operations["supports_generate_diff"]:
             raise ValueError(
-                "candidate configuration is required to generate diff"
+                "candidate configuration is required to generate diff",
             )
 
         if diff_match not in option_values["diff_match"]:
             raise ValueError(
                 "'match' value %s in invalid, valid values are %s"
-                % (diff_match, ", ".join(option_values["diff_match"]))
+                % (diff_match, ", ".join(option_values["diff_match"])),
             )
 
         if diff_replace not in option_values["diff_replace"]:
             raise ValueError(
                 "'replace' value %s in invalid, valid values are %s"
-                % (diff_replace, ", ".join(option_values["diff_replace"]))
+                % (diff_replace, ", ".join(option_values["diff_replace"])),
             )
 
         # prepare candidate configuration
@@ -371,7 +370,9 @@ class Cliconf(CliconfBase):
         if running and diff_match != "none":
             # running configuration
             running = mask_config_blocks_from_diff(
-                running, candidate, "ansible"
+                running,
+                candidate,
+                "ansible",
             )
             running = sanitize_config(running)
 
@@ -382,15 +383,16 @@ class Cliconf(CliconfBase):
                 comment_tokens=["!"],
             )
             configdiffobjs = candidate_obj.difference(
-                running_obj, path=path, match=diff_match, replace=diff_replace
+                running_obj,
+                path=path,
+                match=diff_match,
+                replace=diff_replace,
             )
 
         else:
             configdiffobjs = candidate_obj.items
 
-        diff["config_diff"] = (
-            dumps(configdiffobjs, "commands") if configdiffobjs else ""
-        )
+        diff["config_diff"] = dumps(configdiffobjs, "commands") if configdiffobjs else ""
         return diff
 
     def get(
@@ -405,7 +407,7 @@ class Cliconf(CliconfBase):
     ):
         if output:
             raise ValueError(
-                "'output' value %s is not supported for get" % output
+                "'output' value %s is not supported for get" % output,
             )
         return self.send_command(
             command=command,
@@ -438,15 +440,15 @@ class Cliconf(CliconfBase):
             cmd_obj["command"] = "commit confirmed"
             if self.get_option("commit_confirmed_timeout"):
                 cmd_obj["command"] += " {0}".format(
-                    self.get_option("commit_confirmed_timeout")
+                    self.get_option("commit_confirmed_timeout"),
                 )
             if self.get_option("commit_label"):
                 cmd_obj["command"] += " label {0}".format(
-                    self.get_option("commit_label")
+                    self.get_option("commit_label"),
                 )
             if self.get_option("commit_comment"):
                 cmd_obj["command"] += " comment {0}".format(
-                    self.get_option("commit_comment")
+                    self.get_option("commit_comment"),
                 )
 
         else:
@@ -480,8 +482,7 @@ class Cliconf(CliconfBase):
             output = cmd.pop("output", None)
             if output:
                 raise ValueError(
-                    "'output' value %s is not supported for run_commands"
-                    % output
+                    "'output' value %s is not supported for run_commands" % output,
                 )
 
             try:
@@ -496,8 +497,7 @@ class Cliconf(CliconfBase):
                     out = to_text(out, errors="surrogate_or_strict").strip()
                 except UnicodeError:
                     raise ConnectionError(
-                        message="Failed to decode output from %s: %s"
-                        % (cmd, to_text(out))
+                        message="Failed to decode output from %s: %s" % (cmd, to_text(out)),
                     )
 
                 try:
@@ -555,8 +555,9 @@ class Cliconf(CliconfBase):
         :return: None
         """
         if self._connection.connected and not self.get_option(
-            "commit_confirmed"
+            "commit_confirmed",
         ):
             self._update_cli_prompt_context(
-                config_context=")#", exit_command="abort"
+                config_context=")#",
+                exit_command="abort",
             )

@@ -45,9 +45,7 @@ class ActionModule(ActionNetworkModule):
         del tmp  # tmp no longer has any effect
 
         module_name = self._task.action.split(".")[-1]
-        self._config_module = (
-            True if module_name in ["iosxr_config", "config"] else False
-        )
+        self._config_module = True if module_name in ["iosxr_config", "config"] else False
         force_cli = module_name in (
             "iosxr_netconf",
             "iosxr_config",
@@ -64,25 +62,22 @@ class ActionModule(ActionNetworkModule):
             if force_cli or provider["transport"] == "cli":
                 pc.connection = "ansible.netcommon.network_cli"
                 pc.port = int(
-                    provider["port"] or self._play_context.port or 22
+                    provider["port"] or self._play_context.port or 22,
                 )
             elif provider["transport"] == "netconf":
                 pc.connection = "ansible.netcommon.netconf"
                 pc.port = int(
-                    provider["port"] or self._play_context.port or 830
+                    provider["port"] or self._play_context.port or 830,
                 )
             else:
                 return {
                     "failed": True,
-                    "msg": "Transport type %s is not valid for this module"
-                    % provider["transport"],
+                    "msg": "Transport type %s is not valid for this module" % provider["transport"],
                 }
 
             pc.remote_addr = provider["host"] or self._play_context.remote_addr
             pc.port = int(provider["port"] or self._play_context.port or 22)
-            pc.remote_user = (
-                provider["username"] or self._play_context.connection_user
-            )
+            pc.remote_user = provider["username"] or self._play_context.connection_user
             pc.password = provider["password"] or self._play_context.password
 
             connection = self._shared_loader_obj.connection_loader.get(
@@ -101,7 +96,10 @@ class ActionModule(ActionNetworkModule):
                     pc.connection = "network_cli"
 
                 connection = self._shared_loader_obj.connection_loader.get(
-                    "persistent", pc, sys.stdin, task_uuid=self._task._uuid
+                    "persistent",
+                    pc,
+                    sys.stdin,
+                    task_uuid=self._task._uuid,
                 )
 
             display.vvv(
@@ -115,7 +113,7 @@ class ActionModule(ActionNetworkModule):
                 else connection.get_option("persistent_command_timeout")
             )
             connection.set_options(
-                direct={"persistent_command_timeout": command_timeout}
+                direct={"persistent_command_timeout": command_timeout},
             )
 
             socket_path = connection.run()
@@ -131,8 +129,8 @@ class ActionModule(ActionNetworkModule):
             warnings.append(
                 [
                     "connection local support for this module is deprecated and will be removed in version 2.14, use connection %s"
-                    % pc.connection
-                ]
+                    % pc.connection,
+                ],
             )
         elif persistent_connection in ("netconf", "network_cli"):
             if force_cli and persistent_connection != "network_cli":
@@ -145,8 +143,8 @@ class ActionModule(ActionNetworkModule):
             if any(provider.values()):
                 display.warning(
                     "provider is unnecessary when using {0} and will be ignored".format(
-                        self._play_context.connection
-                    )
+                        self._play_context.connection,
+                    ),
                 )
                 del self._task.args["provider"]
         else:
