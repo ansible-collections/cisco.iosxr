@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -249,33 +250,31 @@ xml:
     </config>'
 """
 
-import re
 import collections
+import re
+
 from copy import deepcopy
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    Version,
-)
 
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    get_config,
-    load_config,
-    build_xml,
-    get_capabilities,
-    get_os_version,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
-    etree_findall,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    is_netconf,
-    is_cliconf,
-    etree_find,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
+)
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    build_xml,
+    etree_find,
+    etree_findall,
+    get_capabilities,
+    get_config,
+    get_os_version,
+    iosxr_argument_spec,
+    is_cliconf,
+    is_netconf,
+    load_config,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    Version,
 )
 
 

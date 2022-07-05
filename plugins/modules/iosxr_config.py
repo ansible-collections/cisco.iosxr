@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -253,22 +254,23 @@ time:
   sample: "22:28:34"
 """
 import re
-from ansible.module_utils._text import to_text, to_bytes
+
+from ansible.module_utils._text import to_bytes, to_text
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import ConnectionError
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    load_config,
-    get_config,
-    get_connection,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
-    copy_file,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.config import (
     NetworkConfig,
     dumps,
 )
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    copy_file,
+    get_config,
+    get_connection,
+    iosxr_argument_spec,
+    load_config,
+)
+
 
 DEFAULT_COMMIT_COMMENT = "configured by iosxr_config"
 

@@ -9,6 +9,7 @@ The module file for iosxr_facts
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -179,15 +180,16 @@ ansible_net_gather_network_resources:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
-)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.facts.facts import (
     FactsArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
     FACT_RESOURCE_SUBSETS,
+    Facts,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    iosxr_argument_spec,
 )
 
 

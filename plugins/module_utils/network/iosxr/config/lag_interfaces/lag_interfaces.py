@@ -13,35 +13,36 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 from copy import deepcopy
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    Version,
-)
+
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_diff,
+    param_list_to_dict,
+    remove_empties,
+    search_obj_in_list,
+    to_list,
+)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
     Facts,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-    dict_diff,
-    remove_empties,
-    search_obj_in_list,
-    param_list_to_dict,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    diff_list_of_dicts,
-    pad_commands,
-    flatten_dict,
-    dict_delete,
-    normalize_interface,
-)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     get_os_version,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    Version,
+    dict_delete,
+    diff_list_of_dicts,
+    flatten_dict,
+    normalize_interface,
+    pad_commands,
 )
 
 

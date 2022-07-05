@@ -12,19 +12,22 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 import re
+
 from copy import deepcopy
 
+from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lacp_interfaces.lacp_interfaces import (
     Lacp_interfacesArgs,
 )
-from ansible.module_utils.six import iteritems
 
 
 class Lacp_interfacesFacts(object):

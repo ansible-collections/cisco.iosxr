@@ -4,6 +4,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -152,23 +153,20 @@ xml:
     </config>'
 """
 
-import re
 import collections
+import re
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    get_config,
-    load_config,
+    build_xml,
+    etree_find,
     etree_findall,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    get_config,
+    iosxr_argument_spec,
     is_cliconf,
     is_netconf,
-    etree_find,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
-    build_xml,
+    load_config,
 )
 
 

@@ -18,6 +18,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -165,8 +166,8 @@ EXAMPLES = """
 # ["configure exclusive"]
 """
 
-import re
 import json
+import re
 
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils._text import to_text
@@ -179,12 +180,13 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     to_list,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    sanitize_config,
-    mask_config_blocks_from_diff,
-)
 from ansible_collections.ansible.netcommon.plugins.plugin_utils.cliconf_base import (
     CliconfBase,
+)
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    mask_config_blocks_from_diff,
+    sanitize_config,
 )
 
 

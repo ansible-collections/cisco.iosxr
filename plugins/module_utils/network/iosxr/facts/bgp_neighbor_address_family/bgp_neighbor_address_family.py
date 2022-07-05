@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -19,11 +20,12 @@ from copy import deepcopy
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.bgp_neighbor_address_family import (
-    Bgp_neighbor_address_familyTemplate,
-)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.bgp_neighbor_address_family.bgp_neighbor_address_family import (
     Bgp_neighbor_address_familyArgs,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.bgp_neighbor_address_family import (
+    Bgp_neighbor_address_familyTemplate,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     flatten_config,

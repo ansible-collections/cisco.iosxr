@@ -10,6 +10,7 @@ The module file for iosxr_bgp_address_family
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -908,6 +909,7 @@ EXAMPLES = """
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.bgp_address_family.bgp_address_family import (
     Bgp_address_familyArgs,
 )

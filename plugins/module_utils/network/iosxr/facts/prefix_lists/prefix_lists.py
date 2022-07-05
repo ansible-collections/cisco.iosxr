@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -18,11 +19,12 @@ based on the configuration.
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.prefix_lists import (
-    Prefix_listsTemplate,
-)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.prefix_lists.prefix_lists import (
     Prefix_listsArgs,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.prefix_lists import (
+    Prefix_listsTemplate,
 )
 
 

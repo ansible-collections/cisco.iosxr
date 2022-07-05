@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -20,13 +21,14 @@ created.
 from copy import deepcopy
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    dict_merge,
-    dict_diff,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
     ResourceModule,
 )
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_diff,
+    dict_merge,
+)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
     Facts,
 )

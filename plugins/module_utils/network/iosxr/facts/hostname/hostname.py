@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -18,11 +19,12 @@ based on the configuration.
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.hostname import (
-    HostnameTemplate,
-)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.hostname.hostname import (
     HostnameArgs,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.hostname import (
+    HostnameTemplate,
 )
 
 

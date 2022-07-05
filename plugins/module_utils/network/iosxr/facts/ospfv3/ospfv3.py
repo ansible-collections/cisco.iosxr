@@ -5,22 +5,25 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from copy import deepcopy
 import re
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ospfv3 import (
-    Ospfv3Template,
-)
+from copy import deepcopy
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
+    NetworkTemplate,
+)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.ospfv3.ospfv3 import (
     Ospfv3Args,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
-    NetworkTemplate,
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ospfv3 import (
+    Ospfv3Template,
 )
 
 
