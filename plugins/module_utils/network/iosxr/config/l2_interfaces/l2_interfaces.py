@@ -12,7 +12,7 @@ created
 from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
-from distutils.version import LooseVersion
+from setuptools._distutils import LooseVersion
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )

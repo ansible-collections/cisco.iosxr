@@ -252,7 +252,7 @@ xml:
 import re
 import collections
 from copy import deepcopy
-from distutils.version import LooseVersion
+from setuptools._distutils import LooseVersion
 
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
