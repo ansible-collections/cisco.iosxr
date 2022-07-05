@@ -252,7 +252,9 @@ xml:
 import re
 import collections
 from copy import deepcopy
-from setuptools._distutils.version import LooseVersion
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    Version,
+)
 
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
@@ -477,9 +479,7 @@ class CliConfiguration(ConfigBase):
                 elif dest == "file" and name not in self._file_list:
                     if level == "errors" or level == "informational":
                         level = severity_transpose[level]
-                    if os_version and LooseVersion(os_version) > LooseVersion(
-                        "7.0"
-                    ):
+                    if os_version and Version(os_version) > Version("7.0"):
                         commands.append(
                             "logging file {0} path {1} maxfilesize {2} severity {3}".format(
                                 name, path, size, level
@@ -707,7 +707,7 @@ class NCConfiguration(ConfigBase):
 
     def map_obj_to_xml_rpc(self, os_version):
         file_attribute_path = "file-log-attributes"
-        if os_version and LooseVersion(os_version) > LooseVersion("7.0.0"):
+        if os_version and Version(os_version) > Version("7.0.0"):
             file_attribute_path = "file-specification"
             self._log_file_meta.update(
                 [

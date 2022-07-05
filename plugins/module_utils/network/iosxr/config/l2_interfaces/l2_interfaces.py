@@ -12,7 +12,10 @@ created
 from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
-from setuptools._distutils.version import LooseVersion
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    Version,
+)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
@@ -308,7 +311,7 @@ class L2_Interfaces(ConfigBase):
                 l2protocol = diff.get("l2protocol")
 
             os_version = get_os_version(self._module)
-            if os_version and LooseVersion(os_version) < LooseVersion("7.0.0"):
+            if os_version and Version(os_version) < Version("7.0.0"):
                 if wants_native:
                     cmd = "dot1q native vlan {0}".format(wants_native)
                     add_command_to_config_list(interface, cmd, commands)
@@ -381,7 +384,7 @@ class L2_Interfaces(ConfigBase):
         else:
             interface = "interface " + have["name"]
         os_version = get_os_version(self._module)
-        if os_version and LooseVersion(os_version) < LooseVersion("7.0.0"):
+        if os_version and Version(os_version) < Version("7.0.0"):
             if have.get("native_vlan"):
                 remove_command_from_config_list(
                     interface, "dot1q native vlan", commands

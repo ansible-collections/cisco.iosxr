@@ -28,7 +28,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     get_os_version,
 )
-from setuptools._distutils.version import LooseVersion
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    Version,
+)
 
 
 class L2_InterfacesFacts(object):
@@ -113,7 +115,7 @@ class L2_InterfacesFacts(object):
 
             dot1q = utils.parse_conf_arg(conf, "encapsulation dot1q")
             os_version = get_os_version(self._module)
-            if os_version and LooseVersion(os_version) > LooseVersion("7.0.0"):
+            if os_version and Version(os_version) > Version("7.0.0"):
                 encapsulation = re.search(
                     r"encapsulation dot1q\s(\d+)\s*(second-dot1q\s\d+)?", conf
                 )

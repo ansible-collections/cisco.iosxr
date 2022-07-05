@@ -16,7 +16,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from copy import deepcopy
-from setuptools._distutils.version import LooseVersion
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    Version,
+)
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
@@ -428,7 +430,7 @@ class Lag_interfaces(ConfigBase):
 
         elif key == "load_balancing_hash":
             os_version = get_os_version(self._module)
-            if os_version and LooseVersion(os_version) < LooseVersion("7.0.0"):
+            if os_version and Version(os_version) < Version("7.0.0"):
                 cmd = "bundle load-balancing hash {0}".format(value)
 
         elif key == "max_active":
