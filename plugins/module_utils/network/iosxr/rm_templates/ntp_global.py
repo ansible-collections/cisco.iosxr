@@ -35,7 +35,9 @@ def tmplt_interfaces(config_data):
         base_command = "ntp interface {name}".format(name=name)
     if config_data.get("broadcast_client"):
         commands.append(
-            "{base_command} broadcast client".format(base_command=base_command),
+            "{base_command} broadcast client".format(
+                base_command=base_command,
+            ),
         )
     if config_data.get("broadcast_key"):
         commands.append(

@@ -170,7 +170,10 @@ class Static_routes(ConfigBase):
                 obj_in_have = self._find_vrf(w_item, have)
                 if state == "merged" or self.state == "rendered":
                     commands.extend(
-                        self._state_merged(remove_empties(w_item), obj_in_have),
+                        self._state_merged(
+                            remove_empties(w_item),
+                            obj_in_have,
+                        ),
                     )
 
                 elif state == "replaced":

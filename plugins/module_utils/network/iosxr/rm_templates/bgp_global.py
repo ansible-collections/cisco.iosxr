@@ -1177,16 +1177,15 @@ class Bgp_globalTemplate(NetworkTemplate):
             "setval": "refresh-time {{ refresh_time.value }}",
             "compval": "refresh_time.value",
             "result": {
-                "rpki":
-                    {
-                        "servers": {
-                            "{{rpki_server.split(" ")[1]}}": {
-                                "refresh_time": {
-                                "value": "{{ refresh_time.split(" ")[1] }}",
-                                },
+                "rpki": {
+                    "servers": {
+                        "{{rpki_server.split(" ")[1]}}": {
+                            "refresh_time": {
+                            "value": "{{ refresh_time.split(" ")[1] }}",
                             },
                         },
                     },
+                },
             },
         },
         {
@@ -1202,16 +1201,15 @@ class Bgp_globalTemplate(NetworkTemplate):
             "setval": "refresh-time off",
             "compval": "refresh_time.time_off",
             "result": {
-                "rpki":
-                    {
-                        "servers": {
-                            "{{rpki_server.split(" ")[1] }}": {
-                                "refresh_time": {
-                                "time_off": "{{ True if refresh_time is defined }}",
-                                },
+                "rpki":{
+                    "servers": {
+                        "{{rpki_server.split(" ")[1] }}": {
+                            "refresh_time": {
+                            "time_off": "{{ True if refresh_time is defined }}",
                             },
                         },
                     },
+                },
             },
         },
         {
@@ -1227,16 +1225,15 @@ class Bgp_globalTemplate(NetworkTemplate):
             "setval": "response-time off",
             "compval": "response_time.time_off",
             "result": {
-                "rpki":
-                    {
-                        "servers": {
-                            "{{rpki_server.split(" ")[1]}}": {
-                                "response_time": {
-                                "time_off": "{{ True if response_time is defined }}",
-                                },
+                "rpki": {
+                    "servers": {
+                        "{{rpki_server.split(" ")[1]}}": {
+                            "response_time": {
+                            "time_off": "{{ True if response_time is defined }}",
                             },
                         },
                     },
+                },
             },
         },
         {
@@ -1251,16 +1248,15 @@ class Bgp_globalTemplate(NetworkTemplate):
             "setval": "response-time {{ response_time.value }}",
             "compval": "response_time.value",
             "result": {
-                "rpki":
-                    {
-                        "servers": {
-                            "{{rpki_server.split(" ")[1]}}": {
-                                "response_time": {
-                                "value": "{{ response_time.split(" ")[1] }}",
-                                },
+                "rpki": {
+                    "servers": {
+                        "{{rpki_server.split(" ")[1]}}": {
+                            "response_time": {
+                            "value": "{{ response_time.split(" ")[1] }}",
                             },
                         },
                     },
+                },
             },
         },
         {
@@ -1275,10 +1271,9 @@ class Bgp_globalTemplate(NetworkTemplate):
             "setval": "shutdown",
             "compval": "shutdown",
             "result": {
-                "rpki":
-                    {
-                        "servers": {"{{rpki_server.split(" ")[1]}}": {"shutdown": "{{ True if shutdown  is defined}}"}},
-                    },
+                "rpki":{
+                    "servers": {"{{rpki_server.split(" ")[1]}}": {"shutdown": "{{ True if shutdown  is defined}}"}},
+                },
             },
         },
         {
@@ -1295,18 +1290,17 @@ class Bgp_globalTemplate(NetworkTemplate):
             "setval": "transport ssh port {{ transport.ssh.port }}",
             "compval": "transport.ssh.port",
             "result": {
-                "rpki":
-                    {
-                        "servers": {
-                            "{{rpki_server.split(" ")[1]}}": {
-                                "transport": {
-                                    "ssh": {
-                                    "port": "{{ ssh_port.split(" ")[1] }}",
-                                    },
+                "rpki": {
+                    "servers": {
+                        "{{rpki_server.split(" ")[1]}}": {
+                            "transport": {
+                                "ssh": {
+                                "port": "{{ ssh_port.split(" ")[1] }}",
                                 },
                             },
                         },
                     },
+                },
             },
         },
         {
@@ -1323,18 +1317,17 @@ class Bgp_globalTemplate(NetworkTemplate):
             "setval": "transport tcp port {{ transport.tcp.port }}",
             "compval": "transport.tcp.port",
             "result": {
-                "rpki":
-                    {
-                        "servers": {
-                            "{{rpki_server.split(" ")[1]}}": {
-                                "transport": {
-                                    "tcp": {
-                                    "port": "{{ tcp_port.split(" ")[1] }}",
-                                    },
+                "rpki": {
+                    "servers": {
+                        "{{rpki_server.split(" ")[1]}}": {
+                            "transport": {
+                                "tcp": {
+                                "port": "{{ tcp_port.split(" ")[1] }}",
                                 },
                             },
                         },
                     },
+                },
             },
         },
         {
@@ -1589,13 +1582,12 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
-                            "{{nbr_address.split(" ")[1]}}":
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "dmz_link_bandwidth":
                                 {
-                                    "dmz_link_bandwidth":
-                                    {
-                                        "inheritance_disable": "{{ True if dmz_link_bandwidth is defined }}",
-                                    },
+                                    "inheritance_disable": "{{ True if dmz_link_bandwidth is defined }}",
                                 },
+                            },
                         },
                     },
                 },
@@ -1996,7 +1988,9 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
-                            "{{nbr_address.split(" ")[1]}}": {"remote_as": "{{ remote_as.split(" ")[1] }}"},
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "remote_as": "{{ remote_as.split(" ")[1] }}",
+                            },
                         },
                     },
                 },
@@ -2057,7 +2051,6 @@ class Bgp_globalTemplate(NetworkTemplate):
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \slocal
                 \s(?P<local>address\sinheritance-disable)
-
                 $""", re.VERBOSE,
             ),
             "setval": "local address inheritance-disable",
@@ -2085,7 +2078,6 @@ class Bgp_globalTemplate(NetworkTemplate):
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \slocal
                 \s(?P<local>address\s\S+)
-
                 $""", re.VERBOSE,
             ),
             "setval": "local address {{ local.address.ipv4_address }}",
@@ -2113,7 +2105,6 @@ class Bgp_globalTemplate(NetworkTemplate):
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \sorigin-as
                 \s(?P<origin_as>validation\sdisable)
-
                 $""", re.VERBOSE,
             ),
             "setval": "origin-as validation disable",
@@ -2212,8 +2203,9 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
-                                "shutdown":
-                                    {"set": "{{ True if shutdown is defined }}"},
+                                "shutdown": {
+                                    "set": "{{ True if shutdown is defined }}",
+                                },
                             },
                         },
                     },
@@ -2255,7 +2247,9 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
-                            "{{nbr_address.split(" ")[1]}}": {"dscp": "{{ dscp.split(" ")[1] }}"},
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "dscp": "{{ dscp.split(" ")[1] }}",
+                            },
                         },
                     },
                 },
@@ -3100,7 +3094,6 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-
                         "timers": {
                             "keepalive_time": "{{ timers_keepalive_time }}",
                             "holdtime": "{{ hold_time}}",

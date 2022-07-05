@@ -151,161 +151,207 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "int"},
+                                                        "name": {
+                                                            "type": "int",
+                                                        },
                                                     },
                                                 },
                                                 "bundle_ether": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "int"},
+                                                        "name": {
+                                                            "type": "int",
+                                                        },
                                                     },
                                                 },
                                                 "pos_int": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "int"},
+                                                        "name": {
+                                                            "type": "int",
+                                                        },
                                                     },
                                                 },
                                                 "fast_ethernet": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "fiftygige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "fortygige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "fourhundredgige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "gigabitethernet": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "hundredgige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "mgmteth": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "multilink": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "pw_ether": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "int"},
+                                                        "name": {
+                                                            "type": "int",
+                                                        },
                                                     },
                                                 },
                                                 "pw_iw": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "int"},
+                                                        "name": {
+                                                            "type": "int",
+                                                        },
                                                     },
                                                 },
                                                 "srp": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "serial": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "tengige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "twentyfivegige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "twohundredgige": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "nve": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "int"},
+                                                        "name": {
+                                                            "type": "int",
+                                                        },
                                                     },
                                                 },
                                                 "tunnel_ip": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "int"},
+                                                        "name": {
+                                                            "type": "int",
+                                                        },
                                                     },
                                                 },
                                                 "tunnel_ipsec": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "int"},
+                                                        "name": {
+                                                            "type": "int",
+                                                        },
                                                     },
                                                 },
                                                 "tunnel_mte": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "int"},
+                                                        "name": {
+                                                            "type": "int",
+                                                        },
                                                     },
                                                 },
                                                 "tunnel_mpls": {
                                                     "type": "list",
                                                     "elements": "dict",
                                                     "options": {
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                             },

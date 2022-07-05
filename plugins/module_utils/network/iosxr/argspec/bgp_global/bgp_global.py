@@ -912,7 +912,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                 "four_byte_AS": {
                                                     "type": "dict",
                                                     "options": {
-                                                        "set": {"type": "bool"},
+                                                        "set": {
+                                                            "type": "bool",
+                                                        },
                                                     },
                                                 },
                                                 "all": {

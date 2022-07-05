@@ -267,7 +267,10 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 config=[
-                    dict(name="GigabitEthernet0/0/0/0", type="gigabitethernet"),
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        type="gigabitethernet",
+                    ),
                 ],
                 state="deleted",
             ),
@@ -282,7 +285,10 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 config=[
-                    dict(name="GigabitEthernet0/0/0/1", type="gigabitethernet"),
+                    dict(
+                        name="GigabitEthernet0/0/0/1",
+                        type="gigabitethernet",
+                    ),
                 ],
                 state="deleted",
             ),

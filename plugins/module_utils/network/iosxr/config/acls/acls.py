@@ -169,7 +169,10 @@ class Acls(ConfigBase):
 
                 elif state == "replaced":
                     commands.extend(
-                        self._state_replaced(remove_empties(item), obj_in_have),
+                        self._state_replaced(
+                            remove_empties(item),
+                            obj_in_have,
+                        ),
                     )
 
         return commands

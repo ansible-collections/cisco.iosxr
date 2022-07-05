@@ -293,7 +293,11 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1),
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
@@ -509,7 +513,11 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1),
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
@@ -1283,7 +1291,11 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1),
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
@@ -1649,7 +1661,11 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1),
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
@@ -2006,7 +2022,11 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1),
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
@@ -2372,7 +2392,11 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1),
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
@@ -2586,7 +2610,11 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1),
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
