@@ -18,15 +18,16 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 from os import path
 
+from ansible.module_utils._text import to_bytes, to_text
 from mock import MagicMock
 
-from ansible_collections.cisco.iosxr.tests.unit.compat import unittest
 from ansible_collections.cisco.iosxr.plugins.cliconf import iosxr
-from ansible.module_utils._text import to_bytes, to_text
+from ansible_collections.cisco.iosxr.tests.unit.compat import unittest
 
 
 class TestPluginCLIConfIOSXR(unittest.TestCase):

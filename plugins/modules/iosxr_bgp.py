@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -270,11 +271,12 @@ commands:
     - exit
 """
 from ansible.module_utils._text import to_text
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.module import (
-    NetworkModule,
-)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.cli.config.bgp.process import (
     REDISTRIBUTE_PROTOCOLS,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.module import (
+    NetworkModule,
 )
 
 

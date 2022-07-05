@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -76,14 +77,14 @@ commands:
 import re
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
-)
+from ansible.module_utils.six import iteritems
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     get_config,
+    iosxr_argument_spec,
     load_config,
 )
-from ansible.module_utils.six import iteritems
+
 
 USE_PERSISTENT_CONNECTION = True
 

@@ -11,35 +11,31 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    Version,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
     remove_empties,
+    to_list,
 )
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
     Facts,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    normalize_interface,
-    dict_diff,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    remove_command_from_config_list,
-    add_command_to_config_list,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    filter_dict_having_none_value,
-    remove_duplicate_interface,
-)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     get_os_version,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    Version,
+    add_command_to_config_list,
+    dict_diff,
+    filter_dict_having_none_value,
+    normalize_interface,
+    remove_command_from_config_list,
+    remove_duplicate_interface,
 )
 
 

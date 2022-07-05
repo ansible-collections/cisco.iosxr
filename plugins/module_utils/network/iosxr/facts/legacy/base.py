@@ -13,18 +13,20 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 import platform
 import re
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    run_commands,
-    get_capabilities,
-)
 from ansible.module_utils.six import iteritems
 from ansible.module_utils.six.moves import zip
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    get_capabilities,
+    run_commands,
+)
 
 
 class FactsBase(object):

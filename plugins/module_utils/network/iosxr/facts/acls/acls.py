@@ -12,23 +12,27 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from copy import deepcopy
+import re
 
 from collections import deque
-from ansible.module_utils.six import iteritems
+from copy import deepcopy
+
 from ansible.module_utils._text import to_text
+from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.acls.acls import (
     AclsArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     isipaddress,
 )
-import re
+
 
 PROTOCOL_OPTIONS = {
     "tcp": ("ack", "fin", "psh", "rst", "syn", "urg", "established"),

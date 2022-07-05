@@ -19,6 +19,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -39,23 +40,25 @@ options:
       the ncclient device handler name refer ncclient library documentation.
 """
 
+import collections
 import json
 import re
-import collections
 
+from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils._text import to_native, to_text
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.netconf import (
     remove_namespaces,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    build_xml,
-    etree_find,
-)
-from ansible.errors import AnsibleConnectionFailure
 from ansible_collections.ansible.netcommon.plugins.plugin_utils.netconf_base import (
     NetconfBase,
     ensure_ncclient,
 )
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    build_xml,
+    etree_find,
+)
+
 
 try:
     from ncclient import manager

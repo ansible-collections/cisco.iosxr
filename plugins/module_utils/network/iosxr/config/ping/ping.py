@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -20,6 +21,7 @@ created.
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     run_commands,
 )

@@ -28,6 +28,7 @@ The module file for iosxr_ospfv3
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -2747,6 +2748,7 @@ EXAMPLES = """
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.ospfv3.ospfv3 import (
     Ospfv3Args,
 )

@@ -1,4 +1,4 @@
-Loopback0 is up, line protocol is up 
+Loopback0 is up, line protocol is up
   Interface state transitions: 1
   Hardware is Loopback interface(s)
   Description: Loopback
@@ -11,7 +11,7 @@ Loopback0 is up, line protocol is up
   Last clearing of "show interface" counters Unknown
   Input/output data rate is disabled.
 
-GigabitEthernet0/0/0/0 is up, line protocol is up 
+GigabitEthernet0/0/0/0 is up, line protocol is up
   Interface state transitions: 1
   Hardware is GigabitEthernet, address is fa16.3e6c.20bd (bia fa16.3e6c.20bd)
   Description: to nxos01

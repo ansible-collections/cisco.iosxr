@@ -18,21 +18,24 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-import sys
 import copy
+import sys
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_provider_spec,
-)
+from ansible.utils.display import Display
 from ansible_collections.ansible.netcommon.plugins.action.network import (
     ActionModule as ActionNetworkModule,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     load_provider,
 )
-from ansible.utils.display import Display
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    iosxr_provider_spec,
+)
+
 
 display = Display()
 

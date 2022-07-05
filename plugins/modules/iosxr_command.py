@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -128,9 +129,10 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.p
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     to_lines,
 )
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    run_commands,
     iosxr_argument_spec,
+    run_commands,
 )
 
 

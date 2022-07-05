@@ -18,16 +18,18 @@
 # Make coding more python3-ish
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import json
 
+from ansible_collections.cisco.iosxr.plugins.modules import iosxr_facts
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .iosxr_module import TestIosxrModule, load_fixture
-from ansible_collections.cisco.iosxr.plugins.modules import iosxr_facts
 
 
 class TestIosxrFacts(TestIosxrModule):

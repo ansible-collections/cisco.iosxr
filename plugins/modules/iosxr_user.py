@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -279,32 +280,33 @@ xml:
     </config>'
 """
 
-import os
-from functools import partial
-from copy import deepcopy
 import collections
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    Version,
-)
+import os
+
+from copy import deepcopy
+from functools import partial
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
 )
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    get_config,
-    load_config,
-    is_netconf,
-    is_cliconf,
-    get_connection,
-    copy_file,
-    get_capabilities,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
     build_xml,
+    copy_file,
     etree_findall,
+    get_capabilities,
+    get_config,
+    get_connection,
+    iosxr_argument_spec,
+    is_cliconf,
+    is_netconf,
+    load_config,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    Version,
+)
+
 
 try:
     from base64 import b64decode

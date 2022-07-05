@@ -18,6 +18,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 GENERATOR_VERSION = "1.0"
@@ -668,6 +669,7 @@ commands:
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.l2_interfaces.l2_interfaces import (
     L2_InterfacesArgs,
 )

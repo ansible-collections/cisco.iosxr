@@ -1,8 +1,10 @@
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import MagicMock
 from ansible.utils.path import unfrackpath
+
+from ansible_collections.cisco.iosxr.tests.unit.compat.mock import MagicMock
 
 
 mock_unfrackpath_noop = MagicMock(
