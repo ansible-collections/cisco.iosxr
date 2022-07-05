@@ -283,7 +283,7 @@ import os
 from functools import partial
 from copy import deepcopy
 import collections
-from setuptools._distutils import LooseVersion
+from setuptools._distutils.version import LooseVersion
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (

@@ -28,7 +28,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     get_os_version,
 )
-from setuptools._distutils import LooseVersion
+from setuptools._distutils.version import LooseVersion
 
 
 class L2_InterfacesFacts(object):
