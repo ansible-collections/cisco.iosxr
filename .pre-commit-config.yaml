@@ -11,6 +11,11 @@ repos:
         args: [--branch, main]
       - id: trailing-whitespace
 
+  - repo: https://github.com/asottile/add-trailing-comma
+    rev: v2.2.3
+    hooks:
+      - id: add-trailing-comma
+
   - repo: https://github.com/PyCQA/isort
     rev: 5.10.1
     hooks:
@@ -21,9 +26,8 @@ repos:
     rev: 22.3.0
     hooks:
       - id: black
-        args: [-l, "79"]
 
   - repo: https://github.com/ansible-network/collection_prep
-    rev: 0.9.4
+    rev: 1.0.0
     hooks:
       - id: update-docs
