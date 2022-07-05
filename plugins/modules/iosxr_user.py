@@ -283,7 +283,9 @@ import os
 from functools import partial
 from copy import deepcopy
 import collections
-from distutils.version import LooseVersion
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    Version,
+)
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
@@ -597,7 +599,7 @@ class NCConfiguration(ConfigBase):
         return os.popen(cmd + arg).readlines()[0].strip()
 
     def map_obj_to_xml_rpc(self, os_version):
-        if os_version and LooseVersion(os_version) > LooseVersion("7.0"):
+        if os_version and Version(os_version) > Version("7.0"):
             self._locald_meta.update(
                 [
                     (
@@ -789,7 +791,7 @@ class NCConfiguration(ConfigBase):
                         "groups": tmp_list,
                     }
                 )
-            if os_version and LooseVersion(os_version) > LooseVersion("7.0"):
+            if os_version and Version(os_version) > Version("7.0"):
                 ordering_index = etree_findall(element, "ordering-index")
                 if len(self._have) > 0:
                     self._have[-1].update(
@@ -812,9 +814,7 @@ class NCConfiguration(ConfigBase):
                     obj_in_have = search_obj_in_list(
                         want_item["name"], self._have
                     )
-                    if os_version and LooseVersion(os_version) > LooseVersion(
-                        "7.0"
-                    ):
+                    if os_version and Version(os_version) > Version("7.0"):
                         want_item["ordering_index"] = obj_in_have[
                             "ordering_index"
                         ]
@@ -825,9 +825,7 @@ class NCConfiguration(ConfigBase):
             for want_item in self._want:
                 obj_in_have = search_obj_in_list(want_item["name"], self._have)
                 if want_item["name"] not in users:
-                    if os_version and LooseVersion(os_version) > LooseVersion(
-                        "7.0"
-                    ):
+                    if os_version and Version(os_version) > Version("7.0"):
                         want_item[
                             "configured_password"
                         ] = self.generate_md5_hash(
@@ -848,9 +846,7 @@ class NCConfiguration(ConfigBase):
                             want_item["group"] = group
                             locald_group_params.append(want_item.copy())
                 else:
-                    if os_version and LooseVersion(os_version) > LooseVersion(
-                        "7.0"
-                    ):
+                    if os_version and Version(os_version) > Version("7.0"):
                         if obj_in_have:
                             # Add iosxr 7.0 > specific parameters
                             want_item["type"] = "type5"
