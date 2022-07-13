@@ -1181,7 +1181,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     "servers": {
                         "{{rpki_server.split(" ")[1]}}": {
                             "refresh_time": {
-                            "value": "{{ refresh_time.split(" ")[1] }}",
+                                "value": "{{ refresh_time.split(" ")[1] }}",
                             },
                         },
                     },
@@ -1201,11 +1201,11 @@ class Bgp_globalTemplate(NetworkTemplate):
             "setval": "refresh-time off",
             "compval": "refresh_time.time_off",
             "result": {
-                "rpki":{
+                "rpki": {
                     "servers": {
                         "{{rpki_server.split(" ")[1] }}": {
                             "refresh_time": {
-                            "time_off": "{{ True if refresh_time is defined }}",
+                                "time_off": "{{ True if refresh_time is defined }}",
                             },
                         },
                     },
@@ -1229,7 +1229,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     "servers": {
                         "{{rpki_server.split(" ")[1]}}": {
                             "response_time": {
-                            "time_off": "{{ True if response_time is defined }}",
+                                "time_off": "{{ True if response_time is defined }}",
                             },
                         },
                     },
@@ -1252,7 +1252,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     "servers": {
                         "{{rpki_server.split(" ")[1]}}": {
                             "response_time": {
-                            "value": "{{ response_time.split(" ")[1] }}",
+                                "value": "{{ response_time.split(" ")[1] }}",
                             },
                         },
                     },
@@ -1271,7 +1271,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "setval": "shutdown",
             "compval": "shutdown",
             "result": {
-                "rpki":{
+                "rpki": {
                     "servers": {"{{rpki_server.split(" ")[1]}}": {"shutdown": "{{ True if shutdown  is defined}}"}},
                 },
             },
@@ -1295,7 +1295,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "{{rpki_server.split(" ")[1]}}": {
                             "transport": {
                                 "ssh": {
-                                "port": "{{ ssh_port.split(" ")[1] }}",
+                                    "port": "{{ ssh_port.split(" ")[1] }}",
                                 },
                             },
                         },
@@ -1322,7 +1322,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "{{rpki_server.split(" ")[1]}}": {
                             "transport": {
                                 "tcp": {
-                                "port": "{{ tcp_port.split(" ")[1] }}",
+                                    "port": "{{ tcp_port.split(" ")[1] }}",
                                 },
                             },
                         },
@@ -1609,7 +1609,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "ebgp_multihop": {
-                                "value": "{{ ebgp_multihop.split(" ")[1] }}",
+                                    "value": "{{ ebgp_multihop.split(" ")[1] }}",
                                 },
                             },
                         },
@@ -1655,7 +1655,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "ebgp_recv_extcommunity_dmz": {
-                                "inheritance_disable": "{{ True if ebgp_recv_extcommunity_dmz is defined }}",
+                                    "inheritance_disable": "{{ True if ebgp_recv_extcommunity_dmz is defined }}",
                                 },
                             },
                         },
@@ -1679,7 +1679,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "ebgp_recv_extcommunity_dmz": {
-                                "set": "{{ True if ebgp_recv_extcommunity_dmz is defined }}",
+                                    "set": "{{ True if ebgp_recv_extcommunity_dmz is defined }}",
                                 },
                             },
                         },
@@ -1703,7 +1703,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "ebgp_send_extcommunity_dmz": {
-                                "inheritance_disable": "{{ True if ebgp_send_extcommunity_dmz is defined }}",
+                                    "inheritance_disable": "{{ True if ebgp_send_extcommunity_dmz is defined }}",
                                 },
                             },
                         },
@@ -1727,7 +1727,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "ebgp_send_extcommunity_dmz": {
-                                "set": "{{ True if ebgp_send_extcommunity_dmz is defined }}",
+                                    "set": "{{ True if ebgp_send_extcommunity_dmz is defined }}",
                                 },
                             },
                         },
@@ -1751,7 +1751,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "ebgp_send_extcommunity_dmz": {
-                                "cumulatie": "{{ True if ebgp_send_extcommunity_dmz is defined }}",
+                                    "cumulatie": "{{ True if ebgp_send_extcommunity_dmz is defined }}",
                                 },
                             },
                         },
@@ -1775,7 +1775,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "egress_engineering": {
-                                "inheritance_disable": "{{ True if egress_engineering is defined }}",
+                                    "inheritance_disable": "{{ True if egress_engineering is defined }}",
                                 },
                             },
                         },
@@ -1799,7 +1799,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "egress_engineering": {
-                                "set": "{{ True if egress_engineering is defined }}",
+                                    "set": "{{ True if egress_engineering is defined }}",
                                 },
                             },
                         },
@@ -1822,8 +1822,9 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
-                            "enforce_first_as": {
-                                "disable": "{{ True if enforce_first_as_disable is defined }}", },
+                                "enforce_first_as": {
+                                    "disable": "{{ True if enforce_first_as_disable is defined }}",
+                                },
                             },
                         },
                     },
@@ -1895,7 +1896,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "ignore_connected_check": {
-                                "set": "{{ True if ignore_connected_check is defined }}",
+                                    "set": "{{ True if ignore_connected_check is defined }}",
                                 },
                             },
                         },
@@ -1919,7 +1920,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "ignore_connected_check": {
-                                "inheritance_disable": "{{ True if ignore_connected_check is defined }}",
+                                    "inheritance_disable": "{{ True if ignore_connected_check is defined }}",
                                 },
                             },
                         },
@@ -1943,7 +1944,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "keychain": {
-                                "inheritance_disable": "{{ True if keychain is defined }}",
+                                    "inheritance_disable": "{{ True if keychain is defined }}",
                                 },
                             },
                         },
@@ -1967,7 +1968,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "keychain": {
-                                "name": "{{ keychain.split(" ")[1] }}",
+                                    "name": "{{ keychain.split(" ")[1] }}",
                                 },
                             },
                         },
@@ -2012,7 +2013,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "local_as": {
-                                "inheritance_disable": "{{ True if local_as is defined }}",
+                                    "inheritance_disable": "{{ True if local_as is defined }}",
                                 },
                             },
                         },
@@ -2036,7 +2037,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "local_as": {
-                                "value": "{{ local_as.split(" ")[1] }}",
+                                    "value": "{{ local_as.split(" ")[1] }}",
                                 },
                             },
                         },
@@ -2062,7 +2063,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                             "{{nbr_address.split(" ")[1]}}": {
                                 "local": {
                                     "address": {
-                                    "inheritance_disable": "{{ True if local is defined }}",
+                                        "inheritance_disable": "{{ True if local is defined }}",
                                     },
                                 },
                             },
@@ -2089,7 +2090,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                             "{{nbr_address.split(" ")[1]}}": {
                                 "local": {
                                     "address": {
-                                    "ipv4_address": "{{ local.split(" ")[1] }}",
+                                        "ipv4_address": "{{ local.split(" ")[1] }}",
                                     },
                                 },
                             },
@@ -2116,7 +2117,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                             "{{nbr_address.split(" ")[1]}}": {
                                 "origin_as": {
                                     "validation": {
-                                    "disable": "{{ True if origin_as is defined}}",
+                                        "disable": "{{ True if origin_as is defined}}",
                                     },
                                 },
                             },
@@ -2272,7 +2273,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                             "{{nbr_address.split(" ")[1]}}": {
                                 "tcp": {
                                     "mss": {
-                                    "inheritance_disable": "{{ True if tcp_mss_disable is defined }}",
+                                        "inheritance_disable": "{{ True if tcp_mss_disable is defined }}",
                                     },
                                 },
                             },
@@ -2298,7 +2299,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                             "{{nbr_address.split(" ")[1]}}": {
                                 "tcp": {
                                     "mss": {
-                                    "value": "{{ tcp_mss.split(" ")[2] }}",
+                                        "value": "{{ tcp_mss.split(" ")[2] }}",
                                     },
                                 },
                             },
