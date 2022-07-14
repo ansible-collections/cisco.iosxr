@@ -28,9 +28,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     to_list,
 )
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     flatten_dict,
 )
@@ -55,7 +53,9 @@ class Lacp(ConfigBase):
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         lacp_facts = facts["ansible_network_resources"].get("lacp")
         if not lacp_facts:
@@ -98,7 +98,7 @@ class Lacp(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_lacp_facts(data=running_config)
 
@@ -140,8 +140,8 @@ class Lacp(ConfigBase):
         if self.state in ("merged", "replaced", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    self.state
-                )
+                    self.state,
+                ),
             )
 
         if self.state == "deleted":
@@ -182,12 +182,13 @@ class Lacp(ConfigBase):
             updates = want
         if updates:
             for key, value in iteritems(
-                flatten_dict(remove_empties(updates["system"]))
+                flatten_dict(remove_empties(updates["system"])),
             ):
                 commands.append(
                     "lacp system {0} {1}".format(
-                        key.replace("address", "mac"), value
-                    )
+                        key.replace("address", "mac"),
+                        value,
+                    ),
                 )
 
         return commands
@@ -202,9 +203,7 @@ class Lacp(ConfigBase):
         commands = []
 
         for x in [
-            k
-            for k in have.get("system", {})
-            if k not in remove_empties(want.get("system", {}))
+            k for k in have.get("system", {}) if k not in remove_empties(want.get("system", {}))
         ]:
             commands.append("no lacp system {0}".format(x))
 

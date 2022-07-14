@@ -96,15 +96,18 @@ class Netconf(NetconfBase):
                     {"xpath": "install/version/hardware-info", "tag": True},
                 ),
                 ("package", {"xpath": "install/version/package", "tag": True}),
-            ]
+            ],
         )
         install_filter = build_xml(
-            "install", install_meta, opcode="filter", namespace="install"
+            "install",
+            install_meta,
+            opcode="filter",
+            namespace="install",
         )
         try:
             reply = self.get(install_filter)
             resp = remove_namespaces(
-                re.sub(r'<\?xml version="1.0" encoding="UTF-8"\?>', "", reply)
+                re.sub(r'<\?xml version="1.0" encoding="UTF-8"\?>', "", reply),
             )
             ele_package_name = etree_find(resp.strip(), "name")
             if ele_package_name is not None:
@@ -131,15 +134,18 @@ class Netconf(NetconfBase):
                 device_info = self.get_device_info_old_version()
             else:
                 self._connection.queue_message(
-                    "vvvv", "Fail to retrieve device info %s" % exc
+                    "vvvv",
+                    "Fail to retrieve device info %s" % exc,
                 )
         try:
             hostname_filter = build_xml(
-                "host-names", opcode="filter", namespace="host-names"
+                "host-names",
+                opcode="filter",
+                namespace="host-names",
             )
             reply = self.get(hostname_filter)
             resp = remove_namespaces(
-                re.sub(r'<\?xml version="1.0" encoding="UTF-8"\?>', "", reply)
+                re.sub(r'<\?xml version="1.0" encoding="UTF-8"\?>', "", reply),
             )
             hostname_ele = etree_find(resp.strip(), "host-name")
             device_info["network_os_hostname"] = (
@@ -147,7 +153,8 @@ class Netconf(NetconfBase):
             )
         except Exception as exc:
             self._connection.queue_message(
-                "vvvv", "Fail to retrieve device info %s" % exc
+                "vvvv",
+                "Fail to retrieve device info %s" % exc,
             )
         return device_info
 
@@ -160,7 +167,7 @@ class Netconf(NetconfBase):
         result["client_capabilities"] = list(self.m.client_capabilities)
         result["session_id"] = self.m.session_id
         result["device_operations"] = self.get_device_operations(
-            result["server_capabilities"]
+            result["server_capabilities"],
         )
         return json.dumps(result)
 
@@ -208,9 +215,7 @@ class Netconf(NetconfBase):
             if remove_ns:
                 response = remove_namespaces(resp)
             else:
-                response = (
-                    resp.data_xml if hasattr(resp, "data_xml") else resp.xml
-                )
+                response = resp.data_xml if hasattr(resp, "data_xml") else resp.xml
             return response
         except RPCError as exc:
             raise Exception(to_xml(exc.xml))
@@ -223,9 +228,7 @@ class Netconf(NetconfBase):
             if remove_ns:
                 response = remove_namespaces(resp)
             else:
-                response = (
-                    resp.data_xml if hasattr(resp, "data_xml") else resp.xml
-                )
+                response = resp.data_xml if hasattr(resp, "data_xml") else resp.xml
             return response
         except RPCError as exc:
             raise Exception(to_xml(exc.xml))
@@ -254,27 +257,29 @@ class Netconf(NetconfBase):
             if remove_ns:
                 response = remove_namespaces(resp)
             else:
-                response = (
-                    resp.data_xml if hasattr(resp, "data_xml") else resp.xml
-                )
+                response = resp.data_xml if hasattr(resp, "data_xml") else resp.xml
             return response
         except RPCError as exc:
             raise Exception(to_xml(exc.xml))
 
     def commit(
-        self, confirmed=False, timeout=None, persist=None, remove_ns=False
+        self,
+        confirmed=False,
+        timeout=None,
+        persist=None,
+        remove_ns=False,
     ):
         timeout = to_text(timeout, errors="surrogate_or_strict")
         try:
             resp = self.m.commit(
-                confirmed=confirmed, timeout=timeout, persist=persist
+                confirmed=confirmed,
+                timeout=timeout,
+                persist=persist,
             )
             if remove_ns:
                 response = remove_namespaces(resp)
             else:
-                response = (
-                    resp.data_xml if hasattr(resp, "data_xml") else resp.xml
-                )
+                response = resp.data_xml if hasattr(resp, "data_xml") else resp.xml
             return response
         except RPCError as exc:
             raise Exception(to_xml(exc.xml))
@@ -285,9 +290,7 @@ class Netconf(NetconfBase):
             if remove_ns:
                 response = remove_namespaces(resp)
             else:
-                response = (
-                    resp.data_xml if hasattr(resp, "data_xml") else resp.xml
-                )
+                response = resp.data_xml if hasattr(resp, "data_xml") else resp.xml
             return response
         except RPCError as exc:
             raise Exception(to_xml(exc.xml))
@@ -298,9 +301,7 @@ class Netconf(NetconfBase):
             if remove_ns:
                 response = remove_namespaces(resp)
             else:
-                response = (
-                    resp.data_xml if hasattr(resp, "data_xml") else resp.xml
-                )
+                response = resp.data_xml if hasattr(resp, "data_xml") else resp.xml
             return response
         except RPCError as exc:
             raise Exception(to_xml(exc.xml))
@@ -342,30 +343,36 @@ class Netconf(NetconfBase):
                         "value": "disk0:",
                     },
                 ),
-            ]
+            ],
         )
 
         install_filter = build_xml(
-            "install", install_meta, opcode="filter", namespace="install_old"
+            "install",
+            install_meta,
+            opcode="filter",
+            namespace="install_old",
         )
         try:
             reply = self.get(install_filter)
             resp = remove_namespaces(
-                re.sub(r'<\?xml version="1.0" encoding="UTF-8"\?>', "", reply)
+                re.sub(r'<\?xml version="1.0" encoding="UTF-8"\?>', "", reply),
             )
             ele_boot_variable = etree_find(resp, "boot-variable/boot-variable")
             if ele_boot_variable is not None:
                 device_info["network_os_image"] = re.split(
-                    "[:|,]", ele_boot_variable.text
+                    "[:|,]",
+                    ele_boot_variable.text,
                 )[1]
             ele_package_name = etree_find(reply, "package-name")
             if ele_package_name is not None:
                 device_info["network_os_package"] = ele_package_name.text
                 device_info["network_os_version"] = re.split(
-                    "-", ele_package_name.text
+                    "-",
+                    ele_package_name.text,
                 )[-1]
         except Exception as exc:
             self._connection.queue_message(
-                "vvvv", "Fail to retrieve device info %s" % exc
+                "vvvv",
+                "Fail to retrieve device info %s" % exc,
             )
         return device_info

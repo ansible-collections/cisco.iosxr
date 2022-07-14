@@ -359,9 +359,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lacp.lacp import (
     LacpArgs,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.lacp.lacp import (
-    Lacp,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.lacp.lacp import Lacp
 
 
 def main():

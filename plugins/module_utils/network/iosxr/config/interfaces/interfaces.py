@@ -18,13 +18,9 @@ __metaclass__ = type
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     add_command_to_config_list,
     dict_to_set,
@@ -56,7 +52,9 @@ class Interfaces(ConfigBase):
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         interfaces_facts = facts["ansible_network_resources"].get("interfaces")
         if not interfaces_facts:
@@ -98,7 +96,7 @@ class Interfaces(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_interfaces_facts(data=running_config)
 
@@ -135,14 +133,11 @@ class Interfaces(ConfigBase):
                   to the desired configuration
         """
         commands = []
-        if (
-            self.state in ("overridden", "merged", "replaced", "rendered")
-            and not want
-        ):
+        if self.state in ("overridden", "merged", "replaced", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    self.state
-                )
+                    self.state,
+                ),
             )
 
         if self.state == "overridden":
@@ -166,10 +161,7 @@ class Interfaces(ConfigBase):
 
         for interface in want:
             for each in have:
-                if (
-                    each["name"] == interface["name"]
-                    or interface["name"] in each["name"]
-                ):
+                if each["name"] == interface["name"] or interface["name"] in each["name"]:
                     break
             else:
                 continue
@@ -192,10 +184,7 @@ class Interfaces(ConfigBase):
 
         for each in have:
             for interface in want:
-                if (
-                    each["name"] == interface["name"]
-                    or interface["name"] in each["name"]
-                ):
+                if each["name"] == interface["name"] or interface["name"] in each["name"]:
                     break
             else:
                 # We didn't find a matching desired state, which means we can
@@ -225,10 +214,7 @@ class Interfaces(ConfigBase):
                 commands.extend(self._set_config(interface, dict()))
             else:
                 for each in have:
-                    if (
-                        each["name"] == interface["name"]
-                        or interface["name"] in each["name"]
-                    ):
+                    if each["name"] == interface["name"] or interface["name"] in each["name"]:
                         flag = 1
                         break
                 if flag == 1:
@@ -249,10 +235,7 @@ class Interfaces(ConfigBase):
         if want:
             for interface in want:
                 for each in have:
-                    if (
-                        each["name"] == interface["name"]
-                        or interface["name"] in each["name"]
-                    ):
+                    if each["name"] == interface["name"] or interface["name"] in each["name"]:
                         break
                 else:
                     continue
@@ -300,11 +283,11 @@ class Interfaces(ConfigBase):
             interface = "interface " + have["name"]
 
         if have.get("description") and want.get("description") != have.get(
-            "description"
+            "description",
         ):
             remove_command_from_config_list(interface, "description", commands)
         if not have.get("enabled") and want.get("enabled") != have.get(
-            "enabled"
+            "enabled",
         ):
             # if enable is False set enable as True which is the default behavior
             remove_command_from_config_list(interface, "shutdown", commands)

@@ -22,13 +22,9 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from ansible_collections.cisco.iosxr.plugins.modules import (
-    iosxr_lacp_interfaces,
-)
+from ansible_collections.cisco.iosxr.plugins.modules import iosxr_lacp_interfaces
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
 
@@ -40,30 +36,26 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
         super(TestIosxrLacpInterfacesModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
         self.mock_execute_show_command = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.lacp_interfaces.lacp_interfaces.Lacp_interfacesFacts.get_config"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.lacp_interfaces.lacp_interfaces.Lacp_interfacesFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -99,7 +91,7 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
                     dict(name="GigabitEthernet0/0/0/1", period=200),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -120,7 +112,7 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
                     dict(name="GigabitEthernet0/0/0/1", period=100),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "interface Bundle-Ether10",
@@ -144,7 +136,7 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
                     dict(name="GigabitEthernet0/0/0/1", period=300),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "interface Bundle-Ether10",
@@ -191,7 +183,7 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
                     dict(name="GigabitEthernet0/0/0/1", period=100),
                 ],
                 state="rendered",
-            )
+            ),
         )
 
         commands = [
@@ -219,7 +211,7 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
                 " 192.0.2.11 255.255.255.0\r\n!\r\ninterface "
                 "GigabitEthernet0/0/0/1\r\n lacp period 200\r\n!",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         print(result["parsed"])
@@ -250,7 +242,7 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
                     dict(name="GigabitEthernet0/0/0/1", period=300),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "interface Bundle-Ether10",

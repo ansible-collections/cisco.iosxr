@@ -26,9 +26,7 @@ from textwrap import dedent
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_ntp_global
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule
 
@@ -41,15 +39,13 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
 
         self.mock_get_resource_connection = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base."
-            "get_resource_connection"
+            "get_resource_connection",
         )
-        self.get_resource_connection = (
-            self.mock_get_resource_connection.start()
-        )
+        self.get_resource_connection = self.mock_get_resource_connection.start()
 
         self.mock_get_config = patch(
             "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ntp_global.ntp_global."
-            "Ntp_globalFacts.get_config"
+            "Ntp_globalFacts.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
@@ -99,7 +95,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                  update-calendar
                  log-internal-sync
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -117,7 +113,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             dict(
                                 ipv4=dict(peer="PeerAcl2", serve="ServeAcl2"),
                                 name="siteA",
-                            )
+                            ),
                         ],
                     ),
                     authenticate=True,
@@ -163,13 +159,13 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ],
                     source_interface="GigabitEthernet0/0/0/0",
                     source_vrfs=[
-                        dict(name="GigabitEthernet0/0/0/0", vrf="siteE")
+                        dict(name="GigabitEthernet0/0/0/0", vrf="siteE"),
                     ],
                     trusted_keys=[dict(key_id=1), dict(key_id=2)],
                     update_calendar=True,
                 ),
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -190,7 +186,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             dict(
                                 ipv4=dict(peer="PeerAcl2", serve="ServeAcl2"),
                                 name="siteA",
-                            )
+                            ),
                         ],
                     ),
                     authenticate=True,
@@ -236,13 +232,13 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ],
                     source_interface="GigabitEthernet0/0/0/0",
                     source_vrfs=[
-                        dict(name="GigabitEthernet0/0/0/0", vrf="siteE")
+                        dict(name="GigabitEthernet0/0/0/0", vrf="siteE"),
                     ],
                     trusted_keys=[dict(key_id=1), dict(key_id=2)],
                     update_calendar=True,
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = [
             "ntp authentication-key 1 md5 encrypted testkey",
@@ -321,7 +317,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                  update-calendar
                  log-internal-sync
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(state="deleted"))
@@ -400,7 +396,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                  update-calendar
                  log-internal-sync
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -418,7 +414,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             dict(
                                 ipv4=dict(peer="PeerAcl2", serve="ServeAcl2"),
                                 name="siteA",
-                            )
+                            ),
                         ],
                     ),
                     authenticate=True,
@@ -464,13 +460,13 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ],
                     source_interface="GigabitEthernet0/0/0/0",
                     source_vrfs=[
-                        dict(name="GigabitEthernet0/0/0/0", vrf="siteE")
+                        dict(name="GigabitEthernet0/0/0/0", vrf="siteE"),
                     ],
                     trusted_keys=[dict(key_id=1), dict(key_id=2)],
                     update_calendar=True,
                 ),
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "no ntp server vrf siteD 192.0.2.2 burst",
@@ -506,7 +502,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             dict(
                                 ipv4=dict(peer="PeerAcl2", serve="ServeAcl2"),
                                 name="siteA",
-                            )
+                            ),
                         ],
                     ),
                     authenticate=True,
@@ -552,13 +548,13 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ],
                     source_interface="GigabitEthernet0/0/0/0",
                     source_vrfs=[
-                        dict(name="GigabitEthernet0/0/0/0", vrf="siteE")
+                        dict(name="GigabitEthernet0/0/0/0", vrf="siteE"),
                     ],
                     trusted_keys=[dict(key_id=1), dict(key_id=2)],
                     update_calendar=True,
                 ),
                 state="rendered",
-            )
+            ),
         )
         commands = [
             "ntp authentication-key 1 md5 encrypted testkey",
@@ -636,7 +632,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                  update-calendar
                  log-internal-sync
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -654,7 +650,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                             dict(
                                 ipv4=dict(peer="PeerAcl2", serve="ServeAcl2"),
                                 name="siteA",
-                            )
+                            ),
                         ],
                     ),
                     authenticate=True,
@@ -700,13 +696,13 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     ],
                     source_interface="GigabitEthernet0/0/0/0",
                     source_vrfs=[
-                        dict(name="GigabitEthernet0/0/0/0", vrf="siteE")
+                        dict(name="GigabitEthernet0/0/0/0", vrf="siteE"),
                     ],
                     trusted_keys=[dict(key_id=1), dict(key_id=2)],
                     update_calendar=True,
                 ),
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "no ntp server vrf siteD 192.0.2.2 burst",
@@ -762,7 +758,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                  update-calendar
                  log-internal-sync
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         print(self.get_config.return_value)
@@ -775,7 +771,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     "broadcast_client": True,
                     "multicast_client": "224.0.0.8",
                     "multicast_destination": "224.0.0.8",
-                }
+                },
             ],
             "authentication_keys": [
                 {"id": 1, "key": "testkey", "encryption": True},
@@ -797,7 +793,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     "prefer": True,
                     "version": 2,
                     "source": "GigabitEthernet0/0/0/0",
-                }
+                },
             ],
             "drift": {"file": "apphost", "aging_time": 0},
             "master": {"stratum": 1},
@@ -806,7 +802,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     {
                         "name": "siteA",
                         "ipv4": {"peer": "PeerAcl3", "serve": "ServeAcl2"},
-                    }
+                    },
                 ],
                 "ipv4": {
                     "peer": "PeerAcl1",
@@ -817,7 +813,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                 "ipv6": {"peer": "PeerAcl2"},
             },
             "source_vrfs": [
-                {"name": "GigabitEthernet0/0/0/0", "vrf": "siteE"}
+                {"name": "GigabitEthernet0/0/0/0", "vrf": "siteE"},
             ],
             "source_interface": "GigabitEthernet0/0/0/0",
             "passive": True,
@@ -847,7 +843,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                 " passive\n broadcastdelay "
                 "1\n update-calendar\n log-internal-sync\n!",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         parsed_list = {
@@ -858,7 +854,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     "broadcast_client": True,
                     "multicast_client": "224.0.0.8",
                     "multicast_destination": "224.0.0.8",
-                }
+                },
             ],
             "authentication_keys": [
                 {"id": 1, "key": "testkey", "encryption": True},
@@ -880,7 +876,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                     "prefer": True,
                     "version": 2,
                     "source": "GigabitEthernet0/0/0/0",
-                }
+                },
             ],
             "drift": {"file": "apphost", "aging_time": 0},
             "master": {"stratum": 1},
@@ -895,7 +891,7 @@ class TestIosxrNtpGlobalModule(TestIosxrModule):
                 "ipv6": {"peer": "PeerAcl2"},
             },
             "source_vrfs": [
-                {"name": "GigabitEthernet0/0/0/0", "vrf": "siteE"}
+                {"name": "GigabitEthernet0/0/0/0", "vrf": "siteE"},
             ],
             "source_interface": "GigabitEthernet0/0/0/0",
             "passive": True,

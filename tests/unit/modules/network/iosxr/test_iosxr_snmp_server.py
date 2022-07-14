@@ -26,9 +26,7 @@ from textwrap import dedent
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_snmp_server
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule
 
@@ -41,15 +39,13 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
 
         self.mock_get_resource_connection = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base."
-            "get_resource_connection"
+            "get_resource_connection",
         )
-        self.get_resource_connection = (
-            self.mock_get_resource_connection.start()
-        )
+        self.get_resource_connection = self.mock_get_resource_connection.start()
 
         self.mock_get_config = patch(
             "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.snmp_server.snmp_server."
-            "Snmp_serverFacts.get_config"
+            "Snmp_serverFacts.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
@@ -202,7 +198,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 snmp-server notification-log-mib size 5
                 snmp-server notification-log-mib GlobalSize 5
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -216,9 +212,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                                     community="test1",
                                     host="1.1.1.1",
                                     traps=True,
-                                )
+                                ),
                             ],
-                        )
+                        ),
                     ],
                     users=[
                         dict(
@@ -227,7 +223,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             group="test2",
                             user="u1",
                             v4_acl="v4acl",
-                        )
+                        ),
                     ],
                     timeouts=dict(
                         duplicate=0,
@@ -262,7 +258,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             systemowner=True,
                             acl_v4="test",
                             acl_v6="test1",
-                        )
+                        ),
                     ],
                     community_maps=[
                         dict(
@@ -270,7 +266,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             context="c1",
                             target_list="t1",
                             security_name="s1",
-                        )
+                        ),
                     ],
                     drop=dict(report_IPv4="test1", unknown_user=True),
                     ipv6=dict(precedence="routine"),
@@ -284,7 +280,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             read="test1",
                             version="v1",
                             write="test2",
-                        )
+                        ),
                     ],
                     location="test1",
                     logging_threshold_oid_processing=1,
@@ -293,10 +289,15 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     mroutemib_send_all_vrf=True,
                     mib_object_lists=["test1"],
                     overload_control=dict(
-                        overload_drop_time=4, overload_throttle_rate=6
+                        overload_drop_time=4,
+                        overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1)
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
@@ -308,7 +309,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             retain=1,
                             retry=1,
                             schema="test2",
-                        )
+                        ),
                     ],
                     traps=dict(
                         diameter=dict(
@@ -320,7 +321,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         ),
                         entity=True,
                         entity_redundancy=dict(
-                            all=True, status=True, switchover=True
+                            all=True,
+                            status=True,
+                            switchover=True,
                         ),
                         entity_state=dict(operstatus=True, switchover=True),
                         flash=dict(insertion=True, removal=True),
@@ -336,7 +339,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         bfd=True,
                         bgp=dict(cbgp2=True),
                         l2tun=dict(
-                            sessions=True, tunnel_down=True, tunnel_up=True
+                            sessions=True,
+                            tunnel_down=True,
+                            tunnel_up=True,
                         ),
                         l2vpn=dict(all=True, vc_down=True, vc_up=True),
                         msdp_peer_state_change=True,
@@ -407,7 +412,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     ),
                 ),
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -425,9 +430,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                                     community="test1",
                                     host="1.1.1.1",
                                     traps=True,
-                                )
+                                ),
                             ],
-                        )
+                        ),
                     ],
                     users=[
                         dict(
@@ -437,7 +442,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             user="u1",
                             v4_acl="v4acl",
                             SystemOwner=True,
-                        )
+                        ),
                     ],
                     timeouts=dict(
                         duplicate=0,
@@ -472,7 +477,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             sdrowner=True,
                             acl_v4="test",
                             acl_v6="test1",
-                        )
+                        ),
                     ],
                     community_maps=[
                         dict(
@@ -480,7 +485,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             context="c1",
                             target_list="t1",
                             security_name="s1",
-                        )
+                        ),
                     ],
                     drop=dict(report_IPv4="test1", unknown_user=True),
                     ipv6=dict(precedence="routine"),
@@ -494,7 +499,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             read="test1",
                             version="v1",
                             write="test2",
-                        )
+                        ),
                     ],
                     interfaces=[dict(name=" GigabitEthernet0/0/0/2")],
                     location="test1",
@@ -504,10 +509,15 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     mroutemib_send_all_vrf=True,
                     mib_object_lists=["test1"],
                     overload_control=dict(
-                        overload_drop_time=4, overload_throttle_rate=6
+                        overload_drop_time=4,
+                        overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1)
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
@@ -519,7 +529,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             retain=1,
                             retry=1,
                             schema="test2",
-                        )
+                        ),
                     ],
                     traps=dict(
                         diameter=dict(
@@ -531,7 +541,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         ),
                         entity=True,
                         entity_redundancy=dict(
-                            all=True, status=True, switchover=True
+                            all=True,
+                            status=True,
+                            switchover=True,
                         ),
                         entity_state=dict(operstatus=True, switchover=True),
                         flash=dict(insertion=True, removal=True),
@@ -547,7 +559,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         bfd=True,
                         bgp=dict(cbgp2=True),
                         l2tun=dict(
-                            sessions=True, tunnel_down=True, tunnel_up=True
+                            sessions=True,
+                            tunnel_down=True,
+                            tunnel_up=True,
                         ),
                         l2vpn=dict(all=True, vc_down=True, vc_up=True),
                         msdp_peer_state_change=True,
@@ -638,7 +652,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     ),
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = [
             "snmp-server chassis-id test2",
@@ -910,7 +924,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 snmp-server mroutemib send-all-vrf
                 snmp-server notification-log-mib size 5
                 snmp-server notification-log-mib GlobalSize 5
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(state="deleted"))
@@ -1182,7 +1196,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 snmp-server mroutemib send-all-vrf
                 snmp-server notification-log-mib size 5
                 snmp-server notification-log-mib GlobalSize 5
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -1196,9 +1210,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                                     community="test1",
                                     host="1.1.1.1",
                                     traps=True,
-                                )
+                                ),
                             ],
-                        )
+                        ),
                     ],
                     users=[
                         dict(
@@ -1207,7 +1221,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             group="test2",
                             user="u1",
                             v4_acl="v4acl",
-                        )
+                        ),
                     ],
                     timeouts=dict(
                         duplicate=0,
@@ -1242,7 +1256,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             sdrowner=True,
                             acl_v4="test",
                             acl_v6="test1",
-                        )
+                        ),
                     ],
                     community_maps=[
                         dict(
@@ -1250,7 +1264,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             context="c1",
                             target_list="t1",
                             security_name="s1",
-                        )
+                        ),
                     ],
                     drop=dict(report_IPv4="test1", unknown_user=True),
                     ipv6=dict(precedence="routine"),
@@ -1264,7 +1278,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             read="test1",
                             version="v1",
                             write="test2",
-                        )
+                        ),
                     ],
                     location="test",
                     logging_threshold_oid_processing=2,
@@ -1273,10 +1287,15 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     mroutemib_send_all_vrf=True,
                     mib_object_lists=["test1"],
                     overload_control=dict(
-                        overload_drop_time=4, overload_throttle_rate=6
+                        overload_drop_time=4,
+                        overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1)
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
@@ -1288,7 +1307,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             retain=1,
                             retry=1,
                             schema="test2",
-                        )
+                        ),
                     ],
                     traps=dict(
                         diameter=dict(
@@ -1300,7 +1319,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         ),
                         entity=True,
                         entity_redundancy=dict(
-                            all=True, status=True, switchover=True
+                            all=True,
+                            status=True,
+                            switchover=True,
                         ),
                         entity_state=dict(operstatus=True, switchover=True),
                         flash=dict(insertion=True, removal=True),
@@ -1314,7 +1335,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         bfd=True,
                         bgp=dict(cbgp2=True),
                         l2tun=dict(
-                            sessions=True, tunnel_down=True, tunnel_up=True
+                            sessions=True,
+                            tunnel_down=True,
+                            tunnel_up=True,
                         ),
                         l2vpn=dict(all=True, vc_down=True, vc_up=True),
                         msdp_peer_state_change=True,
@@ -1341,7 +1364,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                                 bad_packet=True,
                                 config_error=True,
                                 virt_config_error=True,
-                            )
+                            ),
                         ),
                         pim=dict(
                             interface_state_change=True,
@@ -1377,7 +1400,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     ),
                 ),
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "no snmp-server contact t1",
@@ -1542,7 +1565,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 snmp-server notification-log-mib size 5
                 snmp-server notification-log-mib GlobalSize 5
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -1556,9 +1579,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                                     community="test1",
                                     host="1.1.1.1",
                                     traps=True,
-                                )
+                                ),
                             ],
-                        )
+                        ),
                     ],
                     users=[
                         dict(
@@ -1568,7 +1591,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             user="u1",
                             v4_acl="v4acl",
                             version="v1",
-                        )
+                        ),
                     ],
                     timeouts=dict(
                         duplicate=0,
@@ -1603,7 +1626,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             systemowner=True,
                             acl_v4="test",
                             acl_v6="test1",
-                        )
+                        ),
                     ],
                     community_maps=[
                         dict(
@@ -1611,7 +1634,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             context="c1",
                             target_list="t1",
                             security_name="s1",
-                        )
+                        ),
                     ],
                     drop=dict(report_IPv4="test1", unknown_user=True),
                     ipv6=dict(precedence="routine"),
@@ -1625,7 +1648,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             read="test1",
                             version="v1",
                             write="test2",
-                        )
+                        ),
                     ],
                     location="test1",
                     logging_threshold_oid_processing=1,
@@ -1634,10 +1657,15 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     mroutemib_send_all_vrf=True,
                     mib_object_lists=["test1"],
                     overload_control=dict(
-                        overload_drop_time=4, overload_throttle_rate=6
+                        overload_drop_time=4,
+                        overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1)
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
@@ -1649,7 +1677,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             retain=1,
                             retry=1,
                             schema="test2",
-                        )
+                        ),
                     ],
                     traps=dict(
                         diameter=dict(
@@ -1661,7 +1689,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         ),
                         entity=True,
                         entity_redundancy=dict(
-                            all=True, status=True, switchover=True
+                            all=True,
+                            status=True,
+                            switchover=True,
                         ),
                         entity_state=dict(operstatus=True, switchover=True),
                         flash=dict(insertion=True, removal=True),
@@ -1677,7 +1707,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         bfd=True,
                         bgp=dict(cbgp2=True),
                         l2tun=dict(
-                            sessions=True, tunnel_down=True, tunnel_up=True
+                            sessions=True,
+                            tunnel_down=True,
+                            tunnel_up=True,
                         ),
                         l2vpn=dict(all=True, vc_down=True, vc_up=True),
                         msdp_peer_state_change=True,
@@ -1748,7 +1780,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     ),
                 ),
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -1895,7 +1927,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 snmp-server mroutemib send-all-vrf
                 snmp-server notification-log-mib size 5
                 snmp-server notification-log-mib GlobalSize 5
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -1909,9 +1941,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                                     community="test1",
                                     host="1.1.1.1",
                                     traps=True,
-                                )
+                                ),
                             ],
-                        )
+                        ),
                     ],
                     users=[
                         dict(
@@ -1920,7 +1952,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             group="test2",
                             user="u1",
                             v4_acl="v4acl",
-                        )
+                        ),
                     ],
                     timeouts=dict(
                         duplicate=0,
@@ -1955,7 +1987,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             sdrowner=True,
                             acl_v4="test",
                             acl_v6="test1",
-                        )
+                        ),
                     ],
                     community_maps=[
                         dict(
@@ -1963,7 +1995,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             context="c1",
                             target_list="t1",
                             security_name="s1",
-                        )
+                        ),
                     ],
                     drop=dict(report_IPv4="test1", unknown_user=True),
                     ipv6=dict(precedence="routine"),
@@ -1977,7 +2009,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             read="test1",
                             version="v1",
                             write="test2",
-                        )
+                        ),
                     ],
                     location="test",
                     logging_threshold_oid_processing=2,
@@ -1986,10 +2018,15 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     mroutemib_send_all_vrf=True,
                     mib_object_lists=["test1"],
                     overload_control=dict(
-                        overload_drop_time=4, overload_throttle_rate=6
+                        overload_drop_time=4,
+                        overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1)
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
@@ -2001,7 +2038,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             retain=1,
                             retry=1,
                             schema="test2",
-                        )
+                        ),
                     ],
                     traps=dict(
                         diameter=dict(
@@ -2013,7 +2050,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         ),
                         entity=True,
                         entity_redundancy=dict(
-                            all=True, status=True, switchover=True
+                            all=True,
+                            status=True,
+                            switchover=True,
                         ),
                         entity_state=dict(operstatus=True, switchover=True),
                         flash=dict(insertion=True, removal=True),
@@ -2027,7 +2066,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         bfd=True,
                         bgp=dict(cbgp2=True),
                         l2tun=dict(
-                            sessions=True, tunnel_down=True, tunnel_up=True
+                            sessions=True,
+                            tunnel_down=True,
+                            tunnel_up=True,
                         ),
                         l2vpn=dict(all=True, vc_down=True, vc_up=True),
                         msdp_peer_state_change=True,
@@ -2054,7 +2095,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                                 bad_packet=True,
                                 config_error=True,
                                 virt_config_error=True,
-                            )
+                            ),
                         ),
                         pim=dict(
                             interface_state_change=True,
@@ -2090,7 +2131,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     ),
                 ),
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "no snmp-server contact t1",
@@ -2255,7 +2296,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 snmp-server notification-log-mib size 5
                 snmp-server notification-log-mib GlobalSize 5
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -2269,9 +2310,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                                     community="test1",
                                     host="1.1.1.1",
                                     traps=True,
-                                )
+                                ),
                             ],
-                        )
+                        ),
                     ],
                     users=[
                         dict(
@@ -2281,7 +2322,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             user="u1",
                             v4_acl="v4acl",
                             version="v1",
-                        )
+                        ),
                     ],
                     timeouts=dict(
                         duplicate=0,
@@ -2316,7 +2357,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             systemowner=True,
                             acl_v4="test",
                             acl_v6="test1",
-                        )
+                        ),
                     ],
                     community_maps=[
                         dict(
@@ -2324,7 +2365,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             context="c1",
                             target_list="t1",
                             security_name="s1",
-                        )
+                        ),
                     ],
                     drop=dict(report_IPv4="test1", unknown_user=True),
                     ipv6=dict(precedence="routine"),
@@ -2338,7 +2379,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             read="test1",
                             version="v1",
                             write="test2",
-                        )
+                        ),
                     ],
                     location="test1",
                     logging_threshold_oid_processing=1,
@@ -2347,10 +2388,15 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     mroutemib_send_all_vrf=True,
                     mib_object_lists=["test1"],
                     overload_control=dict(
-                        overload_drop_time=4, overload_throttle_rate=6
+                        overload_drop_time=4,
+                        overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1)
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
@@ -2362,7 +2408,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             retain=1,
                             retry=1,
                             schema="test2",
-                        )
+                        ),
                     ],
                     traps=dict(
                         diameter=dict(
@@ -2374,7 +2420,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         ),
                         entity=True,
                         entity_redundancy=dict(
-                            all=True, status=True, switchover=True
+                            all=True,
+                            status=True,
+                            switchover=True,
                         ),
                         entity_state=dict(operstatus=True, switchover=True),
                         flash=dict(insertion=True, removal=True),
@@ -2390,7 +2438,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         bfd=True,
                         bgp=dict(cbgp2=True),
                         l2tun=dict(
-                            sessions=True, tunnel_down=True, tunnel_up=True
+                            sessions=True,
+                            tunnel_down=True,
+                            tunnel_up=True,
                         ),
                         l2vpn=dict(all=True, vc_down=True, vc_up=True),
                         msdp_peer_state_change=True,
@@ -2461,7 +2511,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     ),
                 ),
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -2478,9 +2528,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                                     community="test1",
                                     host="1.1.1.1",
                                     traps=True,
-                                )
+                                ),
                             ],
-                        )
+                        ),
                     ],
                     users=[
                         dict(
@@ -2489,7 +2539,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             group="test2",
                             user="u1",
                             v4_acl="v4acl",
-                        )
+                        ),
                     ],
                     timeouts=dict(
                         duplicate=0,
@@ -2524,7 +2574,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             sdrowner=True,
                             acl_v4="test",
                             acl_v6="test1",
-                        )
+                        ),
                     ],
                     community_maps=[
                         dict(
@@ -2532,7 +2582,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             context="c1",
                             target_list="t1",
                             security_name="s1",
-                        )
+                        ),
                     ],
                     drop=dict(report_IPv4="test1", unknown_user=True),
                     ipv6=dict(precedence="routine"),
@@ -2546,7 +2596,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             read="test1",
                             version="v1",
                             write="test2",
-                        )
+                        ),
                     ],
                     interfaces=[dict(name=" GigabitEthernet0/0/0/2")],
                     location="test1",
@@ -2556,10 +2606,15 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     mroutemib_send_all_vrf=True,
                     mib_object_lists=["test1"],
                     overload_control=dict(
-                        overload_drop_time=4, overload_throttle_rate=6
+                        overload_drop_time=4,
+                        overload_throttle_rate=6,
                     ),
                     mib_schema=[
-                        dict(name="mib1", object_list="test1", poll_interval=1)
+                        dict(
+                            name="mib1",
+                            object_list="test1",
+                            poll_interval=1,
+                        ),
                     ],
                     notification_log_mib=dict(GlobalSize=5, size=5),
                     mib_bulkstat_transfer_ids=[
@@ -2571,7 +2626,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             retain=1,
                             retry=1,
                             schema="test2",
-                        )
+                        ),
                     ],
                     traps=dict(
                         diameter=dict(
@@ -2583,7 +2638,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         ),
                         entity=True,
                         entity_redundancy=dict(
-                            all=True, status=True, switchover=True
+                            all=True,
+                            status=True,
+                            switchover=True,
                         ),
                         entity_state=dict(operstatus=True, switchover=True),
                         flash=dict(insertion=True, removal=True),
@@ -2599,7 +2656,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                         bfd=True,
                         bgp=dict(cbgp2=True),
                         l2tun=dict(
-                            sessions=True, tunnel_down=True, tunnel_up=True
+                            sessions=True,
+                            tunnel_down=True,
+                            tunnel_up=True,
                         ),
                         l2vpn=dict(all=True, vc_down=True, vc_up=True),
                         msdp_peer_state_change=True,
@@ -2670,7 +2729,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     ),
                 ),
                 state="rendered",
-            )
+            ),
         )
         commands = [
             "snmp-server chassis-id test2",
@@ -2950,7 +3009,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 snmp-server notification-log-mib size 5
                 snmp-server notification-log-mib GlobalSize 5
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(state="gathered"))
@@ -2963,9 +3022,9 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             "host": "1.1.1.1",
                             "traps": True,
                             "community": "test1",
-                        }
+                        },
                     ],
-                }
+                },
             ],
             "drop": {"report_IPv4": "test1", "unknown_user": True},
             "ipv4": {"dscp": "af11"},
@@ -2978,7 +3037,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     "acl_v6": "test2",
                     "v4_acl": "v4acl",
                     "version": "v1",
-                }
+                },
             ],
             "communities": [
                 {
@@ -2987,7 +3046,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     "acl_v4": "test",
                     "acl_v6": "test1",
                     "sdrowner": True,
-                }
+                },
             ],
             "groups": [
                 {
@@ -2998,7 +3057,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     "read": "test1",
                     "write": "test2",
                     "version": "v1",
-                }
+                },
             ],
             "queue_length": 2,
             "trap_timeout": 3,
@@ -3115,7 +3174,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "mib_bulkstat_max_procmem_size": 101,
             "mib_object_lists": ["test1"],
             "mib_schema": [
-                {"name": "mib1", "object_list": "test1", "poll_interval": 1}
+                {"name": "mib1", "object_list": "test1", "poll_interval": 1},
             ],
             "mib_bulkstat_transfer_ids": [
                 {
@@ -3126,7 +3185,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     "format_schemaASCI": True,
                     "retain": 1,
                     "schema": "test2",
-                }
+                },
             ],
             "timeouts": {
                 "duplicate": 0,
@@ -3152,7 +3211,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     "context": "c1",
                     "security_name": "s1",
                     "target_list": "t1",
-                }
+                },
             ],
             "inform": {"retries": 7},
             "overload_control": {
@@ -3269,7 +3328,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 "notification-log-mib default\nsnmp-server notification-log-mib disable\nsnmp-server"
                 " notification-log-mib GlobalSize 1",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         parsed_list = {
@@ -3289,7 +3348,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                             "community": "test1",
                         },
                     ],
-                }
+                },
             ],
             "drop": {"report_IPv6": "test", "unknown_user": True},
             "hosts": [
@@ -3315,7 +3374,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     "acl_v6": "test2",
                     "v4_acl": "SDROwner",
                     "version": "v1",
-                }
+                },
             ],
             "communities": [
                 {
@@ -3506,7 +3565,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                     "format_schemaASCI": True,
                     "retain": 1,
                     "schema": "test",
-                }
+                },
             ],
             "timeouts": {
                 "duplicate": 0,
@@ -3533,7 +3592,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 {
                     "name": "GigabitEthernet0/0/0/0",
                     "notification_linkupdown_disable": True,
-                }
+                },
             ],
             "ifmib": {
                 "ifalias_long": True,

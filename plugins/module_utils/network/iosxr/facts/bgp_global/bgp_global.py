@@ -18,9 +18,7 @@ based on the configuration.
 from copy import deepcopy
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.bgp_global.bgp_global import (
     Bgp_globalArgs,
@@ -85,13 +83,12 @@ class Bgp_globalFacts(object):
 
         # parse native config using the Bgp_global template
         bgp_global_parser = Bgp_globalTemplate(
-            lines=bgp_global_config, module=self._module
+            lines=bgp_global_config,
+            module=self._module,
         )
         objs = bgp_global_parser.parse()
 
-        conf_peers = (
-            objs.get("bgp", {}).get("confederation", {}).get("peers", {})
-        )
+        conf_peers = objs.get("bgp", {}).get("confederation", {}).get("peers", {})
         if conf_peers:
             objs["bgp"]["confederation"]["peers"] = list(conf_peers.values())
 
@@ -109,7 +106,8 @@ class Bgp_globalFacts(object):
         # transform vrfs into a list
         if vrfs:
             objs["vrfs"] = sorted(
-                list(objs["vrfs"].values()), key=lambda k, sk="vrf": k[sk]
+                list(objs["vrfs"].values()),
+                key=lambda k, sk="vrf": k[sk],
             )
             for vrf in objs["vrfs"]:
                 self._post_parse(vrf)
@@ -122,8 +120,10 @@ class Bgp_globalFacts(object):
 
         params = utils.remove_empties(
             bgp_global_parser.validate_config(
-                self.argument_spec, {"config": objs}, redact=True
-            )
+                self.argument_spec,
+                {"config": objs},
+                redact=True,
+            ),
         )
 
         facts["bgp_global"] = params.get("config", {})
@@ -145,5 +145,6 @@ class Bgp_globalFacts(object):
         rpki_servers = obj.get("rpki", {}).get("servers", [])
         if rpki_servers:
             obj["rpki"]["servers"] = sorted(
-                list(rpki_servers.values()), key=lambda k, sk="name": k[sk]
+                list(rpki_servers.values()),
+                key=lambda k, sk="name": k[sk],
             )

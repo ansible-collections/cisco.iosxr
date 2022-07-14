@@ -12,9 +12,7 @@ from textwrap import dedent
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_ping
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule
 
@@ -25,7 +23,7 @@ class TestIosxrPingModule(TestIosxrModule):
     def setUp(self):
         super(TestIosxrPingModule, self).setUp()
         self.mock_execute_show_command = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.ping.ping.Ping.run_command"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.ping.ping.Ping.run_command",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -40,7 +38,7 @@ class TestIosxrPingModule(TestIosxrModule):
             ending 2, 100-byte ICMP Echos to 8.8.8.8, timeout is 2 seconds:
             !
             Success rate is 100 percent (2/2), round-trip min/avg/max = 25/25/25 ms
-            """
+            """,
         )
         set_module_args(dict(count=2, dest="8.8.8.8"))
         result = self.execute_module()
@@ -61,14 +59,14 @@ class TestIosxrPingModule(TestIosxrModule):
             ending 2, 100-byte ICMP Echos to 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff, timeout is 2 seconds:
             !
             Success rate is 100 percent (2/2), round-trip min/avg/max = 25/25/25 ms
-            """
+            """,
         )
         set_module_args(
             dict(
                 count=2,
                 dest="2001:db8:ffff:ffff:ffff:ffff:ffff:ffff",
                 afi="ipv6",
-            )
+            ),
         )
         result = self.execute_module()
         mock_res = {
@@ -88,7 +86,7 @@ class TestIosxrPingModule(TestIosxrModule):
             ending 2, 100-byte ICMP Echos to 8.8.8.8, timeout is 2 seconds:
             !
             Success rate is 100 percent (2/2), round-trip min/avg/max = 25/25/25 ms
-            """
+            """,
         )
         set_module_args(
             {
@@ -102,7 +100,7 @@ class TestIosxrPingModule(TestIosxrModule):
                 "sweep": True,
                 "validate": True,
                 "vrf": "DummyVrf",
-            }
+            },
         )
         result = self.execute_module()
         mock_res = {
@@ -122,7 +120,7 @@ class TestIosxrPingModule(TestIosxrModule):
             ending 2, 100-byte ICMP Echos to 8.8.8.8, timeout is 2 seconds:
             !
             Success rate is 90 percent (2/2), round-trip min/avg/max = 25/25/25 ms
-            """
+            """,
         )
         set_module_args(dict(count=2, dest="8.8.8.8", state="absent"))
         result = self.execute_module(failed=True)
@@ -144,7 +142,7 @@ class TestIosxrPingModule(TestIosxrModule):
             ending 2, 100-byte ICMP Echos to 8.8.8.8, timeout is 12 seconds:
             !
             Success rate is 0 percent (0/2), round-trip min/avg/max = 25/25/25 ms
-            """
+            """,
         )
         set_module_args(dict(count=2, dest="8.8.8.8", state="present"))
         result = self.execute_module(failed=True)

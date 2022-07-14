@@ -27,9 +27,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     to_list,
 )
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     dict_delete,
     flatten_dict,
@@ -55,7 +53,9 @@ class Lldp_global(ConfigBase):
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         lldp_facts = facts["ansible_network_resources"].get("lldp_global")
         if not lldp_facts:
@@ -98,7 +98,7 @@ class Lldp_global(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_lldp_global_facts(data=running_config)
 
@@ -140,8 +140,8 @@ class Lldp_global(ConfigBase):
         if state in ("merged", "replaced", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    state
-                )
+                    state,
+                ),
             )
 
         if state == "deleted":
@@ -192,7 +192,7 @@ class Lldp_global(ConfigBase):
         """
         commands = []
         for key, value in iteritems(
-            flatten_dict(dict_delete(have, remove_empties(want)))
+            flatten_dict(dict_delete(have, remove_empties(want))),
         ):
             cmd = self._compute_commands(key, value, remove=True)
             if cmd:

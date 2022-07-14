@@ -27,9 +27,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     dict_merge,
 )
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.bgp_neighbor_address_family import (
     Bgp_neighbor_address_familyTemplate,
 )
@@ -136,7 +134,9 @@ class Bgp_neighbor_address_family(ResourceModule):
             self.commands.insert(
                 0,
                 self._tmplt.render(
-                    {"as_number": want["as_number"]}, "router", False
+                    {"as_number": want["as_number"]},
+                    "router",
+                    False,
                 ),
             )
 
@@ -216,12 +216,9 @@ class Bgp_neighbor_address_family(ResourceModule):
             for nbr in data["neighbors"]:
                 if "address_family" in nbr:
                     nbr["address_family"] = {
-                        (x["afi"], x.get("safi")): x
-                        for x in nbr["address_family"]
+                        (x["afi"], x.get("safi")): x for x in nbr["address_family"]
                     }
-            data["neighbors"] = {
-                x["neighbor_address"]: x for x in data["neighbors"]
-            }
+            data["neighbors"] = {x["neighbor_address"]: x for x in data["neighbors"]}
 
         if "vrfs" in data:
             for vrf in data["vrfs"]:

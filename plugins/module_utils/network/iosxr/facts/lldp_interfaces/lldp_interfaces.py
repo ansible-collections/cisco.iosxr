@@ -20,9 +20,7 @@ import re
 
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lldp_interfaces.lldp_interfaces import (
     Lldp_interfacesArgs,
@@ -74,7 +72,8 @@ class Lldp_interfacesFacts(object):
         if objs:
             facts["lldp_interfaces"] = []
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             for cfg in params["config"]:
                 facts["lldp_interfaces"].append(utils.remove_empties(cfg))
@@ -103,9 +102,7 @@ class Lldp_interfacesFacts(object):
             config["name"] = match.group(1) + match.group(2)
 
             for key in ["receive", "transmit"]:
-                config[key] = (
-                    False if ("{0} disable".format(key)) in conf else None
-                )
+                config[key] = False if ("{0} disable".format(key)) in conf else None
 
             for x in ["ieee-nearest-bridge", "ieee-nearest-non-tmpr-bridge"]:
                 if x in conf:

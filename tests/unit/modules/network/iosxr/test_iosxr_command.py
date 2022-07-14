@@ -23,9 +23,7 @@ __metaclass__ = type
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_command
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
 
@@ -38,7 +36,7 @@ class TestIosxrCommandModule(TestIosxrModule):
         super(TestIosxrCommandModule, self).setUp()
 
         self.mock_run_commands = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_command.run_commands"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_command.run_commands",
         )
         self.run_commands = self.mock_run_commands.start()
 
@@ -68,7 +66,7 @@ class TestIosxrCommandModule(TestIosxrModule):
         result = self.execute_module()
         self.assertEqual(len(result["stdout"]), 1)
         self.assertTrue(
-            result["stdout"][0].startswith("Cisco IOS XR Software")
+            result["stdout"][0].startswith("Cisco IOS XR Software"),
         )
 
     def test_iosxr_command_multiple(self):
@@ -76,7 +74,7 @@ class TestIosxrCommandModule(TestIosxrModule):
         result = self.execute_module()
         self.assertEqual(len(result["stdout"]), 2)
         self.assertTrue(
-            result["stdout"][0].startswith("Cisco IOS XR Software")
+            result["stdout"][0].startswith("Cisco IOS XR Software"),
         )
 
     def test_iosxr_command_wait_for(self):
@@ -93,7 +91,7 @@ class TestIosxrCommandModule(TestIosxrModule):
     def test_iosxr_command_retries(self):
         wait_for = 'result[0] contains "test string"'
         set_module_args(
-            dict(commands=["show version"], wait_for=wait_for, retries=2)
+            dict(commands=["show version"], wait_for=wait_for, retries=2),
         )
         self.execute_module(failed=True)
         self.assertEqual(self.run_commands.call_count, 2)
@@ -104,7 +102,7 @@ class TestIosxrCommandModule(TestIosxrModule):
             'result[0] contains "test string"',
         ]
         set_module_args(
-            dict(commands=["show version"], wait_for=wait_for, match="any")
+            dict(commands=["show version"], wait_for=wait_for, match="any"),
         )
         self.execute_module()
 
@@ -114,7 +112,7 @@ class TestIosxrCommandModule(TestIosxrModule):
             'result[0] contains "XR Software"',
         ]
         set_module_args(
-            dict(commands=["show version"], wait_for=wait_for, match="all")
+            dict(commands=["show version"], wait_for=wait_for, match="all"),
         )
         self.execute_module()
 
@@ -125,6 +123,6 @@ class TestIosxrCommandModule(TestIosxrModule):
         ]
         commands = ["show version", "show version"]
         set_module_args(
-            dict(commands=commands, wait_for=wait_for, match="all")
+            dict(commands=commands, wait_for=wait_for, match="all"),
         )
         self.execute_module(failed=True)

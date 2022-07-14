@@ -27,9 +27,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     dict_merge,
 )
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.prefix_lists import (
     Prefix_listsTemplate,
 )
@@ -77,9 +75,7 @@ class Prefix_lists(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
+            haved = {k: v for k, v in iteritems(haved) if k in wantd or not wantd}
             wantd = {}
 
         # remove superfluous config for overridden and deleted
@@ -92,9 +88,9 @@ class Prefix_lists(ResourceModule):
             self._compare(want=want, have=haved.pop(k, {}))
             # alligning cmd with negate cmd 1st followed by config cmd
         if self.state in ["overridden", "replaced"]:
-            self.commands = [
-                each for each in self.commands if "no" in each
-            ] + [each for each in self.commands if "no" not in each]
+            self.commands = [each for each in self.commands if "no" in each] + [
+                each for each in self.commands if "no" not in each
+            ]
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
@@ -103,7 +99,8 @@ class Prefix_lists(ResourceModule):
         for the Prefix_lists network resource.
         """
         self._compare_plists(
-            want.get("prefix_lists", {}), have.get("prefix_lists", {})
+            want.get("prefix_lists", {}),
+            have.get("prefix_lists", {}),
         )
 
     def _compare_plists(self, want, have):
@@ -111,13 +108,14 @@ class Prefix_lists(ResourceModule):
             hentry = have.pop(wk, {})
             # compare sequences
             self._compare_seqs(
-                wentry.pop("entries", {}), hentry.pop("entries", {})
+                wentry.pop("entries", {}),
+                hentry.pop("entries", {}),
             )
 
         # remove remaining prefix lists
         for h in have.values():
             self.commands.append(
-                "no {0} prefix-list {1}".format(h["afi"], h["name"])
+                "no {0} prefix-list {1}".format(h["afi"], h["name"]),
             )
 
     def _compare_seqs(self, want, have):
@@ -137,10 +135,7 @@ class Prefix_lists(ResourceModule):
                     if "entries" in plist:
                         for seq in plist["entries"]:
                             seq.update({"afi": afi, "name": plist["name"]})
-                        plist["entries"] = {
-                            x["sequence"]: x for x in plist["entries"]
-                        }
+                        plist["entries"] = {x["sequence"]: x for x in plist["entries"]}
                 value["prefix_lists"] = {
-                    (entry["name"], afi): entry
-                    for entry in value["prefix_lists"]
+                    (entry["name"], afi): entry for entry in value["prefix_lists"]
                 }

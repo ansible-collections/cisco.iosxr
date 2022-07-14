@@ -24,9 +24,7 @@ __metaclass__ = type
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_l3_interfaces
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
 
@@ -38,30 +36,26 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         super(TestIosxrL3InterfacesModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
         self.mock_execute_show_command = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l3_interfaces.l3_interfaces.L3_InterfacesFacts.get_config"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l3_interfaces.l3_interfaces.L3_InterfacesFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -98,7 +92,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     ),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -120,7 +114,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     ),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",
@@ -144,10 +138,10 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                             dict(address="203.0.113.27/24"),
                             dict(address="203.0.114.1/24", secondary=True),
                         ],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",
@@ -190,7 +184,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     ),
                 ],
                 state="rendered",
-            )
+            ),
         )
 
         commands = [
@@ -212,7 +206,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                 "ipv6 address 2001:db8::/32\ninterface GigabitEthernet0/0/0/1\nipv4 address"
                 " 192.0.2.1 255.255.255.0\nipv4 address 192.0.2.2 255.255.255.0 secondary\n",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         print(result["parsed"])
@@ -242,10 +236,10 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                         name="GigabitEthernet0/0/0/1",
                         ipv4=[dict(address="198.51.102.1/24")],
                         ipv6=[dict(address="2001:db8:1::/64")],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",

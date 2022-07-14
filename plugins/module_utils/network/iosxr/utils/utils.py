@@ -117,11 +117,7 @@ def filter_dict_having_none_value(want, have):
                     test_dict.update({"ipv4": test_key_dict})
                 # Checks if want doesn't have secondary IP but have has secondary IP set
                 elif have.get("ipv4"):
-                    if [
-                        True
-                        for each_have in have.get("ipv4")
-                        if "secondary" in each_have
-                    ]:
+                    if [True for each_have in have.get("ipv4") if "secondary" in each_have]:
                         test_dict.update({"ipv4": {"secondary": True}})
         if k == "l2protocol":
             diff = True
@@ -231,15 +227,15 @@ def validate_ipv4(value, module):
         if len(address) != 2:
             module.fail_json(
                 msg="address format is <ipv4 address>/<mask>, got invalid format {0}".format(
-                    value
-                )
+                    value,
+                ),
             )
 
         if not is_masklen(address[1]):
             module.fail_json(
                 msg="invalid value for mask: {0}, mask should be in range 0-32".format(
-                    address[1]
-                )
+                    address[1],
+                ),
             )
 
 
@@ -249,15 +245,15 @@ def validate_ipv6(value, module):
         if len(address) != 2:
             module.fail_json(
                 msg="address format is <ipv6 address>/<mask>, got invalid format {0}".format(
-                    value
-                )
+                    value,
+                ),
             )
         else:
             if not 0 <= int(address[1]) <= 128:
                 module.fail_json(
                     msg="invalid value for mask: {0}, mask should be in range 0-128".format(
-                        address[1]
-                    )
+                        address[1],
+                    ),
                 )
 
 

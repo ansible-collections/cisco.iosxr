@@ -18,9 +18,7 @@ __metaclass__ = type
 
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lacp.lacp import (
     LacpArgs,
@@ -86,9 +84,7 @@ class LacpFacts(object):
         config = deepcopy(spec)
 
         system_priority = utils.parse_conf_arg(conf, "priority")
-        config["system"]["priority"] = (
-            int(system_priority) if system_priority else system_priority
-        )
+        config["system"]["priority"] = int(system_priority) if system_priority else system_priority
         config["system"]["mac"]["address"] = utils.parse_conf_arg(conf, "mac")
 
         return config
