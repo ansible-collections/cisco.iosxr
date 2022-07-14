@@ -1,7 +1,6 @@
 ---
-- debug:
-    msg: START iosxr_lag_interfaces rendered integration tests on connection={{
-      ansible_connection }}
+- ansible.builtin.debug:
+    msg: START iosxr_lag_interfaces rendered integration tests on connection={{ ansible_connection }}
 
 - name: Render platform specific commands from task input using rendered state
   register: result
@@ -27,6 +26,6 @@
     state: rendered
 
 - name: Assert that correct set of commands were rendered
-  assert:
+  ansible.builtin.assert:
     that:
       - rendered['commands'].sort() == result['rendered'].sort()

@@ -1,13 +1,12 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start iosxr_logging_global deleted integration tests connection={{ ansible_connection}}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_config.yaml
+- ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
-
     - name: Delete given logging_global configuration
       become: true
       register: result
@@ -18,7 +17,7 @@
       cisco.iosxr.iosxr_facts:
         gather_network_resources: logging_global
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 13
           - result.changed == true
@@ -29,11 +28,9 @@
       become: true
       register: result
       cisco.iosxr.iosxr_logging_global: *deleted
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

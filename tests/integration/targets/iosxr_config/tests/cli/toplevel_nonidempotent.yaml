@@ -1,14 +1,13 @@
 ---
-- debug: msg="START cli/toplevel_nonidempotent.yaml on connection={{ ansible_connection
-    }}"
+- ansible.builtin.debug: msg="START cli/toplevel_nonidempotent.yaml on connection={{ ansible_connection }}"
 
-- name: setup
+- name: Setup
   cisco.iosxr.iosxr_config:
     commands:
       - hostname {{ inventory_hostname_short }}
     match: none
 
-- name: configure top level command
+- name: Configure top level command
   register: result
   cisco.iosxr.iosxr_config:
     commands:
@@ -16,13 +15,13 @@
       - hostname foo
     match: strict
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'hostname foo' in result.commands"
       - "'banner motd \"hello world\"' in result.commands"
 
-- name: configure top level command idempotent check
+- name: Configure top level command idempotent check
   register: result
   cisco.iosxr.iosxr_config:
     commands:
@@ -30,15 +29,14 @@
       - hostname foo
     match: strict
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
-- name: teardown
+- name: Teardown
   cisco.iosxr.iosxr_config:
     commands:
       - hostname {{ inventory_hostname_short }}
     match: none
 
-- debug: msg="END cli/toplevel_nonidempotent.yaml on connection={{ ansible_connection
-    }}"
+- ansible.builtin.debug: msg="END cli/toplevel_nonidempotent.yaml on connection={{ ansible_connection }}"

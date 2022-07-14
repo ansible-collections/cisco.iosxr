@@ -1,24 +1,20 @@
 ---
-- debug:
-    msg: START iosxr_ospfv3 gathered integration tests on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START iosxr_ospfv3 gathered integration tests on connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_config.yaml
+- ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
-
-    - name: Gather Ospfv3 facts from the device using iosxr_ospfv3
-        module
+    - name: Gather ospfv3 facts from the device using iosxr_ospfv3 module
       register: result
       cisco.iosxr.iosxr_ospfv3:
         state: gathered
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - "{{ replaced['before'] == result['gathered'] }}"
           - "result.changed == false"
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

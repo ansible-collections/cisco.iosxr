@@ -1,13 +1,12 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start iosxr_bgp_address-family replaced integration tests connection={{ ansible_connection}}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_config1.yaml
+- ansible.builtin.include_tasks: _populate_config1.yaml
 
 - block:
-
     - name: Replaced given bgp_address_family configuration
       become: true
       register: result
@@ -29,7 +28,7 @@
                   metric: 4
         state: replaced
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 6
           - result.changed == true
@@ -40,23 +39,21 @@
       become: true
       register: result
       cisco.iosxr.iosxr_bgp_address_family: *replaced
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml
 
-- debug:
+- ansible.builtin.debug:
     msg: Start iosxr_bgp_address-family replaced integration tests(VRF) connection={{ ansible_connection}}
 
-- include_tasks: _populate_base_vrf.yaml
+- ansible.builtin.include_tasks: _populate_base_vrf.yaml
 
-- include_tasks: _populate_vrf.yaml
+- ansible.builtin.include_tasks: _populate_vrf.yaml
 
 - block:
-
     - name: Replaced given bgp_address_family configuration
       become: true
       register: result
@@ -70,7 +67,7 @@
               dynamic_med: 8
         state: replaced
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 5
           - result.changed == true
@@ -81,10 +78,9 @@
       become: true
       register: result
       cisco.iosxr.iosxr_bgp_address_family: *replaced1
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

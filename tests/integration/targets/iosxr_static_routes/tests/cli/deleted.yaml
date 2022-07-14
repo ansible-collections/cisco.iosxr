@@ -1,79 +1,68 @@
 ---
-- debug:
-    msg: Start iosxr_static_routes deleted integration tests ansible_connection={{
-      ansible_connection }}
+- ansible.builtin.debug:
+    msg: Start iosxr_static_routes deleted integration tests ansible_connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_config.yaml
+- ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
     - name: Delete all destination network entries under a single AFI
       register: result
-      cisco.iosxr.iosxr_static_routes: &id004
+      cisco.iosxr.iosxr_static_routes: &id001
         config:
-
           - vrf: DEV_SITE
             address_families:
-
               - afi: ipv4
                 safi: unicast
         state: deleted
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - '"router static" in result.commands'
           - '"vrf DEV_SITE" in result.commands'
           - '"no address-family ipv4 unicast" in result.commands'
           - result.commands|length == 3
 
-    - name: Delete all destination network entries under a single AFI (IDEMPOTENT)
+    - name: Delete all destination network entries under a single AFI (idempotent)
       register: result
-      cisco.iosxr.iosxr_static_routes: *id004
-
+      cisco.iosxr.iosxr_static_routes: *id001
     - name: Assert that the previous task was idempotent
-      assert: &id003
+      ansible.builtin.assert: &id003
         that:
           - result['changed'] == false
           - result.commands|length == 0
 
-    - include_tasks: _populate_config.yaml
+    - ansible.builtin.include_tasks: _populate_config.yaml
 
     - name: Delete static routes configuration
       register: result
-      cisco.iosxr.iosxr_static_routes: &id005
+      cisco.iosxr.iosxr_static_routes: &id002
         state: deleted
 
     - name: Assert that the before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ replaced['before'] | symmetric_difference(result['before']) |length\
-            \ == 0 }}"
+          - "{{ replaced['before'] | symmetric_difference(result['before']) |length == 0 }}"
 
     - name: Assert that the correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ deleted['commands'] | symmetric_difference(result['commands']) |length\
-            \ == 0 }}"
+          - "{{ deleted['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that the after dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ deleted['after'] | symmetric_difference(result['after']) |length\
-            \ == 0 }}"
+          - "{{ deleted['after'] | symmetric_difference(result['after']) |length == 0 }}"
 
-    - name: Delete all static routes (IDEMPOTENT)
+    - name: Delete all static routes (idempotent)
       register: result
-      cisco.iosxr.iosxr_static_routes: *id005
-
+      cisco.iosxr.iosxr_static_routes: *id002
     - name: Assert that the previous task was idempotent
-      assert: *id003
-
+      ansible.builtin.assert: *id003
     - name: Assert that the before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ deleted['after'] | symmetric_difference(result['before']) |length\
-            \ == 0 }}"
+          - "{{ deleted['after'] | symmetric_difference(result['before']) |length == 0 }}"
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

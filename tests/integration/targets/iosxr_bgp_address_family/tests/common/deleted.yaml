@@ -1,13 +1,12 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start iosxr_bgp_address_family deleted integration tests connection={{ ansible_connection}}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_config.yaml
+- ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
-
     - name: Delete given bgp_address_family configuration
       become: true
       register: result
@@ -15,8 +14,7 @@
         config:
         state: deleted
 
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 2
           - result.changed == true
@@ -27,23 +25,21 @@
       become: true
       register: result
       cisco.iosxr.iosxr_bgp_address_family: *deleted
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml
 
-- debug:
+- ansible.builtin.debug:
     msg: Start iosxr_bgp_address_family deleted integration tests with multiple afs connection={{ ansible_connection}}
 
-- include_tasks: _populate_base_vrf.yaml
+- ansible.builtin.include_tasks: _populate_base_vrf.yaml
 
-- include_tasks: _populate_vrf.yaml
+- ansible.builtin.include_tasks: _populate_vrf.yaml
 
 - block:
-
     - name: Deleted given bgp_address_family configuration
       become: true
       register: result
@@ -57,7 +53,7 @@
               dynamic_med: 9
         state: deleted
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 3
           - result.changed == true
@@ -65,4 +61,4 @@
           - deleted['vrf']['commands'] == result['commands']
 
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

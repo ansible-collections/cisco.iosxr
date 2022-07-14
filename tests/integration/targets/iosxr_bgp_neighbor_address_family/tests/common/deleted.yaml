@@ -1,15 +1,14 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start iosxr_bgp_nbr_address_family deleted integration tests connection={{ ansible_connection}}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_base_config.yaml
+- ansible.builtin.include_tasks: _populate_base_config.yaml
 
-- include_tasks: _populate_config.yaml
+- ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
-
     - name: Delete given bgp_nbr_address_family configuration
       become: true
       register: result
@@ -17,8 +16,7 @@
         config:
         state: deleted
 
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 3
           - result.changed == true
@@ -29,27 +27,25 @@
       become: true
       register: result
       cisco.iosxr.iosxr_bgp_neighbor_address_family: *deleted
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml
 
-
-- debug:
+- ansible.builtin.debug:
     msg: Start iosxr_bgp_nbr_address_family deleted integration tests (for multipale af) connection={{ ansible_connection}}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_vrf_base_config.yaml
+- ansible.builtin.include_tasks: _populate_vrf_base_config.yaml
 
-- include_tasks: _populate_vrf_config.yaml
+- ansible.builtin.include_tasks: _populate_vrf_config.yaml
 
 - block:
-    - name: delete only one af between multiple af present on device.
-      cisco.iosxr.iosxr_bgp_neighbor_address_family: &id002
+    - name: Delete only one AF between multiple AF present on device.
+      cisco.iosxr.iosxr_bgp_neighbor_address_family:
         state: deleted
         config:
           as_number: 65536
@@ -66,10 +62,10 @@
                       capability_orf_prefix: both
       register: result
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 4
           - result.changed == true
           - "'no router bgp 65536' not in result.commands"
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

@@ -1,19 +1,15 @@
 ---
-- debug:
-    msg: START iosxr_acls rendered integration tests on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START iosxr_acls rendered integration tests on connection={{ ansible_connection }}
 
 - name: Render platform specific commands from task input using rendered state
   register: result
   cisco.iosxr.iosxr_acls:
     config:
-
       - afi: ipv6
         acls:
-
           - name: acl6_1
             aces:
-
               - sequence: 10
                 grant: deny
                 protocol: tcp
@@ -51,10 +47,8 @@
 
       - afi: ipv4
         acls:
-
           - name: acl_1
             aces:
-
               - sequence: 16
                 remark: TEST_ACL_1_REMARK
 
@@ -89,13 +83,11 @@
 
           - name: acl_2
             aces:
-
               - sequence: 10
                 remark: TEST_ACL_2_REMARK
     state: rendered
 
 - name: Assert that correct set of commands were rendered
-  assert:
+  ansible.builtin.assert:
     that:
-      - "{{ merged['commands'] | symmetric_difference(result['rendered']) |length\
-        \ == 0 }}"
+      - "{{ merged['commands'] | symmetric_difference(result['rendered']) |length == 0 }}"

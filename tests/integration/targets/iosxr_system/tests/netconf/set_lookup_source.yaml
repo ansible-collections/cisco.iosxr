@@ -1,9 +1,8 @@
 ---
-- debug:
-    msg: START netconf/set_lookup_source.yaml on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START netconf/set_lookup_source.yaml on connection={{ ansible_connection }}
 
-- name: setup
+- name: Setup
   connection: ansible.netcommon.network_cli
   cisco.iosxr.iosxr_config:
     lines:
@@ -12,151 +11,144 @@
       - no domain lookup disable
       - no domain vrf ansiblevrf lookup disable
     match: none
-    provider: '{{ cli }}'
+    provider: "{{ cli }}"
 
-- name: configure lookup_source
+- name: Configure lookup_source
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id001
     lookup_source: Loopback10
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'Loopback10' in result.xml[0]"
 
-- name: verify lookup_source
+- name: Verify lookup_source
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id001
-
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: disable lookup
+- name: Disable lookup
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id002
     lookup_enabled: false
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'lookup' in result.xml[0]"
 
-- name: verify disable lookup
+- name: Verify disable lookup
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id002
-
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: delete lookup_source
+- name: Delete lookup_source
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id003
     lookup_source: Loopback10
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
     state: absent
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'Loopback10' in result.xml[0]"
 
-- name: verify lookup_source
+- name: Verify lookup_source
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id003
-
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: configure lookup_source with vrf
+- name: Configure lookup_source with VRF
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id004
     lookup_source: Loopback10
     vrf: ansiblevrf
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'Loopback10' in result.xml[0]"
       - "'ansiblevrf' in result.xml[0]"
 
-- name: verify lookup_source
+- name: Verify lookup_source
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id004
-
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: disable lookup
+- name: Disable lookup
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id005
     lookup_enabled: false
     vrf: ansiblevrf
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'lookup' in result.xml[0]"
       - "'ansiblevrf' in result.xml[0]"
 
-- name: verify disable lookup
+- name: Verify disable lookup
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id005
-
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: delete lookup_source
+- name: Delete lookup_source
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id006
     lookup_source: Loopback10
     vrf: ansiblevrf
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
     state: absent
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'Loopback10' in result.xml[0]"
       - "'ansiblevrf' in result.xml[0]"
 
-- name: verify lookup_source
+- name: Verify lookup_source
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id006
-
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: teardown
+- name: Teardown
   connection: ansible.netcommon.network_cli
   cisco.iosxr.iosxr_config:
     lines:
       - no domain lookup disable
       - no domain vrf ansiblevrf lookup disable
     match: none
-    provider: '{{ cli }}'
+    provider: "{{ cli }}"
 
-- debug:
-    msg: END netconf/set_lookup_source.yaml on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: END netconf/set_lookup_source.yaml on connection={{ ansible_connection }}

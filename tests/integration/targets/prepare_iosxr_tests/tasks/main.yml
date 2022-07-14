@@ -4,7 +4,7 @@
   cisco.iosxr.iosxr_config:
     src: config.j2
 
-- name: Enable Netconf service
+- name: Enable netconf service
   connection: ansible.netcommon.network_cli
   tags: netconf
   cisco.iosxr.iosxr_netconf:
@@ -12,5 +12,5 @@
     netconf_vrf: default
     state: present
 
-- set_fact:
+- ansible.builtin.set_fact:
     shorter_hostname: '{{ inventory_hostname_short| truncate(10, True, "") }}'

@@ -1,13 +1,13 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start iosxr_snmp_server replaced integration tests connection={{ ansible_connection}}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_config.yaml
+- ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
-    - name: Replace Snmp-server configuration with provided configuration
+    - name: Replace snmp-server configuration with provided configuration
       cisco.iosxr.iosxr_snmp_server: &replace
         state: replaced
         config:
@@ -83,33 +83,32 @@
             msdp_peer_state_change: true
       register: result
 
-    - debug:
+    - ansible.builtin.debug:
         msg: "{{ replaced['commands'] | symmetric_difference(result['commands']) }}"
 
     - name: Assert that correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ replaced['commands'] | symmetric_difference(result['commands'])\
-            \ |length == 0 }}"
+          - "{{ replaced['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that after dict is correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - replaced['after'] == result['after']
 
     - name: Assert that before dicts are correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - merged['after'] == result['before']
 
-    - name: Replace the provided configuration with the existing running configuration (IDEMPOTENT)
+    - name: Replace the provided configuration with the existing running configuration (idempotent)
       cisco.iosxr.iosxr_snmp_server: *replace
       register: result
 
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
           - result.commands|length == 0
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

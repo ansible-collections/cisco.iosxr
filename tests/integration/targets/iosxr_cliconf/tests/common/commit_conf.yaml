@@ -1,8 +1,6 @@
 ---
-- debug:
-    msg:
-      START iosxr_cliconf integration tests on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START iosxr_cliconf integration tests on connection={{ ansible_connection }}
 
 - name: Apply interface description
   register: result
@@ -19,7 +17,7 @@
   when: result["changed"] == true
 
 - name: Sleep for 35 sec.
-  wait_for:
+  ansible.builtin.wait_for:
     timeout: 35
   when: result["changed"] == true
 
@@ -30,6 +28,6 @@
       - "show interfaces GigabitEthernet 0/0/0/2 | include Description"
   ignore_errors: true
 
-- assert:
+- ansible.builtin.assert:
     that:
       - "'TestCommitConfirmed' in get_desc.stdout[0]"
