@@ -1,8 +1,7 @@
 ---
-- debug: msg="START cli/misplaced_sublevel.yaml on connection={{ ansible_connection
-    }}"
+- ansible.builtin.debug: msg="START cli/misplaced_sublevel.yaml on connection={{ ansible_connection }}"
 
-- name: setup
+- name: Setup
   ignore_errors: true
   cisco.iosxr.iosxr_config:
     src: basic/init_prefix_set.j2
@@ -12,18 +11,17 @@
   cisco.iosxr.iosxr_config:
     src: basic/change_prefix_set.j2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
-- name: Play same config again to verify no diff in prefix-set also works
+- name: Play same configuration again to verify no diff in prefix-set also works
   register: result
   cisco.iosxr.iosxr_config:
     src: basic/change_prefix_set.j2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- debug: msg="END cli/misplaced_sublevel.yaml on connection={{ ansible_connection
-    }}"
+- ansible.builtin.debug: msg="END cli/misplaced_sublevel.yaml on connection={{ ansible_connection }}"

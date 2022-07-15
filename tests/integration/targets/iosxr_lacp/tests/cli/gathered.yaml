@@ -1,12 +1,10 @@
 ---
-- debug:
-    msg: START iosxr_lacp gathered integration tests on connection={{
-      ansible_connection }}
+- ansible.builtin.debug:
+    msg: START iosxr_lacp gathered integration tests on connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
     - name: Gather the provided configuration with the existing running configuration
       register: result
       cisco.iosxr.iosxr_lacp:
@@ -17,14 +15,13 @@
               address: 00c1.4c00.bd15
         state: merged
 
-    - name: Gather LACP facts using gathered state
+    - name: Gather lacp facts using gathered state
       register: result
       cisco.iosxr.iosxr_lacp:
         state: gathered
 
     - name: Assert that facts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that: "{{ merged['after'] == result['gathered'] }}"
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

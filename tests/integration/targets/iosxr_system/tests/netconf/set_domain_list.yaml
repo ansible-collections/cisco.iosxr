@@ -1,9 +1,8 @@
 ---
-- debug:
-    msg: START netconf/set_domain_search.yaml on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START netconf/set_domain_search.yaml on connection={{ ansible_connection }}
 
-- name: setup
+- name: Setup
   connection: ansible.netcommon.network_cli
   cisco.iosxr.iosxr_config:
     lines:
@@ -13,24 +12,24 @@
       - no domain vrf ansiblevrf list redhat.com
       - no domain vrf ansiblevrf list ansible.com
     match: none
-    provider: '{{ cli }}'
+    provider: "{{ cli }}"
 
-- name: configure domain_search
+- name: Configure domain_search
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
       - redhat.com
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'ansible.com' in result.xml[0]"
       - "'redhat.com' in result.xml[0]"
 
-- name: configure domain_search with vrf
+- name: Configure domain_search with VRF
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id001
@@ -38,130 +37,128 @@
     domain_search:
       - redhat.com
       - ansible.com
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'ansiblevrf' in result.xml[0]"
       - "'ansible.com' in result.xml[0]"
       - "'redhat.com' in result.xml[0]"
 
-- name: verify domain_search with vrf
+- name: Verify domain_search with VRF
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id001
-
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: delete domain_search with vrf
+- name: Delete domain_search with VRF
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id002
     vrf: ansiblevrf
     domain_search:
       - redhat.com
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'ansiblevrf' in result.xml[0]"
       - "'ansible.com' in result.xml[0]"
 
-- name: verify delete domain_search with vrf
+- name: Verify delete domain_search with VRF
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id002
-
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: remove one entry
+- name: Remove one entry
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'redhat.com' in result.xml[0]"
 
-- name: verify remove one entry
+- name: Verify remove one entry
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: add one entry
+- name: Add one entry
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
       - redhat.com
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'redhat.com' in result.xml[0]"
 
-- name: verify add one entry
+- name: Verify add one entry
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
       - redhat.com
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: add and remove one entry
+- name: Add and remove one entry
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
       - eng.ansible.com
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'redhat.com' in result.xml[1]"
       - "'eng.ansible.com' in result.xml[0]"
       - result.xml|length == 2
 
-- name: verify add and remove one entry
+- name: Verify add and remove one entry
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
       - eng.ansible.com
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: teardown
+- name: Teardown
   connection: ansible.netcommon.network_cli
   cisco.iosxr.iosxr_config:
     lines:
@@ -172,8 +169,7 @@
       - no domain vrf ansiblevrf list ansible.com
       - no domain vrf ansiblevrf list eng.ansible.com
     match: none
-    provider: '{{ cli }}'
+    provider: "{{ cli }}"
 
-- debug:
-    msg: END netconf/set_domain_search.yaml on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: END netconf/set_domain_search.yaml on connection={{ ansible_connection }}

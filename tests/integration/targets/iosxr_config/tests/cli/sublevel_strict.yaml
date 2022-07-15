@@ -1,8 +1,7 @@
 ---
-- debug: msg="START cli/sublevel_strict.yaml on connection={{ ansible_connection
-    }}"
+- ansible.builtin.debug: msg="START cli/sublevel_strict.yaml on connection={{ ansible_connection }}"
 
-- name: setup
+- name: Setup
   cisco.iosxr.iosxr_config:
     commands:
       - 10 permit ipv4 host 192.0.2.1 any log
@@ -16,7 +15,7 @@
       - no ipv4 access-list test
     match: none
 
-- name: configure sub level command using strict match
+- name: Configure sub level command using strict match
   register: result
   cisco.iosxr.iosxr_config:
     commands:
@@ -31,7 +30,7 @@
     match: strict
     replace: block
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'ipv4 access-list test' in result.commands"
@@ -41,7 +40,7 @@
       - "'40 permit ipv4 host 192.0.2.4 any log' in result.commands"
       - "'50 permit ipv4 host 192.0.2.5 any log' not in result.commands"
 
-- name: check sub level command using strict match
+- name: Check sub level command using strict match
   register: result
   cisco.iosxr.iosxr_config:
     commands:
@@ -53,14 +52,14 @@
       - ipv4 access-list test
     match: strict
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: teardown
+- name: Teardown
   cisco.iosxr.iosxr_config:
     commands:
       - no ipv4 access-list test
     match: none
 
-- debug: msg="END cli/sublevel_strict.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/sublevel_strict.yaml on connection={{ ansible_connection }}"

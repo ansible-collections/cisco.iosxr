@@ -1,48 +1,43 @@
 ---
-- debug:
-    msg: Start iosxr_lldp_global deleted integration tests ansible_connection={{
-      ansible_connection }}
+- ansible.builtin.debug:
+    msg: Start iosxr_lldp_global deleted integration tests ansible_connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
-    - name: Delete global LLDP attributes
+    - name: Delete global lldp attributes
       register: result
       cisco.iosxr.iosxr_lldp_global: &id001
         state: deleted
 
     - name: Assert that the before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ merged['after'] == result['before'] }}"
 
     - name: Assert that the correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ deleted['commands'] | symmetric_difference(result['commands']) |length\
-            \ == 0 }}"
+          - "{{ deleted['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that the after dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ deleted['after'] == result['after'] }}"
 
-    - name: Delete attributes of given interfaces (IDEMPOTENT)
+    - name: Delete attributes of given interfaces (idempotent)
       register: result
       cisco.iosxr.iosxr_lldp_global: *id001
-
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result.changed == false
 
     - name: Assert that the before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ deleted['after'] == result['before'] }}"
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

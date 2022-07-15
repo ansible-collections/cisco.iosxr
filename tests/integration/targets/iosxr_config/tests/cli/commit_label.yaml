@@ -1,7 +1,7 @@
 ---
-- debug: msg="START cli/commit_label.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/commit_label.yaml on connection={{ ansible_connection }}"
 
-- name: setup
+- name: Setup
   cisco.iosxr.iosxr_config:
     commands:
       - no description
@@ -10,22 +10,22 @@
       - interface Loopback999
     match: none
 
-- name: get a unique and valid label
-  set_fact:
+- name: Get a unique and valid label
+  ansible.builtin.set_fact:
     label: ansible_{{ 1001 | random | to_uuid | truncate(20, true, '_') }}
 
-- name: configure device with a label and a comment
+- name: Configure device with a label and a comment
   register: result
   cisco.iosxr.iosxr_config:
     src: basic/config.j2
     comment: this is sensible commit message
-    label: '{{ label }}'
+    label: "{{ label }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
-- name: setup
+- name: Setup
   cisco.iosxr.iosxr_config:
     commands:
       - no description
@@ -39,14 +39,14 @@
   ignore_errors: true
   cisco.iosxr.iosxr_config:
     src: basic/config.j2
-    label: '{{ label }}'
+    label: "{{ label }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - "'already used' in result.msg"
 
-- name: setup
+- name: Setup
   cisco.iosxr.iosxr_config:
     commands:
       - no description
@@ -62,9 +62,9 @@
     src: basic/config.j2
     label: ansible_iosxr_config_$
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - "'only contain alphabets' in result.msg"
 
-- debug: msg="END cli/commit_label.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/commit_label.yaml on connection={{ ansible_connection }}"

@@ -1,12 +1,12 @@
 ---
-- debug: msg="START cli/extcommunity_set_config.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/extcommunity_set_config.yaml on connection={{ ansible_connection }}"
 
-- name: pre-setup cleanup
+- name: Pre-setup cleanup
   cisco.iosxr.iosxr_config:
     commands:
       - no extcommunity-set rt test_set
 
-- name: setup
+- name: Setup
   register: result
   cisco.iosxr.iosxr_config:
     lines:
@@ -14,14 +14,13 @@
       - end-set
     parents: extcommunity-set rt test_set
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
-- name: post-setup cleanup
+- name: Post-setup cleanup
   cisco.iosxr.iosxr_config:
     commands:
       - no extcommunity-set rt test_set
 
-
-- debug: msg="END cli/ on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/ on connection={{ ansible_connection }}"

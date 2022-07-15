@@ -1,10 +1,10 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: START iosxr_bgp_neighbor_af rendered integration tests on connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_base_config.yaml
+- ansible.builtin.include_tasks: _populate_base_config.yaml
 
 - name: Render platform specific configuration lines with state rendered (without connecting to the device)
   cisco.iosxr.iosxr_bgp_neighbor_address_family:
@@ -49,6 +49,6 @@
   register: result
 
 - name: Assert that correct set of commands were rendered
-  assert:
+  ansible.builtin.assert:
     that:
       - rendered['commands'] == result['rendered']
