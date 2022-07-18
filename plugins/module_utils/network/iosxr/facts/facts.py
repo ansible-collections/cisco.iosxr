@@ -94,7 +94,10 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.st
 
 
 FACT_LEGACY_SUBSETS = dict(
-    default=Default, hardware=Hardware, interfaces=Interfaces, config=Config
+    default=Default,
+    hardware=Hardware,
+    interfaces=Interfaces,
+    config=Config,
 )
 FACT_RESOURCE_SUBSETS = dict(
     lacp=LacpFacts,
@@ -132,7 +135,10 @@ class Facts(FactsBase):
         super(Facts, self).__init__(module)
 
     def get_facts(
-        self, legacy_facts_type=None, resource_facts_type=None, data=None
+        self,
+        legacy_facts_type=None,
+        resource_facts_type=None,
+        data=None,
     ):
         """Collect the facts for iosxr
 
@@ -144,12 +150,15 @@ class Facts(FactsBase):
         """
         if self.VALID_RESOURCE_SUBSETS:
             self.get_network_resources_facts(
-                FACT_RESOURCE_SUBSETS, resource_facts_type, data
+                FACT_RESOURCE_SUBSETS,
+                resource_facts_type,
+                data,
             )
 
         if self.VALID_LEGACY_GATHER_SUBSETS:
             self.get_network_legacy_facts(
-                FACT_LEGACY_SUBSETS, legacy_facts_type
+                FACT_LEGACY_SUBSETS,
+                legacy_facts_type,
             )
 
         return self.ansible_facts, self._warnings

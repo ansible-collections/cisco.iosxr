@@ -28,9 +28,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     to_list,
 )
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 
 
 class Static_routes(ConfigBase):
@@ -52,10 +50,12 @@ class Static_routes(ConfigBase):
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         static_routes_facts = facts["ansible_network_resources"].get(
-            "static_routes"
+            "static_routes",
         )
         if not static_routes_facts:
             return []
@@ -97,10 +97,10 @@ class Static_routes(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_static_routes_facts(
-                data=running_config
+                data=running_config,
             )
 
         if self.state in self.ACTION_STATES:
@@ -139,14 +139,11 @@ class Static_routes(ConfigBase):
         state = self._module.params["state"]
         commands = []
 
-        if (
-            state in ("overridden", "merged", "replaced", "rendered")
-            and not want
-        ):
+        if state in ("overridden", "merged", "replaced", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    state
-                )
+                    state,
+                ),
             )
 
         if state == "overridden":
@@ -163,8 +160,9 @@ class Static_routes(ConfigBase):
                     if obj_in_have:
                         commands.extend(
                             self._state_deleted(
-                                remove_empties(w_item), obj_in_have
-                            )
+                                remove_empties(w_item),
+                                obj_in_have,
+                            ),
                         )
 
         else:
@@ -172,14 +170,18 @@ class Static_routes(ConfigBase):
                 obj_in_have = self._find_vrf(w_item, have)
                 if state == "merged" or self.state == "rendered":
                     commands.extend(
-                        self._state_merged(remove_empties(w_item), obj_in_have)
+                        self._state_merged(
+                            remove_empties(w_item),
+                            obj_in_have,
+                        ),
                     )
 
                 elif state == "replaced":
                     commands.extend(
                         self._state_replaced(
-                            remove_empties(w_item), obj_in_have
-                        )
+                            remove_empties(w_item),
+                            obj_in_have,
+                        ),
                     )
 
         if commands:
@@ -199,7 +201,8 @@ class Static_routes(ConfigBase):
         for want_afi in want.get("address_families", []):
             have_afi = (
                 self.find_af_context(
-                    want_afi, have.get("address_families", [])
+                    want_afi,
+                    have.get("address_families", []),
                 )
                 or {}
             )
@@ -215,10 +218,10 @@ class Static_routes(ConfigBase):
                 )
 
                 rotated_have_next_hops = self.rotate_next_hops(
-                    have_route.get("next_hops", {})
+                    have_route.get("next_hops", {}),
                 )
                 rotated_want_next_hops = self.rotate_next_hops(
-                    want_route.get("next_hops", {})
+                    want_route.get("next_hops", {}),
                 )
 
                 for key in rotated_have_next_hops.keys():
@@ -248,14 +251,15 @@ class Static_routes(ConfigBase):
                                 dest=want_route["dest"],
                                 next_hop=key,
                                 updates=updates,
-                            )
+                            ),
                         )
 
             if update_commands:
                 update_commands.insert(
                     0,
                     "address-family {0} {1}".format(
-                        want_afi["afi"], want_afi["safi"]
+                        want_afi["afi"],
+                        want_afi["safi"],
                     ),
                 )
                 commands.extend(update_commands)
@@ -290,8 +294,9 @@ class Static_routes(ConfigBase):
                     for have_afi in h_item.get("address_families", []):
                         commands.append(
                             "no address-family {0} {1}".format(
-                                have_afi["afi"], have_afi["safi"]
-                            )
+                                have_afi["afi"],
+                                have_afi["safi"],
+                            ),
                         )
 
             # For VRFs/Global Entry present in want, we also need to delete extraneous routes
@@ -302,7 +307,8 @@ class Static_routes(ConfigBase):
                 for have_afi in h_item.get("address_families", []):
                     want_afi = (
                         self.find_af_context(
-                            have_afi, w_item.get("address_families", [])
+                            have_afi,
+                            w_item.get("address_families", []),
                         )
                         or {}
                     )
@@ -318,14 +324,15 @@ class Static_routes(ConfigBase):
                         )
                         if not w_route:
                             update_commands.append(
-                                "no {0}".format(h_route["dest"])
+                                "no {0}".format(h_route["dest"]),
                             )
 
                     if update_commands:
                         update_commands.insert(
                             0,
                             "address-family {0} {1}".format(
-                                want_afi["afi"], want_afi["safi"]
+                                want_afi["afi"],
+                                want_afi["safi"],
                             ),
                         )
                         del_cmds.extend(update_commands)
@@ -340,7 +347,7 @@ class Static_routes(ConfigBase):
         for w_item in want:
             h_item = self._find_vrf(w_item, have)
             commands.extend(
-                self._state_replaced(remove_empties(w_item), h_item)
+                self._state_replaced(remove_empties(w_item), h_item),
             )
 
         return commands
@@ -357,7 +364,8 @@ class Static_routes(ConfigBase):
         for want_afi in want.get("address_families", []):
             have_afi = (
                 self.find_af_context(
-                    want_afi, have.get("address_families", [])
+                    want_afi,
+                    have.get("address_families", []),
                 )
                 or {}
             )
@@ -380,10 +388,10 @@ class Static_routes(ConfigBase):
                 # in case `dest_vrf` is not specified, `forward_router_address` and `interface`
                 # become the unique identifier
                 rotated_have_next_hops = self.rotate_next_hops(
-                    have_route.get("next_hops", {})
+                    have_route.get("next_hops", {}),
                 )
                 rotated_want_next_hops = self.rotate_next_hops(
-                    want_route.get("next_hops", {})
+                    want_route.get("next_hops", {}),
                 )
 
                 # for every dict in the want next_hops dictionaries, if the key
@@ -413,14 +421,15 @@ class Static_routes(ConfigBase):
                                     rotated_have_next_hops.get(key, {}),
                                     updates,
                                 ),
-                            )
+                            ),
                         )
 
             if update_commands:
                 update_commands.insert(
                     0,
                     "address-family {0} {1}".format(
-                        want_afi["afi"], want_afi["safi"]
+                        want_afi["afi"],
+                        want_afi["safi"],
                     ),
                 )
                 commands.extend(update_commands)
@@ -445,15 +454,17 @@ class Static_routes(ConfigBase):
             for want_afi in want.get("address_families", []):
                 have_afi = (
                     self.find_af_context(
-                        want_afi, have.get("address_families", [])
+                        want_afi,
+                        have.get("address_families", []),
                     )
                     or {}
                 )
                 if have_afi:
                     commands.append(
                         "no address-family {0} {1}".format(
-                            have_afi["afi"], have_afi["safi"]
-                        )
+                            have_afi["afi"],
+                            have_afi["safi"],
+                        ),
                     )
             if "vrf" in want and commands:
                 commands.insert(0, "vrf {0}".format(want["vrf"]))

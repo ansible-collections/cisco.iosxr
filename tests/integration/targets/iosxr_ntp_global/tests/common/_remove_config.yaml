@@ -1,5 +1,5 @@
 ---
-- name: "Remove ntp global config"
+- name: "Remove ntp global configuration"
   cisco.iosxr.iosxr_ntp_global:
     state: deleted
   vars:

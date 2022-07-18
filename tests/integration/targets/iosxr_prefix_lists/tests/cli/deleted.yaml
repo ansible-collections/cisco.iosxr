@@ -1,67 +1,60 @@
 ---
-- debug:
-    msg: Start iosxr_prefix_list deleted integration tests ansible_connection={{
-      ansible_connection }}
+- ansible.builtin.debug:
+    msg: Start iosxr_prefix_list deleted integration tests ansible_connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_config.yaml
+- ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
-    - name: Delete Prefix-list by afi.
+    - name: Delete prefix-list by afi.
       register: result
-      cisco.iosxr.iosxr_prefix_lists: &id002
+      cisco.iosxr.iosxr_prefix_lists: &id001
         config:
           - afi: ipv6
         state: deleted
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - '"no ipv6 prefix-list pl_1" in result.commands'
           - result.commands|length == 1
 
-    - name: Delete a single Prefix-list by name (IDEMPOTENT)
+    - name: Delete a single prefix-list by name (idempotent)
       register: result
-      cisco.iosxr.iosxr_prefix_lists: *id002
-
+      cisco.iosxr.iosxr_prefix_lists: *id001
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result.changed == false
           - result.commands|length == 0
 
-    - include_tasks: _populate_config.yaml
-
+    - ansible.builtin.include_tasks: _populate_config.yaml
 
     - name: Delete all prefix-lists from the device
       register: result
-      cisco.iosxr.iosxr_prefix_lists: &id003
+      cisco.iosxr.iosxr_prefix_lists: &id002
         state: deleted
 
     - name: Assert that the before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['after'] | symmetric_difference(result['before']) |length\
-            \ == 0 }}"
+          - "{{ merged['after'] | symmetric_difference(result['before']) |length == 0 }}"
 
     - name: Assert that the correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ deleted['commands'] | symmetric_difference(result['commands']) |length\
-            \ == 0 }}"
+          - "{{ deleted['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ deleted['after'] | symmetric_difference(result['after']) |length\
-            \ == 0 }}"
+          - "{{ deleted['after'] | symmetric_difference(result['after']) |length == 0 }}"
 
-    - name: Delete all prefix_lists from the device (IDEMPOTENT)
+    - name: Delete all prefix_lists from the device (idempotent)
       register: result
-      cisco.iosxr.iosxr_prefix_lists: *id003
-
+      cisco.iosxr.iosxr_prefix_lists: *id002
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result.changed == false
           - result.commands|length == 0

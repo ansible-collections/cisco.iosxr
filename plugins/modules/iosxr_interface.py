@@ -412,15 +412,13 @@ class CliConfiguration(ConfigBase):
     def map_config_to_obj(self):
         data = get_config(self._module, config_filter="interface")
         data_lines = data.splitlines()
-        start_indexes = [
-            i for i, e in enumerate(data_lines) if e.startswith("interface")
-        ]
+        start_indexes = [i for i, e in enumerate(data_lines) if e.startswith("interface")]
         end_indexes = [i for i, e in enumerate(data_lines) if e == "!"]
 
         intf_configs = list()
         for start_index, end_index in zip(start_indexes, end_indexes):
             intf_configs.append(
-                [i.strip() for i in data_lines[start_index:end_index]]
+                [i.strip() for i in data_lines[start_index:end_index]],
             )
 
         if not intf_configs:
@@ -437,7 +435,8 @@ class CliConfiguration(ConfigBase):
             obj = {
                 "name": name,
                 "description": self.parse_config_argument(
-                    intf_config, "description"
+                    intf_config,
+                    "description",
                 ),
                 "speed": self.parse_config_argument(intf_config, "speed"),
                 "duplex": self.parse_config_argument(intf_config, "duplex"),
@@ -470,13 +469,7 @@ class CliConfiguration(ConfigBase):
                         running = obj_in_have.get(item)
                         if candidate != running:
                             if candidate:
-                                cmd = (
-                                    interface
-                                    + " "
-                                    + item
-                                    + " "
-                                    + str(candidate)
-                                )
+                                cmd = interface + " " + item + " " + str(candidate)
                                 commands.append(cmd)
 
                     if disable and obj_in_have.get("enabled", False):
@@ -488,7 +481,7 @@ class CliConfiguration(ConfigBase):
                         value = want_item.get(item)
                         if value:
                             commands.append(
-                                interface + " " + item + " " + str(value)
+                                interface + " " + item + " " + str(value),
                             )
                     if not disable:
                         commands.append("no " + interface + " shutdown")
@@ -507,11 +500,7 @@ class CliConfiguration(ConfigBase):
             want_state = want_item.get("state")
             want_tx_rate = want_item.get("tx_rate")
             want_rx_rate = want_item.get("rx_rate")
-            if (
-                want_state not in ("up", "down")
-                and not want_tx_rate
-                and not want_rx_rate
-            ):
+            if want_state not in ("up", "down") and not want_tx_rate and not want_rx_rate:
                 continue
 
             if self._result["changed"]:
@@ -527,16 +516,19 @@ class CliConfiguration(ConfigBase):
                     have_state = match.group(1)
                     if have_state.strip() == "administratively":
                         match = re.search(
-                            r"%s (\w+)" % "administratively", out, re.M
+                            r"%s (\w+)" % "administratively",
+                            out,
+                            re.M,
                         )
                         if match:
                             have_state = match.group(1)
 
                 if have_state is None or not conditional(
-                    want_state, have_state.strip()
+                    want_state,
+                    have_state.strip(),
                 ):
                     failed_conditions.append(
-                        "state " + "eq({0!s})".format(want_state)
+                        "state " + "eq({0!s})".format(want_state),
                     )
 
             if want_tx_rate:
@@ -546,7 +538,9 @@ class CliConfiguration(ConfigBase):
                     have_tx_rate = match.group(1)
 
                 if have_tx_rate is None or not conditional(
-                    want_tx_rate, have_tx_rate.strip(), cast=int
+                    want_tx_rate,
+                    have_tx_rate.strip(),
+                    cast=int,
                 ):
                     failed_conditions.append("tx_rate " + want_tx_rate)
 
@@ -557,14 +551,17 @@ class CliConfiguration(ConfigBase):
                     have_rx_rate = match.group(1)
 
                 if have_rx_rate is None or not conditional(
-                    want_rx_rate, have_rx_rate.strip(), cast=int
+                    want_rx_rate,
+                    have_rx_rate.strip(),
+                    cast=int,
                 ):
                     failed_conditions.append("rx_rate " + want_rx_rate)
 
         if failed_conditions:
             msg = "One or more conditional statements have not been satisfied"
             self._module.fail_json(
-                msg=msg, failed_conditions=failed_conditions
+                msg=msg,
+                failed_conditions=failed_conditions,
             )
 
     def run(self):
@@ -606,7 +603,7 @@ class NCConfiguration(ConfigBase):
                 (
                     "a:name",
                     {
-                        "xpath": "interface-configurations/interface-configuration/interface-name"
+                        "xpath": "interface-configurations/interface-configuration/interface-name",
                     },
                 ),
                 (
@@ -669,7 +666,7 @@ class NCConfiguration(ConfigBase):
                         "operation": "edit",
                     },
                 ),
-            ]
+            ],
         )
 
         self._shut_meta.update(
@@ -691,7 +688,7 @@ class NCConfiguration(ConfigBase):
                 (
                     "a:name",
                     {
-                        "xpath": "interface-configurations/interface-configuration/interface-name"
+                        "xpath": "interface-configurations/interface-configuration/interface-name",
                     },
                 ),
                 (
@@ -703,7 +700,7 @@ class NCConfiguration(ConfigBase):
                         "attrib": "operation",
                     },
                 ),
-            ]
+            ],
         )
         state = self._module.params["state"]
 
@@ -715,7 +712,9 @@ class NCConfiguration(ConfigBase):
         )
 
         running = get_config(
-            self._module, source="running", config_filter=_get_filter
+            self._module,
+            source="running",
+            config_filter=_get_filter,
         )
         intfcfg_nodes = etree_findall(running, "interface-configuration")
 
@@ -757,7 +756,7 @@ class NCConfiguration(ConfigBase):
                     xmap=self._intf_meta,
                     params=intf_params,
                     opcode=opcode,
-                )
+                ),
             )
 
             if opcode == "merge":
@@ -768,7 +767,7 @@ class NCConfiguration(ConfigBase):
                             xmap=self._shut_meta,
                             params=shut_params,
                             opcode="merge",
-                        )
+                        ),
                     )
                 if len(noshut_params):
                     _edit_filter_list.append(
@@ -777,7 +776,7 @@ class NCConfiguration(ConfigBase):
                             xmap=self._shut_meta,
                             params=noshut_params,
                             opcode="delete",
-                        )
+                        ),
                     )
             diff = None
             if len(_edit_filter_list):
@@ -816,7 +815,7 @@ class NCConfiguration(ConfigBase):
                 (
                     "a:name",
                     {
-                        "xpath": "infra-statistics/interfaces/interface/interface-name"
+                        "xpath": "infra-statistics/interfaces/interface/interface-name",
                     },
                 ),
                 (
@@ -847,7 +846,7 @@ class NCConfiguration(ConfigBase):
                         "tag": True,
                     },
                 ),
-            ]
+            ],
         )
 
         self._line_state_meta.update(
@@ -887,7 +886,7 @@ class NCConfiguration(ConfigBase):
                 (
                     "a:name",
                     {
-                        "xpath": "interface-properties/data-nodes/data-node/system-view/interfaces/interface/interface-name"
+                        "xpath": "interface-properties/data-nodes/data-node/system-view/interfaces/interface/interface-name",
                     },
                 ),
                 (
@@ -897,7 +896,7 @@ class NCConfiguration(ConfigBase):
                         "tag": True,
                     },
                 ),
-            ]
+            ],
         )
 
         _rate_filter = build_xml(
@@ -911,17 +910,19 @@ class NCConfiguration(ConfigBase):
         data_rate_map = dict()
         for item in data_rate_list:
             data_rate_map.update(
-                {etree_find(item, "interface-name").text: dict()}
+                {etree_find(item, "interface-name").text: dict()},
             )
             data_rate_map[etree_find(item, "interface-name").text].update(
                 {
                     "input-data-rate": etree_find(
-                        item, "input-data-rate"
+                        item,
+                        "input-data-rate",
                     ).text,
                     "output-data-rate": etree_find(
-                        item, "output-data-rate"
+                        item,
+                        "output-data-rate",
                     ).text,
-                }
+                },
             )
 
         _line_state_filter = build_xml(
@@ -936,21 +937,15 @@ class NCConfiguration(ConfigBase):
         for item in line_state_list:
             line_state_map.update(
                 {
-                    etree_find(item, "interface-name")
-                    .text: etree_find(item, "line-state")
-                    .text
-                }
+                    etree_find(item, "interface-name").text: etree_find(item, "line-state").text,
+                },
             )
 
         for want_item in self._want:
             want_state = want_item.get("state")
             want_tx_rate = want_item.get("tx_rate")
             want_rx_rate = want_item.get("rx_rate")
-            if (
-                want_state not in ("up", "down")
-                and not want_tx_rate
-                and not want_rx_rate
-            ):
+            if want_state not in ("up", "down") and not want_tx_rate and not want_rx_rate:
                 continue
 
             if self._result["changed"]:
@@ -959,27 +954,22 @@ class NCConfiguration(ConfigBase):
             if want_state in ("up", "down"):
                 if want_state not in line_state_map[want_item["name"]]:
                     failed_conditions.append(
-                        "state " + "eq({0!s})".format(want_state)
+                        "state " + "eq({0!s})".format(want_state),
                     )
 
             if want_tx_rate:
-                if (
-                    want_tx_rate
-                    != data_rate_map[want_item["name"]]["output-data-rate"]
-                ):
+                if want_tx_rate != data_rate_map[want_item["name"]]["output-data-rate"]:
                     failed_conditions.append("tx_rate " + want_tx_rate)
 
             if want_rx_rate:
-                if (
-                    want_rx_rate
-                    != data_rate_map[want_item["name"]]["input-data-rate"]
-                ):
+                if want_rx_rate != data_rate_map[want_item["name"]]["input-data-rate"]:
                     failed_conditions.append("rx_rate " + want_rx_rate)
 
         if failed_conditions:
             msg = "One or more conditional statements have not been satisfied"
             self._module.fail_json(
-                msg=msg, failed_conditions=failed_conditions
+                msg=msg,
+                failed_conditions=failed_conditions,
             )
 
     def run(self):
@@ -999,13 +989,16 @@ def main():
         duplex=dict(choices=["full", "half"]),
         enabled=dict(default=True, type="bool"),
         active=dict(
-            type="str", choices=["active", "preconfigure"], default="active"
+            type="str",
+            choices=["active", "preconfigure"],
+            default="active",
         ),
         tx_rate=dict(),
         rx_rate=dict(),
         delay=dict(default=10, type="int"),
         state=dict(
-            default="present", choices=["present", "absent", "up", "down"]
+            default="present",
+            choices=["present", "absent", "up", "down"],
         ),
     )
 
@@ -1016,7 +1009,7 @@ def main():
     remove_default_spec(aggregate_spec)
 
     argument_spec = dict(
-        aggregate=dict(type="list", elements="dict", options=aggregate_spec)
+        aggregate=dict(type="list", elements="dict", options=aggregate_spec),
     )
 
     argument_spec.update(element_spec)
@@ -1041,7 +1034,7 @@ def main():
     elif is_netconf(module):
         if module.params["active"] == "preconfigure":
             module.fail_json(
-                msg="Physical interface pre-configuration is not supported with transport 'netconf'"
+                msg="Physical interface pre-configuration is not supported with transport 'netconf'",
             )
         config_object = NCConfiguration(module)
 

@@ -20,9 +20,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     dict_merge,
 )
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ospfv3 import (
     Ospfv3Template,
 )
@@ -81,28 +79,21 @@ class Ospfv3(ResourceModule):
         for thing in wantd, haved:
             for _pid, proc in iteritems(thing):
                 for area in proc.get("areas", []):
-                    virtual_link = {
-                        entry["id"]: entry
-                        for entry in area.get("virtual_link", [])
-                    }
+                    virtual_link = {entry["id"]: entry for entry in area.get("virtual_link", [])}
                     if bool(virtual_link):
                         area["virtual_link"] = virtual_link
-                    ranges = {
-                        entry["address"]: entry
-                        for entry in area.get("ranges", [])
-                    }
+                    ranges = {entry["address"]: entry for entry in area.get("ranges", [])}
                     if bool(ranges):
                         area["ranges"] = ranges
 
-                proc["areas"] = {
-                    entry["area_id"]: entry for entry in proc.get("areas", [])
-                }
+                proc["areas"] = {entry["area_id"]: entry for entry in proc.get("areas", [])}
                 if proc.get("distribute_list"):
                     if "acls" in proc.get("distribute_list"):
                         proc["distribute_list"]["acls"] = {
                             entry["name"]: entry
                             for entry in proc["distribute_list"].get(
-                                "acls", []
+                                "acls",
+                                [],
                             )
                         }
 
@@ -113,9 +104,7 @@ class Ospfv3(ResourceModule):
         # if state is deleted, limit the have to anything in want
         # set want to nothing
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
+            haved = {k: v for k, v in iteritems(haved) if k in wantd or not wantd}
             wantd = {}
 
         # delete processes first so we do run into "more than one" errors
@@ -240,7 +229,8 @@ class Ospfv3(ResourceModule):
         hvlinks = have.get("virtual_link", {})
         for name, entry in iteritems(wvlinks):
             self._area_compare_virtual_link(
-                want=entry, have=hvlinks.pop(name, {})
+                want=entry,
+                have=hvlinks.pop(name, {}),
             )
         for name, entry in iteritems(hvlinks):
             self._area_compare_virtual_link(want={}, have=entry)

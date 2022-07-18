@@ -19,16 +19,12 @@ import re
 
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.l2_interfaces.l2_interfaces import (
     L2_InterfacesArgs,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    get_os_version,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import get_os_version
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     Version,
     get_interface_type,
@@ -78,7 +74,8 @@ class L2_InterfacesFacts(object):
         if objs:
             facts["l2_interfaces"] = []
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             for cfg in params["config"]:
                 facts["l2_interfaces"].append(utils.remove_empties(cfg))
@@ -119,15 +116,16 @@ class L2_InterfacesFacts(object):
             os_version = get_os_version(self._module)
             if os_version and Version(os_version) > Version("7.0.0"):
                 encapsulation = re.search(
-                    r"encapsulation dot1q\s(\d+)\s*(second-dot1q\s\d+)?", conf
+                    r"encapsulation dot1q\s(\d+)\s*(second-dot1q\s\d+)?",
+                    conf,
                 )
                 if encapsulation:
                     config["encapsulation"]["dot1q"] = int(
-                        encapsulation.group(1)
+                        encapsulation.group(1),
                     )
                     if encapsulation.group(2):
                         config["encapsulation"]["second_dot1q"] = int(
-                            encapsulation.group(2).split("second-dot1q ")[1]
+                            encapsulation.group(2).split("second-dot1q ")[1],
                         )
             else:
                 config["q_vlan"] = []

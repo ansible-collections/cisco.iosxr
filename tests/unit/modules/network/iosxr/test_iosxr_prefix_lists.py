@@ -26,9 +26,7 @@ from textwrap import dedent
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_prefix_lists
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule
 
@@ -41,15 +39,13 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
 
         self.mock_get_resource_connection = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base."
-            "get_resource_connection"
+            "get_resource_connection",
         )
-        self.get_resource_connection = (
-            self.mock_get_resource_connection.start()
-        )
+        self.get_resource_connection = self.mock_get_resource_connection.start()
 
         self.mock_get_config = patch(
             "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.prefix_lists.prefix_lists."
-            "Prefix_listsFacts.get_config"
+            "Prefix_listsFacts.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
@@ -62,7 +58,7 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
         run_cfg = dedent(
             """ipv6 prefix-list test2\n 4 remark test\n!
             \nipv4 prefix-list test1\n 3 remark test1\n 2 permit 10.0.0.0/24\n!
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -78,9 +74,9 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         sequence=4,
                                         action="remark",
                                         description="test",
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                     dict(
@@ -100,12 +96,12 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         prefix="10.0.0.0/24",
                                     ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -123,9 +119,9 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         sequence=4,
                                         action="remark",
                                         description="test",
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                     dict(
@@ -154,14 +150,14 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         action="permit",
                                         eq="3",
                                         prefix="32.0.0.0/8",
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
                     ),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "ipv6 prefix-list test2 4 remark test",
@@ -175,7 +171,7 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
     def test_iosxr_prefix_lists_replaced(self):
         run_cfg = dedent(
             """ipv6 prefix-list test2\n 4 remark test\n!
-            \nipv4 prefix-list test1\n 3 remark test1\n 2 permit 10.0.0.0/24\n!"""
+            \nipv4 prefix-list test1\n 3 remark test1\n 2 permit 10.0.0.0/24\n!""",
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -191,7 +187,7 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         sequence=2,
                                         action="permit",
                                         prefix="10.0.0.0/24",
-                                    )
+                                    ),
                                 ],
                             ),
                             dict(
@@ -201,7 +197,7 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         sequence=2,
                                         action="permit",
                                         prefix="10.0.0.0/24",
-                                    )
+                                    ),
                                 ],
                             ),
                             dict(
@@ -212,14 +208,14 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         action="permit",
                                         eq="3",
                                         prefix="32.0.0.0/8",
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "no ipv4 prefix-list test1 3 remark test1",
@@ -232,7 +228,7 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
     def test_iosxr_prefix_lists_replaced_idempotent(self):
         run_cfg = dedent(
             """ipv6 prefix-list test2\n 4 remark test\n!
-            \nipv4 prefix-list test1\n 3 remark test1\n 2 permit 10.0.0.0/24\n!"""
+            \nipv4 prefix-list test1\n 3 remark test1\n 2 permit 10.0.0.0/24\n!""",
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -248,9 +244,9 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         sequence=4,
                                         action="remark",
                                         description="test",
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                     dict(
@@ -270,12 +266,12 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         prefix="10.0.0.0/24",
                                     ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="replaced",
-            )
+            ),
         )
 
         self.execute_module(changed=False, commands=[])
@@ -283,7 +279,7 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
     def test_iosxr_prefix_list_deleted(self):
         run_cfg = dedent(
             """ipv6 prefix-list test2\n 4 remark test\n!
-            \nipv4 prefix-list test1\n 3 remark test1\n 2 permit 10.0.0.0/24\n!"""
+            \nipv4 prefix-list test1\n 3 remark test1\n 2 permit 10.0.0.0/24\n!""",
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(state="deleted"))
@@ -295,7 +291,7 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
     def test_iosxr_prefix_list_deleted_idempotent(self):
         run_cfg = dedent(
             """\
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(config=[], state="deleted"))
@@ -317,9 +313,9 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         sequence=4,
                                         action="remark",
                                         description="test",
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                     dict(
@@ -348,14 +344,14 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         action="permit",
                                         eq="3",
                                         prefix="32.0.0.0/8",
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
                     ),
                 ],
                 state="rendered",
-            )
+            ),
         )
 
         commands = [
@@ -372,7 +368,7 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
             dict(
                 running_config="ipv4 prefix-list test1\n 3 remark test1\n!",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         parsed_list = [
@@ -386,11 +382,11 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                 "sequence": 3,
                                 "action": "remark",
                                 "description": "test1",
-                            }
+                            },
                         ],
-                    }
+                    },
                 ],
-            }
+            },
         ]
 
         self.assertEqual(parsed_list, result["parsed"])
@@ -399,7 +395,7 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
         run_cfg = dedent(
             """ipv6 prefix-list test2\n 4 remark test\n!
             \nipv4 prefix-list test1\n 3 remark test1\n 2 permit 10.0.0.0/24\n!
-            """
+            """,
         )
 
         self.get_config.return_value = run_cfg
@@ -417,7 +413,7 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         sequence=2,
                                         action="permit",
                                         prefix="10.0.0.0/24",
-                                    )
+                                    ),
                                 ],
                             ),
                             dict(
@@ -427,14 +423,14 @@ class TestIosxrPrefixListsModule(TestIosxrModule):
                                         sequence=2,
                                         action="permit",
                                         prefix="10.0.0.0/24",
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "no ipv4 prefix-list test1 3 remark test1",

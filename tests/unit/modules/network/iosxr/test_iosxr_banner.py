@@ -41,9 +41,7 @@ __metaclass__ = type
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_banner
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
 
@@ -56,17 +54,17 @@ class TestIosxrBannerModule(TestIosxrModule):
         super(TestIosxrBannerModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_banner.get_config"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_banner.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_banner.load_config"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_banner.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_is_cliconf = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_banner.is_cliconf"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_banner.is_cliconf",
         )
         self.is_cliconf = self.mock_is_cliconf.start()
 

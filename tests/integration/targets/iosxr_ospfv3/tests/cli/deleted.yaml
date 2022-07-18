@@ -1,15 +1,13 @@
 ---
-- debug:
-    msg: Start iosxr_ospfv3 deleted integration tests ansible_connection={{
-      ansible_connection }}
+- ansible.builtin.debug:
+    msg: Start iosxr_ospfv3 deleted integration tests ansible_connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_config.yaml
+- ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
-
-    - name: Delete single ospf process network
+    - name: Delete single OSPF process network
       register: result
       cisco.iosxr.iosxr_ospfv3: &id001
         config:
@@ -21,64 +19,58 @@
         state: deleted
 
     - name: Assert that the before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ replaced['before'] == result['before'] }}"
 
     - name: Assert that the correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ deleted['commands'] | symmetric_difference(result['commands']) |length\
-          \ == 0 }}"
+          - "{{ deleted['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that the after dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ deleted['after'] == result['after'] }}"
 
-    - name: Delete a single ospf process (IDEMPOTENT)
+    - name: Delete a single OSPF process (idempotent)
       register: result
       cisco.iosxr.iosxr_ospfv3: *id001
-
-    - assert: &id003
+    - ansible.builtin.assert: &id003
         that:
           - result.changed == false
           - result.commands|length == 0
 
-    - include_tasks: _populate_config.yaml
+    - ansible.builtin.include_tasks: _populate_config.yaml
 
-    - name: Delete all ospf processes
+    - name: Delete all OSPF processes
       register: result
-      cisco.iosxr.iosxr_ospfv3: &id005
+      cisco.iosxr.iosxr_ospfv3: &id002
         state: deleted
 
     - name: Assert that the before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ replaced['before'] ==  result['before'] }}"
 
     - name: Assert that the correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ deleted['commands'] | symmetric_difference(result['commands']) |length\
-            \ == 0 }}"
+          - "{{ deleted['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that the after dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ deleted['after'] ==  result['after'] }}"
 
-    - name: Delete all  ospf processes (IDEMPOTENT)
+    - name: Delete all  OSPF processes (idempotent)
       register: result
-      cisco.iosxr.iosxr_ospfv3: *id005
-
+      cisco.iosxr.iosxr_ospfv3: *id002
     - name: Assert that the previous task was idempotent
-      assert: *id003
-
+      ansible.builtin.assert: *id003
     - name: Assert that the before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ deleted['after'] == result['before'] }}"
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

@@ -24,13 +24,9 @@ __metaclass__ = type
 
 from textwrap import dedent
 
-from ansible_collections.cisco.iosxr.plugins.modules import (
-    iosxr_logging_global,
-)
+from ansible_collections.cisco.iosxr.plugins.modules import iosxr_logging_global
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule
 
@@ -43,15 +39,13 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
 
         self.mock_get_resource_connection = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base."
-            "get_resource_connection"
+            "get_resource_connection",
         )
-        self.get_resource_connection = (
-            self.mock_get_resource_connection.start()
-        )
+        self.get_resource_connection = self.mock_get_resource_connection.start()
 
         self.mock_get_config = patch(
             "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.logging_global.logging_global."
-            "Logging_globalFacts.get_config"
+            "Logging_globalFacts.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
@@ -126,7 +120,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                 logging hostnameprefix test
                 logging suppress duplicates
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -144,7 +138,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                         size=2097152,
                         severity="warnings",
                         discriminator=[
-                            dict(match_params="match2", name="test")
+                            dict(match_params="match2", name="test"),
                         ],
                     ),
                     console=dict(
@@ -157,7 +151,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     correlator=dict(
                         buffer_size=1024,
                         rule_sets=[
-                            dict(name="test", rulename=["test1", "test"])
+                            dict(name="test", rulename=["test1", "test"]),
                         ],
                         rules=[
                             dict(
@@ -206,7 +200,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                             port="default",
                             severity="critical",
                             vrf="default",
-                        )
+                        ),
                     ],
                     ipv6=dict(precedence="routine"),
                     ipv4=dict(dscp="af11"),
@@ -214,11 +208,11 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     monitor=dict(
                         severity="errors",
                         discriminator=[
-                            dict(match_params="match1", name="test1")
+                            dict(match_params="match1", name="test1"),
                         ],
                     ),
                     source_interfaces=[
-                        dict(interface="GigabitEthernet0/0/0/0", vrf="test")
+                        dict(interface="GigabitEthernet0/0/0/0", vrf="test"),
                     ],
                     suppress=dict(duplicates=True),
                     tls_servers=[
@@ -227,12 +221,12 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                             tls_hostname="test2",
                             trustpoint="test2",
                             vrf="test",
-                        )
+                        ),
                     ],
                     trap=dict(severity="informational"),
                 ),
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -252,7 +246,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                         size=2097152,
                         severity="warnings",
                         discriminator=[
-                            dict(match_params="match2", name="test")
+                            dict(match_params="match2", name="test"),
                         ],
                     ),
                     console=dict(
@@ -265,7 +259,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     correlator=dict(
                         buffer_size=1024,
                         rule_sets=[
-                            dict(name="test", rulename=["test1", "test"])
+                            dict(name="test", rulename=["test1", "test"]),
                         ],
                         rules=[
                             dict(
@@ -314,7 +308,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                             port="default",
                             severity="critical",
                             vrf="default",
-                        )
+                        ),
                     ],
                     ipv6=dict(precedence="routine"),
                     ipv4=dict(dscp="af11"),
@@ -322,11 +316,11 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     monitor=dict(
                         severity="errors",
                         discriminator=[
-                            dict(match_params="match1", name="test1")
+                            dict(match_params="match1", name="test1"),
                         ],
                     ),
                     source_interfaces=[
-                        dict(interface="GigabitEthernet0/0/0/0", vrf="test")
+                        dict(interface="GigabitEthernet0/0/0/0", vrf="test"),
                     ],
                     suppress=dict(duplicates=True),
                     tls_servers=[
@@ -335,12 +329,12 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                             tls_hostname="test2",
                             trustpoint="test2",
                             vrf="test",
-                        )
+                        ),
                     ],
                     trap=dict(severity="informational"),
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = [
             "logging archive device disk0",
@@ -460,7 +454,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                 logging hostnameprefix test
                 logging suppress duplicates
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(state="deleted"))
@@ -580,7 +574,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                 logging hostnameprefix test
                 logging suppress duplicates
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -597,7 +591,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     console=dict(
                         severity="warning",
                         discriminator=[
-                            dict(match_params="match1", name="test1")
+                            dict(match_params="match1", name="test1"),
                         ],
                     ),
                     correlator=dict(
@@ -610,7 +604,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                                 context_correlation=True,
                                 reissue_nonbistate=True,
                                 reparent=True,
-                            )
+                            ),
                         ],
                     ),
                     events=dict(
@@ -627,7 +621,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                             name="test",
                             path="test1",
                             severity="info",
-                        )
+                        ),
                     ],
                     history=dict(state="disabled", size=10),
                     hostnameprefix="test",
@@ -637,13 +631,13 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                             port="default",
                             severity="critical",
                             vrf="default",
-                        )
+                        ),
                     ],
                     ipv6=dict(precedence="routine"),
                     ipv4=dict(dscp="af11"),
                     localfilesize=1024,
                     source_interfaces=[
-                        dict(interface="GigabitEthernet0/0/0/0", vrf="test")
+                        dict(interface="GigabitEthernet0/0/0/0", vrf="test"),
                     ],
                     tls_servers=[
                         dict(
@@ -651,11 +645,11 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                             tls_hostname="test2",
                             trustpoint="test3",
                             vrf="test",
-                        )
+                        ),
                     ],
                 ),
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "logging console discriminator match1 test1",
@@ -700,7 +694,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                         size=2097152,
                         severity="warnings",
                         discriminator=[
-                            dict(match_params="match2", name="test")
+                            dict(match_params="match2", name="test"),
                         ],
                     ),
                     console=dict(
@@ -713,7 +707,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     correlator=dict(
                         buffer_size=1024,
                         rule_sets=[
-                            dict(name="test", rulename=["test1", "test"])
+                            dict(name="test", rulename=["test1", "test"]),
                         ],
                         rules=[
                             dict(
@@ -762,7 +756,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                             port="default",
                             severity="critical",
                             vrf="default",
-                        )
+                        ),
                     ],
                     ipv6=dict(precedence="routine"),
                     ipv4=dict(dscp="af11"),
@@ -770,11 +764,11 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     monitor=dict(
                         severity="errors",
                         discriminator=[
-                            dict(match_params="match1", name="test1")
+                            dict(match_params="match1", name="test1"),
                         ],
                     ),
                     source_interfaces=[
-                        dict(interface="GigabitEthernet0/0/0/0", vrf="test")
+                        dict(interface="GigabitEthernet0/0/0/0", vrf="test"),
                     ],
                     suppress=dict(duplicates=True),
                     tls_servers=[
@@ -783,12 +777,12 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                             tls_hostname="test2",
                             trustpoint="test2",
                             vrf="test",
-                        )
+                        ),
                     ],
                     trap=dict(severity="informational"),
                 ),
                 state="rendered",
-            )
+            ),
         )
         commands = [
             "logging archive device disk0",
@@ -908,7 +902,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                 logging hostnameprefix test
                 logging suppress duplicates
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -925,7 +919,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     console=dict(
                         severity="warning",
                         discriminator=[
-                            dict(match_params="match1", name="test1")
+                            dict(match_params="match1", name="test1"),
                         ],
                     ),
                     correlator=dict(
@@ -938,7 +932,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                                 context_correlation=True,
                                 reissue_nonbistate=True,
                                 reparent=True,
-                            )
+                            ),
                         ],
                     ),
                     events=dict(
@@ -955,7 +949,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                             name="test",
                             path="test1",
                             severity="info",
-                        )
+                        ),
                     ],
                     history=dict(state="disabled", size=10),
                     hostnameprefix="test",
@@ -965,13 +959,13 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                             port="default",
                             severity="critical",
                             vrf="default",
-                        )
+                        ),
                     ],
                     ipv6=dict(precedence="routine"),
                     ipv4=dict(dscp="af11"),
                     localfilesize=1024,
                     source_interfaces=[
-                        dict(interface="GigabitEthernet0/0/0/0", vrf="test")
+                        dict(interface="GigabitEthernet0/0/0/0", vrf="test"),
                     ],
                     tls_servers=[
                         dict(
@@ -979,11 +973,11 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                             tls_hostname="test2",
                             trustpoint="test3",
                             vrf="test",
-                        )
+                        ),
                     ],
                 ),
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "logging console discriminator match1 test1",
@@ -1070,7 +1064,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                 logging hostnameprefix test
                 logging suppress duplicates
                 !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(state="gathered"))
@@ -1103,7 +1097,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                         "rule_name": "test",
                         "rule_type": "stateful",
                         "timeout": 5,
-                    }
+                    },
                 ],
             },
             "events": {
@@ -1119,7 +1113,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     "name": "test",
                     "path": "test",
                     "severity": "info",
-                }
+                },
             ],
             "format": True,
             "history": {"state": "disabled", "size": 10},
@@ -1130,7 +1124,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     "port": "default",
                     "severity": "critical",
                     "vrf": "default",
-                }
+                },
             ],
             "ipv4": {"dscp": "af11"},
             "ipv6": {"precedence": "routine"},
@@ -1140,7 +1134,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                 "severity": "errors",
             },
             "source_interfaces": [
-                {"interface": "GigabitEthernet0/0/0/0", "vrf": "test"}
+                {"interface": "GigabitEthernet0/0/0/0", "vrf": "test"},
             ],
             "suppress": {"duplicates": True},
             "tls_servers": [
@@ -1149,7 +1143,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     "tls_hostname": "test2",
                     "trustpoint": "test2",
                     "vrf": "test",
-                }
+                },
             ],
             "trap": {"severity": "informational"},
         }
@@ -1183,7 +1177,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                 " GigabitEthernet0/0/0/0 vrf test\nlogging hostnameprefix "
                 "test\nlogging suppress duplicates",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         parsed_list = {
@@ -1215,7 +1209,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                         "rule_name": "test",
                         "rule_type": "stateful",
                         "timeout": 5,
-                    }
+                    },
                 ],
             },
             "events": {
@@ -1231,7 +1225,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     "name": "test",
                     "path": "test",
                     "severity": "info",
-                }
+                },
             ],
             "format": True,
             "history": {"state": "disabled", "size": 10},
@@ -1242,7 +1236,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     "port": "default",
                     "severity": "critical",
                     "vrf": "default",
-                }
+                },
             ],
             "ipv4": {"dscp": "af11"},
             "ipv6": {"precedence": "routine"},
@@ -1252,7 +1246,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                 "severity": "errors",
             },
             "source_interfaces": [
-                {"interface": "GigabitEthernet0/0/0/0", "vrf": "test"}
+                {"interface": "GigabitEthernet0/0/0/0", "vrf": "test"},
             ],
             "suppress": {"duplicates": True},
             "tls_servers": [
@@ -1261,7 +1255,7 @@ class TestIosxrLoggingGlobalModule(TestIosxrModule):
                     "tls_hostname": "test2",
                     "trustpoint": "test2",
                     "vrf": "test",
-                }
+                },
             ],
             "trap": {"severity": "informational"},
         }

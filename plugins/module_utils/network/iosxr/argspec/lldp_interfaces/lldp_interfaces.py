@@ -51,7 +51,7 @@ class Lldp_interfacesArgs(object):  # pylint: disable=R0903
                                 "ieee-nearest-bridge",
                                 "ieee-nearest-non-tmpr-bridge",
                             ],
-                        }
+                        },
                     },
                 },
                 "name": {"type": "str"},

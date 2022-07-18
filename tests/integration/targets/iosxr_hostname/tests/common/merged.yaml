@@ -1,37 +1,33 @@
 ---
-- debug:
-    msg: START Merged iosxr_hostname state for integration tests on connection={{
-      ansible_connection }}
+- ansible.builtin.debug:
+    msg: START Merged iosxr_hostname state for integration tests on connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
-    - name: iosxr_hostname merged - Play
+    - name: Iosxr_hostname merged - play
       register: result
       cisco.iosxr.iosxr_hostname: &id001
         config:
-          hostname: 'iosxr1'
+          hostname: "iosxr1"
         state: merged
 
-    - name: iosxr_hostname merged - Assert commands
-      assert:
+    - name: Iosxr_hostname merged - assert commands
+      ansible.builtin.assert:
         that:
           - merged['commands'] == result['commands']
 
-    - name: iosxr_hostname merged - Assert after
-      assert:
+    - name: Iosxr_hostname merged - assert after
+      ansible.builtin.assert:
         that:
           - merged['after'] == result['after']
 
-    - name: iosxr_hostname merged - Play (IDEMPOTENT)
+    - name: Iosxr_hostname merged - play (idempotent)
       register: result
       cisco.iosxr.iosxr_hostname: *id001
-
-    - name: iosxr_hostname merged - Assert above task was idempotent
-      assert:
+    - name: Iosxr_hostname merged - assert above task was idempotent
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

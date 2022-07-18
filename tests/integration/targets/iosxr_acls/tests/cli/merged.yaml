@@ -1,10 +1,8 @@
 ---
-- debug:
-    msg:
-      START iosxr_acls merged integration tests on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START iosxr_acls merged integration tests on connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
     - name: Merge the provided configuration with the existing running configuration
@@ -93,42 +91,34 @@
         state: merged
 
     - name: Assert that before dicts were correctly generated
-      assert:
-        that:
-          "{{ merged['before'] | symmetric_difference(result['before']) |length\
-          \ == 0 }}"
+      ansible.builtin.assert:
+        that: "{{ merged['before'] | symmetric_difference(result['before']) |length == 0 }}"
 
     - name: Assert that correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['commands'] | symmetric_difference(result['commands']) |length\
-            \ == 0 }}"
+          - "{{ merged['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that after dicts was correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['after'] | symmetric_difference(result['after']) |length\
-            \ == 0 }}"
+          - "{{ merged['after'] | symmetric_difference(result['after']) |length == 0 }}"
 
-    - name:
-        Merge the provided configuration with the existing running configuration
-        (IDEMPOTENT)
+    - name: Merge the provided configuration with the existing running configuration (idempotent)
       register: result
       cisco.iosxr.iosxr_acls: *id001
-
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
           - result.commands|length == 0
 
     - name: Assert that before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['after'] | symmetric_difference(result['before']) |length\
-            \ == 0 }}"
+          - "{{ merged['after'] | symmetric_difference(result['before']) |length == 0 }}"
 
-    - name: Update existing ACEs
+    - name: Update existing aces
       register: result
       cisco.iosxr.iosxr_acls: &id002
         config:
@@ -156,23 +146,20 @@
         state: merged
 
     - name: Assert that the correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
           - '"ipv4 access-list acl_1" in result.commands'
-          - '"21 permit tcp 198.51.100.32 0.0.0.15 range pop3 121 198.51.100.0 0.0.0.15
-            syn" in result.commands'
-          - '"23 deny icmp any 198.51.100.0 0.0.0.15 router-advertisement dscp eq
-            af23" in result.commands'
+          - '"21 permit tcp 198.51.100.32 0.0.0.15 range pop3 121 198.51.100.0 0.0.0.15 syn" in result.commands'
+          - '"23 deny icmp any 198.51.100.0 0.0.0.15 router-advertisement dscp eq af23" in result.commands'
           - result.commands|length == 3
 
-    - name: Update existing ACEs (IDEMPOTENT)
+    - name: Update existing aces (idempotent)
       register: result
       cisco.iosxr.iosxr_acls: *id002
-
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
           - result.commands|length == 0
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

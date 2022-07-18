@@ -1,136 +1,127 @@
 ---
-- name: remove host logging
+- name: Remove host logging
   cisco.iosxr.iosxr_logging:
     dest: host
     name: 172.16.0.1
     state: absent
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- name: remove console logging
+- name: Remove console logging
   register: result
   cisco.iosxr.iosxr_logging:
     dest: console
     level: warning
     state: absent
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- name: remove buffered logging
+- name: Remove buffered logging
   register: result
   cisco.iosxr.iosxr_logging:
     dest: buffered
     size: 2097155
     state: absent
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- name: set up syslog host logging
+- name: Set up syslog host logging
   register: result
   cisco.iosxr.iosxr_logging: &id001
     dest: host
     name: 172.16.0.1
     level: errors
     state: present
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"172.16.0.1" in result.xml[0]'
 
-- name: set up syslog host logging (idempotent)
+- name: Set up syslog host logging (idempotent)
   register: result
   cisco.iosxr.iosxr_logging: *id001
-
-- assert: &id003
+- ansible.builtin.assert: &id003
     that:
       - result.changed == false
 
-- name: delete/disable syslog host logging
+- name: Delete/disable syslog host logging
   register: result
   cisco.iosxr.iosxr_logging: &id002
     dest: host
     name: 172.16.0.1
     state: absent
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"172.16.0.1" in result.xml[0]'
       - '"delete" in result.xml[0]'
 
-- name: delete/disable syslog host logging (idempotent)
+- name: Delete/disable syslog host logging (idempotent)
   register: result
   cisco.iosxr.iosxr_logging: *id002
-
-- assert: *id003
-
-- name: add console logging with level warning
+- ansible.builtin.assert: *id003
+- name: Add console logging with level warning
   register: result
   cisco.iosxr.iosxr_logging: &id004
     dest: console
     level: warning
     state: present
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"console" in result.xml[0]'
       - '"warning" in result.xml[0]'
 
-- name: console logging with level warning (idempotent)
+- name: Console logging with level warning (idempotent)
   register: result
   cisco.iosxr.iosxr_logging: *id004
-
-- assert: *id003
-
-- name: remove console logging with level warning
+- ansible.builtin.assert: *id003
+- name: Remove console logging with level warning
   register: result
   cisco.iosxr.iosxr_logging:
     dest: console
     level: warning
     state: absent
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert: &id006
+- ansible.builtin.assert: &id006
     that:
       - result.changed == true
 
-- name: configure buffered logging size
+- name: Configure buffered logging size
   register: result
   cisco.iosxr.iosxr_logging: &id005
     dest: buffered
     size: 4800000
     state: present
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"buffered" in result.xml[0]'
       - '"4800000" in result.xml[0]'
 
-- name: configure buffered logging size (idempotence)
+- name: Configure buffered logging size (idempotence)
   register: result
   cisco.iosxr.iosxr_logging: *id005
-
-- assert: *id003
-
-- name: remove buffered logging size
+- ansible.builtin.assert: *id003
+- name: Remove buffered logging size
   register: result
   cisco.iosxr.iosxr_logging:
     dest: buffered
     size: 4800000
     state: absent
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert: *id006
-
-- name: change logging parameters using aggregate
+- ansible.builtin.assert: *id006
+- name: Change logging parameters using aggregate
   register: result
   cisco.iosxr.iosxr_logging:
     aggregate:
-
       - dest: console
         level: notifications
 
@@ -162,9 +153,9 @@
 
       - hostnameprefix: host3
     state: present
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"file1" in result.xml[0]'
@@ -178,11 +169,10 @@
       - '"local3" in result.xml[5]'
       - '"host3" in result.xml[6]'
 
-- name: remove logging parameters using aggregate
+- name: Remove logging parameters using aggregate
   register: result
   cisco.iosxr.iosxr_logging:
     aggregate:
-
       - dest: console
         level: notifications
 
@@ -212,9 +202,9 @@
 
       - hostnameprefix: host3
     state: absent
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"file1" in result.xml[0]'

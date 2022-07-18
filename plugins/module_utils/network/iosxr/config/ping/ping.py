@@ -18,13 +18,9 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    run_commands,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import run_commands
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ping import (
     PingTemplate,
 )
@@ -76,7 +72,8 @@ class Ping:
 
     def run_command(self):
         ping_results = run_commands(
-            self.module, commands=self.result["commands"]
+            self.module,
+            commands=self.result["commands"],
         )
         return ping_results
 

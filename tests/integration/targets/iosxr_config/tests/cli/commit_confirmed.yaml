@@ -1,7 +1,7 @@
 ---
-- debug: msg="START cli/commit_confirmed.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/commit_confirmed.yaml on connection={{ ansible_connection }}"
 
-- name: test commit confirmed functionality
+- name: Test commit confirmed functionality
   vars:
     ansible_iosxr_commit_confirmed: true
     ansible_iosxr_commit_confirmed_timeout: 90
@@ -10,7 +10,7 @@
     lines:
       - hostname iosxr_commit_confirmed
 
-- name: "get hostname"
+- name: "Get hostname"
   vars:
     ansible_iosxr_commit_confirmed: true
   register: get_hostname1
@@ -19,19 +19,18 @@
       - "show running-config hostname"
   ignore_errors: true
 
-
 - name: Sleep for 90 secs as rollback to happen.
-  wait_for:
+  ansible.builtin.wait_for:
     timeout: 90
 
-- name: "get hostname"
+- name: "Get hostname"
   register: get_hostname2
   iosxr_command:
     commands:
       - "show running-config hostname"
   ignore_errors: true
 
-- assert:
+- ansible.builtin.assert:
     that:
       - "'iosxr_commit_confirmed' in get_hostname1.stdout[0]"
       - "'iosxr_commit_confirmed' not in get_hostname2.stdout[0]"

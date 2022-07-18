@@ -6,18 +6,18 @@
       - no username ansible1
       - no username ansible2
       - no username ansible3
-    provider: '{{ cli }}'
+    provider: "{{ cli }}"
 
-- name: Create user (SetUp)
+- name: Create user (setup)
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     name: ansible1
     configured_password: password
     state: present
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"ansible1" in result.xml[0]'
@@ -31,9 +31,9 @@
     configured_password: password
     update_password: always
     state: present
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"ansible1" in result.xml[0]'
@@ -47,9 +47,9 @@
     configured_password: password
     update_password: on_create
     state: present
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.xml | length == 0
@@ -63,9 +63,9 @@
     update_password: on_create
     group: sysadmin
     state: present
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"ansible1" in result.xml[0]'
@@ -80,28 +80,27 @@
     update_password: on_create
     group: sysadmin
     state: present
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.xml | length == 0
 
-- name: Collection of users (SetUp)
+- name: Collection of users (setup)
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
-
       - name: ansible2
 
       - name: ansible3
     configured_password: password
     state: present
     group: sysadmin
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"ansible2" in result.xml[0]'
@@ -116,16 +115,15 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
-
       - name: ansible2
 
       - name: ansible3
     configured_password: password
     state: present
     group: sysadmin
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"ansible2" in result.xml[0]'
@@ -137,7 +135,6 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
-
       - name: ansible2
 
       - name: ansible3
@@ -145,9 +142,9 @@
     update_password: on_create
     state: present
     group: sysadmin
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.xml | length == 0
@@ -157,16 +154,15 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
-
       - name: ansible1
 
       - name: ansible2
 
       - name: ansible3
     state: absent
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"ansible1" in result.xml[0]'
@@ -178,16 +174,15 @@
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
-
       - name: ansible1
 
       - name: ansible2
 
       - name: ansible3
     state: absent
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.xml | length == 0

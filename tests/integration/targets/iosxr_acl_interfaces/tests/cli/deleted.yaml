@@ -1,33 +1,31 @@
 ---
-- debug:
-    msg: Start iosxr_acl_interfaces deleted integration tests ansible_connection={{
-      ansible_connection }}
+- ansible.builtin.debug:
+    msg: Start iosxr_acl_interfaces deleted integration tests ansible_connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-    - name: Delete ACL attributes of GigabitEthernet0/0/0/1
+    - name: Delete ACL attributes of gigabitethernet0/0/0/1
       register: result
       cisco.iosxr.iosxr_acl_interfaces: &id001
         config:
           - name: GigabitEthernet0/0/0/1
         state: deleted
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - "'interface GigabitEthernet0/0/0/1' in result.commands"
           - "'no ipv4 access-group acl_1 egress' in result.commands"
           - result.commands|length == 2
 
-    - name: Delete ACL attributes of GigabitEthernet0/0/0/1 (IDEMPOTENT)
+    - name: Delete ACL attributes of gigabitethernet0/0/0/1 (idempotent)
       register: result
       cisco.iosxr.iosxr_acl_interfaces: *id001
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == False
           - result.commands|length == 0
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

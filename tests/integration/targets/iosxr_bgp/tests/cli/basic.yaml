@@ -1,19 +1,18 @@
 ---
-- debug: msg="START iosxr cli/iosxr_bgp.yaml on connection={{ ansible_connection
-    }}"
+- ansible.builtin.debug: msg="START iosxr cli/iosxr_bgp.yaml on connection={{ ansible_connection }}"
 
-- name: Check IOS-XR version
+- name: Check ios-xr version
   register: facts
   cisco.iosxr.iosxr_facts:
     gather_subset: default
 
 - block:
-    - name: Clear existing BGP config
+    - name: Clear existing BGP configuration
       ignore_errors: true
       cisco.iosxr.iosxr_bgp:
         operation: delete
 
-    - name: Configure BGP with AS 64496 and a router-id
+    - name: Configure BGP with as 64496 and a router-id
       register: result
       cisco.iosxr.iosxr_bgp: &id001
         operation: merge
@@ -21,17 +20,16 @@
           bgp_as: 64496
           router_id: 192.0.2.2
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == true
           - "'router bgp 64496' in result.commands"
           - "'bgp router-id 192.0.2.2' in result.commands"
 
-    - name: Configure BGP with AS 64496 and a router-id (idempotent)
+    - name: Configure BGP with as 64496 and a router-id (idempotent)
       register: result
       cisco.iosxr.iosxr_bgp: *id001
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
 
@@ -55,7 +53,7 @@
               description: IBGP_NBR_2
               tcp_mss: 1500
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == true
           - "'router bgp 64496' in result.commands"
@@ -72,8 +70,7 @@
     - name: Configure BGP neighbors (idempotent)
       register: result
       cisco.iosxr.iosxr_bgp: *id002
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
 
@@ -93,7 +90,7 @@
               remote_as: 64511
               description: EBGP_NBR_1
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == true
           - "'neighbor 203.0.113.10' in result.commands"
@@ -104,12 +101,11 @@
     - name: Configure BGP neighbors with operation replace (idempotent)
       register: result
       cisco.iosxr.iosxr_bgp: *id003
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
 
-    - name: create route-policy as prerequisite for BGP configuration
+    - name: Create route-policy as prerequisite for BGP configuration
       register: result
       cisco.iosxr.iosxr_config:
         lines:
@@ -142,7 +138,7 @@
                 - prefix: 198.51.100.64
                   masklen: 28
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == true
           - "'router bgp 64496' in result.commands"
@@ -156,8 +152,7 @@
     - name: Configure networks under address family (idempotent)
       register: result
       cisco.iosxr.iosxr_bgp: *id004
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
 
@@ -186,7 +181,7 @@
                 - prefix: 198.51.100.64
                   masklen: 28
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == true
           - '"router bgp 64496" in result.commands'
@@ -199,12 +194,11 @@
     - name: Configure networks under address family with operation replace (idempotent)
       register: result
       cisco.iosxr.iosxr_bgp: *id005
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
 
-    - name: Override all the existing BGP config
+    - name: Override all the existing BGP configuration
       register: result
       cisco.iosxr.iosxr_bgp:
         operation: override
@@ -213,7 +207,7 @@
           router_id: 192.0.2.10
           log_neighbor_changes: true
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == true
           - "'router bgp 64497' in result.commands"
@@ -225,7 +219,7 @@
       cisco.iosxr.iosxr_bgp: &id006
         operation: delete
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == true
           - "'no router bgp 64497' in result.commands"
@@ -233,15 +227,13 @@
     - name: Teardown again (idempotent)
       register: result
       cisco.iosxr.iosxr_bgp: *id006
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
 
-    - name: delete route-policy configures as prerequisite for BGP configuration
-        (teardown)
+    - name: Delete route-policy configures as prerequisite for BGP configuration (teardown)
       cisco.iosxr.iosxr_config:
         lines: no route-policy RMAP_1
   when: facts['ansible_facts']['ansible_net_version'].split('[')[0] == '6.1.3'
 
-- debug: msg="END iosxr cli/iosxr_bgp.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END iosxr cli/iosxr_bgp.yaml on connection={{ ansible_connection }}"

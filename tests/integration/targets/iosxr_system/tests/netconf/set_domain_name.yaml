@@ -1,78 +1,74 @@
 ---
-- debug:
-    msg: START netconf/set_domain_name.yaml on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START netconf/set_domain_name.yaml on connection={{ ansible_connection }}
 
-- name: setup
+- name: Setup
   connection: ansible.netcommon.network_cli
   cisco.iosxr.iosxr_config:
     lines:
       - no domain name
       - no domain vrf ansiblevrf name
     match: none
-    provider: '{{ cli }}'
+    provider: "{{ cli }}"
 
-- name: configure domain_name
+- name: Configure domain_name
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id001
     domain_name: eng.ansible.com
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
-- name: verify domain_name
+- name: Verify domain_name
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id001
-
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: configure domain_name
+- name: Configure domain_name
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id002
     domain_name: eng.ansible.com
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
     state: absent
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
-- name: verify domain_name
+- name: Verify domain_name
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id002
-
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- name: configure domain_name with vrf
+- name: Configure domain_name with VRF
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id003
     domain_name: eng.ansible.com
     vrf: ansiblevrf
-    provider: '{{ netconf }}'
+    provider: "{{ netconf }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
-- name: verify domain_name with vrf
+- name: Verify domain_name with VRF
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id003
-
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- debug:
+- ansible.builtin.debug:
     msg: END netconf/set_domain_name.yaml on connection={{ ansible_connection }}

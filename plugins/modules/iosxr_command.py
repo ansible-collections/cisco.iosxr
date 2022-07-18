@@ -126,9 +126,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.parsing import (
     Conditional,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_lines,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_lines
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     iosxr_argument_spec,
@@ -146,7 +144,7 @@ def parse_commands(module, warnings):
         if module.check_mode and not command.startswith("show"):
             warnings.append(
                 "Only show commands are supported when using check mode, not "
-                "executing %s" % command
+                "executing %s" % command,
             )
             commands.remove(item)
 
@@ -165,7 +163,8 @@ def main():
     argument_spec.update(iosxr_argument_spec)
 
     module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
+        argument_spec=argument_spec,
+        supports_check_mode=True,
     )
 
     warnings = list()
@@ -204,7 +203,7 @@ def main():
         module.fail_json(msg=msg, failed_conditions=failed_conditions)
 
     result.update(
-        {"stdout": responses, "stdout_lines": list(to_lines(responses))}
+        {"stdout": responses, "stdout_lines": list(to_lines(responses))},
     )
 
     module.exit_json(**result)

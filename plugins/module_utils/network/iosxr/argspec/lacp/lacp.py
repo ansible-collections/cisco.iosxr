@@ -49,7 +49,7 @@ class LacpArgs(object):  # pylint: disable=R0903
                         "priority": {"type": "int"},
                     },
                     "type": "dict",
-                }
+                },
             },
             "type": "dict",
         },
