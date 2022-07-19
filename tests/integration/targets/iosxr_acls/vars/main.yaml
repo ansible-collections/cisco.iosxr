@@ -30,7 +30,7 @@ merged:
                 host: 192.0.2.10
                 port_protocol:
                   range:
-                    end: '121'
+                    end: "121"
                     start: pop3
             - destination:
                 address: 198.51.100.0
@@ -112,7 +112,7 @@ replaced:
                 host: 192.0.2.10
                 port_protocol:
                   range:
-                    end: '121'
+                    end: "121"
                     start: pop3
             - destination:
                 address: 198.51.100.0

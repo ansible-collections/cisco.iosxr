@@ -1,7 +1,8 @@
 ---
 - name: Populate the device with acls
   cisco.iosxr.iosxr_config:
-    lines: "ipv4 access-list acl_1\n10 permit ipv4 any any\nipv4 access-list acl_2\n10 permit ipv4 any any\nipv4 access-list acl_3\n10 permit ipv4 any any\nipv6 access-list\
+    lines:
+      "ipv4 access-list acl_1\n10 permit ipv4 any any\nipv4 access-list acl_2\n10 permit ipv4 any any\nipv4 access-list acl_3\n10 permit ipv4 any any\nipv6 access-list\
       \ acl6_1\n10 permit ipv6 any any\nipv6 access-list acl6_2\n10 permit ipv6 any any\nipv6 access-list acl6_3\n10 permit ipv6 any any\n"
 
 - name: Setup ACL interfaces configuration for gigabitethernet0/0/0/0

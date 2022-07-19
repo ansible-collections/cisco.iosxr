@@ -51,10 +51,8 @@ merged:
     trap:
       severity: informational
 
-
 deleted:
-  after:
-    {}
+  after: {}
 
 replaced:
   commands:

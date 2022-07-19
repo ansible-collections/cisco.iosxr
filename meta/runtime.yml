@@ -1,5 +1,5 @@
 ---
-requires_ansible: '>=2.9.10'
+requires_ansible: ">=2.9.10"
 plugin_routing:
   modules:
     acl_interfaces:
@@ -11,7 +11,7 @@ plugin_routing:
     bgp:
       redirect: cisco.iosxr.iosxr_bgp
       deprecation:
-        removal_date: '2023-01-29'
+        removal_date: "2023-01-29"
         warning_text: See the plugin documentation for more details
     command:
       redirect: cisco.iosxr.iosxr_command
@@ -22,11 +22,11 @@ plugin_routing:
     interface:
       redirect: cisco.iosxr.iosxr_interface
       deprecation:
-        removal_date: '2022-06-01'
+        removal_date: "2022-06-01"
         warning_text: See the plugin documentation for more details
     iosxr_interface:
       deprecation:
-        removal_date: '2022-06-01'
+        removal_date: "2022-06-01"
         warning_text: See the plugin documentation for more details
     interfaces:
       redirect: cisco.iosxr.iosxr_interfaces
@@ -47,11 +47,11 @@ plugin_routing:
     logging:
       redirect: cisco.iosxr.iosxr_logging
       deprecation:
-        removal_date: '2023-08-01'
+        removal_date: "2023-08-01"
         warning_text: See the plugin documentation for more details
     iosxr_logging:
       deprecation:
-        removal_date: '2023-08-01'
+        removal_date: "2023-08-01"
         warning_text: See the plugin documentation for more details
     logging_global:
       redirect: cisco.iosxr.iosxr_logging_global
