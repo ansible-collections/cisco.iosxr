@@ -1,5 +1,4 @@
 ---
-
 merged:
   commands:
     - router bgp 65536
@@ -69,7 +68,6 @@ replaced:
       - address-family ipv4 unicast
       - dynamic-med interval 8
       - no redistribute connected metric 10
-
 
 rendered:
   commands:

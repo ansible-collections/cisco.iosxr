@@ -34,12 +34,13 @@
       cisco.iosxr.iosxr_user:
         name: auth_user
         state: present
-        public_key_contents: "{{ lookup('file', \"{{ role_path }}/files/public.pub\") }}"
+        public_key_contents: '{{ lookup(''file'', "{{ role_path }}/files/public.pub") }}'
         provider: "{{ cli }}"
 
     - name: Test login with private key
       ansible.builtin.expect:
-        command: ssh auth_user@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i {{ role_path
+        command:
+          ssh auth_user@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i {{ role_path
           }}/files/private show version
         responses:
           (?i)password: pass123
@@ -54,7 +55,8 @@
 
     - name: Test login with private key (should fail, no user)
       ansible.builtin.expect:
-        command: ssh auth_user@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i {{ role_path
+        command:
+          ssh auth_user@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i {{ role_path
           }}/files/private show version
         responses:
           (?i)password: pass123
@@ -72,7 +74,8 @@
 
     - name: Test login with private key
       ansible.builtin.expect:
-        command: ssh auth_user@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i {{ role_path
+        command:
+          ssh auth_user@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i {{ role_path
           }}/files/private show version
         responses:
           (?i)password: pass123
@@ -84,12 +87,13 @@
       cisco.iosxr.iosxr_user:
         name: auth_user
         state: present
-        public_key_contents: "{{ lookup('file', \"{{ role_path }}/files/public2.pub\") }}"
+        public_key_contents: '{{ lookup(''file'', "{{ role_path }}/files/public2.pub") }}'
         provider: "{{ cli }}"
 
     - name: Test login with invalid private key (should fail)
       ansible.builtin.expect:
-        command: ssh auth_user@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i {{ role_path
+        command:
+          ssh auth_user@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i {{ role_path
           }}/files/private show version
         responses:
           (?i)password: pass123

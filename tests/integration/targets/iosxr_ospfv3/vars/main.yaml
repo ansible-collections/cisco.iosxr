@@ -70,20 +70,20 @@ merged:
             default_cost: 5
           - area_id: "22"
             default_cost: 6
-        process_id: '10'
+        process_id: "10"
       - authentication:
           disable: true
-        process_id: '26'
+        process_id: "26"
       - areas:
-          - area_id: '10'
+          - area_id: "10"
             hello_interval: 2
-          - area_id: '30'
+          - area_id: "30"
             dead_interval: 4
-        process_id: '27'
+        process_id: "27"
       - areas:
-          - area_id: '11'
+          - area_id: "11"
             default_cost: 5
-          - area_id: '22'
+          - area_id: "22"
             default_cost: 6
 
         cost: 2
@@ -94,31 +94,31 @@ merged:
         mtu_ignore: true
         packet_size: 577
         priority: 1
-        process_id: '30'
+        process_id: "30"
         retransmit_interval: 2
-        router_id: '2.2.2.2'
+        router_id: "2.2.2.2"
         transmit_delay: 2
 replaced:
   before:
     processes:
       - areas:
-          - area_id: '11'
+          - area_id: "11"
             cost: 11
             default_cost: 5
-          - area_id: '22'
+          - area_id: "22"
             default_cost: 6
-        process_id: '10'
+        process_id: "10"
       - authentication:
           disable: true
-        process_id: '26'
+        process_id: "26"
       - areas:
-          - area_id: '10'
+          - area_id: "10"
             hello_interval: 2
-        process_id: '27'
+        process_id: "27"
       - areas:
-          - area_id: '11'
+          - area_id: "11"
             default_cost: 5
-          - area_id: '22'
+          - area_id: "22"
             default_cost: 6
         cost: 2
         dead_interval: 2
@@ -128,9 +128,9 @@ replaced:
         mtu_ignore: true
         packet_size: 577
         priority: 1
-        process_id: '30'
+        process_id: "30"
         retransmit_interval: 2
-        router_id: '2.2.2.2'
+        router_id: "2.2.2.2"
         transmit_delay: 2
 
   commands:
@@ -141,26 +141,26 @@ replaced:
   after:
     processes:
       - areas:
-          - area_id: '11'
+          - area_id: "11"
             cost: 11
             default_cost: 5
-          - area_id: '22'
+          - area_id: "22"
             default_cost: 6
-        process_id: '10'
+        process_id: "10"
       - authentication:
           disable: true
-        process_id: '26'
+        process_id: "26"
       - areas:
-          - area_id: '10'
+          - area_id: "10"
             hello_interval: 2
-          - area_id: '20'
+          - area_id: "20"
             cost: 2
             default_cost: 2
-        process_id: '27'
+        process_id: "27"
       - areas:
-          - area_id: '11'
+          - area_id: "11"
             default_cost: 5
-          - area_id: '22'
+          - area_id: "22"
             default_cost: 6
         cost: 2
         dead_interval: 2
@@ -170,9 +170,9 @@ replaced:
         mtu_ignore: true
         packet_size: 577
         priority: 1
-        process_id: '30'
+        process_id: "30"
         retransmit_interval: 2
-        router_id: '2.2.2.2'
+        router_id: "2.2.2.2"
         transmit_delay: 2
 
 overridden:
@@ -200,18 +200,18 @@ overridden:
     - area 20 cost 2
   after:
     processes:
-      - process_id: '10'
+      - process_id: "10"
       - authentication:
           disable: true
-        process_id: '26'
+        process_id: "26"
       - areas:
-          - area_id: '10'
+          - area_id: "10"
             hello_interval: 2
-          - area_id: '20'
+          - area_id: "20"
             cost: 2
             default_cost: 2
-        process_id: '27'
-      - process_id: '30'
+        process_id: "27"
+      - process_id: "30"
 deleted:
   commands:
     - router ospfv3 10
@@ -239,22 +239,22 @@ deleted:
 
   after:
     processes:
-      - process_id: '10'
-      - process_id: '26'
-      - process_id: '27'
-      - process_id: '30'
+      - process_id: "10"
+      - process_id: "26"
+      - process_id: "27"
+      - process_id: "30"
 round_trip:
   after:
     processes:
-      - process_id: '10'
+      - process_id: "10"
       - authentication:
           disable: true
-        process_id: '26'
+        process_id: "26"
       - areas:
-          - area_id: '10'
+          - area_id: "10"
             hello_interval: 2
-          - area_id: '20'
+          - area_id: "20"
             cost: 2
             default_cost: 2
-        process_id: '27'
-      - process_id: '30'
+        process_id: "27"
+      - process_id: "30"

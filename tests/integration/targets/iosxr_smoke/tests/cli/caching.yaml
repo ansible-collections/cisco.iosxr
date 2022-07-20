@@ -11,8 +11,8 @@
           - no interface GigabitEthernet 0/0/0/4
         match: none
 
-  # We need to do this because of a bug in iosxr_interfaces module
-  # https://github.com/ansible-collections/cisco.iosxr/issues/106
+    # We need to do this because of a bug in iosxr_interfaces module
+    # https://github.com/ansible-collections/cisco.iosxr/issues/106
     - name: Add back interfaces to configuration before actual testing
       ignore_errors: true
       cisco.iosxr.iosxr_config:

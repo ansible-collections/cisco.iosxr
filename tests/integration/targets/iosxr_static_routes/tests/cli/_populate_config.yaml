@@ -2,16 +2,12 @@
 - name: Setup
   cisco.iosxr.iosxr_static_routes:
     config:
-
       - address_families:
-
           - afi: ipv4
             safi: unicast
             routes:
-
               - dest: 192.0.2.16/28
                 next_hops:
-
                   - forward_router_address: 192.0.2.10
                     interface: FastEthernet0/0/0/1
                     description: LAB
@@ -23,17 +19,14 @@
 
               - dest: 192.0.2.32/28
                 next_hops:
-
                   - forward_router_address: 192.0.2.11
                     admin_distance: 100
 
           - afi: ipv6
             safi: unicast
             routes:
-
               - dest: 2001:db8:1000::/36
                 next_hops:
-
                   - interface: FastEthernet0/0/0/7
                     description: DC
 
@@ -42,14 +35,11 @@
 
       - vrf: DEV_SITE
         address_families:
-
           - afi: ipv4
             safi: unicast
             routes:
-
               - dest: 192.0.2.48/28
                 next_hops:
-
                   - forward_router_address: 192.0.2.12
                     description: DEV
                     dest_vrf: test_1
@@ -60,7 +50,6 @@
 
               - dest: 192.0.2.80/28
                 next_hops:
-
                   - interface: FastEthernet0/0/0/2
                     forward_router_address: 192.0.2.14
                     dest_vrf: test_1

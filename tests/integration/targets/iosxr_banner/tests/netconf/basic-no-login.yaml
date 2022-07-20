@@ -23,7 +23,7 @@
 - ansible.builtin.assert:
     that:
       - result.changed == true
-      - "'xc:operation=\"delete\"' in result.xml"
+      - '''xc:operation="delete"'' in result.xml'
 
 - name: Remove login (idempotent)
   register: result
