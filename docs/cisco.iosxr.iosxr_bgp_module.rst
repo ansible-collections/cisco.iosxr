@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_bgp
 *********************
 
-**Configure global BGP protocol settings on Cisco IOS-XR**
+**Module to configure BGP protocol settings.**
 
 
 Version added: 1.0.0

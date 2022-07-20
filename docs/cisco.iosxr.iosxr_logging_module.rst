@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_logging
 *************************
 
-**Configuration management of system logging services on network devices**
+**(deprecated, removed after 2023-08-01) Configuration management of system logging services on network devices**
 
 
 Version added: 1.0.0

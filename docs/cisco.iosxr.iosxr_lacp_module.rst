@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_lacp
 **********************
 
-**LACP resource module**
+**Resource module to configure LACP.**
 
 
 Version added: 1.0.0

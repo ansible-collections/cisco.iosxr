@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_bgp_global
 ****************************
 
-**Manages BGP global resource module.**
+**Resource module to configure BGP.**
 
 
 Version added: 2.0.0

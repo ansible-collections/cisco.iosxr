@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_hostname
 **************************
 
-**Manages hostname resource module**
+**Resource module to configure hostname.**
 
 
 Version added: 2.7.0

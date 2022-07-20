@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_lldp_interfaces
 *********************************
 
-**LLDP interfaces resource module**
+**Resource module to configure LLDP interfaces.**
 
 
 Version added: 1.0.0

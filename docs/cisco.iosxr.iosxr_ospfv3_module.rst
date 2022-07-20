@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_ospfv3
 ************************
 
-**ospfv3 resource module**
+**Resource module to configure OSPFv3.**
 
 
 Version added: 1.1.0

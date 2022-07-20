@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_command
 *************************
 
-**Run commands on remote devices running Cisco IOS XR**
+**Module to run commands on remote devices.**
 
 
 Version added: 1.0.0

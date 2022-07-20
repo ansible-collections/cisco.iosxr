@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_l2_interfaces
 *******************************
 
-**L2 interfaces resource module**
+**Resource Module to configure L2 interfaces.**
 
 
 Version added: 1.0.0

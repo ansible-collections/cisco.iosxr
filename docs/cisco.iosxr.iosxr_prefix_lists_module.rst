@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_prefix_lists
 ******************************
 
-**Prefix-Lists resource module.**
+**Resource module to configure prefix lists.**
 
 
 Version added: 2.3.0

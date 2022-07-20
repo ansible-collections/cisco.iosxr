@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_bgp_address_family
 ************************************
 
-**Manages BGP Address Family resource module.**
+**Resource module to configure BGP Address family.**
 
 
 Version added: 2.0.0
