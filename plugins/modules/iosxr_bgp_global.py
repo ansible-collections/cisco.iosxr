@@ -15,7 +15,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_bgp_global
-short_description: Manages BGP global resource module.
+short_description: Resource module to configure BGP.
 description:
 - This module configures and manages the attributes of BGP global on Cisco IOS-XR platforms.
 version_added: 2.0.0

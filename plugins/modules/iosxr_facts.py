@@ -15,7 +15,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_facts
-short_description: Get facts about iosxr devices.
+short_description: Module to collect facts from remote devices.
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 description:

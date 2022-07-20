@@ -16,7 +16,7 @@ __metaclass__ = type
 DOCUMENTATION = """
 module: iosxr_ospf_interfaces
 version_added: 1.2.0
-short_description: OSPF Interfaces Resource Module.
+short_description: Resource module to configure OSPF interfaces.
 description:
   - This module manages OSPF(v2/v3) configuration of interfaces on devices running Cisco IOS-XR.
 author: Rohit Thakur (@rohitthakur2590)

@@ -34,7 +34,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_lldp_interfaces
-short_description: LLDP interfaces resource module
+short_description: Resource module to configure LLDP interfaces.
 description:
 - This module manages Link Layer Discovery Protocol (LLDP) attributes of interfaces
   on IOS-XR devices.

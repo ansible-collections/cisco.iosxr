@@ -12,7 +12,7 @@ __metaclass__ = type
 DOCUMENTATION = """
 module: iosxr_config
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
-short_description: Manage Cisco IOS XR configuration sections
+short_description: Module to manage configuration sections.
 description:
 - Cisco IOS XR configurations use a simple block indent file syntax for segmenting
   configuration into sections.  This module provides an implementation for working

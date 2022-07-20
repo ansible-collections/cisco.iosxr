@@ -32,7 +32,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 DOCUMENTATION = """
 module: iosxr_lag_interfaces
-short_description: LAG interfaces resource module
+short_description: Resource module to configure LAG interfaces.
 description:
 - This module manages the attributes of LAG/Ether-Bundle interfaces on IOS-XR devices.
 version_added: 1.0.0

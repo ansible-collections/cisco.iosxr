@@ -34,7 +34,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_lldp_global
-short_description: LLDP resource module
+short_description: Resource module to configure LLDP.
 description:
 - This module manages Global Link Layer Discovery Protocol (LLDP) settings on IOS-XR
   devices.

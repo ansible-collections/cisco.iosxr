@@ -34,7 +34,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_acl_interfaces
-short_description: ACL interfaces resource module
+short_description: Resource module to configure ACL interfaces.
 description:
 - This module manages adding and removing Access Control Lists (ACLs) from interfaces
   on devices running IOS-XR software.

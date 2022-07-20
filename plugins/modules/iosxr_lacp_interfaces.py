@@ -34,7 +34,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_lacp_interfaces
-short_description: LACP interfaces resource module
+short_description: Resource module to configure LACP interfaces.
 description:
 - This module manages Link Aggregation Control Protocol (LACP) attributes of interfaces
   on IOS-XR devices.

@@ -26,7 +26,7 @@ GENERATOR_VERSION = "1.0"
 
 DOCUMENTATION = """
 module: iosxr_l2_interfaces
-short_description: L2 interfaces resource module
+short_description: Resource Module to configure L2 interfaces.
 description: This module manages the Layer-2 interface attributes on Cisco IOS-XR
   devices.
 version_added: 1.0.0

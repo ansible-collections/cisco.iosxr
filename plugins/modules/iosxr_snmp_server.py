@@ -16,7 +16,7 @@ __metaclass__ = type
 DOCUMENTATION = """
 ---
 module: iosxr_snmp_server
-short_description: Manages snmp-server resource module
+short_description: Resource module to configure snmp server.
 description: This module configures and manages the attributes of snmp-server on Cisco
   IOSXR platforms.
 version_added: 2.6.0

@@ -16,7 +16,7 @@ __metaclass__ = type
 DOCUMENTATION = """
 ---
 module: iosxr_ntp_global
-short_description: Manages ntp resource module
+short_description: Resource module to configure NTP.
 description: This module configures and manages the attributes of  ntp on Cisco
   IOSXR platforms.
 version_added: 2.5.0

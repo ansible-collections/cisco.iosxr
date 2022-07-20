@@ -27,7 +27,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_ospfv2
-short_description: OSPFv2 resource module
+short_description: Resource module to configure OSPFv2.
 description: This module manages global OSPFv2 configuration on devices running Cisco
   IOS-XR
 version_added: 1.0.0

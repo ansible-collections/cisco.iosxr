@@ -34,7 +34,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_acls
-short_description: ACLs resource module
+short_description: Resource module to configure ACLs.
 description:
 - This module manages Access Control Lists (ACLs) on devices running IOS-XR.
 version_added: 1.0.0

@@ -16,7 +16,7 @@ __metaclass__ = type
 DOCUMENTATION = """
 ---
 module: iosxr_hostname
-short_description: Manages hostname resource module
+short_description: Resource module to configure hostname.
 description: This module configures and manages the attributes of hostname on Cisco
   IOSXR platforms.
 version_added: 2.7.0

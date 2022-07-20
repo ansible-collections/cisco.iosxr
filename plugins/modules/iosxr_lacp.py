@@ -34,7 +34,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_lacp
-short_description: LACP resource module
+short_description: Resource module to configure LACP.
 description:
 - This module manages Global Link Aggregation Control Protocol (LACP) on IOS-XR devices.
 version_added: 1.0.0

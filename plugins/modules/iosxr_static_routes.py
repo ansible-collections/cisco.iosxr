@@ -34,7 +34,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_static_routes
-short_description: Static routes resource module
+short_description: Resource module to configure static routes.
 description:
 - This module manages static routes on devices running Cisco IOS-XR.
 version_added: 1.0.0

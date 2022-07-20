@@ -15,7 +15,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_bgp_neighbor_address_family
-short_description: Manages BGP neighbor address family resource module.
+short_description: Resource module to configure BGP Neighbor Address family.
 description:
 - This module configures and manages the attributes of BGP global on Cisco IOS-XR platforms.
 version_added: 2.0.0

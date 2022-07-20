@@ -13,7 +13,7 @@ module: iosxr_system
 author:
 - Peter Sprygada (@privateip)
 - Kedar Kekan (@kedarX)
-short_description: Manage the system attributes on Cisco IOS XR devices
+short_description: Module to manage the system attributes.
 description:
 - This module provides declarative management of node system attributes on Cisco IOS
   XR devices. It provides an option to configure host system parameters or remove
