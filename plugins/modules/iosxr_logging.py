@@ -15,7 +15,7 @@ module: iosxr_logging
 author:
 - Trishna Guha (@trishnaguha)
 - Kedar Kekan (@kedarX)
-short_description: Configuration management of system logging services on network
+short_description: (deprecated, removed after 2023-08-01) Configuration management of system logging services on network
   devices
 description:
 - This module provides declarative management configuration of system logging (syslog)

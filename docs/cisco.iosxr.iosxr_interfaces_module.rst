@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_interfaces
 ****************************
 
-**Interfaces resource module**
+**Resource module to configure interfaces.**
 
 
 Version added: 1.0.0

@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_lag_interfaces
 ********************************
 
-**LAG interfaces resource module**
+**Resource module to configure LAG interfaces.**
 
 
 Version added: 1.0.0

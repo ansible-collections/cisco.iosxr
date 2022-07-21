@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_ntp_global
 ****************************
 
-**Manages ntp resource module**
+**Resource module to configure NTP.**
 
 
 Version added: 2.5.0

@@ -15,7 +15,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_prefix_lists
-short_description: Prefix-Lists resource module.
+short_description: Resource module to configure prefix lists.
 description:
 - This module manages prefix-lists configuration on devices running Cisco IOSXR.
 version_added: 2.3.0

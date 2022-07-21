@@ -16,7 +16,7 @@ __metaclass__ = type
 DOCUMENTATION = """
 module: iosxr_logging_global
 version_added: 2.4.0
-short_description: Manages logging attributes of Cisco IOSXR network devices
+short_description: Resource module to configure logging.
 description: This module manages the logging attributes of Cisco IOSXR network devices
 notes:
 - Tested against IOSXR 7.0.2.

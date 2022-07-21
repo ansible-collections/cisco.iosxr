@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_facts
 ***********************
 
-**Get facts about iosxr devices.**
+**Module to collect facts from remote devices.**
 
 
 Version added: 1.0.0

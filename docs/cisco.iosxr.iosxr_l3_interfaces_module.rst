@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_l3_interfaces
 *******************************
 
-**L3 interfaces resource module**
+**Resource module to configure L3 interfaces.**
 
 
 Version added: 1.0.0

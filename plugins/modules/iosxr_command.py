@@ -11,7 +11,7 @@ __metaclass__ = type
 DOCUMENTATION = """
 module: iosxr_command
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
-short_description: Run commands on remote devices running Cisco IOS XR
+short_description: Module to run commands on remote devices.
 description:
 - Sends arbitrary commands to an IOS XR node and returns the results read from the
   device. This module includes an argument that will cause the module to wait for

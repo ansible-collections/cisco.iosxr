@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_snmp_server
 *****************************
 
-**Manages snmp-server resource module**
+**Resource module to configure snmp server.**
 
 
 Version added: 2.6.0
