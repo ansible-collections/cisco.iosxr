@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_user
 **********************
 
-**Manage the aggregate of local users on Cisco IOS XR device**
+**Module to manage the aggregates of local users.**
 
 
 Version added: 1.0.0

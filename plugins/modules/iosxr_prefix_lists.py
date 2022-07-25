@@ -10,11 +10,12 @@ The module file for iosxr_prefix_lists
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_prefix_lists
-short_description: Prefix-Lists resource module.
+short_description: Resource module to configure prefix lists.
 description:
 - This module manages prefix-lists configuration on devices running Cisco IOSXR.
 version_added: 2.3.0
@@ -1078,6 +1079,7 @@ parsed:
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.prefix_lists.prefix_lists import (
     Prefix_listsArgs,
 )

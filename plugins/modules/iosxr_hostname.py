@@ -10,12 +10,13 @@ The module file for iosxr_hostname
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
 ---
 module: iosxr_hostname
-short_description: Manages hostname resource module
+short_description: Resource module to configure hostname.
 description: This module configures and manages the attributes of hostname on Cisco
   IOSXR platforms.
 version_added: 2.7.0
@@ -281,6 +282,7 @@ parsed:
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.hostname.hostname import (
     HostnameArgs,
 )

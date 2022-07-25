@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -14,14 +15,13 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.snmp_server.snmp_server import (
+    Snmp_serverArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.snmp_server import (
     Snmp_serverTemplate,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.snmp_server.snmp_server import (
-    Snmp_serverArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     flatten_config,
@@ -68,7 +68,8 @@ class Snmp_serverFacts(object):
             data = flatten_config(data, x)
         # parse native config using the Snmp_server template
         snmp_server_parser = Snmp_serverTemplate(
-            lines=data.splitlines(), module=self._module
+            lines=data.splitlines(),
+            module=self._module,
         )
         objs = snmp_server_parser.parse()
 
@@ -92,8 +93,10 @@ class Snmp_serverFacts(object):
 
         params = utils.remove_empties(
             snmp_server_parser.validate_config(
-                self.argument_spec, {"config": objs}, redact=True
-            )
+                self.argument_spec,
+                {"config": objs},
+                redact=True,
+            ),
         )
         facts["snmp_server"] = params.get("config", {})
         ansible_facts["ansible_network_resources"].update(facts)

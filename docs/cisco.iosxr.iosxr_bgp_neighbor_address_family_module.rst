@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_bgp_neighbor_address_family
 *********************************************
 
-**Manages BGP neighbor address family resource module.**
+**Resource module to configure BGP Neighbor Address family.**
 
 
 Version added: 2.0.0

@@ -19,13 +19,13 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_lacp
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
+
 from .iosxr_module import TestIosxrModule, load_fixture
 
 
@@ -36,30 +36,26 @@ class TestIosxrLacpModule(TestIosxrModule):
         super(TestIosxrLacpModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
         self.mock_execute_show_command = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.lacp.lacp.LacpFacts.get_config"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.lacp.lacp.LacpFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -82,11 +78,12 @@ class TestIosxrLacpModule(TestIosxrModule):
             dict(
                 config=dict(
                     system=dict(
-                        priority=12, mac=dict(address="00c1.4c00.bd15")
-                    )
+                        priority=12,
+                        mac=dict(address="00c1.4c00.bd15"),
+                    ),
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = [
             "lacp system mac 00c1.4c00.bd15",

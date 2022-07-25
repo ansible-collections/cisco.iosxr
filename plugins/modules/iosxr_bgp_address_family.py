@@ -10,11 +10,12 @@ The module file for iosxr_bgp_address_family
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_bgp_address_family
-short_description: Manages BGP Address Family resource module.
+short_description: Resource module to configure BGP Address family.
 description:
 - This module configures and manages the attributes of BGP address family on Cisco IOS-XR platforms.
 version_added: 2.0.0
@@ -908,6 +909,7 @@ EXAMPLES = """
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.bgp_address_family.bgp_address_family import (
     Bgp_address_familyArgs,
 )

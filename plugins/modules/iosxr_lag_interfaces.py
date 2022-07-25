@@ -28,10 +28,11 @@ The module file for iosxr_lag_interfaces
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 DOCUMENTATION = """
 module: iosxr_lag_interfaces
-short_description: LAG interfaces resource module
+short_description: Resource module to configure LAG interfaces.
 description:
 - This module manages the attributes of LAG/Ether-Bundle interfaces on IOS-XR devices.
 version_added: 1.0.0
@@ -814,6 +815,7 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lag_interfaces.lag_interfaces import (
     Lag_interfacesArgs,
 )

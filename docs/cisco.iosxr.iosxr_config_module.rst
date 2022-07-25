@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_config
 ************************
 
-**Manage Cisco IOS XR configuration sections**
+**Module to manage configuration sections.**
 
 
 Version added: 1.0.0

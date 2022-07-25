@@ -18,13 +18,13 @@
 # Make coding more python3-ish
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_netconf
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
+
 from .iosxr_module import TestIosxrModule
 
 
@@ -36,12 +36,12 @@ class TestIosxrNetconfModule(TestIosxrModule):
         super(TestIosxrNetconfModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_netconf.get_config"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_netconf.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_netconf.load_config"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_netconf.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
@@ -59,7 +59,7 @@ class TestIosxrNetconfModule(TestIosxrModule):
         """
         self.load_config.return_value = "dummy diff"
         set_module_args(
-            dict(netconf_port=830, netconf_vrf="default", state="absent")
+            dict(netconf_port=830, netconf_vrf="default", state="absent"),
         )
         result = self.execute_module(changed=True)
         self.assertEqual(
@@ -75,7 +75,7 @@ class TestIosxrNetconfModule(TestIosxrModule):
         self.get_config.return_value = ""
         self.load_config.return_value = "dummy diff"
         set_module_args(
-            dict(netconf_port=830, netconf_vrf="default", state="present")
+            dict(netconf_port=830, netconf_vrf="default", state="present"),
         )
         result = self.execute_module(changed=True)
         self.assertEqual(
@@ -110,5 +110,6 @@ class TestIosxrNetconfModule(TestIosxrModule):
         set_module_args(dict(netconf_vrf="new_default", state="present"))
         result = self.execute_module(changed=True)
         self.assertEqual(
-            result["commands"], ["ssh server netconf vrf new_default"]
+            result["commands"],
+            ["ssh server netconf vrf new_default"],
         )

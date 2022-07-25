@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 #############################################
@@ -70,7 +71,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         "disable": {"type": "bool"},
                                         "set": {"type": "bool"},
                                         "send_cost_community_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "send_med": {
                                             "type": "dict",
@@ -93,12 +94,12 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
                                 "bestpath_origin_as_allow_invalid": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "capability_orf_prefix": {
                                     "type": "str",
@@ -115,7 +116,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         "set": {"type": "bool"},
                                         "route_policy": {"type": "str"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
@@ -140,7 +141,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         "restart": {"type": "int"},
                                         "warning_only": {"type": "bool"},
                                         "discard_extra_paths": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
@@ -150,7 +151,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
@@ -159,13 +160,13 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "multipath": {"type": "bool"},
                                     },
                                 },
                                 "optimal_route_reflection_group_name": {
-                                    "type": "str"
+                                    "type": "str",
                                 },
                                 "orf_route_policy": {"type": "str"},
                                 "origin_as": {
@@ -174,9 +175,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         "validation": {
                                             "type": "dict",
                                             "options": {
-                                                "disable": {"type": "bool"}
+                                                "disable": {"type": "bool"},
                                             },
-                                        }
+                                        },
                                     },
                                 },
                                 "remove_private_AS": {
@@ -186,7 +187,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         "inbound": {"type": "bool"},
                                         "entire_aspath": {"type": "bool"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
@@ -202,7 +203,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
@@ -211,7 +212,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
@@ -220,7 +221,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
@@ -229,7 +230,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
@@ -249,10 +250,10 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                                 "set": {"type": "bool"},
                                                 "always": {"type": "bool"},
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
-                                        }
+                                        },
                                     },
                                 },
                                 "weight": {"type": "int"},
@@ -305,16 +306,16 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                                 "disable": {"type": "bool"},
                                                 "set": {"type": "bool"},
                                                 "send_cost_community_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "send_med": {
                                                     "type": "dict",
                                                     "options": {
                                                         "set": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "disable": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                     },
                                                 },
@@ -332,7 +333,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -350,10 +351,10 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "route_policy": {
-                                                    "type": "str"
+                                                    "type": "str",
                                                 },
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -365,10 +366,10 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "send": {
-                                                            "type": "int"
+                                                            "type": "int",
                                                         },
                                                         "accept": {
-                                                            "type": "int"
+                                                            "type": "int",
                                                         },
                                                     },
                                                 },
@@ -379,14 +380,14 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "max_limit": {"type": "int"},
                                                 "threshold_value": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "restart": {"type": "int"},
                                                 "warning_only": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "discard_extra_paths": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -396,7 +397,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -405,13 +406,13 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "multipath": {"type": "bool"},
                                             },
                                         },
                                         "optimal_route_reflection_group_name": {
-                                            "type": "str"
+                                            "type": "str",
                                         },
                                         "orf_route_policy": {"type": "str"},
                                         "remove_private_AS": {
@@ -420,10 +421,10 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                                 "set": {"type": "bool"},
                                                 "inbound": {"type": "bool"},
                                                 "entire_aspath": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -439,7 +440,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -448,7 +449,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -457,7 +458,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -466,7 +467,7 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -477,16 +478,16 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "set": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "always": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "inheritance_disable": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                     },
-                                                }
+                                                },
                                             },
                                         },
                                         "site_of_origin": {"type": "str"},

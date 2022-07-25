@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -15,7 +16,7 @@ author:
 - Trishna Guha (@trishnaguha)
 - Sebastiaan van Doesselaar (@sebasdoes)
 - Kedar Kekan (@kedarX)
-short_description: Manage the aggregate of local users on Cisco IOS XR device
+short_description: Module to manage the aggregates of local users.
 description:
 - This module provides declarative management of the local usernames configured on
   network devices. It allows playbooks to manage either individual usernames or the
@@ -279,30 +280,31 @@ xml:
     </config>'
 """
 
-import os
-from functools import partial
-from copy import deepcopy
 import collections
-from distutils.version import LooseVersion
+import os
+
+from copy import deepcopy
+from functools import partial
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
 )
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    get_config,
-    load_config,
-    is_netconf,
-    is_cliconf,
-    get_connection,
-    copy_file,
-    get_capabilities,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
     build_xml,
+    copy_file,
     etree_findall,
+    get_capabilities,
+    get_config,
+    get_connection,
+    iosxr_argument_spec,
+    is_cliconf,
+    is_netconf,
+    load_config,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import Version
+
 
 try:
     from base64 import b64decode
@@ -391,15 +393,11 @@ class PublicKeyManager(object):
             if not self._module.check_mode:
                 if self._module.params["aggregate"]:
                     for user in self._module.params["aggregate"]:
-                        cmdtodo = (
-                            "crypto key zeroize authentication rsa username %s"
-                            % (user)
-                        )
+                        cmdtodo = "crypto key zeroize authentication rsa username %s" % (user)
                         self.addremovekey(cmdtodo)
                 else:
-                    cmdtodo = (
-                        "crypto key zeroize authentication rsa username %s"
-                        % (self._module.params["name"])
+                    cmdtodo = "crypto key zeroize authentication rsa username %s" % (
+                        self._module.params["name"]
                     )
                     self.addremovekey(cmdtodo)
         elif self._module.params["purge"] is True:
@@ -433,9 +431,7 @@ class ConfigBase(object):
         # if key does exist, do a type check on it to validate it
         else:
             value_type = self._module.argument_spec[key].get("type", "str")
-            type_checker = self._module._CHECK_ARGUMENT_TYPES_DISPATCHER[
-                value_type
-            ]
+            type_checker = self._module._CHECK_ARGUMENT_TYPES_DISPATCHER[value_type]
             type_checker(item[key])
             value = item[key]
 
@@ -451,10 +447,7 @@ class ConfigBase(object):
 
         aggregate = list()
         if not users:
-            if (
-                not self._module.params["name"]
-                and self._module.params["purge"]
-            ):
+            if not self._module.params["name"] and self._module.params["purge"]:
                 pass
             elif not self._module.params["name"]:
                 self._module.fail_json(msg="username is required")
@@ -526,7 +519,7 @@ class CliConfiguration(ConfigBase):
 
                 if w["configured_password"]:
                     commands.append(
-                        user_cmd + " secret " + w["configured_password"]
+                        user_cmd + " secret " + w["configured_password"],
                     )
                 if w["group"]:
                     commands.append(user_cmd + " group " + w["group"])
@@ -537,12 +530,9 @@ class CliConfiguration(ConfigBase):
             elif state == "present" and obj_in_have:
                 user_cmd = "username " + name
 
-                if (
-                    self._module.params["update_password"] == "always"
-                    and w["configured_password"]
-                ):
+                if self._module.params["update_password"] == "always" and w["configured_password"]:
                     commands.append(
-                        user_cmd + " secret " + w["configured_password"]
+                        user_cmd + " secret " + w["configured_password"],
                     )
                 if w["group"] and w["group"] != obj_in_have["group"]:
                     commands.append(user_cmd + " group " + w["group"])
@@ -565,7 +555,10 @@ class CliConfiguration(ConfigBase):
             commit = not self._module.check_mode
             admin = self._module.params["admin"]
             diff = load_config(
-                self._module, commands, commit=commit, admin=admin
+                self._module,
+                commands,
+                commit=commit,
+                admin=admin,
             )
             if diff:
                 self._result["diff"] = dict(prepared=diff)
@@ -597,7 +590,7 @@ class NCConfiguration(ConfigBase):
         return os.popen(cmd + arg).readlines()[0].strip()
 
     def map_obj_to_xml_rpc(self, os_version):
-        if os_version and LooseVersion(os_version) > LooseVersion("7.0"):
+        if os_version and Version(os_version) > Version("7.0"):
             self._locald_meta.update(
                 [
                     (
@@ -639,7 +632,7 @@ class NCConfiguration(ConfigBase):
                             "operation": "edit",
                         },
                     ),
-                ]
+                ],
             )
             self._locald_group_meta.update(
                 [
@@ -683,7 +676,7 @@ class NCConfiguration(ConfigBase):
                             "operation": "edit",
                         },
                     ),
-                ]
+                ],
             )
         else:
             self._locald_meta.update(
@@ -708,7 +701,7 @@ class NCConfiguration(ConfigBase):
                             "operation": "edit",
                         },
                     ),
-                ]
+                ],
             )
             self._locald_group_meta.update(
                 [
@@ -748,13 +741,15 @@ class NCConfiguration(ConfigBase):
                             "operation": "edit",
                         },
                     ),
-                ]
+                ],
             )
 
         state = self._module.params["state"]
         _get_filter = build_xml("aaa", opcode="filter")
         running = get_config(
-            self._module, source="running", config_filter=_get_filter
+            self._module,
+            source="running",
+            config_filter=_get_filter,
         )
 
         elements = etree_findall(running, "username")
@@ -765,7 +760,7 @@ class NCConfiguration(ConfigBase):
             list_size = len(name_list)
             if list_size == 1:
                 self._have.append(
-                    {"name": name_list[0].text, "group": None, "groups": None}
+                    {"name": name_list[0].text, "group": None, "groups": None},
                 )
             elif list_size == 2:
                 self._have.append(
@@ -773,7 +768,7 @@ class NCConfiguration(ConfigBase):
                         "name": name_list[0].text,
                         "group": name_list[1].text,
                         "groups": None,
-                    }
+                    },
                 )
             elif list_size > 2:
                 name_iter = iter(name_list)
@@ -787,22 +782,20 @@ class NCConfiguration(ConfigBase):
                         "name": name_list[0].text,
                         "group": None,
                         "groups": tmp_list,
-                    }
+                    },
                 )
-            if os_version and LooseVersion(os_version) > LooseVersion("7.0"):
+            if os_version and Version(os_version) > Version("7.0"):
                 ordering_index = etree_findall(element, "ordering-index")
                 if len(self._have) > 0:
                     self._have[-1].update(
-                        ordering_index=ordering_index[0].text
+                        ordering_index=ordering_index[0].text,
                     )
 
         locald_params = list()
         locald_group_params = list()
         opcode = None
         ordering_index_list = [
-            int(user.get("ordering_index"))
-            for user in self._have
-            if user.get("ordering_index")
+            int(user.get("ordering_index")) for user in self._have if user.get("ordering_index")
         ]
 
         if state == "absent":
@@ -810,14 +803,11 @@ class NCConfiguration(ConfigBase):
             for want_item in self._want:
                 if want_item["name"] in users:
                     obj_in_have = search_obj_in_list(
-                        want_item["name"], self._have
+                        want_item["name"],
+                        self._have,
                     )
-                    if os_version and LooseVersion(os_version) > LooseVersion(
-                        "7.0"
-                    ):
-                        want_item["ordering_index"] = obj_in_have[
-                            "ordering_index"
-                        ]
+                    if os_version and Version(os_version) > Version("7.0"):
+                        want_item["ordering_index"] = obj_in_have["ordering_index"]
                     want_item["configured_password"] = None
                     locald_params.append(want_item)
         elif state == "present":
@@ -825,20 +815,16 @@ class NCConfiguration(ConfigBase):
             for want_item in self._want:
                 obj_in_have = search_obj_in_list(want_item["name"], self._have)
                 if want_item["name"] not in users:
-                    if os_version and LooseVersion(os_version) > LooseVersion(
-                        "7.0"
-                    ):
-                        want_item[
-                            "configured_password"
-                        ] = self.generate_md5_hash(
-                            want_item["configured_password"]
+                    if os_version and Version(os_version) > Version("7.0"):
+                        want_item["configured_password"] = self.generate_md5_hash(
+                            want_item["configured_password"],
                         )
                         new_ordering_index = ordering_index_list[-1] + 1
                         want_item["ordering_index"] = str(new_ordering_index)
                         ordering_index_list.append(new_ordering_index)
                         want_item["type"] = "type5"
                     want_item["configured_password"] = self.generate_md5_hash(
-                        want_item["configured_password"]
+                        want_item["configured_password"],
                     )
                     locald_params.append(want_item)
                     if want_item["group"] is not None:
@@ -848,24 +834,18 @@ class NCConfiguration(ConfigBase):
                             want_item["group"] = group
                             locald_group_params.append(want_item.copy())
                 else:
-                    if os_version and LooseVersion(os_version) > LooseVersion(
-                        "7.0"
-                    ):
+                    if os_version and Version(os_version) > Version("7.0"):
                         if obj_in_have:
                             # Add iosxr 7.0 > specific parameters
                             want_item["type"] = "type5"
-                            want_item["ordering_index"] = obj_in_have[
-                                "ordering_index"
-                            ]
+                            want_item["ordering_index"] = obj_in_have["ordering_index"]
                     if (
                         self._module.params["update_password"] == "always"
                         and want_item["configured_password"] is not None
                     ):
 
-                        want_item[
-                            "configured_password"
-                        ] = self.generate_md5_hash(
-                            want_item["configured_password"]
+                        want_item["configured_password"] = self.generate_md5_hash(
+                            want_item["configured_password"],
                         )
                         locald_params.append(want_item)
                     else:
@@ -899,7 +879,7 @@ class NCConfiguration(ConfigBase):
                         xmap=self._locald_meta,
                         params=locald_params,
                         opcode=opcode,
-                    )
+                    ),
                 )
 
             if locald_group_params:
@@ -909,7 +889,7 @@ class NCConfiguration(ConfigBase):
                         xmap=self._locald_group_meta,
                         params=locald_group_params,
                         opcode=opcode,
-                    )
+                    ),
                 )
 
             if purge_params:
@@ -919,7 +899,7 @@ class NCConfiguration(ConfigBase):
                         xmap=self._locald_meta,
                         params=purge_params,
                         opcode="delete",
-                    )
+                    ),
                 )
         diff = None
         if _edit_filter_list:
@@ -940,11 +920,7 @@ class NCConfiguration(ConfigBase):
             self._result["changed"] = True
 
     def run(self):
-        os_version = (
-            get_capabilities(self._module)
-            .get("device_info")
-            .get("network_os_version")
-        )
+        os_version = get_capabilities(self._module).get("device_info").get("network_os_version")
         self.map_params_to_obj()
         self.map_obj_to_xml_rpc(os_version)
 
@@ -957,7 +933,9 @@ def main():
         name=dict(type="str"),
         configured_password=dict(type="str", no_log=True),
         update_password=dict(
-            type="str", default="always", choices=["on_create", "always"]
+            type="str",
+            default="always",
+            choices=["on_create", "always"],
         ),
         admin=dict(type="bool", default=False),
         public_key=dict(type="str"),
@@ -965,7 +943,9 @@ def main():
         group=dict(type="str", aliases=["role"]),
         groups=dict(type="list", elements="str"),
         state=dict(
-            type="str", default="present", choices=["present", "absent"]
+            type="str",
+            default="present",
+            choices=["present", "absent"],
         ),
     )
     aggregate_spec = deepcopy(element_spec)
@@ -1003,7 +983,7 @@ def main():
         if not HAS_B64:
             module.fail_json(
                 msg="library base64 is required but does not appear to be "
-                "installed. It can be installed using `pip install base64`"
+                "installed. It can be installed using `pip install base64`",
             )
 
     result = {"changed": False, "warnings": []}

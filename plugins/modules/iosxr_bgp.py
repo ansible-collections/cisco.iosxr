@@ -7,13 +7,14 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 DOCUMENTATION = """
 module: iosxr_bgp
 author: Nilashish Chakraborty (@NilashishC)
-short_description: Configure global BGP protocol settings on Cisco IOS-XR
+short_description: Module to configure BGP protocol settings.
 description:
 - This module provides configuration management of global BGP parameters on devices
   running Cisco IOS-XR
@@ -270,11 +271,12 @@ commands:
     - exit
 """
 from ansible.module_utils._text import to_text
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.module import (
-    NetworkModule,
-)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.cli.config.bgp.process import (
     REDISTRIBUTE_PROTOCOLS,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.module import (
+    NetworkModule,
 )
 
 
@@ -320,7 +322,9 @@ def main():
         ),
         "networks": dict(type="list", elements="dict", options=network_spec),
         "redistribute": dict(
-            type="list", elements="dict", options=redistribute_spec
+            type="list",
+            elements="dict",
+            options=redistribute_spec,
         ),
     }
 
@@ -330,19 +334,23 @@ def main():
         "log_neighbor_changes": dict(type="bool"),
         "neighbors": dict(type="list", elements="dict", options=neighbor_spec),
         "address_family": dict(
-            type="list", elements="dict", options=address_family_spec
+            type="list",
+            elements="dict",
+            options=address_family_spec,
         ),
     }
 
     argument_spec = {
         "config": dict(type="dict", options=config_spec),
         "operation": dict(
-            default="merge", choices=["merge", "replace", "override", "delete"]
+            default="merge",
+            choices=["merge", "replace", "override", "delete"],
         ),
     }
 
     module = NetworkModule(
-        argument_spec=argument_spec, supports_check_mode=True
+        argument_spec=argument_spec,
+        supports_check_mode=True,
     )
 
     try:

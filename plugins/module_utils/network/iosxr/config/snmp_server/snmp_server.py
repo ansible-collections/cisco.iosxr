@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -20,16 +21,15 @@ created.
 from copy import deepcopy
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    dict_merge,
-    dict_diff,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_diff,
+    dict_merge,
 )
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.snmp_server import (
     Snmp_serverTemplate,
 )
@@ -224,9 +224,9 @@ class Snmp_server(ResourceModule):
 
         self._compare(want=wantd, have=haved)
         if self.state in ["overridden", "replaced"]:
-            self.commands = [
-                each for each in self.commands if "no" in each
-            ] + [each for each in self.commands if "no" not in each]
+            self.commands = [each for each in self.commands if "no" in each] + [
+                each for each in self.commands if "no" not in each
+            ]
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
@@ -254,7 +254,9 @@ class Snmp_server(ResourceModule):
                 self.commands.insert(
                     begin,
                     self._tmplt.render(
-                        {"vrf": entry.get("vrf")}, "vrfs", False
+                        {"vrf": entry.get("vrf")},
+                        "vrfs",
+                        False,
                     ),
                 )
         for name, entry in iteritems(hvrfs):
@@ -285,10 +287,12 @@ class Snmp_server(ResourceModule):
             if "." in x:
                 complex_parser = x.split(".")
                 wantx = want.get(complex_parser[0], {}).get(
-                    complex_parser[1], {}
+                    complex_parser[1],
+                    {},
                 )
                 havex = have.get(complex_parser[0], {}).get(
-                    complex_parser[1], {}
+                    complex_parser[1],
+                    {},
                 )
 
             if x in [
@@ -340,8 +344,8 @@ class Snmp_server(ResourceModule):
                         inf,
                         tr,
                         el.get("udp_port"),
-                    ): el
-                }
+                    ): el,
+                },
             )
         return host_dict
 
@@ -383,13 +387,10 @@ class Snmp_server(ResourceModule):
         if "context" in data:
             data["context"] = {x: {"name": x} for x in data["context"]}
         if "mib_object_lists" in data:
-            data["mib_object_lists"] = {
-                x: {"mib_object": x} for x in data["mib_object_lists"]
-            }
+            data["mib_object_lists"] = {x: {"mib_object": x} for x in data["mib_object_lists"]}
         if "targets" in data:
             data["targets"] = {
-                x["name"] + x.get("vrf", "") + x.get("host", ""): x
-                for x in data["targets"]
+                x["name"] + x.get("vrf", "") + x.get("host", ""): x for x in data["targets"]
             }
         if "hosts" in data:
             data["hosts"] = self._host_list_to_dict(data)

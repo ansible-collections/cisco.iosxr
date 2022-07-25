@@ -1,7 +1,6 @@
 ---
-- debug:
-    msg: START iosxr_prefix_lists rendered integration tests on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START iosxr_prefix_lists rendered integration tests on connection={{ ansible_connection }}
 
 - name: Render platform specific commands from task input using rendered state
   register: result
@@ -28,7 +27,6 @@
     state: rendered
 
 - name: Assert that correct set of commands were rendered
-  assert:
+  ansible.builtin.assert:
     that:
-      - "{{ merged['commands'] | symmetric_difference(result['rendered']) |length\
-        \ == 0 }}"
+      - "{{ merged['commands'] | symmetric_difference(result['rendered']) |length == 0 }}"

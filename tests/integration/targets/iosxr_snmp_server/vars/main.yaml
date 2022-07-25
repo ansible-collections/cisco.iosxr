@@ -55,7 +55,6 @@ merged:
     - snmp-server vrf vrf1
     - host 1.1.1.1 traps test1
 
-
   after:
     vrfs:
       - hosts:
@@ -151,8 +150,7 @@ merged:
       msdp_peer_state_change: true
 
 deleted:
-  after:
-    {}
+  after: {}
 
 replaced:
   commands:

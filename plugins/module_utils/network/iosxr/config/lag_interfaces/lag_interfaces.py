@@ -13,33 +13,32 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 from copy import deepcopy
-from distutils.version import LooseVersion
+
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
     dict_diff,
+    param_list_to_dict,
     remove_empties,
     search_obj_in_list,
-    param_list_to_dict,
+    to_list,
 )
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import get_os_version
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    diff_list_of_dicts,
-    pad_commands,
-    flatten_dict,
+    Version,
     dict_delete,
+    diff_list_of_dicts,
+    flatten_dict,
     normalize_interface,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    get_os_version,
+    pad_commands,
 )
 
 
@@ -62,10 +61,12 @@ class Lag_interfaces(ConfigBase):
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         lag_interfaces_facts = facts["ansible_network_resources"].get(
-            "lag_interfaces"
+            "lag_interfaces",
         )
         if not lag_interfaces_facts:
             return []
@@ -106,10 +107,10 @@ class Lag_interfaces(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_lag_interfaces_facts(
-                data=running_config
+                data=running_config,
             )
 
         if self.state in self.ACTION_STATES:
@@ -141,7 +142,7 @@ class Lag_interfaces(ConfigBase):
                             {
                                 "member": normalize_interface(item["member"]),
                                 "mode": item["mode"],
-                            }
+                            },
                         )
         have = existing_lag_interfaces_facts
         resp = self.set_state(want, have)
@@ -159,14 +160,11 @@ class Lag_interfaces(ConfigBase):
         state = self._module.params["state"]
         commands = []
 
-        if (
-            self.state in ("merged", "replaced", "overridden", "rendered")
-            and not want
-        ):
+        if self.state in ("merged", "replaced", "overridden", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    state
-                )
+                    state,
+                ),
             )
 
         if state == "overridden":
@@ -266,7 +264,7 @@ class Lag_interfaces(ConfigBase):
                 obj_in_have = search_obj_in_list(name, have)
                 if not obj_in_have:
                     self._module.fail_json(
-                        msg=("interface {0} does not exist".format(name))
+                        msg=("interface {0} does not exist".format(name)),
                     )
                 commands.extend(self._purge_attribs(intf=obj_in_have))
 
@@ -291,7 +289,7 @@ class Lag_interfaces(ConfigBase):
 
         if bundle_updates:
             for key, value in iteritems(
-                flatten_dict(remove_empties(bundle_updates))
+                flatten_dict(remove_empties(bundle_updates)),
             ):
                 commands.append(self._compute_commands(key=key, value=value))
 
@@ -310,13 +308,14 @@ class Lag_interfaces(ConfigBase):
             have = {"name": want["name"]}
 
         member_diff = diff_list_of_dicts(
-            want["members"], have.get("members", [])
+            want["members"],
+            have.get("members", []),
         )
 
         for diff in member_diff:
             diff_cmd = []
             bundle_cmd = "bundle id {0}".format(
-                want["name"].split("Bundle-Ether")[1]
+                want["name"].split("Bundle-Ether")[1],
             )
             if diff.get("mode"):
                 bundle_cmd += " mode {0}".format(diff.get("mode"))
@@ -345,10 +344,10 @@ class Lag_interfaces(ConfigBase):
         to_delete = dict_delete(have_copy, remove_empties(want_copy))
         if to_delete:
             for key, value in iteritems(
-                flatten_dict(remove_empties(to_delete))
+                flatten_dict(remove_empties(to_delete)),
             ):
                 commands.append(
-                    self._compute_commands(key=key, value=value, remove=True)
+                    self._compute_commands(key=key, value=value, remove=True),
                 )
 
         return commands
@@ -367,10 +366,12 @@ class Lag_interfaces(ConfigBase):
 
         if have_members:
             have_members = param_list_to_dict(
-                deepcopy(have_members), unique_key="member"
+                deepcopy(have_members),
+                unique_key="member",
             )
             want_members = param_list_to_dict(
-                deepcopy(want).get("members", []), unique_key="member"
+                deepcopy(want).get("members", []),
+                unique_key="member",
             )
 
             for key in have_members:
@@ -391,14 +392,15 @@ class Lag_interfaces(ConfigBase):
         members = have_copy.pop("members", [])
 
         to_delete = dict_delete(
-            have_copy, remove_empties({"name": have_copy["name"]})
+            have_copy,
+            remove_empties({"name": have_copy["name"]}),
         )
         if to_delete:
             for key, value in iteritems(
-                flatten_dict(remove_empties(to_delete))
+                flatten_dict(remove_empties(to_delete)),
             ):
                 commands.append(
-                    self._compute_commands(key=key, value=value, remove=True)
+                    self._compute_commands(key=key, value=value, remove=True),
                 )
 
         if commands:
@@ -406,7 +408,8 @@ class Lag_interfaces(ConfigBase):
 
         if members:
             members = param_list_to_dict(
-                deepcopy(members), unique_key="member"
+                deepcopy(members),
+                unique_key="member",
             )
             for key in members:
                 member_cmd = ["no bundle id"]
@@ -428,7 +431,7 @@ class Lag_interfaces(ConfigBase):
 
         elif key == "load_balancing_hash":
             os_version = get_os_version(self._module)
-            if os_version and LooseVersion(os_version) < LooseVersion("7.0.0"):
+            if os_version and Version(os_version) < Version("7.0.0"):
                 cmd = "bundle load-balancing hash {0}".format(value)
 
         elif key == "max_active":

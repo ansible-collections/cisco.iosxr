@@ -5,13 +5,13 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_acls
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
+
 from .iosxr_module import TestIosxrModule, load_fixture
 
 
@@ -22,31 +22,27 @@ class TestIosxrAclsModule(TestIosxrModule):
         super(TestIosxrAclsModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.acls.acls.AclsFacts.get_device_data"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.acls.acls.AclsFacts.get_device_data",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -92,7 +88,7 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             wildcard_bits="0.0.255.255",
                                         ),
                                         destination=dict(
-                                            net_group="netgroup1"
+                                            net_group="netgroup1",
                                         ),
                                     ),
                                     dict(
@@ -104,16 +100,16 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             wildcard_bits="0.0.255.255",
                                         ),
                                         destination=dict(
-                                            port_group="portgroup1"
+                                            port_group="portgroup1",
                                         ),
                                     ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "ipv4 access-list acl_1",
@@ -140,14 +136,14 @@ class TestIosxrAclsModule(TestIosxrModule):
                                         protocol="ipv4",
                                         destination=dict(any="true"),
                                         source=dict(any="true"),
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -179,7 +175,7 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             wildcard_bits="0.0.255.255",
                                         ),
                                         destination=dict(
-                                            net_group="netgroup1"
+                                            net_group="netgroup1",
                                         ),
                                     ),
                                     dict(
@@ -191,16 +187,16 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             wildcard_bits="0.0.255.255",
                                         ),
                                         destination=dict(
-                                            port_group="portgroup1"
+                                            port_group="portgroup1",
                                         ),
                                     ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "ipv4 access-list acl_2",
@@ -238,12 +234,12 @@ class TestIosxrAclsModule(TestIosxrModule):
                                         source=dict(host="192.168.1.100"),
                                     ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -275,7 +271,7 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             wildcard_bits="0.0.255.255",
                                         ),
                                         destination=dict(
-                                            net_group="netgroup1"
+                                            net_group="netgroup1",
                                         ),
                                     ),
                                     dict(
@@ -287,16 +283,16 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             wildcard_bits="0.0.255.255",
                                         ),
                                         destination=dict(
-                                            port_group="portgroup1"
+                                            port_group="portgroup1",
                                         ),
                                     ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "no ipv6 access-list acl6_1",
@@ -330,7 +326,7 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             wildcard_bits="0.0.255.255",
                                         ),
                                         destination=dict(
-                                            net_group="netgroup1"
+                                            net_group="netgroup1",
                                         ),
                                     ),
                                     dict(
@@ -342,7 +338,7 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             wildcard_bits="0.0.255.255",
                                         ),
                                         destination=dict(
-                                            port_group="portgroup1"
+                                            port_group="portgroup1",
                                         ),
                                     ),
                                 ],
@@ -380,14 +376,14 @@ class TestIosxrAclsModule(TestIosxrModule):
                                         protocol="icmpv6",
                                         destination=dict(any="true"),
                                         source=dict(any="true"),
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -397,7 +393,7 @@ class TestIosxrAclsModule(TestIosxrModule):
             dict(
                 config=[dict(afi="ipv6", acls=[dict(name="acl6_1")])],
                 state="deleted",
-            )
+            ),
         )
         commands = ["no ipv6 access-list acl6_1"]
         self.execute_module(changed=True, commands=commands)
@@ -424,19 +420,21 @@ class TestIosxrAclsModule(TestIosxrModule):
                                         source=dict(any="true"),
                                         destination=dict(any="true"),
                                         protocol="igmp",
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="rendered",
-            )
+            ),
         )
         commands = ["ipv4 access-list acl_2", "permit igmp any any"]
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )
 
     def test_iosxr_acls_overridden_on_empty_config(self):
@@ -456,14 +454,14 @@ class TestIosxrAclsModule(TestIosxrModule):
                                         source=dict(any=True),
                                         destination=dict(any=True),
                                         protocol="ip",
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         cmds = ["ipv4 access-list acl_1", "10 deny ip any any"]
         self.execute_module(changed=True, commands=cmds)
@@ -473,7 +471,7 @@ class TestIosxrAclsModule(TestIosxrModule):
             dict(
                 running_config="""ipv4 access-list ACL_NAME\n5 permit ipv4 host x.x.x.x any (409 matches)""",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         parsed_list = [
@@ -488,11 +486,11 @@ class TestIosxrAclsModule(TestIosxrModule):
                                 "protocol": "ipv4",
                                 "source": {"host": "x.x.x.x"},
                                 "destination": {"any": True},
-                            }
+                            },
                         ],
-                    }
+                    },
                 ],
                 "afi": "ipv4",
-            }
+            },
         ]
         self.assertEqual(parsed_list, result["parsed"])

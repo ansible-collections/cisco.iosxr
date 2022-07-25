@@ -1,23 +1,18 @@
 ---
-- debug:
-    msg: START iosxr_static_routes gathered integration tests on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START iosxr_static_routes gathered integration tests on connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_config.yaml
+- ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
-
-    - name: Gather static routes facts from the device using iosxr_static_routes
-        module
+    - name: Gather static routes facts from the device using iosxr_static_routes module
       register: result
       cisco.iosxr.iosxr_static_routes:
         state: gathered
 
-    - assert:
-        that: "{{ replaced['before'] | symmetric_difference(result['gathered'])\
-          \ |length == 0 }}"
+    - ansible.builtin.assert:
+        that: "{{ replaced['before'] | symmetric_difference(result['gathered']) |length == 0 }}"
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

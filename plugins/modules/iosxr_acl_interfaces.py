@@ -28,12 +28,13 @@ The module file for iosxr_acl_interfaces
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 DOCUMENTATION = """
 module: iosxr_acl_interfaces
-short_description: ACL interfaces resource module
+short_description: Resource module to configure ACL interfaces.
 description:
 - This module manages adding and removing Access Control Lists (ACLs) from interfaces
   on devices running IOS-XR software.
@@ -613,6 +614,7 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.acl_interfaces.acl_interfaces import (
     Acl_interfacesArgs,
 )

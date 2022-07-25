@@ -19,15 +19,13 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
+from ansible_collections.cisco.iosxr.plugins.modules import iosxr_acl_interfaces
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.plugins.modules import (
-    iosxr_acl_interfaces,
-)
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
+
 from .iosxr_module import TestIosxrModule, load_fixture
 
 
@@ -38,14 +36,12 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
         super(TestIosxrAclInterfacesModule, self).setUp()
 
         self.mock_get_resource_connection = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
-        self.get_resource_connection = (
-            self.mock_get_resource_connection.start()
-        )
+        self.get_resource_connection = self.mock_get_resource_connection.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.acl_interfaces.acl_interfaces.Acl_interfacesFacts.get_config"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.acl_interfaces.acl_interfaces.Acl_interfacesFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -90,12 +86,12 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
                             dict(
                                 afi="ipv4",
                                 acls=[dict(name="acl_1", direction="out")],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -128,12 +124,12 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
                             dict(
                                 afi="ipv4",
                                 acls=[dict(name="acl_1", direction="in")],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",
@@ -158,12 +154,12 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
                             dict(
                                 afi="ipv6",
                                 acls=[dict(name="acl6_3", direction="in")],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",
@@ -220,12 +216,12 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
                             dict(
                                 afi="ipv4",
                                 acls=[dict(name="acl_1", direction="in")],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="rendered",
-            )
+            ),
         )
 
         commands = [
@@ -249,7 +245,7 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
                 "access-group acl6_2 egress\r\n!\r\ninterface GigabitEthernet0/0/0/1\r\n "
                 "shutdown\r\n ipv4 access-group acl_1 egress\r\n!",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         print(result["parsed"])
@@ -279,7 +275,7 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
                     {
                         "afi": "ipv4",
                         "acls": [{"name": "acl_1", "direction": "out"}],
-                    }
+                    },
                 ],
             },
         ]
@@ -297,7 +293,7 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
                             dict(
                                 afi="ipv6",
                                 acls=[dict(name="acl6_3", direction="in")],
-                            )
+                            ),
                         ],
                     ),
                     dict(
@@ -315,7 +311,7 @@ class TestIosxrAclInterfacesModule(TestIosxrModule):
                     ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",

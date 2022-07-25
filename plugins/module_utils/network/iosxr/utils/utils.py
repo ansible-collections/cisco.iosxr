@@ -8,16 +8,20 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
+from functools import total_ordering
+
 from ansible.module_utils._text import to_text
-from ansible.module_utils.six import iteritems
 from ansible.module_utils.basic import missing_required_lib
+from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_diff,
     is_masklen,
-    to_netmask,
     search_obj_in_list,
+    to_netmask,
 )
+
 
 try:
     import ipaddress
@@ -113,11 +117,7 @@ def filter_dict_having_none_value(want, have):
                     test_dict.update({"ipv4": test_key_dict})
                 # Checks if want doesn't have secondary IP but have has secondary IP set
                 elif have.get("ipv4"):
-                    if [
-                        True
-                        for each_have in have.get("ipv4")
-                        if "secondary" in each_have
-                    ]:
+                    if [True for each_have in have.get("ipv4") if "secondary" in each_have]:
                         test_dict.update({"ipv4": {"secondary": True}})
         if k == "l2protocol":
             diff = True
@@ -227,15 +227,15 @@ def validate_ipv4(value, module):
         if len(address) != 2:
             module.fail_json(
                 msg="address format is <ipv4 address>/<mask>, got invalid format {0}".format(
-                    value
-                )
+                    value,
+                ),
             )
 
         if not is_masklen(address[1]):
             module.fail_json(
                 msg="invalid value for mask: {0}, mask should be in range 0-32".format(
-                    address[1]
-                )
+                    address[1],
+                ),
             )
 
 
@@ -245,15 +245,15 @@ def validate_ipv6(value, module):
         if len(address) != 2:
             module.fail_json(
                 msg="address format is <ipv6 address>/<mask>, got invalid format {0}".format(
-                    value
-                )
+                    value,
+                ),
             )
         else:
             if not 0 <= int(address[1]) <= 128:
                 module.fail_json(
                     msg="invalid value for mask: {0}, mask should be in range 0-128".format(
-                        address[1]
-                    )
+                        address[1],
+                    ),
                 )
 
 
@@ -422,3 +422,33 @@ def flatten_config(data, context):
         elif in_cxt:
             data[index] = cur["context"] + " " + x.strip()
     return "\n".join(data)
+
+
+@total_ordering
+class Version:
+    """Simple class to compare arbitrary versions"""
+
+    def __init__(self, version_string):
+        self.components = version_string.split(".")
+
+    def __eq__(self, other):
+        other = _coerce(other)
+        if not isinstance(other, Version):
+            return NotImplemented
+
+        return self.components == other.components
+
+    def __lt__(self, other):
+        other = _coerce(other)
+        if not isinstance(other, Version):
+            return NotImplemented
+
+        return self.components < other.components
+
+
+def _coerce(other):
+    if isinstance(other, str):
+        other = Version(other)
+    if isinstance(other, (int, float)):
+        other = Version(str(other))
+    return other

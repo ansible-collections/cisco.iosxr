@@ -47,7 +47,6 @@ merged:
       - default-originate
       - multipath
 
-
   after:
     as_number: "65536"
     neighbors:

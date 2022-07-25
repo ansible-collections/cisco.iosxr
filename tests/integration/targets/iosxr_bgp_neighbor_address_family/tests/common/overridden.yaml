@@ -1,12 +1,11 @@
 ---
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_base_config.yaml
+- ansible.builtin.include_tasks: _populate_base_config.yaml
 
-- include_tasks: _populate_config.yaml
+- ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
-
     - name: Override given bgp_address_family configuration
       become: true
       register: result
@@ -27,7 +26,7 @@
                     outbound: test2
         state: overridden
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 9
           - result.changed == true
@@ -38,10 +37,9 @@
       become: true
       register: result
       cisco.iosxr.iosxr_bgp_neighbor_address_family: *overridden
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

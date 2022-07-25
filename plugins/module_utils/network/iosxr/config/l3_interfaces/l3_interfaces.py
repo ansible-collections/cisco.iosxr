@@ -11,33 +11,25 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    normalize_interface,
-    dict_to_set,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    remove_command_from_config_list,
     add_command_to_config_list,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    dict_to_set,
     filter_dict_having_none_value,
+    normalize_interface,
+    remove_command_from_config_list,
     remove_duplicate_interface,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    validate_n_expand_ipv4,
     validate_ipv6,
+    validate_n_expand_ipv4,
 )
 
 
@@ -56,10 +48,12 @@ class L3_Interfaces(ConfigBase):
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         l3_interfaces_facts = facts["ansible_network_resources"].get(
-            "l3_interfaces"
+            "l3_interfaces",
         )
         if not l3_interfaces_facts:
             return []
@@ -100,10 +94,10 @@ class L3_Interfaces(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_l3_interfaces_facts(
-                data=running_config
+                data=running_config,
             )
 
         if self.state in self.ACTION_STATES:
@@ -139,14 +133,11 @@ class L3_Interfaces(ConfigBase):
         """
         commands = []
 
-        if (
-            self.state in ("overridden", "merged", "replaced", "rendered")
-            and not want
-        ):
+        if self.state in ("overridden", "merged", "replaced", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    self.state
-                )
+                    self.state,
+                ),
             )
 
         if self.state == "overridden":
@@ -241,7 +232,7 @@ class L3_Interfaces(ConfigBase):
                         break
                 else:
                     commands.extend(
-                        self._set_config(interface, dict(), module)
+                        self._set_config(interface, dict(), module),
                     )
                     continue
                 commands.extend(self._set_config(interface, each, module))
@@ -260,10 +251,7 @@ class L3_Interfaces(ConfigBase):
             for interface in want:
                 interface["name"] = normalize_interface(interface["name"])
                 for each in have:
-                    if (
-                        each["name"] == interface["name"]
-                        or interface["name"] in each["name"]
-                    ):
+                    if each["name"] == interface["name"] or interface["name"] in each["name"]:
                         break
                 else:
                     continue
@@ -293,13 +281,12 @@ class L3_Interfaces(ConfigBase):
 
                 if each_want.get("address") == every_have.get("address"):
                     if len(each_want.keys()) == len(every_have.keys()) and (
-                        each_want.get("secondary")
-                        == every_have.get("secondary")
+                        each_want.get("secondary") == every_have.get("secondary")
                     ):
                         diff = False
                         break
                     if not each_want.get("secondary") and not every_have.get(
-                        "secondary"
+                        "secondary",
                     ):
                         diff = False
                         break
@@ -335,11 +322,7 @@ class L3_Interfaces(ConfigBase):
             if have_ipv4:
                 diff_ipv4 = set(want_ipv4) - set(dict(have_dict).get("ipv4"))
                 if diff_ipv4:
-                    diff_ipv4 = (
-                        diff_ipv4
-                        if self.verify_diff_again(want_ipv4, have_ipv4)
-                        else ()
-                    )
+                    diff_ipv4 = diff_ipv4 if self.verify_diff_again(want_ipv4, have_ipv4) else ()
             else:
                 diff_ipv4 = set(want_ipv4)
             for each in diff_ipv4:
@@ -377,21 +360,23 @@ class L3_Interfaces(ConfigBase):
 
         if have.get("ipv4") and want.get("ipv4"):
             for each in have.get("ipv4"):
-                if each.get("secondary") and not (
-                    want.get("ipv4")[count].get("secondary")
-                ):
+                if each.get("secondary") and not (want.get("ipv4")[count].get("secondary")):
                     cmd = "ipv4 address {0} secondary".format(
-                        each.get("address")
+                        each.get("address"),
                     )
                     remove_command_from_config_list(interface, cmd, commands)
                 count += 1
         if have.get("ipv4") and not (want.get("ipv4")):
             remove_command_from_config_list(
-                interface, "ipv4 address", commands
+                interface,
+                "ipv4 address",
+                commands,
             )
         if have.get("ipv6") and not (want.get("ipv6")):
             remove_command_from_config_list(
-                interface, "ipv6 address", commands
+                interface,
+                "ipv6 address",
+                commands,
             )
 
         return commands

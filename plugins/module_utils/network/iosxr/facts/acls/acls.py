@@ -12,23 +12,25 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from copy import deepcopy
+import re
 
 from collections import deque
-from ansible.module_utils.six import iteritems
+from copy import deepcopy
+
 from ansible.module_utils._text import to_text
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible.module_utils.six import iteritems
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.acls.acls import (
     AclsArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     isipaddress,
 )
-import re
+
 
 PROTOCOL_OPTIONS = {
     "tcp": ("ack", "fin", "psh", "rst", "syn", "urg", "established"),
@@ -442,11 +444,15 @@ class AclsFacts(object):
             __parse_src_dest(rendered_ace, ace_queue, direction="destination")
             # Populate port_protocol key in destination dictionary
             __parse_port_protocol(
-                rendered_ace, ace_queue, direction="destination"
+                rendered_ace,
+                ace_queue,
+                direction="destination",
             )
             # Populate protocol_options dictionary
             __parse_protocol_options(
-                rendered_ace, ace_queue, protocol=rendered_ace["protocol"]
+                rendered_ace,
+                ace_queue,
+                protocol=rendered_ace["protocol"],
             )
             # Populate remaining match options' dictionaries
             __parse_match_options(rendered_ace, ace_queue)

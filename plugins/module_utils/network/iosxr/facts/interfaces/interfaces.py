@@ -11,18 +11,20 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from copy import deepcopy
 import re
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
+
+from copy import deepcopy
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.interfaces.interfaces import (
+    InterfacesArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     get_interface_type,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.interfaces.interfaces import (
-    InterfacesArgs,
 )
 
 
@@ -70,7 +72,8 @@ class InterfacesFacts(object):
         if objs:
             facts["interfaces"] = []
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             for cfg in params["config"]:
                 facts["interfaces"].append(utils.remove_empties(cfg))

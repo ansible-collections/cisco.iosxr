@@ -4,13 +4,13 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
+from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers import (
-    providers,
-)
-from ansible.module_utils._text import to_text
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers import providers
 
 
 class NetworkModule(AnsibleModule):
@@ -37,14 +37,13 @@ class NetworkModule(AnsibleModule):
                 connection_type = "network_cli"
 
             cls = providers.get(
-                network_os, self._name.split(".")[-1], connection_type
+                network_os,
+                self._name.split(".")[-1],
+                connection_type,
             )
 
             if not cls:
-                msg = (
-                    "unable to find suitable provider for network os %s"
-                    % network_os
-                )
+                msg = "unable to find suitable provider for network os %s" % network_os
                 if self.fail_on_missing_provider:
                     self.fail_json(msg=msg)
                 else:

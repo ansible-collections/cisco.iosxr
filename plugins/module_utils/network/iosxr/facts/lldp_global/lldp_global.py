@@ -12,14 +12,14 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lldp_global.lldp_global import (
     Lldp_globalArgs,
 )
@@ -96,10 +96,7 @@ class Lldp_globalFacts(object):
                     "system_capabilities",
                 ]:
                     config[key][item] = (
-                        False
-                        if ("{0} disable".format(item.replace("_", "-")))
-                        in conf
-                        else None
+                        False if ("{0} disable".format(item.replace("_", "-"))) in conf else None
                     )
 
             else:

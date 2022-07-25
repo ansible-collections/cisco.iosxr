@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -14,7 +15,7 @@ module: iosxr_banner
 author:
 - Trishna Guha (@trishnaguha)
 - Kedar Kekan (@kedarX)
-short_description: Manage multiline banners on Cisco IOS XR devices
+short_description: Module to configure multiline banners.
 description:
 - This module will configure both exec and motd banners on remote device running Cisco
   IOS XR. It allows playbooks to add or remove banner text from the running configuration.
@@ -99,24 +100,19 @@ xml:
         </config>'
 """
 
-import re
 import collections
+import re
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    get_config,
-    load_config,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
-)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     build_xml,
-    is_cliconf,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     etree_find,
+    get_config,
+    iosxr_argument_spec,
+    is_cliconf,
     is_netconf,
+    load_config,
 )
 
 
@@ -136,7 +132,7 @@ class ConfigBase(object):
                 "banner": self._module.params["banner"],
                 "text": text,
                 "state": self._module.params["state"],
-            }
+            },
         )
 
 
@@ -152,14 +148,14 @@ class CliConfiguration(ConfigBase):
                 "text" in self._have.keys() and self._have["text"]
             ):
                 commands.append(
-                    "no banner {0!s}".format(self._module.params["banner"])
+                    "no banner {0!s}".format(self._module.params["banner"]),
                 )
         elif state == "present":
             if self._want["text"] and self._want["text"].encode().decode(
-                "unicode_escape"
+                "unicode_escape",
             ) != self._have.get("text"):
                 banner_cmd = "banner {0!s} ".format(
-                    self._module.params["banner"]
+                    self._module.params["banner"],
                 )
                 banner_cmd += self._want["text"].strip()
                 commands.append(banner_cmd)
@@ -212,7 +208,7 @@ class NCConfiguration(ConfigBase):
                     "a:text",
                     {"xpath": "banner/banner-text", "operation": "edit"},
                 ),
-            ]
+            ],
         )
 
     def map_obj_to_xml_rpc(self):
@@ -225,7 +221,9 @@ class NCConfiguration(ConfigBase):
         )
 
         running = get_config(
-            self._module, source="running", config_filter=_get_filter
+            self._module,
+            source="running",
+            config_filter=_get_filter,
         )
 
         banner_name = None
@@ -235,11 +233,7 @@ class NCConfiguration(ConfigBase):
             banner_text = etree_find(running, "banner-text").text
 
         opcode = None
-        if (
-            state == "absent"
-            and banner_name == self._module.params["banner"]
-            and len(banner_text)
-        ):
+        if state == "absent" and banner_name == self._module.params["banner"] and len(banner_text):
             opcode = "delete"
         elif state == "present":
             opcode = "merge"

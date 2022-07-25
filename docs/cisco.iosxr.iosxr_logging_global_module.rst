@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_logging_global
 ********************************
 
-**Manages logging attributes of Cisco IOSXR network devices**
+**Resource module to configure logging.**
 
 
 Version added: 2.4.0

@@ -10,12 +10,13 @@ The module file for iosxr_ntp_global
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
 ---
 module: iosxr_ntp_global
-short_description: Manages ntp resource module
+short_description: Resource module to configure NTP.
 description: This module configures and manages the attributes of  ntp on Cisco
   IOSXR platforms.
 version_added: 2.5.0
@@ -1059,6 +1060,7 @@ parsed:
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.ntp_global.ntp_global import (
     Ntp_globalArgs,
 )

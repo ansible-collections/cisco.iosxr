@@ -28,12 +28,13 @@ The module file for iosxr_static_routes
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 DOCUMENTATION = """
 module: iosxr_static_routes
-short_description: Static routes resource module
+short_description: Resource module to configure static routes.
 description:
 - This module manages static routes on devices running Cisco IOS-XR.
 version_added: 1.0.0
@@ -817,6 +818,7 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.static_routes.static_routes import (
     Static_routesArgs,
 )

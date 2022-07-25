@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,6 +16,7 @@ the given network resource.
 """
 
 import re
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
@@ -23,7 +25,9 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 class Prefix_listsTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         super(Prefix_listsTemplate, self).__init__(
-            lines=lines, tmplt=self, module=module
+            lines=lines,
+            tmplt=self,
+            module=module,
         )
 
     # fmt: off
@@ -44,8 +48,8 @@ class Prefix_listsTemplate(NetworkTemplate):
                     "prefix_lists": {
                         "{{ name }}": {
                             "name": "{{ name }}",
-                        }
-                    }
+                        },
+                    },
                 },
 
             },
@@ -82,10 +86,10 @@ class Prefix_listsTemplate(NetworkTemplate):
                                     "eq": "{{ eq }}",
                                     "ge": "{{ ge }}",
                                     "le": "{{ le }}",
-                                }
+                                },
                             ],
-                        }
-                    }
+                        },
+                    },
                 },
             },
         },
@@ -111,10 +115,10 @@ class Prefix_listsTemplate(NetworkTemplate):
                                     "sequence": "{{ sequence|d(None) }}",
                                     "action": "{{ action }}",
                                     "description": "{{ desc }}",
-                                }
+                                },
                             ],
-                        }
-                    }
+                        },
+                    },
                 },
             },
         },

@@ -1,16 +1,16 @@
 ---
-- debug: msg="START cli/route_policy.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/route_policy.yaml on connection={{ ansible_connection }}"
 
 - name: Cleanup
   cisco.iosxr.iosxr_config:
     src: basic/route_policy_clean.j2
 
-- name: config setup route-policy/prefix-set/as-path-set/community-set
+- name: Config setup route-policy/prefix-set/as-path-set/community-set
   register: result
   cisco.iosxr.iosxr_config:
     src: basic/route_policy.j2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
@@ -19,7 +19,7 @@
   cisco.iosxr.iosxr_config:
     src: basic/route_policy.j2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -28,7 +28,7 @@
   cisco.iosxr.iosxr_config:
     src: basic/route_policy_change.j2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
@@ -37,7 +37,7 @@
   cisco.iosxr.iosxr_config:
     src: basic/route_policy_change.j2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -46,8 +46,8 @@
   cisco.iosxr.iosxr_config:
     src: basic/route_policy_clean.j2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
-- debug: msg="END cli/route_policy.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/route_policy.yaml on connection={{ ansible_connection }}"

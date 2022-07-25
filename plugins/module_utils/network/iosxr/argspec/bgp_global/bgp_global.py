@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 #############################################
@@ -86,13 +87,13 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "use": {
                                             "type": "dict",
                                             "options": {
-                                                "validity": {"type": "bool"}
+                                                "validity": {"type": "bool"},
                                             },
                                         },
                                         "allow": {
                                             "type": "dict",
                                             "options": {
-                                                "invalid": {"type": "bool"}
+                                                "invalid": {"type": "bool"},
                                             },
                                         },
                                     },
@@ -149,7 +150,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                 "detail": {"type": "bool"},
                                                 "disable": {"type": "bool"},
                                             },
-                                        }
+                                        },
                                     },
                                 },
                             },
@@ -167,11 +168,11 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "ignore": {
                                             "type": "dict",
                                             "options": {
-                                                "onwards": {"type": "bool"}
+                                                "onwards": {"type": "bool"},
                                             },
-                                        }
+                                        },
                                     },
-                                }
+                                },
                             },
                         },
                         "origin_as": {
@@ -184,7 +185,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "signal": {
                                             "type": "dict",
                                             "options": {
-                                                "ibgp": {"type": "bool"}
+                                                "ibgp": {"type": "bool"},
                                             },
                                         },
                                         "time": {
@@ -192,12 +193,12 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "time_off": {"type": "bool"},
                                                 "time_in_second": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                             },
                                         },
                                     },
-                                }
+                                },
                             },
                         },
                         "redistribute_internal": {"type": "bool"},
@@ -223,7 +224,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "all-neighbors retain-routes",
                                 "",
                             ],
-                        }
+                        },
                     },
                 },
                 "ibgp": {
@@ -236,12 +237,12 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "enforce_modifications": {
-                                            "type": "bool"
-                                        }
+                                            "type": "bool",
+                                        },
                                     },
-                                }
+                                },
                             },
-                        }
+                        },
                     },
                 },
                 "mpls": {
@@ -250,7 +251,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "activate": {
                             "type": "dict",
                             "options": {"interface": {"type": "str"}},
-                        }
+                        },
                     },
                 },
                 "mvpn": {"type": "bool"},
@@ -310,14 +311,14 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "four_byte_AS": {
                                             "type": "dict",
                                             "options": {
-                                                "set": {"type": "bool"}
+                                                "set": {"type": "bool"},
                                             },
                                         },
                                         "all": {
                                             "type": "dict",
                                             "options": {
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "set": {"type": "bool"},
                                             },
@@ -377,7 +378,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "set": {"type": "bool"},
                                     },
@@ -386,7 +387,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "value": {"type": "int"},
                                     },
@@ -396,7 +397,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "value": {"type": "int"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
@@ -432,10 +433,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "ipv4_address": {"type": "str"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
-                                }
+                                },
                             },
                         },
                         "local_as": {
@@ -457,7 +458,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                 "value": {"type": "int"},
                                                 "disable": {"type": "bool"},
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -467,12 +468,12 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                 "value": {"type": "int"},
                                                 "disable": {"type": "bool"},
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
                                     },
-                                }
+                                },
                             },
                         },
                         "origin_as": {
@@ -481,7 +482,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "validation": {
                                     "type": "dict",
                                     "options": {"disable": {"type": "bool"}},
-                                }
+                                },
                             },
                         },
                         "receive_buffer_size": {"type": "int"},
@@ -506,10 +507,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "value": {"type": "int"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
-                                }
+                                },
                             },
                         },
                         "timers": {
@@ -539,30 +540,30 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "group": {
-                                                            "type": "str"
-                                                        }
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "logging": {
                                                     "type": "dict",
                                                     "options": {
                                                         "disable": {
-                                                            "type": "bool"
-                                                        }
+                                                            "type": "bool",
+                                                        },
                                                     },
                                                 },
                                                 "update_message": {
                                                     "type": "dict",
                                                     "options": {
                                                         "buffers": {
-                                                            "type": "int"
-                                                        }
+                                                            "type": "int",
+                                                        },
                                                     },
                                                 },
                                             },
-                                        }
+                                        },
                                     },
-                                }
+                                },
                             },
                         },
                         "update_source": {"type": "str"},
@@ -605,16 +606,16 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "disable": {
-                                                            "type": "bool"
-                                                        }
+                                                            "type": "bool",
+                                                        },
                                                     },
                                                 },
                                                 "ibgp": {
                                                     "type": "dict",
                                                     "options": {
                                                         "disable": {
-                                                            "type": "bool"
-                                                        }
+                                                            "type": "bool",
+                                                        },
                                                     },
                                                 },
                                             },
@@ -627,7 +628,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             },
                                         },
                                     },
-                                }
+                                },
                             },
                         },
                         "out": {
@@ -675,13 +676,13 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "ssh": {
                                             "type": "dict",
                                             "options": {
-                                                "port": {"type": "int"}
+                                                "port": {"type": "int"},
                                             },
                                         },
                                         "tcp": {
                                             "type": "dict",
                                             "options": {
-                                                "port": {"type": "int"}
+                                                "port": {"type": "int"},
                                             },
                                         },
                                     },
@@ -717,14 +718,14 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "ignore": {"type": "bool"},
                                                 "multipath_relax": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
                                         "aigp": {
                                             "type": "dict",
                                             "options": {
-                                                "ignore": {"type": "bool"}
+                                                "ignore": {"type": "bool"},
                                             },
                                         },
                                         "med": {
@@ -733,7 +734,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                 "always": {"type": "bool"},
                                                 "confed": {"type": "bool"},
                                                 "missing_as_worst": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -741,7 +742,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "cost_community": {
                                             "type": "dict",
                                             "options": {
-                                                "ignore": {"type": "bool"}
+                                                "ignore": {"type": "bool"},
                                             },
                                         },
                                         "origin_as": {
@@ -751,16 +752,16 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "validity": {
-                                                            "type": "bool"
-                                                        }
+                                                            "type": "bool",
+                                                        },
                                                     },
                                                 },
                                                 "allow": {
                                                     "type": "dict",
                                                     "options": {
                                                         "invalid": {
-                                                            "type": "bool"
-                                                        }
+                                                            "type": "bool",
+                                                        },
                                                     },
                                                 },
                                             },
@@ -770,7 +771,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "default": {
                                     "type": "dict",
                                     "options": {
-                                        "local_preference": {"type": "int"}
+                                        "local_preference": {"type": "int"},
                                     },
                                 },
                                 "enforce_first_as": {
@@ -787,7 +788,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "log_message": {
                                             "type": "dict",
                                             "options": {
-                                                "disable": {"type": "bool"}
+                                                "disable": {"type": "bool"},
                                             },
                                         },
                                         "neighbor": {
@@ -797,13 +798,13 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "detail": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "disable": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                     },
-                                                }
+                                                },
                                             },
                                         },
                                     },
@@ -818,12 +819,12 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "onwards": {
-                                                            "type": "bool"
-                                                        }
+                                                            "type": "bool",
+                                                        },
                                                     },
-                                                }
+                                                },
                                             },
-                                        }
+                                        },
                                     },
                                 },
                                 "redistribute_internal": {"type": "bool"},
@@ -842,7 +843,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "activate": {
                                     "type": "dict",
                                     "options": {"interface": {"type": "str"}},
-                                }
+                                },
                             },
                         },
                         "neighbors": {
@@ -863,7 +864,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "disable": {"type": "bool"},
                                                 "strict_mode": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -885,10 +886,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "set": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "disable": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                     },
                                                 },
@@ -896,10 +897,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "set": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "disable": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                     },
                                                 },
@@ -911,17 +912,19 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                 "four_byte_AS": {
                                                     "type": "dict",
                                                     "options": {
-                                                        "set": {"type": "bool"}
+                                                        "set": {
+                                                            "type": "bool",
+                                                        },
                                                     },
                                                 },
                                                 "all": {
                                                     "type": "dict",
                                                     "options": {
                                                         "inheritance_disable": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "set": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                     },
                                                 },
@@ -935,7 +938,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "set": {"type": "bool"},
                                     },
@@ -952,7 +955,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "set": {"type": "bool"},
                                     },
@@ -961,7 +964,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "cumulatie": {"type": "bool"},
                                         "set": {"type": "bool"},
@@ -971,7 +974,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "set": {"type": "bool"},
                                     },
@@ -988,7 +991,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "set": {"type": "bool"},
                                             },
@@ -997,7 +1000,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "value": {"type": "int"},
                                             },
@@ -1007,7 +1010,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "value": {"type": "int"},
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -1024,7 +1027,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "set": {"type": "bool"},
                                     },
@@ -1035,7 +1038,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "name": {"type": "str"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
@@ -1046,13 +1049,13 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "ipv4_address": {
-                                                    "type": "str"
+                                                    "type": "str",
                                                 },
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
-                                        }
+                                        },
                                     },
                                 },
                                 "local_as": {
@@ -1060,7 +1063,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "value": {"type": "int"},
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
@@ -1074,13 +1077,13 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "value": {
-                                                            "type": "int"
+                                                            "type": "int",
                                                         },
                                                         "disable": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "inheritance_disable": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                     },
                                                 },
@@ -1088,18 +1091,18 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "value": {
-                                                            "type": "int"
+                                                            "type": "int",
                                                         },
                                                         "disable": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "inheritance_disable": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                     },
                                                 },
                                             },
-                                        }
+                                        },
                                     },
                                 },
                                 "origin_as": {
@@ -1108,9 +1111,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "validation": {
                                             "type": "dict",
                                             "options": {
-                                                "disable": {"type": "bool"}
+                                                "disable": {"type": "bool"},
                                             },
-                                        }
+                                        },
                                     },
                                 },
                                 "receive_buffer_size": {"type": "int"},
@@ -1128,7 +1131,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "set": {"type": "bool"},
                                     },
@@ -1141,10 +1144,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "value": {"type": "int"},
                                                 "inheritance_disable": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
-                                        }
+                                        },
                                     },
                                 },
                                 "timers": {
@@ -1158,7 +1161,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "inheritance_disable": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "set": {"type": "bool"},
                                     },
@@ -1176,30 +1179,30 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                             "type": "dict",
                                                             "options": {
                                                                 "group": {
-                                                                    "type": "str"
-                                                                }
+                                                                    "type": "str",
+                                                                },
                                                             },
                                                         },
                                                         "logging": {
                                                             "type": "dict",
                                                             "options": {
                                                                 "disable": {
-                                                                    "type": "bool"
-                                                                }
+                                                                    "type": "bool",
+                                                                },
                                                             },
                                                         },
                                                         "update_message": {
                                                             "type": "dict",
                                                             "options": {
                                                                 "buffers": {
-                                                                    "type": "int"
-                                                                }
+                                                                    "type": "int",
+                                                                },
                                                             },
                                                         },
                                                     },
-                                                }
+                                                },
                                             },
-                                        }
+                                        },
                                     },
                                 },
                                 "update_source": {"type": "str"},

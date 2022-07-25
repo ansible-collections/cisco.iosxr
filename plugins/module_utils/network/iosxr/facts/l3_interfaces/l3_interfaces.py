@@ -12,19 +12,21 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
-from copy import deepcopy
 import re
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
+
+from copy import deepcopy
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.l3_interfaces.l3_interfaces import (
+    L3_InterfacesArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     get_interface_type,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.l3_interfaces.l3_interfaces import (
-    L3_InterfacesArgs,
 )
 
 
@@ -72,7 +74,8 @@ class L3_InterfacesFacts(object):
         if objs:
             facts["l3_interfaces"] = []
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             for cfg in params["config"]:
                 facts["l3_interfaces"].append(utils.remove_empties(cfg))

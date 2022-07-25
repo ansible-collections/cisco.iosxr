@@ -1,9 +1,9 @@
 ---
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_base_config.yaml
+- ansible.builtin.include_tasks: _populate_base_config.yaml
 
-- include_tasks: _populate_config.yaml
+- ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
     - name: Replaced given bgp_nbr_address_family configuration
@@ -46,7 +46,7 @@
                   bestpath_origin_as_allow_invalid: true
         state: replaced
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 7
           - result.changed == true
@@ -57,21 +57,20 @@
       become: true
       register: result
       cisco.iosxr.iosxr_bgp_neighbor_address_family: *replaced
-
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_vrf_base_config.yaml
+- ansible.builtin.include_tasks: _populate_vrf_base_config.yaml
 
-- include_tasks: _populate_vrf_config.yaml
+- ansible.builtin.include_tasks: _populate_vrf_config.yaml
 
 - block:
     - name: Merge the provided configuration with the existing running configuration
-      cisco.iosxr.iosxr_bgp_neighbor_address_family: &id002
+      cisco.iosxr.iosxr_bgp_neighbor_address_family: &id001
         state: replaced
         config:
           as_number: 65536
@@ -89,21 +88,18 @@
       register: result
 
     - name: Assert that correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ replaced['vrf']['commands'] | symmetric_difference(result['commands']) |length\
-            \ == 0 }}"
+          - "{{ replaced['vrf']['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
-    - name:
-        Merge the provided configuration with the existing running configuration
-        (IDEMPOTENT)
-      cisco.iosxr.iosxr_bgp_neighbor_address_family: *id002
+    - name: Merge the provided configuration with the existing running configuration (idempotent)
+      cisco.iosxr.iosxr_bgp_neighbor_address_family: *id001
       register: result
 
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
           - result.commands|length == 0
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

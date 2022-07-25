@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_banner
 ************************
 
-**Manage multiline banners on Cisco IOS XR devices**
+**Module to configure multiline banners.**
 
 
 Version added: 1.0.0

@@ -19,15 +19,13 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
+from ansible_collections.cisco.iosxr.plugins.modules import iosxr_lldp_interfaces
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.plugins.modules import (
-    iosxr_lldp_interfaces,
-)
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
+
 from .iosxr_module import TestIosxrModule, load_fixture
 
 
@@ -38,30 +36,26 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
         super(TestIosxrLldpInterfacesModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
         self.mock_execute_show_command = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.lldp_interfaces.lldp_interfaces.Lldp_interfacesFacts.get_config"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.lldp_interfaces.lldp_interfaces.Lldp_interfacesFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -88,7 +82,7 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
                     dict(name="GigabitEthernet0/0/0/1", receive=False),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -100,7 +94,7 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
                     dict(name="GigabitEthernet0/0/0/1", receive=False),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",
@@ -117,7 +111,7 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
             dict(
                 config=[dict(name="GigabitEthernet0/0/0/1", transmit=False)],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "interface GigabitEthernet0/0/0/1",
@@ -151,7 +145,7 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
                     dict(name="GigabitEthernet0/0/0/1", receive=False),
                 ],
                 state="rendered",
-            )
+            ),
         )
 
         commands = [
@@ -172,7 +166,7 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
                 "ieee-nearest-bridge\r\n  !\r\n !\r\n!\r\ninterface preconfigure GigabitEthernet0/0/0/1\r\n lldp\r\n  "
                 "receive disable\r\n  destination mac-address\r\n   ieee-nearest-non-tmpr-bridge\r\n",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         print(result["parsed"])
@@ -198,7 +192,7 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
             dict(
                 config=[dict(name="GigabitEthernet0/0/0/0", transmit=False)],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "interface GigabitEthernet0/0/0/1",

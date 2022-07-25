@@ -28,12 +28,13 @@ The module file for ios_l3_interfaces
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 DOCUMENTATION = """
 module: iosxr_l3_interfaces
-short_description: L3 interfaces resource module
+short_description: Resource module to configure L3 interfaces.
 description: This module provides declarative management of Layer-3 interface on Cisco
   IOS-XR devices.
 version_added: 1.0.0
@@ -633,6 +634,7 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.l3_interfaces.l3_interfaces import (
     L3_InterfacesArgs,
 )

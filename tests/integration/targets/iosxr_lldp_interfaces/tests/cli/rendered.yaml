@@ -1,8 +1,6 @@
 ---
-- debug:
-    msg:
-      START iosxr_lldp_interfaces rendered integration tests on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START iosxr_lldp_interfaces rendered integration tests on connection={{ ansible_connection }}
 
 - block:
     - name: Merge the provided configuration with the existing running configuration
@@ -21,7 +19,6 @@
         state: rendered
 
     - name: Assert that correct set of commands were rendered
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ rendered['commands'] | symmetric_difference(result['rendered']) |length\
-            \ == 0 }}"
+          - "{{ rendered['commands'] | symmetric_difference(result['rendered']) |length == 0 }}"

@@ -10,12 +10,13 @@ The module file for iosxr_ospf_interfaces
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_ospf_interfaces
 version_added: 1.2.0
-short_description: OSPF Interfaces Resource Module.
+short_description: Resource module to configure OSPF interfaces.
 description:
   - This module manages OSPF(v2/v3) configuration of interfaces on devices running Cisco IOS-XR.
 author: Rohit Thakur (@rohitthakur2590)
@@ -1174,6 +1175,7 @@ EXAMPLES = """
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.ospf_interfaces.ospf_interfaces import (
     Ospf_interfacesArgs,
 )

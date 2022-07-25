@@ -1,8 +1,8 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: START iosxr_snmp_server rendered integration tests on connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - name: Render platform specific configuration lines with state rendered (without connecting to the device)
   cisco.iosxr.iosxr_snmp_server:
@@ -103,6 +103,6 @@
   register: result
 
 - name: Assert that correct set of commands were rendered
-  assert:
+  ansible.builtin.assert:
     that:
       - merged['commands'] == result['rendered']

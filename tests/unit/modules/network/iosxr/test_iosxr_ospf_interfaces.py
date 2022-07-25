@@ -5,15 +5,13 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
+from ansible_collections.cisco.iosxr.plugins.modules import iosxr_ospf_interfaces
 from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.plugins.modules import (
-    iosxr_ospf_interfaces,
-)
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
+
 from .iosxr_module import TestIosxrModule, load_fixture
 
 
@@ -24,39 +22,35 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
         super(TestIosxrOspf_InterfacesModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base."
-            "get_resource_connection"
+            "get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base."
-            "get_resource_connection"
+            "get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
 
         self.mock_edit_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.providers.CliProvider.edit_config"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.providers.CliProvider.edit_config",
         )
         self.edit_config = self.mock_edit_config.start()
 
         self.mock_execute_show_command = patch(
             "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ospf_interfaces.ospf_interfaces."
-            "Ospf_interfacesFacts.get_ospf_interfaces"
+            "Ospf_interfacesFacts.get_ospf_interfaces",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -89,18 +83,18 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
                                     dict(
                                         process_id="LAB1",
                                         area=dict(area_id="0.0.0.3"),
-                                    )
+                                    ),
                                 ],
                                 cost=10,
                                 authentication=dict(
-                                    message_digest=dict(keychain="iosxr")
+                                    message_digest=dict(keychain="iosxr"),
                                 ),
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "router ospf LAB1 area 0.0.0.3 interface GigabitEthernet 0/0/0/1 cost 10",
@@ -124,18 +118,18 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
                                     dict(
                                         process_id="LAB3",
                                         area=dict(area_id="0.0.0.3"),
-                                    )
+                                    ),
                                 ],
                                 cost=20,
                                 authentication=dict(
-                                    message_digest=dict(keychain="cisco")
+                                    message_digest=dict(keychain="cisco"),
                                 ),
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -153,18 +147,18 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
                                     dict(
                                         process_id="LAB3",
                                         area=dict(area_id="0.0.0.3"),
-                                    )
+                                    ),
                                 ],
                                 cost=40,
                                 authentication=dict(
-                                    message_digest=dict(keychain="ciscoiosxr")
+                                    message_digest=dict(keychain="ciscoiosxr"),
                                 ),
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 cost 40",
@@ -188,18 +182,18 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
                                     dict(
                                         process_id="LAB3",
                                         area=dict(area_id="0.0.0.3"),
-                                    )
+                                    ),
                                 ],
                                 cost=20,
                                 authentication=dict(
-                                    message_digest=dict(keychain="cisco")
+                                    message_digest=dict(keychain="cisco"),
                                 ),
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -217,18 +211,18 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
                                     dict(
                                         process_id="LAB4",
                                         area=dict(area_id="0.0.0.4"),
-                                    )
+                                    ),
                                 ],
                                 cost=40,
                                 authentication=dict(
-                                    message_digest=dict(keychain="iosxr")
+                                    message_digest=dict(keychain="iosxr"),
                                 ),
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
 
         commands = [
@@ -254,18 +248,18 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
                                     dict(
                                         process_id="LAB3",
                                         area=dict(area_id="0.0.0.3"),
-                                    )
+                                    ),
                                 ],
                                 cost=20,
                                 authentication=dict(
-                                    message_digest=dict(keychain="cisco")
+                                    message_digest=dict(keychain="cisco"),
                                 ),
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -273,13 +267,16 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 config=[
-                    dict(name="GigabitEthernet0/0/0/0", type="gigabitethernet")
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        type="gigabitethernet",
+                    ),
                 ],
                 state="deleted",
-            )
+            ),
         )
         commands = [
-            "no router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0"
+            "no router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -288,10 +285,13 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
         set_module_args(
             dict(
                 config=[
-                    dict(name="GigabitEthernet0/0/0/1", type="gigabitethernet")
+                    dict(
+                        name="GigabitEthernet0/0/0/1",
+                        type="gigabitethernet",
+                    ),
                 ],
                 state="deleted",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -300,7 +300,7 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
             dict(
                 running_config="router ospf LAB3\n area 0.0.0.3\n  interface GigabitEthernet0/0/0/0\n   cost 20\n  !\n !\n!",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         parsed_list = [
@@ -312,13 +312,14 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
                         afi="ipv4",
                         processes=[
                             dict(
-                                process_id="LAB3", area=dict(area_id="0.0.0.3")
-                            )
+                                process_id="LAB3",
+                                area=dict(area_id="0.0.0.3"),
+                            ),
                         ],
                         cost=20,
-                    )
+                    ),
                 ],
-            )
+            ),
         ]
         self.assertEqual(parsed_list, result["parsed"])
 
@@ -336,18 +337,18 @@ class TestIosxrOspf_InterfacesModule(TestIosxrModule):
                                     dict(
                                         process_id="LAB1",
                                         area=dict(area_id="0.0.0.3"),
-                                    )
+                                    ),
                                 ],
                                 cost=10,
                                 authentication=dict(
-                                    message_digest=dict(keychain="iosxr")
+                                    message_digest=dict(keychain="iosxr"),
                                 ),
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="rendered",
-            )
+            ),
         )
         commands = [
             "router ospf LAB1 area 0.0.0.3 interface GigabitEthernet 0/0/0/1 cost 10",

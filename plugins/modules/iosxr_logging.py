@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -14,7 +15,7 @@ module: iosxr_logging
 author:
 - Trishna Guha (@trishnaguha)
 - Kedar Kekan (@kedarX)
-short_description: Configuration management of system logging services on network
+short_description: (deprecated, removed after 2023-08-01) Configuration management of system logging services on network
   devices
 description:
 - This module provides declarative management configuration of system logging (syslog)
@@ -249,32 +250,30 @@ xml:
     </config>'
 """
 
-import re
 import collections
+import re
+
 from copy import deepcopy
-from distutils.version import LooseVersion
 
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    get_config,
-    load_config,
-    build_xml,
-    get_capabilities,
-    get_os_version,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
-    etree_findall,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    is_netconf,
-    is_cliconf,
-    etree_find,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
 )
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    build_xml,
+    etree_find,
+    etree_findall,
+    get_capabilities,
+    get_config,
+    get_os_version,
+    iosxr_argument_spec,
+    is_cliconf,
+    is_netconf,
+    load_config,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import Version
 
 
 severity_level = {
@@ -314,12 +313,12 @@ class ConfigBase(object):
             if type == "buffer":
                 if value and not int(307200) <= value <= int(125000000):
                     self._module.fail_json(
-                        msg="buffer size must be between 307200 and 125000000"
+                        msg="buffer size must be between 307200 and 125000000",
                     )
             elif type == "file":
                 if value and not int(1) <= value <= int(2097152):
                     self._module.fail_json(
-                        msg="file size must be between 1 and 2097152"
+                        msg="file size must be between 1 and 2097152",
                     )
         return value
 
@@ -339,7 +338,7 @@ class ConfigBase(object):
                 if d["dest"] == "buffered":
                     if d["size"] is not None:
                         d["size"] = str(
-                            self.validate_size(d["size"], "buffer")
+                            self.validate_size(d["size"], "buffer"),
                         )
                     else:
                         d["size"] = str(307200)
@@ -364,14 +363,14 @@ class ConfigBase(object):
             if params["dest"] == "buffered":
                 if params["size"] is not None:
                     params["size"] = str(
-                        self.validate_size(params["size"], "buffer")
+                        self.validate_size(params["size"], "buffer"),
                     )
                 else:
                     params["size"] = str(307200)
             elif params["dest"] == "file":
                 if params["size"] is not None:
                     params["size"] = str(
-                        self.validate_size(params["size"], "file")
+                        self.validate_size(params["size"], "file"),
                     )
                 else:
                     params["size"] = str(2097152)
@@ -392,7 +391,7 @@ class ConfigBase(object):
                     "level": params["level"],
                     "hostnameprefix": params["hostnameprefix"],
                     "state": params["state"],
-                }
+                },
             )
 
 
@@ -450,19 +449,11 @@ class CliConfiguration(ConfigBase):
                 elif dest == "buffered" and have_size:
                     commands.append("no logging {0}".format(dest))
 
-                if (
-                    dest is None
-                    and hostnameprefix is not None
-                    and have_prefix == hostnameprefix
-                ):
+                if dest is None and hostnameprefix is not None and have_prefix == hostnameprefix:
                     commands.append(
-                        "no logging hostnameprefix {0}".format(hostnameprefix)
+                        "no logging hostnameprefix {0}".format(hostnameprefix),
                     )
-                if (
-                    dest is None
-                    and facility is not None
-                    and have_facility == facility
-                ):
+                if dest is None and facility is not None and have_facility == facility:
                     commands.append("no logging facility {0}".format(facility))
 
             if state == "present":
@@ -471,45 +462,43 @@ class CliConfiguration(ConfigBase):
                         level = severity_transpose[level]
                     commands.append(
                         "logging {0} vrf {1} severity {2}".format(
-                            name, vrf, level
-                        )
+                            name,
+                            vrf,
+                            level,
+                        ),
                     )
                 elif dest == "file" and name not in self._file_list:
                     if level == "errors" or level == "informational":
                         level = severity_transpose[level]
-                    if os_version and LooseVersion(os_version) > LooseVersion(
-                        "7.0"
-                    ):
+                    if os_version and Version(os_version) > Version("7.0"):
                         commands.append(
                             "logging file {0} path {1} maxfilesize {2} severity {3}".format(
-                                name, path, size, level
-                            )
+                                name,
+                                path,
+                                size,
+                                level,
+                            ),
                         )
                     else:
                         commands.append(
                             "logging file {0} maxfilesize {1} severity {2}".format(
-                                name, size, level
-                            )
+                                name,
+                                size,
+                                level,
+                            ),
                         )
                 elif dest == "buffered" and (
-                    have_size is None
-                    or (have_size is not None and size != have_size)
+                    have_size is None or (have_size is not None and size != have_size)
                 ):
                     commands.append("logging buffered {0}".format(size))
                 elif dest == "console" and (
                     have_console_level is None
-                    or (
-                        have_console_level is not None
-                        and have_console_level != level
-                    )
+                    or (have_console_level is not None and have_console_level != level)
                 ):
                     commands.append("logging console {0}".format(level))
                 elif dest == "monitor" and (
                     have_monitor_level is None
-                    or (
-                        have_monitor_level is not None
-                        and have_monitor_level != level
-                    )
+                    or (have_monitor_level is not None and have_monitor_level != level)
                 ):
                     commands.append("logging monitor {0}".format(level))
 
@@ -518,20 +507,13 @@ class CliConfiguration(ConfigBase):
                     and hostnameprefix is not None
                     and (
                         have_prefix is None
-                        or (
-                            have_prefix is not None
-                            and hostnameprefix != have_prefix
-                        )
+                        or (have_prefix is not None and hostnameprefix != have_prefix)
                     )
                 ):
                     commands.append(
-                        "logging hostnameprefix {0}".format(hostnameprefix)
+                        "logging hostnameprefix {0}".format(hostnameprefix),
                     )
-                if (
-                    dest is None
-                    and hostnameprefix is None
-                    and facility != have_facility
-                ):
+                if dest is None and hostnameprefix is None and facility != have_facility:
                     commands.append("logging facility {0}".format(facility))
 
         self._result["commands"] = commands
@@ -593,7 +575,8 @@ class CliConfiguration(ConfigBase):
             if match:
                 try:
                     path = to_text(
-                        match.group(2), errors="surrogate_or_strict"
+                        match.group(2),
+                        errors="surrogate_or_strict",
                     )
                 except ValueError:
                     path = None
@@ -682,7 +665,7 @@ class CliConfiguration(ConfigBase):
                         "level": self.parse_level(line, dest),
                         "vrf": self.parse_vrf(line, dest),
                         "hostnameprefix": self.parse_hostnameprefix(line),
-                    }
+                    },
                 )
 
     def run(self, os_version):
@@ -707,7 +690,7 @@ class NCConfiguration(ConfigBase):
 
     def map_obj_to_xml_rpc(self, os_version):
         file_attribute_path = "file-log-attributes"
-        if os_version and LooseVersion(os_version) > LooseVersion("7.0.0"):
+        if os_version and Version(os_version) > Version("7.0.0"):
             file_attribute_path = "file-specification"
             self._log_file_meta.update(
                 [
@@ -738,8 +721,7 @@ class NCConfiguration(ConfigBase):
                     (
                         "file-attrib",
                         {
-                            "xpath": "syslog/files/file/"
-                            + file_attribute_path,
+                            "xpath": "syslog/files/file/" + file_attribute_path,
                             "tag": True,
                             "operation": "edit",
                         },
@@ -747,31 +729,25 @@ class NCConfiguration(ConfigBase):
                     (
                         "a:size",
                         {
-                            "xpath": "syslog/files/file/"
-                            + file_attribute_path
-                            + "/max-file-size",
+                            "xpath": "syslog/files/file/" + file_attribute_path + "/max-file-size",
                             "operation": "edit",
                         },
                     ),
                     (
                         "a:level",
                         {
-                            "xpath": "syslog/files/file/"
-                            + file_attribute_path
-                            + "/severity",
+                            "xpath": "syslog/files/file/" + file_attribute_path + "/severity",
                             "operation": "edit",
                         },
                     ),
                     (
                         "a:path",
                         {
-                            "xpath": "syslog/files/file/"
-                            + file_attribute_path
-                            + "/path",
+                            "xpath": "syslog/files/file/" + file_attribute_path + "/path",
                             "operation": "edit",
                         },
                     ),
-                ]
+                ],
             )
         else:
             self._log_file_meta.update(
@@ -803,8 +779,7 @@ class NCConfiguration(ConfigBase):
                     (
                         "file-attrib",
                         {
-                            "xpath": "syslog/files/file/"
-                            + file_attribute_path,
+                            "xpath": "syslog/files/file/" + file_attribute_path,
                             "tag": True,
                             "operation": "edit",
                         },
@@ -812,22 +787,18 @@ class NCConfiguration(ConfigBase):
                     (
                         "a:size",
                         {
-                            "xpath": "syslog/files/file/"
-                            + file_attribute_path
-                            + "/max-file-size",
+                            "xpath": "syslog/files/file/" + file_attribute_path + "/max-file-size",
                             "operation": "edit",
                         },
                     ),
                     (
                         "a:level",
                         {
-                            "xpath": "syslog/files/file/"
-                            + file_attribute_path
-                            + "/severity",
+                            "xpath": "syslog/files/file/" + file_attribute_path + "/severity",
                             "operation": "edit",
                         },
                     ),
-                ]
+                ],
             )
         self._log_host_meta.update(
             [
@@ -901,7 +872,7 @@ class NCConfiguration(ConfigBase):
                         "operation": "edit",
                     },
                 ),
-            ]
+            ],
         )
         self._log_console_meta.update(
             [
@@ -929,7 +900,7 @@ class NCConfiguration(ConfigBase):
                         "operation": "edit",
                     },
                 ),
-            ]
+            ],
         )
         self._log_monitor_meta.update(
             [
@@ -949,7 +920,7 @@ class NCConfiguration(ConfigBase):
                         "operation": "edit",
                     },
                 ),
-            ]
+            ],
         )
         self._log_buffered_meta.update(
             [
@@ -976,7 +947,7 @@ class NCConfiguration(ConfigBase):
                         "operation": "edit",
                     },
                 ),
-            ]
+            ],
         )
         self._log_facility_meta.update(
             [
@@ -996,7 +967,7 @@ class NCConfiguration(ConfigBase):
                         "operation": "edit",
                     },
                 ),
-            ]
+            ],
         )
         self._log_prefix_meta.update(
             [
@@ -1007,15 +978,17 @@ class NCConfiguration(ConfigBase):
                         "operation": "edit",
                         "attrib": "operation",
                     },
-                )
-            ]
+                ),
+            ],
         )
 
         state = self._module.params["state"]
 
         _get_filter = build_xml("syslog", opcode="filter")
         running = get_config(
-            self._module, source="running", config_filter=_get_filter
+            self._module,
+            source="running",
+            config_filter=_get_filter,
         )
 
         file_ele = etree_findall(running, "file")
@@ -1024,7 +997,7 @@ class NCConfiguration(ConfigBase):
             for file in file_ele:
                 file_name = etree_find(file, "file-name")
                 file_list.append(
-                    file_name.text if file_name is not None else None
+                    file_name.text if file_name is not None else None,
                 )
         vrf_ele = etree_findall(running, "vrf")
         host_list = list()
@@ -1033,48 +1006,32 @@ class NCConfiguration(ConfigBase):
             for host in host_ele:
                 host_name = etree_find(host, "address")
                 host_list.append(
-                    host_name.text if host_name is not None else None
+                    host_name.text if host_name is not None else None,
                 )
 
         console_ele = etree_find(running, "console-logging")
         console_level = (
-            etree_find(console_ele, "logging-level")
-            if console_ele is not None
-            else None
+            etree_find(console_ele, "logging-level") if console_ele is not None else None
         )
-        have_console = (
-            console_level.text if console_level is not None else None
-        )
+        have_console = console_level.text if console_level is not None else None
 
         monitor_ele = etree_find(running, "monitor-logging")
         monitor_level = (
-            etree_find(monitor_ele, "logging-level")
-            if monitor_ele is not None
-            else None
+            etree_find(monitor_ele, "logging-level") if monitor_ele is not None else None
         )
-        have_monitor = (
-            monitor_level.text if monitor_level is not None else None
-        )
+        have_monitor = monitor_level.text if monitor_level is not None else None
 
         buffered_ele = etree_find(running, "buffered-logging")
         buffered_size = (
-            etree_find(buffered_ele, "buffer-size")
-            if buffered_ele is not None
-            else None
+            etree_find(buffered_ele, "buffer-size") if buffered_ele is not None else None
         )
-        have_buffered = (
-            buffered_size.text if buffered_size is not None else None
-        )
+        have_buffered = buffered_size.text if buffered_size is not None else None
 
         facility_ele = etree_find(running, "logging-facilities")
         facility_level = (
-            etree_find(facility_ele, "facility-level")
-            if facility_ele is not None
-            else None
+            etree_find(facility_ele, "facility-level") if facility_ele is not None else None
         )
-        have_facility = (
-            facility_level.text if facility_level is not None else None
-        )
+        have_facility = facility_level.text if facility_level is not None else None
 
         prefix_ele = etree_find(running, "host-name-prefix")
         have_prefix = prefix_ele.text if prefix_ele is not None else None
@@ -1102,12 +1059,8 @@ class NCConfiguration(ConfigBase):
                 elif item["dest"] == "monitor" and have_monitor:
                     monitor_params.update({"monitor-level": item["level"]})
                 elif item["dest"] == "buffered" and have_buffered:
-                    buffered_params["size"] = (
-                        str(item["size"]) if item["size"] else None
-                    )
-                    buffered_params["level"] = (
-                        item["level"] if item["level"] else None
-                    )
+                    buffered_params["size"] = str(item["size"]) if item["size"] else None
+                    buffered_params["level"] = item["level"] if item["level"] else None
                 elif (
                     item["dest"] is None
                     and item["hostnameprefix"] is None
@@ -1115,13 +1068,9 @@ class NCConfiguration(ConfigBase):
                     and have_facility
                 ):
                     facility_params.update({"facility": item["facility"]})
-                elif (
-                    item["dest"] is None
-                    and item["hostnameprefix"] is not None
-                    and have_prefix
-                ):
+                elif item["dest"] is None and item["hostnameprefix"] is not None and have_prefix:
                     prefix_params.update(
-                        {"hostnameprefix": item["hostnameprefix"]}
+                        {"hostnameprefix": item["hostnameprefix"]},
                     )
         elif state == "present":
             opcode = "merge"
@@ -1137,23 +1086,17 @@ class NCConfiguration(ConfigBase):
                 elif item["dest"] == "monitor":
                     monitor_params.update({"monitor-level": item["level"]})
                 elif item["dest"] == "buffered":
-                    buffered_params["size"] = (
-                        str(item["size"]) if item["size"] else None
-                    )
-                    buffered_params["level"] = (
-                        item["level"] if item["level"] else None
-                    )
+                    buffered_params["size"] = str(item["size"]) if item["size"] else None
+                    buffered_params["level"] = item["level"] if item["level"] else None
                 elif (
                     item["dest"] is None
                     and item["hostnameprefix"] is None
                     and item["facility"] is not None
                 ):
                     facility_params.update({"facility": item["facility"]})
-                elif (
-                    item["dest"] is None and item["hostnameprefix"] is not None
-                ):
+                elif item["dest"] is None and item["hostnameprefix"] is not None:
                     prefix_params.update(
-                        {"hostnameprefix": item["hostnameprefix"]}
+                        {"hostnameprefix": item["hostnameprefix"]},
                     )
 
         self._result["xml"] = []
@@ -1166,7 +1109,7 @@ class NCConfiguration(ConfigBase):
                         xmap=self._log_file_meta,
                         params=file_params,
                         opcode=opcode,
-                    )
+                    ),
                 )
             if len(host_params):
                 _edit_filter_list.append(
@@ -1175,7 +1118,7 @@ class NCConfiguration(ConfigBase):
                         xmap=self._log_host_meta,
                         params=host_params,
                         opcode=opcode,
-                    )
+                    ),
                 )
             if len(console_params):
                 _edit_filter_list.append(
@@ -1184,7 +1127,7 @@ class NCConfiguration(ConfigBase):
                         xmap=self._log_console_meta,
                         params=console_params,
                         opcode=opcode,
-                    )
+                    ),
                 )
             if len(monitor_params):
                 _edit_filter_list.append(
@@ -1193,7 +1136,7 @@ class NCConfiguration(ConfigBase):
                         xmap=self._log_monitor_meta,
                         params=monitor_params,
                         opcode=opcode,
-                    )
+                    ),
                 )
             if len(buffered_params):
                 _edit_filter_list.append(
@@ -1202,7 +1145,7 @@ class NCConfiguration(ConfigBase):
                         xmap=self._log_buffered_meta,
                         params=buffered_params,
                         opcode=opcode,
-                    )
+                    ),
                 )
             if len(facility_params):
                 _edit_filter_list.append(
@@ -1211,7 +1154,7 @@ class NCConfiguration(ConfigBase):
                         xmap=self._log_facility_meta,
                         params=facility_params,
                         opcode=opcode,
-                    )
+                    ),
                 )
             if len(prefix_params):
                 _edit_filter_list.append(
@@ -1220,7 +1163,7 @@ class NCConfiguration(ConfigBase):
                         xmap=self._log_prefix_meta,
                         params=prefix_params,
                         opcode=opcode,
-                    )
+                    ),
                 )
 
             diff = None
@@ -1300,7 +1243,7 @@ def main():
             options=aggregate_spec,
             mutually_exclusive=mutually_exclusive,
             required_if=required_if,
-        )
+        ),
     )
 
     argument_spec.update(element_spec)
@@ -1318,11 +1261,7 @@ def main():
         os_version = get_os_version(module)
     elif is_netconf(module):
         config_object = NCConfiguration(module)
-        os_version = (
-            get_capabilities(module)
-            .get("device_info")
-            .get("network_os_version")
-        )
+        os_version = get_capabilities(module).get("device_info").get("network_os_version")
 
     if config_object:
         result = config_object.run(os_version)

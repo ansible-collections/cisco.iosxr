@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_acls
 **********************
 
-**ACLs resource module**
+**Resource module to configure ACLs.**
 
 
 Version added: 1.0.0

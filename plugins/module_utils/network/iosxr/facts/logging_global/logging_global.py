@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,14 +16,13 @@ based on the configuration.
 """
 
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.logging_global.logging_global import (
+    Logging_globalArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.logging_global import (
     Logging_globalTemplate,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.logging_global.logging_global import (
-    Logging_globalArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     flatten_config,
@@ -70,16 +70,17 @@ class Logging_globalFacts(object):
             data = flatten_config(data, x)
         # parse native config using the Logging_global template
         logging_global_parser = Logging_globalTemplate(
-            lines=data.splitlines(), module=self._module
+            lines=data.splitlines(),
+            module=self._module,
         )
         objs = logging_global_parser.parse()
         objs["tls_servers"] = list(objs.get("tls_servers", {}).values())
         if objs.get("correlator"):
             objs["correlator"]["rules"] = list(
-                objs.get("correlator", {}).get("rules", {}).values()
+                objs.get("correlator", {}).get("rules", {}).values(),
             )
             objs["correlator"]["rule_sets"] = list(
-                objs.get("correlator", {}).get("rule_sets", {}).values()
+                objs.get("correlator", {}).get("rule_sets", {}).values(),
             )
             for i, x in enumerate(objs["correlator"]["rule_sets"]):
                 if None in x["rulename"]:
@@ -89,8 +90,10 @@ class Logging_globalFacts(object):
 
         params = utils.remove_empties(
             logging_global_parser.validate_config(
-                self.argument_spec, {"config": objs}, redact=True
-            )
+                self.argument_spec,
+                {"config": objs},
+                redact=True,
+            ),
         )
 
         facts["logging_global"] = params.get("config", {})

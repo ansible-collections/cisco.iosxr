@@ -4,14 +4,14 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 import re
 import socket
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.providers import (
     CliProvider,
 )
@@ -39,7 +39,9 @@ class Neighbors(CliProvider):
             if config:
                 context_path = [router_context, context]
                 context_config = self.get_config_context(
-                    config, context_path, indent=1
+                    config,
+                    context_path,
+                    indent=1,
                 )
 
             for key, value in iteritems(item):
@@ -130,5 +132,5 @@ class Neighbors(CliProvider):
                 return cmd
         else:
             raise ValueError(
-                "required both options for timers: keepalive and holdtime"
+                "required both options for timers: keepalive and holdtime",
             )

@@ -28,20 +28,21 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 import json
 import re
+
 from difflib import Differ
 
-from ansible.module_utils._text import to_text, to_bytes
+from ansible.module_utils._text import to_bytes, to_text
 from ansible.module_utils.basic import env_fallback
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
 from ansible.module_utils.connection import Connection, ConnectionError
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.netconf import (
     NetconfConnection,
 )
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
+
 
 try:
     from ncclient.xml_ import to_xml
@@ -64,41 +65,41 @@ BASE_1_0 = "{urn:ietf:params:xml:ns:netconf:base:1.0}"
 NS_DICT = {
     "BASE_NSMAP": {"xc": "urn:ietf:params:xml:ns:netconf:base:1.0"},
     "BANNERS_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-infra-infra-cfg"
+        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-infra-infra-cfg",
     },
     "INTERFACES_NSMAP": {None: "http://openconfig.net/yang/interfaces"},
     "INSTALL_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-spirit-install-instmgr-oper"
+        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-spirit-install-instmgr-oper",
     },
     "INSTALL_OLD_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-installmgr-admin-oper"
+        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-installmgr-admin-oper",
     },
     "HOST-NAMES_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-shellutil-cfg"
+        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-shellutil-cfg",
     },
     "M:TYPE_NSMAP": {"idx": "urn:ietf:params:xml:ns:yang:iana-if-type"},
     "ETHERNET_NSMAP": {None: "http://openconfig.net/yang/interfaces/ethernet"},
     "CETHERNET_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-drivers-media-eth-cfg"
+        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-drivers-media-eth-cfg",
     },
     "INTERFACE-CONFIGURATIONS_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-ifmgr-cfg"
+        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-ifmgr-cfg",
     },
     "INFRA-STATISTICS_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-infra-statsd-oper"
+        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-infra-statsd-oper",
     },
     "INTERFACE-PROPERTIES_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-ifmgr-oper"
+        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-ifmgr-oper",
     },
     "IP-DOMAIN_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-ip-domain-cfg"
+        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-ip-domain-cfg",
     },
     "SYSLOG_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-infra-syslog-cfg"
+        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-infra-syslog-cfg",
     },
     "AAA_NSMAP": {None: "http://cisco.com/ns/yang/Cisco-IOS-XR-aaa-lib-cfg"},
     "AAA_LOCALD_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-aaa-locald-cfg"
+        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-aaa-locald-cfg",
     },
 }
 
@@ -107,10 +108,12 @@ iosxr_provider_spec = {
     "port": dict(type="int"),
     "username": dict(fallback=(env_fallback, ["ANSIBLE_NET_USERNAME"])),
     "password": dict(
-        fallback=(env_fallback, ["ANSIBLE_NET_PASSWORD"]), no_log=True
+        fallback=(env_fallback, ["ANSIBLE_NET_PASSWORD"]),
+        no_log=True,
     ),
     "ssh_keyfile": dict(
-        fallback=(env_fallback, ["ANSIBLE_NET_SSH_KEYFILE"]), type="path"
+        fallback=(env_fallback, ["ANSIBLE_NET_SSH_KEYFILE"]),
+        type="path",
     ),
     "timeout": dict(type="int"),
     "transport": dict(type="str", default="cli", choices=["cli", "netconf"]),
@@ -122,7 +125,7 @@ iosxr_argument_spec = {
         options=iosxr_provider_spec,
         removed_at_date="2022-06-01",
         removed_from_collection="cisco.iosxr",
-    )
+    ),
 }
 
 command_spec = {
@@ -166,7 +169,7 @@ def get_connection(module):
         module.connection = NetconfConnection(module._socket_path)
     else:
         module.fail_json(
-            msg="Invalid connection type {0!s}".format(network_api)
+            msg="Invalid connection type {0!s}".format(network_api),
         )
 
     return module.connection
@@ -196,15 +199,11 @@ def build_xml_subtree(container_ele, xmap, param=None, opcode=None):
             parent = sub_root
         else:
             parent = sub_root.find(
-                ".//"
-                + meta.get("xpath", "")
-                .split(sub_root.tag + "/", 1)[1]
-                .rsplit("/", 1)[0]
+                ".//" + meta.get("xpath", "").split(sub_root.tag + "/", 1)[1].rsplit("/", 1)[0],
             )
 
         if (
-            opcode in ("delete", "merge")
-            and meta.get("operation", "unknown") == "edit"
+            opcode in ("delete", "merge") and meta.get("operation", "unknown") == "edit"
         ) or meta.get("operation", None) is None:
 
             if meta.get("tag", False) is True:
@@ -239,10 +238,7 @@ def build_xml_subtree(container_ele, xmap, param=None, opcode=None):
             text = None
             param_key = key.split(":")
             if param_key[0] == "a":
-                if (
-                    param is not None
-                    and param.get(param_key[1], None) is not None
-                ):
+                if param is not None and param.get(param_key[1], None) is not None:
                     text = param.get(param_key[1])
             elif param_key[0] == "m":
                 if meta.get("value", None) is not None:
@@ -325,7 +321,9 @@ def build_xml(container, xmap=None, params=None, opcode=None, namespace=None):
         root = etree.Element("config", nsmap=NS_DICT["BASE_NSMAP"])
 
     container_ele = etree.SubElement(
-        root, container, nsmap=NS_DICT[namespace.upper() + "_NSMAP"]
+        root,
+        container,
+        nsmap=NS_DICT[namespace.upper() + "_NSMAP"],
     )
 
     if xmap is not None:
@@ -335,7 +333,10 @@ def build_xml(container, xmap=None, params=None, opcode=None, namespace=None):
             subtree_list = list()
             for param in to_list(params):
                 subtree_ele = build_xml_subtree(
-                    container_ele, xmap, param=param, opcode=opcode
+                    container_ele,
+                    xmap,
+                    param=param,
+                    opcode=opcode,
                 )
                 if subtree_ele is not None:
                     subtree_list.append(subtree_ele)
@@ -395,22 +396,23 @@ def get_config_diff(module, running=None, candidate=None):
         if running and candidate:
             # ignore rpc-reply root node and diff from data element onwards
             running_data_ele = etree.fromstring(
-                to_bytes(running.strip())
+                to_bytes(running.strip()),
             ).getchildren()[0]
             candidate_data_ele = etree.fromstring(
-                to_bytes(candidate.strip())
+                to_bytes(candidate.strip()),
             ).getchildren()[0]
 
             running_data = to_text(etree.tostring(running_data_ele)).strip()
             candidate_data = to_text(
-                etree.tostring(candidate_data_ele)
+                etree.tostring(candidate_data_ele),
             ).strip()
             if running_data != candidate_data:
                 d = Differ()
                 diff = list(
                     d.compare(
-                        running_data.splitlines(), candidate_data.splitlines()
-                    )
+                        running_data.splitlines(),
+                        candidate_data.splitlines(),
+                    ),
                 )
                 return "\n".join(diff).strip()
 
@@ -453,7 +455,7 @@ def commit_config(
         elif is_cliconf(module):
             if check:
                 module.fail_json(
-                    msg="Validate configuration is not supported with network_cli connection type"
+                    msg="Validate configuration is not supported with network_cli connection type",
                 )
             else:
                 reply = conn.commit(comment=comment, label=label)
@@ -478,7 +480,8 @@ def get_oper(module, filter=None):
         return None
 
     return to_bytes(
-        etree.tostring(response), errors="surrogate_then_replace"
+        etree.tostring(response),
+        errors="surrogate_then_replace",
     ).strip()
 
 
@@ -490,8 +493,10 @@ def get_config(module, config_filter=None, source="running"):
         if is_netconf(module):
             out = to_xml(
                 conn.get_config(
-                    source=source, filter=config_filter, remove_ns=True
-                )
+                    source=source,
+                    filter=config_filter,
+                    remove_ns=True,
+                ),
             )
         elif is_cliconf(module):
             out = conn.get_config(source=source, flags=config_filter)
@@ -503,7 +508,7 @@ def get_config(module, config_filter=None, source="running"):
 
 def check_existing_commit_labels(conn, label):
     out = conn.get(
-        command="show configuration history detail | include %s" % label
+        command="show configuration history detail | include %s" % label,
     )
     label_exist = re.search(label, out, re.M)
     if label_exist:
@@ -538,7 +543,9 @@ def load_config(
                 conn.edit_config(config=filter, remove_ns=True)
 
             candidate = get_config(
-                module, source="candidate", config_filter=nc_get_filter
+                module,
+                source="candidate",
+                config_filter=nc_get_filter,
             )
             diff = get_config_diff(module, running, candidate)
 
@@ -560,7 +567,7 @@ def load_config(
                     module.fail_json(
                         msg="commit label {%s} is already used for"
                         " an earlier commit, please choose a different label"
-                        " and rerun task" % label
+                        " and rerun task" % label,
                     )
 
             response = conn.edit_config(

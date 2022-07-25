@@ -28,12 +28,13 @@ The module file for iosxr_lldp_interfaces
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 DOCUMENTATION = """
 module: iosxr_lldp_interfaces
-short_description: LLDP interfaces resource module
+short_description: Resource module to configure LLDP interfaces.
 description:
 - This module manages Link Layer Discovery Protocol (LLDP) attributes of interfaces
   on IOS-XR devices.
@@ -686,6 +687,7 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lldp_interfaces.lldp_interfaces import (
     Lldp_interfacesArgs,
 )

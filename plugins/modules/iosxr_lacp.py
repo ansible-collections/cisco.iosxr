@@ -28,12 +28,13 @@ The module file for iosxr_lacp
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 DOCUMENTATION = """
 module: iosxr_lacp
-short_description: LACP resource module
+short_description: Resource module to configure LACP.
 description:
 - This module manages Global Link Aggregation Control Protocol (LACP) on IOS-XR devices.
 version_added: 1.0.0
@@ -354,12 +355,11 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lacp.lacp import (
     LacpArgs,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.lacp.lacp import (
-    Lacp,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.lacp.lacp import Lacp
 
 
 def main():

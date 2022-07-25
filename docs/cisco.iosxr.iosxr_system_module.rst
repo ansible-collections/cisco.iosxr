@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_system
 ************************
 
-**Manage the system attributes on Cisco IOS XR devices**
+**Module to manage the system attributes.**
 
 
 Version added: 1.0.0

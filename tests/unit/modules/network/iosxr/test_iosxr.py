@@ -18,15 +18,16 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 from os import path
 
+from ansible.module_utils._text import to_bytes, to_text
 from mock import MagicMock
 
-from ansible_collections.cisco.iosxr.tests.unit.compat import unittest
 from ansible_collections.cisco.iosxr.plugins.cliconf import iosxr
-from ansible.module_utils._text import to_bytes, to_text
+from ansible_collections.cisco.iosxr.tests.unit.compat import unittest
 
 
 class TestPluginCLIConfIOSXR(unittest.TestCase):
@@ -56,7 +57,7 @@ class TestPluginCLIConfIOSXR(unittest.TestCase):
                 if b"|" in value:
                     value = value.replace(b"|", b"")
                 fixture_path = path.abspath(
-                    b"%s/%s" % (b_FIXTURE_DIR, b"_".join(value.split(b" ")))
+                    b"%s/%s" % (b_FIXTURE_DIR, b"_".join(value.split(b" "))),
                 )
                 with open(fixture_path, "rb") as file_desc:
                     return to_text(file_desc.read())

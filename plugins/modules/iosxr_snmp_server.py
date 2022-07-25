@@ -10,12 +10,13 @@ The module file for iosxr_snmp_server
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
 ---
 module: iosxr_snmp_server
-short_description: Manages snmp-server resource module
+short_description: Resource module to configure snmp server.
 description: This module configures and manages the attributes of snmp-server on Cisco
   IOSXR platforms.
 version_added: 2.6.0
@@ -2291,6 +2292,7 @@ parsed:
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.snmp_server.snmp_server import (
     Snmp_serverArgs,
 )

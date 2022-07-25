@@ -1,0 +1,4 @@
+---
+trivial:
+  - Add ansible-lint with GHA.
+  - Add prettier with pre-commit.

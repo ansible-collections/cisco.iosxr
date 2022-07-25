@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_ospf_interfaces
 *********************************
 
-**OSPF Interfaces Resource Module.**
+**Resource module to configure OSPF interfaces.**
 
 
 Version added: 1.2.0

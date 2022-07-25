@@ -49,7 +49,7 @@ merged:
           min_adjacency: 10
         authentication:
           message_digest:
-            keychain: 'ansible1101pass'
+            keychain: "ansible1101pass"
         process_id: "26"
       - areas:
           - area_id: "10"
@@ -85,83 +85,83 @@ merged:
             default_cost: 5
           - area_id: "22"
             default_cost: 6
-        process_id: '10'
+        process_id: "10"
       - adjacency_stagger:
           max_adjacency: 21
           min_adjacency: 11
         authentication:
           message_digest:
-            keychain: 'ansible1101pass'
-        process_id: '26'
+            keychain: "ansible1101pass"
+        process_id: "26"
       - areas:
-          - area_id: '10'
+          - area_id: "10"
             hello_interval: 2
-          - area_id: '30'
+          - area_id: "30"
             dead_interval: 4
-        process_id: '27'
+        process_id: "27"
       - areas:
-          - area_id: '11'
+          - area_id: "11"
             default_cost: 5
-          - area_id: '22'
+          - area_id: "22"
             default_cost: 6
 
         cost: 2
         dead_interval: 2
         default_metric: 10
-        demand_circuit: 'enable'
-        external_out: 'disable'
-        flood_reduction: 'disable'
+        demand_circuit: "enable"
+        external_out: "disable"
+        flood_reduction: "disable"
         hello_interval: 1
-        mtu_ignore: 'enable'
+        mtu_ignore: "enable"
         packet_size: 577
-        passive: 'disable'
+        passive: "disable"
         priority: 1
-        process_id: '30'
+        process_id: "30"
         retransmit_interval: 2
-        router_id: '2.2.2.2'
-        summary_in: 'enable'
+        router_id: "2.2.2.2"
+        summary_in: "enable"
         transmit_delay: 2
 replaced:
   before:
     processes:
       - areas:
-          - area_id: '11'
+          - area_id: "11"
             cost: 11
             default_cost: 5
-          - area_id: '22'
+          - area_id: "22"
             default_cost: 6
-        process_id: '10'
+        process_id: "10"
       - adjacency_stagger:
           max_adjacency: 20
           min_adjacency: 10
         authentication:
           message_digest:
-            keychain: 'ansible1101pass'
-        process_id: '26'
+            keychain: "ansible1101pass"
+        process_id: "26"
       - areas:
-          - area_id: '10'
+          - area_id: "10"
             hello_interval: 2
-        process_id: '27'
+        process_id: "27"
       - areas:
-          - area_id: '11'
+          - area_id: "11"
             default_cost: 5
-          - area_id: '22'
+          - area_id: "22"
             default_cost: 6
         cost: 2
         dead_interval: 2
         default_metric: 10
-        demand_circuit: 'enable'
-        external_out: 'disable'
-        flood_reduction: 'disable'
+        demand_circuit: "enable"
+        external_out: "disable"
+        flood_reduction: "disable"
         hello_interval: 1
-        mtu_ignore: 'enable'
+        mtu_ignore: "enable"
         packet_size: 577
-        passive: 'disable'
+        passive: "disable"
         priority: 1
-        process_id: '30'
+        process_id: "30"
         retransmit_interval: 2
-        router_id: '2.2.2.2'
-        summary_in: 'enable'
+        router_id: "2.2.2.2"
+        summary_in: "enable"
         transmit_delay: 2
 
   commands:
@@ -172,46 +172,46 @@ replaced:
   after:
     processes:
       - areas:
-          - area_id: '11'
+          - area_id: "11"
             cost: 11
             default_cost: 5
-          - area_id: '22'
+          - area_id: "22"
             default_cost: 6
-        process_id: '10'
+        process_id: "10"
       - adjacency_stagger:
           max_adjacency: 20
           min_adjacency: 10
         authentication:
           message_digest:
-            keychain: 'ansible1101pass'
-        process_id: '26'
+            keychain: "ansible1101pass"
+        process_id: "26"
       - areas:
-          - area_id: '10'
+          - area_id: "10"
             hello_interval: 2
-          - area_id: '20'
+          - area_id: "20"
             cost: 2
             default_cost: 2
-        process_id: '27'
+        process_id: "27"
       - areas:
-          - area_id: '11'
+          - area_id: "11"
             default_cost: 5
-          - area_id: '22'
+          - area_id: "22"
             default_cost: 6
         cost: 2
         dead_interval: 2
         default_metric: 10
-        demand_circuit: 'enable'
-        external_out: 'disable'
-        flood_reduction: 'disable'
+        demand_circuit: "enable"
+        external_out: "disable"
+        flood_reduction: "disable"
         hello_interval: 1
-        mtu_ignore: 'enable'
+        mtu_ignore: "enable"
         packet_size: 577
-        passive: 'disable'
+        passive: "disable"
         priority: 1
-        process_id: '30'
+        process_id: "30"
         retransmit_interval: 2
-        router_id: '2.2.2.2'
-        summary_in: 'enable'
+        router_id: "2.2.2.2"
+        summary_in: "enable"
         transmit_delay: 2
 
 overridden:
@@ -243,22 +243,22 @@ overridden:
     - area 20 cost 2
   after:
     processes:
-      - process_id: '10'
+      - process_id: "10"
       - adjacency_stagger:
           max_adjacency: 20
           min_adjacency: 10
         authentication:
           message_digest:
-            keychain: 'ansible1101pass'
-        process_id: '26'
+            keychain: "ansible1101pass"
+        process_id: "26"
       - areas:
-          - area_id: '10'
+          - area_id: "10"
             hello_interval: 2
-          - area_id: '20'
+          - area_id: "20"
             cost: 2
             default_cost: 2
-        process_id: '27'
-      - process_id: '30'
+        process_id: "27"
+      - process_id: "30"
 deleted:
   commands:
     - router ospf 10
@@ -291,26 +291,26 @@ deleted:
 
   after:
     processes:
-      - process_id: '10'
-      - process_id: '26'
-      - process_id: '27'
-      - process_id: '30'
+      - process_id: "10"
+      - process_id: "26"
+      - process_id: "27"
+      - process_id: "30"
 round_trip:
   after:
     processes:
-      - process_id: '10'
+      - process_id: "10"
       - adjacency_stagger:
           max_adjacency: 20
           min_adjacency: 10
         authentication:
           message_digest:
-            keychain: 'ansible1101pass'
-        process_id: '26'
+            keychain: "ansible1101pass"
+        process_id: "26"
       - areas:
-          - area_id: '10'
+          - area_id: "10"
             hello_interval: 2
-          - area_id: '20'
+          - area_id: "20"
             cost: 2
             default_cost: 2
-        process_id: '27'
-      - process_id: '30'
+        process_id: "27"
+      - process_id: "30"

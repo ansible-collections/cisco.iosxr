@@ -4,25 +4,24 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 import re
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.providers import (
-    register_provider,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.providers import (
-    CliProvider,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.cli.config.bgp.address_family import (
+    AddressFamily,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.cli.config.bgp.neighbors import (
     Neighbors,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.cli.config.bgp.address_family import (
-    AddressFamily,
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.providers import (
+    CliProvider,
+    register_provider,
 )
+
 
 REDISTRIBUTE_PROTOCOLS = [
     "ospf",
@@ -65,11 +64,11 @@ class Provider(CliProvider):
         else:
             if operation == "replace":
                 if existing_as and int(existing_as) != self.get_value(
-                    "config.bgp_as"
+                    "config.bgp_as",
                 ):
                     # The negate command has to be committed before new BGP AS is used.
                     self.connection.edit_config(
-                        "no router bgp %s" % existing_as
+                        "no router bgp %s" % existing_as,
                     )
                     config = None
 
@@ -77,7 +76,7 @@ class Provider(CliProvider):
                 if existing_as:
                     # The negate command has to be committed before new BGP AS is used.
                     self.connection.edit_config(
-                        "no router bgp %s" % existing_as
+                        "no router bgp %s" % existing_as,
                     )
                 config = None
 

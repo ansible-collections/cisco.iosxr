@@ -1,5 +1,5 @@
 ---
-- name: Setup Bundle-Ether10
+- name: Setup bundle-ether10
   cisco.iosxr.iosxr_config:
     lines:
       - lacp churn logging actor
@@ -7,19 +7,19 @@
       - lacp collector-max-delay 100
     parents: interface Bundle-Ether10
 
-- name: Setup Bundle-Ether11
+- name: Setup bundle-ether11
   cisco.iosxr.iosxr_config:
     lines:
       - lacp system mac 00c2.4c00.bd15
     parents: interface Bundle-Ether11
 
-- name: Setup GigE0
+- name: Setup gige0
   cisco.iosxr.iosxr_config:
     lines:
       - lacp period 100
     parents: interface GigabitEthernet0/0/0/0
 
-- name: Setup GigE1
+- name: Setup gige1
   cisco.iosxr.iosxr_config:
     lines:
       - lacp period 200

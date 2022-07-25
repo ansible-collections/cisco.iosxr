@@ -1,10 +1,10 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start iosxr_bgp_nbr_address_family merged integration tests connection={{ ansible_connection}}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_base_config.yaml
+- ansible.builtin.include_tasks: _populate_base_config.yaml
 
 - block:
     - name: Merge the provided configuration with the existing running configuration
@@ -52,31 +52,28 @@
       register: result
 
     - name: Assert that correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['commands'] | symmetric_difference(result['commands']) |length\
-            \ == 0 }}"
+          - "{{ merged['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that after dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - merged['after'] == result['after']
 
-    - name:
-        Merge the provided configuration with the existing running configuration
-        (IDEMPOTENT)
+    - name: Merge the provided configuration with the existing running configuration (idempotent)
       cisco.iosxr.iosxr_bgp_neighbor_address_family: *id001
       register: result
 
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
           - result.commands|length == 0
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_vrf_base_config.yaml
+- ansible.builtin.include_tasks: _populate_vrf_base_config.yaml
 
 - block:
     - name: Merge the provided configuration with the existing running configuration(vrf and multiple afs)
@@ -124,21 +121,18 @@
       register: result
 
     - name: Assert that correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['vrf']['commands'] | symmetric_difference(result['commands']) |length\
-            \ == 0 }}"
+          - "{{ merged['vrf']['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
-    - name:
-        Merge the provided configuration with the existing running configuration
-        (IDEMPOTENT)
+    - name: Merge the provided configuration with the existing running configuration (idempotent)
       cisco.iosxr.iosxr_bgp_neighbor_address_family: *id002
       register: result
 
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
           - result.commands|length == 0
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

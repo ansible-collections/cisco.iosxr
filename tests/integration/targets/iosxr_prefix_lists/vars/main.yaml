@@ -24,13 +24,11 @@ merged:
           name: pl_1
       afi: ipv6
 
-
 replaced:
   commands:
     - no ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK
     - no ipv4 prefix-list pl1 4 permit 10.0.0.0/24
     - ipv4 prefix-list pl1 3 permit 10.0.0.0/24
-
 
   after:
     - prefix_lists:

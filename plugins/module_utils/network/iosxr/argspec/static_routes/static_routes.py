@@ -27,6 +27,7 @@ The arg spec for the iosxr_static_routes module
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -65,7 +66,7 @@ class Static_routesArgs(object):  # pylint: disable=R0903
                                         "description": {"type": "str"},
                                         "dest_vrf": {"type": "str"},
                                         "forward_router_address": {
-                                            "type": "str"
+                                            "type": "str",
                                         },
                                         "interface": {"type": "str"},
                                         "metric": {"type": "int"},

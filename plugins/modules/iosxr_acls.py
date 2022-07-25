@@ -28,12 +28,13 @@ The module file for iosxr_acls
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 DOCUMENTATION = """
 module: iosxr_acls
-short_description: ACLs resource module
+short_description: Resource module to configure ACLs.
 description:
 - This module manages Access Control Lists (ACLs) on devices running IOS-XR.
 version_added: 1.0.0
@@ -1431,12 +1432,11 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.acls.acls import (
     AclsArgs,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.acls.acls import (
-    Acls,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.acls.acls import Acls
 
 
 def main():

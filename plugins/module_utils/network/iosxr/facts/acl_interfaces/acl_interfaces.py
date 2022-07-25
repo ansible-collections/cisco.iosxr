@@ -12,17 +12,18 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 from copy import deepcopy
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.acl_interfaces import (
-    Acl_interfacesTemplate,
-)
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.acl_interfaces.acl_interfaces import (
     Acl_interfacesArgs,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.acl_interfaces import (
+    Acl_interfacesTemplate,
 )
 
 

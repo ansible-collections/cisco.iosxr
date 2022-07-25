@@ -28,12 +28,13 @@ The module file for iosxr_ospfv3
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_ospfv3
 version_added: 1.1.0
-short_description: ospfv3 resource module
+short_description: Resource module to configure OSPFv3.
 description:
   - This module manages global ospfv3 configuration on devices running Cisco IOS-XR
 author: Rohit Thakur (@rohitthakur2590)
@@ -2747,6 +2748,7 @@ EXAMPLES = """
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.ospfv3.ospfv3 import (
     Ospfv3Args,
 )

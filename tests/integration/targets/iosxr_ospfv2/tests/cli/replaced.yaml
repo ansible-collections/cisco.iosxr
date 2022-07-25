@@ -1,14 +1,12 @@
 ---
-- debug:
-    msg: START iosxr_ospfv2 replaced integration tests on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START iosxr_ospfv2 replaced integration tests on connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate_config.yaml
+- ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
-
     - name: Replace device configurations of ospfv2 routes with provided configurations
       register: result
       cisco.iosxr.iosxr_ospfv2: &id001
@@ -27,40 +25,36 @@
                 max_adjacency: 20
               authentication:
                 message_digest:
-                  keychain: 'ansible1101pass'
+                  keychain: "ansible1101pass"
         state: replaced
 
     - name: Assert that correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ replaced['commands'] | symmetric_difference(result['commands'])\
-            \ |length == 0 }}"
+          - "{{ replaced['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that before dicts are correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ replaced['before'] == result['before'] }}"
 
     - name: Assert that after dict is correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ replaced['after'] == result['after'] }}"
 
-    - name: Replace device configurations of listed vrfs/global entry with provided
-        configuration (IDEMPOTENT)
+    - name: Replace device configurations of listed vrfs/global entry with provided configuration (idempotent)
       register: result
       cisco.iosxr.iosxr_ospfv2: *id001
-
     - name: Assert that task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
           - result.commands|length == 0
 
     - name: Assert that before dict is correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ replaced['after'] == result['before'] }}"
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

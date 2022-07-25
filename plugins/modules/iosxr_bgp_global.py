@@ -10,11 +10,12 @@ The module file for iosxr_bgp_global
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_bgp_global
-short_description: Manages BGP global resource module.
+short_description: Resource module to configure BGP.
 description:
 - This module configures and manages the attributes of BGP global on Cisco IOS-XR platforms.
 version_added: 2.0.0
@@ -1288,6 +1289,7 @@ EXAMPLES = """
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.bgp_global.bgp_global import (
     Bgp_globalArgs,
 )

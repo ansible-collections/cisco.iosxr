@@ -18,13 +18,13 @@
 # Make coding more python3-ish
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_user
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
+
 from .iosxr_module import TestIosxrModule, load_fixture
 
 
@@ -36,17 +36,17 @@ class TestIosxrUserModule(TestIosxrModule):
         super(TestIosxrUserModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_user.get_config"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_user.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_user.load_config"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_user.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_is_cliconf = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_user.is_cliconf"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_user.is_cliconf",
         )
         self.is_cliconf = self.mock_is_cliconf.start()
 
@@ -81,7 +81,8 @@ class TestIosxrUserModule(TestIosxrModule):
         set_module_args(dict(name="ansible", group="sysadmin"))
         result = self.execute_module(changed=True)
         self.assertEqual(
-            result["commands"], ["username ansible group sysadmin"]
+            result["commands"],
+            ["username ansible group sysadmin"],
         )
 
     def test_iosxr_user_update_password_changed(self):
@@ -90,11 +91,12 @@ class TestIosxrUserModule(TestIosxrModule):
                 name="test",
                 configured_password="test",
                 update_password="on_create",
-            )
+            ),
         )
         result = self.execute_module(changed=True)
         self.assertEqual(
-            result["commands"], ["username test", "username test secret test"]
+            result["commands"],
+            ["username test", "username test secret test"],
         )
 
     def test_iosxr_user_update_password_on_create_ok(self):
@@ -103,7 +105,7 @@ class TestIosxrUserModule(TestIosxrModule):
                 name="ansible",
                 configured_password="test",
                 update_password="on_create",
-            )
+            ),
         )
         self.execute_module()
 
@@ -113,14 +115,14 @@ class TestIosxrUserModule(TestIosxrModule):
                 name="ansible",
                 configured_password="test",
                 update_password="always",
-            )
+            ),
         )
         result = self.execute_module(changed=True)
         self.assertEqual(result["commands"], ["username ansible secret test"])
 
     def test_iosxr_user_admin_mode(self):
         set_module_args(
-            dict(name="ansible-2", configured_password="test-2", admin=True)
+            dict(name="ansible-2", configured_password="test-2", admin=True),
         )
         result = self.execute_module(changed=True)
         self.assertEqual(

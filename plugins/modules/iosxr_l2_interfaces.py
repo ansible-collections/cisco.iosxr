@@ -18,6 +18,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 GENERATOR_VERSION = "1.0"
@@ -25,7 +26,7 @@ GENERATOR_VERSION = "1.0"
 
 DOCUMENTATION = """
 module: iosxr_l2_interfaces
-short_description: L2 interfaces resource module
+short_description: Resource Module to configure L2 interfaces.
 description: This module manages the Layer-2 interface attributes on Cisco IOS-XR
   devices.
 version_added: 1.0.0
@@ -668,6 +669,7 @@ commands:
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.l2_interfaces.l2_interfaces import (
     L2_InterfacesArgs,
 )

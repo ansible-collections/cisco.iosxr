@@ -1,18 +1,16 @@
 ---
-- debug:
-    msg: Start iosxr_hostname rendered integration tests ansible_connection={{
-      ansible_connection }}
+- ansible.builtin.debug:
+    msg: Start iosxr_hostname rendered integration tests ansible_connection={{ ansible_connection }}
 
 - block:
-
-    - name: iosxr_hostname render - Play
+    - name: Iosxr_hostname render - play
       register: result
       cisco.iosxr.iosxr_hostname:
         config:
-          hostname: 'test'
+          hostname: "test"
         state: rendered
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
           - result.rendered == rendered['commands']

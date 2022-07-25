@@ -13,26 +13,26 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
+from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    flatten_dict,
-    prefix_to_address_wildcard,
-    is_ipv4_address,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-    search_obj_in_list,
     dict_diff,
     remove_empties,
+    search_obj_in_list,
+    to_list,
 )
-from ansible.module_utils.six import iteritems
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    flatten_dict,
+    is_ipv4_address,
+    prefix_to_address_wildcard,
 )
 
 
@@ -55,7 +55,9 @@ class Acls(ConfigBase):
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         acls_facts = facts["ansible_network_resources"].get("acls")
         if not acls_facts:
@@ -98,7 +100,7 @@ class Acls(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_acls_facts(data=running_config)
 
@@ -138,14 +140,11 @@ class Acls(ConfigBase):
         state = self._module.params["state"]
         commands = []
 
-        if (
-            state in ("overridden", "merged", "replaced", "rendered")
-            and not want
-        ):
+        if state in ("overridden", "merged", "replaced", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    state
-                )
+                    state,
+                ),
             )
 
         if state == "overridden":
@@ -165,12 +164,15 @@ class Acls(ConfigBase):
 
                 if state == "merged" or self.state == "rendered":
                     commands.extend(
-                        self._state_merged(remove_empties(item), obj_in_have)
+                        self._state_merged(remove_empties(item), obj_in_have),
                     )
 
                 elif state == "replaced":
                     commands.extend(
-                        self._state_replaced(remove_empties(item), obj_in_have)
+                        self._state_replaced(
+                            remove_empties(item),
+                            obj_in_have,
+                        ),
                     )
 
         return commands
@@ -185,16 +187,15 @@ class Acls(ConfigBase):
         commands = []
 
         for want_acl in want["acls"]:
-            have_acl = (
-                search_obj_in_list(want_acl["name"], have.get("acls", []))
-                or {}
-            )
+            have_acl = search_obj_in_list(want_acl["name"], have.get("acls", [])) or {}
             acl_updates = []
 
             for have_ace in have_acl.get("aces", []):
                 want_ace = (
                     search_obj_in_list(
-                        have_ace["sequence"], want_acl["aces"], key="sequence"
+                        have_ace["sequence"],
+                        want_acl["aces"],
+                        key="sequence",
                     )
                     or {}
                 )
@@ -218,7 +219,8 @@ class Acls(ConfigBase):
                 acl_updates.insert(
                     0,
                     "{0} access-list {1}".format(
-                        want["afi"], want_acl["name"]
+                        want["afi"],
+                        want_acl["name"],
                     ),
                 )
                 commands.extend(acl_updates)
@@ -237,15 +239,14 @@ class Acls(ConfigBase):
         # Remove extraneous AFI that are present in config but not
         # specified in `want`
         for have_afi in have:
-            want_afi = (
-                search_obj_in_list(have_afi["afi"], want, key="afi") or {}
-            )
+            want_afi = search_obj_in_list(have_afi["afi"], want, key="afi") or {}
             if not want_afi:
                 for acl in have_afi.get("acls", []):
                     commands.append(
                         "no {0} access-list {1}".format(
-                            have_afi["afi"], acl["name"]
-                        )
+                            have_afi["afi"],
+                            acl["name"],
+                        ),
                     )
 
         # First we remove the extraneous ACLs from the AFIs that
@@ -253,22 +254,22 @@ class Acls(ConfigBase):
         # we call `_state_replaced` to update the ACEs within those ACLs
         for want_afi in want:
             want_afi = remove_empties(want_afi)
-            have_afi = (
-                search_obj_in_list(want_afi["afi"], have, key="afi") or {}
-            )
+            have_afi = search_obj_in_list(want_afi["afi"], have, key="afi") or {}
             if have_afi:
                 for have_acl in have_afi.get("acls", []):
                     want_acl = (
                         search_obj_in_list(
-                            have_acl["name"], want_afi.get("acls", [])
+                            have_acl["name"],
+                            want_afi.get("acls", []),
                         )
                         or {}
                     )
                     if not want_acl:
                         commands.append(
                             "no {0} access-list {1}".format(
-                                have_afi["afi"], have_acl["name"]
-                            )
+                                have_afi["afi"],
+                                have_acl["name"],
+                            ),
                         )
 
             commands.extend(self._state_replaced(want_afi, have_afi))
@@ -287,10 +288,7 @@ class Acls(ConfigBase):
             have = {}
 
         for want_acl in want["acls"]:
-            have_acl = (
-                search_obj_in_list(want_acl["name"], have.get("acls", {}))
-                or {}
-            )
+            have_acl = search_obj_in_list(want_acl["name"], have.get("acls", {})) or {}
 
             acl_updates = []
             for want_ace in want_acl["aces"]:
@@ -310,7 +308,8 @@ class Acls(ConfigBase):
                 acl_updates.insert(
                     0,
                     "{0} access-list {1}".format(
-                        want["afi"], want_acl["name"]
+                        want["afi"],
+                        want_acl["name"],
                     ),
                 )
                 commands.extend(acl_updates)
@@ -337,22 +336,25 @@ class Acls(ConfigBase):
                     for acl in have_item["acls"]:
                         commands.append(
                             "no {0} access-list {1}".format(
-                                have_item["afi"], acl["name"]
-                            )
+                                have_item["afi"],
+                                acl["name"],
+                            ),
                         )
             else:
                 for want_acl in item["acls"]:
                     have_acl = (
                         search_obj_in_list(
-                            want_acl["name"], have_item.get("acls", [])
+                            want_acl["name"],
+                            have_item.get("acls", []),
                         )
                         or {}
                     )
                     if have_acl:
                         commands.append(
                             "no {0} access-list {1}".format(
-                                have_item["afi"], have_acl["name"]
-                            )
+                                have_item["afi"],
+                                have_acl["name"],
+                            ),
                         )
 
         return commands
@@ -378,14 +380,16 @@ class Acls(ConfigBase):
                 cmd += "{0} ".format(dir_dict["prefix"])
             else:
                 cmd += "{0} {1} ".format(
-                    dir_dict["address"], dir_dict["wildcard_bits"]
+                    dir_dict["address"],
+                    dir_dict["wildcard_bits"],
                 )
 
             if "port_protocol" in dir_dict:
                 protocol_range = dir_dict["port_protocol"].get("range")
                 if protocol_range:
                     cmd += "range {0} {1} ".format(
-                        protocol_range["start"], protocol_range["end"]
+                        protocol_range["start"],
+                        protocol_range["end"],
                     )
                 else:
                     for key, value in iteritems(dir_dict["port_protocol"]):
@@ -419,7 +423,9 @@ class Acls(ConfigBase):
                     else:
                         for key, value in iteritems(want_ace[x]):
                             cmd += "{0} {1} {2} ".format(
-                                x.replace("_", "-"), key, value
+                                x.replace("_", "-"),
+                                key,
+                                value,
                             )
 
             for x in (
@@ -492,7 +498,7 @@ class Acls(ConfigBase):
             # so we need to handle it separately
             if want_ace.get("protocol_options", {}):
                 protocol_opt_delta = set(
-                    flatten_dict(have_ace.get("protocol_options", {}))
+                    flatten_dict(have_ace.get("protocol_options", {})),
                 ) ^ set(flatten_dict(want_ace.get("protocol_options", {})))
 
             if delta or protocol_opt_delta:

@@ -1,10 +1,8 @@
 ---
-- debug:
-    msg:
-      START iosxr_ospf interfaces merged integration tests on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START iosxr_ospf interfaces merged integration tests on connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
     - name: Merge the provided configuration with the existing running configuration
@@ -32,40 +30,33 @@
         state: merged
 
     - name: Assert that before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['before'] | symmetric_difference(result['before']) | length\
-            \ == 0 }}"
+          - "{{ merged['before'] | symmetric_difference(result['before']) | length == 0 }}"
 
     - name: Assert that correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['commands'] | symmetric_difference(result['commands']) |length\
-            \ == 0 }}"
+          - "{{ merged['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that after dicts was correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['after'] | symmetric_difference(result['after']) | length\
-            \ == 0 }}"
+          - "{{ merged['after'] | symmetric_difference(result['after']) | length == 0 }}"
 
-    - name:
-        Merge the provided configuration with the existing running configuration
-        (IDEMPOTENT)
+    - name: Merge the provided configuration with the existing running configuration (idempotent)
       register: result
       cisco.iosxr.iosxr_ospf_interfaces: *id001
-
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
           - result.commands|length == 0
 
     - name: Assert that before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['after'] | symmetric_difference(result['before']) | length\
-            \ == 0 }}"
+          - "{{ merged['after'] | symmetric_difference(result['before']) | length == 0 }}"
 
     - name: Update existing configuration using merged
       register: result
@@ -91,31 +82,27 @@
                 cost: 40
 
     - name: Assert that before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['after'] | symmetric_difference(result['before']) | length\
-            \ == 0 }}"
+          - "{{ merged['after'] | symmetric_difference(result['before']) | length == 0 }}"
 
     - name: Assert that correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['update_commands'] | symmetric_difference(result['commands'])\
-            \ |length == 0 }}"
+          - "{{ merged['update_commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that after dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['update_after'] | symmetric_difference(result['after']) | length\
-            \ == 0 }}"
+          - "{{ merged['update_after'] | symmetric_difference(result['after']) | length == 0 }}"
 
-    - name: Update existing ospf interfaces configuration using merged (IDEMPOTENT)
+    - name: Update existing OSPF interfaces configuration using merged (idempotent)
       register: result
       cisco.iosxr.iosxr_ospf_interfaces: *id002
-
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
           - result.commands|length == 0
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

@@ -1,11 +1,13 @@
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 import re
+
+from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
-from ansible.module_utils.six import iteritems
 
 
 def _tmplt_ospf_default_information(config_data):
@@ -14,9 +16,7 @@ def _tmplt_ospf_default_information(config_data):
         if "always" in config_data["default_information_originate"]:
             command += " always"
         if "metric" in config_data["default_information_originate"]:
-            command += " metric {metric}".format(
-                **config_data["default_information_originate"]
-            )
+            command += " metric {metric}".format(**config_data["default_information_originate"])
         if "metric_type" in config_data["default_information_originate"]:
             command += " metric-type {metric_type}".format(
                 **config_data["default_information_originate"]
@@ -44,9 +44,7 @@ def _tmplt_ospf_bfd(config_data):
     if "bfd" in config_data:
         command = "bfd"
         if "minimum_interval" in config_data["bfd"]:
-            command += " minimum-interval {minimum_interval}".format(
-                **config_data["bfd"]
-            )
+            command += " minimum-interval {minimum_interval}".format(**config_data["bfd"])
 
         if "multiplier" in config_data["bfd"]:
             command += " multiplier {multiplier}".format(**config_data["bfd"])
@@ -61,7 +59,7 @@ def _tmplt_ospf_security(config_data):
             command += " ttl"
         elif config_data["security_ttl"].get("hops"):
             command += " ttl hops {0}".format(
-                config_data["security_ttl"].get("hops")
+                config_data["security_ttl"].get("hops"),
             )
         return command
 
@@ -85,19 +83,19 @@ def _tmplt_ospf_log_max_lsa(config_data):
             command += " {0}".format(config_data["max_lsa"].get("threshold"))
         if "warning_only" in config_data["max_lsa"]:
             command += " warning-only {0}".format(
-                config_data["max_lsa"].get("warning_only")
+                config_data["max_lsa"].get("warning_only"),
             )
         if "ignore_time" in config_data["max_lsa"]:
             command += " ignore-time {0}".format(
-                config_data["max_lsa"].get("ignore_time")
+                config_data["max_lsa"].get("ignore_time"),
             )
         if "ignore_count" in config_data["max_lsa"]:
             command += " ignore-count {0}".format(
-                config_data["max_lsa"].get("ignore_count")
+                config_data["max_lsa"].get("ignore_count"),
             )
         if "reset_time" in config_data["max_lsa"]:
             command += " reset-time {0}".format(
-                config_data["max_lsa"].get("reset_time")
+                config_data["max_lsa"].get("reset_time"),
             )
         return command
 
@@ -108,22 +106,16 @@ def _tmplt_ospf_max_metric(config_data):
         if "router_lsa" in config_data["max_metric"]:
             command += " router-lsa"
         if "external_lsa" in config_data["max_metric"]:
-            command += " external-lsa {external_lsa}".format(
-                **config_data["max_metric"]
-            )
+            command += " external-lsa {external_lsa}".format(**config_data["max_metric"])
         if "include_stub" in config_data["max_metric"]:
             command += " include-stub"
         if "on_startup" in config_data["max_metric"]:
             if "time" in config_data["max_metric"]["on_startup"]:
-                command += " on-startup {time}".format(
-                    **config_data["max_metric"]["on_startup"]
-                )
+                command += " on-startup {time}".format(**config_data["max_metric"]["on_startup"])
             elif "wait_for_bgp" in config_data["max_metric"]["on_startup"]:
                 command += " on-startup wait-for-bgp"
         if "summary_lsa" in config_data["max_metric"]:
-            command += " summary-lsa {summary_lsa}".format(
-                **config_data["max_metric"]
-            )
+            command += " summary-lsa {summary_lsa}".format(**config_data["max_metric"])
         return command
 
 
@@ -132,19 +124,19 @@ def _tmplt_ospf_distance_admin(config_data):
         command = "distance"
         if config_data["admin_distance"].get("value"):
             command += " {0}".format(
-                config_data["admin_distance"].get("value")
+                config_data["admin_distance"].get("value"),
             )
         if config_data["admin_distance"].get("source"):
             command += " {0}".format(
-                config_data["admin_distance"].get("source")
+                config_data["admin_distance"].get("source"),
             )
         if config_data["admin_distance"].get("wildcard"):
             command += " {0}".format(
-                config_data["admin_distance"].get("wildcard")
+                config_data["admin_distance"].get("wildcard"),
             )
         if config_data["admin_distance"].get("access_list"):
             command += " {0}".format(
-                config_data["admin_distance"].get("access_list")
+                config_data["admin_distance"].get("access_list"),
             )
         return command
 
@@ -154,15 +146,15 @@ def _tmplt_ospf_distance_ospf(config_data):
         command = "distance ospf"
         if config_data["ospf_distance"].get("external"):
             command += " external {0}".format(
-                config_data["ospf_distance"].get("external")
+                config_data["ospf_distance"].get("external"),
             )
         if config_data["ospf_distance"].get("inter_area"):
             command += " inter-area {0}".format(
-                config_data["ospf_distance"].get("inter_area")
+                config_data["ospf_distance"].get("inter_area"),
             )
         if config_data["ospf_distance"].get("intra_area"):
             command += " intra-area {0}".format(
-                config_data["ospf_distance"].get("intra_area")
+                config_data["ospf_distance"].get("intra_area"),
             )
         return command
 
@@ -197,9 +189,9 @@ def _tmplt_microloop_avoidance(config_data):
         if "segment_routing" in config_data["microloop_avoidance"]:
             command += " segment_routing"
         if "rib_update_delay" in config_data["microloop_avoidance"]:
-            command += " rin-update-delay {0}".config_data[
-                "microloop_avoidance"
-            ].get("rib_update_delay")
+            command += " rin-update-delay {0}".config_data["microloop_avoidance"].get(
+                "rib_update_delay",
+            )
         return command
 
 
@@ -226,7 +218,7 @@ def _tmplt_ospf_mpls_traffic_eng(config_data):
         if "auto_route_exclude" in config_data["traffic_eng"]:
             policy = config_data["traffic_eng"].get("autoroute_exclude")
             command += " autoroute-exlude route-policy {0}".format(
-                policy.get("route_policy")
+                policy.get("route_policy"),
             )
         return command
 
@@ -246,9 +238,7 @@ def _tmplt_ospf_authentication(config_data):
     command = []
     if "authentication" in config_data:
         if config_data["authentication"].get("keychain"):
-            command = "authentication keychain " + config_data[
-                "authentication"
-            ].get("keychain")
+            command = "authentication keychain " + config_data["authentication"].get("keychain")
         elif config_data["authentication"].get("no_auth"):
             command = "authentication null"
         return command
@@ -257,9 +247,9 @@ def _tmplt_ospf_authentication(config_data):
 def _tmplt_ospf_adjacency_stagger(config_data):
     if "adjacency_stagger" in config_data:
         command = "adjacency stagger".format(**config_data)
-        if config_data["adjacency_stagger"].get(
-            "min_adjacency"
-        ) and config_data["adjacency_stagger"].get("min_adjacency"):
+        if config_data["adjacency_stagger"].get("min_adjacency") and config_data[
+            "adjacency_stagger"
+        ].get("min_adjacency"):
             command += " {0} {1}".format(
                 config_data["adjacency_stagger"].get("min_adjacency"),
                 config_data["adjacency_stagger"].get("max_adjacency"),
@@ -274,22 +264,22 @@ def _tmplt_ospf_adjacency_distribute_bgp_state(config_data):
         command = "distribute link-state"
         if config_data["distribute_link_list"].get("instance_id"):
             command += "  instance-id {0}".format(
-                config_data["distribute_link_list"].get("instance_id")
+                config_data["distribute_link_list"].get("instance_id"),
             )
         elif config_data["distribute_link_list"].get("throttle"):
             command += "  throttle {0}".format(
-                config_data["distribute_link_list"].get("throttle")
+                config_data["distribute_link_list"].get("throttle"),
             )
         return command
     elif "distribute_bgp_ls" in config_data:
         command = "distribute bgp-ls"
         if config_data["distribute_bgp_ls"].get("instance_id"):
             command += "  instance-id {0}".format(
-                config_data["distribute_bgp_ls"].get("instance_id")
+                config_data["distribute_bgp_ls"].get("instance_id"),
             )
         elif config_data["distribute_bgp_ls"].get("throttle"):
             command += "  throttle {0}".format(
-                config_data["distribute_bgp_ls"].get("throttle")
+                config_data["distribute_bgp_ls"].get("throttle"),
             )
         return command
 
@@ -309,7 +299,7 @@ def _tmplt_ospf_authentication_key(config_data):
         command = "authentication-key".format(**config_data)
         if config_data["authentication_key"].get("password"):
             command += " {0}".format(
-                config_data["authentication_key"].get("password")
+                config_data["authentication_key"].get("password"),
             )
         return command
 
@@ -319,7 +309,7 @@ def _tmplt_ospf_area_authentication(config_data):
         command = "area {area_id} authentication".format(**config_data)
         if config_data["authentication"].get("keychain"):
             command += " keychain " + config_data["authentication"].get(
-                "keychain"
+                "keychain",
             )
         elif config_data["authentication"].get("no_auth"):
             command += " null"
@@ -342,7 +332,7 @@ def _tmplt_ospf_area_authentication_key(config_data):
         command = "area {area_id} authentication-key".format(**config_data)
         if config_data["authentication_key"].get("password"):
             command += " {0}".format(
-                config_data["authentication_key"].get("password")
+                config_data["authentication_key"].get("password"),
             )
         return command
 
@@ -369,9 +359,7 @@ def _tmplt_ospf_area_bfd(config_data):
     if "bfd" in config_data:
         command = "area {area_id} bfd".format(**config_data)
         if "minimum_interval" in config_data["bfd"]:
-            command += " minimum-interval {minimum_interval}".format(
-                **config_data["bfd"]
-            )
+            command += " minimum-interval {minimum_interval}".format(**config_data["bfd"])
 
         if "multiplier" in config_data["bfd"]:
             command += " multiplier {multiplier}".format(**config_data["bfd"])
@@ -424,7 +412,7 @@ def _tmplt_ospf_area_nssa_def_info_origin(config_data):
         if "default_information_originate" in config_data["nssa"]:
             command += " default-information-originate"
             def_info_origin = config_data["nssa"].get(
-                "default_information_originate"
+                "default_information_originate",
             )
             if "metric" in def_info_origin:
                 command += " metric {metric}".format(
@@ -452,12 +440,10 @@ def _tmplt_ospf_area_nssa_translate(config_data):
 
 def _tmplt_ospf_area_vlink_authentication(config_data):
     if "authentication" in config_data:
-        command = "area {area_id} virtual-link {id} authentication".format(
-            **config_data
-        )
+        command = "area {area_id} virtual-link {id} authentication".format(**config_data)
         if config_data["authentication"].get("keychain"):
             command += " keychain " + config_data["authentication"].get(
-                "keychain"
+                "keychain",
             )
         elif config_data["authentication"].get("no_auth"):
             command += " null"
@@ -466,9 +452,7 @@ def _tmplt_ospf_area_vlink_authentication(config_data):
 
 def _tmplt_ospf_area_vlink_authentication_md(config_data):
     if "authentication" in config_data:
-        command = "area {area_id} virtual-link {id} authentication".format(
-            **config_data
-        )
+        command = "area {area_id} virtual-link {id} authentication".format(**config_data)
         if config_data["authentication"].get("message_digest"):
             command = "authentication message-digest"
             md = config_data["authentication"].get("message_digest")
@@ -479,12 +463,10 @@ def _tmplt_ospf_area_vlink_authentication_md(config_data):
 
 def _tmplt_ospf_area_vlink_authentication_key(config_data):
     if "authentication_key" in config_data:
-        command = "area {area_id} virtual-link {id} authentication-key".format(
-            **config_data
-        )
+        command = "area {area_id} virtual-link {id} authentication-key".format(**config_data)
         if config_data["authentication_key"].get("password"):
             command += " {0}".format(
-                config_data["authentication_key"].get("password")
+                config_data["authentication_key"].get("password"),
             )
         return command
 
@@ -536,17 +518,11 @@ def _tmplt_timers_lsa(config_data):
     if "timers" in config_data:
         command = "timers lsa"
         if "group_pacing" in config_data["timers"]["lsa"]:
-            command += " group-pacing {group_pacing}".format(
-                **config_data["timers"]["lsa"]
-            )
+            command += " group-pacing {group_pacing}".format(**config_data["timers"]["lsa"])
         if "min_arrival" in config_data["timers"]["lsa"]:
-            command += " min-arrival {min_arrival}".format(
-                **config_data["timers"]["lsa"]
-            )
+            command += " min-arrival {min_arrival}".format(**config_data["timers"]["lsa"])
         if "refresh" in config_data["timers"]["lsa"]:
-            command += " refresh {refresh}".format(
-                **config_data["timers"]["lsa"]
-            )
+            command += " refresh {refresh}".format(**config_data["timers"]["lsa"])
         return command
 
 
@@ -567,7 +543,9 @@ def _tmplt_timers_graceful_shutdown(config_data):
 class Ospfv2Template(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         super(Ospfv2Template, self).__init__(
-            lines=lines, tmplt=self, module=module
+            lines=lines,
+            tmplt=self,
+            module=module,
         )
 
     # fmt: off
@@ -583,7 +561,7 @@ class Ospfv2Template(NetworkTemplate):
             ),
             "setval": "router ospf {{ process_id }}",
             "result": {
-                "processes": {"{{ pid }}": {"process_id": "{{ pid }}"}}
+                "processes": {"{{ pid }}": {"process_id": "{{ pid }}"}},
             },
             "shared": True,
         },
@@ -603,8 +581,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "cost": "{{ cost|int }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -623,8 +601,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "default_metric": "{{ default_metric|int }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -643,8 +621,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "packet_size": "{{ packet_size|int }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -663,8 +641,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "dead_interval": "{{ dead_interval|int }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -683,8 +661,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "hello_interval": "{{ hello_interval|int }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -703,8 +681,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "priority": "{{ priority|int }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -723,8 +701,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "weight": "{{ weight|int }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -743,8 +721,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "retransmit_interval": "{{ retransmit_interval|int }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -763,8 +741,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "transmit_delay": "{{ transmit_delay|int }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -783,8 +761,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "passive": "{{ passive }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -805,8 +783,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "database_filter": "{{ database_filter }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -825,8 +803,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "demand_circuit": "{{ demand_circuit }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -845,8 +823,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "external_out": "{{ external_out }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -865,8 +843,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "router_id": "{{ router_id }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -885,8 +863,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "summary_in": "{{ summary_in }}",
-                    }
-                }
+                    },
+                },
             },
         },
 
@@ -906,8 +884,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "mtu_ignore": "{{ mtu_ignore }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -926,8 +904,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "flood_reduction": "{{ flood_reduction }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -947,8 +925,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "loopback_stub_network": "{{ loopback_stub_network }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -969,8 +947,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "address_family_unicast": "{{ True if unicast is defined }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -990,9 +968,9 @@ class Ospfv2Template(NetworkTemplate):
                     "{{ pid }}": {
                         "apply_weight": {
                             "default_weight": "{{ default_weight|int }}",
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             },
         },
         {
@@ -1012,9 +990,9 @@ class Ospfv2Template(NetworkTemplate):
                     "{{ pid }}": {
                         "apply_weight": {
                             "bandwidth": "{{ bandwidth|int }}",
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             },
         },
         {
@@ -1040,8 +1018,8 @@ class Ospfv2Template(NetworkTemplate):
                             "max_adjacency": "{{ max_adjacency }}",
                             "disable": "{{ True if disable is defined }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1064,8 +1042,8 @@ class Ospfv2Template(NetworkTemplate):
                             "no_auth": "{{ True if no_auth is defined }}",
                             "keychain": "{{ keychain }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1088,10 +1066,10 @@ class Ospfv2Template(NetworkTemplate):
                             "message_digest": {
                                 "keychain": "{{ md_key }}",
                                 "set": "{{ True if md is defined and md_key is undefined }}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1119,10 +1097,10 @@ class Ospfv2Template(NetworkTemplate):
                             "metric_type": "{{ metric_type|int }}",
                             "route_policy": "{{ route_policy }}",
                             "set": "{{ True if default_information is defined and always is undefined and metric "
-                                   "is undefined and metric_type is undefined and route_policy is undefined }}"
+                                   "is undefined and metric_type is undefined and route_policy is undefined }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1145,8 +1123,8 @@ class Ospfv2Template(NetworkTemplate):
                             "disable": "{{ True if disable is defined }}",
                             "reference_bandwidth": "{{ reference_bandwidth|int }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1169,8 +1147,8 @@ class Ospfv2Template(NetworkTemplate):
                             "minimum_interval": "{{ minimum_interval|int }}",
                             "multiplier": "{{ multiplier|int }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1196,7 +1174,7 @@ class Ospfv2Template(NetworkTemplate):
                                 "strict_mode": "{{ True if strict_mode is defined }}",
                             },
                         },
-                    }
+                    },
                 },
             },
         },
@@ -1220,8 +1198,8 @@ class Ospfv2Template(NetworkTemplate):
                             "set": "{{ True if ttl is defined and hops is undefined }}",
                             "hops": "{{ hops }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1243,8 +1221,8 @@ class Ospfv2Template(NetworkTemplate):
                             "set": "{{ True if nsr is defined and disable is undefined }}",
                             "disable": "{{ True if disable is defined }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1269,8 +1247,8 @@ class Ospfv2Template(NetworkTemplate):
                             "host_mode": "{{ True if host_mode is defined }}",
                             "on_reload": "{{ True if on_reload is defined }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1289,10 +1267,10 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "capability": {
-                            "type7": "{{ type7 }}"
+                            "type7": "{{ type7 }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1317,8 +1295,8 @@ class Ospfv2Template(NetworkTemplate):
                                 "set": "{{ True if opaque is defined and disable is undefined }}",
                             },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1344,10 +1322,10 @@ class Ospfv2Template(NetworkTemplate):
                                 "source": "{{ source }}",
                                 "wildcard": "{{ wildcard }}",
                                 "access_list": "{{ access_list }}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
 
@@ -1374,10 +1352,10 @@ class Ospfv2Template(NetworkTemplate):
                                 "external": "{{ external|int }}",
                                 "inter_area": "{{ inter_area|int }}",
                                 "intra_area": "{{ intra_area|int }}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1402,8 +1380,8 @@ class Ospfv2Template(NetworkTemplate):
                             "encrypted": "{{ encrypted}}",
                             "password": "{{ password if clear is undefined and encrypted is undefined }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1427,10 +1405,10 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "default_cost": "{{ default_cost|int }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1454,10 +1432,10 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "dead_interval": "{{ dead_interval|int }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1480,10 +1458,10 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "hello_interval": "{{ hello_interval|int }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1506,10 +1484,10 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "transmit_delay": "{{ transmit_delay|int }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1532,10 +1510,10 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "cost": "{{ cost|int }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1558,10 +1536,10 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "priority": "{{ priority|int }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1584,10 +1562,10 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "weight": "{{ weight|int }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1610,10 +1588,10 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "packet_size": "{{ packet_size|int }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1637,10 +1615,10 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "summary_in": "{{ summary_in }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1664,10 +1642,10 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "demand_circuit": "{{ demand_circuit }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1691,10 +1669,10 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "passive": "{{ passive }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1718,10 +1696,10 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "external_out": "{{ external_out }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1745,10 +1723,10 @@ class Ospfv2Template(NetworkTemplate):
                             "{{ area_id }}": {
                                 "area_id": "{{ area_id }}",
                                 "mtu_ignore": "{{ mtu_ignore }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1776,10 +1754,10 @@ class Ospfv2Template(NetworkTemplate):
                                     "no_auth": "{{ True if no_auth is defined }}",
                                     "keychain": "{{ keychain }}",
                                 },
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1809,10 +1787,10 @@ class Ospfv2Template(NetworkTemplate):
                                     "encrypted": "{{ encrypted}}",
                                     "password": "{{ password if clear is undefined and encrypted is undefined }}",
                                 },
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1839,12 +1817,12 @@ class Ospfv2Template(NetworkTemplate):
                                 "authentication": {
                                     "message_digest": {
                                         "keychain": "{{ md_key }}",
-                                    }
+                                    },
                                 },
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1870,10 +1848,10 @@ class Ospfv2Template(NetworkTemplate):
                                 "mpls": {
                                     "traffic_eng": "{{ True if traffic_eng is defined }}",
                                 },
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1904,12 +1882,12 @@ class Ospfv2Template(NetworkTemplate):
                                         "sync": "{{ True if sync is defined }}",
                                         "sync_igp_shortcuts": "{{ True if sync_igp_shortcuts is defined }}",
 
-                                    }
+                                    },
                                 },
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1937,10 +1915,10 @@ class Ospfv2Template(NetworkTemplate):
                                     "minimum_interval": "{{ minimum_interval|int }}",
                                     "multiplier": "{{ multiplier|int }}",
                                 },
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1971,9 +1949,9 @@ class Ospfv2Template(NetworkTemplate):
                                         "strict_mode": "{{ True if strict_mode is defined }}",
                                     },
                                 },
-                            }
-                        }
-                    }
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -1999,10 +1977,10 @@ class Ospfv2Template(NetworkTemplate):
                             "stub": {
                                 "set": "{{ True if stub is defined and no_summary is undefined }}",
                                 "no_summary": "{{ True if no_summary is defined }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -2028,11 +2006,11 @@ class Ospfv2Template(NetworkTemplate):
                             "nssa": {
                                 "set": "{{ True if nssa is defined and no_summary is undefined and no_redis is undefined }}",
                                 "no_summary": "{{ True if no_summary is defined }}",
-                                "no_redistribution": "{{ True if no_redis is defined }}"
-                            }
-                        }
-                    }
-                }
+                                "no_redistribution": "{{ True if no_redis is defined }}",
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -2063,10 +2041,10 @@ class Ospfv2Template(NetworkTemplate):
                                         "metric": "{{ metric|int }}",
                                         "metric_type": "{{ metric_type|int }}",
                                     },
-                                }
-                            }
-                        }
-                    }
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -2097,12 +2075,12 @@ class Ospfv2Template(NetworkTemplate):
                                         "address": "{{ address }}",
                                         "advertise": "{{ True if advertise is defined }}",
                                         "not_advertise": "{{ True if not_advertise is defined }}",
-                                    }
+                                    },
                                 ],
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -2129,13 +2107,13 @@ class Ospfv2Template(NetworkTemplate):
                             "nssa": {
                                 "translate": {
                                     "type7": {
-                                        "always": "{{ True if always is defined }}"
-                                    }
+                                        "always": "{{ True if always is defined }}",
+                                    },
                                 },
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -2162,14 +2140,14 @@ class Ospfv2Template(NetworkTemplate):
                                     "{{ id }}":
                                         {
                                             "id": "{{ id }}",
-                                            "hello_interval": "{{ hello_interval|int }}"
-                                        }
+                                            "hello_interval": "{{ hello_interval|int }}",
+                                        },
 
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -2195,14 +2173,14 @@ class Ospfv2Template(NetworkTemplate):
                                 "virtual_link": {
                                     "{{ id }}": {
                                         "id": "{{ id }}",
-                                        "dead_interval": "{{ dead_interval|int }}"
-                                    }
+                                        "dead_interval": "{{ dead_interval|int }}",
+                                    },
 
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -2228,15 +2206,15 @@ class Ospfv2Template(NetworkTemplate):
                                 "virtual_link": {
                                     "{{ id }}": {
                                         "id": "{{ id }}",
-                                        "retransmit_interval": "{{ retransmit_interval|int }}"
-                                    }
-                                }
+                                        "retransmit_interval": "{{ retransmit_interval|int }}",
+                                    },
+                                },
 
-                            }
-                        }
-                    }
-                }
-            }
+                            },
+                        },
+                    },
+                },
+            },
         },
         {
             "name": "virtual_link.authentication",
@@ -2264,10 +2242,10 @@ class Ospfv2Template(NetworkTemplate):
                                     "no_auth": "{{ True if no_auth is defined }}",
                                     "keychain": "{{ keychain }}",
                                 },
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -2300,12 +2278,12 @@ class Ospfv2Template(NetworkTemplate):
                                             "encrypted": "{{ encrypted}}",
                                             "password": "{{ password if clear is undefined and encrypted is undefined }}",
                                         },
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -2335,14 +2313,14 @@ class Ospfv2Template(NetworkTemplate):
                                         "authentication": {
                                             "message_digest": {
                                                 "keychain": "{{ md_key }}",
-                                            }
+                                            },
                                         },
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -2361,8 +2339,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "link_down_fast_detect": "{{ True if fast_detect is defined }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -2381,8 +2359,8 @@ class Ospfv2Template(NetworkTemplate):
                 "processes": {
                     "{{ pid }}": {
                         "disable": "{{ True if disable is defined }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -2402,9 +2380,9 @@ class Ospfv2Template(NetworkTemplate):
             "result": {
                 "processes": {
                     "{{ pid }}": {
-                        "outing": "{{ outing }}"
-                    }
-                }
+                        "outing": "{{ outing }}",
+                    },
+                },
             },
         },
         {
@@ -2428,8 +2406,8 @@ class Ospfv2Template(NetworkTemplate):
                             "instance_id": "{{ inst_id|int }}",
                             "throttle": "{{ throttle }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -2453,8 +2431,8 @@ class Ospfv2Template(NetworkTemplate):
                             "instance_id": "{{ inst_id|int }}",
                             "throttle": "{{ throttle }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -2480,8 +2458,8 @@ class Ospfv2Template(NetworkTemplate):
                             "disable": "{{ True if disable is defined }}",
                             "details": "{{ True if details is defined }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -2509,8 +2487,8 @@ class Ospfv2Template(NetworkTemplate):
                             "ignore_count": "{{ ignore_count|int }}",
                             "reset_time": "{{ reset_time|int }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -2555,10 +2533,10 @@ class Ospfv2Template(NetworkTemplate):
                                     "set": "{{ True if summary_lsa is defined and sum_lsa_max_metric_value is undefined else None }}",
                                     "max_metric_value": "{{ sum_lsa_max_metric_value }}",
                                 },
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -2584,10 +2562,10 @@ class Ospfv2Template(NetworkTemplate):
                                 "auto_config": "{{ True if auto_config is defined }}",
                                 "sync": "{{ True if sync is defined }}",
                                 "sync_igp_shortcuts": "{{ True if sync_igp_shortcuts is defined }}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -2614,8 +2592,8 @@ class Ospfv2Template(NetworkTemplate):
                             "segment_routing": "{{ True if segment_routing is defined }}",
                             "rib_update_delay": "{{ rib_update_delay }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -2641,15 +2619,15 @@ class Ospfv2Template(NetworkTemplate):
                     "{{ pid }}": {
                         "mpls": {
                             "autoroute_exclude": {
-                                "route_policy": "{{ route_policy }}"
+                                "route_policy": "{{ route_policy }}",
                             },
                             "igp_intact": "{{ True if igp_intact is defined }}",
                             "ldp_sync_update": "{{ True if ldp_sync_update is defined }}",
                             "multicast_intact": "{{ True if multicast_intact is defined }}",
-                            "router_id": "{{ router_id }}"
+                            "router_id": "{{ router_id }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -2671,8 +2649,8 @@ class Ospfv2Template(NetworkTemplate):
                             "set": "{{ True if prefix_suppression is defined and secondary_address is undefined }}",
                             "secondary_address": "{{ True if secondary_address is defined }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -2696,8 +2674,8 @@ class Ospfv2Template(NetworkTemplate):
                             "host_mode": "{{ True if host_mode is defined }}",
                             "on_reload": "{{ True if on_reload is defined }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -2724,9 +2702,9 @@ class Ospfv2Template(NetworkTemplate):
                                 "min_arrival": "{{ min_arrival|int }}",
                                 "refresh": "{{ refresh|int }}",
                             },
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             },
         },
         {
@@ -2751,9 +2729,9 @@ class Ospfv2Template(NetworkTemplate):
                                 "initial_delay": "{{ initial_delay|int }}",
                                 "retain_routes": "{{ retain_routes|int }}",
                             },
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             },
         },
         {
@@ -2783,10 +2761,10 @@ class Ospfv2Template(NetworkTemplate):
                                     "min_delay": "{{ min_delay }}",
                                     "max_delay": "{{ max_delay }}",
                                 },
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -2817,10 +2795,10 @@ class Ospfv2Template(NetworkTemplate):
                                     "min_delay": "{{ min_delay }}",
                                     "max_delay": "{{ max_delay }}",
                                 },
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -2843,10 +2821,10 @@ class Ospfv2Template(NetworkTemplate):
                         "timers": {
                             "throttle": {
                                 "fast_reroute": "{{ fast_reroute }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -2869,9 +2847,9 @@ class Ospfv2Template(NetworkTemplate):
                         "timers": {
                             "pacing_flood": "{{ pacing_flood }}",
 
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             },
         },
     ]

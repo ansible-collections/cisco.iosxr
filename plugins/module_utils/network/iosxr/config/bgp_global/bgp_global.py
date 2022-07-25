@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -19,15 +20,14 @@ created.
 
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    dict_merge,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
     ResourceModule,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_merge,
 )
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.bgp_global import (
     Bgp_globalTemplate,
 )
@@ -131,24 +131,20 @@ class Bgp_global(ResourceModule):
                 self._module.fail_json(
                     msg="BGP is already configured with ASN {0}. "
                     "Please remove it with state purged before "
-                    "configuring new as_number".format(h_asn)
+                    "configuring new as_number".format(h_asn),
                 )
         for entry in self.want, self.have:
             self._bgp_list_to_dict(entry)
 
         # if state is deleted, clean up global params
         if self.state == "deleted":
-            if not self.want or (
-                self.have.get("as_number") == self.want.get("as_number")
-            ):
+            if not self.want or (self.have.get("as_number") == self.want.get("as_number")):
                 self._compare(
                     want={"as_number": self.want.get("as_number")},
                     have=self.have,
                 )
         elif self.state == "purged":
-            if not self.want or (
-                self.have.get("as_number") == self.want.get("as_number")
-            ):
+            if not self.want or (self.have.get("as_number") == self.want.get("as_number")):
                 self.addcmd(self.have or {}, "router", True)
 
         else:
@@ -175,7 +171,9 @@ class Bgp_global(ResourceModule):
             self.commands.insert(
                 0,
                 self._tmplt.render(
-                    {"as_number": want["as_number"]}, "router", False
+                    {"as_number": want["as_number"]},
+                    "router",
+                    False,
                 ),
             )
 
@@ -201,14 +199,18 @@ class Bgp_global(ResourceModule):
             new_have = have.pop(name, {})
             begin = len(self.commands)
             self.compare(
-                parsers=rpki_server_parsers, want=entry, have=new_have
+                parsers=rpki_server_parsers,
+                want=entry,
+                have=new_have,
             )
             rpki_server_name = entry.get("name")
             if len(self.commands) != begin:
                 self.commands.insert(
                     begin,
                     self._tmplt.render(
-                        {"name": rpki_server_name}, "rpki_server_name", False
+                        {"name": rpki_server_name},
+                        "rpki_server_name",
+                        False,
                     ),
                 )
         for name, entry in iteritems(have):
@@ -219,12 +221,8 @@ class Bgp_global(ResourceModule):
         :params want: the want BGP dictionary
         :params have: the have BGP dictionary
         """
-        w_cpeers = (
-            want.get("bgp", {}).get("confederation", {}).get("peers", [])
-        )
-        h_cpeers = (
-            have.get("bgp", {}).get("confederation", {}).get("peers", [])
-        )
+        w_cpeers = want.get("bgp", {}).get("confederation", {}).get("peers", [])
+        h_cpeers = have.get("bgp", {}).get("confederation", {}).get("peers", [])
 
         if set(w_cpeers) != set(h_cpeers):
             if self.state in ["replaced", "deleted"]:
@@ -334,8 +332,8 @@ class Bgp_global(ResourceModule):
                 self._module.fail_json(
                     msg="Neighbor {0} has address-family configurations. "
                     "Please use the iosxr_bgp_neighbor_address_family module to remove those first.".format(
-                        name
-                    )
+                        name,
+                    ),
                 )
             else:
                 self.addcmd(entry, "neighbor_address", True)
@@ -357,7 +355,9 @@ class Bgp_global(ResourceModule):
                 self.commands.insert(
                     begin,
                     self._tmplt.render(
-                        {"vrf": entry.get("vrf")}, "vrf", False
+                        {"vrf": entry.get("vrf")},
+                        "vrf",
+                        False,
                     ),
                 )
         # cleanup remaining VRFs
@@ -369,8 +369,8 @@ class Bgp_global(ResourceModule):
                 self._module.fail_json(
                     msg="VRF {0} has address-family configurations. "
                     "Please use the iosxr_bgp_address_family module to remove those first.".format(
-                        name
-                    )
+                        name,
+                    ),
                 )
             else:
                 self.addcmd(entry, "vrf", True)
@@ -399,9 +399,7 @@ class Bgp_global(ResourceModule):
                 x["name"]: x for x in entry.get("rpki", {}).get("servers", [])
             }
         if "neighbors" in entry:
-            entry["neighbors"] = {
-                x["neighbor_address"]: x for x in entry.get("neighbors", [])
-            }
+            entry["neighbors"] = {x["neighbor_address"]: x for x in entry.get("neighbors", [])}
 
         if "vrfs" in entry:
             entry["vrfs"] = {x["vrf"]: x for x in entry.get("vrfs", [])}
@@ -415,11 +413,7 @@ class Bgp_global(ResourceModule):
         af_present = False
         if self._connection:
             config_lines = self._get_config().splitlines()
-            index = [
-                i + 1
-                for i, el in enumerate(config_lines)
-                if context_name in el
-            ]
+            index = [i + 1 for i, el in enumerate(config_lines) if context_name in el]
             if index:
                 # had to do this to escape flake8 and black errors
                 ind = index[0]

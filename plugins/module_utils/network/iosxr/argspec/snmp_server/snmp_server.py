@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 #############################################
@@ -325,11 +326,11 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                                 "all": {"type": "bool"},
                                 "area_mismatch": {"type": "bool"},
                                 "attempt_to_exceed_max_sequence": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "authentication_failure": {"type": "bool"},
                                 "authentication_type_failure": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "corrupted_lsp_detected": {"type": "bool"},
                                 "database_overload": {"type": "bool"},
@@ -338,16 +339,16 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                                 "lsp_too_large_to_propagate": {"type": "bool"},
                                 "manual_address_drops": {"type": "bool"},
                                 "max_area_addresses_mismatch": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "orig_lsp_buff_size_mismatch": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "version_skew": {"type": "bool"},
                                 "own_lsp_purge": {"type": "bool"},
                                 "rejected_adjacency": {"type": "bool"},
                                 "protocols_supported_mismatch": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "sequence_number_skip": {"type": "bool"},
                             },
@@ -380,12 +381,12 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "bad_packet": {"type": "bool"},
                                         "authentication_failure": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "config_error": {"type": "bool"},
                                         "virt_bad_packet": {"type": "bool"},
                                         "virt_authentication_failure": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "virt_config_error": {"type": "bool"},
                                     },
@@ -409,13 +410,13 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "if_state_change": {"type": "bool"},
                                         "neighbor_state_change": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "virtif_state_change": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "virtneighbor_state_change": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
@@ -438,23 +439,23 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "if_state_change": {"type": "bool"},
                                         "neighbor_state_change": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "virtif_state_change": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "virtneighbor_state_change": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "nssa_state_change": {"type": "bool"},
                                         "restart_status_change": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "restart_helper_status_change": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "restart_virtual_helper_status_change": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                     },
                                 },
@@ -497,7 +498,7 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "options": {
                                 "session_agg_access_interface": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "session_agg_node": {"type": "bool"},
                             },

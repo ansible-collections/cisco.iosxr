@@ -18,14 +18,14 @@
 # Make coding more python3-ish
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
-from .iosxr_module import TestIosxrModule, load_fixture
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_system
+from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
+
+from .iosxr_module import TestIosxrModule, load_fixture
 
 
 class TestIosxrSystemModule(TestIosxrModule):
@@ -36,17 +36,17 @@ class TestIosxrSystemModule(TestIosxrModule):
         super(TestIosxrSystemModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_system.get_config"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_system.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_system.load_config"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_system.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_is_cliconf = patch(
-            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_system.is_cliconf"
+            "ansible_collections.cisco.iosxr.plugins.modules.iosxr_system.is_cliconf",
         )
         self.is_cliconf = self.mock_is_cliconf.start()
 
@@ -118,6 +118,6 @@ class TestIosxrSystemModule(TestIosxrModule):
                 hostname="iosxr01",
                 domain_name="eng.ansible.com",
                 lookup_enabled=False,
-            )
+            ),
         )
         self.execute_module()
