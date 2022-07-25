@@ -25,7 +25,8 @@ from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc.base import 
 from imp import load_source
 
 from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc.base import (
-    GrpcBase, ensure_connect
+    GrpcBase,
+    ensure_connect,
 )
 
 
@@ -75,17 +76,21 @@ class Grpc(GrpcBase):
     @ensure_connect
     def merge_config(self, path):
         """Merge grpc call equivalent  of PATCH RESTconf call
-            :param data: JSON
-            :type data: str
-            :return: Return the response object
-            :rtype: Response object
+        :param data: JSON
+        :type data: str
+        :return: Return the response object
+        :rtype: Response object
         """
         path = json.dumps(path)
         stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
             self._connection._channel
         )
         message = self._ems_grpc_pb2.ConfigArgs(yangjson=path)
-        response = stub.MergeConfig(message, self._connection._timeout, metadata=self._connection._login_credentials,)
+        response = stub.MergeConfig(
+            message,
+            self._connection._timeout,
+            metadata=self._connection._login_credentials,
+        )
         if response:
             return response.errors
         else:
@@ -94,18 +99,21 @@ class Grpc(GrpcBase):
     @ensure_connect
     def replace_config(self, path):
         """Replace grpc call equivalent  of PATCH RESTconf call
-            :param data: JSON
-            :type data: str
-            :return: Return the response object
-            :rtype: Response object
+        :param data: JSON
+        :type data: str
+        :return: Return the response object
+        :rtype: Response object
         """
-        reposnde = dict()
         path = json.dumps(path)
         stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
             self._connection._channel
         )
         message = self._ems_grpc_pb2.ConfigArgs(yangjson=path)
-        response = stub.ReplaceConfig(message, self._connection._timeout, metadata=self._connection._login_credentials,)
+        response = stub.ReplaceConfig(
+            message,
+            self._connection._timeout,
+            metadata=self._connection._login_credentials,
+        )
         if response:
             return response.errors
         else:
@@ -114,17 +122,21 @@ class Grpc(GrpcBase):
     @ensure_connect
     def delete_config(self, path):
         """Delete grpc call equivalent  of PATCH RESTconf call
-            :param data: JSON
-            :type data: str
-            :return: Return the response object
-            :rtype: Response object
+        :param data: JSON
+        :type data: str
+        :return: Return the response object
+        :rtype: Response object
         """
         path = json.dumps(path)
         stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
             self._connection._channel
         )
         message = self._ems_grpc_pb2.ConfigArgs(yangjson=path)
-        response = stub.DeleteConfig(message, self._connection._timeout, metadata=self._connection._login_credentials,)
+        response = stub.DeleteConfig(
+            message,
+            self._connection._timeout,
+            metadata=self._connection._login_credentials,
+        )
         if response:
             return response.errors
         else:
@@ -139,7 +151,7 @@ class Grpc(GrpcBase):
         stub = self._ems_grpc_pb2.beta_create_gRPCExec_stub(
             self._connection._channel
         )
-        
+
         message = self._ems_grpc_pb2.ShowCmdArgs(cli=command)
         if display == "text":
             responses = stub.ShowCmdTextOutput(
