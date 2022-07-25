@@ -72,7 +72,7 @@ class TestIosxrHostnameModule(TestIosxrModule):
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
-    def test_iosxr_hostname_deleted(self):
+    def test_iosxr_hostname_deleted_1(self):
         self.maxDiff = None
         run_cfg = dedent(
             """\
