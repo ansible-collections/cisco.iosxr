@@ -135,6 +135,28 @@ class TestIosxrPingModule(TestIosxrModule):
         }
         self.assertEqual(result, mock_res)
 
+    def test_iosxr_ping_state_absent_pass(self):
+        self.execute_show_command.return_value = dedent(
+            """\
+            Type escape sequence to abort.
+            Sending 5, 100-byte ICMP Echos to 192.0.2.1, timeout is 2 seconds:
+            .....
+            Success rate is 0 percent (0/5)
+            """,
+        )
+        set_module_args(dict(count=2, dest="8.8.8.8", state="absent"))
+        result = self.execute_module(failed=False)
+        print(result)
+        mock_res = {
+            "commands": "ping ipv4 192.0.2.1 count 2",
+            "packet_loss": "100%",
+            "packets_rx": 0,
+            "packets_tx": 5,
+            "rtt": {},
+            "changed": False,
+        }
+        self.assertEqual(result, mock_res)
+
     def test_iosxr_ping_state_absent_present_fail(self):
         self.execute_show_command.return_value = dedent(
             """\
