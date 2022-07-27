@@ -3,6 +3,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -21,6 +22,8 @@ from imp import load_source
 
 from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc.base import (
     GrpcBase, ensure_connect
+import json
+import os
 
 from imp import load_source
 
@@ -43,7 +46,7 @@ class Grpc(GrpcBase):
 
     def get_config(self, section=None):
         stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
-            self._connection._channel
+            self._connection._channel,
         )
         message = self._ems_grpc_pb2.ConfigGetArgs(yangpathjson=section)
         responses = stub.GetConfig(
@@ -59,7 +62,7 @@ class Grpc(GrpcBase):
 
     def get(self, section=None):
         stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
-            self._connection._channel
+            self._connection._channel,
         )
         message = self._ems_grpc_pb2.GetOperArgs(yangpathjson=section)
         responses = stub.GetOper(
@@ -83,7 +86,7 @@ class Grpc(GrpcBase):
         """
         path = json.dumps(path)
         stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
-            self._connection._channel
+            self._connection._channel,
         )
         message = self._ems_grpc_pb2.ConfigArgs(yangjson=path)
         response = stub.MergeConfig(
@@ -106,7 +109,7 @@ class Grpc(GrpcBase):
         """
         path = json.dumps(path)
         stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
-            self._connection._channel
+            self._connection._channel,
         )
         message = self._ems_grpc_pb2.ConfigArgs(yangjson=path)
         response = stub.ReplaceConfig(
@@ -129,7 +132,7 @@ class Grpc(GrpcBase):
         """
         path = json.dumps(path)
         stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
-            self._connection._channel
+            self._connection._channel,
         )
         message = self._ems_grpc_pb2.ConfigArgs(yangjson=path)
         response = stub.DeleteConfig(
@@ -149,7 +152,7 @@ class Grpc(GrpcBase):
 
         output = {"response": "", "error": ""}
         stub = self._ems_grpc_pb2.beta_create_gRPCExec_stub(
-            self._connection._channel
+            self._connection._channel,
         )
 
         message = self._ems_grpc_pb2.ShowCmdArgs(cli=command)
