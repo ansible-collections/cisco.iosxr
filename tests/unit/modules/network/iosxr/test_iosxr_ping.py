@@ -144,7 +144,7 @@ class TestIosxrPingModule(TestIosxrModule):
             Success rate is 0 percent (0/5)
             """,
         )
-        set_module_args(dict(count=2, dest="8.8.8.8", state="absent"))
+        set_module_args(dict(count=2, dest="192.0.2.1", state="absent"))
         result = self.execute_module(failed=False)
         print(result)
         mock_res = {
