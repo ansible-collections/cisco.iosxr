@@ -17,17 +17,8 @@ description:
 version_added: ""
 """
 import os
-
-from imp import load_source
-
-from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc.base import (
-    GrpcBase,
-    ensure_connect,
-)
 import json
-import os
-
-from imp import load_source
+import sys
 
 from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc.base import (
     GrpcBase,
@@ -38,13 +29,23 @@ from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc.base import 
 class Grpc(GrpcBase):
     def __init__(self, connection):
         super(Grpc, self).__init__(connection)
-        self._ems_grpc_pb2 = load_source(
-            "ems_grpc_pb2",
-            os.path.join(
-                os.path.dirname(os.path.realpath(__file__)),
-                "pb/ems_grpc_pb2.py",
-            ),
+        module_name = "ems_grpc_pb2"
+        module_path = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            "pb/ems_grpc_pb2.py",
         )
+        if sys.version_info[0] == 3 and sys.version_info[1] >= 5:
+            import importlib.util
+            spec = importlib.util.spec_from_file_location(module_name, module_path)
+            self._ems_grpc_pb2 = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(self._ems_grpc_pb2)
+        elif sys.version_info[0] == 3 and sys.version_info[1] < 5:
+            import importlib.machinery
+            loader = importlib.machinery.SourceFileLoader(module_name, module_path)
+            self._ems_grpc_pb2 = loader.load_module()
+        elif sys.version_info[0] == 2:
+            import imp
+            self._ems_grpc_pb2 = imp.load_source(module_name, module_path)
 
     def get_config(self, section=None):
         stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
