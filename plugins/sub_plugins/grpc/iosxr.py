@@ -16,8 +16,8 @@ description:
     devices over gRPC protocol.
 version_added: ""
 """
-import os
 import json
+import os
 import sys
 
 from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc.base import (
@@ -36,15 +36,18 @@ class Grpc(GrpcBase):
         )
         if sys.version_info[0] == 3 and sys.version_info[1] >= 5:
             import importlib.util
+
             spec = importlib.util.spec_from_file_location(module_name, module_path)
             self._ems_grpc_pb2 = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(self._ems_grpc_pb2)
         elif sys.version_info[0] == 3 and sys.version_info[1] < 5:
             import importlib.machinery
+
             loader = importlib.machinery.SourceFileLoader(module_name, module_path)
             self._ems_grpc_pb2 = loader.load_module()
         elif sys.version_info[0] == 2:
             import imp
+
             self._ems_grpc_pb2 = imp.load_source(module_name, module_path)
 
     def get_config(self, section=None):
