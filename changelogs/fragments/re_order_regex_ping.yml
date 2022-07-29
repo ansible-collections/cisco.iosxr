@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - "`iosxr_ping` - Fix regex to parse ping failure correctly."
