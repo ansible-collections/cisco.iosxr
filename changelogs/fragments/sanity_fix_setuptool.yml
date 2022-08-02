@@ -1,4 +1,0 @@
----
-trivial:
-  - "Remove references for LooseVersion."
-  - "fix sanity failures with >2.13 and Python 3.10."

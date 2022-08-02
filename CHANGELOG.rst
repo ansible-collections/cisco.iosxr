@@ -5,6 +5,19 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v3.3.0
+======
+
+Minor Changes
+-------------
+
+- Add support for grpc connection plugin
+
+Bugfixes
+--------
+
+- `iosxr_ping` - Fix regex to parse ping failure correctly.
+
 v3.2.0
 ======
 

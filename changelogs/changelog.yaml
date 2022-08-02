@@ -439,3 +439,21 @@ releases:
     fragments:
       - fix_comm_confirmed.yml
     release_date: "2022-06-28"
+  3.3.0:
+    changes:
+      bugfixes:
+        - "`iosxr_ping` - Fix regex to parse ping failure correctly."
+      minor_changes:
+        - Add support for grpc connection plugin
+    fragments:
+      - add_ansible_lint.yml
+      - add_fqcn.yml
+      - add_isort.yml
+      - add_proper_short_desc.yml
+      - add_tailig_commas.yml
+      - fix_changelog.yml
+      - gha_update.yml
+      - grpc_plugin_support.yaml
+      - re_order_regex_ping.yml
+      - sanity_fix_setuptool.yml
+    release_date: "2022-08-02"
