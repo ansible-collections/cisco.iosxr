@@ -33,3 +33,11 @@ plugins/netconf/iosxr.py pylint:arguments-renamed
 tests/unit/mock/loader.py pylint:arguments-renamed
 plugins/module_utils/network/iosxr/config/acls/acls.py pylint:unused-private-member
 plugins/module_utils/network/iosxr/facts/acls/acls.py pylint:unused-private-member
+plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.7!skip
+plugins/sub_plugins/grpc/iosxr.py import-3.7!skip
+plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.8!skip
+plugins/sub_plugins/grpc/iosxr.py import-3.8!skip
+plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.9!skip
+plugins/sub_plugins/grpc/iosxr.py import-3.9!skip
+plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.10!skip
+plugins/sub_plugins/grpc/iosxr.py import-3.10!skip
