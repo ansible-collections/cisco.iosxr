@@ -5,6 +5,14 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v3.3.1
+======
+
+Bugfixes
+--------
+
+- Fixing TenGigE Interface recognition for resource modules. (https://github.com/ansible-collections/cisco.iosxr/issues/270)
+
 v3.3.0
 ======
 

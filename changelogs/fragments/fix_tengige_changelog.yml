@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Fixing TenGigE Interface recognition for resource modules. (https://github.com/ansible-collections/cisco.iosxr/issues/270)
