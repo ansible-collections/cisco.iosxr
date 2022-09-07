@@ -457,3 +457,11 @@ releases:
       - re_order_regex_ping.yml
       - sanity_fix_setuptool.yml
     release_date: "2022-08-02"
+  3.3.1:
+    changes:
+      bugfixes:
+        - Fixing TenGigE Interface recognition for resource modules. (https://github.com/ansible-collections/cisco.iosxr/issues/270)
+    fragments:
+      - commit_conf_doc.yml
+      - fix_tengige_changelog.yml
+    release_date: "2022-09-07"
