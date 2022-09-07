@@ -255,7 +255,7 @@ class AclsFacts(object):
         :returns: The ACE in structured format
         """
 
-        def __parse_src_dest(rendered_ace, ace_queue, direction):
+        def _parse_src_dest(rendered_ace, ace_queue, direction):
             """
             Parses the ACE queue and populates address, wildcard_bits,
             host or any keys in the source/destination dictionary of
@@ -285,7 +285,7 @@ class AclsFacts(object):
                     "wildcard_bits": ace_queue.popleft(),
                 }
 
-        def __parse_port_protocol(rendered_ace, ace_queue, direction):
+        def _parse_port_protocol(rendered_ace, ace_queue, direction):
             """
             Parses the ACE queue and populates `port_protocol` dictionary in the
             ACE dictionary, i.e., `rendered_ace`.
@@ -318,7 +318,7 @@ class AclsFacts(object):
                 else:
                     rendered_ace[direction] = {"port_protocol": port_protocol}
 
-        def __parse_protocol_options(rendered_ace, ace_queue, protocol):
+        def _parse_protocol_options(rendered_ace, ace_queue, protocol):
             """
             Parses the ACE queue and populates protocol specific options
             of the required dictionary and updates the ACE dictionary, i.e.,
@@ -339,7 +339,7 @@ class AclsFacts(object):
 
                 rendered_ace["protocol_options"] = protocol_options
 
-        def __parse_match_options(rendered_ace, ace_queue):
+        def _parse_match_options(rendered_ace, ace_queue):
             """
             Parses the ACE queue and populates remaining options in the ACE dictionary,
             i.e., `rendered_ace`
@@ -437,25 +437,25 @@ class AclsFacts(object):
             rendered_ace["protocol"] = ace_queue.popleft()
 
             # Populate source dictionary
-            __parse_src_dest(rendered_ace, ace_queue, direction="source")
+            _parse_src_dest(rendered_ace, ace_queue, direction="source")
             # Populate port_protocol key in source dictionary
-            __parse_port_protocol(rendered_ace, ace_queue, direction="source")
+            _parse_port_protocol(rendered_ace, ace_queue, direction="source")
             # Populate destination dictionary
-            __parse_src_dest(rendered_ace, ace_queue, direction="destination")
+            _parse_src_dest(rendered_ace, ace_queue, direction="destination")
             # Populate port_protocol key in destination dictionary
-            __parse_port_protocol(
+            _parse_port_protocol(
                 rendered_ace,
                 ace_queue,
                 direction="destination",
             )
             # Populate protocol_options dictionary
-            __parse_protocol_options(
+            _parse_protocol_options(
                 rendered_ace,
                 ace_queue,
                 protocol=rendered_ace["protocol"],
             )
             # Populate remaining match options' dictionaries
-            __parse_match_options(rendered_ace, ace_queue)
+            _parse_match_options(rendered_ace, ace_queue)
 
             # At this stage the queue should be empty
             # If the queue is not empty, it means that
