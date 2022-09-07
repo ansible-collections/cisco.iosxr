@@ -366,7 +366,7 @@ class Acls(ConfigBase):
         :returns: An ACE generated from a structured ACE dictionary
         """
 
-        def __compute_src_dest(dir_dict):
+        def _compute_src_dest(dir_dict):
             cmd = ""
             if "any" in dir_dict:
                 cmd += "any "
@@ -397,7 +397,7 @@ class Acls(ConfigBase):
 
             return cmd
 
-        def __compute_protocol_options(protocol_dict):
+        def _compute_protocol_options(protocol_dict):
             cmd = ""
             for value in protocol_options.values():
                 for subkey, subvalue in iteritems(value):
@@ -405,7 +405,7 @@ class Acls(ConfigBase):
                         cmd += "{0} ".format(subkey.replace("_", "-"))
             return cmd
 
-        def __compute_match_options(want_ace):
+        def _compute_match_options(want_ace):
             cmd = ""
 
             if "precedence" in want_ace:
@@ -459,14 +459,14 @@ class Acls(ConfigBase):
             if "protocol" in want_ace:
                 cmd += "{0} ".format(want_ace["protocol"])
 
-            cmd += __compute_src_dest(want_ace["source"])
-            cmd += __compute_src_dest(want_ace["destination"])
+            cmd += _compute_src_dest(want_ace["source"])
+            cmd += _compute_src_dest(want_ace["destination"])
 
             protocol_options = want_ace.get("protocol_options", {})
             if protocol_options:
-                cmd += __compute_protocol_options(protocol_options)
+                cmd += _compute_protocol_options(protocol_options)
 
-            cmd += __compute_match_options(want_ace)
+            cmd += _compute_match_options(want_ace)
 
         return cmd.strip()
 

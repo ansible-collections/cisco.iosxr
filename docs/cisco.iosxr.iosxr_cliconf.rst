@@ -223,7 +223,7 @@ Examples
         - name: "Confirm the Commit"
           cisco.iosxr.iosxr_command:
             commands:
-              - commit confirmed
+              - commit
 
     # Commands (cliconf specific)
     # ["commit confirmed 60"]

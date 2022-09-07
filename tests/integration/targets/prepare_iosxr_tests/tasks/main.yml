@@ -14,4 +14,4 @@
 
 - name: Set facts
   ansible.builtin.set_fact:
-    shorter_hostname: '{{ inventory_hostname_short| truncate(10, True, "") }}'
+    shorter_hostname: '{{ inventory_hostname_short | truncate(10, True, "") }}'

@@ -144,7 +144,7 @@ EXAMPLES = """
     - name: "Confirm the Commit"
       cisco.iosxr.iosxr_command:
         commands:
-          - commit confirmed
+          - commit
 
 # Commands (cliconf specific)
 # ["commit confirmed 60"]
@@ -230,10 +230,7 @@ class Cliconf(CliconfBase):
         return self._device_info
 
     def configure(self, admin=False, exclusive=False):
-        prompt = to_text(
-            self._connection.get_prompt(),
-            errors="surrogate_or_strict",
-        ).strip()
+        prompt = to_text(self._connection.get_prompt(), errors="surrogate_or_strict").strip()
         if not prompt.endswith(")#"):
             if admin and "admin-" not in prompt:
                 self.send_command("admin")
@@ -243,10 +240,7 @@ class Cliconf(CliconfBase):
             self.send_command("configure terminal")
 
     def abort(self, admin=False):
-        prompt = to_text(
-            self._connection.get_prompt(),
-            errors="surrogate_or_strict",
-        ).strip()
+        prompt = to_text(self._connection.get_prompt(), errors="surrogate_or_strict").strip()
         if prompt.endswith(")#"):
             self.send_command("abort")
             if admin and "admin-" in prompt:
@@ -254,9 +248,7 @@ class Cliconf(CliconfBase):
 
     def get_config(self, source="running", format="text", flags=None):
         if source not in ["running"]:
-            raise ValueError(
-                "fetching configuration from %s is not supported" % source,
-            )
+            raise ValueError("fetching configuration from %s is not supported" % source)
 
         lookup = {"running": "running-config"}
 
@@ -277,13 +269,7 @@ class Cliconf(CliconfBase):
         label=None,
     ):
         operations = self.get_device_operations()
-        self.check_edit_config_capability(
-            operations,
-            candidate,
-            commit,
-            replace,
-            comment,
-        )
+        self.check_edit_config_capability(operations, candidate, commit, replace, comment)
 
         resp = {}
         results = []
@@ -346,9 +332,7 @@ class Cliconf(CliconfBase):
         option_values = self.get_option_values()
 
         if candidate is None and device_operations["supports_generate_diff"]:
-            raise ValueError(
-                "candidate configuration is required to generate diff",
-            )
+            raise ValueError("candidate configuration is required to generate diff")
 
         if diff_match not in option_values["diff_match"]:
             raise ValueError(
@@ -369,11 +353,7 @@ class Cliconf(CliconfBase):
 
         if running and diff_match != "none":
             # running configuration
-            running = mask_config_blocks_from_diff(
-                running,
-                candidate,
-                "ansible",
-            )
+            running = mask_config_blocks_from_diff(running, candidate, "ansible")
             running = sanitize_config(running)
 
             running_obj = NetworkConfig(
@@ -406,9 +386,7 @@ class Cliconf(CliconfBase):
         check_all=False,
     ):
         if output:
-            raise ValueError(
-                "'output' value %s is not supported for get" % output,
-            )
+            raise ValueError("'output' value %s is not supported for get" % output)
         return self.send_command(
             command=command,
             prompt=prompt,
@@ -439,17 +417,11 @@ class Cliconf(CliconfBase):
         elif self.get_option("commit_confirmed"):
             cmd_obj["command"] = "commit confirmed"
             if self.get_option("commit_confirmed_timeout"):
-                cmd_obj["command"] += " {0}".format(
-                    self.get_option("commit_confirmed_timeout"),
-                )
+                cmd_obj["command"] += " {0}".format(self.get_option("commit_confirmed_timeout"))
             if self.get_option("commit_label"):
-                cmd_obj["command"] += " label {0}".format(
-                    self.get_option("commit_label"),
-                )
+                cmd_obj["command"] += " label {0}".format(self.get_option("commit_label"))
             if self.get_option("commit_comment"):
-                cmd_obj["command"] += " comment {0}".format(
-                    self.get_option("commit_comment"),
-                )
+                cmd_obj["command"] += " comment {0}".format(self.get_option("commit_comment"))
 
         else:
             label = label or self.get_option("commit_label")
@@ -481,9 +453,7 @@ class Cliconf(CliconfBase):
 
             output = cmd.pop("output", None)
             if output:
-                raise ValueError(
-                    "'output' value %s is not supported for run_commands" % output,
-                )
+                raise ValueError("'output' value %s is not supported for run_commands" % output)
 
             try:
                 out = self.send_command(**cmd)
@@ -538,13 +508,7 @@ class Cliconf(CliconfBase):
 
     def get_capabilities(self):
         result = super(Cliconf, self).get_capabilities()
-        result["rpc"] += [
-            "commit",
-            "discard_changes",
-            "get_diff",
-            "configure",
-            "exit",
-        ]
+        result["rpc"] += ["commit", "discard_changes", "get_diff", "configure", "exit"]
         result["device_operations"] = self.get_device_operations()
         result.update(self.get_option_values())
         return json.dumps(result)
@@ -554,10 +518,5 @@ class Cliconf(CliconfBase):
         Make sure we are in the operational cli mode
         :return: None
         """
-        if self._connection.connected and not self.get_option(
-            "commit_confirmed",
-        ):
-            self._update_cli_prompt_context(
-                config_context=")#",
-                exit_command="abort",
-            )
+        if self._connection.connected and not self.get_option("commit_confirmed"):
+            self._update_cli_prompt_context(config_context=")#", exit_command="abort")
