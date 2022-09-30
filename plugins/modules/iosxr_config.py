@@ -287,6 +287,8 @@ def copy_file_to_node(module):
 
     dst = "/harddisk:/ansible_config.txt"
     copy_file(module, src, dst, "sftp")
+    
+    os.remove(src)
 
     return True
 
