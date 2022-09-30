@@ -280,7 +280,7 @@ DEFAULT_COMMIT_COMMENT = "configured by iosxr_config"
 
 def copy_file_to_node(module):
     """Copy config file to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well."""
-    file = tempfile.TemporaryFile("wb")
+    file = tempfile.NamedTemporaryFile("wb")
     src = os.path.realpath(file.name)
     file.write(to_bytes(module.params["src"], errors="surrogate_or_strict"))
     file.close()
