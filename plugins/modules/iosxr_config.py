@@ -253,10 +253,9 @@ time:
   type: str
   sample: "22:28:34"
 """
-import re
-
-import tempfile
 import os
+import re
+import tempfile
 
 from ansible.module_utils._text import to_bytes, to_text
 from ansible.module_utils.basic import AnsibleModule
@@ -287,7 +286,7 @@ def copy_file_to_node(module):
 
     dst = "/harddisk:/ansible_config.txt"
     copy_file(module, src, dst, "sftp")
-    
+
     os.remove(src)
 
     return True
