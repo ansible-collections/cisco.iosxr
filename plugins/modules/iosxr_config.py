@@ -255,6 +255,9 @@ time:
 """
 import re
 
+import tempfile
+import os
+
 from ansible.module_utils._text import to_bytes, to_text
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import ConnectionError
@@ -277,8 +280,8 @@ DEFAULT_COMMIT_COMMENT = "configured by iosxr_config"
 
 def copy_file_to_node(module):
     """Copy config file to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well."""
-    src = "/tmp/ansible_config.txt"
-    file = open(src, "wb")
+    file = tempfile.TemporaryFile("wb")
+    src = os.path.realpath(file.name)
     file.write(to_bytes(module.params["src"], errors="surrogate_or_strict"))
     file.close()
 
