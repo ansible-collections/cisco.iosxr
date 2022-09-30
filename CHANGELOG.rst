@@ -12,6 +12,7 @@ Bugfixes
 --------
 
 - Fixing TenGigE Interface recognition for resource modules. (https://github.com/ansible-collections/cisco.iosxr/issues/270)
+- Fix parallel config upload. (https://github.com/ansible-collections/cisco.iosxr/issues/67)
 
 v3.3.0
 ======
