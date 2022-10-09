@@ -207,7 +207,7 @@ class Cliconf(CliconfBase):
             else:
                 match = re.search(r"Version (\S+ \S+)$", data, re.M)
                 if match:
-                    device_info["network_os_version"] = match.group(1)                
+                    device_info["network_os_version"] = match.group(1)
 
             match = re.search(r'image file is "(.+)"', data)
             if match:
