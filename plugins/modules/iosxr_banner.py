@@ -147,16 +147,12 @@ class CliConfiguration(ConfigBase):
             if self._have.get("state") != "absent" and (
                 "text" in self._have.keys() and self._have["text"]
             ):
-                commands.append(
-                    "no banner {0!s}".format(self._module.params["banner"]),
-                )
+                commands.append("no banner {0!s}".format(self._module.params["banner"]))
         elif state == "present":
             if self._want["text"] and self._want["text"].encode().decode(
                 "unicode_escape",
             ) != self._have.get("text"):
-                banner_cmd = "banner {0!s} ".format(
-                    self._module.params["banner"],
-                )
+                banner_cmd = "banner {0!s} ".format(self._module.params["banner"])
                 banner_cmd += self._want["text"].strip()
                 commands.append(banner_cmd)
         self._result["commands"] = commands
@@ -195,19 +191,9 @@ class NCConfiguration(ConfigBase):
         self._banners_meta = collections.OrderedDict()
         self._banners_meta.update(
             [
-                (
-                    "banner",
-                    {
-                        "xpath": "banners/banner",
-                        "tag": True,
-                        "attrib": "operation",
-                    },
-                ),
+                ("banner", {"xpath": "banners/banner", "tag": True, "attrib": "operation"}),
                 ("a:banner", {"xpath": "banner/banner-name"}),
-                (
-                    "a:text",
-                    {"xpath": "banner/banner-text", "operation": "edit"},
-                ),
+                ("a:text", {"xpath": "banner/banner-text", "operation": "edit"}),
             ],
         )
 
@@ -220,11 +206,7 @@ class NCConfiguration(ConfigBase):
             opcode="filter",
         )
 
-        running = get_config(
-            self._module,
-            source="running",
-            config_filter=_get_filter,
-        )
+        running = get_config(self._module, source="running", config_filter=_get_filter)
 
         banner_name = None
         banner_text = None
@@ -292,8 +274,6 @@ def main():
     config_object = None
     if is_cliconf(module):
         # Commenting the below cliconf deprecation support call for Ansible 2.9 as it'll be continued to be supported
-        # module.deprecate("cli support for 'iosxr_interface' is deprecated. Use transport netconf instead",
-        #                  version='2.9')
         config_object = CliConfiguration(module)
     elif is_netconf(module):
         config_object = NCConfiguration(module)
