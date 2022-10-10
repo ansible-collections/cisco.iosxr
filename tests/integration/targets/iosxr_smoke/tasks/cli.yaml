@@ -10,7 +10,7 @@
   ansible.builtin.set_fact: test_items="{{ test_cases.files | map(attribute='path') | list }}"
 
 - name: Run test case (connection=network_cli)
-  ansible.builtin.include: "{{ test_case_to_run }} ansible_connection=ansible.netcommon.network_cli"
+  ansible.builtin.include_tasks: "{{ test_case_to_run }} ansible_connection=ansible.netcommon.network_cli"
   with_items: "{{ test_items }}"
   loop_control:
     loop_var: test_case_to_run
@@ -18,7 +18,7 @@
     - network_cli
 
 - name: Run test case (connection=local)
-  ansible.builtin.include: "{{ test_case_to_run }} ansible_connection=local"
+  ansible.builtin.include_tasks: "{{ test_case_to_run }} ansible_connection=local"
   with_items: "{{ test_items }}"
   loop_control:
     loop_var: test_case_to_run
@@ -26,7 +26,7 @@
     - local
 
 - name: Run test cases with single_user_mode (connection=network_cli)
-  ansible.builtin.include:
+  ansible.builtin.include_tasks:
     "{{ role_path }}/tests/cli/caching.yaml ansible_connection=ansible.netcommon.network_cli ansible_network_single_user_mode=True ansible_connection=ansible.netcommon.network_cli\
     \ connection={{ cli }}"
   tags:

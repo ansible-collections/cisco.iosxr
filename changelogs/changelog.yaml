@@ -23,11 +23,6 @@ releases:
       - description: Get facts about iosxr devices.
         name: iosxr_facts
         namespace: ""
-      - description:
-          (deprecated, removed after 2022-06-01) Manage Interface on Cisco
-          IOS XR network devices
-        name: iosxr_interface
-        namespace: ""
       - description: Interfaces resource module
         name: iosxr_interfaces
         namespace: ""

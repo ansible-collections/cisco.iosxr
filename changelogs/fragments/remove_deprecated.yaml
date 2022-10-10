@@ -1,0 +1,5 @@
+---
+major_changes:
+  - "This release removes all deprecated plugins that have reached their end-of-life."
+  - "This includes the following modules:"
+  - "iosxr_interface"
