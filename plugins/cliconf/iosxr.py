@@ -215,7 +215,7 @@ class Cliconf(CliconfBase):
 
             model_search_strs = [
                 r"^[Cc]isco (.+) \(\) processor",
-                r"^[Cc]isco (.+) processor",
+                r"^[Cc]isco ([A-Z0-9\-]+) processor",
                 r"^[Cc]isco (.+) \(revision",
                 r"^[Cc]isco (\S+ \S+).+bytes of .*memory",
             ]
