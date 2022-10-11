@@ -1,3 +1,3 @@
 ---
 minor_changes:
-  - "iosxr_bgp_neighbor_address_family - add extra supported values to afi attribute."
+  - "iosxr_bgp_neighbor_address_family - add extra supported values l2vpn, link-state, vpnv4, vpnv6 to afi attribute."
