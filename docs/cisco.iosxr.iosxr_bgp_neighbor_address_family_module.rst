@@ -115,6 +115,10 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>ipv4</li>
                                     <li>ipv6</li>
+                                    <li>l2vpn</li>
+                                    <li>link-state</li>
+                                    <li>vpnv4</li>
+                                    <li>vpnv6</li>
                         </ul>
                 </td>
                 <td>
@@ -1860,6 +1864,10 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>ipv4</li>
                                     <li>ipv6</li>
+                                    <li>l2vpn</li>
+                                    <li>link-state</li>
+                                    <li>vpnv4</li>
+                                    <li>vpnv6</li>
                         </ul>
                 </td>
                 <td>

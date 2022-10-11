@@ -128,26 +128,17 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                                     default_originate=dict(set=True),
                                     capability_orf_prefix="both",
                                     send_multicast_attributes=dict(set=True),
-                                    soft_reconfiguration=dict(
-                                        inbound=dict(set=True),
-                                    ),
+                                    soft_reconfiguration=dict(inbound=dict(set=True)),
                                     send_community_gshut_ebgp=dict(set=True),
-                                    send_extended_community_ebgp=dict(
-                                        set=True,
-                                    ),
+                                    send_extended_community_ebgp=dict(set=True),
                                     send_community_ebgp=dict(set=True),
-                                    origin_as=dict(
-                                        validation=dict(disable=True),
-                                    ),
+                                    origin_as=dict(validation=dict(disable=True)),
                                     remove_private_AS=dict(
                                         set=True,
                                         inbound=True,
                                         entire_aspath=True,
                                     ),
-                                    route_policy=dict(
-                                        inbound="test1",
-                                        outbound="test1",
-                                    ),
+                                    route_policy=dict(inbound="test1", outbound="test1"),
                                     maximum_prefix=dict(
                                         max_limit=10,
                                         threshold_value=20,
@@ -155,10 +146,7 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                                     ),
                                     next_hop_self=dict(set=True),
                                     next_hop_unchanged=dict(multipath=True),
-                                    aigp=dict(
-                                        set=True,
-                                        send_med=dict(set=True),
-                                    ),
+                                    aigp=dict(set=True, send_med=dict(set=True)),
                                     as_override=dict(set=True),
                                     allowas_in=dict(value=4),
                                     bestpath_origin_as_allow_invalid=True,
@@ -211,26 +199,17 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                                     default_originate=dict(set=True),
                                     capability_orf_prefix="both",
                                     send_multicast_attributes=dict(set=True),
-                                    soft_reconfiguration=dict(
-                                        inbound=dict(set=True),
-                                    ),
+                                    soft_reconfiguration=dict(inbound=dict(set=True)),
                                     send_community_gshut_ebgp=dict(set=True),
-                                    send_extended_community_ebgp=dict(
-                                        set=True,
-                                    ),
+                                    send_extended_community_ebgp=dict(set=True),
                                     send_community_ebgp=dict(set=True),
-                                    origin_as=dict(
-                                        validation=dict(disable=True),
-                                    ),
+                                    origin_as=dict(validation=dict(disable=True)),
                                     remove_private_AS=dict(
                                         set=True,
                                         inbound=True,
                                         entire_aspath=True,
                                     ),
-                                    route_policy=dict(
-                                        inbound="test1",
-                                        outbound="test1",
-                                    ),
+                                    route_policy=dict(inbound="test1", outbound="test1"),
                                     maximum_prefix=dict(
                                         max_limit=10,
                                         threshold_value=20,
@@ -238,10 +217,7 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                                     ),
                                     next_hop_self=dict(set=True),
                                     next_hop_unchanged=dict(multipath=True),
-                                    aigp=dict(
-                                        set=True,
-                                        send_med=dict(set=True),
-                                    ),
+                                    aigp=dict(set=True, send_med=dict(set=True)),
                                     as_override=dict(set=True),
                                     bestpath_origin_as_allow_invalid=True,
                                     long_lived_graceful_restart=dict(
@@ -344,10 +320,7 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                                             safi="unicast",
                                             multipath=True,
                                             default_originate=dict(set=True),
-                                            route_policy=dict(
-                                                inbound="test1",
-                                                outbound="test1",
-                                            ),
+                                            route_policy=dict(inbound="test1", outbound="test1"),
                                         ),
                                     ],
                                 ),
@@ -534,17 +507,11 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                                     default_originate=dict(set=True),
                                     capability_orf_prefix="both",
                                     send_multicast_attributes=dict(set=True),
-                                    soft_reconfiguration=dict(
-                                        inbound=dict(set=True),
-                                    ),
+                                    soft_reconfiguration=dict(inbound=dict(set=True)),
                                     send_community_gshut_ebgp=dict(set=True),
-                                    send_extended_community_ebgp=dict(
-                                        set=True,
-                                    ),
+                                    send_extended_community_ebgp=dict(set=True),
                                     send_community_ebgp=dict(set=True),
-                                    origin_as=dict(
-                                        validation=dict(disable=True),
-                                    ),
+                                    origin_as=dict(validation=dict(disable=True)),
                                     remove_private_AS=dict(
                                         set=True,
                                         inbound=True,
@@ -557,10 +524,7 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                                     ),
                                     next_hop_self=dict(set=True),
                                     next_hop_unchanged=dict(multipath=True),
-                                    aigp=dict(
-                                        set=True,
-                                        send_med=dict(set=True),
-                                    ),
+                                    aigp=dict(set=True, send_med=dict(set=True)),
                                     as_override=dict(set=True),
                                     allowas_in=dict(value=4),
                                     bestpath_origin_as_allow_invalid=True,
@@ -650,9 +614,7 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
                             },
                             "safi": "unicast",
                             "send_community_ebgp": {"set": True},
-                            "send_community_gshut_ebgp": {
-                                "inheritance_disable": True,
-                            },
+                            "send_community_gshut_ebgp": {"inheritance_disable": True},
                             "send_extended_community_ebgp": {"set": True},
                             "send_multicast_attributes": {"set": True},
                             "weight": 0,
@@ -664,6 +626,122 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
         }
 
         self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_bgp_add_fam_parsed(self):
+        self.maxDiff = None
+        set_module_args(
+            dict(
+                running_config="router bgp 1\n bgp router-id 1.2.1.3\n neighbor 1.1.1.1\n  "
+                "remote-as 6\n  address-family vpnv4 unicast\n   origin-as validation disable\n   "
+                "bestpath origin-as allow invalid\n   weight 0\n   send-community-ebgp\n  "
+                " multipath\n   allowas-in 3\n   maximum-prefix 1 1 discard-extra-paths\n"
+                "   capability orf prefix both\n   "
+                "next-hop-unchanged multipath\n  !\n  "
+                "!\n !",
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        parsed_list = {
+            "as_number": "1",
+            "neighbors": [
+                {
+                    "neighbor_address": "1.1.1.1",
+                    "address_family": [
+                        {
+                            "afi": "vpnv4",
+                            "safi": "unicast",
+                            "origin_as": {"validation": {"disable": True}},
+                            "bestpath_origin_as_allow_invalid": True,
+                            "weight": 0,
+                            "send_community_ebgp": {"set": True},
+                            "multipath": True,
+                            "allowas_in": {"value": 3},
+                            "capability_orf_prefix": "both",
+                            "next_hop_unchanged": {"multipath": True},
+                        },
+                    ],
+                },
+            ],
+        }
+
+        self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_bgp_nbr_af_afi_replaced(self):
+        self.maxDiff = None
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="1",
+                    neighbors=[
+                        dict(
+                            neighbor_address="1.1.1.1",
+                            address_family=[
+                                dict(
+                                    afi="vpnv4",
+                                    safi="flowspec",
+                                    multipath=True,
+                                    default_originate=dict(set=True),
+                                    capability_orf_prefix="both",
+                                    send_multicast_attributes=dict(set=True),
+                                    soft_reconfiguration=dict(inbound=dict(set=True)),
+                                    send_community_gshut_ebgp=dict(set=True),
+                                    send_extended_community_ebgp=dict(set=True),
+                                    send_community_ebgp=dict(set=True),
+                                    origin_as=dict(validation=dict(disable=True)),
+                                    remove_private_AS=dict(
+                                        set=True,
+                                        inbound=True,
+                                        entire_aspath=True,
+                                    ),
+                                    route_policy=dict(inbound="test1", outbound="test1"),
+                                    maximum_prefix=dict(
+                                        max_limit=10,
+                                        threshold_value=20,
+                                        restart=10,
+                                    ),
+                                    next_hop_self=dict(set=True),
+                                    next_hop_unchanged=dict(multipath=True),
+                                    aigp=dict(set=True, send_med=dict(set=True)),
+                                    as_override=dict(set=True),
+                                    bestpath_origin_as_allow_invalid=True,
+                                    long_lived_graceful_restart=dict(
+                                        stale_time=dict(send=20, accept=30),
+                                    ),
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+                state="replaced",
+            ),
+        )
+        commands = [
+            "address-family vpnv4 flowspec",
+            "aigp",
+            "aigp send med",
+            "as-override",
+            "bestpath origin-as allow invalid",
+            "capability orf prefix both",
+            "default-originate",
+            "maximum-prefix 10 20 restart 10",
+            "multipath",
+            "neighbor 1.1.1.1",
+            "next-hop-self",
+            "next-hop-unchanged multipath",
+            "origin-as validation disable",
+            "remove-private-AS inbound entire-aspath",
+            "route-policy test1 in",
+            "route-policy test1 out",
+            "router bgp 1",
+            "send-community-ebgp",
+            "send-community-gshut-ebgp",
+            "send-extended-community-ebgp",
+            "send-multicast-attributes",
+            "soft-reconfiguration inbound",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_bgp_nbr_af_overridden(self):
         run_cfg = dedent(
