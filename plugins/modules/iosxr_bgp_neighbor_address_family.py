@@ -45,10 +45,10 @@ options:
                 type: list
                 elements: dict
                 suboptions:
-                  afi: &afi
+                  afi:
                     description: address family.
                     type: str
-                    choices: [ 'ipv4', 'ipv6', 'l2vpn', 'link-state', 'vpnv4', 'vpnv6',]
+                    choices: [ 'ipv4', 'ipv6', 'l2vpn', 'link-state', 'vpnv4', 'vpnv6']
                   safi:
                     description: Address Family modifier
                     type: str
@@ -327,7 +327,10 @@ options:
                     type: list
                     elements: dict
                     suboptions:
-                      afi: *afi
+                      afi:
+                        description: address family.
+                        type: str
+                        choices: [ 'ipv4', 'ipv6']
                       safi:
                         description: Address Family modifier
                         type: str
