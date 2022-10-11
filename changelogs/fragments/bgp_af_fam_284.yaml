@@ -1,3 +1,3 @@
 ---
 minor_changes:
-  - "ios_bgp_neighbor_address_family - add extra supported values to afi attribute."
+  - "iosxr_bgp_neighbor_address_family - add extra supported values to afi attribute."
