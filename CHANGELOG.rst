@@ -419,6 +419,7 @@ New Modules
 - iosxr_command - Run commands on remote devices running Cisco IOS XR
 - iosxr_config - Manage Cisco IOS XR configuration sections
 - iosxr_facts - Get facts about iosxr devices.
+- iosxr_interface - (deprecated, removed after 2022-06-01) Manage Interface on Cisco IOS XR network devices
 - iosxr_interfaces - Interfaces resource module
 - iosxr_l2_interfaces - L2 interfaces resource module
 - iosxr_l3_interfaces - L3 interfaces resource module
