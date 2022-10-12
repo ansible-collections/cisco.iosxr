@@ -16,8 +16,6 @@ Minor Changes
 Removed Features (previously deprecated)
 ----------------------------------------
 
-- This includes the following modules:
-- This release removes all deprecated plugins that have reached their end-of-life.
 - iosxr_interface
 
 Bugfixes
