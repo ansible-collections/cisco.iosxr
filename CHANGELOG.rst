@@ -8,17 +8,17 @@ Cisco Iosxr Collection Release Notes
 v4.0.0
 ======
 
-Major Changes
--------------
-
-- This includes the following modules:
-- This release removes all deprecated plugins that have reached their end-of-life.
-- iosxr_interface
-
 Minor Changes
 -------------
 
 - iosxr_bgp_neighbor_address_family - add extra supported values l2vpn, link-state, vpnv4, vpnv6 to afi attribute.
+
+Removed Features (previously deprecated)
+----------------------------------------
+
+- This includes the following modules:
+- This release removes all deprecated plugins that have reached their end-of-life.
+- iosxr_interface
 
 v3.3.1
 ======
