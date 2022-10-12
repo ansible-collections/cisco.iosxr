@@ -5,6 +5,21 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v4.0.0
+======
+
+Major Changes
+-------------
+
+- This includes the following modules:
+- This release removes all deprecated plugins that have reached their end-of-life.
+- iosxr_interface
+
+Minor Changes
+-------------
+
+- iosxr_bgp_neighbor_address_family - add extra supported values l2vpn, link-state, vpnv4, vpnv6 to afi attribute.
+
 v3.3.1
 ======
 
@@ -401,7 +416,6 @@ New Modules
 - iosxr_command - Run commands on remote devices running Cisco IOS XR
 - iosxr_config - Manage Cisco IOS XR configuration sections
 - iosxr_facts - Get facts about iosxr devices.
-- iosxr_interface - (deprecated, removed after 2022-06-01) Manage Interface on Cisco IOS XR network devices
 - iosxr_interfaces - Interfaces resource module
 - iosxr_l2_interfaces - L2 interfaces resource module
 - iosxr_l3_interfaces - L3 interfaces resource module
