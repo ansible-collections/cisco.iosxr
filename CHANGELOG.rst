@@ -20,6 +20,11 @@ Removed Features (previously deprecated)
 - This release removes all deprecated plugins that have reached their end-of-life.
 - iosxr_interface
 
+Bugfixes
+--------
+
+- Fixing model/version facts gathering (https://github.com/ansible-collections/cisco.iosxr/issues/282)
+
 v3.3.1
 ======
 

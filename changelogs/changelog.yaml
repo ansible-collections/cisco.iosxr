@@ -462,6 +462,8 @@ releases:
     release_date: "2022-09-07"
   4.0.0:
     changes:
+      bugfixes:
+        - Fixing model/version facts gathering (https://github.com/ansible-collections/cisco.iosxr/issues/282)
       minor_changes:
         - iosxr_bgp_neighbor_address_family - add extra supported values l2vpn, link-state,
           vpnv4, vpnv6 to afi attribute.
@@ -471,6 +473,8 @@ releases:
         - iosxr_interface
     fragments:
       - bgp_af_fam_284.yaml
+      - facts-ncs540.yaml
       - ignores-2.15.yaml
       - remove_deprecated.yaml
+      - remove_net_changes.yaml
     release_date: "2022-10-12"
