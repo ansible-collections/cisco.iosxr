@@ -468,6 +468,8 @@ releases:
         - iosxr_bgp_neighbor_address_family - add extra supported values l2vpn, link-state,
           vpnv4, vpnv6 to afi attribute.
       removed_features:
+        - This release removes the following deprecated plugins that have reached their
+          end-of-life.
         - iosxr_interface
     fragments:
       - bgp_af_fam_284.yaml
