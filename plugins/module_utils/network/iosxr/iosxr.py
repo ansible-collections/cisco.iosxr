@@ -140,7 +140,7 @@ def build_xml_subtree(container_ele, xmap, param=None, opcode=None):
             parent = sub_root
         else:
             parent = sub_root.find(
-                ".//" + meta.get("xpath", "").split(sub_root.tag + "/", 1)[1].rsplit("/", 1)[0]
+                ".//" + meta.get("xpath", "").split(sub_root.tag + "/", 1)[1].rsplit("/", 1)[0],
             )
 
         if (
@@ -158,7 +158,9 @@ def build_xml_subtree(container_ele, xmap, param=None, opcode=None):
                 else:
                     if meta.get("ns", False) is True:
                         child = etree.SubElement(
-                            parent, candidates[-1], nsmap=NS_DICT[key.upper() + "_NSMAP"]
+                            parent,
+                            candidates[-1],
+                            nsmap=NS_DICT[key.upper() + "_NSMAP"],
                         )
                     else:
                         child = etree.SubElement(parent, candidates[-1])
@@ -180,7 +182,9 @@ def build_xml_subtree(container_ele, xmap, param=None, opcode=None):
             if text:
                 if meta.get("ns", False) is True:
                     child = etree.SubElement(
-                        parent, candidates[-1], nsmap=NS_DICT[key.upper() + "_NSMAP"]
+                        parent,
+                        candidates[-1],
+                        nsmap=NS_DICT[key.upper() + "_NSMAP"],
                     )
                 else:
                     child = etree.SubElement(parent, candidates[-1])
@@ -355,12 +359,15 @@ def commit_config(
                 reply = conn.validate(remove_ns=True)
             else:
                 reply = conn.commit(
-                    confirmed=confirmed, timeout=confirm_timeout, persist=persist, remove_ns=True
+                    confirmed=confirmed,
+                    timeout=confirm_timeout,
+                    persist=persist,
+                    remove_ns=True,
                 )
         elif is_cliconf(module):
             if check:
                 module.fail_json(
-                    msg="Validate configuration is not supported with network_cli connection type"
+                    msg="Validate configuration is not supported with network_cli connection type",
                 )
             else:
                 reply = conn.commit(comment=comment, label=label)
@@ -457,7 +464,7 @@ def load_config(
                     module.fail_json(
                         msg="commit label {%s} is already used for"
                         " an earlier commit, please choose a different label"
-                        " and rerun task" % label
+                        " and rerun task" % label,
                     )
 
             response = conn.edit_config(
