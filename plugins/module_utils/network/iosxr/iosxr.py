@@ -64,75 +64,25 @@ BASE_1_0 = "{urn:ietf:params:xml:ns:netconf:base:1.0}"
 
 NS_DICT = {
     "BASE_NSMAP": {"xc": "urn:ietf:params:xml:ns:netconf:base:1.0"},
-    "BANNERS_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-infra-infra-cfg",
-    },
+    "BANNERS_NSMAP": {None: "http://cisco.com/ns/yang/Cisco-IOS-XR-infra-infra-cfg"},
     "INTERFACES_NSMAP": {None: "http://openconfig.net/yang/interfaces"},
-    "INSTALL_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-spirit-install-instmgr-oper",
-    },
-    "INSTALL_OLD_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-installmgr-admin-oper",
-    },
-    "HOST-NAMES_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-shellutil-cfg",
-    },
+    "INSTALL_NSMAP": {None: "http://cisco.com/ns/yang/Cisco-IOS-XR-spirit-install-instmgr-oper"},
+    "INSTALL_OLD_NSMAP": {None: "http://cisco.com/ns/yang/Cisco-IOS-XR-installmgr-admin-oper"},
+    "HOST-NAMES_NSMAP": {None: "http://cisco.com/ns/yang/Cisco-IOS-XR-shellutil-cfg"},
     "M:TYPE_NSMAP": {"idx": "urn:ietf:params:xml:ns:yang:iana-if-type"},
     "ETHERNET_NSMAP": {None: "http://openconfig.net/yang/interfaces/ethernet"},
-    "CETHERNET_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-drivers-media-eth-cfg",
-    },
-    "INTERFACE-CONFIGURATIONS_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-ifmgr-cfg",
-    },
-    "INFRA-STATISTICS_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-infra-statsd-oper",
-    },
-    "INTERFACE-PROPERTIES_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-ifmgr-oper",
-    },
-    "IP-DOMAIN_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-ip-domain-cfg",
-    },
-    "SYSLOG_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-infra-syslog-cfg",
-    },
+    "CETHERNET_NSMAP": {None: "http://cisco.com/ns/yang/Cisco-IOS-XR-drivers-media-eth-cfg"},
+    "INTERFACE-CONFIGURATIONS_NSMAP": {None: "http://cisco.com/ns/yang/Cisco-IOS-XR-ifmgr-cfg"},
+    "INFRA-STATISTICS_NSMAP": {None: "http://cisco.com/ns/yang/Cisco-IOS-XR-infra-statsd-oper"},
+    "INTERFACE-PROPERTIES_NSMAP": {None: "http://cisco.com/ns/yang/Cisco-IOS-XR-ifmgr-oper"},
+    "IP-DOMAIN_NSMAP": {None: "http://cisco.com/ns/yang/Cisco-IOS-XR-ip-domain-cfg"},
+    "SYSLOG_NSMAP": {None: "http://cisco.com/ns/yang/Cisco-IOS-XR-infra-syslog-cfg"},
     "AAA_NSMAP": {None: "http://cisco.com/ns/yang/Cisco-IOS-XR-aaa-lib-cfg"},
-    "AAA_LOCALD_NSMAP": {
-        None: "http://cisco.com/ns/yang/Cisco-IOS-XR-aaa-locald-cfg",
-    },
+    "AAA_LOCALD_NSMAP": {None: "http://cisco.com/ns/yang/Cisco-IOS-XR-aaa-locald-cfg"},
 }
 
-iosxr_provider_spec = {
-    "host": dict(),
-    "port": dict(type="int"),
-    "username": dict(fallback=(env_fallback, ["ANSIBLE_NET_USERNAME"])),
-    "password": dict(
-        fallback=(env_fallback, ["ANSIBLE_NET_PASSWORD"]),
-        no_log=True,
-    ),
-    "ssh_keyfile": dict(
-        fallback=(env_fallback, ["ANSIBLE_NET_SSH_KEYFILE"]),
-        type="path",
-    ),
-    "timeout": dict(type="int"),
-    "transport": dict(type="str", default="cli", choices=["cli", "netconf"]),
-}
 
-iosxr_argument_spec = {
-    "provider": dict(
-        type="dict",
-        options=iosxr_provider_spec,
-        removed_at_date="2022-06-01",
-        removed_from_collection="cisco.iosxr",
-    ),
-}
-
-command_spec = {
-    "command": dict(),
-    "prompt": dict(default=None),
-    "answer": dict(default=None),
-}
+command_spec = {"command": dict(), "prompt": dict(default=None), "answer": dict(default=None)}
 
 CONFIG_MISPLACED_CHILDREN = [re.compile(r"^end-\s*(.+)$")]
 
@@ -146,15 +96,8 @@ CONFIG_BLOCKS_FORCED_IN_DIFF = [
     {"start": re.compile(r"^as-path-set"), "end": re.compile(r"end-set$")},
     {"start": re.compile(r"^community-set"), "end": re.compile(r"end-set$")},
     {"start": re.compile(r"^rd-set"), "end": re.compile(r"end-set$")},
-    {
-        "start": re.compile(r"^extcommunity-set"),
-        "end": re.compile(r"end-set$"),
-    },
+    {"start": re.compile(r"^extcommunity-set"), "end": re.compile(r"end-set$")},
 ]
-
-
-def get_provider_argspec():
-    return iosxr_provider_spec
 
 
 def get_connection(module):
@@ -168,9 +111,7 @@ def get_connection(module):
     elif network_api == "netconf":
         module.connection = NetconfConnection(module._socket_path)
     else:
-        module.fail_json(
-            msg="Invalid connection type {0!s}".format(network_api),
-        )
+        module.fail_json(msg="Invalid connection type {0!s}".format(network_api))
 
     return module.connection
 
@@ -199,7 +140,7 @@ def build_xml_subtree(container_ele, xmap, param=None, opcode=None):
             parent = sub_root
         else:
             parent = sub_root.find(
-                ".//" + meta.get("xpath", "").split(sub_root.tag + "/", 1)[1].rsplit("/", 1)[0],
+                ".//" + meta.get("xpath", "").split(sub_root.tag + "/", 1)[1].rsplit("/", 1)[0]
             )
 
         if (
@@ -209,10 +150,7 @@ def build_xml_subtree(container_ele, xmap, param=None, opcode=None):
             if meta.get("tag", False) is True:
                 if parent.tag == container_ele.tag:
                     if meta.get("ns", False) is True:
-                        child = etree.Element(
-                            candidates[-1],
-                            nsmap=NS_DICT[key.upper() + "_NSMAP"],
-                        )
+                        child = etree.Element(candidates[-1], nsmap=NS_DICT[key.upper() + "_NSMAP"])
                     else:
                         child = etree.Element(candidates[-1])
                     meta_subtree.append(child)
@@ -220,17 +158,12 @@ def build_xml_subtree(container_ele, xmap, param=None, opcode=None):
                 else:
                     if meta.get("ns", False) is True:
                         child = etree.SubElement(
-                            parent,
-                            candidates[-1],
-                            nsmap=NS_DICT[key.upper() + "_NSMAP"],
+                            parent, candidates[-1], nsmap=NS_DICT[key.upper() + "_NSMAP"]
                         )
                     else:
                         child = etree.SubElement(parent, candidates[-1])
 
-                if meta.get("attrib", None) is not None and opcode in (
-                    "delete",
-                    "merge",
-                ):
+                if meta.get("attrib", None) is not None and opcode in ("delete", "merge"):
                     child.set(BASE_1_0 + meta.get("attrib"), opcode)
 
                 continue
@@ -247,18 +180,13 @@ def build_xml_subtree(container_ele, xmap, param=None, opcode=None):
             if text:
                 if meta.get("ns", False) is True:
                     child = etree.SubElement(
-                        parent,
-                        candidates[-1],
-                        nsmap=NS_DICT[key.upper() + "_NSMAP"],
+                        parent, candidates[-1], nsmap=NS_DICT[key.upper() + "_NSMAP"]
                     )
                 else:
                     child = etree.SubElement(parent, candidates[-1])
                 child.text = text
 
-                if meta.get("attrib", None) is not None and opcode in (
-                    "delete",
-                    "merge",
-                ):
+                if meta.get("attrib", None) is not None and opcode in ("delete", "merge"):
                     child.set(BASE_1_0 + meta.get("attrib"), opcode)
 
     if len(meta_subtree) > 1:
@@ -320,11 +248,7 @@ def build_xml(container, xmap=None, params=None, opcode=None, namespace=None):
     elif opcode in ("delete", "merge"):
         root = etree.Element("config", nsmap=NS_DICT["BASE_NSMAP"])
 
-    container_ele = etree.SubElement(
-        root,
-        container,
-        nsmap=NS_DICT[namespace.upper() + "_NSMAP"],
-    )
+    container_ele = etree.SubElement(root, container, nsmap=NS_DICT[namespace.upper() + "_NSMAP"])
 
     if xmap is not None:
         if params is None:
@@ -332,12 +256,7 @@ def build_xml(container, xmap=None, params=None, opcode=None, namespace=None):
         else:
             subtree_list = list()
             for param in to_list(params):
-                subtree_ele = build_xml_subtree(
-                    container_ele,
-                    xmap,
-                    param=param,
-                    opcode=opcode,
-                )
+                subtree_ele = build_xml_subtree(container_ele, xmap, param=param, opcode=opcode)
                 if subtree_ele is not None:
                     subtree_list.append(subtree_ele)
 
@@ -395,25 +314,14 @@ def get_config_diff(module, running=None, candidate=None):
     elif is_netconf(module):
         if running and candidate:
             # ignore rpc-reply root node and diff from data element onwards
-            running_data_ele = etree.fromstring(
-                to_bytes(running.strip()),
-            ).getchildren()[0]
-            candidate_data_ele = etree.fromstring(
-                to_bytes(candidate.strip()),
-            ).getchildren()[0]
+            running_data_ele = etree.fromstring(to_bytes(running.strip())).getchildren()[0]
+            candidate_data_ele = etree.fromstring(to_bytes(candidate.strip())).getchildren()[0]
 
             running_data = to_text(etree.tostring(running_data_ele)).strip()
-            candidate_data = to_text(
-                etree.tostring(candidate_data_ele),
-            ).strip()
+            candidate_data = to_text(etree.tostring(candidate_data_ele)).strip()
             if running_data != candidate_data:
                 d = Differ()
-                diff = list(
-                    d.compare(
-                        running_data.splitlines(),
-                        candidate_data.splitlines(),
-                    ),
-                )
+                diff = list(d.compare(running_data.splitlines(), candidate_data.splitlines()))
                 return "\n".join(diff).strip()
 
     return None
@@ -447,15 +355,12 @@ def commit_config(
                 reply = conn.validate(remove_ns=True)
             else:
                 reply = conn.commit(
-                    confirmed=confirmed,
-                    timeout=confirm_timeout,
-                    persist=persist,
-                    remove_ns=True,
+                    confirmed=confirmed, timeout=confirm_timeout, persist=persist, remove_ns=True
                 )
         elif is_cliconf(module):
             if check:
                 module.fail_json(
-                    msg="Validate configuration is not supported with network_cli connection type",
+                    msg="Validate configuration is not supported with network_cli connection type"
                 )
             else:
                 reply = conn.commit(comment=comment, label=label)
@@ -479,10 +384,7 @@ def get_oper(module, filter=None):
     else:
         return None
 
-    return to_bytes(
-        etree.tostring(response),
-        errors="surrogate_then_replace",
-    ).strip()
+    return to_bytes(etree.tostring(response), errors="surrogate_then_replace").strip()
 
 
 def get_config(module, config_filter=None, source="running"):
@@ -491,13 +393,7 @@ def get_config(module, config_filter=None, source="running"):
     # Note: Does not cache config in favour of latest config on every get operation.
     try:
         if is_netconf(module):
-            out = to_xml(
-                conn.get_config(
-                    source=source,
-                    filter=config_filter,
-                    remove_ns=True,
-                ),
-            )
+            out = to_xml(conn.get_config(source=source, filter=config_filter, remove_ns=True))
         elif is_cliconf(module):
             out = conn.get_config(source=source, flags=config_filter)
         cfg = out.strip()
@@ -507,9 +403,7 @@ def get_config(module, config_filter=None, source="running"):
 
 
 def check_existing_commit_labels(conn, label):
-    out = conn.get(
-        command="show configuration history detail | include %s" % label,
-    )
+    out = conn.get(command="show configuration history detail | include %s" % label)
     label_exist = re.search(label, out, re.M)
     if label_exist:
         return True
@@ -542,11 +436,7 @@ def load_config(
             for filter in to_list(command_filter):
                 conn.edit_config(config=filter, remove_ns=True)
 
-            candidate = get_config(
-                module,
-                source="candidate",
-                config_filter=nc_get_filter,
-            )
+            candidate = get_config(module, source="candidate", config_filter=nc_get_filter)
             diff = get_config_diff(module, running, candidate)
 
             if commit and diff:
@@ -567,7 +457,7 @@ def load_config(
                     module.fail_json(
                         msg="commit label {%s} is already used for"
                         " an earlier commit, please choose a different label"
-                        " and rerun task" % label,
+                        " and rerun task" % label
                     )
 
             response = conn.edit_config(
