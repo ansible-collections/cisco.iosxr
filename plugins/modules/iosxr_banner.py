@@ -109,7 +109,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     build_xml,
     etree_find,
     get_config,
-    iosxr_argument_spec,
     is_cliconf,
     is_netconf,
     load_config,
@@ -260,8 +259,6 @@ def main():
         text=dict(),
         state=dict(default="present", choices=["present", "absent"]),
     )
-
-    argument_spec.update(iosxr_argument_spec)
 
     required_if = [("state", "present", ("text",))]
 

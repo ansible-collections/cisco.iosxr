@@ -163,7 +163,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     etree_find,
     etree_findall,
     get_config,
-    iosxr_argument_spec,
     is_cliconf,
     is_netconf,
     load_config,
@@ -729,8 +728,6 @@ def main():
         lookup_enabled=dict(type="bool", default=True),
         state=dict(choices=["present", "absent"], default="present"),
     )
-
-    argument_spec.update(iosxr_argument_spec)
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
