@@ -268,7 +268,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     get_capabilities,
     get_config,
     get_os_version,
-    iosxr_argument_spec,
     is_cliconf,
     is_netconf,
     load_config,
@@ -1247,7 +1246,6 @@ def main():
     )
 
     argument_spec.update(element_spec)
-    argument_spec.update(iosxr_argument_spec)
 
     module = AnsibleModule(
         argument_spec=argument_spec,

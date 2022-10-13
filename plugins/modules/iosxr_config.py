@@ -267,7 +267,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     copy_file,
     get_config,
     get_connection,
-    iosxr_argument_spec,
     load_config,
 )
 
@@ -291,15 +290,11 @@ def copy_file_to_node(module):
 def check_args(module, warnings):
     if module.params["comment"]:
         if len(module.params["comment"]) > 60:
-            module.fail_json(
-                msg="comment argument cannot be more than 60 characters",
-            )
+            module.fail_json(msg="comment argument cannot be more than 60 characters")
     if module.params["label"]:
         label = module.params["label"]
         if len(label) > 30:
-            module.fail_json(
-                msg="label argument cannot be more than 30 characters",
-            )
+            module.fail_json(msg="label argument cannot be more than 30 characters")
         if not label[0].isalpha():
             module.fail_json(msg="label argument must begin with an alphabet")
         valid_chars = re.match(r"[\w-]*$", label)
@@ -420,10 +415,7 @@ def main():
         parents=dict(type="list", elements="str"),
         before=dict(type="list", elements="str"),
         after=dict(type="list", elements="str"),
-        match=dict(
-            default="line",
-            choices=["line", "strict", "exact", "none"],
-        ),
+        match=dict(default="line", choices=["line", "strict", "exact", "none"]),
         replace=dict(default="line", choices=["line", "block", "config"]),
         # this argument is deprecated in favor of setting match: none
         # it will be removed in a future version
@@ -437,8 +429,6 @@ def main():
         exclusive=dict(type="bool", default=False),
         label=dict(),
     )
-
-    argument_spec.update(iosxr_argument_spec)
 
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
 
@@ -475,9 +465,7 @@ def main():
     if any((module.params["src"], module.params["lines"])):
         run(module, result)
 
-    if result.get("changed") and any(
-        (module.params["src"], module.params["lines"]),
-    ):
+    if result.get("changed") and any((module.params["src"], module.params["lines"])):
         msg = (
             "To ensure idempotency and correct diff the input configuration lines should be"
             " similar to how they appear if present in"
