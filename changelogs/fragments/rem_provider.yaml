@@ -1,4 +1,0 @@
----
-major_changes:
-  - "This release drops support for `connection: local` and provider dictionary."
-  - "Only valid connection types for this collection are network_cli and netconf."
