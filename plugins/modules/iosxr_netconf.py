@@ -81,7 +81,6 @@ from ansible.module_utils.six import iteritems
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     get_config,
-    iosxr_argument_spec,
     load_config,
 )
 
@@ -98,9 +97,7 @@ def map_obj_to_commands(updates):
             commands.append("no netconf-yang agent ssh")
 
         if "netconf_port" in have:
-            commands.append(
-                "no ssh server netconf port %s" % have["netconf_port"],
-            )
+            commands.append("no ssh server netconf port %s" % have["netconf_port"])
 
         if have["netconf_vrf"]:
             for vrf in have["netconf_vrf"]:
@@ -110,9 +107,7 @@ def map_obj_to_commands(updates):
             commands.append("netconf-yang agent ssh")
 
         if want["netconf_port"] is not None and (want["netconf_port"] != have.get("netconf_port")):
-            commands.append(
-                "ssh server netconf port %s" % want["netconf_port"],
-            )
+            commands.append("ssh server netconf port %s" % want["netconf_port"])
         if want["netconf_vrf"] is not None and (want["netconf_vrf"] not in have["netconf_vrf"]):
             commands.append("ssh server netconf vrf %s" % want["netconf_vrf"])
 
@@ -185,12 +180,8 @@ def main():
         netconf_vrf=dict(aliases=["vrf"], default="default"),
         state=dict(default="present", choices=["present", "absent"]),
     )
-    argument_spec.update(iosxr_argument_spec)
 
-    module = AnsibleModule(
-        argument_spec=argument_spec,
-        supports_check_mode=True,
-    )
+    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
     warnings = list()
 

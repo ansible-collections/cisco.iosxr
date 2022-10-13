@@ -109,7 +109,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     build_xml,
     etree_find,
     get_config,
-    iosxr_argument_spec,
     is_cliconf,
     is_netconf,
     load_config,
@@ -132,7 +131,7 @@ class ConfigBase(object):
                 "banner": self._module.params["banner"],
                 "text": text,
                 "state": self._module.params["state"],
-            },
+            }
         )
 
 
@@ -150,7 +149,7 @@ class CliConfiguration(ConfigBase):
                 commands.append("no banner {0!s}".format(self._module.params["banner"]))
         elif state == "present":
             if self._want["text"] and self._want["text"].encode().decode(
-                "unicode_escape",
+                "unicode_escape"
             ) != self._have.get("text"):
                 banner_cmd = "banner {0!s} ".format(self._module.params["banner"])
                 banner_cmd += self._want["text"].strip()
@@ -194,16 +193,13 @@ class NCConfiguration(ConfigBase):
                 ("banner", {"xpath": "banners/banner", "tag": True, "attrib": "operation"}),
                 ("a:banner", {"xpath": "banner/banner-name"}),
                 ("a:text", {"xpath": "banner/banner-text", "operation": "edit"}),
-            ],
+            ]
         )
 
     def map_obj_to_xml_rpc(self):
         state = self._module.params["state"]
         _get_filter = build_xml(
-            "banners",
-            xmap=self._banners_meta,
-            params=self._module.params,
-            opcode="filter",
+            "banners", xmap=self._banners_meta, params=self._module.params, opcode="filter"
         )
 
         running = get_config(self._module, source="running", config_filter=_get_filter)
@@ -223,10 +219,7 @@ class NCConfiguration(ConfigBase):
         self._result["xml"] = []
         if opcode:
             _edit_filter = build_xml(
-                "banners",
-                xmap=self._banners_meta,
-                params=self._module.params,
-                opcode=opcode,
+                "banners", xmap=self._banners_meta, params=self._module.params, opcode=opcode
             )
 
             if _edit_filter is not None:
@@ -261,14 +254,10 @@ def main():
         state=dict(default="present", choices=["present", "absent"]),
     )
 
-    argument_spec.update(iosxr_argument_spec)
-
     required_if = [("state", "present", ("text",))]
 
     module = AnsibleModule(
-        argument_spec=argument_spec,
-        required_if=required_if,
-        supports_check_mode=True,
+        argument_spec=argument_spec, required_if=required_if, supports_check_mode=True
     )
 
     config_object = None
