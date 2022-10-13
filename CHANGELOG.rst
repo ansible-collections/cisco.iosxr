@@ -8,6 +8,12 @@ Cisco Iosxr Collection Release Notes
 v4.0.0
 ======
 
+Major Changes
+-------------
+
+- Only valid connection types for this collection are network_cli and netconf.
+- This release drops support for `connection: local` and provider dictionary.
+
 Minor Changes
 -------------
 
