@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Fixing model/version facts gathering (https://github.com/ansible-collections/cisco.iosxr/issues/282)
