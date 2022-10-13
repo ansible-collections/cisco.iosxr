@@ -9,7 +9,6 @@
     - "{{ role_path }}/backup_test_dir/"
     - "{{ role_path }}/backup/backup.cfg"
 
-
 - name: Take configuration backup
   become: true
   register: result
