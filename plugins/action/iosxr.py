@@ -37,10 +37,13 @@ class ActionModule(ActionNetworkModule):
 
         module_name = self._task.action.split(".")[-1]
         self._config_module = True if module_name in ["iosxr_config", "config"] else False
+        force_cli = module_name in ("iosxr_netconf", "iosxr_config", "iosxr_command", "iosxr_facts")
         persistent_connection = self._play_context.connection.split(".")[-1]
         warnings = []
 
-        if persistent_connection not in ("netconf", "network_cli"):
+        if (not force_cli and persistent_connection not in ("netconf", "network_cli")) or (
+            force_cli and persistent_connection != "network_cli"
+        ):
             return {
                 "failed": True,
                 "msg": "Connection type %s is not valid for this module"
