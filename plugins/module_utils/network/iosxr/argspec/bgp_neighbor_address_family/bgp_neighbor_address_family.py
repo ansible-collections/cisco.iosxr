@@ -285,8 +285,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                                 "set": {"type": "bool"},
                                             },
                                         },
-                                        "as_overrride": {
+                                        "as_override": {
                                             "type": "dict",
+                                            "aliases": ["as_overrride"],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {"type": "bool"},
