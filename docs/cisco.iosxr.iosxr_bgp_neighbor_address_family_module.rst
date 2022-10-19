@@ -2104,7 +2104,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>as_overrride</b>
+                    <b>as_override</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">dictionary</span>
@@ -2114,6 +2114,7 @@ Parameters
                 </td>
                 <td>
                         <div>Override matching AS-number while sending update</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: a, s, _, o, v, e, r, r, r, i, d, e</div>
                 </td>
             </tr>
                                 <tr>

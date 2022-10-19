@@ -337,7 +337,17 @@ options:
                         choices: [ 'flowspec', 'multicast', 'mvpn', 'unicast', 'labeled-unicast' ]
                       aigp: *aigp
                       allowas_in: *allowas_in
-                      as_overrride: *as_override
+                      as_override:
+                        type: dict
+                        description: Override matching AS-number while sending update
+                        aliases: as_overrride
+                        suboptions:
+                          set:
+                            type: bool
+                            description: set as_override
+                          inheritance_disable:
+                            type: bool
+                            description: Prevent as-override from being inherited from the parent.
                       capability_orf_prefix: *capability
                       default_originate: *default_originate
                       long_lived_graceful_restart: *long_lived_graceful_restart
