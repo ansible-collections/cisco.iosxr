@@ -340,7 +340,8 @@ options:
                       as_override:
                         type: dict
                         description: Override matching AS-number while sending update
-                        aliases: as_overrride
+                        aliases:
+                          - as_overrride
                         suboptions:
                           set:
                             type: bool

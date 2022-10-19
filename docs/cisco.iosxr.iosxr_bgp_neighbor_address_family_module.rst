@@ -2114,7 +2114,7 @@ Parameters
                 </td>
                 <td>
                         <div>Override matching AS-number while sending update</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: a, s, _, o, v, e, r, r, r, i, d, e</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: as_overrride</div>
                 </td>
             </tr>
                                 <tr>
