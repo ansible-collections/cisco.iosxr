@@ -204,6 +204,10 @@ class Cliconf(CliconfBase):
             match = re.search(r"Version (\S+)$", data, re.M)
             if match:
                 device_info["network_os_version"] = match.group(1)
+            else:
+                match = re.search(r"Version (\S+ \S+)$", data, re.M)
+                if match:
+                    device_info["network_os_version"] = match.group(1)
 
             match = re.search(r'image file is "(.+)"', data)
             if match:
@@ -211,6 +215,7 @@ class Cliconf(CliconfBase):
 
             model_search_strs = [
                 r"^[Cc]isco (.+) \(\) processor",
+                r"^[Cc]isco ([A-Z0-9\-]+) processor",
                 r"^[Cc]isco (.+) \(revision",
                 r"^[Cc]isco (\S+ \S+).+bytes of .*memory",
             ]

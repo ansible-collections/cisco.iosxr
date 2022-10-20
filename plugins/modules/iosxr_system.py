@@ -163,7 +163,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     etree_find,
     etree_findall,
     get_config,
-    iosxr_argument_spec,
     is_cliconf,
     is_netconf,
     load_config,
@@ -215,9 +214,7 @@ class CliConfiguration(ConfigBase):
                 commands.append("no domain name")
             if self._have["lookup_source"]:
                 commands.append(
-                    "no domain lookup source-interface {0!s}".format(
-                        self._have["lookup_source"],
-                    ),
+                    "no domain lookup source-interface {0!s}".format(self._have["lookup_source"]),
                 )
             if not self._have["lookup_enabled"]:
                 commands.append("no domain lookup disable")
@@ -228,20 +225,14 @@ class CliConfiguration(ConfigBase):
 
         elif state == "present":
             if needs_update("hostname"):
-                commands.append(
-                    "hostname {0!s}".format(self._want["hostname"]),
-                )
+                commands.append("hostname {0!s}".format(self._want["hostname"]))
 
             if needs_update("domain_name"):
-                commands.append(
-                    "domain name {0!s}".format(self._want["domain_name"]),
-                )
+                commands.append("domain name {0!s}".format(self._want["domain_name"]))
 
             if needs_update("lookup_source"):
                 commands.append(
-                    "domain lookup source-interface {0!s}".format(
-                        self._want["lookup_source"],
-                    ),
+                    "domain lookup source-interface {0!s}".format(self._want["lookup_source"]),
                 )
 
             cmd = None
@@ -253,20 +244,14 @@ class CliConfiguration(ConfigBase):
                 commands.append(cmd)
 
             if self._want["name_servers"] is not None:
-                adds, removes = diff_list(
-                    self._want["name_servers"],
-                    self._have["name_servers"],
-                )
+                adds, removes = diff_list(self._want["name_servers"], self._have["name_servers"])
                 for item in adds:
                     commands.append("domain name-server {0!s}".format(item))
                 for item in removes:
                     commands.append("no domain name-server {0!s}".format(item))
 
             if self._want["domain_search"] is not None:
-                adds, removes = diff_list(
-                    self._want["domain_search"],
-                    self._have["domain_search"],
-                )
+                adds, removes = diff_list(self._want["domain_search"], self._have["domain_search"])
                 for item in adds:
                     commands.append("domain list {0!s}".format(item))
                 for item in removes:
@@ -293,11 +278,7 @@ class CliConfiguration(ConfigBase):
             return match.group(1)
 
     def parse_lookup_source(self, config):
-        match = re.search(
-            r"^domain lookup source-interface (\S+)",
-            config,
-            re.M,
-        )
+        match = re.search(r"^domain lookup source-interface (\S+)", config, re.M)
         if match:
             return match.group(1)
 
@@ -307,18 +288,10 @@ class CliConfiguration(ConfigBase):
             {
                 "hostname": self.parse_hostname(config),
                 "domain_name": self.parse_domain_name(config),
-                "domain_search": re.findall(
-                    r"^domain list (\S+)",
-                    config,
-                    re.M,
-                ),
+                "domain_search": re.findall(r"^domain list (\S+)", config, re.M),
                 "lookup_source": self.parse_lookup_source(config),
                 "lookup_enabled": "domain lookup disable" not in config,
-                "name_servers": re.findall(
-                    r"^domain name-server (\S+)",
-                    config,
-                    re.M,
-                ),
+                "name_servers": re.findall(r"^domain name-server (\S+)", config, re.M),
             },
         )
 
@@ -343,29 +316,9 @@ class NCConfiguration(ConfigBase):
     def map_obj_to_xml_rpc(self):
         self._system_meta.update(
             [
-                (
-                    "vrfs",
-                    {
-                        "xpath": "ip-domain/vrfs",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "vrf",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "a:vrf",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf/vrf-name",
-                        "operation": "edit",
-                    },
-                ),
+                ("vrfs", {"xpath": "ip-domain/vrfs", "tag": True, "operation": "edit"}),
+                ("vrf", {"xpath": "ip-domain/vrfs/vrf", "tag": True, "operation": "edit"}),
+                ("a:vrf", {"xpath": "ip-domain/vrfs/vrf/vrf-name", "operation": "edit"}),
                 (
                     "a:domain_name",
                     {
@@ -379,37 +332,10 @@ class NCConfiguration(ConfigBase):
 
         self._system_domain_meta.update(
             [
-                (
-                    "vrfs",
-                    {
-                        "xpath": "ip-domain/vrfs",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "vrf",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "a:vrf",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf/vrf-name",
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "lists",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf/lists",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
+                ("vrfs", {"xpath": "ip-domain/vrfs", "tag": True, "operation": "edit"}),
+                ("vrf", {"xpath": "ip-domain/vrfs/vrf", "tag": True, "operation": "edit"}),
+                ("a:vrf", {"xpath": "ip-domain/vrfs/vrf/vrf-name", "operation": "edit"}),
+                ("lists", {"xpath": "ip-domain/vrfs/vrf/lists", "tag": True, "operation": "edit"}),
                 (
                     "list",
                     {
@@ -419,55 +345,22 @@ class NCConfiguration(ConfigBase):
                         "attrib": "operation",
                     },
                 ),
-                (
-                    "a:order",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf/lists/list/order",
-                        "operation": "edit",
-                    },
-                ),
+                ("a:order", {"xpath": "ip-domain/vrfs/vrf/lists/list/order", "operation": "edit"}),
                 (
                     "a:domain_search",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf/lists/list/list-name",
-                        "operation": "edit",
-                    },
+                    {"xpath": "ip-domain/vrfs/vrf/lists/list/list-name", "operation": "edit"},
                 ),
             ],
         )
 
         self._system_server_meta.update(
             [
-                (
-                    "vrfs",
-                    {
-                        "xpath": "ip-domain/vrfs",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "vrf",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "a:vrf",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf/vrf-name",
-                        "operation": "edit",
-                    },
-                ),
+                ("vrfs", {"xpath": "ip-domain/vrfs", "tag": True, "operation": "edit"}),
+                ("vrf", {"xpath": "ip-domain/vrfs/vrf", "tag": True, "operation": "edit"}),
+                ("a:vrf", {"xpath": "ip-domain/vrfs/vrf/vrf-name", "operation": "edit"}),
                 (
                     "servers",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf/servers",
-                        "tag": True,
-                        "operation": "edit",
-                    },
+                    {"xpath": "ip-domain/vrfs/vrf/servers", "tag": True, "operation": "edit"},
                 ),
                 (
                     "server",
@@ -480,10 +373,7 @@ class NCConfiguration(ConfigBase):
                 ),
                 (
                     "a:order",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf/servers/server/order",
-                        "operation": "edit",
-                    },
+                    {"xpath": "ip-domain/vrfs/vrf/servers/server/order", "operation": "edit"},
                 ),
                 (
                     "a:name_servers",
@@ -499,40 +389,16 @@ class NCConfiguration(ConfigBase):
             [
                 (
                     "a:hostname",
-                    {
-                        "xpath": "host-names/host-name",
-                        "operation": "edit",
-                        "attrib": "operation",
-                    },
+                    {"xpath": "host-names/host-name", "operation": "edit", "attrib": "operation"},
                 ),
             ],
         )
 
         self._lookup_source_meta.update(
             [
-                (
-                    "vrfs",
-                    {
-                        "xpath": "ip-domain/vrfs",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "vrf",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "a:vrf",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf/vrf-name",
-                        "operation": "edit",
-                    },
-                ),
+                ("vrfs", {"xpath": "ip-domain/vrfs", "tag": True, "operation": "edit"}),
+                ("vrf", {"xpath": "ip-domain/vrfs/vrf", "tag": True, "operation": "edit"}),
+                ("a:vrf", {"xpath": "ip-domain/vrfs/vrf/vrf-name", "operation": "edit"}),
                 (
                     "a:lookup_source",
                     {
@@ -546,29 +412,9 @@ class NCConfiguration(ConfigBase):
 
         self._lookup_meta.update(
             [
-                (
-                    "vrfs",
-                    {
-                        "xpath": "ip-domain/vrfs",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "vrf",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "a:vrf",
-                    {
-                        "xpath": "ip-domain/vrfs/vrf/vrf-name",
-                        "operation": "edit",
-                    },
-                ),
+                ("vrfs", {"xpath": "ip-domain/vrfs", "tag": True, "operation": "edit"}),
+                ("vrf", {"xpath": "ip-domain/vrfs/vrf", "tag": True, "operation": "edit"}),
+                ("a:vrf", {"xpath": "ip-domain/vrfs/vrf/vrf-name", "operation": "edit"}),
                 (
                     "lookup",
                     {
@@ -583,17 +429,9 @@ class NCConfiguration(ConfigBase):
 
         state = self._module.params["state"]
         _get_filter = build_xml("ip-domain", opcode="filter")
-        running = get_config(
-            self._module,
-            source="running",
-            config_filter=_get_filter,
-        )
+        running = get_config(self._module, source="running", config_filter=_get_filter)
         _get_filter = build_xml("host-names", opcode="filter")
-        hostname_runn = get_config(
-            self._module,
-            source="running",
-            config_filter=_get_filter,
-        )
+        hostname_runn = get_config(self._module, source="running", config_filter=_get_filter)
 
         hostname_ele = etree_find(hostname_runn, "host-name")
         hostname = hostname_ele.text if hostname_ele is not None else None
@@ -660,10 +498,7 @@ class NCConfiguration(ConfigBase):
                 return self._want[x] is not None and self._want[x] == sys_node[x]
 
             if needs_update("domain_name"):
-                system_param = {
-                    "vrf": self._want["vrf"],
-                    "domain_name": self._want["domain_name"],
-                }
+                system_param = {"vrf": self._want["vrf"], "domain_name": self._want["domain_name"]}
 
             if needs_update("hostname"):
                 hostname_param = {"hostname": hostname}
@@ -704,10 +539,7 @@ class NCConfiguration(ConfigBase):
                 )
 
             if needs_update("domain_name"):
-                system_param = {
-                    "vrf": self._want["vrf"],
-                    "domain_name": self._want["domain_name"],
-                }
+                system_param = {"vrf": self._want["vrf"], "domain_name": self._want["domain_name"]}
 
             if self._want["hostname"] is not None and self._want["hostname"] != hostname:
                 hostname_param = {"hostname": self._want["hostname"]}
@@ -897,18 +729,11 @@ def main():
         state=dict(choices=["present", "absent"], default="present"),
     )
 
-    argument_spec.update(iosxr_argument_spec)
-
-    module = AnsibleModule(
-        argument_spec=argument_spec,
-        supports_check_mode=True,
-    )
+    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
     config_object = None
     if is_cliconf(module):
         # Commenting the below cliconf deprecation support call for Ansible 2.9 as it'll be continued to be supported
-        # module.deprecate("cli support for 'iosxr_interface' is deprecated. Use transport netconf instead",
-        #                  version='2.9')
         config_object = CliConfiguration(module)
     elif is_netconf(module):
         config_object = NCConfiguration(module)
