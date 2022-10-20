@@ -485,3 +485,11 @@ releases:
       - remove_deprecated.yaml
       - remove_net_changes.yaml
     release_date: "2022-10-12"
+  4.0.1:
+    changes:
+      bugfixes:
+        - iosxr_bgp_neighbor_address_family - Added alias to render as_overrride under
+          vrfs as as_override.
+    fragments:
+      - as_ovrride_alias.yaml
+    release_date: "2022-10-20"
