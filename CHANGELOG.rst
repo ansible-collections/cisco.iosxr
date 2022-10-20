@@ -5,6 +5,14 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v4.0.1
+======
+
+Bugfixes
+--------
+
+- iosxr_bgp_neighbor_address_family - Added alias to render as_overrride under vrfs as as_override.
+
 v4.0.0
 ======
 
