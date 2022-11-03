@@ -496,7 +496,7 @@ releases:
   4.0.2:
     changes:
       bugfixes:
-        - 'requirements: remove google dependency'
+        - "requirements: remove google dependency"
     fragments:
       - remove_google_dependency.yaml
-    release_date: '2022-11-03'
+    release_date: "2022-11-03"
