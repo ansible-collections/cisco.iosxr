@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - "requirements: remove google dependency"
