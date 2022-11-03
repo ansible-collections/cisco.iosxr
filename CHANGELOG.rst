@@ -5,6 +5,14 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v4.0.2
+======
+
+Bugfixes
+--------
+
+- requirements: remove google dependency
+
 v4.0.1
 ======
 
