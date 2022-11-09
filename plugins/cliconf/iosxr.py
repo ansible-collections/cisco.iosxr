@@ -125,7 +125,7 @@ EXAMPLES = """
 
 # Use commit confirm with timeout and confirm the commit
 
-# NOTE - IOSXR waits for a `commit confirmed` when the command
+# NOTE - IOSXR waits for a `commit` when the command
 # executed is `commit confirmed <timeout>` within the timeout
 # period for the config to commit successfully, else a rollback
 # happens.
