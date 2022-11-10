@@ -165,7 +165,7 @@ EXAMPLES = """
 # Commands (cliconf specific)
 # ["configure exclusive"]
 
-# Use commit confirm with Replace option
+# Use Replace option with commit confirmed
 
 # NOTE - IOSXR waits for a `commit` when the command
 # executed is `commit replace confirmed <timeout>` within the timeout
@@ -173,7 +173,7 @@ EXAMPLES = """
 # happens.
 # This option is supported by only iosxr_config module
 
-- name: Example relace config commit confirmed
+- name: Example replace config with commit confirmed
   vars:
     ansible_iosxr_commit_confirmed: True
     ansible_iosxr_commit_confirmed_timeout: 60
