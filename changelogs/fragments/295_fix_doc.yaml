@@ -1,3 +1,2 @@
----
-bug_fixes:
-  - Fix syntax errors in integration tests.
+trivial:
+  - Fix commit confirm example.
