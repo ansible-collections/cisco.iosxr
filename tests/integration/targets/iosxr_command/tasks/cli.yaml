@@ -3,7 +3,6 @@
   ansible.builtin.find:
     paths: "{{ role_path }}/tests/cli"
     patterns: "{{ testcase }}.yaml"
-    use_regex: true
   register: test_cases
   delegate_to: localhost
 
