@@ -11,14 +11,12 @@
       - no domain lookup disable
       - no domain vrf ansiblevrf lookup disable
     match: none
-    provider: "{{ cli }}"
 
 - name: Configure lookup_source
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id001
     lookup_source: Loopback10
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -38,7 +36,6 @@
   register: result
   cisco.iosxr.iosxr_system: &id002
     lookup_enabled: false
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -58,7 +55,6 @@
   register: result
   cisco.iosxr.iosxr_system: &id003
     lookup_source: Loopback10
-    provider: "{{ netconf }}"
     state: absent
 
 - ansible.builtin.assert:
@@ -80,7 +76,6 @@
   cisco.iosxr.iosxr_system: &id004
     lookup_source: Loopback10
     vrf: ansiblevrf
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -102,7 +97,6 @@
   cisco.iosxr.iosxr_system: &id005
     lookup_enabled: false
     vrf: ansiblevrf
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -124,7 +118,6 @@
   cisco.iosxr.iosxr_system: &id006
     lookup_source: Loopback10
     vrf: ansiblevrf
-    provider: "{{ netconf }}"
     state: absent
 
 - ansible.builtin.assert:
@@ -148,7 +141,6 @@
       - no domain lookup disable
       - no domain vrf ansiblevrf lookup disable
     match: none
-    provider: "{{ cli }}"
 
 - ansible.builtin.debug:
     msg: END netconf/set_lookup_source.yaml on connection={{ ansible_connection }}

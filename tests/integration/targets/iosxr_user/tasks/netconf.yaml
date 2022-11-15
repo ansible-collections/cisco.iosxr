@@ -3,7 +3,6 @@
   ansible.builtin.find:
     paths: "{{ role_path }}/tests/common"
     patterns: "{{ testcase }}.yaml"
-    use_regex: true
   register: common_test_cases
   delegate_to: localhost
 
@@ -11,7 +10,6 @@
   ansible.builtin.find:
     paths: "{{ role_path }}/tests/netconf"
     patterns: "{{ testcase }}.yaml"
-    use_regex: true
   register: test_cases
   delegate_to: localhost
 
