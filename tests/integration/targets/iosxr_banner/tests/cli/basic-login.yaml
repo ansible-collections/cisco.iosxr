@@ -6,7 +6,6 @@
 - name: Setup - remove login
   cisco.iosxr.iosxr_banner:
     banner: login
-    provider: "{{ cli }}"
     state: absent
 
 - name: Set login
@@ -14,7 +13,6 @@
   cisco.iosxr.iosxr_banner:
     banner: login
     text: "@this is my login banner\nthat has a multiline\nstring\n@"
-    provider: "{{ cli }}"
     state: present
 
 - ansible.builtin.debug:
@@ -31,7 +29,6 @@
   cisco.iosxr.iosxr_banner:
     banner: login
     text: "@this is my login banner\nthat has a multiline\nstring\n@"
-    provider: "{{ cli }}"
     state: present
 
 - ansible.builtin.assert:
