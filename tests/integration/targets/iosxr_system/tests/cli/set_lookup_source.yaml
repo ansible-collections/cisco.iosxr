@@ -5,13 +5,11 @@
   cisco.iosxr.iosxr_config:
     lines: no domain lookup source-interface Loopback10
     match: none
-    provider: "{{ cli }}"
 
 - name: Configure lookup_source
   register: result
   cisco.iosxr.iosxr_system:
     lookup_source: Loopback10
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -22,7 +20,6 @@
   register: result
   cisco.iosxr.iosxr_system:
     lookup_source: Loopback10
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -33,6 +30,5 @@
     lines:
       - no domain lookup source-interface Loopback10
     match: none
-    provider: "{{ cli }}"
 
 - ansible.builtin.debug: msg="END cli/set_lookup_source.yaml on connection={{ ansible_connection }}"
