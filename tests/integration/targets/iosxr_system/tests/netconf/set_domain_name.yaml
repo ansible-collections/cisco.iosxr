@@ -9,14 +9,12 @@
       - no domain name
       - no domain vrf ansiblevrf name
     match: none
-    provider: "{{ cli }}"
 
 - name: Configure domain_name
   connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id001
     domain_name: eng.ansible.com
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -35,7 +33,6 @@
   register: result
   cisco.iosxr.iosxr_system: &id002
     domain_name: eng.ansible.com
-    provider: "{{ netconf }}"
     state: absent
 
 - ansible.builtin.assert:
@@ -56,7 +53,6 @@
   cisco.iosxr.iosxr_system: &id003
     domain_name: eng.ansible.com
     vrf: ansiblevrf
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
