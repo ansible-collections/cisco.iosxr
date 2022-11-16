@@ -8,14 +8,12 @@
       - no domain list redhat.com
     match: none
 
-
 - name: Configure domain_search
   register: result
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
       - redhat.com
-
 
 - ansible.builtin.assert:
     that:
