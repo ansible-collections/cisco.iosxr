@@ -12,6 +12,9 @@
       - no domain vrf ansiblevrf lookup disable
     match: none
 
+- name: Reset connection
+  ansible.builtin.meta: reset_connection
+
 - name: Configure lookup_source
   connection: ansible.netcommon.netconf
   register: result
