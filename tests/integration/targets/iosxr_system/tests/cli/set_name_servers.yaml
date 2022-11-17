@@ -8,7 +8,6 @@
       - no ip name-server 192.0.2.2
       - no ip name-server 192.0.2.3
     match: none
-    provider: "{{ cli }}"
 
 - name: Configure name_servers
   register: result
@@ -17,7 +16,6 @@
       - 192.0.2.1
       - 192.0.2.2
       - 192.0.2.3
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -33,7 +31,6 @@
       - 192.0.2.1
       - 192.0.2.2
       - 192.0.2.3
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -45,7 +42,6 @@
     name_servers:
       - 192.0.2.1
       - 192.0.2.2
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -59,6 +55,5 @@
       - no ip name-server 192.0.2.1
       - no ip name-server 192.0.2.2
     match: none
-    provider: "{{ cli }}"
 
 - ansible.builtin.debug: msg="END cli/set_name_servers.yaml on connection={{ ansible_connection }}"

@@ -7,7 +7,6 @@
   cisco.iosxr.iosxr_facts:
     gather_subset:
       - foobar
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -22,7 +21,6 @@
     gather_subset:
       - "!hardware"
       - hardware
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:

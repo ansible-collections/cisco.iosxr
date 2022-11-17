@@ -4,7 +4,6 @@
 - name: Test getting default facts
   register: result
   cisco.iosxr.iosxr_facts:
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:

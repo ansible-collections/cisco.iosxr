@@ -10,7 +10,7 @@
   register: result
   cisco.iosxr.iosxr_config:
     lines:
-      - "＃#﹟testremark"
+      - "＃# testremark"
       - 192.168.1.0/20 le 24
       - end-set
     parents: prefix-set test_set
@@ -18,7 +18,7 @@
 - ansible.builtin.assert:
     that:
       - result.changed == true
-      - "'＃#﹟testremark' in result.commands"
+      - "'＃# testremark' in result.commands"
 
 - name: Post-setup cleanup
   cisco.iosxr.iosxr_config:

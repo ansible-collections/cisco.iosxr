@@ -7,7 +7,6 @@
   cisco.iosxr.iosxr_banner:
     banner: login
     text: "@Junk login banner\nover multiple lines\n@"
-    provider: "{{ netconf }}"
     state: present
 
 - name: Remove login
@@ -15,8 +14,6 @@
   cisco.iosxr.iosxr_banner:
     banner: login
     state: absent
-    provider: "{{ netconf }}"
-
 - ansible.builtin.debug:
     msg: "{{ result }}"
 
@@ -30,7 +27,6 @@
   cisco.iosxr.iosxr_banner:
     banner: login
     state: absent
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
