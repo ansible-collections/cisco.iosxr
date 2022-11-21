@@ -115,6 +115,10 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>ipv4</li>
                                     <li>ipv6</li>
+                                    <li>l2vpn</li>
+                                    <li>link-state</li>
+                                    <li>vpnv4</li>
+                                    <li>vpnv6</li>
                         </ul>
                 </td>
                 <td>
@@ -2100,7 +2104,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>as_overrride</b>
+                    <b>as_override</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">dictionary</span>
@@ -2110,6 +2114,7 @@ Parameters
                 </td>
                 <td>
                         <div>Override matching AS-number while sending update</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: as_overrride</div>
                 </td>
             </tr>
                                 <tr>

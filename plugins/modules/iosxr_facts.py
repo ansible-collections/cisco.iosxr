@@ -188,9 +188,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.fa
     FACT_RESOURCE_SUBSETS,
     Facts,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
-)
 
 
 def main():
@@ -200,20 +197,14 @@ def main():
     :returns: ansible_facts
     """
     argument_spec = FactsArgs.argument_spec
-    argument_spec.update(iosxr_argument_spec)
 
-    module = AnsibleModule(
-        argument_spec=argument_spec,
-        supports_check_mode=True,
-    )
+    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
     warnings = []
 
     ansible_facts = {}
     if module.params.get("available_network_resources"):
-        ansible_facts["available_network_resources"] = sorted(
-            FACT_RESOURCE_SUBSETS.keys(),
-        )
+        ansible_facts["available_network_resources"] = sorted(FACT_RESOURCE_SUBSETS.keys())
     result = Facts(module).get_facts()
     additional_facts, additional_warnings = result
     ansible_facts.update(additional_facts)

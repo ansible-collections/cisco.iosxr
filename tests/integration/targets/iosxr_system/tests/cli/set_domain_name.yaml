@@ -5,13 +5,11 @@
   cisco.iosxr.iosxr_config:
     lines: no domain name
     match: none
-    provider: "{{ cli }}"
 
 - name: Configure domain_name
   register: result
   cisco.iosxr.iosxr_system:
     domain_name: eng.ansible.com
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -21,7 +19,6 @@
   register: result
   cisco.iosxr.iosxr_system:
     domain_name: eng.ansible.com
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -31,6 +28,5 @@
   cisco.iosxr.iosxr_config:
     lines: no domain name
     match: none
-    provider: "{{ cli }}"
 
 - ansible.builtin.debug: msg="END cli/set_domain_name.yaml on connection={{ ansible_connection }}"
