@@ -4,8 +4,7 @@
 - name: Test commit confirmed functionality
   vars:
     ansible_iosxr_commit_confirmed: true
-    ansible_iosxr_commit_confirmed_timeout: 90
-    ansible_iosxr_commit_label: testLabel1
+    ansible_iosxr_commit_confirmed_timeout: 60
   cisco.iosxr.iosxr_config:
     lines:
       - hostname iosxr_commit_confirmed

@@ -10,7 +10,6 @@
       - no domain name-server 192.0.2.2
       - no domain name-server 192.0.2.3
     match: none
-    provider: "{{ cli }}"
 
 - name: Setup
   connection: ansible.netcommon.netconf
@@ -22,7 +21,6 @@
       - 192.0.2.1
       - 192.0.2.2
       - 192.0.2.3
-    provider: "{{ netconf }}"
     state: absent
 
 - name: Configure name_servers
@@ -33,7 +31,6 @@
       - 192.0.2.1
       - 192.0.2.2
       - 192.0.2.3
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -51,7 +48,6 @@
       - 192.0.2.1
       - 192.0.2.2
       - 192.0.2.3
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -66,7 +62,6 @@
       - 192.0.2.1
       - 192.0.2.2
       - 192.0.2.3
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -92,7 +87,6 @@
     name_servers:
       - 192.0.2.1
       - 192.0.2.2
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -109,7 +103,6 @@
     name_servers:
       - 192.0.2.1
       - 192.0.2.2
-    provider: "{{ netconf }}"
 
 - name: Teardown
   connection: ansible.netcommon.network_cli
@@ -118,7 +111,6 @@
       - no domain name-server 192.0.2.1
       - no domain name-server 192.0.2.2
     match: none
-    provider: "{{ cli }}"
 
 - name: Teardown
   connection: ansible.netcommon.netconf
@@ -129,7 +121,6 @@
     name_servers:
       - 192.0.2.1
       - 192.0.2.2
-    provider: "{{ netconf }}"
     state: absent
 
 - ansible.builtin.debug:

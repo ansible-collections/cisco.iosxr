@@ -493,3 +493,10 @@ releases:
     fragments:
       - as_ovrride_alias.yaml
     release_date: "2022-10-20"
+  4.0.2:
+    changes:
+      bugfixes:
+        - "requirements: remove google dependency"
+    fragments:
+      - remove_google_dependency.yaml
+    release_date: "2022-11-03"
