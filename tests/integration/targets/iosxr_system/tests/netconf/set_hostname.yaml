@@ -4,40 +4,36 @@
 
 - block:
     - name: Setup
-      connection: ansible.netcommon.network_cli
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
       cisco.iosxr.iosxr_config:
         lines: hostname switch
         match: none
-        provider: "{{ cli }}"
 
     - name: Configure hostname
-      connection: ansible.netcommon.netconf
       register: result
       cisco.iosxr.iosxr_system:
         hostname: foo
-        provider: "{{ netconf }}"
 
     - ansible.builtin.assert:
         that:
           - result.changed == true
 
     - name: Verify hostname
-      connection: ansible.netcommon.netconf
       register: result
       cisco.iosxr.iosxr_system:
         hostname: foo
-        provider: "{{ netconf }}"
 
     - ansible.builtin.assert:
         that:
           - result.changed == false
   always:
     - name: Teardown
-      connection: ansible.netcommon.network_cli
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
       cisco.iosxr.iosxr_config:
         lines: hostname {{ inventory_hostname }}
         match: none
-        provider: "{{ cli }}"
 
 - ansible.builtin.debug:
     msg: END netconf/set_hostname.yaml on connection={{ ansible_connection }}

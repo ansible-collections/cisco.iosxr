@@ -204,7 +204,7 @@ Examples
 
     # Use commit confirm with timeout and confirm the commit
 
-    # NOTE - IOSXR waits for a `commit confirmed` when the command
+    # NOTE - IOSXR waits for a `commit` when the command
     # executed is `commit confirmed <timeout>` within the timeout
     # period for the config to commit successfully, else a rollback
     # happens.
@@ -223,7 +223,7 @@ Examples
         - name: "Confirm the Commit"
           cisco.iosxr.iosxr_command:
             commands:
-              - commit confirmed
+              - commit
 
     # Commands (cliconf specific)
     # ["commit confirmed 60"]
@@ -243,6 +243,29 @@ Examples
 
     # Commands (cliconf specific)
     # ["configure exclusive"]
+
+    # Use Replace option with commit confirmed
+
+    # NOTE - IOSXR waits for a `commit` when the command
+    # executed is `commit replace confirmed <timeout>` within the timeout
+    # period for the config to commit successfully, else a rollback
+    # happens.
+    # This option is supported by only iosxr_config module
+
+    - name: Example replace config with commit confirmed
+      vars:
+        ansible_iosxr_commit_confirmed: True
+        ansible_iosxr_commit_confirmed_timeout: 60
+      tasks:
+        - name: "Replace config with Commit confirmed"
+          cisco.iosxr.iosxr_config:
+            src: 'replace_running_cfg_iosxr.txt'
+            replace: config
+
+        - name: "Confirm the Commit"
+          cisco.iosxr.iosxr_command:
+            commands:
+              - commit
 
 
 

@@ -6,7 +6,6 @@
       - no username ansible1
       - no username ansible2
       - no username ansible3
-    provider: "{{ cli }}"
 
 - name: Create user (setup)
   connection: ansible.netcommon.netconf
@@ -15,7 +14,6 @@
     name: ansible1
     configured_password: password
     state: present
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -31,7 +29,6 @@
     configured_password: password
     update_password: always
     state: present
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -47,7 +44,6 @@
     configured_password: password
     update_password: on_create
     state: present
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -63,7 +59,6 @@
     update_password: on_create
     group: sysadmin
     state: present
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -80,7 +75,6 @@
     update_password: on_create
     group: sysadmin
     state: present
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -98,7 +92,6 @@
     configured_password: password
     state: present
     group: sysadmin
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -121,7 +114,6 @@
     configured_password: password
     state: present
     group: sysadmin
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -142,7 +134,6 @@
     update_password: on_create
     state: present
     group: sysadmin
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -160,7 +151,6 @@
 
       - name: ansible3
     state: absent
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -180,7 +170,6 @@
 
       - name: ansible3
     state: absent
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:

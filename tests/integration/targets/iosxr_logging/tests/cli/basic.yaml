@@ -4,14 +4,12 @@
     dest: host
     name: 172.16.0.1
     state: absent
-    provider: "{{ cli }}"
 
 - name: Remove console logging
   register: result
   cisco.iosxr.iosxr_logging:
     dest: console
     state: absent
-    provider: "{{ cli }}"
 
 - name: Remove buffered logging
   register: result
@@ -19,7 +17,6 @@
     dest: buffered
     size: 2097155
     state: absent
-    provider: "{{ cli }}"
 
 - name: Set up syslog host logging
   register: result
@@ -28,7 +25,6 @@
     name: 172.16.0.1
     level: errors
     state: present
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -48,7 +44,6 @@
     dest: host
     name: 172.16.0.1
     state: absent
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -65,7 +60,6 @@
     dest: console
     level: warning
     state: present
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -82,7 +76,6 @@
     dest: console
     level: warning
     state: absent
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert: &id006
     that:
@@ -94,7 +87,6 @@
     dest: buffered
     size: 4800000
     state: present
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -111,7 +103,6 @@
     dest: buffered
     size: 4800000
     state: absent
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert: *id006
 - name: Change logging parameters using aggregate
@@ -124,7 +115,6 @@
       - dest: buffered
         size: 4700000
     state: present
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -142,7 +132,6 @@
       - dest: buffered
         size: 4700000
     state: absent
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:

@@ -6,7 +6,6 @@
   cisco.iosxr.iosxr_facts:
     gather_subset:
       - all
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -23,7 +22,6 @@
   cisco.iosxr.iosxr_facts:
     available_network_resources: true
     gather_network_resources: all
-    provider: "{{ cli }}"
 
 - name: Assert that correct available_network_resources returned
   ansible.builtin.assert:

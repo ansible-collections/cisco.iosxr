@@ -336,6 +336,8 @@ def get_interface_type(interface):
         return "Bundle-Ether"
     elif interface.upper().startswith("NV"):
         return "nve"
+    elif interface.upper().startswith("TE"):
+        return "TenGigE"
     elif interface.upper().startswith("TWE"):
         return "TwentyFiveGigE"
     elif interface.upper().startswith("HU"):

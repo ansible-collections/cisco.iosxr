@@ -128,10 +128,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.p
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_lines
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
-    run_commands,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import run_commands
 
 
 def parse_commands(module, warnings):
@@ -160,12 +157,7 @@ def main():
         interval=dict(default=1, type="int"),
     )
 
-    argument_spec.update(iosxr_argument_spec)
-
-    module = AnsibleModule(
-        argument_spec=argument_spec,
-        supports_check_mode=True,
-    )
+    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
     warnings = list()
     result = {"changed": False, "warnings": warnings}
@@ -202,9 +194,7 @@ def main():
         msg = "One or more conditional statements have not been satisfied"
         module.fail_json(msg=msg, failed_conditions=failed_conditions)
 
-    result.update(
-        {"stdout": responses, "stdout_lines": list(to_lines(responses))},
-    )
+    result.update({"stdout": responses, "stdout_lines": list(to_lines(responses))})
 
     module.exit_json(**result)
 

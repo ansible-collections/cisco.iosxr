@@ -5,7 +5,6 @@
       - no username ansibletest1
       - no username ansibletest2
       - no username ansibletest3
-    provider: "{{ cli }}"
 
 - name: Create user (setup)
   register: result
@@ -13,7 +12,6 @@
     name: ansibletest1
     configured_password: test
     state: present
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -28,7 +26,6 @@
     configured_password: test
     update_password: always
     state: present
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -43,7 +40,6 @@
     configured_password: test
     update_password: on_create
     state: present
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -58,7 +54,6 @@
     update_password: on_create
     group: sysadmin
     state: present
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -74,7 +69,6 @@
     update_password: on_create
     group: sysadmin
     state: present
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -91,7 +85,6 @@
     configured_password: test
     state: present
     group: sysadmin
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -113,7 +106,6 @@
     configured_password: test
     state: present
     group: sysadmin
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -134,7 +126,6 @@
     update_password: on_create
     state: present
     group: sysadmin
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -151,7 +142,6 @@
 
       - name: ansibletest3
     state: absent
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:
@@ -168,7 +158,6 @@
 
       - name: ansibletest3
     state: absent
-    provider: "{{ cli }}"
 
 - ansible.builtin.assert:
     that:

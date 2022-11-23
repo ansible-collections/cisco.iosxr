@@ -298,7 +298,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     get_capabilities,
     get_config,
     get_connection,
-    iosxr_argument_spec,
     is_cliconf,
     is_netconf,
     load_config,
@@ -383,10 +382,7 @@ class PublicKeyManager(object):
                 else:
                     cmdtodo = (
                         "crypto key import authentication rsa username %s harddisk:/publickey_%s.b64"
-                        % (
-                            self._module.params["name"],
-                            self._module.params["name"],
-                        )
+                        % (self._module.params["name"], self._module.params["name"])
                     )
                     self.addremovekey(cmdtodo)
         elif self._module.params["state"] == "absent":
@@ -494,12 +490,7 @@ class CliConfiguration(ConfigBase):
                 if group_or_secret[0] == "group":
                     group = group_or_secret[1]
 
-            obj = {
-                "name": name,
-                "state": "present",
-                "configured_password": None,
-                "group": group,
-            }
+            obj = {"name": name, "state": "present", "configured_password": None, "group": group}
             self._have.append(obj)
 
     def map_obj_to_commands(self):
@@ -518,9 +509,7 @@ class CliConfiguration(ConfigBase):
                 commands.append(user_cmd)
 
                 if w["configured_password"]:
-                    commands.append(
-                        user_cmd + " secret " + w["configured_password"],
-                    )
+                    commands.append(user_cmd + " secret " + w["configured_password"])
                 if w["group"]:
                     commands.append(user_cmd + " group " + w["group"])
                 elif w["groups"]:
@@ -531,9 +520,7 @@ class CliConfiguration(ConfigBase):
                 user_cmd = "username " + name
 
                 if self._module.params["update_password"] == "always" and w["configured_password"]:
-                    commands.append(
-                        user_cmd + " secret " + w["configured_password"],
-                    )
+                    commands.append(user_cmd + " secret " + w["configured_password"])
                 if w["group"] and w["group"] != obj_in_have["group"]:
                     commands.append(user_cmd + " group " + w["group"])
                 elif w["groups"]:
@@ -554,12 +541,7 @@ class CliConfiguration(ConfigBase):
         if commands:
             commit = not self._module.check_mode
             admin = self._module.params["admin"]
-            diff = load_config(
-                self._module,
-                commands,
-                commit=commit,
-                admin=admin,
-            )
+            diff = load_config(self._module, commands, commit=commit, admin=admin)
             if diff:
                 self._result["diff"] = dict(prepared=diff)
 
@@ -593,23 +575,13 @@ class NCConfiguration(ConfigBase):
         if os_version and Version(os_version) > Version("7.0"):
             self._locald_meta.update(
                 [
-                    (
-                        "aaa_locald",
-                        {"xpath": "aaa/usernames", "tag": True, "ns": True},
-                    ),
+                    ("aaa_locald", {"xpath": "aaa/usernames", "tag": True, "ns": True}),
                     (
                         "username",
-                        {
-                            "xpath": "aaa/usernames/username",
-                            "tag": True,
-                            "attrib": "operation",
-                        },
+                        {"xpath": "aaa/usernames/username", "tag": True, "attrib": "operation"},
                     ),
                     ("a:name", {"xpath": "aaa/usernames/username/name"}),
-                    (
-                        "a:ordering_index",
-                        {"xpath": "aaa/usernames/username/ordering-index"},
-                    ),
+                    ("a:ordering_index", {"xpath": "aaa/usernames/username/ordering-index"}),
                     (
                         "secret",
                         {
@@ -618,41 +590,22 @@ class NCConfiguration(ConfigBase):
                             "operation": "edit",
                         },
                     ),
-                    (
-                        "a:type",
-                        {
-                            "xpath": "aaa/usernames/username/secret/type",
-                            "value": "type5",
-                        },
-                    ),
+                    ("a:type", {"xpath": "aaa/usernames/username/secret/type", "value": "type5"}),
                     (
                         "a:configured_password",
-                        {
-                            "xpath": "aaa/usernames/username/secret/secret5",
-                            "operation": "edit",
-                        },
+                        {"xpath": "aaa/usernames/username/secret/secret5", "operation": "edit"},
                     ),
                 ],
             )
             self._locald_group_meta.update(
                 [
-                    (
-                        "aaa_locald",
-                        {"xpath": "aaa/usernames", "tag": True, "ns": True},
-                    ),
+                    ("aaa_locald", {"xpath": "aaa/usernames", "tag": True, "ns": True}),
                     (
                         "username",
-                        {
-                            "xpath": "aaa/usernames/username",
-                            "tag": True,
-                            "attrib": "operation",
-                        },
+                        {"xpath": "aaa/usernames/username", "tag": True, "attrib": "operation"},
                     ),
                     ("a:name", {"xpath": "aaa/usernames/username/name"}),
-                    (
-                        "a:ordering_index",
-                        {"xpath": "aaa/usernames/username/ordering-index"},
-                    ),
+                    ("a:ordering_index", {"xpath": "aaa/usernames/username/ordering-index"}),
                     (
                         "usergroups",
                         {
@@ -681,41 +634,24 @@ class NCConfiguration(ConfigBase):
         else:
             self._locald_meta.update(
                 [
-                    (
-                        "aaa_locald",
-                        {"xpath": "aaa/usernames", "tag": True, "ns": True},
-                    ),
+                    ("aaa_locald", {"xpath": "aaa/usernames", "tag": True, "ns": True}),
                     (
                         "username",
-                        {
-                            "xpath": "aaa/usernames/username",
-                            "tag": True,
-                            "attrib": "operation",
-                        },
+                        {"xpath": "aaa/usernames/username", "tag": True, "attrib": "operation"},
                     ),
                     ("a:name", {"xpath": "aaa/usernames/username/name"}),
                     (
                         "a:configured_password",
-                        {
-                            "xpath": "aaa/usernames/username/secret",
-                            "operation": "edit",
-                        },
+                        {"xpath": "aaa/usernames/username/secret", "operation": "edit"},
                     ),
                 ],
             )
             self._locald_group_meta.update(
                 [
-                    (
-                        "aaa_locald",
-                        {"xpath": "aaa/usernames", "tag": True, "ns": True},
-                    ),
+                    ("aaa_locald", {"xpath": "aaa/usernames", "tag": True, "ns": True}),
                     (
                         "username",
-                        {
-                            "xpath": "aaa/usernames/username",
-                            "tag": True,
-                            "attrib": "operation",
-                        },
+                        {"xpath": "aaa/usernames/username", "tag": True, "attrib": "operation"},
                     ),
                     ("a:name", {"xpath": "aaa/usernames/username/name"}),
                     (
@@ -746,11 +682,7 @@ class NCConfiguration(ConfigBase):
 
         state = self._module.params["state"]
         _get_filter = build_xml("aaa", opcode="filter")
-        running = get_config(
-            self._module,
-            source="running",
-            config_filter=_get_filter,
-        )
+        running = get_config(self._module, source="running", config_filter=_get_filter)
 
         elements = etree_findall(running, "username")
         users = list()
@@ -759,16 +691,10 @@ class NCConfiguration(ConfigBase):
             users.append(name_list[0].text)
             list_size = len(name_list)
             if list_size == 1:
-                self._have.append(
-                    {"name": name_list[0].text, "group": None, "groups": None},
-                )
+                self._have.append({"name": name_list[0].text, "group": None, "groups": None})
             elif list_size == 2:
                 self._have.append(
-                    {
-                        "name": name_list[0].text,
-                        "group": name_list[1].text,
-                        "groups": None,
-                    },
+                    {"name": name_list[0].text, "group": name_list[1].text, "groups": None},
                 )
             elif list_size > 2:
                 name_iter = iter(name_list)
@@ -777,19 +703,11 @@ class NCConfiguration(ConfigBase):
                 for name in name_iter:
                     tmp_list.append(name.text)
 
-                self._have.append(
-                    {
-                        "name": name_list[0].text,
-                        "group": None,
-                        "groups": tmp_list,
-                    },
-                )
+                self._have.append({"name": name_list[0].text, "group": None, "groups": tmp_list})
             if os_version and Version(os_version) > Version("7.0"):
                 ordering_index = etree_findall(element, "ordering-index")
                 if len(self._have) > 0:
-                    self._have[-1].update(
-                        ordering_index=ordering_index[0].text,
-                    )
+                    self._have[-1].update(ordering_index=ordering_index[0].text)
 
         locald_params = list()
         locald_group_params = list()
@@ -802,10 +720,7 @@ class NCConfiguration(ConfigBase):
             opcode = "delete"
             for want_item in self._want:
                 if want_item["name"] in users:
-                    obj_in_have = search_obj_in_list(
-                        want_item["name"],
-                        self._have,
-                    )
+                    obj_in_have = search_obj_in_list(want_item["name"], self._have)
                     if os_version and Version(os_version) > Version("7.0"):
                         want_item["ordering_index"] = obj_in_have["ordering_index"]
                     want_item["configured_password"] = None
@@ -874,12 +789,7 @@ class NCConfiguration(ConfigBase):
         if opcode is not None:
             if locald_params:
                 _edit_filter_list.append(
-                    build_xml(
-                        "aaa",
-                        xmap=self._locald_meta,
-                        params=locald_params,
-                        opcode=opcode,
-                    ),
+                    build_xml("aaa", xmap=self._locald_meta, params=locald_params, opcode=opcode),
                 )
 
             if locald_group_params:
@@ -894,12 +804,7 @@ class NCConfiguration(ConfigBase):
 
             if purge_params:
                 _edit_filter_list.append(
-                    build_xml(
-                        "aaa",
-                        xmap=self._locald_meta,
-                        params=purge_params,
-                        opcode="delete",
-                    ),
+                    build_xml("aaa", xmap=self._locald_meta, params=purge_params, opcode="delete"),
                 )
         diff = None
         if _edit_filter_list:
@@ -932,21 +837,13 @@ def main():
     element_spec = dict(
         name=dict(type="str"),
         configured_password=dict(type="str", no_log=True),
-        update_password=dict(
-            type="str",
-            default="always",
-            choices=["on_create", "always"],
-        ),
+        update_password=dict(type="str", default="always", choices=["on_create", "always"]),
         admin=dict(type="bool", default=False),
         public_key=dict(type="str"),
         public_key_contents=dict(type="str"),
         group=dict(type="str", aliases=["role"]),
         groups=dict(type="list", elements="str"),
-        state=dict(
-            type="str",
-            default="present",
-            choices=["present", "absent"],
-        ),
+        state=dict(type="str", default="present", choices=["present", "absent"]),
     )
     aggregate_spec = deepcopy(element_spec)
     aggregate_spec["name"] = dict(required=True)
@@ -971,7 +868,6 @@ def main():
     )
 
     argument_spec.update(element_spec)
-    argument_spec.update(iosxr_argument_spec)
 
     module = AnsibleModule(
         argument_spec=argument_spec,
@@ -991,8 +887,6 @@ def main():
     config_object = None
     if is_cliconf(module):
         # Commenting the below cliconf deprecation support call for Ansible 2.9 as it'll be continued to be supported
-        # module.deprecate("cli support for 'iosxr_interface' is deprecated. Use transport netconf instead",
-        #                  version='2.9')
         config_object = CliConfiguration(module, result)
     elif is_netconf(module):
         config_object = NCConfiguration(module, result)

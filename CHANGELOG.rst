@@ -5,6 +5,67 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v4.0.2
+======
+
+Bugfixes
+--------
+
+- requirements: remove google dependency
+
+v4.0.1
+======
+
+Bugfixes
+--------
+
+- iosxr_bgp_neighbor_address_family - Added alias to render as_overrride under vrfs as as_override.
+
+v4.0.0
+======
+
+Major Changes
+-------------
+
+- Only valid connection types for this collection are network_cli and netconf.
+- This release drops support for `connection: local` and provider dictionary.
+
+Minor Changes
+-------------
+
+- iosxr_bgp_neighbor_address_family - add extra supported values l2vpn, link-state, vpnv4, vpnv6 to afi attribute.
+
+Removed Features (previously deprecated)
+----------------------------------------
+
+- iosxr_interface - use iosxr_interfaces instead.
+
+Bugfixes
+--------
+
+- Fixing model/version facts gathering (https://github.com/ansible-collections/cisco.iosxr/issues/282)
+
+v3.3.1
+======
+
+Bugfixes
+--------
+
+- Fixing TenGigE Interface recognition for resource modules. (https://github.com/ansible-collections/cisco.iosxr/issues/270)
+
+v3.3.0
+======
+
+Minor Changes
+-------------
+
+- Add support for grpc connection plugin
+
+Bugfixes
+--------
+
+- `iosxr_ping` - Fix regex to parse ping failure correctly.
+
 v3.2.0
 ======
 
