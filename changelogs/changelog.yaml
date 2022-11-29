@@ -500,3 +500,14 @@ releases:
     fragments:
       - remove_google_dependency.yaml
     release_date: "2022-11-03"
+  4.0.3:
+    changes:
+      bugfixes:
+        - Fix issue of iosxr_config parellel uploads.
+        - Support commit confirmed functionality with replace option.
+    fragments:
+      - 249_commit_confirmed_with_replace.yaml
+      - 295_fix_doc.yaml
+      - fix_integration_tests.yaml
+      - fix_iosxr_config_parellel_upload.yaml
+    release_date: "2022-11-30"
