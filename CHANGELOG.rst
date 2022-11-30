@@ -5,6 +5,15 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v4.0.3
+======
+
+Bugfixes
+--------
+
+- Fix issue of iosxr_config parellel uploads.
+- Support commit confirmed functionality with replace option.
+
 v4.0.2
 ======
 
