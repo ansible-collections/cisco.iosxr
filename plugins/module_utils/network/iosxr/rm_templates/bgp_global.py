@@ -1527,7 +1527,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s+(?P<nbr_address>neighbor\s\S+)
-                \s(?P<description>description\s\S+)
+                \sdescription\s(?P<description>.+)
                 $""", re.VERBOSE,
             ),
             "setval": "description {{ description }}",
@@ -1536,7 +1536,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
-                            "{{nbr_address.split(" ")[1]}}": {"description": "{{ description.split(" ")[1] }}"},
+                            "{{nbr_address.split(" ")[1]}}": {"description": "{{ description }}"},
                         },
                     },
                 },
