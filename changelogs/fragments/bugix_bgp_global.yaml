@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - bgp_global -  Fix neighbor description parser issue.

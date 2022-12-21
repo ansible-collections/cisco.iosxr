@@ -430,7 +430,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 "bgp router-id 192.0.2.10\n bgp cluster-id 5\n default-metric 4\n "
                 "socket send-buffer-size 4098\n bgp bestpath med confed\n "
                 "socket receive-buffer-size 514\n neighbor 192.0.2.11\n  remote-as 65537\n  "
-                "cluster-id 3\n !\n neighbor 192.0.2.14\n  remote-as 65538\n "
+                "cluster-id 3\n !\n neighbor 192.0.2.14\n  remote-as 65538\n  description test nbr description\n"
                 " bfd fast-detect strict-mode\n "
                 " bfd multiplier 6\n  bfd minimum-interval 20\n !\n!",
                 state="parsed",
@@ -440,29 +440,22 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         parsed_list = {
             "as_number": "65536",
             "bgp": {
-                "bestpath": {"med": {"confed": True}},
-                "cluster_id": "5",
                 "confederation": {"identifier": 4},
+                "cluster_id": "5",
                 "router_id": "192.0.2.10",
+                "bestpath": {"med": {"confed": True}},
             },
             "default_metric": 4,
+            "socket": {"send_buffer_size": 4098, "receive_buffer_size": 514},
             "neighbors": [
+                {"neighbor_address": "192.0.2.11", "remote_as": 65537, "cluster_id": "3"},
                 {
-                    "cluster_id": "3",
-                    "neighbor_address": "192.0.2.11",
-                    "remote_as": 65537,
-                },
-                {
-                    "bfd": {
-                        "fast_detect": {"strict_mode": True},
-                        "minimum_interval": 20,
-                        "multiplier": 6,
-                    },
                     "neighbor_address": "192.0.2.14",
                     "remote_as": 65538,
+                    "description": "test nbr description",
                 },
             ],
-            "socket": {"receive_buffer_size": 514, "send_buffer_size": 4098},
+            "bfd": {"multiplier": 6, "minimum_interval": 20},
         }
 
         self.assertEqual(parsed_list, result["parsed"])
