@@ -16,7 +16,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
@@ -292,14 +291,26 @@ class Acls(ConfigBase):
 
             acl_updates = []
             for want_ace in want_acl["aces"]:
-                have_ace = (
-                    search_obj_in_list(
-                        want_ace.get("sequence"),
-                        have_acl.get("aces", []),
-                        key="sequence",
+                if want_ace.get("sequence"):
+                    have_ace = (
+                        search_obj_in_list(
+                            want_ace.get("sequence"),
+                            have_acl.get("aces", []),
+                            key="sequence",
+                        )
+                        or {}
                     )
-                    or {}
-                )
+                else:
+                    new_have_acelist = []
+                    have_ace = {}
+                    for hc in have_acl.get("aces", []):
+                        del hc["sequence"]
+                        new_have_acelist.append(hc)
+                    for hc in new_have_acelist:
+                        if not dict_diff(hc, want_ace):
+                            have_ace = hc
+                            break
+
                 set_cmd = self._set_commands(want_ace, have_ace)
                 if set_cmd:
                     acl_updates.append(set_cmd)
