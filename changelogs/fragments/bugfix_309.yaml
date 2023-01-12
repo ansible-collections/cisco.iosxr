@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - support identpotency in current access of access-list.
