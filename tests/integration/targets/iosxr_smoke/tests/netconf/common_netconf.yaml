@@ -5,14 +5,12 @@
 - name: Setup - remove login
   cisco.iosxr.iosxr_banner:
     banner: login
-    provider: "{{ netconf }}"
     state: absent
 
 - name: Set login
   cisco.iosxr.iosxr_banner:
     banner: login
     text: "@this is my login banner\nthat has a multiline\nstring\n@"
-    provider: "{{ netconf }}"
     state: present
   register: result
 
@@ -31,7 +29,6 @@
     dest: host
     name: 172.16.0.1
     state: absent
-    provider: "{{ netconf }}"
 
 - name: Set up syslog host logging
   cisco.iosxr.iosxr_logging:
@@ -39,7 +36,6 @@
     name: 172.16.0.1
     level: errors
     state: present
-    provider: "{{ netconf }}"
   register: result
 
 - ansible.builtin.assert:

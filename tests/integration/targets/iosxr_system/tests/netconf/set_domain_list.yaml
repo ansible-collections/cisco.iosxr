@@ -12,7 +12,6 @@
       - no domain vrf ansiblevrf list redhat.com
       - no domain vrf ansiblevrf list ansible.com
     match: none
-    provider: "{{ cli }}"
 
 - name: Configure domain_search
   connection: ansible.netcommon.netconf
@@ -21,7 +20,6 @@
     domain_search:
       - ansible.com
       - redhat.com
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -37,7 +35,6 @@
     domain_search:
       - redhat.com
       - ansible.com
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -61,7 +58,6 @@
     vrf: ansiblevrf
     domain_search:
       - redhat.com
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -83,7 +79,6 @@
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -96,7 +91,6 @@
   cisco.iosxr.iosxr_system:
     domain_search:
       - ansible.com
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -109,7 +103,6 @@
     domain_search:
       - ansible.com
       - redhat.com
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -123,7 +116,6 @@
     domain_search:
       - ansible.com
       - redhat.com
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -136,7 +128,6 @@
     domain_search:
       - ansible.com
       - eng.ansible.com
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -152,7 +143,6 @@
     domain_search:
       - ansible.com
       - eng.ansible.com
-    provider: "{{ netconf }}"
 
 - ansible.builtin.assert:
     that:
@@ -169,7 +159,6 @@
       - no domain vrf ansiblevrf list ansible.com
       - no domain vrf ansiblevrf list eng.ansible.com
     match: none
-    provider: "{{ cli }}"
 
 - ansible.builtin.debug:
     msg: END netconf/set_domain_search.yaml on connection={{ ansible_connection }}
