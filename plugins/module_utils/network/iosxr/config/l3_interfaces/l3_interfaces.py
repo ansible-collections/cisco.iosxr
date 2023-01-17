@@ -160,9 +160,7 @@ class L3_Interfaces(ConfigBase):
                   to the desired configuration
         """
         commands = []
-        import epdb
 
-        epdb.serve()
         for interface in want:
             interface["name"] = normalize_interface(interface["name"])
             for each in have:

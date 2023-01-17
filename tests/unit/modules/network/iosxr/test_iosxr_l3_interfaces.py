@@ -213,14 +213,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         parsed_list = [
             {
                 "name": "GigabitEthernet0/0/0/0",
-                "ipv4": [{"address": "198.51.100.1 255.255.255.0"}],
+                "ipv4": [{"address": "198.51.100.1/24"}],
                 "ipv6": [{"address": "2001:db8::/32"}],
             },
             {
                 "name": "GigabitEthernet0/0/0/1",
                 "ipv4": [
-                    {"address": "192.0.2.1 255.255.255.0"},
-                    {"address": "192.0.2.2 255.255.255.0", "secondary": True},
+                    {"address": "192.0.2.1/24"},
+                    {"address": "192.0.2.2/24", "secondary": True},
                 ],
             },
         ]
