@@ -21,15 +21,13 @@ import re
 from copy import deepcopy
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
-from ansible_collections.cisco.ios.plugins.module_utils.network.ios.utils.utils import (
-    netmask_to_cidr,
-)
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.l3_interfaces.l3_interfaces import (
     L3_InterfacesArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     get_interface_type,
+    netmask_to_cidr,
 )
 
 

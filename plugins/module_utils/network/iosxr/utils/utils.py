@@ -454,3 +454,8 @@ def _coerce(other):
     if isinstance(other, (int, float)):
         other = Version(str(other))
     return other
+
+
+def netmask_to_cidr(netmask):
+    # convert netmask to cidr and returns the cidr notation
+    return str(sum([bin(int(x)).count("1") for x in netmask.split(".")]))
