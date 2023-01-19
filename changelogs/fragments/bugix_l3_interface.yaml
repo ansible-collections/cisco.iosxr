@@ -1,3 +1,3 @@
 ---
 major_changes:
-  - `l3_interfaces` Fix issue in ipv4 address formatting.
+  - Fix issue in ipv4 address formatting(l3-interface).
