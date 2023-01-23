@@ -166,6 +166,11 @@ Examples
         - result[0] contains IOS-XR
         - result[1] contains Loopback0
 
+    - name: multiple prompt, multiple answer (mandatory check for all prompts)
+      cisco.iosxr.iosxr_command:
+              commands:
+                  - {command: key config-key password-encryption, prompt: [ "Enter old key :", "Enter new key :", "Enter confirm key :" ], answer: ["test1234", "test12345", "test12345"] , check_all: true}
+
 
 
 Return Values
