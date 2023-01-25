@@ -1,0 +1,3 @@
+---
+doc_changes:
+  - Add valid example in iosxr_command module which will show handling multiple prompts.
