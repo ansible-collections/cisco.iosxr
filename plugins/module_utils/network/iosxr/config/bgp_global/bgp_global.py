@@ -245,6 +245,7 @@ class Bgp_global(ResourceModule):
             "advertisement_interval",
             "bfd_fast_detect_disable",
             "bfd_fast_detect_strict_mode",
+            "bfd_fast_detect_set",
             "bfd_nbr_minimum_interval",
             "bfd_nbr_multiplier",
             "bmp_activate",
