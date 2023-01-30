@@ -525,5 +525,6 @@ releases:
       - bugfix_317.yaml
       - bugfix_bgp_nbr.yaml
       - bugix_bgp_global.yaml
+      - fix_pre_commit.yaml
       - rm_base.yaml
     release_date: "2023-01-30"
