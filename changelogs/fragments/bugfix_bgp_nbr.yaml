@@ -1,0 +1,3 @@
+---
+minor_changes:
+  - iosxr.iosxr_bgp_global - Add missing set option in fast-detect dict of bgp nbr.

@@ -339,6 +339,9 @@ options:
                   description: Enable Fast detection
                   type: dict
                   suboptions:
+                    set:
+                      description: set fast-detect
+                      type: bool
                     disable:
                       description: Prevent bfd settings from being inherited from the parent.
                       type: bool

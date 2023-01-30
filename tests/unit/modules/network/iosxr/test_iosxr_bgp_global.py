@@ -389,7 +389,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             bfd=dict(
                                 multiplier=6,
                                 minimum_interval=20,
-                                fast_detect=dict(strict_mode=True),
+                                fast_detect=dict(set=True),
                             ),
                         ),
                     ],
@@ -412,7 +412,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "cluster-id 3",
             "remote-as 65537",
             "neighbor 192.0.2.14",
-            "bfd fast-detect strict-mode",
+            "bfd fast-detect",
             "bfd minimum-interval 20",
             "bfd multiplier 6",
             "remote-as 65538",

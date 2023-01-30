@@ -271,6 +271,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "fast_detect": {
                                     "type": "dict",
                                     "options": {
+                                        "set": {"type": "bool"},
                                         "disable": {"type": "bool"},
                                         "strict_mode": {"type": "bool"},
                                     },
@@ -862,6 +863,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "fast_detect": {
                                             "type": "dict",
                                             "options": {
+                                                "set": {"type": "bool"},
                                                 "disable": {"type": "bool"},
                                                 "strict_mode": {
                                                     "type": "bool",

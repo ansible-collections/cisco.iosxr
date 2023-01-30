@@ -55,7 +55,7 @@ replaced:
     - no neighbor 192.0.2.11
     - no neighbor 192.0.2.14
     - neighbor 192.0.2.13
-    - bfd fast-detect strict-mode
+    - bfd fast-detect
     - bfd minimum-interval 20
     - bfd multiplier 6
     - remote-as 65538
@@ -76,7 +76,7 @@ replaced:
         remote_as: 65538
         bfd:
           fast_detect:
-            strict_mode: true
+            set: true
           multiplier: 6
           minimum_interval: 20
 rendered:
