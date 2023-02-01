@@ -26,7 +26,7 @@
               remote_as: 65538
               bfd:
                 fast_detect:
-                  strict_mode: true
+                  set: true
                 multiplier: 6
                 minimum_interval: 20
         state: replaced

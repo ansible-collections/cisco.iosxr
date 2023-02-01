@@ -511,3 +511,20 @@ releases:
       - fix_integration_tests.yaml
       - fix_iosxr_config_parellel_upload.yaml
     release_date: "2022-11-30"
+  4.1.0:
+    changes:
+      bugfixes:
+        - bgp_global -  Fix neighbor description parser issue.
+      doc_changes:
+        - Add valid example in iosxr_command module which will show handling multiple
+          prompts.
+      minor_changes:
+        - iosxr.iosxr_bgp_global - Add missing set option in fast-detect dict of bgp
+          nbr.
+    fragments:
+      - bugfix_317.yaml
+      - bugfix_bgp_nbr.yaml
+      - bugix_bgp_global.yaml
+      - fix_pre_commit.yaml
+      - rm_base.yaml
+    release_date: "2023-01-30"

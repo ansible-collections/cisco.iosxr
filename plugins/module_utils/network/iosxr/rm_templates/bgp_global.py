@@ -1399,6 +1399,31 @@ class Bgp_globalTemplate(NetworkTemplate):
             },
         },
         {
+            "name": "bfd_fast_detect_set",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor\s\S+)
+                \sbfd
+                \s(?P<fast_detect>fast-detect)
+                $""", re.VERBOSE,
+            ),
+            "setval": "bfd fast-detect",
+            "compval": "bfd.fast_detect.set",
+            "result": {
+                "vrfs": {
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "neighbors": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "bfd": {
+                                    "fast_detect": {"set": "{{ True if fast_detect is defined }}"},
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
             "name": "bfd_fast_detect_strict_mode",
             "getval": re.compile(
                 r"""

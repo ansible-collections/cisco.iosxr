@@ -5,6 +5,24 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v4.1.0
+======
+
+Minor Changes
+-------------
+
+- iosxr.iosxr_bgp_global - Add missing set option in fast-detect dict of bgp nbr.
+
+Bugfixes
+--------
+
+- bgp_global -  Fix neighbor description parser issue.
+
+Documentation Changes
+---------------------
+
+- Add valid example in iosxr_command module which will show handling multiple prompts.
+
 v4.0.3
 ======
 
