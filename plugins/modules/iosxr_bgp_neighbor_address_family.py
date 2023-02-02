@@ -278,8 +278,6 @@ options:
                       inbound:
                         type: dict
                         description: inbound soft reconfiguration
-                        mutually_exclusive:
-                        - ["set", "always", "inheritance_disable", ]
                         suboptions:
                           set:
                             type: bool
