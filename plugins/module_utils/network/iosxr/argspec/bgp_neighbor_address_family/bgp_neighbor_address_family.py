@@ -217,6 +217,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "inbound": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "always", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "always": {"type": "bool"},
@@ -395,6 +398,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "inbound": {
                                                     "type": "dict",
+                                                    "mutually_exclusive": [
+                                                        ["set", "always", "inheritance_disable"],
+                                                    ],
                                                     "options": {
                                                         "set": {"type": "bool"},
                                                         "always": {"type": "bool"},
