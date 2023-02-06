@@ -80,6 +80,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         "send_cost_community_disable": {"type": "bool"},
                                         "send_med": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "disable"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "disable": {"type": "bool"},
@@ -89,10 +92,16 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                 },
                                 "allowas_in": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "value"],
+                                    ],
                                     "options": {"value": {"type": "int"}, "set": {"type": "bool"}},
                                 },
                                 "as_override": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {"type": "bool"},
@@ -105,6 +114,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                 },
                                 "default_originate": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "route_policy", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "set": {"type": "bool"},
                                         "route_policy": {"type": "str"},
@@ -137,6 +149,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                 "multipath": {"type": "bool"},
                                 "next_hop_self": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {"type": "bool"},
@@ -179,6 +194,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                 },
                                 "route_reflector_client": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {"type": "bool"},
@@ -186,6 +204,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                 },
                                 "send_community_ebgp": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {"type": "bool"},
@@ -193,6 +214,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                 },
                                 "send_community_gshut_ebgp": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {"type": "bool"},
@@ -200,6 +224,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                 },
                                 "send_extended_community_ebgp": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {"type": "bool"},
@@ -207,6 +234,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                 },
                                 "send_multicast_attributes": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "disable"],
+                                    ],
                                     "options": {
                                         "set": {"type": "bool"},
                                         "disable": {"type": "bool"},
@@ -217,6 +247,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "inbound": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "always", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "always": {"type": "bool"},
@@ -271,6 +304,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                                 "send_cost_community_disable": {"type": "bool"},
                                                 "send_med": {
                                                     "type": "dict",
+                                                    "mutually_exclusive": [
+                                                        ["set", "disable"],
+                                                    ],
                                                     "options": {
                                                         "set": {"type": "bool"},
                                                         "disable": {"type": "bool"},
@@ -280,6 +316,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         },
                                         "allowas_in": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["value", "set"],
+                                            ],
                                             "options": {
                                                 "value": {"type": "int"},
                                                 "set": {"type": "bool"},
@@ -288,6 +327,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         "as_override": {
                                             "type": "dict",
                                             "aliases": ["as_overrride"],
+                                            "mutually_exclusive": [
+                                                ["set", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {"type": "bool"},
@@ -299,6 +341,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         },
                                         "default_originate": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "route_policy", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "route_policy": {"type": "str"},
@@ -331,6 +376,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         "multipath": {"type": "bool"},
                                         "next_hop_self": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {"type": "bool"},
@@ -364,6 +412,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         },
                                         "route_reflector_client": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {"type": "bool"},
@@ -371,6 +422,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         },
                                         "send_community_ebgp": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {"type": "bool"},
@@ -378,6 +432,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         },
                                         "send_community_gshut_ebgp": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {"type": "bool"},
@@ -385,6 +442,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         },
                                         "send_extended_community_ebgp": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {"type": "bool"},
@@ -395,6 +455,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "inbound": {
                                                     "type": "dict",
+                                                    "mutually_exclusive": [
+                                                        ["set", "always", "inheritance_disable"],
+                                                    ],
                                                     "options": {
                                                         "set": {"type": "bool"},
                                                         "always": {"type": "bool"},

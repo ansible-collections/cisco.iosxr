@@ -149,6 +149,9 @@ class Bgp_address_familyArgs(object):  # pylint: disable=R0903
                                 },
                                 "dampening": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "value", "route_policy"],
+                                    ],
                                     "options": {
                                         "set": {"type": "bool"},
                                         "value": {"type": "int"},

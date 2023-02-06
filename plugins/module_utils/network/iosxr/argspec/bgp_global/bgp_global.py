@@ -270,6 +270,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "fast_detect": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "disable", "strict_mode"],
+                                    ],
                                     "options": {
                                         "set": {"type": "bool"},
                                         "disable": {"type": "bool"},
@@ -292,6 +295,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "send": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "disable"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "disable": {"type": "bool"},
@@ -299,6 +305,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         },
                                         "receive": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "disable"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "disable": {"type": "bool"},
@@ -317,6 +326,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         },
                                         "all": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "inheritance_disable": {
                                                     "type": "bool",
@@ -332,6 +344,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "description": {"type": "str"},
                         "dmz_link_bandwidth": {
                             "type": "dict",
+                            "mutually_exclusive": [
+                                ["set", "inheritance_disable"],
+                            ],
                             "options": {
                                 "inheritance_disable": {"type": "bool"},
                                 "set": {"type": "bool"},
@@ -340,6 +355,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "dscp": {"type": "str"},
                         "ebgp_multihop": {
                             "type": "dict",
+                            "mutually_exclusive": [
+                                ["value", "mpls"],
+                            ],
                             "options": {
                                 "value": {"type": "int"},
                                 "mpls": {"type": "bool"},
@@ -347,6 +365,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "ebgp_recv_extcommunity_dmz": {
                             "type": "dict",
+                            "mutually_exclusive": [
+                                ["set", "inheritance_disable"],
+                            ],
                             "options": {
                                 "inheritance_disable": {"type": "bool"},
                                 "set": {"type": "bool"},
@@ -354,6 +375,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "ebgp_send_extcommunity_dmz": {
                             "type": "dict",
+                            "mutually_exclusive": [
+                                ["set", "cumulatie", "inheritance_disable"],
+                            ],
                             "options": {
                                 "inheritance_disable": {"type": "bool"},
                                 "cumulatie": {"type": "bool"},
@@ -362,6 +386,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "egress_engineering": {
                             "type": "dict",
+                            "mutually_exclusive": [
+                                ["set", "inheritance_disable"],
+                            ],
                             "options": {
                                 "inheritance_disable": {"type": "bool"},
                                 "set": {"type": "bool"},
@@ -377,6 +404,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "set": {"type": "bool"},
                                 "activate": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "inheritance_disable": {
                                             "type": "bool",
@@ -386,6 +416,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "as_prepends": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["value", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "inheritance_disable": {
                                             "type": "bool",
@@ -395,6 +428,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "local_preference": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["value", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "value": {"type": "int"},
                                         "inheritance_disable": {
@@ -413,6 +449,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "ignore_connected_check": {
                             "type": "dict",
+                            "mutually_exclusive": [
+                                ["set", "inheritance_disable"],
+                            ],
                             "options": {
                                 "inheritance_disable": {"type": "bool"},
                                 "set": {"type": "bool"},
@@ -421,6 +460,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "keychain": {
                             "type": "dict",
                             "no_log": False,
+                            "mutually_exclusive": [
+                                ["name", "inheritance_disable"],
+                            ],
                             "options": {
                                 "name": {"type": "str"},
                                 "inheritance_disable": {"type": "bool"},
@@ -431,6 +473,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "address": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["ipv4_address", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "ipv4_address": {"type": "str"},
                                         "inheritance_disable": {
@@ -442,6 +487,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "local_as": {
                             "type": "dict",
+                            "mutually_exclusive": [
+                                ["value", "inheritance_disable"],
+                            ],
                             "options": {
                                 "value": {"type": "int"},
                                 "inheritance_disable": {"type": "bool"},
@@ -455,6 +503,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "in": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["value", "disable", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "value": {"type": "int"},
                                                 "disable": {"type": "bool"},
@@ -465,6 +516,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         },
                                         "out": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["value", "disable", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "value": {"type": "int"},
                                                 "disable": {"type": "bool"},
@@ -495,6 +549,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "shutdown": {
                             "type": "dict",
+                            "mutually_exclusive": [
+                                ["set", "inheritance_disable"],
+                            ],
                             "options": {
                                 "inheritance_disable": {"type": "bool"},
                                 "set": {"type": "bool"},
@@ -505,6 +562,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "mss": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["value", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "value": {"type": "int"},
                                         "inheritance_disable": {
@@ -523,6 +583,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "ttl_security": {
                             "type": "dict",
+                            "mutually_exclusive": [
+                                ["set", "inheritance_disable"],
+                            ],
                             "options": {
                                 "inheritance_disable": {"type": "bool"},
                                 "set": {"type": "bool"},
@@ -572,6 +635,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                 },
                 "nsr": {
                     "type": "dict",
+                    "mutually_exclusive": [
+                        ["set", "disable"],
+                    ],
                     "options": {
                         "set": {"type": "bool"},
                         "disable": {"type": "bool"},
@@ -862,6 +928,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "fast_detect": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "disable", "strict_mode"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "disable": {"type": "bool"},
@@ -886,6 +955,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "send": {
                                                     "type": "dict",
+                                                    "mutually_exclusive": [
+                                                        ["set", "disable"],
+                                                    ],
                                                     "options": {
                                                         "set": {
                                                             "type": "bool",
@@ -897,6 +969,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                 },
                                                 "receive": {
                                                     "type": "dict",
+                                                    "mutually_exclusive": [
+                                                        ["set", "disable"],
+                                                    ],
                                                     "options": {
                                                         "set": {
                                                             "type": "bool",
@@ -921,6 +996,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                 },
                                                 "all": {
                                                     "type": "dict",
+                                                    "mutually_exclusive": [
+                                                        ["set", "inheritance_disable"],
+                                                    ],
                                                     "options": {
                                                         "inheritance_disable": {
                                                             "type": "bool",
@@ -938,6 +1016,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "description": {"type": "str"},
                                 "dmz_link_bandwidth": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "inheritance_disable": {
                                             "type": "bool",
@@ -955,6 +1036,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "ebgp_recv_extcommunity_dmz": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "inheritance_disable": {
                                             "type": "bool",
@@ -964,6 +1048,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "ebgp_send_extcommunity_dmz": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "inheritance_disable": {
                                             "type": "bool",
@@ -974,6 +1061,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "egress_engineering": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "inheritance_disable": {
                                             "type": "bool",
@@ -991,6 +1081,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "set": {"type": "bool"},
                                         "activate": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "inheritance_disable": {
                                                     "type": "bool",
@@ -1000,6 +1093,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         },
                                         "as_prepends": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["value", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "inheritance_disable": {
                                                     "type": "bool",
@@ -1009,6 +1105,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         },
                                         "local_preference": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["value", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "value": {"type": "int"},
                                                 "inheritance_disable": {
@@ -1027,6 +1126,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "ignore_connected_check": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "inheritance_disable": {
                                             "type": "bool",
@@ -1036,6 +1138,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "keychain": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["name", "inheritance_disable"],
+                                    ],
                                     "no_log": False,
                                     "options": {
                                         "name": {"type": "str"},
@@ -1049,6 +1154,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "address": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["ipv4_address", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "ipv4_address": {
                                                     "type": "str",
@@ -1062,6 +1170,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "local_as": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["value", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "value": {"type": "int"},
                                         "inheritance_disable": {
@@ -1077,6 +1188,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "in": {
                                                     "type": "dict",
+                                                    "mutually_exclusive": [
+                                                        ["value", "disable", "inheritance_disable"],
+                                                    ],
                                                     "options": {
                                                         "value": {
                                                             "type": "int",
@@ -1091,6 +1205,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                 },
                                                 "out": {
                                                     "type": "dict",
+                                                    "mutually_exclusive": [
+                                                        ["value", "disable", "inheritance_disable"],
+                                                    ],
                                                     "options": {
                                                         "value": {
                                                             "type": "int",
@@ -1131,6 +1248,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "shutdown": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "inheritance_disable": {
                                             "type": "bool",
@@ -1143,6 +1263,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "mss": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["value", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "value": {"type": "int"},
                                                 "inheritance_disable": {
@@ -1161,6 +1284,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "ttl_security": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "inheritance_disable": {
                                             "type": "bool",
