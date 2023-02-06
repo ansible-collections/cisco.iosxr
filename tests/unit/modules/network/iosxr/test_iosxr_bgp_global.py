@@ -224,6 +224,10 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                                 minimum_interval=20,
                                 fast_detect=dict(strict_mode=True),
                             ),
+                            use=dict(
+                                neighbor_group="test_ng",
+                                session_group="test_sg",
+                            ),
                         ),
                     ],
                     vrfs=[dict(vrf="vrf1", default_metric=5)],
@@ -240,6 +244,8 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "bfd fast-detect strict-mode",
             "bfd minimum-interval 20",
             "bfd multiplier 6",
+            "use session-group test_sg",
+            "use neighbor-group test_ng",
             "remote-as 65538",
         ]
         result = self.execute_module(changed=True)
@@ -264,6 +270,8 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 bfd fast-detect strict-mode
                 bfd multiplier 6
                 bfd minimum-interval 20
+                use session-group test_sg
+                use neighbor-group test_ng
               vrf vrf1
                 default-metric 5
             """,
@@ -297,6 +305,10 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                                 multiplier=6,
                                 minimum_interval=20,
                                 fast_detect=dict(strict_mode=True),
+                            ),
+                            use=dict(
+                                neighbor_group="test_ng",
+                                session_group="test_sg",
                             ),
                         ),
                     ],
@@ -386,6 +398,10 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                         dict(
                             neighbor="192.0.2.14",
                             remote_as="65538",
+                            use=dict(
+                                neighbor_group="test_nb",
+                                session_group="test_sg",
+                            ),
                             bfd=dict(
                                 multiplier=6,
                                 minimum_interval=20,
@@ -415,6 +431,8 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "bfd fast-detect",
             "bfd minimum-interval 20",
             "bfd multiplier 6",
+            "use neighbor-group test_nb",
+            "use session-group test_sg",
             "remote-as 65538",
             "vrf vrf1",
             "default-metric 5",

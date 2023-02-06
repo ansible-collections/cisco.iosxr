@@ -697,6 +697,16 @@ options:
             update_source:
               description: Source of routing updates.Refer vendor document for valid values.
               type: str
+            use:
+              description: Use a neighbor-group and session-group template.
+              type: dict
+              suboptions:
+                neighbor_group:
+                  description: Inherit configuration from a neighbor-group.
+                  type: str
+                session_group:
+                  description: Inherit address-family independent config from a session-group
+                  type: str
         nsr:
           description: Enable non-stop-routing support for all neighbors.
           type: dict
