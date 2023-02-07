@@ -109,7 +109,7 @@ def filter_dict_having_none_value(want, have):
                     have_ip = have.get("ipv4")
                     for each in have_ip:
                         if len(want_ip) > 1 and each.get("secondary"):
-                            have_ip = each.get("address").split(" ")[0]
+                            have_ip = each.get("address").split("/")[0]
                             if have_ip != want_ip[0]:
                                 diff_ip = True
                     if each.get("secondary") and diff_ip is True:
@@ -454,3 +454,8 @@ def _coerce(other):
     if isinstance(other, (int, float)):
         other = Version(str(other))
     return other
+
+
+def netmask_to_cidr(netmask):
+    # convert netmask to cidr and returns the cidr notation
+    return str(sum([bin(int(x)).count("1") for x in netmask.split(".")]))

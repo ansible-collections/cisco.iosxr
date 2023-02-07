@@ -27,6 +27,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     get_interface_type,
+    netmask_to_cidr,
 )
 
 
@@ -112,10 +113,10 @@ class L3_InterfacesFacts(object):
         for each in ipv4_all:
             each_ipv4 = dict()
             if "secondary" in each:
-                each_ipv4["address"] = each.split(" secondary")[0]
+                each_ipv4["address"] = self.format_ipv4(each.split(" secondary")[0])
                 each_ipv4["secondary"] = True
             else:
-                each_ipv4["address"] = each
+                each_ipv4["address"] = self.format_ipv4(each)
             ipv4.append(each_ipv4)
             config["ipv4"] = ipv4
 
@@ -127,5 +128,9 @@ class L3_InterfacesFacts(object):
             each_ipv6["address"] = each
             ipv6.append(each_ipv6)
             config["ipv6"] = ipv6
-
         return utils.remove_empties(config)
+
+    def format_ipv4(self, address):
+        if address.split(" ")[1]:
+            cidr_val = netmask_to_cidr(address.split(" ")[1])
+        return address.split(" ")[0] + "/" + cidr_val
