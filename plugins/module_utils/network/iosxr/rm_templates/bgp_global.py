@@ -2374,7 +2374,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "use": {
-                                    "neighbor_group":  "{{ neighbor_group }}",
+                                    "neighbor_group": "{{ neighbor_group }}",
                                 },
                             },
                         },
