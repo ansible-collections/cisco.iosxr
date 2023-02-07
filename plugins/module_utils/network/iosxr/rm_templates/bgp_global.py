@@ -2360,6 +2360,52 @@ class Bgp_globalTemplate(NetworkTemplate):
             },
         },
         {
+            "name": "use.neighbor_group",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor\s\S+)
+                \suse\sneighbor-group\s(?P<neighbor_group>\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "use neighbor-group {{ use.neighbor_group }}",
+            "result": {
+                "vrfs": {
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "neighbors": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "use": {
+                                    "neighbor_group": "{{ neighbor_group }}",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "use.session_group",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor\s\S+)
+                \suse\ssession-group\s(?P<session_group>\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "use session-group {{ use.session_group }}",
+            "result": {
+                "vrfs": {
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "neighbors": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "use": {
+                                    "session_group": "{{ session_group }}",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
             "name": "update_source",
             "getval": re.compile(
                 r"""

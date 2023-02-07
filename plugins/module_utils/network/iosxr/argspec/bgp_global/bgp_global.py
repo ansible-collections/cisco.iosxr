@@ -631,6 +631,17 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             },
                         },
                         "update_source": {"type": "str"},
+                        "use": {
+                            "type": "dict",
+                            "options": {
+                                "neighbor_group": {
+                                    "type": "str",
+                                },
+                                "session_group": {
+                                    "type": "str",
+                                },
+                            },
+                        },
                     },
                 },
                 "nsr": {
@@ -1334,6 +1345,17 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     },
                                 },
                                 "update_source": {"type": "str"},
+                                "use": {
+                                    "type": "dict",
+                                    "options": {
+                                        "neighbor_group": {
+                                            "type": "str",
+                                        },
+                                        "session_group": {
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                             },
                         },
                         "rd": {
