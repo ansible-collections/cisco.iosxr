@@ -1,8 +1,4 @@
 ---
-- name: Pause for 1 min
-  ansible.builtin.pause:
-    minutes: 1
-
 - name: Setup - remove login
   cisco.iosxr.iosxr_banner:
     banner: login

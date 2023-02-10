@@ -1,8 +1,4 @@
 ---
-- name: Pause for 1 min
-  ansible.builtin.pause:
-    minutes: 1
-
 - name: Setup - remove MOTD
   cisco.iosxr.iosxr_banner:
     banner: motd
