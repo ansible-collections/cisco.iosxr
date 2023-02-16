@@ -1,0 +1,3 @@
+---
+trivial:
+  - Fix integration tests in iosxr_banner,iosxr_cliconf,iosxr_system,iosxr_facts and iosxr_acl_interfaces modules.

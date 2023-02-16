@@ -1,6 +1,7 @@
 ---
 - name: Remove users prior to tests
-  connection: ansible.netcommon.network_cli
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   cisco.iosxr.iosxr_config:
     lines:
       - no username ansible1
@@ -8,7 +9,8 @@
       - no username ansible3
 
 - name: Create user (setup)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     name: ansible1
@@ -22,7 +24,8 @@
       - '"secret" in result.xml[0]'
 
 - name: Create user with update_password always (not idempotent)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     name: ansible1
@@ -37,7 +40,8 @@
       - '"secret" in result.xml[0]'
 
 - name: Create user again with update_password on_create (idempotent)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     name: ansible1
@@ -51,7 +55,8 @@
       - result.xml | length == 0
 
 - name: Modify user group
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     name: ansible1
@@ -67,7 +72,8 @@
       - '"sysadmin" in result.xml[0]'
 
 - name: Modify user group again (idempotent)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     name: ansible1
@@ -82,7 +88,8 @@
       - result.xml | length == 0
 
 - name: Collection of users (setup)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
@@ -104,7 +111,8 @@
       - '"sysadmin" in result.xml[1]'
 
 - name: Add collection of users again with update_password always (not idempotent)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
@@ -123,7 +131,8 @@
       - '"secret" in result.xml[0]'
 
 - name: Add collection of users again with update_password on_create (idempotent)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
@@ -141,7 +150,8 @@
       - result.xml | length == 0
 
 - name: Delete collection of users
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
@@ -160,7 +170,8 @@
       - '"ansible3" in result.xml[0]'
 
 - name: Delete collection of users again (idempotent)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:

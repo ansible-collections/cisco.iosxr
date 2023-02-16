@@ -3,7 +3,8 @@
     msg: START netconf/set_name_servers.yaml on connection={{ ansible_connection }}
 
 - name: Setup
-  connection: ansible.netcommon.network_cli
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
   cisco.iosxr.iosxr_config:
     lines:
       - no domain name-server 192.0.2.1
@@ -12,7 +13,8 @@
     match: none
 
 - name: Setup
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   ignore_errors: true
   register: result
   cisco.iosxr.iosxr_system:
@@ -24,7 +26,8 @@
     state: absent
 
 - name: Configure name_servers
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system:
     name_servers:
@@ -41,7 +44,8 @@
       - "'192.0.2.3' in result.xml[0]"
 
 - name: Verify name_servers
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system:
     name_servers:
@@ -54,7 +58,8 @@
       - result.changed == false
 
 - name: Add name servers with VRF
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: &id001
     vrf: ansible
@@ -73,7 +78,8 @@
       - "'192.0.2.3' in result.xml[0]"
 
 - name: Verify change to VRF
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system: *id001
 - ansible.builtin.assert:
@@ -81,7 +87,8 @@
       - result.changed == false
 
 - name: Remove one
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_system:
     name_servers:
@@ -95,7 +102,8 @@
       - "'192.0.2.3' in result.xml[0]"
 
 - name: Remove one with VRF
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   ignore_errors: true
   register: result
   cisco.iosxr.iosxr_system:
@@ -105,7 +113,8 @@
       - 192.0.2.2
 
 - name: Teardown
-  connection: ansible.netcommon.network_cli
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
   cisco.iosxr.iosxr_config:
     lines:
       - no domain name-server 192.0.2.1
@@ -113,7 +122,8 @@
     match: none
 
 - name: Teardown
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   ignore_errors: true
   register: result
   cisco.iosxr.iosxr_system:
