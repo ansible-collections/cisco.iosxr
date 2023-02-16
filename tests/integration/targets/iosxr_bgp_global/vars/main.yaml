@@ -59,6 +59,8 @@ replaced:
     - bfd minimum-interval 20
     - bfd multiplier 6
     - remote-as 65538
+    - use neighbor-group test_ng
+    - use session-group test_sg
   after:
     as_number: "65536"
     default_metric: 5
@@ -74,11 +76,15 @@ replaced:
     neighbors:
       - neighbor_address: "192.0.2.13"
         remote_as: 65538
+        use:
+          neighbor_group: test_ng
+          session_group: test_sg
         bfd:
           fast_detect:
             set: true
           multiplier: 6
           minimum_interval: 20
+
 rendered:
   commands:
     - router bgp 65536

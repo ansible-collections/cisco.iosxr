@@ -242,6 +242,8 @@ class Bgp_global(ResourceModule):
         for the Bgp_global neighbor resource.
         """
         neighbor_parsers = [
+            "use.neighbor_group",
+            "use.session_group",
             "advertisement_interval",
             "bfd_fast_detect_disable",
             "bfd_fast_detect_strict_mode",

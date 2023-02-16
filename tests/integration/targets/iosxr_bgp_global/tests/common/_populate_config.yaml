@@ -10,6 +10,8 @@
       - "default-metric 4"
       - "socket receive-buffer-size 514"
       - "socket send-buffer-size 4098"
+      - "neighbor-group test_ng"
+      - "session-group test_sg"
       - "neighbor 192.0.2.11"
       - "cluster-id 3"
       - "remote-as 65537"

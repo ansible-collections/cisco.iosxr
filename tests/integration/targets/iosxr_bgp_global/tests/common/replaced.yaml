@@ -24,6 +24,9 @@
           neighbors:
             - neighbor: 192.0.2.13
               remote_as: 65538
+              use:
+                neighbor_group: test_ng
+                session_group: test_sg
               bfd:
                 fast_detect:
                   set: true

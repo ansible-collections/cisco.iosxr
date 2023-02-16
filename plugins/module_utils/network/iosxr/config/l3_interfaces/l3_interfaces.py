@@ -11,6 +11,8 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+import copy
+
 
 __metaclass__ = type
 
@@ -119,7 +121,7 @@ class L3_Interfaces(ConfigBase):
                   to the desired configuration
         """
         want = self._module.params["config"]
-        have = existing_l3_interfaces_facts
+        have = copy.deepcopy(existing_l3_interfaces_facts)
         resp = self.set_state(want, have)
         return to_list(resp)
 
@@ -308,8 +310,12 @@ class L3_Interfaces(ConfigBase):
         if want.get("ipv4"):
             for each in want.get("ipv4"):
                 if each.get("address") != "dhcp":
-                    ip_addr_want = validate_n_expand_ipv4(module, each)
-                    each["address"] = ip_addr_want
+                    each["address"] = validate_n_expand_ipv4(module, each)
+
+        if have.get("ipv4"):
+            for each in have.get("ipv4"):
+                if each.get("address") != "dhcp":
+                    each["address"] = validate_n_expand_ipv4(module, each)
 
         # Get the diff b/w want and have
         want_dict = dict_to_set(want)
