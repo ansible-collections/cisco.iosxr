@@ -32,6 +32,21 @@ def _tmplt_confederation_peers(config_data):
     return cmds
 
 
+def _templ_local_as(config_data):
+    conf = config_data.get("local_as", {})
+    if conf.get("value"):
+        command = "local-as " + str(conf.get("value", {}))
+    if "no_prepend" in conf:
+        if "replace_as" in conf.get("no_prepend", {}):
+            if "dual_as" in conf.get("no_prepend", {}).get("replace_as", {}):
+                command += " no-prepend replace-as dual-as"
+            elif "set" in conf.get("no_prepend", {}).get("replace_as", {}):
+                command += " no-prepend replace-as"
+        elif "set" in conf.get("no_prepend", {}):
+            command += " no-prepend"
+    return command
+
+
 class Bgp_globalTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         super(Bgp_globalTemplate, self).__init__(
@@ -2052,10 +2067,12 @@ class Bgp_globalTemplate(NetworkTemplate):
                 r"""
                 \s+(?P<nbr_address>neighbor\s\S+)
                 \s(?P<local_as>local-as\s\S+)
+                (\s(?P<no_prepend>no-prepend))?
+                (\s(?P<replace_as>replace-as))?
+                (\s(?P<dual_as>dual-as))?
                 $""", re.VERBOSE,
             ),
-            "setval": "local-as {{ local_as.value }}",
-            "compval": "local_as.value",
+            "setval": _templ_local_as,
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
@@ -2063,6 +2080,14 @@ class Bgp_globalTemplate(NetworkTemplate):
                             "{{nbr_address.split(" ")[1]}}": {
                                 "local_as": {
                                     "value": "{{ local_as.split(" ")[1] }}",
+                                    "no_prepend":
+                                        {
+                                            "set": "{{ True if no_prepend is defined and replace_as is undefined and dual_as is undefined else None}}",
+                                            "replace_as": {
+                                                "set": "{{ True if replace_as is defined and dual_as is undefined}}",
+                                                "dual_as": "{{ not not dual_as}}",
+                                            },
+                                        },
                                 },
                             },
                         },
@@ -2144,6 +2169,55 @@ class Bgp_globalTemplate(NetworkTemplate):
                                     "validation": {
                                         "disable": "{{ True if origin_as is defined}}",
                                     },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "password_inheritance_disable",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor\s\S+)
+                \s(?P<password>password\sinheritance-disable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "password inheritance-disable",
+            "compval": "password.inheritance_disable",
+            "result": {
+                "vrfs": {
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "neighbors": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "password": {
+                                    "inheritance_disable": "{{ True if password is defined }}",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "password_encrypted",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor\s\S+)
+                \spassword\sencrypted
+                \s(?P<password>\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "password encrypted {{password.encrypted}}",
+            "compval": "password.encrypted",
+            "result": {
+                "vrfs": {
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "neighbors": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "password": {
+                                    "encrypted": "{{ password }}",
                                 },
                             },
                         },

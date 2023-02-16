@@ -559,6 +559,23 @@ options:
                 inheritance_disable:
                   description: Prevent local AS from being inherited from parent.
                   type: bool
+                no_prepend:
+                  description: Do not prepend local AS to announcements from this neighbor.
+                  type: dict
+                  suboptions:
+                    set:
+                      type: bool
+                      description: Do not prepend local AS to announcements from this neighbor.
+                    replace_as:
+                      type: dict
+                      description: Prepend only local AS to announcements to this neighbor.
+                      suboptions:
+                        set:
+                          type: bool
+                          description: Prepend only local AS to announcements to this neighbor.
+                        dual_as:
+                          type: bool
+                          description: Dual-AS mode.
             log:
               description: Logging update messages per neighbor.
               type: dict
@@ -604,6 +621,16 @@ options:
                     disable:
                       description: Disable RPKI origin-AS validation.
                       type: bool
+            password:
+              type: dict
+              description: Set a password.
+              suboptions:
+                encrypted:
+                  type: str
+                  description: Specifies an ENCRYPTED password will follow.
+                inheritance_disable:
+                  description: Prevent password from being inherited from parent.
+                  type: bool
             receive_buffer_size:
               description: Set socket and BGP receive buffer size.Example <512-131072>.
               type: int

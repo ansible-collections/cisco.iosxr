@@ -1,0 +1,919 @@
+RLIMIT_NOFILE: (1024, 9223372036854775807)
+MAXFD: -1
+Falling back to tests in "tests/integration/targets/" because "roles/test/" was not found.
+Run command: /Users/amhatre/ansible_venvs/py3.6.10/bin/python /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/yamlcheck.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/ansible_venvs/py3.6.10/bin/python
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 0 after 0.056619882583618164 seconds.
+Run command: /Users/amhatre/ansible_venvs/py3.6.10/bin/python /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/ansible_venvs/py3.6.10/bin/python
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 0 after 0.061319828033447266 seconds.
+Run command: /Users/amhatre/.pyenv/shims/python2 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/.pyenv/shims/python2
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 127 after 0.21165180206298828 seconds.
+Run command: /Users/amhatre/.pyenv/shims/python2.7 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/.pyenv/shims/python2.7
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 127 after 0.17979121208190918 seconds.
+Run command: /Users/amhatre/ansible_venvs/py3.6.10/bin/python3 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/ansible_venvs/py3.6.10/bin/python3
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 0 after 0.05019497871398926 seconds.
+Run command: /Users/amhatre/.pyenv/shims/python3.5 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/.pyenv/shims/python3.5
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 127 after 0.17925715446472168 seconds.
+Run command: /Users/amhatre/ansible_venvs/py3.6.10/bin/python3.6 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/ansible_venvs/py3.6.10/bin/python3.6
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 0 after 0.050184011459350586 seconds.
+Run command: /Users/amhatre/.pyenv/shims/python3.8 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/.pyenv/shims/python3.8
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 127 after 0.1893758773803711 seconds.
+Run command: /usr/local/bin/python3.9 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /usr/local/bin/python3.9
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 0 after 0.03638577461242676 seconds.
+>>> Environment Description
+{
+    "known_hosts_hash": "eab1750a1a870f6ed1fb8f98a4b1da707ea041cc73d6722d766fe025c9481662",
+    "pip_interpreters": {
+        "": "#!/Users/amhatre/ansible_venvs/py3.6.10/bin/python",
+        "2": "#!/usr/bin/env bash",
+        "2.7": "#!/usr/bin/env bash",
+        "3": "#!/Users/amhatre/ansible_venvs/py3.6.10/bin/python",
+        "3.5": "#!/usr/bin/env bash",
+        "3.6": "#!/Users/amhatre/ansible_venvs/py3.6.10/bin/python",
+        "3.8": "#!/usr/bin/env bash",
+        "3.9": "#!/usr/local/opt/python@3.9/bin/python3.9"
+    },
+    "pip_paths": {
+        "": "/Users/amhatre/ansible_venvs/py3.6.10/bin/pip",
+        "2": "/Users/amhatre/.pyenv/shims/pip2",
+        "2.6": null,
+        "2.7": "/Users/amhatre/.pyenv/shims/pip2.7",
+        "3": "/Users/amhatre/ansible_venvs/py3.6.10/bin/pip3",
+        "3.5": "/Users/amhatre/.pyenv/shims/pip3.5",
+        "3.6": "/Users/amhatre/ansible_venvs/py3.6.10/bin/pip3.6",
+        "3.7": null,
+        "3.8": "/Users/amhatre/.pyenv/shims/pip3.8",
+        "3.9": "/usr/local/bin/pip3.9"
+    },
+    "program_versions": {
+        "": [
+            "3.6.10 (default, Dec 16 2020, 20:36:55)",
+            "[GCC Apple LLVM 12.0.0 (clang-1200.0.32.28)]",
+            "pip 20.3.3 from /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/pip"
+        ],
+        "2": null,
+        "2.7": null,
+        "3": [
+            "3.6.10 (default, Dec 16 2020, 20:36:55)",
+            "[GCC Apple LLVM 12.0.0 (clang-1200.0.32.28)]",
+            "pip 20.3.3 from /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/pip"
+        ],
+        "3.5": null,
+        "3.6": [
+            "3.6.10 (default, Dec 16 2020, 20:36:55)",
+            "[GCC Apple LLVM 12.0.0 (clang-1200.0.32.28)]",
+            "pip 20.3.3 from /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/pip"
+        ],
+        "3.8": null,
+        "3.9": [
+            "3.9.15 (main, Oct 11 2022, 22:25:13)",
+            "[Clang 12.0.0 (clang-1200.0.32.29)]",
+            "pip 22.2.2 from /usr/local/lib/python3.9/site-packages/pip"
+        ]
+    },
+    "python_paths": {
+        "": "/Users/amhatre/ansible_venvs/py3.6.10/bin/python",
+        "2": "/Users/amhatre/.pyenv/shims/python2",
+        "2.6": null,
+        "2.7": "/Users/amhatre/.pyenv/shims/python2.7",
+        "3": "/Users/amhatre/ansible_venvs/py3.6.10/bin/python3",
+        "3.5": "/Users/amhatre/.pyenv/shims/python3.5",
+        "3.6": "/Users/amhatre/ansible_venvs/py3.6.10/bin/python3.6",
+        "3.7": null,
+        "3.8": "/Users/amhatre/.pyenv/shims/python3.8",
+        "3.9": "/usr/local/bin/python3.9"
+    },
+    "warnings": [
+        "Command \"/Users/amhatre/.pyenv/shims/python2 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py\" returned exit status 127.\n>>> Standard Error\npyenv: python2: command not found\n\nThe `python2' command exists in these Python versions:\n  2.7.18\n\nNote: See 'pyenv help global' for tips on allowing both\n      python2 and python3 to be found.\u001b[0m",
+        "Command \"/Users/amhatre/.pyenv/shims/python2.7 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py\" returned exit status 127.\n>>> Standard Error\npyenv: python2.7: command not found\n\nThe `python2.7' command exists in these Python versions:\n  2.7.18\n\nNote: See 'pyenv help global' for tips on allowing both\n      python2 and python3 to be found.\u001b[0m",
+        "Command \"/Users/amhatre/.pyenv/shims/python3.5 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py\" returned exit status 127.\n>>> Standard Error\npyenv: python3.5: command not found\n\nThe `python3.5' command exists in these Python versions:\n  3.5.10\n\nNote: See 'pyenv help global' for tips on allowing both\n      python2 and python3 to be found.\u001b[0m",
+        "Command \"/Users/amhatre/.pyenv/shims/python3.8 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py\" returned exit status 127.\n>>> Standard Error\npyenv: python3.8: command not found\n\nThe `python3.8' command exists in these Python versions:\n  3.8.5\n\nNote: See 'pyenv help global' for tips on allowing both\n      python2 and python3 to be found.\u001b[0m",
+        "A Python 2 pip was found at \"/Users/amhatre/.pyenv/shims/pip2\", but it uses interpreter \"/usr/bin/env\" instead of \"/Users/amhatre/.pyenv/shims/python2\".",
+        "A Python 2.7 pip was found at \"/Users/amhatre/.pyenv/shims/pip2.7\", but it uses interpreter \"/usr/bin/env\" instead of \"/Users/amhatre/.pyenv/shims/python2.7\".",
+        "A Python 3.5 pip was found at \"/Users/amhatre/.pyenv/shims/pip3.5\", but it uses interpreter \"/usr/bin/env\" instead of \"/Users/amhatre/.pyenv/shims/python3.5\".",
+        "A Python 3.8 pip was found at \"/Users/amhatre/.pyenv/shims/pip3.8\", but it uses interpreter \"/usr/bin/env\" instead of \"/Users/amhatre/.pyenv/shims/python3.8\"."
+    ]
+}
+Running iosxr_snmp_server integration test role
+Preparing temporary directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ
+prepare_iosxr_tests:
+  iosxr_banner
+  iosxr_bgp
+  iosxr_command
+  iosxr_config
+  iosxr_facts
+  iosxr_logging
+  iosxr_netconf
+  iosxr_smoke
+  iosxr_system
+  iosxr_user
+Copying tests/integration/targets/iosxr_snmp_server/ to /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/
+Copying /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/integration/network-integration.cfg to /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/network-integration.cfg
+Copying /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/integration/test-inventory to /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/inventory.networking
+>>> Playbook: iosxr_snmp_server-g4zyw6lx.yml
+[
+    {
+        "gather_facts": false,
+        "hosts": "iosxr",
+        "roles": [
+            "iosxr_snmp_server"
+        ],
+        "vars": {
+            "output_dir": "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/output_dir"
+        },
+        "vars_files": []
+    }
+]
+Injecting "/tmp/python-bdcx7522-ansible/python" as a execv wrapper for the "/Users/amhatre/ansible_venvs/py3.6.10/bin/python" interpreter.
+Run command: ansible-playbook iosxr_snmp_server-g4zyw6lx.yml -i inventory.networking -vvvv
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration
+Program found: /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/injector/ansible-playbook
+ANSIBLE_CALLBACKS_ENABLED=junit
+ANSIBLE_COLLECTIONS_PATH=/Users/amhatre/ansible-collections/collections
+ANSIBLE_CONFIG=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/network-integration.cfg
+ANSIBLE_CONTROLLER_PYTHON_WARNING=false
+ANSIBLE_DEPRECATION_WARNINGS=false
+ANSIBLE_DEVEL_WARNING=false
+ANSIBLE_FORCE_COLOR=false
+ANSIBLE_FORCE_HANDLERS=true
+ANSIBLE_HOST_KEY_CHECKING=false
+ANSIBLE_HOST_PATTERN_MISMATCH=error
+ANSIBLE_INVENTORY=/dev/null
+ANSIBLE_LIBRARY=/dev/null
+ANSIBLE_PLAYBOOK_DIR=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration
+ANSIBLE_PYTHON_MODULE_RLIMIT_NOFILE=1024
+ANSIBLE_RETRY_FILES_ENABLED=false
+ANSIBLE_ROLES_PATH=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets
+ANSIBLE_TEST_CI=
+ANSIBLE_TEST_COVERAGE=
+ANSIBLE_TEST_PYTHON_INTERPRETER=/Users/amhatre/ansible_venvs/py3.6.10/bin/python
+ANSIBLE_TEST_PYTHON_VERSION=3.6
+ANSIBLE_WORKER_SHUTDOWN_POLL_COUNT=100
+ANSIBLE_WORKER_SHUTDOWN_POLL_DELAY=0.1
+HOME=/Users/amhatre
+INVENTORY_PATH=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/inventory.networking
+JUNIT_OUTPUT_DIR=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/junit
+JUNIT_REPLACE_OUT_OF_TREE_PATH=out-of-tree:
+JUNIT_TASK_RELATIVE_PATH=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ
+LC_ALL=en_US.UTF-8
+OUTPUT_DIR=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/output_dir
+PAGER=/bin/cat
+PATH=/tmp/python-bdcx7522-ansible:/Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/injector:/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+PYTHONPATH=/var/folders/j6/fqn4v5252b9_4ck6xxq4_rqm0000gn/T/ansible-test-mybc4nha
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+ansible-playbook [core 2.11.12]
+  config file = /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/network-integration.cfg
+  configured module search path = ['/dev/null']
+  ansible python module location = /var/folders/j6/fqn4v5252b9_4ck6xxq4_rqm0000gn/T/ansible-test-mybc4nha/ansible
+  ansible collection location = /Users/amhatre/ansible-collections/collections
+  executable location = /Users/amhatre/ansible_venvs/py3.6.10/bin/ansible-playbook
+  python version = 3.6.10 (default, Dec 16 2020, 20:36:55) [GCC Apple LLVM 12.0.0 (clang-1200.0.32.28)]
+  jinja version = 3.0.2
+  libyaml = False
+Using /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/network-integration.cfg as config file
+Loading collection cisco.iosxr from /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+setting up inventory plugins
+host_list declined parsing /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/inventory.networking as it did not pass its verify_file() method
+script declined parsing /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/inventory.networking as it did not pass its verify_file() method
+auto declined parsing /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/inventory.networking as it did not pass its verify_file() method
+yaml declined parsing /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/inventory.networking as it did not pass its verify_file() method
+Parsed /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/inventory.networking inventory source with ini plugin
+Loading callback plugin default of type stdout, v2.0 from /var/folders/j6/fqn4v5252b9_4ck6xxq4_rqm0000gn/T/ansible-test-mybc4nha/ansible/plugins/callback/default.py
+Skipping callback 'default', as we already have a stdout callback.
+Loading callback plugin junit of type aggregate, v2.0 from /var/folders/j6/fqn4v5252b9_4ck6xxq4_rqm0000gn/T/ansible-test-mybc4nha/ansible/plugins/callback/junit.py
+Skipping callback 'minimal', as we already have a stdout callback.
+Skipping callback 'oneline', as we already have a stdout callback.
+
+PLAYBOOK: iosxr_snmp_server-g4zyw6lx.yml ***************************************
+Positional arguments: iosxr_snmp_server-g4zyw6lx.yml
+verbosity: 4
+connection: smart
+timeout: 10
+force_handlers: True
+become_method: sudo
+tags: ('all',)
+inventory: ('/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/inventory.networking',)
+forks: 5
+1 plays in iosxr_snmp_server-g4zyw6lx.yml
+
+PLAY [iosxr] *******************************************************************
+META: ran handlers
+
+TASK [iosxr_snmp_server : Include the CLI tasks] *******************************
+task path: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tasks/main.yaml:2
+included: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tasks/cli.yaml for 10.0.150.231
+
+TASK [iosxr_snmp_server : Collect all CLI test cases] **************************
+task path: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tasks/cli.yaml:2
+<localhost> ESTABLISH LOCAL CONNECTION FOR USER: amhatre
+<localhost> EXEC /bin/sh -c 'echo ~amhatre && sleep 0'
+<localhost> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo /Users/amhatre/.ansible/tmp `"&& mkdir "` echo /Users/amhatre/.ansible/tmp/ansible-tmp-1668399259.788206-34816-209162287747191 `" && echo ansible-tmp-1668399259.788206-34816-209162287747191="` echo /Users/amhatre/.ansible/tmp/ansible-tmp-1668399259.788206-34816-209162287747191 `" ) && sleep 0'
+Using module file /var/folders/j6/fqn4v5252b9_4ck6xxq4_rqm0000gn/T/ansible-test-mybc4nha/ansible/modules/find.py
+<localhost> PUT /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/tmpz2z2elag TO /Users/amhatre/.ansible/tmp/ansible-tmp-1668399259.788206-34816-209162287747191/AnsiballZ_find.py
+<localhost> EXEC /bin/sh -c 'chmod u+x /Users/amhatre/.ansible/tmp/ansible-tmp-1668399259.788206-34816-209162287747191/ /Users/amhatre/.ansible/tmp/ansible-tmp-1668399259.788206-34816-209162287747191/AnsiballZ_find.py && sleep 0'
+<localhost> EXEC /bin/sh -c '/Users/amhatre/ansible_venvs/py3.6.10/bin/python /Users/amhatre/.ansible/tmp/ansible-tmp-1668399259.788206-34816-209162287747191/AnsiballZ_find.py && sleep 0'
+<localhost> EXEC /bin/sh -c 'rm -f -r /Users/amhatre/.ansible/tmp/ansible-tmp-1668399259.788206-34816-209162287747191/ > /dev/null 2>&1 && sleep 0'
+ok: [10.0.150.231 -> localhost] => {
+    "changed": false,
+    "examined": 11,
+    "files": [
+        {
+            "atime": 1668230965.260644,
+            "ctime": 1668399256.6928878,
+            "dev": 16777225,
+            "gid": 20,
+            "gr_name": "staff",
+            "inode": 21203055,
+            "isblk": false,
+            "ischr": false,
+            "isdir": false,
+            "isfifo": false,
+            "isgid": false,
+            "islnk": false,
+            "isreg": true,
+            "issock": false,
+            "isuid": false,
+            "mode": "0644",
+            "mtime": 1668230964.1225133,
+            "nlink": 1,
+            "path": "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/parsed.yaml",
+            "pw_name": "amhatre",
+            "rgrp": true,
+            "roth": true,
+            "rusr": true,
+            "size": 453,
+            "uid": 501,
+            "wgrp": false,
+            "woth": false,
+            "wusr": true,
+            "xgrp": false,
+            "xoth": false,
+            "xusr": false
+        },
+        {
+            "atime": 1668230965.2720194,
+            "ctime": 1668399256.6945727,
+            "dev": 16777225,
+            "gid": 20,
+            "gr_name": "staff",
+            "inode": 21203057,
+            "isblk": false,
+            "ischr": false,
+            "isdir": false,
+            "isfifo": false,
+            "isgid": false,
+            "islnk": false,
+            "isreg": true,
+            "issock": false,
+            "isuid": false,
+            "mode": "0644",
+            "mtime": 1668230964.1231472,
+            "nlink": 1,
+            "path": "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/replaced.yaml",
+            "pw_name": "amhatre",
+            "rgrp": true,
+            "roth": true,
+            "rusr": true,
+            "size": 3334,
+            "uid": 501,
+            "wgrp": false,
+            "woth": false,
+            "wusr": true,
+            "xgrp": false,
+            "xoth": false,
+            "xusr": false
+        },
+        {
+            "atime": 1668250609.2684748,
+            "ctime": 1668399256.6961136,
+            "dev": 16777225,
+            "gid": 20,
+            "gr_name": "staff",
+            "inode": 21203059,
+            "isblk": false,
+            "ischr": false,
+            "isdir": false,
+            "isfifo": false,
+            "isgid": false,
+            "islnk": false,
+            "isreg": true,
+            "issock": false,
+            "isuid": false,
+            "mode": "0644",
+            "mtime": 1668250608.0663023,
+            "nlink": 1,
+            "path": "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/merged.yaml",
+            "pw_name": "amhatre",
+            "rgrp": true,
+            "roth": true,
+            "rusr": true,
+            "size": 3686,
+            "uid": 501,
+            "wgrp": false,
+            "woth": false,
+            "wusr": true,
+            "xgrp": false,
+            "xoth": false,
+            "xusr": false
+        },
+        {
+            "atime": 1668230965.2713964,
+            "ctime": 1668399256.6968608,
+            "dev": 16777225,
+            "gid": 20,
+            "gr_name": "staff",
+            "inode": 21203060,
+            "isblk": false,
+            "ischr": false,
+            "isdir": false,
+            "isfifo": false,
+            "isgid": false,
+            "islnk": false,
+            "isreg": true,
+            "issock": false,
+            "isuid": false,
+            "mode": "0644",
+            "mtime": 1668230964.1221747,
+            "nlink": 1,
+            "path": "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/overridden.yaml",
+            "pw_name": "amhatre",
+            "rgrp": true,
+            "roth": true,
+            "rusr": true,
+            "size": 3228,
+            "uid": 501,
+            "wgrp": false,
+            "woth": false,
+            "wusr": true,
+            "xgrp": false,
+            "xoth": false,
+            "xusr": false
+        },
+        {
+            "atime": 1668230965.2675765,
+            "ctime": 1668399256.6974585,
+            "dev": 16777225,
+            "gid": 20,
+            "gr_name": "staff",
+            "inode": 21203061,
+            "isblk": false,
+            "ischr": false,
+            "isdir": false,
+            "isfifo": false,
+            "isgid": false,
+            "islnk": false,
+            "isreg": true,
+            "issock": false,
+            "isuid": false,
+            "mode": "0644",
+            "mtime": 1668230964.1228275,
+            "nlink": 1,
+            "path": "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/rendered.yaml",
+            "pw_name": "amhatre",
+            "rgrp": true,
+            "roth": true,
+            "rusr": true,
+            "size": 2576,
+            "uid": 501,
+            "wgrp": false,
+            "woth": false,
+            "wusr": true,
+            "xgrp": false,
+            "xoth": false,
+            "xusr": false
+        },
+        {
+            "atime": 1668230965.2814684,
+            "ctime": 1668399256.6981096,
+            "dev": 16777225,
+            "gid": 20,
+            "gr_name": "staff",
+            "inode": 21203062,
+            "isblk": false,
+            "ischr": false,
+            "isdir": false,
+            "isfifo": false,
+            "isgid": false,
+            "islnk": false,
+            "isreg": true,
+            "issock": false,
+            "isuid": false,
+            "mode": "0644",
+            "mtime": 1668230964.1206927,
+            "nlink": 1,
+            "path": "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/deleted.yaml",
+            "pw_name": "amhatre",
+            "rgrp": true,
+            "roth": true,
+            "rusr": true,
+            "size": 1043,
+            "uid": 501,
+            "wgrp": false,
+            "woth": false,
+            "wusr": true,
+            "xgrp": false,
+            "xoth": false,
+            "xusr": false
+        },
+        {
+            "atime": 1668230965.2795582,
+            "ctime": 1668399256.698835,
+            "dev": 16777225,
+            "gid": 20,
+            "gr_name": "staff",
+            "inode": 21203063,
+            "isblk": false,
+            "ischr": false,
+            "isdir": false,
+            "isfifo": false,
+            "isgid": false,
+            "islnk": false,
+            "isreg": true,
+            "issock": false,
+            "isuid": false,
+            "mode": "0644",
+            "mtime": 1668230964.1215317,
+            "nlink": 1,
+            "path": "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/gathered.yaml",
+            "pw_name": "amhatre",
+            "rgrp": true,
+            "roth": true,
+            "rusr": true,
+            "size": 650,
+            "uid": 501,
+            "wgrp": false,
+            "woth": false,
+            "wusr": true,
+            "xgrp": false,
+            "xoth": false,
+            "xusr": false
+        },
+        {
+            "atime": 1668230965.2809474,
+            "ctime": 1668399256.6994796,
+            "dev": 16777225,
+            "gid": 20,
+            "gr_name": "staff",
+            "inode": 21203064,
+            "isblk": false,
+            "ischr": false,
+            "isdir": false,
+            "isfifo": false,
+            "isgid": false,
+            "islnk": false,
+            "isreg": true,
+            "issock": false,
+            "isuid": false,
+            "mode": "0644",
+            "mtime": 1668230964.1209779,
+            "nlink": 1,
+            "path": "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/empty_config.yaml",
+            "pw_name": "amhatre",
+            "rgrp": true,
+            "roth": true,
+            "rusr": true,
+            "size": 1822,
+            "uid": 501,
+            "wgrp": false,
+            "woth": false,
+            "wusr": true,
+            "xgrp": false,
+            "xoth": false,
+            "xusr": false
+        }
+    ],
+    "invocation": {
+        "module_args": {
+            "age": null,
+            "age_stamp": "mtime",
+            "contains": null,
+            "depth": null,
+            "excludes": null,
+            "file_type": "file",
+            "follow": false,
+            "get_checksum": false,
+            "hidden": false,
+            "paths": [
+                "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common"
+            ],
+            "patterns": [
+                "[^_].*.yaml"
+            ],
+            "read_whole_file": false,
+            "recurse": false,
+            "size": null,
+            "use_regex": true
+        }
+    },
+    "matched": 8,
+    "msg": ""
+}
+
+TASK [iosxr_snmp_server : Set test_items] **************************************
+task path: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tasks/cli.yaml:10
+Loading collection ansible.netcommon from /Users/amhatre/ansible-collections/collections/ansible_collections/ansible/netcommon
+<10.0.150.231> attempting to start connection
+<10.0.150.231> using connection plugin ansible.netcommon.network_cli
+Found ansible-connection at path /Users/amhatre/ansible_venvs/py3.6.10/bin/ansible-connection
+<10.0.150.231> local domain socket does not exist, starting it
+<10.0.150.231> control socket path is /Users/amhatre/.ansible/pc/300c7cd6e7
+<10.0.150.231> Loading collection ansible.netcommon from /Users/amhatre/ansible-collections/collections/ansible_collections/ansible/netcommon
+<10.0.150.231> Loading collection cisco.iosxr from /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+<10.0.150.231> local domain socket listeners started successfully
+<10.0.150.231> loaded cliconf plugin ansible_collections.cisco.iosxr.plugins.cliconf.iosxr from path /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/plugins/cliconf/iosxr.py for network_os cisco.iosxr.iosxr
+<10.0.150.231> ssh type is set to paramiko
+<10.0.150.231>
+<10.0.150.231> local domain socket path is /Users/amhatre/.ansible/pc/300c7cd6e7
+ok: [10.0.150.231] => {
+    "ansible_facts": {
+        "test_items": [
+            "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/parsed.yaml",
+            "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/replaced.yaml",
+            "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/merged.yaml",
+            "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/overridden.yaml",
+            "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/rendered.yaml",
+            "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/deleted.yaml",
+            "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/gathered.yaml",
+            "/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/empty_config.yaml"
+        ]
+    },
+    "changed": false
+}
+
+TASK [iosxr_snmp_server : Run test case (connection=ansible.netcommon.network_cli)] ***
+task path: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tasks/cli.yaml:13
+included: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/parsed.yaml for 10.0.150.231 => (item=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/parsed.yaml)
+included: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/replaced.yaml for 10.0.150.231 => (item=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/replaced.yaml)
+included: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/merged.yaml for 10.0.150.231 => (item=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/merged.yaml)
+included: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/overridden.yaml for 10.0.150.231 => (item=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/overridden.yaml)
+included: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/rendered.yaml for 10.0.150.231 => (item=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/rendered.yaml)
+included: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/deleted.yaml for 10.0.150.231 => (item=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/deleted.yaml)
+included: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/gathered.yaml for 10.0.150.231 => (item=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/gathered.yaml)
+included: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/empty_config.yaml for 10.0.150.231 => (item=/Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/empty_config.yaml)
+
+TASK [iosxr_snmp_server : ansible.builtin.debug] *******************************
+task path: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/parsed.yaml:2
+Loading collection ansible.netcommon from /Users/amhatre/ansible-collections/collections/ansible_collections/ansible/netcommon
+<10.0.150.231> attempting to start connection
+<10.0.150.231> using connection plugin ansible.netcommon.network_cli
+Found ansible-connection at path /Users/amhatre/ansible_venvs/py3.6.10/bin/ansible-connection
+<10.0.150.231> found existing local domain socket, using it!
+<10.0.150.231> updating play_context for connection
+<10.0.150.231>
+<10.0.150.231> local domain socket path is /Users/amhatre/.ansible/pc/300c7cd6e7
+ok: [10.0.150.231] => {
+    "msg": "START iosxr_snmp_server parsed integration tests on connection=ansible.netcommon.network_cli"
+}
+
+TASK [iosxr_snmp_server : Parse externally provided snmp_server configuration] ***
+task path: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/parsed.yaml:5
+File lookup using /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/./_parsed.cfg as file
+Loading collection ansible.netcommon from /Users/amhatre/ansible-collections/collections/ansible_collections/ansible/netcommon
+<10.0.150.231> attempting to start connection
+<10.0.150.231> using connection plugin ansible.netcommon.network_cli
+Found ansible-connection at path /Users/amhatre/ansible_venvs/py3.6.10/bin/ansible-connection
+<10.0.150.231> found existing local domain socket, using it!
+<10.0.150.231> updating play_context for connection
+<10.0.150.231>
+<10.0.150.231> local domain socket path is /Users/amhatre/.ansible/pc/300c7cd6e7
+<10.0.150.231> Using network group action cisco.iosxr.iosxr for cisco.iosxr.iosxr_snmp_server
+<10.0.150.231> ANSIBLE_NETWORK_IMPORT_MODULES: disabled
+<10.0.150.231> ANSIBLE_NETWORK_IMPORT_MODULES: module execution time may be extended
+<10.0.150.231> ESTABLISH LOCAL CONNECTION FOR USER: amhatre
+<10.0.150.231> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq `"&& mkdir "` echo /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399269.3761752-34852-54696085556118 `" && echo ansible-tmp-1668399269.3761752-34852-54696085556118="` echo /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399269.3761752-34852-54696085556118 `" ) && sleep 0'
+Using module file /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/plugins/modules/iosxr_snmp_server.py
+<10.0.150.231> PUT /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/tmp6qbhc0n4 TO /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399269.3761752-34852-54696085556118/AnsiballZ_iosxr_snmp_server.py
+<10.0.150.231> EXEC /bin/sh -c 'chmod u+x /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399269.3761752-34852-54696085556118/ /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399269.3761752-34852-54696085556118/AnsiballZ_iosxr_snmp_server.py && sleep 0'
+<10.0.150.231> EXEC /bin/sh -c '/Users/amhatre/ansible_venvs/py3.6.10/bin/python /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399269.3761752-34852-54696085556118/AnsiballZ_iosxr_snmp_server.py && sleep 0'
+<10.0.150.231> EXEC /bin/sh -c 'rm -f -r /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399269.3761752-34852-54696085556118/ > /dev/null 2>&1 && sleep 0'
+ok: [10.0.150.231] => {
+    "changed": false,
+    "invocation": {
+        "module_args": {
+            "config": null,
+            "running_config": "snmp-server vrf vrf1\n host 1.1.1.1 traps test1\n!\nsnmp-server drop report acl IPv4 test1\nsnmp-server drop unknown-user\nsnmp-server ipv4 dscp af11\nsnmp-server ipv6 precedence routine\nsnmp-server user u1 test2 v1 IPv4 test1 IPv6 test2\nsnmp-server community test2 RO SDROwner IPv4 test IPv6 test1\nsnmp-server queue-length 2\nsnmp-server trap-timeout 3\nsnmp-server trap throttle-time 12\nsnmp-server traps bfd\nsnmp-server traps bgp cbgp2\nsnmp-server traps copy-complete\nsnmp-server traps hsrp\nsnmp-server traps ipsla\nsnmp-server traps msdp peer-state-change\nsnmp-server traps ipsec tunnel stop\nsnmp-server traps ipsec tunnel start\nsnmp-server traps config\nsnmp-server traps l2tun sessions\nsnmp-server traps l2tun tunnel-up\nsnmp-server traps l2tun tunnel-down\nsnmp-server traps bulkstat collection\nsnmp-server traps l2vpn all\nsnmp-server traps l2vpn vc-up\nsnmp-server traps l2vpn vc-down\nsnmp-server traps bridgemib\nsnmp-server traps addrpool low\nsnmp-server traps addrpool high\nsnmp-server traps cisco-entity-ext\nsnmp-server chassis-id test2\nsnmp-server contact t1\nsnmp-server location test1\nsnmp-server target list test host 1.1.1.2\nsnmp-server context c1\nsnmp-server context c2\nsnmp-server logging threshold oid-processing 1\nsnmp-server logging threshold pdu-processing 1\nsnmp-server mib bulkstat max-procmem-size 101\nsnmp-server timeouts duplicate 0\nsnmp-server timeouts inQdrop 0\nsnmp-server packetsize 490\nsnmp-server correlator buffer-size 1024\nsnmp-server trap-source GigabitEthernet0/0/0/2\nsnmp-server throttle-time 60\nsnmp-server community-map cm1 context c1 security-name s1 target-list t1\nsnmp-server inform retries 7\nsnmp-server overload-control 4 6\nsnmp-server ifmib internal cache max-duration 4\nsnmp-server mroutemib send-all-vrf\nsnmp-server notification-log-mib size 5\nsnmp-server notification-log-mib GlobalSize 5",
+            "state": "parsed"
+        }
+    },
+    "parsed": {
+        "chassis_id": "test2",
+        "communities": [
+            {
+                "acl_v4": "test",
+                "acl_v6": "test1",
+                "name": "test2",
+                "ro": true,
+                "sdrowner": true
+            }
+        ],
+        "community_maps": [
+            {
+                "context": "c1",
+                "name": "cm1",
+                "security_name": "s1",
+                "target_list": "t1"
+            }
+        ],
+        "contact": "t1",
+        "context": [
+            "c1",
+            "c2"
+        ],
+        "correlator": {
+            "buffer_size": 1024
+        },
+        "drop": {
+            "report_IPv4": "test1",
+            "unknown_user": true
+        },
+        "ifmib": {
+            "internal_cache_max_duration": 4
+        },
+        "inform": {
+            "retries": 7
+        },
+        "ipv4": {
+            "dscp": "af11"
+        },
+        "ipv6": {
+            "precedence": "routine"
+        },
+        "location": "test1",
+        "logging_threshold_oid_processing": 1,
+        "logging_threshold_pdu_processing": 1,
+        "mib_bulkstat_max_procmem_size": 101,
+        "mroutemib_send_all_vrf": true,
+        "notification_log_mib": {
+            "GlobalSize": 5,
+            "size": 5
+        },
+        "overload_control": {
+            "overload_drop_time": 4,
+            "overload_throttle_rate": 6
+        },
+        "packetsize": 490,
+        "queue_length": 2,
+        "targets": [
+            {
+                "host": "1.1.1.2",
+                "name": "test"
+            }
+        ],
+        "throttle_time": 60,
+        "timeouts": {
+            "duplicate": 0,
+            "inQdrop": 0
+        },
+        "trap": {
+            "throttle_time": 12
+        },
+        "trap_source": "GigabitEthernet0/0/0/2",
+        "trap_timeout": 3,
+        "traps": {
+            "addrpool": {
+                "high": true,
+                "low": true
+            },
+            "bfd": true,
+            "bgp": {
+                "cbgp2": true
+            },
+            "bridgemib": true,
+            "bulkstat_collection": true,
+            "cisco_entity_ext": true,
+            "config": true,
+            "copy_complete": true,
+            "hsrp": true,
+            "ipsec": {
+                "start": true,
+                "stop": true
+            },
+            "ipsla": true,
+            "l2tun": {
+                "sessions": true,
+                "tunnel_down": true,
+                "tunnel_up": true
+            },
+            "l2vpn": {
+                "all": true,
+                "vc_down": true,
+                "vc_up": true
+            },
+            "msdp_peer_state_change": true
+        },
+        "users": [
+            {
+                "acl_v4": "test1",
+                "acl_v6": "test2",
+                "group": "test2",
+                "user": "u1",
+                "version": "v1"
+            }
+        ],
+        "vrfs": [
+            {
+                "hosts": [
+                    {
+                        "community": "test1",
+                        "host": "1.1.1.1",
+                        "traps": true
+                    }
+                ],
+                "vrf": "vrf1"
+            }
+        ]
+    }
+}
+
+TASK [iosxr_snmp_server : Assert that configuration was correctly parsed] ******
+task path: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/parsed.yaml:11
+Loading collection ansible.netcommon from /Users/amhatre/ansible-collections/collections/ansible_collections/ansible/netcommon
+<10.0.150.231> attempting to start connection
+<10.0.150.231> using connection plugin ansible.netcommon.network_cli
+Found ansible-connection at path /Users/amhatre/ansible_venvs/py3.6.10/bin/ansible-connection
+<10.0.150.231> found existing local domain socket, using it!
+<10.0.150.231> updating play_context for connection
+<10.0.150.231>
+<10.0.150.231> local domain socket path is /Users/amhatre/.ansible/pc/300c7cd6e7
+ok: [10.0.150.231] => {
+    "changed": false,
+    "msg": "All assertions passed"
+}
+
+TASK [iosxr_snmp_server : ansible.builtin.debug] *******************************
+task path: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/replaced.yaml:2
+Loading collection ansible.netcommon from /Users/amhatre/ansible-collections/collections/ansible_collections/ansible/netcommon
+<10.0.150.231> attempting to start connection
+<10.0.150.231> using connection plugin ansible.netcommon.network_cli
+Found ansible-connection at path /Users/amhatre/ansible_venvs/py3.6.10/bin/ansible-connection
+<10.0.150.231> found existing local domain socket, using it!
+<10.0.150.231> updating play_context for connection
+<10.0.150.231>
+<10.0.150.231> local domain socket path is /Users/amhatre/.ansible/pc/300c7cd6e7
+ok: [10.0.150.231] => {
+    "msg": "Start iosxr_snmp_server replaced integration tests connection=ansible.netcommon.network_cli"
+}
+
+TASK [iosxr_snmp_server : ansible.builtin.include_tasks] ***********************
+task path: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/replaced.yaml:5
+included: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/_remove_config.yaml for 10.0.150.231
+
+TASK [iosxr_snmp_server : Remove SNMP server configuration] ********************
+task path: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/tests/output/.tmp/integration/iosxr_snmp_server-4jiu2_be-ÅÑŚÌβŁÈ/tests/integration/targets/iosxr_snmp_server/tests/common/_remove_config.yaml:2
+Loading collection ansible.netcommon from /Users/amhatre/ansible-collections/collections/ansible_collections/ansible/netcommon
+<10.0.150.231> attempting to start connection
+<10.0.150.231> using connection plugin ansible.netcommon.network_cli
+Found ansible-connection at path /Users/amhatre/ansible_venvs/py3.6.10/bin/ansible-connection
+<10.0.150.231> found existing local domain socket, using it!
+<10.0.150.231> updating play_context for connection
+<10.0.150.231>
+<10.0.150.231> local domain socket path is /Users/amhatre/.ansible/pc/300c7cd6e7
+<10.0.150.231> Using network group action cisco.iosxr.iosxr for cisco.iosxr.iosxr_snmp_server
+<10.0.150.231> ANSIBLE_NETWORK_IMPORT_MODULES: disabled
+<10.0.150.231> ANSIBLE_NETWORK_IMPORT_MODULES: module execution time may be extended
+<10.0.150.231> ESTABLISH LOCAL CONNECTION FOR USER: amhatre
+<10.0.150.231> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq `"&& mkdir "` echo /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399279.1190479-34880-162822510521037 `" && echo ansible-tmp-1668399279.1190479-34880-162822510521037="` echo /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399279.1190479-34880-162822510521037 `" ) && sleep 0'
+Using module file /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr/plugins/modules/iosxr_snmp_server.py
+<10.0.150.231> PUT /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/tmpv0z3o2ol TO /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399279.1190479-34880-162822510521037/AnsiballZ_iosxr_snmp_server.py
+<10.0.150.231> EXEC /bin/sh -c 'chmod u+x /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399279.1190479-34880-162822510521037/ /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399279.1190479-34880-162822510521037/AnsiballZ_iosxr_snmp_server.py && sleep 0'
+<10.0.150.231> EXEC /bin/sh -c '/Users/amhatre/ansible_venvs/py3.6.10/bin/python /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399279.1190479-34880-162822510521037/AnsiballZ_iosxr_snmp_server.py && sleep 0'
+<10.0.150.231> EXEC /bin/sh -c 'rm -f -r /Users/amhatre/.ansible/tmp/ansible-local-34810wr6me6wq/ansible-tmp-1668399279.1190479-34880-162822510521037/ > /dev/null 2>&1 && sleep 0'
+The full traceback is:
+  File "/tmp/ansible_cisco.iosxr.iosxr_snmp_server_payload_b801g1d5/ansible_cisco.iosxr.iosxr_snmp_server_payload.zip/ansible_collections/ansible/netcommon/plugins/module_utils/network/common/network.py", line 251, in get_capabilities
+    capabilities = Connection(module._socket_path).get_capabilities()
+  File "/tmp/ansible_cisco.iosxr.iosxr_snmp_server_payload_b801g1d5/ansible_cisco.iosxr.iosxr_snmp_server_payload.zip/ansible/module_utils/connection.py", line 200, in __rpc__
+    raise ConnectionError(to_text(msg, errors='surrogate_then_replace'), code=code)
+fatal: [10.0.150.231]: FAILED! => {
+    "changed": false,
+    "invocation": {
+        "module_args": {
+            "config": null,
+            "running_config": null,
+            "state": "deleted"
+        }
+    },
+    "msg": "[Errno 60] Operation timed out"
+}
+
+PLAY RECAP *********************************************************************
+10.0.150.231               : ok=16   changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
+
+Command exited with status 2 after 98.26517677307129 seconds.
+Run command: /Users/amhatre/ansible_venvs/py3.6.10/bin/python /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/ansible_venvs/py3.6.10/bin/python
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 0 after 0.07487106323242188 seconds.
+Run command: /Users/amhatre/.pyenv/shims/python2 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/.pyenv/shims/python2
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 127 after 0.20929408073425293 seconds.
+Run command: /Users/amhatre/.pyenv/shims/python2.7 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/.pyenv/shims/python2.7
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 127 after 0.20583176612854004 seconds.
+Run command: /Users/amhatre/ansible_venvs/py3.6.10/bin/python3 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/ansible_venvs/py3.6.10/bin/python3
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 0 after 0.05463814735412598 seconds.
+Run command: /Users/amhatre/.pyenv/shims/python3.5 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/.pyenv/shims/python3.5
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 127 after 0.21368074417114258 seconds.
+Run command: /Users/amhatre/ansible_venvs/py3.6.10/bin/python3.6 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/ansible_venvs/py3.6.10/bin/python3.6
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 0 after 0.05478096008300781 seconds.
+Run command: /Users/amhatre/.pyenv/shims/python3.8 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /Users/amhatre/.pyenv/shims/python3.8
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 127 after 0.21750879287719727 seconds.
+Run command: /usr/local/bin/python3.9 /Users/amhatre/ansible_venvs/py3.6.10/lib/python3.6/site-packages/ansible_test/_data/versions.py
+Working directory: /Users/amhatre/ansible-collections/collections/ansible_collections/cisco/iosxr
+Program found: /usr/local/bin/python3.9
+HOME=/Users/amhatre
+LC_ALL=en_US.UTF-8
+PATH=/Users/amhatre/ansible_venvs/py3.6.10/bin:/Users/amhatre/.pyenv/shims:/Users/amhatre/Library/Python/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/munki
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.2nMyENkL1s/Listeners
+Command exited with status 0 after 0.043450117111206055 seconds.
+Cleaning up temporary python directory: /tmp/python-bdcx7522-ansible
