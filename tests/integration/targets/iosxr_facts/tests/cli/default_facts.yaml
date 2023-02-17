@@ -15,6 +15,7 @@
       - result.ansible_facts.ansible_net_python_version is defined
       - result.ansible_facts.ansible_net_system is defined
       - result.ansible_facts.ansible_net_version is defined
+      - result.ansible_facts.ansible_net_serialnum is defined
       - result.ansible_facts.ansible_network_resources == {}
 
 - ansible.builtin.debug: msg="END cli/default.yaml on connection={{ ansible_connection }}"
