@@ -27,6 +27,13 @@
               use:
                 neighbor_group: test_ng
                 session_group: test_sg
+              password:
+                inheritance_disable: true
+              local_as:
+                value: 65539
+                no_prepend:
+                  replace_as:
+                    set: true
               bfd:
                 fast_detect:
                   set: true

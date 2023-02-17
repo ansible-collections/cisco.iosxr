@@ -492,6 +492,19 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             ],
                             "options": {
                                 "value": {"type": "int"},
+                                "no_prepend": {
+                                    "type": "dict",
+                                    "options": {
+                                        "set": {"type": "bool"},
+                                        "replace_as": {
+                                            "type": "dict",
+                                            "options": {
+                                                "set": {"type": "bool"},
+                                                "dual_as": {"type": "bool"},
+                                            },
+                                        },
+                                    },
+                                },
                                 "inheritance_disable": {"type": "bool"},
                             },
                         },
@@ -537,6 +550,19 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "validation": {
                                     "type": "dict",
                                     "options": {"disable": {"type": "bool"}},
+                                },
+                            },
+                        },
+                        "password": {
+                            "type": "dict",
+                            "no_log": False,
+                            "mutually_exclusive": [
+                                ["encrypted", "inheritance_disable"],
+                            ],
+                            "options": {
+                                "encrypted": {"type": "str", "no_log": True},
+                                "inheritance_disable": {
+                                    "type": "bool",
                                 },
                             },
                         },
@@ -1186,6 +1212,19 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     ],
                                     "options": {
                                         "value": {"type": "int"},
+                                        "no_prepend": {
+                                            "type": "dict",
+                                            "options": {
+                                                "set": {"type": "bool"},
+                                                "replace_as": {
+                                                    "type": "dict",
+                                                    "options": {
+                                                        "set": {"type": "bool"},
+                                                        "dual_as": {"type": "bool"},
+                                                    },
+                                                },
+                                            },
+                                        },
                                         "inheritance_disable": {
                                             "type": "bool",
                                         },
@@ -1243,6 +1282,19 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "disable": {"type": "bool"},
                                             },
+                                        },
+                                    },
+                                },
+                                "password": {
+                                    "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["encrypted", "inheritance_disable"],
+                                    ],
+                                    "no_log": False,
+                                    "options": {
+                                        "encrypted": {"type": "str", "no_log": True},
+                                        "inheritance_disable": {
+                                            "type": "bool",
                                         },
                                     },
                                 },

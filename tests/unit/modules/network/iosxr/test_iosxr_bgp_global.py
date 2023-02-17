@@ -228,6 +228,15 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                                 neighbor_group="test_ng",
                                 session_group="test_sg",
                             ),
+                            password=dict(
+                                inheritance_disable="true",
+                            ),
+                            local_as=dict(
+                                value="65539",
+                                no_prepend=dict(
+                                    set="true",
+                                ),
+                            ),
                         ),
                     ],
                     vrfs=[dict(vrf="vrf1", default_metric=5)],
@@ -246,6 +255,8 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "bfd multiplier 6",
             "use session-group test_sg",
             "use neighbor-group test_ng",
+            "local-as 65539 no-prepend",
+            "password inheritance-disable",
             "remote-as 65538",
         ]
         result = self.execute_module(changed=True)
@@ -447,7 +458,9 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 running_config="router bgp 65536\n bgp confederation identifier 4\n "
                 "bgp router-id 192.0.2.10\n bgp cluster-id 5\n default-metric 4\n "
                 "socket send-buffer-size 4098\n bgp bestpath med confed\n "
-                "socket receive-buffer-size 514\n neighbor 192.0.2.11\n  remote-as 65537\n  "
+                "socket receive-buffer-size 514\n neighbor 192.0.2.11\n  "
+                "local-as 4 no-prepend replace-as\n  "
+                "password encrypted 15060E1F107B\n  remote-as 65537\n  "
                 "cluster-id 3\n !\n neighbor 192.0.2.14\n  remote-as 65538\n  description test nbr description\n"
                 " bfd fast-detect strict-mode\n "
                 " bfd multiplier 6\n  bfd minimum-interval 20\n !\n!",
@@ -466,7 +479,16 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "default_metric": 4,
             "socket": {"send_buffer_size": 4098, "receive_buffer_size": 514},
             "neighbors": [
-                {"neighbor_address": "192.0.2.11", "remote_as": 65537, "cluster_id": "3"},
+                {
+                    "neighbor_address": "192.0.2.11",
+                    "remote_as": 65537,
+                    "cluster_id": "3",
+                    "password": {"encrypted": "15060E1F107B"},
+                    "local_as": {
+                        "no_prepend": {"replace_as": {"set": True}},
+                        "value": 4,
+                    },
+                },
                 {
                     "neighbor_address": "192.0.2.14",
                     "remote_as": 65538,

@@ -1,0 +1,4 @@
+---
+minor_changes:
+  - bgp_global - Add ``no_prepend`` option and  ``set`` and ``replace_as`` suboptions under local_as option. (https://github.com/ansible-collections/cisco.iosxr/issues/336)
+  - bgp_global - Add ``password`` option and  ``encrypted`` and ``inheritance_disable`` suboptions. (https://github.com/ansible-collections/cisco.iosxr/issues/337)

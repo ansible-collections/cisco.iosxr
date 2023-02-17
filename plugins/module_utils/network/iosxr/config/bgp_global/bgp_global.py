@@ -116,6 +116,7 @@ class Bgp_global(ResourceModule):
         """
         if self.state not in ["parsed", "gathered"]:
             self.generate_commands()
+            # import epdb;epdb.serve()
             self.run_commands()
         return self.result
 
@@ -277,6 +278,8 @@ class Bgp_global(ResourceModule):
             "local",
             "local_address",
             "origin_as",
+            "password_inheritance_disable",
+            "password_encrypted",
             "remote_as",
             "receive_buffer_size",
             "send_buffer_size",
