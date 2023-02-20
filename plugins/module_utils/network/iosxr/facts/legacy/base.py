@@ -58,8 +58,7 @@ class Default(FactsBase):
         device_info = resp["device_info"]
 
         platform_facts["system"] = device_info["network_os"]
-
-        for item in ("model", "image", "version", "platform", "hostname"):
+        for item in ("serialnum", "model", "image", "version", "platform", "hostname"):
             val = device_info.get("network_os_%s" % item)
             if val:
                 platform_facts[item] = val
