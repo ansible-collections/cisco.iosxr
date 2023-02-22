@@ -248,6 +248,17 @@ class Cliconf(CliconfBase):
                     device_info["network_os_model"] = match.group(1)
                     break
 
+            if "network_os_model" not in device_info:
+                data = self.get_command_output("show inventory")
+                match = re.search(r"DESCR: \"[Cc]isco (\S+ \S+)", data, re.M)
+                if match:
+                    device_info["network_os_model"] = match.group(1)
+
+            data = self.get_command_output("show inventory")
+            match = re.search(r"SN: (\S+)\n\nNAME:", data, re.M)
+            if match:
+                device_info["network_os_serialnum"] = match.group(1)
+
             hostname = self.get_command_output("show running-config hostname")
             match = re.search(r"hostname\s(\S+)$", hostname, re.M)
             if match:
