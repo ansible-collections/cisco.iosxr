@@ -1,3 +1,0 @@
----
-bugfixes:
-  - facts - fix ``ansible_net_model`` and ``ansible_net_seriulnum`` facts gathering issue (https://github.com/ansible-collections/cisco.iosxr/issues/308)
