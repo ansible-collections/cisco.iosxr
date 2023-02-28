@@ -15,6 +15,7 @@
   ansible.builtin.include_tasks: "{{ test_case_to_run }}"
   vars:
     ansible_connection: ansible.netcommon.network_cli
+    ansible_command_timeout: 100
   with_items: "{{ test_items }}"
   loop_control:
     loop_var: test_case_to_run
