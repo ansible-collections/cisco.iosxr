@@ -1,3 +1,0 @@
----
-major_changes:
-  - iosxr_l3_interfaces - fix issue in ipv4 address formatting. (https://github.com/ansible-collections/cisco.iosxr/issues/311).

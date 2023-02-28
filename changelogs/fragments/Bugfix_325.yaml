@@ -1,3 +1,0 @@
----
-bugfixes:
-  - bgp_neighbor_address_family - mark ``soft_reconfiguration`` suboptions ``set``, ``always``, and ``inheritance_disable`` as mutually exclusive. (https://github.com/ansible-collections/cisco.iosxr/issues/325)

@@ -1,3 +1,0 @@
----
-minor_changes:
-  - bgp_global - Add ``use`` option and  ``neighbor_group`` and ``session_group`` suboptions. (https://github.com/ansible-collections/cisco.iosxr/issues/312)

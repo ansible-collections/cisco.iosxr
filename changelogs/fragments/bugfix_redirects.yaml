@@ -1,4 +1,0 @@
----
-trivial:
-  - Move references for NetworkTemplate to the rm_base package as the non-rm_base path is going away.
-  - Move references for is_masklen, to_netmask to  its valid position

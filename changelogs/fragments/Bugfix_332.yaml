@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Bgp_global, Bgp_neighbor_address_family, Bgp_address_family. Make all possible option mutually exclusive.
