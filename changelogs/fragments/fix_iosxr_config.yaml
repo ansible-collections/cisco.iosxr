@@ -1,0 +1,3 @@
+---
+trivial:
+  - Disable replace config test until https://github.com/ansible/pylibssh/issues/222 issue is fixed.
