@@ -13,4 +13,4 @@ issues: https://github.com/ansible-collections/cisco.iosxr/issues
 tags: [cisco, iosxr, networking, netconf]
 # NOTE(pabelanger): We create an empty version key to keep ansible-galaxy
 # happy. We dynamically inject version info based on git information.
-version: "0.0.0"
+version: "5.0.0"
