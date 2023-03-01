@@ -1,0 +1,3 @@
+---
+trivial:
+  - Revert changes in cleanup of acl_interfaces tests.
