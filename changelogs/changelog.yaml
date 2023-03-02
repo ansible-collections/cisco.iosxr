@@ -555,4 +555,8 @@ releases:
       - bugfix_facts.yaml
       - bugfix_redirects.yaml
       - bugix_l3_interface.yaml
-    release_date: "2023-02-28"
+      - fix_galaxy.yaml
+      - fix_iosxr_config.yaml
+      - fix_upstream_tests.yaml
+      - revert_integration_tests.yaml
+    release_date: "2023-03-02"
