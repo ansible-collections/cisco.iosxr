@@ -559,4 +559,4 @@ releases:
       - fix_iosxr_config.yaml
       - fix_upstream_tests.yaml
       - revert_integration_tests.yaml
-      release_date: '2023-03-02'
+    release_date: "2023-03-02"
