@@ -1,3 +1,0 @@
----
-trivial:
-  - Increase "command_timeout" value for acl_interfaces tests.
