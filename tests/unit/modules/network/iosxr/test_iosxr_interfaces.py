@@ -203,6 +203,13 @@ class TestIosxrInterfacesModule(TestIosxrModule):
                         duplex="full",
                         speed=100,
                     ),
+                    dict(
+                        name="FourHundredGigE0/0/0/2",
+                        description="Configured and Merged by Ansible-Network",
+                        mtu=9216,
+                        enabled=True,
+                        duplex="full",
+                    ),
                 ],
                 state="rendered",
             ),
@@ -220,6 +227,11 @@ class TestIosxrInterfacesModule(TestIosxrModule):
             "speed 100",
             "duplex full",
             "shutdown",
+            "interface FourHundredGigE0/0/0/2",
+            "description Configured and Merged by Ansible-Network",
+            "mtu 9216",
+            "duplex full",
+            "no shutdown",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
