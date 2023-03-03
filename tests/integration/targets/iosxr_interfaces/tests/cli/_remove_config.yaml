@@ -11,6 +11,7 @@
     - GigabitEthernet 0/0/0/1
     - GigabitEthernet 0/0/0/2
     - GigabitEthernet 0/0/0/3
+    - loopback 777
   ignore_errors: true
   cisco.iosxr.iosxr_config:
     lines:
