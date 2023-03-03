@@ -306,7 +306,16 @@ class Interfaces(ConfigBase):
             ):
                 remove_command_from_config_list(interface, "duplex", commands)
 
-        if interface_type.lower() in ["gigabitethernet", "fourhundredgige"]:
+        if interface_type.lower() in [
+            "gigabitethernet",
+            "fourhundredgige",
+            "fiftygige",
+            "fortygige",
+            "hundredgige",
+            "twohundredgige",
+            "tengige",
+            "twentyfivegige",
+        ]:
             if have.get("mtu") and want.get("mtu") != have.get("mtu"):
                 remove_command_from_config_list(interface, "mtu", commands)
 
