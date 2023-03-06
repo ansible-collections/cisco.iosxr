@@ -1,0 +1,3 @@
+---
+trivial:
+  - Fix issue in l3 interface asseration.
