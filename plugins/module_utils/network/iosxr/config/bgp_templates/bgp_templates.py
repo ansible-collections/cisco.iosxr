@@ -47,7 +47,35 @@ class Bgp_templates(ResourceModule):
             resource="bgp_templates",
             tmplt=Bgp_templatesTemplate(),
         )
-        self.parsers = []
+        self.parsers = [
+            "router",
+            "advertise",
+            "aigp",
+            "allowas_in",
+            "as_override",
+            "bestpath_origin_as_allow_invalid",
+            "capability_orf_prefix",
+            "default_originate",
+            "long_lived_graceful_restart_capable",
+            "long_lived_graceful_restart_stale_time",
+            "maximum_prefix",
+            "multipath",
+            "next_hop_self",
+            "next_hop_unchanged",
+            "optimal_route_reflection_group_name",
+            "origin_as",
+            "remove_private_AS",
+            "route_reflector_client",
+            "send_community_ebgp",
+            "send_community_gshut_ebgp",
+            "send_extended_community_ebgp",
+            "send_multicast_attributes",
+            "soft_reconfiguration",
+            "weight",
+            "route_policy.inbound",
+            "route_policy.outbound",
+            "signalling",
+        ]
 
     def execute_module(self):
         """Execute the module
@@ -57,16 +85,23 @@ class Bgp_templates(ResourceModule):
         """
         if self.state not in ["parsed", "gathered"]:
             self.generate_commands()
+            import epdb
+
+            epdb.serve()
             self.run_commands()
+
         return self.result
 
     def generate_commands(self):
         """Generate configuration commands to send based on
         want, have and desired state.
         """
-        wantd = {entry["name"]: entry for entry in self.want}
-        haved = {entry["name"]: entry for entry in self.have}
+        w_asn = self.want.pop("as_number", "")
+        h_asn = self.have.pop("as_number", "")
 
+        asn = w_asn or h_asn
+        wantd = self._bgp_list_to_dict(deepcopy(self.want))
+        haved = self._bgp_list_to_dict(deepcopy(self.have))
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
             wantd = dict_merge(haved, wantd)
@@ -76,19 +111,163 @@ class Bgp_templates(ResourceModule):
             haved = {k: v for k, v in iteritems(haved) if k in wantd or not wantd}
             wantd = {}
 
-        # remove superfluous config for overridden and deleted
         if self.state in ["overridden", "deleted"]:
-            for k, have in iteritems(haved):
-                if k not in wantd:
-                    self._compare(want={}, have=have)
+            cmds = []
+            for k, have in iteritems(haved.get("neighbor", {})):
+                if k not in wantd.get("neighbor", {}):
+                    cmds.append("no neighbor-group {0}".format(have["name"]))
+            self.commands.extend(cmds)
 
-        for k, want in iteritems(wantd):
-            self._compare(want=want, have=haved.pop(k, {}))
+        self._compare(asn, want=wantd, have=haved)
 
-    def _compare(self, want, have):
+    def _compare(self, asn, want, have):
         """Leverages the base class `compare()` method and
         populates the list of commands to be run by comparing
         the `want` and `have` data with the `parsers` defined
-        for the Bgp_templates network resource.
+        for the Bgp_global network resource.
         """
-        self.compare(parsers=self.parsers, want=want, have=have)
+        self._compare_ngs(want=want, have=have)
+        self.commands.insert(0, "router bgp {0}".format(asn))
+
+    def _compare_ngs(self, want, have):
+        """Leverages the base class `compare()` method and
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Bgp_global neighbor resource.
+        """
+        neighbor_parsers = [
+            "use.neighbor_group",
+            "use.session_group",
+            "advertisement_interval",
+            "bfd_fast_detect_disable",
+            "bfd_fast_detect_strict_mode",
+            "bfd_fast_detect_set",
+            "bfd_nbr_minimum_interval",
+            "bfd_nbr_multiplier",
+            "bmp_activate",
+            "dmz_link_bandwidth",
+            "dmz_link_bandwidth_inheritance_disable",
+            "neighbor_description",
+            "neighbor_cluster_id",
+            "dscp",
+            "ebgp_multihop_value",
+            "ebgp_multihop_mpls",
+            "ebgp_recv_extcommunity_dmz",
+            "ebgp_recv_extcommunity_dmz_set",
+            "ebgp_send_extcommunity_dmz",
+            "ebgp_send_extcommunity_dmz_set",
+            "ebgp_send_extcommunity_dmz_cumulatie",
+            "egress_engineering",
+            "egress_engineering_set",
+            "idle_watch_time",
+            "internal_vpn_client",
+            "ignore_connected_check",
+            "ignore_connected_check_set",
+            "neighbor_enforce_first_as_disable",
+            "neighbor_graceful_restart_restart_time",
+            "neighbor_graceful_restart_stalepath_time",
+            "keychain",
+            "keychain_name",
+            "local_as_inheritance_disable",
+            "local_as",
+            "local",
+            "local_address",
+            "origin_as",
+            "password_inheritance_disable",
+            "password_encrypted",
+            "peer_set",
+            "precedence",
+            "remote_as",
+            "remote_as_list",
+            "receive_buffer_size",
+            "send_buffer_size",
+            "session_open_mode",
+            "neighbor_shutdown",
+            "neighbor_shutdown_inheritance_disable",
+            "neighbor_tcp_mss",
+            "neighbor_tcp_mss_inheritance_disable",
+            "neighbor_timers_keepalive",
+            "update_source",
+            "neighbor_ttl_security_inheritance_disable",
+            "neighbor_ttl_security",
+            "neighbor_graceful_maintenance_set",
+            "neighbor_graceful_maintenance_activate",
+            "neighbor_graceful_maintenance_activate_inheritance_disable",
+            "neighbor_graceful_maintenance_as_prepends",
+            "neighbor_graceful_maintenance_local_preference_disable",
+            "neighbor_graceful_maintenance_local_preference",
+            "neighbor_graceful_maintenance_as_prepends_value",
+            "neighbor_capability_additional_paths_send",
+            "neighbor_capability_additional_paths_send_disable",
+            "neighbor_capability_additional_paths_rcv_disable",
+            "neighbor_capability_additional_paths_rcv",
+            "neighbor_capability_suppress_four_byte_AS",
+            "neighbor_capability_suppress_all",
+            "neighbor_capability_suppress_all_inheritance_disable",
+            "neighbor_log_message_in_value",
+            "neighbor_log_message_in_disable",
+            "neighbor_log_message_in_inheritance_disable",
+            "neighbor_log_message_out_value",
+            "neighbor_log_message_out_disable",
+            "neighbor_log_message_out_inheritance_disable",
+            "neighbor_update_in_filtering_attribute_filter_group",
+            "neighbor_update_in_filtering_logging_disable",
+            "neighbor_update_in_filtering_message_buffers",
+        ]
+
+        want_nbr = want.get("neighbor", {})
+        have_nbr = have.get("neighbor", {})
+        for name, entry in iteritems(want_nbr):
+            have = have_nbr.pop(name, {})
+            begin = len(self.commands)
+            self.compare(parsers=neighbor_parsers, want=entry, have=have)
+            self._compare_af(want=entry, have=have)
+            name = entry.get("name", "")
+            if len(self.commands) != begin:
+                self.commands.insert(
+                    begin,
+                    self._tmplt.render(
+                        {"name": name},
+                        "neighbor_group",
+                        False,
+                    ),
+                )
+
+    def _compare_af(self, want, have):
+        """Custom handling of afs option
+        :params want: the want BGP dictionary
+        :params have: the have BGP dictionary
+        """
+        wafs = want.get("address_family", {})
+        hafs = have.get("address_family", {})
+        for name, entry in iteritems(wafs):
+            begin = len(self.commands)
+            af_have = hafs.pop(name, {})
+            self.compare(parsers=self.parsers, want=entry, have=af_have)
+            if len(self.commands) != begin or (not af_have and entry):
+                self.commands.insert(
+                    begin,
+                    self._tmplt.render(
+                        {"afi": entry.get("afi"), "safi": entry.get("safi")},
+                        "address_family",
+                        False,
+                    ),
+                )
+
+        for name, entry in iteritems(hafs):
+            self.addcmd(
+                {"afi": entry.get("afi"), "safi": entry.get("safi")},
+                "address_family",
+                True,
+            )
+
+    def _bgp_list_to_dict(self, data):
+
+        if "neighbor" in data:
+            for nbr in data["neighbor"]:
+                if "address_family" in nbr:
+                    nbr["address_family"] = {
+                        (x["afi"], x.get("safi")): x for x in nbr["address_family"]
+                    }
+            data["neighbor"] = {x["name"]: x for x in data["neighbor"]}
+        return data

@@ -49,11 +49,11 @@ class Bgp_templatesFacts(object):
         objs = []
 
         if not data:
-            data = connection.get()
+            data = connection.get("show running-config router bgp")
         data = flatten_config(data, "neighbor-group")
         # parse native config using the Bgp_templates template
         bgp_templates_parser = Bgp_templatesTemplate(lines=data.splitlines(), module=self._module)
-        objs = list(bgp_templates_parser.parse().values())
+        objs = bgp_templates_parser.parse()
         if objs:
             objs["neighbor"] = self._post_parse(objs).get(
                 "neighbor",

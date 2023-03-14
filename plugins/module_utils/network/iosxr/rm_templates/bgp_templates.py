@@ -154,7 +154,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "address_family",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 (?P<address_family>\s+address-family\s(?P<afi>\S+)\s(?P<safi>\S+))
                 $""", re.VERBOSE,
             ),
@@ -162,7 +162,6 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "result": {
                         "neighbor": {
                             "{{nbr_address.split(" ")[1]}}": {
-                                "name": "{{nbr_address.split(" ")[1]}}",
                                 "address_family": {
                                     '{{"address_family_" + afi + "_" + safi }}': {
                                         "afi": "{{ afi}}",
@@ -175,16 +174,33 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "shared": True,
         },
         {
+            "name": "neighbor_group",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "neighbor-group {{ name}}",
+            "result": {
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "name": "{{nbr_address.split(" ")[1]}}",
+                    },
+                },
+            },
+            "shared": True,
+        },
+        {
             "name": "signalling",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \sSignalling(?P<signalling>)
                 (\sbgp\sdisable(?P<b_disable>))?
                 (\sldp\sdisable(?P<l_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "'signalling bgp disable' if {{signalling.bgp_disable}} else 'signalling ldp disable' ",
+            "setval": "{{ 'signalling bgp disable' if signalling.bgp_disable else 'signalling ldp disable' }} ",
             "result": {
                 "neighbor": {
                     "{{nbr_address.split(" ")[1]}}": {
@@ -204,13 +220,13 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "advertise",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \sadvertise
                 (\slocal-labeled-route(?P<set>))?
                 (\sdisable(?P<l_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "'advertise local-labeled-route disable' if {{advertise.local_labeled_route.disable}} else 'advertise local-labeled-route' ",
+            "setval": "advertise local-labeled-route disable if {{advertise.local_labeled_route.disable}} is defined else advertise local-labeled-route ",
             "result": {
                 "neighbor": {
                     "{{nbr_address.split(" ")[1]}}": {
@@ -218,7 +234,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
                             '{{"address_family_" + afi + "_" + safi }}': {
                                 "advertise": {
                                     "local_labeled_route": {
-                                        "set": "{{ True if disable not defined and set is defined}}",
+                                        "set": "{{ True if disable is not defined and set is defined}}",
                                         "disable": "{{ True if disable is defined}}",
                                     },
                                 },
@@ -232,7 +248,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "aigp",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \saigp(?P<aigp>)
                 (\sdisable(?P<disable>))?
                 (\ssend\smed(?P<send_med>))?
@@ -265,7 +281,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "allowas_in",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \sallowas-in(?P<allowas_in>)(\s(?P<value>\S+))?
                 $""", re.VERBOSE,
             ),
@@ -337,7 +353,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "capability_orf_prefix",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \scapability\sorf\sprefix\s(?P<capability_orf_prefix>\S+)
                 $""", re.VERBOSE,
             ),
@@ -358,7 +374,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "default_originate",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \sdefault-originate(?P<default_originate>)
                 (\sroute-policy\s(?P<route_policy>\S+))?
                 (\sinheritance-disable(?P<inheritance_disable>))?
@@ -386,11 +402,11 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "encapsulation_type_srv6",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
-                \sencapsulation\stype\ssrv6(?P<encapsulation_type_srv6>)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \sencapsulation-type\ssrv6(?P<encapsulation_type_srv6>)
                 $""", re.VERBOSE,
             ),
-            "setval": "capability orf prefix {{capability_orf_prefix }}",
+            "setval": "encapsulation-type srv6",
             "result": {
                 "neighbor": {
                     "{{nbr_address.split(" ")[1]}}": {
@@ -407,7 +423,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "long_lived_graceful_restart_capable",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \s+long-lived-graceful-restart
                 \s(?P<capable>capable)
                 $""", re.VERBOSE,
@@ -433,7 +449,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "long_lived_graceful_restart_stale_time",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \s+long-lived-graceful-restart
                 \s+stale-time\ssend\s(?P<stale_time_send>\d+)\saccept\s(?P<accept>\d+)
                 $""", re.VERBOSE,
@@ -462,7 +478,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "maximum_prefix",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \s+maximum-prefix
                 (\s(?P<maximum_prefix>\d+))?
                 (\s(?P<threshold_value>\d+))?
@@ -494,7 +510,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "multipath",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \smultipath(?P<multipath>)
                 $""", re.VERBOSE,
             ),
@@ -515,7 +531,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "next_hop_self",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \snext-hop-self(?P<next_hop_self>)
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
@@ -541,7 +557,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "next_hop_unchanged",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \snext-hop-unchanged(?P<next_hop_unchanged>)
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 (\smultipath(?P<multipath>))?
@@ -568,7 +584,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "optimal_route_reflection_group_name",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \soptimal-route-reflection\s(?P<group_name>\S+)
                 $""", re.VERBOSE,
             ),
@@ -589,7 +605,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "orf_route_policy",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor\s\S+)
+                \s+(?P<nbr_address>neighbor\s\S+)
                 \sorf\sroute-policy\s(?P<orf_rr>\S+)
                 $""", re.VERBOSE,
             ),
@@ -635,7 +651,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "remove_private_AS",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \sremove-private-AS(?P<remove_private_AS>)
                 (\sinbound(?P<inbound>))?
                 (\sentire-aspath(?P<entire_aspath>))?
@@ -644,7 +660,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             ),
             "setval": _tmpl_remove_private_AS,
             "result": {
-                        "neighbors": {
+                        "neighbor": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "address_family": {
                                     '{{"address_family_" + afi + "_" + safi }}': {
@@ -664,7 +680,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "route_policy.inbound",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \sroute-policy\s(?P<route_policy>\S+)
                 \sin
                 $""", re.VERBOSE,
@@ -688,7 +704,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "route_policy.outbound",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \sroute-policy\s(?P<route_policy>\S+)
                 \sout
                 $""", re.VERBOSE,
@@ -739,7 +755,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "send_community_ebgp",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \ssend-community-ebgp(?P<send_community_ebgp>)
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
@@ -793,7 +809,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "send_extended_community_ebgp",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \ssend-extended-community-ebgp(?P<send_extended_community_ebgp>)
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
@@ -820,7 +836,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "send_multicast_attributes",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \s+(?P<send_multicast_attributes>send-multicast-attributes)
                 (\sdisable(?P<disable>))?
                 $""", re.VERBOSE,
@@ -847,7 +863,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "soft_reconfiguration",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \ssoft-reconfiguration
                 \sinbound(?P<inbound>)
                 (\salways(?P<always>))?
@@ -879,7 +895,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "weight",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \sweight\s(?P<weight>\d+)
                 $""", re.VERBOSE,
             ),
@@ -900,7 +916,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "use",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \suse\s(?P<af_use>\S+)
                 $""", re.VERBOSE,
             ),
@@ -921,7 +937,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "name": "update",
             "getval": re.compile(
                 r"""
-                (?P<nbr_address>neighbor-group\s\S+)
+                \s+(?P<nbr_address>neighbor-group\s\S+)
                 \supdate\sout\soriginator-loopcheck(?P<set>)
                 (\sdisable(?P<disable>))?
                 $""", re.VERBOSE,
@@ -1221,6 +1237,28 @@ class Bgp_templatesTemplate(NetworkTemplate):
                         "neighbor": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "ebgp_multihop": {"mpls": "{{ True if ebgp_multihop is defined }}"},
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "ebgp_recv_extcommunity_dmz_set",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<ebgp_recv_extcommunity_dmz>ebgp-recv-extcommunity-dmz)
+                $""", re.VERBOSE,
+            ),
+            "setval": "ebgp-recv-extcommunity-dmz inheritance-disable",
+            "compval": "ebgp_recv_extcommunity_dm.set",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "ebgp_recv_extcommunity_dmz": {
+                                    "set": "{{ True if ebgp_recv_extcommunity_dmz is defined }}",
+                                },
                             },
                         },
             },
@@ -1640,7 +1678,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
                 \sidle-watch-time(?P<idle_watch_time>\s\S+)
                 $""", re.VERBOSE,
             ),
-            "setval": "idle_watch_time {{idle_watch_time}} ",
+            "setval": "idle-watch-time {{idle_watch_time}} ",
             "result": {
 
                 "neighbor": {
@@ -1656,10 +1694,10 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                  \s+(?P<nbr_address>neighbor-group\s\S+)
-                (?P<idle_watch_time>\sinternal-vpn-client)
+                (?P<internal_vpn_client>\sinternal-vpn-client)
                 $""", re.VERBOSE,
             ),
-            "setval": "internal-vpn-client ",
+            "setval": "internal-vpn-client",
             "result": {
 
                 "neighbor": {
@@ -1763,6 +1801,26 @@ class Bgp_templatesTemplate(NetworkTemplate):
             },
         },
         {
+            "name": "local_as_inheritance_disable",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<local_as>local-as\sinheritance-disable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "local-as inheritance-disable",
+            "compval": "local_as.inheritance_disable",
+            "result": {
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "local_as": {
+                                    "inheritance_disable": "{{ True if local_as is defined }}",
+                                },
+                            },
+                        },
+            },
+        },
+        {
             "name": "local_as",
             "getval": re.compile(
                 r"""
@@ -1795,23 +1853,879 @@ class Bgp_templatesTemplate(NetworkTemplate):
 
         },
         {
-            "name": "local_address",
+            "name": "local_address_subnet",
             "getval": re.compile(
                 r"""
                 \s+(?P<nbr_address>neighbor-group\s\S+)
-                \slocal
-                \s(?P<local>address\sinheritance-disable)
+                \slocal-address-subnet(?P<local>\s\S+)
                 $""", re.VERBOSE,
             ),
-            "setval": "local address inheritance-disable",
-            "compval": "local.address.inheritance_disable",
+            "setval": "local-address-subnet {{local_address_subnet}}",
             "result": {
 
                         "neighbor": {
                             "{{nbr_address.split(" ")[1]}}": {
-                                "local": {
-                                    "address": {
-                                        "inheritance_disable": "{{ True if local is defined }}",
+                                "local_address_subnet": "{{local}}",
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_log_message_in_value",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \slog
+                \smessage
+                \s(?P<value>in\s\d+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "log message in {{ log.message.in.value}}",
+            "compval": "log.log_message.in.value",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "log": {
+                                    "log_message": {
+                                        "in": {
+                                            "value": "{{ value.split(" ")[1] }}",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_log_message_in_disable",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor-group\s\S+)
+                \slog
+                \smessage
+                \s(?P<disable>in\sdisable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "log message in disable",
+            "compval": "log.log_message.in.disable",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "log": {
+                                    "log_message": {
+                                        "in": {
+                                            "disable": "{{ True if disable is defined }}",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_log_message_in_inheritance_disable",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \slog
+                \smessage
+                \s(?P<disable>in\sinheritance-diable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "log message in inheritance-diable",
+            "compval": "log.log_message.in.inheritance_disable",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "log": {
+                                    "log_message": {
+                                        "in": {
+                                            "inheritance_disable": "{{ True if disable is defined }}",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+        },
+        {
+            "name": "neighbor_log_message_out_value",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor-group\s\S+)
+                \slog
+                \smessage
+                \s(?P<value>out\s\d+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "log message out {{ log.message.out.value}}",
+            "compval": "log.log_message.out.value",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "log": {
+                                    "log_message": {
+                                        "out": {
+                                            "value": "{{ value.split(" ")[1] }}",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+        },
+        {
+            "name": "neighbor_log_message_out_disable",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor-group\s\S+)
+                \slog
+                \smessage
+                \s(?P<disable>out\sdisable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "log message out disable",
+            "compval": "log.log_message.out.disable",
+            "result": {
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "log": {
+                                    "log_message": {
+                                        "out": {
+                                            "disable": "{{ True if disable is defined }}",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_log_message_out_inheritance_disable",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor-group\s\S+)
+                \slog
+                \smessage
+                \s(?P<disable>out\sinheritance-diable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "log message out inheritance-diable",
+            "compval": "log.log_message.out.inheritance_disable",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "log": {
+                                    "log_message": {
+                                        "out": {
+                                            "inheritance_disable": "{{ True if disable is defined }}",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "maximum_peers",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \smaximum-peers(?P<local>\s\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "maximum-peers {maximum_peers}}",
+            "result": {
+
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "maximum_peers": "{{local}}",
+                    },
+                },
+            },
+
+        },
+        {
+            "name": "password_inheritance_disable",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<password>password\sinheritance-disable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "password inheritance-disable",
+            "compval": "password.inheritance_disable",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "password": {
+                                    "inheritance_disable": "{{ True if password is defined }}",
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "password_encrypted",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor-group\s\S+)
+                \spassword\sencrypted
+                \s(?P<password>\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "password encrypted {{password.encrypted}}",
+            "compval": "password.encrypted",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "password": {
+                                    "encrypted": "{{ password }}",
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "peer_set",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \speer-set(?P<local>\s\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "peer-set {peer_set}}",
+            "result": {
+
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "peer_set": "{{local}}",
+                    },
+                },
+            },
+
+        },
+        {
+            "name": "receive_buffer_size",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<receive_buffer_size>receive-buffer-size\s\d+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "receive-buffer-size {{ receive_buffer_size }}",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "receive_buffer_size": "{{ receive_buffer_size.split(" ")[1] }}",
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "send_buffer_size",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<send_buffer_size>send-buffer-size\s\d+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "send-buffer-size {{ send_buffer_size }}",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "send_buffer_size": "{{ send_buffer_size.split(" ")[1] }}",
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "precedence",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \sprecedence\s(?P<local>\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "precedence {{precedence}}",
+            "result": {
+
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "precedence": "{{local}}",
+                    },
+                },
+            },
+
+        },
+        {
+            "name": "remote_as",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<remote_as>remote-as\s\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "remote-as {{ remote_as }}",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "remote_as": "{{ remote_as.split(" ")[1] }}",
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "remote_as_list",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<remote_as>remote-as-list\s\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "remote-as-list {{ remote_as_list }}",
+            "result": {
+
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "remote_as_list": "{{ remote_as.split(" ")[1] }}",
+                    },
+                },
+            },
+
+        },
+        {
+            "name": "session_open_mode",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<session_open_mode>session-open-mode\s(active-only|both|passive-only))
+                $""", re.VERBOSE,
+            ),
+            "setval": "session-open-mode {{ session_open_mode }}",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "session_open_mode": "{{ session_open_mode.split(" ")[1] }}",
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_shutdown",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<shutdown>shutdown)
+                $""", re.VERBOSE,
+            ),
+            "setval": "shutdown",
+            "compval": "shutdown",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "shutdown": {
+                                    "set": "{{ True if shutdown is defined }}",
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_shutdown_inheritance_disable",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<shutdown>shutdown\sinheritance_disable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "shutdown inheritance-disable",
+            "compval": "shutdown.inheritance_disable",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "shutdown": {"inheritance_disable": "{{ True if shutdown is defined }}"},
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_tcp_mss_inheritance_disable",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<tcp_mss_disable>tcp\smss\sinheritance-disable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "tcp mss inheritance-disable",
+            "compval": "tcp.mss.inheritance_disable",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "tcp": {
+                                    "mss": {
+                                        "inheritance_disable": "{{ True if tcp_mss_disable is defined }}",
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_tcp_mss",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<tcp_mss>tcp\smss\s\d+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "tcp mss {{ tcp.mss.value }}",
+            "compval": "tcp.mss.value",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "tcp": {
+                                    "mss": {
+                                        "value": "{{ tcp_mss.split(" ")[2] }}",
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_timers_keepalive",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<timers_keepalive_time>timers\s\d+)
+                \s(?P<timers_holdtime>\d+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "timers {{ timers.keepalive_time}} {{ timers.holdtime }}",
+            "compval": "timers",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "timers": {
+                                    "keepalive_time": "{{ timers_keepalive_time.split(" ")[1] }}",
+                                    "holdtime": "{{ timers_holdtime.split(" ")[0] }}",
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "use.neighbor_group",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \suse\sneighbor-group\s(?P<neighbor_group>\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "use neighbor-group {{ use.neighbor_group }}",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "use": {
+                                    "neighbor_group": "{{ neighbor_group }}",
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "use.session_group",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \suse\ssession-group\s(?P<session_group>\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "use session-group {{ use.session_group }}",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "use": {
+                                    "session_group": "{{ session_group }}",
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "update_source",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \supdate-source
+                \s(?P<update_source>\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "update-source {{ update_source}}",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "update_source": "{{ update_source}}",
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_ttl_security_inheritance_disable",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<ttl_security>ttl-security\sinheritance-disable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "ttl-security inheritance-disable",
+            "compval": "ttl_security.inheritance_disable",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "ttl_security": {
+                                    "inheritance_disable": "{{ True if ttl_security is defined }}",
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_ttl_security",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<ttl_security>ttl-security)
+                $""", re.VERBOSE,
+            ),
+            "setval": "ttl-security",
+            "compval": "ttl_security.set",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "ttl_security": {
+                                    "set": "{{ True if ttl_security is defined }}",
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_update_in_filtering_attribute_filter_group",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<attribute_filter_group>attribute-filter\sgroup\s\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "update in filtering attribute-filter group {{ update.in.filtering.attribute_filter.group }}",
+            "compval": "update.in.filtering.attribute_filter.group",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "update": {
+                                    "in": {
+                                        "filtering": {
+                                            "attribute_filter": {
+                                                "group": "{{ attribute_filter_group.split(" ")[2] }}",
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_update_in_filtering_logging_disable",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<logging_disable>logging\sdisable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "update in filtering logging disable",
+            "compval": "update.in.filtering.logging.disable",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "update": {
+                                    "in": {
+                                        "filtering": {
+                                            "logging": {
+                                                "disable": "{{True if logging_disable is defined }}",
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_update_in_filtering_message_buffers",
+            "getval": re.compile(
+                r"""
+                 \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s(?P<message_buffers>message\sbuffers\s\d+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "update in filtering message buffers {{ update.in.filtering.message.buffers}}",
+            "compval": "update.in.filtering.update_message.buffers",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "update": {
+                                    "in": {
+                                        "filtering": {
+                                            "update_message": {
+                                                "buffers": "{{ message_buffers.split(" ")[2] }}",
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_capability_additional_paths_send",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \scapability
+                \sadditional-paths
+                \s(?P<additional_paths_send>send)
+                $""", re.VERBOSE,
+            ),
+            "setval": "capability additional-paths send",
+            "compval": "capability.additional_paths.send.set",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "capability": {
+                                    "additional_paths": {
+                                        "send": {
+                                            "set": "{{ True if additional_paths_send is defined }}",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_capability_additional_paths_send_disable",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \scapability
+                \sadditional-paths
+                \s(?P<additional_paths_send>send\sdisable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "capability additional-paths send disable",
+            "compval": "capability.additional_paths.send.disable",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "capability": {
+                                    "additional_paths": {
+                                        "send": {
+                                            "disable": "{{ True if additional_paths_send is defined }}",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_capability_additional_paths_rcv",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \scapability
+                \sadditional-paths
+                \s(?P<additional_paths_receive>receive)
+                $""", re.VERBOSE,
+            ),
+            "setval": "capability additional-paths receive",
+            "compval": "capability.additional_paths.receive.set",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "capability": {
+                                    "additional_paths": {
+                                        "receive": {
+                                            "set": "{{ True if additional_paths_receive is defined }}",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_capability_additional_paths_rcv_disable",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \scapability
+                \sadditional-paths
+                \s(?P<additional_paths_receive_disable>receive\sdisable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "capability additional-paths receive disable",
+            "compval": "capability.additional_paths.receive.disable",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "capability": {
+                                    "additional_paths": {
+                                        "receive": {
+                                            "disable": "{{ True if additional_paths_receive_disable is defined }}",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_capability_suppress_four_byte_AS",
+            "getval": re.compile(
+                r"""
+               \s+(?P<nbr_address>neighbor-group\s\S+)
+                \scapability
+                \ssuppress
+                \s(?P<suppress_4_byte_as>4-byte-as)
+                $""", re.VERBOSE,
+            ),
+            "setval": "capability suppress 4-byte-as",
+            "compval": "capability.suppress.four_byte_AS.set",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "capability": {
+                                    "suppress": {
+                                        "four_byte_AS": {
+                                            "set": "{{ True if suppress_4_byte_as is defined }}",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_capability_suppress_all",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \scapability
+                \ssuppress
+                \s(?P<all>all)
+                $""", re.VERBOSE,
+            ),
+            "setval": "capability suppress all",
+            "compval": "capability.suppress.all.set",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "capability": {
+                                    "suppress": {
+                                        "all": {
+                                            "set": "{{ True if all is defined }}",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+
+        },
+        {
+            "name": "neighbor_capability_suppress_all_inheritance_disable",
+            "getval": re.compile(
+                r"""
+               \s+(?P<nbr_address>neighbor-group\s\S+)
+                \scapability
+                \ssuppress
+                \s(?P<all>all\sinheritance-disable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "capability suppress all inheritance-disable",
+            "compval": "capability.suppress.all.inheritance_disable",
+            "result": {
+
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "capability": {
+                                    "suppress": {
+                                        "all": {
+                                            "inheritance_disable": "{{ True if all is defined }}",
+                                        },
                                     },
                                 },
                             },
