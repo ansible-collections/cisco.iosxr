@@ -35,6 +35,9 @@ class Bgp_templatesFacts(object):
         self._module = module
         self.argument_spec = Bgp_templatesArgs.argument_spec
 
+    def get_config(self, connection):
+        return connection.get("show running-config router bgp")
+
     def populate_facts(self, connection, ansible_facts, data=None):
         """Populate the facts for Bgp_templates network resource
 
@@ -49,7 +52,7 @@ class Bgp_templatesFacts(object):
         objs = []
 
         if not data:
-            data = connection.get("show running-config router bgp")
+            data = self.get_config(connection)
         data = flatten_config(data, "neighbor-group")
         # parse native config using the Bgp_templates template
         bgp_templates_parser = Bgp_templatesTemplate(lines=data.splitlines(), module=self._module)
@@ -65,7 +68,7 @@ class Bgp_templatesFacts(object):
             bgp_templates_parser.validate_config(self.argument_spec, {"config": objs}, redact=True),
         )
 
-        facts["bgp_templates"] = params["config"]
+        facts["bgp_templates"] = params.get("config", {})
         ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts
@@ -81,5 +84,6 @@ class Bgp_templatesFacts(object):
                 key=lambda k, s="name": k[s],
             )
             for nbrg in data["neighbor"]:
-                nbrg["address_family"] = list(nbrg["address_family"].values())
+                if nbrg.get("address_family"):
+                    nbrg["address_family"] = list(nbrg["address_family"].values())
         return data

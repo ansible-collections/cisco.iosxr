@@ -22,36 +22,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.r
 )
 
 
-def _tmpl_aigp(config_data):
-    conf = config_data.get("aigp", {})
-    commands = []
-    if conf:
-        if "set" in conf:
-            commands.append("aigp")
-        if "disable" in conf:
-            commands.append("aigp disable")
-        if "send_cost_community_disable" in conf:
-            commands.append("aigp send cost-community disable")
-        if "send_med" in conf and "set" in conf.get("send_med", {}):
-            commands.append("aigp send med")
-        if "send_med" in conf and "disable" in conf.get("send_med", {}):
-            commands.append("aigp send med disable")
-    return commands
-
-
-def _tmpl_default_originate(config_data):
-    conf = config_data.get("default_originate", {})
-    command = ""
-    if conf:
-        if "set" in conf:
-            command = "default-originate"
-        if "inheritance_disable" in conf:
-            command = "default-originate inheritance-disable"
-        if "route_policy" in conf:
-            command = "default-originate route_policy " + conf["route_policy"]
-    return command
-
-
 def _tmpl_maximum_prefix(config_data):
     conf = config_data.get("maximum_prefix", {})
     if conf:
@@ -102,15 +72,13 @@ def _tmpl_soft_reconfiguration(config_data):
 def _tmpl_remove_private_AS(config_data):
     conf = config_data.get("remove_private_AS", {})
     if conf:
-        command = " "
-        if "set" in conf:
-            command = "remove-private-AS"
+        command = "remove-private-AS"
         if "inbound" in conf:
             command += " inbound"
         if "entire_aspath" in conf:
             command += " entire-aspath"
-        elif "inheritance_disable" in conf:
-            command = "remove-private-AS inheritance-disable"
+        if "inheritance_disable" in conf:
+            command += " inheritance-disable"
     return command
 
 
@@ -217,16 +185,14 @@ class Bgp_templatesTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "advertise",
+            "name": "advertise.local_labeled_route.set",
             "getval": re.compile(
                 r"""
                 \s+(?P<nbr_address>neighbor-group\s\S+)
-                \sadvertise
-                (\slocal-labeled-route(?P<set>))?
-                (\sdisable(?P<l_disable>))?
+                (?P<a_Set>\sadvertise\slocal-labeled-route(?P<a_set>))
                 $""", re.VERBOSE,
             ),
-            "setval": "advertise local-labeled-route disable if {{advertise.local_labeled_route.disable}} is defined else advertise local-labeled-route ",
+            "setval": "advertise local-labeled-route",
             "result": {
                 "neighbor": {
                     "{{nbr_address.split(" ")[1]}}": {
@@ -234,8 +200,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
                             '{{"address_family_" + afi + "_" + safi }}': {
                                 "advertise": {
                                     "local_labeled_route": {
-                                        "set": "{{ True if disable is not defined and set is defined}}",
-                                        "disable": "{{ True if disable is defined}}",
+                                        "set": "{{ True if a_set is defined}}",
                                     },
                                 },
                             },
@@ -245,18 +210,64 @@ class Bgp_templatesTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "aigp",
+            "name": "advertise.local_labeled_route.disable",
             "getval": re.compile(
                 r"""
                 \s+(?P<nbr_address>neighbor-group\s\S+)
-                \saigp(?P<aigp>)
-                (\sdisable(?P<disable>))?
-                (\ssend\smed(?P<send_med>))?
-                (\ssend\smed\sdisable(?P<send_disable>))?
-                (\ssend\scost-community\sdisable(?P<cc_disable>))?
+                \sadvertise
+                (\slocal-labeled-route\sdisable(?P<l_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": _tmpl_aigp,
+            "setval": "advertise local-labeled-route disable",
+            "result": {
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "advertise": {
+                                    "local_labeled_route": {
+                                        "disable": "{{ True if l_disable is defined}}",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "advertise.permanent_network",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \sadvertise
+                (\spermanent-network(?P<set>))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "advertise permanent-network",
+            "result": {
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "advertise": {
+                                    "permanent_network": "{{ True if set is defined}}",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "aigp.set",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                (?P<aigp>\saigp)
+                $""", re.VERBOSE,
+            ),
+            "setval": "aigp",
             "result": {
                         "neighbor": {
                             "{{nbr_address.split(" ")[1]}}": {
@@ -264,11 +275,81 @@ class Bgp_templatesTemplate(NetworkTemplate):
                                     '{{"address_family_" + afi + "_" + safi }}': {
                                         "aigp": {
                                             "set": "{{ True if aigp is defined }}",
-                                            "disable": "{{ True if disable is defined}}",
-                                            "send_med": {
-                                                "set": "{{ True if send_med is defined }}",
-                                                "disable": "{{ True if send_disable is defined}}",
-                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+            },
+        },
+        {
+            "name": "aigp.disable",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \saigp(?P<aigp>)
+                (\sdisable(?P<disable>))
+                $""", re.VERBOSE,
+            ),
+            "setval": "aigp disable",
+            "result": {
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "aigp": {
+                                    "disable": "{{ True if disable is defined}}",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "aigp.send_med",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \saigp(?P<aigp>)
+                (\ssend\smed(?P<send_med>))?
+                (\ssend\smed\sdisable(?P<send_disable>))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "'aigp send med disable' if {{aigp.send_med.disable}} is defined else 'aigp send med'",
+            "result": {
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "aigp": {
+                                    "send_med": {
+                                        "set": "{{ True if send_med is defined }}",
+                                        "disable": "{{ True if send_disable is defined}}",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "aigp.send_cost_community_disable",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \saigp(?P<aigp>)
+                (\ssend\scost-community\sdisable(?P<cc_disable>))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "aigp send cost-community disable",
+            "result": {
+                        "neighbor": {
+                            "{{nbr_address.split(" ")[1]}}": {
+                                "address_family": {
+                                    '{{"address_family_" + afi + "_" + safi }}': {
+                                        "aigp": {
                                             "send_cost_community_disable": "{{True if cc_disable is defined}}",
                                         },
                                     },
@@ -371,16 +452,14 @@ class Bgp_templatesTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "default_originate",
+            "name": "default_originate.set",
             "getval": re.compile(
                 r"""
                 \s+(?P<nbr_address>neighbor-group\s\S+)
-                \sdefault-originate(?P<default_originate>)
-                (\sroute-policy\s(?P<route_policy>\S+))?
-                (\sinheritance-disable(?P<inheritance_disable>))?
+                \s+default-originate(?P<default_originate>)
                 $""", re.VERBOSE,
             ),
-            "setval": _tmpl_default_originate,
+            "setval": "default-originate",
             "result": {
 
                         "neighbor": {
@@ -389,13 +468,60 @@ class Bgp_templatesTemplate(NetworkTemplate):
                                     '{{"address_family_" + afi + "_" + safi}}': {
                                         "default_originate": {
                                             "set": "{{True if default_originate is defined}}",
-                                            "route_policy": "{{route_policy}}",
-                                            "inheritance_disable": "{{True if inheritance_disable is defined}}",
                                         },
                                     },
                                 },
                             },
                         },
+            },
+        },
+        {
+            "name": "default_originate.route_policy",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s+default-originate(?P<default_originate>)
+                (\sroute-policy\s(?P<route_policy>\S+))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "default-originate route-policy {{default_originate.route_policy}}",
+            "result": {
+
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi}}': {
+                                "default_originate": {
+                                    "route_policy": "{{route_policy}}",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "default_originate.inheritance_disable",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \s+default-originate\s(?P<disable>inheritance-disable)
+                $""", re.VERBOSE,
+            ),
+            "setval": "default-originate inheritance-disable",
+            "result": {
+
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi}}': {
+                                "default_originate": {
+                                    "inheritance_disable": "{{true if disable is defined}}",
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -506,6 +632,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
                         },
             },
         },
+
         {
             "name": "multipath",
             "getval": re.compile(
@@ -554,16 +681,14 @@ class Bgp_templatesTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "next_hop_unchanged",
+            "name": "next_hop_unchanged.set",
             "getval": re.compile(
                 r"""
                 \s+(?P<nbr_address>neighbor-group\s\S+)
                 \snext-hop-unchanged(?P<next_hop_unchanged>)
-                (\sinheritance-disable(?P<inheritance_disable>))?
-                (\smultipath(?P<multipath>))?
                 $""", re.VERBOSE,
             ),
-            "setval": _tmpl_next_hop_unchanged,
+            "setval": "next-hop-unchanged",
             "result": {
                         "neighbor": {
                             "{{nbr_address.split(" ")[1]}}": {
@@ -571,13 +696,59 @@ class Bgp_templatesTemplate(NetworkTemplate):
                                     '{{"address_family_" + afi + "_" + safi}}': {
                                         "next_hop_unchanged": {
                                             "set": "{{True if next_hop_self is defined }}",
-                                            "inheritance_disable": "{{True if inheritance_disable is defined}}",
-                                            "multipath": "{{True if multipath is defined}}",
                                         },
                                     },
                                 },
                             },
                         },
+            },
+        },
+        {
+            "name": "next_hop_unchanged.inheritance_disable",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \snext-hop-unchanged(?P<next_hop_unchanged>)
+                ((?P<inheritance_disable>)\sinheritance-disable)?
+                $""", re.VERBOSE,
+            ),
+            "setval": "next-hop-unchanged inheritance-disable",
+            "result": {
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi}}': {
+                                "next_hop_unchanged": {
+                                    "inheritance_disable": "{{True if inheritance_disable is defined}}",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "next_hop_unchanged.multipath",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \snext-hop-unchanged(?P<next_hop_unchanged>)
+                (?P<multipath>\smultipath)?
+                $""", re.VERBOSE,
+            ),
+            "setval": "next-hop-unchanged multipath",
+            "result": {
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi}}': {
+                                "next_hop_unchanged": {
+                                    "multipath": "{{True if multipath is defined}}",
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -648,6 +819,29 @@ class Bgp_templatesTemplate(NetworkTemplate):
             },
         },
         {
+            "name": "remove_private_AS.set",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \sremove-private-AS(?P<remove_private_AS>)
+                $""", re.VERBOSE,
+            ),
+            "setval": "remove-private-AS",
+            "result": {
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "remove_private_AS": {
+                                    "set": "{{True if remove_private_AS is defined}}",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
             "name": "remove_private_AS",
             "getval": re.compile(
                 r"""
@@ -665,10 +859,9 @@ class Bgp_templatesTemplate(NetworkTemplate):
                                 "address_family": {
                                     '{{"address_family_" + afi + "_" + safi }}': {
                                         "remove_private_AS": {
-                                            "set": "{{True if remove_private_AS is defined}}",
+                                            "inheritance_disable": "{{True if inheritance_disable is defined}}",
                                             "inbound": "{{True if inbound is defined}}",
                                             "entire_aspath": "{{True if entire_aspath is defined}}",
-                                            "inheritance_disable": "{{True if inheritance_disable is defined}}",
                                         },
                                     },
                                 },
@@ -934,7 +1127,31 @@ class Bgp_templatesTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "update",
+            "name": "update.out_originator_loopcheck_set",
+            "getval": re.compile(
+                r"""
+                \s+(?P<nbr_address>neighbor-group\s\S+)
+                \supdate\sout\soriginator-loopcheck(?P<set>)
+                $""", re.VERBOSE,
+            ),
+            "setval": "update out originator-loopcheck",
+            "result": {
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "update":
+                                    {
+                                        "out_originator_loopcheck_set": "{{True if set is defined }}",
+                                    },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "update.out_originator_loopcheck_disable",
             "getval": re.compile(
                 r"""
                 \s+(?P<nbr_address>neighbor-group\s\S+)
@@ -942,7 +1159,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
                 (\sdisable(?P<disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "weight {{weight}}",
+            "setval": "update out originator-loopcheck disable",
             "result": {
                 "neighbor": {
                     "{{nbr_address.split(" ")[1]}}": {
@@ -951,7 +1168,6 @@ class Bgp_templatesTemplate(NetworkTemplate):
                                 "update":
                                     {
                                         "out_originator_loopcheck_disable": "{{True if disable is defined}}",
-                                        "out_originator_loopcheck_set": "{{True if set is defined and disable is not defined}}",
                                     },
                             },
                         },
@@ -1738,7 +1954,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
                 \s(?P<keychain>keychain\s\S+)
                 $""", re.VERBOSE,
             ),
-            "setval": "keychain {{ name }}",
+            "setval": "keychain {{ keychain.name }}",
             "compval": "keychain.name",
             "result": {
 
@@ -1865,7 +2081,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
 
                         "neighbor": {
                             "{{nbr_address.split(" ")[1]}}": {
-                                "local_address_subnet": "{{local}}",
+                                "local_address_subnet": "{{local.split(" ")[1]}}",
                             },
                         },
             },

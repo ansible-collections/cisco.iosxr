@@ -49,22 +49,32 @@ class Bgp_templates(ResourceModule):
         )
         self.parsers = [
             "router",
-            "advertise",
-            "aigp",
+            "advertise.local_labeled_route.disable",
+            "advertise.local_labeled_route.set",
+            "advertise.permanent_network",
+            "aigp.set",
+            "aigp.disable",
+            "aigp.send_med",
+            "aigp.send_cost_community_disable",
             "allowas_in",
             "as_override",
             "bestpath_origin_as_allow_invalid",
             "capability_orf_prefix",
-            "default_originate",
+            "default_originate.set",
+            "default_originate.route_policy",
+            "default_originate.inheritance_disable",
             "long_lived_graceful_restart_capable",
             "long_lived_graceful_restart_stale_time",
             "maximum_prefix",
             "multipath",
             "next_hop_self",
-            "next_hop_unchanged",
+            "next_hop_unchanged.set",
+            "next_hop_unchanged.inheritance_disable",
+            "next_hop_unchanged.multipath",
             "optimal_route_reflection_group_name",
             "origin_as",
             "remove_private_AS",
+            "remove_private_AS.set",
             "route_reflector_client",
             "send_community_ebgp",
             "send_community_gshut_ebgp",
@@ -75,6 +85,9 @@ class Bgp_templates(ResourceModule):
             "route_policy.inbound",
             "route_policy.outbound",
             "signalling",
+            "update.out_originator_loopcheck_disable",
+            "update.out_originator_loopcheck_set",
+            "use",
         ]
 
     def execute_module(self):
@@ -85,9 +98,6 @@ class Bgp_templates(ResourceModule):
         """
         if self.state not in ["parsed", "gathered"]:
             self.generate_commands()
-            import epdb
-
-            epdb.serve()
             self.run_commands()
 
         return self.result
@@ -120,6 +130,14 @@ class Bgp_templates(ResourceModule):
 
         self._compare(asn, want=wantd, have=haved)
 
+    def sort_commands(self, index):
+        old_cmd = self.commands[index:]
+        self.commands = self.commands[0:index]
+        self.commands.extend(
+            [each for each in old_cmd if "no" in each]
+            + [each for each in old_cmd if "no" not in each],
+        )
+
     def _compare(self, asn, want, have):
         """Leverages the base class `compare()` method and
         populates the list of commands to be run by comparing
@@ -127,7 +145,8 @@ class Bgp_templates(ResourceModule):
         for the Bgp_global network resource.
         """
         self._compare_ngs(want=want, have=have)
-        self.commands.insert(0, "router bgp {0}".format(asn))
+        if self.commands and "router bgp" not in self.commands[0]:
+            self.commands.insert(0, "router bgp {0}".format(asn))
 
     def _compare_ngs(self, want, have):
         """Leverages the base class `compare()` method and
@@ -221,6 +240,8 @@ class Bgp_templates(ResourceModule):
             have = have_nbr.pop(name, {})
             begin = len(self.commands)
             self.compare(parsers=neighbor_parsers, want=entry, have=have)
+            if self.state in ["replaced", "overridden"]:
+                self.sort_commands(begin)
             self._compare_af(want=entry, have=have)
             name = entry.get("name", "")
             if len(self.commands) != begin:
@@ -244,6 +265,8 @@ class Bgp_templates(ResourceModule):
             begin = len(self.commands)
             af_have = hafs.pop(name, {})
             self.compare(parsers=self.parsers, want=entry, have=af_have)
+            if self.state in ["replaced", "overridden"]:
+                self.sort_commands(begin)
             if len(self.commands) != begin or (not af_have and entry):
                 self.commands.insert(
                     begin,
