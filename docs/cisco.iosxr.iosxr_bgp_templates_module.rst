@@ -1876,6 +1876,7 @@ Parameters
                 <td>
                 </td>
                 <td>
+                        <div>update</div>
                 </td>
             </tr>
                                 <tr>
@@ -3258,6 +3259,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
+                        <div>Preserve iBGP CE neighbor path in ATTR_SET across VPN core.</div>
                 </td>
             </tr>
             <tr>
@@ -4477,27 +4479,6 @@ Parameters
                 </td>
                 <td>
                         <div>Number of buffers to store filtered update messages.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>non_circular</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">-</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>None</div>
                 </td>
             </tr>
 

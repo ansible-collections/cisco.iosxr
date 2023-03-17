@@ -321,6 +321,7 @@ options:
                     description: Set default weight for routes from this neighbor.
                   update:
                     type: dict
+                    description: update
                     suboptions:
                       out_originator_loopcheck_disable:
                         type: bool
@@ -549,7 +550,7 @@ options:
                 description: Maximum time to wait for deletion of IDLE state dynamic peer.
               internal_vpn_client:
                 type: bool
-                decsription: Preserve iBGP CE neighbor path in ATTR_SET across VPN core.
+                description: Preserve iBGP CE neighbor path in ATTR_SET across VPN core.
               keychain:
                 description: Set keychain based authentication.
                 type: dict
@@ -754,8 +755,6 @@ options:
                               buffers:
                                 description: Number of buffers to store filtered update messages.
                                 type: int
-                              non_circular:
-                                description:
               update_source:
                 description: Source of routing updates.Refer vendor document for valid values.
                 type: str

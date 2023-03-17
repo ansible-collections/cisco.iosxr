@@ -40,19 +40,6 @@ def _tmpl_maximum_prefix(config_data):
     return command
 
 
-def _tmpl_next_hop_unchanged(config_data):
-    conf = config_data.get("next_hop_unchanged", {})
-    command = ""
-    if conf:
-        if "set" in conf:
-            command = "next-hop-unchanged"
-        if "inheritance_disable" in conf:
-            command += "next-hop-unchanged inheritance-disable"
-        if "multipath" in conf:
-            command = "next-hop-unchanged multipath"
-    return command
-
-
 def _tmpl_soft_reconfiguration(config_data):
     conf = config_data.get("soft_reconfiguration", {})
     if conf:
@@ -87,6 +74,7 @@ def _templ_local_as(config_data):
     if conf.get("value"):
         command = "local-as " + str(conf.get("value", {}))
     if "no_prepend" in conf:
+        command = "local-as"
         if "replace_as" in conf.get("no_prepend", {}):
             if "dual_as" in conf.get("no_prepend", {}).get("replace_as", {}):
                 command += " no-prepend replace-as dual-as"

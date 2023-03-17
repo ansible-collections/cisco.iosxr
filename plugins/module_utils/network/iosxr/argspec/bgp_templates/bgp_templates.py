@@ -40,9 +40,6 @@ class Bgp_templatesArgs(object):  # pylint: disable=R0903
                 "neighbor": {
                     "type": "list",
                     "elements": "dict",
-                    "mutually_exclusive": [
-                        ["keychain", "password.encrypted"],
-                    ],
                     "options": {
                         "name": {"type": "str"},
                         "address_family": {
@@ -421,7 +418,7 @@ class Bgp_templatesArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "no_log": False,
                             "options": {
-                                "name": {"type": "str"},
+                                "name": {"type": "str", "no_log": True},
                                 "inheritance_disable": {"type": "bool"},
                             },
                         },
@@ -578,7 +575,6 @@ class Bgp_templatesArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "buffers": {"type": "int"},
-                                                        "non_circular": {},
                                                     },
                                                 },
                                             },
