@@ -19,4 +19,4 @@
   loop_control:
     loop_var: test_case_to_run
   tags:
-    - static_routes
+    - iosxr_static_routes
