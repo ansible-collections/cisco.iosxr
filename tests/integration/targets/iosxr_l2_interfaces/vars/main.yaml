@@ -104,4 +104,6 @@ deleted:
     - interface GigabitEthernet0/0/0/4
     - no l2transport
   after:
+    - name: GigabitEthernet0/0/0/1
     - name: GigabitEthernet0/0/0/3.900
+    - name: GigabitEthernet0/0/0/4
