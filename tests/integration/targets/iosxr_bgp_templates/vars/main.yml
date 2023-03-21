@@ -90,6 +90,7 @@ overridden:
     - advertisement-interval 12
     - precedence flash
     - address-family ipv4 unicast
+    - no advertise local-labeled-route
     - advertise local-labeled-route disable
 
 replaced:

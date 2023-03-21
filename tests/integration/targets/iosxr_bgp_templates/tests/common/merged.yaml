@@ -4,8 +4,6 @@
 
 - ansible.builtin.include_tasks: _remove_config.yaml
 
-- ansible.builtin.include_tasks: _populate_base_config.yaml
-
 - block:
     - name: Merge the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_bgp_templates: &id001

@@ -47,4 +47,4 @@
       - result.msg == 'value of running_config parameter must not be empty for state parsed'
 
 - ansible.builtin.debug:
-    msg: END nxos_bgp_global empty_config integration tests on connection={{ ansible_connection }}
+    msg: END iosxr_bgp_templates empty_config integration tests on connection={{ ansible_connection }}
