@@ -87,7 +87,11 @@ def _templ_local_as(config_data):
 
 class Bgp_templatesTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
-        super(Bgp_templatesTemplate, self).__init__(lines=lines, tmplt=self, module=module)
+        super(Bgp_templatesTemplate, self).__init__(
+            lines=lines,
+            tmplt=self,
+            module=module,
+        )
 
     # fmt: off
     PARSERS = [
@@ -116,16 +120,16 @@ class Bgp_templatesTemplate(NetworkTemplate):
             ),
             "setval": "address-family {{ afi}} {{safi}}",
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "address_family": {
-                                    '{{"address_family_" + afi + "_" + safi }}': {
-                                        "afi": "{{ afi}}",
-                                        "safi": "{{safi}}",
-                                    },
-                                },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "afi": "{{ afi}}",
+                                "safi": "{{safi}}",
                             },
                         },
+                    },
+                },
             },
             "shared": True,
         },
@@ -257,17 +261,17 @@ class Bgp_templatesTemplate(NetworkTemplate):
             ),
             "setval": "aigp",
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "address_family": {
-                                    '{{"address_family_" + afi + "_" + safi }}': {
-                                        "aigp": {
-                                            "set": "{{ True if aigp is defined }}",
-                                        },
-                                    },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "aigp": {
+                                    "set": "{{ True if aigp is defined }}",
                                 },
                             },
                         },
+                    },
+                },
             },
         },
         {
@@ -333,17 +337,17 @@ class Bgp_templatesTemplate(NetworkTemplate):
             ),
             "setval": "aigp send cost-community disable",
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "address_family": {
-                                    '{{"address_family_" + afi + "_" + safi }}': {
-                                        "aigp": {
-                                            "send_cost_community_disable": "{{True if cc_disable is defined}}",
-                                        },
-                                    },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "aigp": {
+                                    "send_cost_community_disable": "{{True if cc_disable is defined}}",
                                 },
                             },
                         },
+                    },
+                },
             },
         },
         {
@@ -356,18 +360,18 @@ class Bgp_templatesTemplate(NetworkTemplate):
             ),
             "setval": "allowas-in {{allowas_in.value if allowas_in.value is defined }}",
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "address_family": {
-                                    '{{"address_family_" + afi + "_" + safi }}': {
-                                        "allowas_in": {
-                                            "set": "{{True if allowas_in is defined and value is not defined}}",
-                                            "value": "{{value }}",
-                                        },
-                                    },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "allowas_in": {
+                                    "set": "{{True if allowas_in is defined and value is not defined}}",
+                                    "value": "{{value }}",
                                 },
                             },
                         },
+                    },
+                },
             },
         },
         {
@@ -381,19 +385,19 @@ class Bgp_templatesTemplate(NetworkTemplate):
             ),
             "setval": "as-override{{' inheritance-disable' if as_override.inheritance_disable is defined else ''}}",
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "address_family": {
-                                    '{{"address_family_" + afi + "_" + safi }}': {
-                                        "as_override": {
-                                            "set": "{{True if as_override is defined "
-                                                   "and inheritance_disable is not defined}}",
-                                            "inheritance_disable": "{{True if inheritance_disable is defined}}",
-                                        },
-                                    },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "as_override": {
+                                    "set": "{{True if as_override is defined "
+                                            "and inheritance_disable is not defined}}",
+                                    "inheritance_disable": "{{True if inheritance_disable is defined}}",
                                 },
                             },
                         },
+                    },
+                },
             },
         },
         {
@@ -406,16 +410,15 @@ class Bgp_templatesTemplate(NetworkTemplate):
             ),
             "setval": "bestpath origin-as allow invalid",
             "result": {
-
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "address_family": {
-                                    '{{"address_family_" + afi + "_" + safi }}': {
-                                        "bestpath_origin_as_allow_invalid": "{{ True if invalid is defined}}",
-                                    },
-                                },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "bestpath_origin_as_allow_invalid": "{{ True if invalid is defined}}",
                             },
                         },
+                    },
+                },
             },
         },
         {
@@ -428,15 +431,15 @@ class Bgp_templatesTemplate(NetworkTemplate):
             ),
             "setval": "capability orf prefix {{capability_orf_prefix }}",
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "address_family": {
-                                    '{{"address_family_" + afi + "_" + safi }}': {
-                                        "capability_orf_prefix": "{{capability_orf_prefix}}",
-                                    },
-                                },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "capability_orf_prefix": "{{capability_orf_prefix}}",
                             },
                         },
+                    },
+                },
             },
         },
         {
@@ -1025,19 +1028,19 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "setval": "send-multicast-attributes{{' disable' "
                       "if send_multicast_attributes.disable is defined else ''}}",
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "address_family": {
-                                    '{{"address_family_" + afi + "_" + safi }}': {
-                                        "send_multicast_attributes": {
-                                            "set": "{{True if send_multicast_attributes is "
-                                                   "defined and disable is not defined}}",
-                                            "disable": "{{True if disable is defined}}",
-                                        },
-                                    },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "send_multicast_attributes": {
+                                    "set": "{{True if send_multicast_attributes is "
+                                            "defined and disable is not defined}}",
+                                    "disable": "{{True if disable is defined}}",
                                 },
                             },
                         },
+                    },
+                },
             },
         },
         {
@@ -1053,23 +1056,23 @@ class Bgp_templatesTemplate(NetworkTemplate):
             ),
             "setval": _tmpl_soft_reconfiguration,
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "address_family": {
-                                    '{{"address_family_" + afi + "_" + safi }}': {
-                                        "soft_reconfiguration": {
-                                            "inbound": {
-                                                "set": "{{True if inbound is defined and "
-                                                       "inheritance_disable is not defined and "
-                                                       "always is not defined}}",
-                                                "always": "{{True if always is defined }}",
-                                                "inheritance_disable": "{{True if inheritance_disable is defined}}",
-                                            },
-                                        },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "soft_reconfiguration": {
+                                    "inbound": {
+                                         "set": "{{True if inbound is defined and "
+                                                "inheritance_disable is not defined and "
+                                                "always is not defined}}",
+                                        "always": "{{True if always is defined }}",
+                                        "inheritance_disable": "{{True if inheritance_disable is defined}}",
                                     },
                                 },
                             },
                         },
+                    },
+                },
             },
         },
         {
@@ -1082,15 +1085,15 @@ class Bgp_templatesTemplate(NetworkTemplate):
             ),
             "setval": "weight {{weight}}",
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "address_family": {
-                                    '{{"address_family_" + afi + "_" + safi }}': {
-                                        "weight": "{{weight}}",
-                                    },
-                                },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "address_family": {
+                            '{{"address_family_" + afi + "_" + safi }}': {
+                                "weight": "{{weight}}",
                             },
                         },
+                    },
+                },
             },
         },
         {
@@ -1128,10 +1131,9 @@ class Bgp_templatesTemplate(NetworkTemplate):
                     "{{nbr_address.split(" ")[1]}}": {
                         "address_family": {
                             '{{"address_family_" + afi + "_" + safi }}': {
-                                "update":
-                                    {
-                                        "out_originator_loopcheck_set": "{{True if set is defined }}",
-                                    },
+                                "update": {
+                                    "out_originator_loopcheck_set": "{{True if set is defined }}",
+                                },
                             },
                         },
                     },
@@ -1153,10 +1155,9 @@ class Bgp_templatesTemplate(NetworkTemplate):
                     "{{nbr_address.split(" ")[1]}}": {
                         "address_family": {
                             '{{"address_family_" + afi + "_" + safi }}': {
-                                "update":
-                                    {
-                                        "out_originator_loopcheck_disable": "{{True if disable is defined}}",
-                                    },
+                                "update": {
+                                    "out_originator_loopcheck_disable": "{{True if disable is defined}}",
+                                },
                             },
                         },
                     },
@@ -1173,11 +1174,11 @@ class Bgp_templatesTemplate(NetworkTemplate):
             ),
             "setval": "advertisement-interval {{ advertisement_interval }}",
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "advertisement_interval": "{{ advertise_in.split(" ")[1] }}",
-                            },
-                        },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "advertisement_interval": "{{ advertise_in.split(" ")[1] }}",
+                    },
+                },
             },
         },
         {
@@ -1193,13 +1194,13 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "setval": "bfd fast-detect disable",
             "compval": "bfd.fast_detect.disable",
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "bfd": {
-                                    "fast_detect": {"disable": "{{ True if disable is defined }}"},
-                                },
-                            },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "bfd": {
+                            "fast_detect": {"disable": "{{ True if disable is defined }}"},
                         },
+                    },
+                },
             },
         },
         {
@@ -1214,14 +1215,13 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "setval": "bfd fast-detect",
             "compval": "bfd.fast_detect.set",
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}": {
-                                "bfd": {
-                                    "fast_detect": {"set": "{{ True if fast_detect is defined }}"},
-                                },
-                            },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}": {
+                        "bfd": {
+                            "fast_detect": {"set": "{{ True if fast_detect is defined }}"},
                         },
-
+                    },
+                },
             },
         },
         {
@@ -1258,15 +1258,14 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "setval": "bfd multiplier {{ bfd.multiplier}}",
             "compval": "bfd.multiplier",
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}":
-                                {
-                                    "bfd":
-                                        {
-                                            "multiplier": "{{multiplier.split(" ")[1]}}",
-                                        },
-                                },
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}":
+                    {
+                        "bfd": {
+                            "multiplier": "{{multiplier.split(" ")[1]}}",
                         },
+                    },
+                },
             },
         },
         {
@@ -1281,15 +1280,15 @@ class Bgp_templatesTemplate(NetworkTemplate):
             "setval": "bfd minimum-interval {{ bfd.minimum_interval}}",
             "compval": "bfd.minimum_interval",
             "result": {
-                        "neighbor": {
-                            "{{nbr_address.split(" ")[1]}}":
-                                {
-                                    "bfd":
-                                        {
+                "neighbor": {
+                    "{{nbr_address.split(" ")[1]}}":
+                        {
+                            "bfd":
+                                 {
                                             "minimum_interval": "{{min_interval.split(" ")[1]}}",
-                                        },
-                                },
+                                 },
                         },
+                },
             },
         },
         {
