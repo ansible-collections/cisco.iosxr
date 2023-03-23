@@ -4,7 +4,7 @@
 - ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
-    - name: Replaced given bgp_nbr_address_family configuration
+    - name: Replaced given bgp_templates configuration
       become: true
       register: result
       cisco.iosxr.iosxr_bgp_templates: &replaced

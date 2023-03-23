@@ -1000,7 +1000,39 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
         self.maxDiff = None
         set_module_args(
             dict(
-                running_config="router bgp 1\n neighbor-group ********\n  bfd fast-detect strict-mode\n  update in filtering\n   message buffers 0 non-circular\n   logging disable\n  !\n  precedence critical\n  timers 0 3 3\n  advertisement-interval 10\n  maximum-peers 10\n  local-address-subnet 1.1.1.5/24\n  internal-vpn-client\n  address-family ipv4 unicast\n   advertise local-labeled-route\n  !\n !\n neighbor-group ********1\n  bfd fast-detect\n  update in filtering\n  !\n  bfd minimum-interval 3\n  capability additional-paths send disable\n  keychain ********\n  ebgp-multihop 255\n  egress-engineering\n  precedence flash\n  graceful-maintenance\n   as-prepends 0\n  !\n  advertisement-interval 2\n  tcp mss inheritance-disable\n  local-as 6\n  password inheritance-disable\n  shutdown inheritance-disable\n  maximum-peers 1\n  cluster-id 1\n  dmz-link-bandwidth\n  description ********\n  ttl-security\n  ebgp-recv-extcommunity-dmz\n  ebgp-send-extcommunity-dmz cumulative\n  local address inheritance-disable\n  update-source Loopback919\n  idle-watch-time 30\n  enforce-first-as\n  ignore-connected-check\n  session-open-mode both\n  send-buffer-size 4096\n  local-address-subnet 1.1.1.1/24\n  receive-buffer-size 512\n  internal-vpn-client\n  address-family ipv4 unicast\n   origin-as validation disable\n   bestpath origin-as allow invalid\n   weight 0\n   aigp send med\n   send-community-ebgp\n   multipath\n   route-reflector-client\n   allowas-in 1\n   encapsulation-type srv6\n   maximum-prefix 1 75\n   as-override\n   capability orf prefix send\n   send-extended-community-ebgp\n   default-originate\n   long-lived-graceful-restart capable\n   next-hop-self\n   send-community-gshut-ebgp inheritance-disable\n   soft-reconfiguration inbound\n   site-of-origin 1.1:1\n   send-multicast-attributes disable\n   Signalling bgp disable\n   remove-private-AS inbound\n   update out originator-loopcheck disable\n   advertise local-labeled-route\n   next-hop-unchanged inheritance-disable\n   cluster-id allow-equal disable\n  !       \n !        \n neighbor 1.1.1.1\n !        \n!",
+                running_config="router bgp 1\n neighbor-group ********\n  "
+                "bfd fast-detect strict-mode\n  update in filtering\n"
+                "   message buffers 0 non-circular\n   logging disable\n"
+                "  !\n  precedence critical\n  timers 0 3 3\n  "
+                "advertisement-interval 10\n  maximum-peers 10\n  "
+                "local-address-subnet 1.1.1.5/24\n  internal-vpn-client\n"
+                "  address-family ipv4 unicast\n   advertise local-labeled-route\n"
+                "  !\n !\n neighbor-group ********1\n  bfd fast-detect\n  "
+                "update in filtering\n  !\n  bfd minimum-interval 3\n  "
+                "capability additional-paths send disable\n  keychain ********\n"
+                "  ebgp-multihop 255\n  egress-engineering\n  precedence flash\n  "
+                "graceful-maintenance\n   as-prepends 0\n  !\n  advertisement-interval 2\n"
+                "  tcp mss inheritance-disable\n  local-as 6\n  password inheritance-disable\n"
+                "  shutdown inheritance-disable\n  maximum-peers 1\n  cluster-id 1\n"
+                "  dmz-link-bandwidth\n  description ********\n  ttl-security\n  "
+                "ebgp-recv-extcommunity-dmz\n  ebgp-send-extcommunity-dmz cumulative\n"
+                "  local address inheritance-disable\n  update-source Loopback919\n  "
+                "idle-watch-time 30\n  enforce-first-as\n  ignore-connected-check\n  "
+                "session-open-mode both\n  send-buffer-size 4096\n  "
+                "local-address-subnet 1.1.1.1/24\n  receive-buffer-size 512\n"
+                "  internal-vpn-client\n  address-family ipv4 unicast\n   "
+                "origin-as validation disable\n   bestpath origin-as allow invalid\n"
+                "   weight 0\n   aigp send med\n   send-community-ebgp\n   multipath\n"
+                "   route-reflector-client\n   allowas-in 1\n   "
+                "encapsulation-type srv6\n   maximum-prefix 1 75\n   as-override\n   capability orf prefix send\n"
+                "   send-extended-community-ebgp\n   default-originate\n   long-lived-graceful-restart capable\n"
+                "   next-hop-self\n   send-community-gshut-ebgp inheritance-disable\n   soft-reconfiguration inbound\n"
+                "   site-of-origin 1.1:1\n   send-multicast-attributes disable\n   Signalling bgp disable\n  "
+                " remove-private-AS inbound\n   update out originator-loopcheck disable\n  "
+                " advertise local-labeled-route\n   next-hop-unchanged inheritance-disable\n "
+                "  cluster-id allow-equal disable\n  !       \n !        "
+                "\n neighbor 1.1.1.1\n !        "
+                "\n!",
                 state="parsed",
             ),
         )

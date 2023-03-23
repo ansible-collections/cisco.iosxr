@@ -786,7 +786,839 @@ options:
 """
 
 EXAMPLES = """
+# Using merged
+# Before state:
+# -------------
+# RP/0/RP0/CPU0:10#show running-config router bgp
+# Thu Mar 23 10:00:12.668 UTC
+# % No such configuration item(s)
+#
+# RP/0/RP0/CPU0:10#
 
+- name: Merge the provided configuration with the existing running configuration
+  cisco.iosxr.iosxr_bgp_templates:
+    config:
+        as_number: 65536
+        neighbor:
+            - address_family:
+                - advertise:
+                    local_labeled_route:
+                      set: true
+                  afi: ipv4
+                  safi: unicast
+              advertisement_interval: 10
+              bfd:
+                fast_detect:
+                  strict_mode: true
+              internal_vpn_client: true
+              name: neighbor-group1
+              precedence: critical
+            - cluster_id: "1"
+              description: neighbor-group2
+              dmz_link_bandwidth:
+                set: true
+              ebgp_multihop:
+                value: 255
+              egress_engineering:
+                set: true
+              graceful_maintenance:
+                as_prepends:
+                  value: 0
+                set: true
+              ignore_connected_check:
+                set: true
+              internal_vpn_client: true
+              local:
+                address:
+                  inheritance_disable: true
+              local_as:
+                value: 6
+              name: neighbor-group2
+              precedence: flash
+              receive_buffer_size: 512
+              send_buffer_size: 4096
+              session_open_mode: both
+              tcp:
+                mss:
+                  inheritance_disable: true
+              ttl_security:
+                set: true
+              update_source: Loopback919
+    state: merged
+
+# Task Output
+# -----------
+# before: {}
+# commands:
+# - router bgp 65536
+# - neighbor-group neighbor-group1
+# - advertisement-interval 10
+# - bfd fast-detect strict-mode
+# - internal-vpn-client
+# - precedence critical
+# - address-family ipv4 unicast
+# - advertise local-labeled-route
+# - neighbor-group neighbor-group2
+# - dmz-link-bandwidth
+# - description neighbor-group2
+# - cluster-id 1
+# - ebgp-multihop 255
+# - egress-engineering
+# - internal-vpn-client
+# - ignore-connected-check
+# - local-as 6
+# - local address inheritance-disable
+# - precedence flash
+# - receive-buffer-size 512
+# - send-buffer-size 4096
+# - session-open-mode both
+# - tcp mss inheritance-disable
+# - update-source Loopback919
+# - ttl-security
+# - graceful-maintenance
+# - graceful-maintenance as-prepends 0
+# after:
+#   as_number: '65536'
+#   neighbor:
+#     - address_family:
+#         - advertise:
+#             local_labeled_route:
+#               set: true
+#           afi: ipv4
+#           safi: unicast
+#       advertisement_interval: 10
+#       bfd:
+#         fast_detect:
+#           strict_mode: true
+#       internal_vpn_client: true
+#       name: neighbor-group1
+#       precedence: critical
+#     - cluster_id: '1'
+#       description: neighbor-group2
+#       dmz_link_bandwidth:
+#         set: true
+#       ebgp_multihop:
+#         value: 255
+#       egress_engineering:
+#         set: true
+#       graceful_maintenance:
+#         as_prepends:
+#           value: 0
+#         set: true
+#       ignore_connected_check:
+#         set: true
+#       internal_vpn_client: true
+#       local:
+#         address:
+#           inheritance_disable: true
+#       local_as:
+#         value: 6
+#       name: neighbor-group2
+#       precedence: flash
+#       receive_buffer_size: 512
+#       send_buffer_size: 4096
+#       session_open_mode: both
+#       tcp:
+#         mss:
+#           inheritance_disable: true
+#       ttl_security:
+#         set: true
+#       update_source: Loopback919
+
+# After state:
+# ------------
+# RP/0/RP0/CPU0:10#show running-config router bgp
+# Thu Mar 23 10:14:33.116 UTC
+# router bgp 65536
+#  neighbor-group neighbor-group1
+#   bfd fast-detect strict-mode
+#   precedence critical
+#   advertisement-interval 10
+#   internal-vpn-client
+#   address-family ipv4 unicast
+#    advertise local-labeled-route
+#   !
+#  !
+#  neighbor-group neighbor-group2
+#   ebgp-multihop 255
+#   egress-engineering
+#   precedence flash
+#   graceful-maintenance
+#    as-prepends 0
+#   !
+#   tcp mss inheritance-disable
+#   local-as 6
+#   cluster-id 1
+#   dmz-link-bandwidth
+#   description neighbor-group2
+#   ttl-security
+#   local address inheritance-disable
+#   update-source Loopback919
+#   ignore-connected-check
+#   session-open-mode both
+#   send-buffer-size 4096
+#   receive-buffer-size 512
+#   internal-vpn-client
+#  !
+# !
+
+
+# Using replaced
+# Before state:
+# ------------
+# RP/0/RP0/CPU0:10#show running-config router bgp
+# Thu Mar 23 10:14:33.116 UTC
+# router bgp 65536
+#  neighbor-group neighbor-group1
+#   bfd fast-detect strict-mode
+#   precedence critical
+#   advertisement-interval 10
+#   internal-vpn-client
+#   address-family ipv4 unicast
+#    advertise local-labeled-route
+#   !
+#  !
+#  neighbor-group neighbor-group2
+#   ebgp-multihop 255
+#   egress-engineering
+#   precedence flash
+#   graceful-maintenance
+#    as-prepends 0
+#   !
+#   tcp mss inheritance-disable
+#   local-as 6
+#   cluster-id 1
+#   dmz-link-bandwidth
+#   description neighbor-group2
+#   ttl-security
+#   local address inheritance-disable
+#   update-source Loopback919
+#   ignore-connected-check
+#   session-open-mode both
+#   send-buffer-size 4096
+#   receive-buffer-size 512
+#   internal-vpn-client
+#  !
+# !
+
+- name: Replaced given bgp_templates configuration
+  cisco.iosxr.iosxr_bgp_templates:
+        config:
+          as_number: 65536
+          neighbor:
+            - address_family:
+                - advertise:
+                    local_labeled_route:
+                      set: true
+                  afi: ipv4
+                  safi: unicast
+              advertisement_interval: 12
+              name: neighbor-group1
+              precedence: flash
+            - cluster_id: "2"
+              description: replace neighbor-group2
+              ebgp_multihop:
+                value: 254
+              graceful_maintenance:
+                as_prepends:
+                  value: 2
+                set: true
+              update_source: Loopback917
+              name: neighbor-group2
+        state: replaced
+
+# Task Output
+# -----------
+# before:
+#   as_number: '65536'
+#   neighbor:
+#     - address_family:
+#         - advertise:
+#             local_labeled_route:
+#               set: true
+#           afi: ipv4
+#           safi: unicast
+#       advertisement_interval: 10
+#       bfd:
+#         fast_detect:
+#           strict_mode: true
+#       internal_vpn_client: true
+#       name: neighbor-group1
+#       precedence: critical
+#     - cluster_id: '1'
+#       description: neighbor-group2
+#       dmz_link_bandwidth:
+#         set: true
+#       ebgp_multihop:
+#         value: 255
+#       egress_engineering:
+#         set: true
+#       graceful_maintenance:
+#         as_prepends:
+#           value: 0
+#         set: true
+#       ignore_connected_check:
+#         set: true
+#       internal_vpn_client: true
+#       local:
+#         address:
+#           inheritance_disable: true
+#       local_as:
+#         value: 6
+#       name: neighbor-group2
+#       precedence: flash
+#       receive_buffer_size: 512
+#       send_buffer_size: 4096
+#       session_open_mode: both
+#       tcp:
+#         mss:
+#           inheritance_disable: true
+#       ttl_security:
+#         set: true
+#       update_source: Loopback919
+# commands:
+# - router bgp 65536
+# - neighbor-group neighbor-group1
+# - no bfd fast-detect strict-mode
+# - no internal-vpn-client
+# - advertisement-interval 12
+# - precedence flash
+# - neighbor-group neighbor-group2
+# - no dmz-link-bandwidth
+# - no egress-engineering
+# - no internal-vpn-client
+# - no ignore-connected-check
+# - no local-as 6
+# - no local address inheritance-disable
+# - no precedence flash
+# - no receive-buffer-size 512
+# - no send-buffer-size 4096
+# - no session-open-mode both
+# - no tcp mss inheritance-disable
+# - no ttl-security
+# - description replace neighbor-group2
+# - cluster-id 2
+# - ebgp-multihop 254
+# - update-source Loopback917
+# - graceful-maintenance as-prepends 2
+# after:
+#   as_number: '65536'
+#   neighbor:
+#     - address_family:
+#         - advertise:
+#             local_labeled_route:
+#               set: true
+#           afi: ipv4
+#           safi: unicast
+#       advertisement_interval: 12
+#       name: neighbor-group1
+#       precedence: flash
+#     - cluster_id: '2'
+#       description: replace neighbor-group2
+#       ebgp_multihop:
+#         value: 254
+#       graceful_maintenance:
+#         as_prepends:
+#           value: 2
+#         set: true
+#       name: neighbor-group2
+#       update_source: Loopback917
+
+# After state:
+# ------------
+# RP/0/RP0/CPU0:10#show running-config router bgp
+# Thu Mar 23 10:23:34.104 UTC
+# router bgp 65536
+#  neighbor-group neighbor-group1
+#   precedence flash
+#   advertisement-interval 12
+#   address-family ipv4 unicast
+#    advertise local-labeled-route
+#   !
+#  !
+#  neighbor-group neighbor-group2
+#   ebgp-multihop 254
+#   graceful-maintenance
+#    as-prepends 2
+#   !
+#   cluster-id 2
+#   description replace neighbor-group2
+#   update-source Loopback917
+#  !
+# !
+
+
+# Using deleted
+# Before state:
+# -------------
+# RP/0/RP0/CPU0:10#show running-config router bgp
+# Thu Mar 23 10:23:34.104 UTC
+# router bgp 65536
+#  neighbor-group neighbor-group1
+#   precedence flash
+#   advertisement-interval 12
+#   address-family ipv4 unicast
+#    advertise local-labeled-route
+#   !
+#  !
+#  neighbor-group neighbor-group2
+#   ebgp-multihop 254
+#   graceful-maintenance
+#    as-prepends 2
+#   !
+#   cluster-id 2
+#   description replace neighbor-group2
+#   update-source Loopback917
+#  !
+# !
+
+- name: Delete given bgp_nbr_address_family configuration
+  cisco.iosxr.iosxr_bgp_templates: &deleted
+        config:
+        state: deleted
+
+# Task Output
+# -----------
+# before:
+#   as_number: '65536'
+#   neighbor:
+#     - address_family:
+#         - advertise:
+#             local_labeled_route:
+#               set: true
+#           afi: ipv4
+#           safi: unicast
+#       advertisement_interval: 12
+#       name: neighbor-group1
+#       precedence: flash
+#     - cluster_id: '2'
+#       description: replace neighbor-group2
+#       ebgp_multihop:
+#         value: 254
+#       graceful_maintenance:
+#         as_prepends:
+#           value: 2
+#         set: true
+#       name: neighbor-group2
+#       update_source: Loopback917
+# commands:
+# - router bgp 65536
+# - no neighbor-group neighbor-group1
+# - no neighbor-group neighbor-group2
+# after: {}
+
+# After state:
+# -------------
+# RP/0/RP0/CPU0:10#show running-config router bgp
+# Thu Mar 23 10:00:12.668 UTC
+# % No such configuration item(s)
+#
+# RP/0/RP0/CPU0:10#
+
+
+
+# Using gathered
+# Before state:
+# -------------
+# RP/0/RP0/CPU0:10#show running-config router bgp
+# Thu Mar 23 10:30:38.785 UTC
+# router bgp 65536
+#  neighbor-group neighbor-group1
+#   bfd fast-detect strict-mode
+#   precedence critical
+#   advertisement-interval 10
+#   internal-vpn-client
+#   address-family ipv4 unicast
+#    advertise local-labeled-route
+#   !
+#  !
+#  neighbor-group neighbor-group2
+#   ebgp-multihop 255
+#   egress-engineering
+#   precedence flash
+#   graceful-maintenance
+#    as-prepends 0
+#   !
+#   tcp mss inheritance-disable
+#   local-as 6
+#   cluster-id 1
+#   dmz-link-bandwidth
+#   description neighbor-group2
+#   ttl-security
+#   local address inheritance-disable
+#   update-source Loopback919
+#   ignore-connected-check
+#   session-open-mode both
+#   send-buffer-size 4096
+#   receive-buffer-size 512
+#   internal-vpn-client
+#  !
+# !
+
+- name: Gather given bgp_templates configuration
+  cisco.iosxr.iosxr_bgp_templates: &id001
+        config:
+        state: gathered
+
+# Task output
+# -----------
+# gathered:
+#   as_number: '65536'
+#   neighbor:
+#     - address_family:
+#         - advertise:
+#             local_labeled_route:
+#               set: true
+#           afi: ipv4
+#           safi: unicast
+#       advertisement_interval: 10
+#       bfd:
+#         fast_detect:
+#           strict_mode: true
+#       internal_vpn_client: true
+#       name: neighbor-group1
+#       precedence: critical
+#     - cluster_id: '1'
+#       description: neighbor-group2
+#       dmz_link_bandwidth:
+#         set: true
+#       ebgp_multihop:
+#         value: 255
+#       egress_engineering:
+#         set: true
+#       graceful_maintenance:
+#         as_prepends:
+#           value: 0
+#         set: true
+#       ignore_connected_check:
+#         set: true
+#       internal_vpn_client: true
+#       local:
+#         address:
+#           inheritance_disable: true
+#       local_as:
+#         value: 6
+#       name: neighbor-group2
+#       precedence: flash
+#       receive_buffer_size: 512
+#       send_buffer_size: 4096
+#       session_open_mode: both
+#       tcp:
+#         mss:
+#           inheritance_disable: true
+#       ttl_security:
+#         set: true
+#       update_source: Loopback919
+
+
+# Using overridden
+
+# Before state:
+# -------------
+# RP/0/RP0/CPU0:10#show running-config router bgp
+# Thu Mar 23 10:30:38.785 UTC
+# router bgp 65536
+#  neighbor-group neighbor-group1
+#   bfd fast-detect strict-mode
+#   precedence critical
+#   advertisement-interval 10
+#   internal-vpn-client
+#   address-family ipv4 unicast
+#    advertise local-labeled-route
+#   !
+#  !
+#  neighbor-group neighbor-group2
+#   ebgp-multihop 255
+#   egress-engineering
+#   precedence flash
+#   graceful-maintenance
+#    as-prepends 0
+#   !
+#   tcp mss inheritance-disable
+#   local-as 6
+#   cluster-id 1
+#   dmz-link-bandwidth
+#   description neighbor-group2
+#   ttl-security
+#   local address inheritance-disable
+#   update-source Loopback919
+#   ignore-connected-check
+#   session-open-mode both
+#   send-buffer-size 4096
+#   receive-buffer-size 512
+#   internal-vpn-client
+#  !
+# !
+
+- name: override given bgp_templates configuration
+  cisco.iosxr.iosxr_bgp_templates:
+        config:
+          as_number: 65536
+          neighbor:
+            - address_family:
+                - advertise:
+                    local_labeled_route:
+                      disable: true
+                  afi: ipv4
+                  safi: unicast
+              advertisement_interval: 12
+              bfd:
+                fast_detect:
+                  strict_mode: true
+              name: neighbor-group1
+              precedence: flash
+        state: overridden
+
+# Task Output
+# -----------
+# before:
+#   as_number: '65536'
+#   neighbor:
+#     - address_family:
+#         - advertise:
+#             local_labeled_route:
+#               set: true
+#           afi: ipv4
+#           safi: unicast
+#       advertisement_interval: 10
+#       bfd:
+#         fast_detect:
+#           strict_mode: true
+#       internal_vpn_client: true
+#       name: neighbor-group1
+#       precedence: critical
+#     - cluster_id: '1'
+#       description: neighbor-group2
+#       dmz_link_bandwidth:
+#         set: true
+#       ebgp_multihop:
+#         value: 255
+#       egress_engineering:
+#         set: true
+#       graceful_maintenance:
+#         as_prepends:
+#           value: 0
+#         set: true
+#       ignore_connected_check:
+#         set: true
+#       internal_vpn_client: true
+#       local:
+#         address:
+#           inheritance_disable: true
+#       local_as:
+#         value: 6
+#       name: neighbor-group2
+#       precedence: flash
+#       receive_buffer_size: 512
+#       send_buffer_size: 4096
+#       session_open_mode: both
+#       tcp:
+#         mss:
+#           inheritance_disable: true
+#       ttl_security:
+#         set: true
+#       update_source: Loopback919
+# commands:
+# - router bgp 65536
+# - no neighbor-group neighbor-group2
+# - neighbor-group neighbor-group1
+# - no internal-vpn-client
+# - advertisement-interval 12
+# - precedence flash
+# - address-family ipv4 unicast
+# - no advertise local-labeled-route
+# - advertise local-labeled-route disable
+# after:
+#   as_number: '65536'
+#   neighbor:
+#     - address_family:
+#         - advertise:
+#             local_labeled_route:
+#               disable: true
+#           afi: ipv4
+#           safi: unicast
+#       advertisement_interval: 12
+#       bfd:
+#         fast_detect:
+#           strict_mode: true
+#       name: neighbor-group1
+#       precedence: flash
+
+
+# Using rendered
+- name: Render platform specific configuration lines with state rendered (without connecting to the device)
+  cisco.iosxr.iosxr_bgp_templates:
+    config:
+      as_number: 65536
+      neighbor:
+        - address_family:
+            - advertise:
+                local_labeled_route:
+                  set: true
+              afi: ipv4
+              safi: unicast
+          advertisement_interval: 10
+          bfd:
+            fast_detect:
+              strict_mode: true
+          internal_vpn_client: true
+          name: neighbor-group1
+          precedence: critical
+        - cluster_id: "1"
+          description: neighbor-group2
+          dmz_link_bandwidth:
+            set: true
+          ebgp_multihop:
+            value: 255
+          egress_engineering:
+            set: true
+          graceful_maintenance:
+            as_prepends:
+              value: 0
+            set: true
+          ignore_connected_check:
+            set: true
+          internal_vpn_client: true
+          local:
+            address:
+              inheritance_disable: true
+          local_as:
+            value: 6
+          name: neighbor-group2
+          precedence: flash
+          receive_buffer_size: 512
+          send_buffer_size: 4096
+          session_open_mode: both
+          tcp:
+            mss:
+              inheritance_disable: true
+          ttl_security:
+            set: true
+          update_source: Loopback919
+    state: rendered
+
+# Task Output
+# -----------
+# rendered:
+# - router bgp 65536
+# - neighbor-group neighbor-group1
+# - advertisement-interval 10
+# - bfd fast-detect strict-mode
+# - internal-vpn-client
+# - precedence critical
+# - address-family ipv4 unicast
+# - advertise local-labeled-route
+# - neighbor-group neighbor-group2
+# - dmz-link-bandwidth
+# - description neighbor-group2
+# - cluster-id 1
+# - ebgp-multihop 255
+# - egress-engineering
+# - internal-vpn-client
+# - ignore-connected-check
+# - local-as 6
+# - local address inheritance-disable
+# - precedence flash
+# - receive-buffer-size 512
+# - send-buffer-size 4096
+# - session-open-mode both
+# - tcp mss inheritance-disable
+# - update-source Loopback919
+# - ttl-security
+# - graceful-maintenance
+# - graceful-maintenance as-prepends 0
+
+
+# Using parsed
+- name: Parse externally provided BGP configuration
+  register: result
+  cisco.iosxr.iosxr_bgp_templates:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
+
+# content of pared.cfg
+# router bgp 65536
+#  neighbor-group neighbor-group1
+#   bfd fast-detect strict-mode
+#   precedence critical
+#   advertisement-interval 10
+#   internal-vpn-client
+#   address-family ipv4 unicast
+#    advertise local-labeled-route
+#   !
+#  !
+#  neighbor-group neighbor-group2
+#   ebgp-multihop 255
+#   egress-engineering
+#   precedence flash
+#   graceful-maintenance
+#    as-prepends 0
+#   !
+#   tcp mss inheritance-disable
+#   local-as 6
+#   cluster-id 1
+#   dmz-link-bandwidth
+#   description neighbor-group2
+#   ttl-security
+#   local address inheritance-disable
+#   update-source Loopback919
+#   idle-watch-time 30
+#   ignore-connected-check
+#   session-open-mode both
+#   send-buffer-size 4096
+#   receive-buffer-size 512
+#   internal-vpn-client
+#  !
+# !
+# Task output
+# -----------
+# parsed:
+#   as_number: '65536'
+#   neighbor:
+#     - address_family:
+#         - advertise:
+#             local_labeled_route:
+#               set: true
+#           afi: ipv4
+#           safi: unicast
+#       advertisement_interval: 10
+#       bfd:
+#         fast_detect:
+#           strict_mode: true
+#       internal_vpn_client: true
+#       name: neighbor-group1
+#       precedence: critical
+#     - cluster_id: '1'
+#       description: neighbor-group2
+#       dmz_link_bandwidth:
+#         set: true
+#       ebgp_multihop:
+#         value: 255
+#       egress_engineering:
+#         set: true
+#       graceful_maintenance:
+#         as_prepends:
+#           value: 0
+#         set: true
+#       ignore_connected_check:
+#         set: true
+#       internal_vpn_client: true
+#       local:
+#         address:
+#           inheritance_disable: true
+#       local_as:
+#         value: 6
+#       name: neighbor-group2
+#       precedence: flash
+#       receive_buffer_size: 512
+#       send_buffer_size: 4096
+#       session_open_mode: both
+#       tcp:
+#         mss:
+#           inheritance_disable: true
+#       ttl_security:
+#         set: true
+#       update_source: Loopback919
 """
 
 RETURN = """
@@ -809,17 +1641,21 @@ commands:
   returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
   type: list
   sample:
-    - sample command 1
-    - sample command 2
-    - sample command 3
+    - router bgp 65536
+    - neighbor-group neighbor-group1
+    - advertisement-interval 10
+    - bfd fast-detect strict-mode
+    - internal-vpn-client
 rendered:
   description: The provided configuration in the task rendered in device-native format (offline).
   returned: when I(state) is C(rendered)
   type: list
   sample:
-    - sample command 1
-    - sample command 2
-    - sample command 3
+   - router bgp 65536
+   - neighbor-group neighbor-group1
+   - advertisement-interval 10
+   - bfd fast-detect strict-mode
+   - internal-vpn-client
 gathered:
   description: Facts about the network resource gathered from the remote device as structured data.
   returned: when I(state) is C(gathered)
