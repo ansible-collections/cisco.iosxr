@@ -336,9 +336,9 @@ def get_interface_type(interface):
         return "Ethernet"
     elif interface.upper().startswith("LO"):
         return "Loopback"
-    elif interface.upper().startswith("BUNDLE-E")
+    elif interface.upper().startswith("BUNDLE-E"):
         return "Bundle-Ether"
-    elif interface.upper().startswith("BUNDLE-P")
+    elif interface.upper().startswith("BUNDLE-P"):
         return "Bundle-POS"
     elif interface.upper().startswith("NV"):
         return "nve"
