@@ -297,9 +297,9 @@ def normalize_interface(name):
         if_type = "Vlan"
     elif name.lower().startswith("lo"):
         if_type = "Loopback"
-    elif name.lower().startswith("be"):
+    elif name.lower().startswith("bundle-e"):
         if_type = "Bundle-Ether"
-    elif name.lower().startswith("bp"):
+    elif name.lower().startswith("bundle-p"):
         if_type = "Bundle-POS"
     elif name.lower().startswith("fif"):
         if_type = "FiftyGigE"
@@ -336,8 +336,10 @@ def get_interface_type(interface):
         return "Ethernet"
     elif interface.upper().startswith("LO"):
         return "Loopback"
-    elif interface.upper().startswith("BE"):
+    elif interface.upper().startswith("BUNDLE-E")
         return "Bundle-Ether"
+    elif interface.upper().startswith("BUNDLE-P")
+        return "Bundle-POS"
     elif interface.upper().startswith("NV"):
         return "nve"
     elif interface.upper().startswith("TE"):
