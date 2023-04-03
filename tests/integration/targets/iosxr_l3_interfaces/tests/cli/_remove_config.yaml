@@ -1,6 +1,9 @@
 ---
-- name: Remove configuration
-  vars:
-    lines: "interface GigabitEthernet 0/0/0/0\nno ipv4 address\nno ipv6 address\ninterface GigabitEthernet 0/0/0/1\nno ipv4 address\nno ipv6 address\n"
-  ansible.netcommon.cli_config:
-    config: "{{ lines }}"
+- name: Remove interfaces from configuration before actual testing
+  loop:
+    - GigabitEthernet 0/0/0/0
+    - GigabitEthernet 0/0/0/1
+  ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no interface {{ item }}
