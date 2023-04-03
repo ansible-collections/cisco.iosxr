@@ -5,6 +5,9 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v5.0.1
+======
+
 v5.0.0
 ======
 
@@ -26,7 +29,6 @@ Bugfixes
 - Bgp_global, Bgp_neighbor_address_family, Bgp_address_family. Make all possible option mutually exclusive.
 - bgp_neighbor_address_family - mark ``soft_reconfiguration`` suboptions ``set``, ``always``, and ``inheritance_disable`` as mutually exclusive. (https://github.com/ansible-collections/cisco.iosxr/issues/325)
 - facts - fix ``ansible_net_model`` and ``ansible_net_seriulnum`` facts gathering issue (https://github.com/ansible-collections/cisco.iosxr/issues/308)
-
 
 v4.1.0
 ======
