@@ -29,6 +29,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.ut
     normalize_interface,
     remove_command_from_config_list,
     remove_duplicate_interface,
+    search_obj_in_list,
 )
 
 
@@ -181,21 +182,33 @@ class Interfaces(ConfigBase):
                   to the desired configuration
         """
         commands = []
+        not_in_have = set()
+        in_have = set()
 
         for each in have:
             for interface in want:
-                if each["name"] == interface["name"] or interface["name"] in each["name"]:
+                interface["name"] = normalize_interface(interface["name"])
+                if each["name"] == interface["name"]:
+                    in_have.add(interface["name"])
                     break
+                if interface["name"] != each["name"]:
+                    not_in_have.add(interface["name"])
             else:
                 # We didn't find a matching desired state, which means we can
                 # pretend we received an empty desired state.
                 interface = dict(name=each["name"])
-                commands.extend(self._clear_config(interface, each))
+                kwargs = {"want": interface, "have": each}
+                commands.extend(self._clear_config(**kwargs))
                 continue
             have_dict = filter_dict_having_none_value(interface, each)
-            want = dict()
-            commands.extend(self._clear_config(want, have_dict))
+            commands.extend(self._clear_config(dict(), have_dict))
             commands.extend(self._set_config(interface, each))
+        # Add the want interface that's not already configured in have interface
+        for each in not_in_have - in_have:
+            for every in want:
+                interface = "interface {0}".format(every["name"])
+                if each and interface not in commands:
+                    commands.extend(self._set_config(every, {}, module))
         # Remove the duplicate interface call
         commands = remove_duplicate_interface(commands)
 
