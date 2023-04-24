@@ -208,7 +208,7 @@ class Interfaces(ConfigBase):
             for every in want:
                 interface = "interface {0}".format(every["name"])
                 if each and interface not in commands:
-                    commands.extend(self._set_config(every, {}, module))
+                    commands.extend(self._set_config(every, {}))
         # Remove the duplicate interface call
         commands = remove_duplicate_interface(commands)
 
