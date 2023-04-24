@@ -29,7 +29,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.ut
     normalize_interface,
     remove_command_from_config_list,
     remove_duplicate_interface,
-    search_obj_in_list,
 )
 
 
