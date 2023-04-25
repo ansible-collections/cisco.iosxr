@@ -145,7 +145,6 @@ def build_xml_subtree(container_ele, xmap, param=None, opcode=None):
         if (
             opcode in ("delete", "merge") and meta.get("operation", "unknown") == "edit"
         ) or meta.get("operation", None) is None:
-
             if meta.get("tag", False) is True:
                 if parent.tag == container_ele.tag:
                     if meta.get("ns", False) is True:
@@ -429,7 +428,6 @@ def load_config(
     nc_get_filter=None,
     label=None,
 ):
-
     conn = get_connection(module)
 
     diff = None
