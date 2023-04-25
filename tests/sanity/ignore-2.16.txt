@@ -1,0 +1,12 @@
+plugins/action/iosxr.py action-plugin-docs # base class for deprecated network platform modules using `connection: local
+plugins/modules/iosxr_bgp.py validate-modules:deprecation-mismatch
+plugins/modules/iosxr_bgp.py validate-modules:invalid-documentation
+plugins/cliconf/iosxr.py pylint:arguments-renamed
+plugins/netconf/iosxr.py pylint:arguments-renamed
+tests/unit/mock/loader.py pylint:arguments-renamed
+plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.9!skip
+plugins/sub_plugins/grpc/iosxr.py import-3.9!skip
+plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.10!skip
+plugins/sub_plugins/grpc/iosxr.py import-3.10!skip
+plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.11!skip
+plugins/sub_plugins/grpc/iosxr.py import-3.11!skip

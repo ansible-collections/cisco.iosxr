@@ -21,10 +21,11 @@ version_added: 1.0.0
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 notes:
-- This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
+- This module works with connection C(network_cli).
+    See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_iosxr.html)
 - This module does not support C(netconf) connection
-- Abbreviated commands are NOT idempotent, see L(Network FAQ,../network/user_guide/faq.html
-  #why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands).
+- Abbreviated commands are NOT idempotent, see
+    U(https://docs.ansible.com/ansible/latest/network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands)
 - Avoid service disrupting changes (viz. Management IP) from config replace.
 - Do not use C(end) in the replace config file.
 - To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they
