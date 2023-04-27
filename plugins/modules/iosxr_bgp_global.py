@@ -935,68 +935,94 @@ options:
 """
 EXAMPLES = """
 
-##### Using Merged ##########################################
------------------------------------------------------------------
-
-# configuration on device  Before merge state:
-
-
-#RP/0/0/CPU0:10#show running-config router bgp
-#Thu Feb  4 09:38:36.245 UTC
-#% No such configuration item(s)
-#RP/0/0/CPU0:10#
-
-# --------------Merge state---------------
-#  - name: Merge the following configuration
-#       cisco.iosxr.iosxr_bgp_global:
-#         config:
-#             as_number: 65536
-#             default_metric: 5
-#             socket:
-#               receive_buffer_size: 514
-#               send_buffer_size: 4098
-#             bgp:
-#               confederation:
-#                 identifier: 4
-#               bestpath:
-#                 med:
-#                   confed: True
-#               cluster_id: 5
-#               router_id: 192.0.2.10
-#             neighbors:
-#               - neighbor: 192.0.2.13
-#                 remote_as: 65538
-#                 bfd:
-#                   fast_detect:
-#                     strict_mode: True
-#                   multiplier: 6
-#                   minimum_interval: 20
-#             vrfs:
-#               - vrf: vrf1
-#                 default_metric: 5
-# ----------------------------------------
+# Using merged
 #
+# Before state
+# ------------
 
+# RP/0/0/CPU0:10#show running-config router bgp
+# Thu Feb  4 09:38:36.245 UTC
+# % No such configuration item(s)
+# RP/0/0/CPU0:10#
+
+ - name: Merge the following BGP global configuration
+   cisco.iosxr.iosxr_bgp_global:
+     config:
+       as_number: 65536
+       default_metric: 5
+       socket:
+         receive_buffer_size: 514
+         send_buffer_size: 4098
+       bgp:
+         confederation:
+           identifier: 4
+         bestpath:
+           med:
+             confed: True
+         cluster_id: 5
+         router_id: 192.0.2.10
+       neighbors:
+         - neighbor: 192.0.2.13
+           remote_as: 65538
+           bfd:
+             fast_detect:
+               strict_mode: True
+             multiplier: 6
+             minimum_interval: 20
+       vrfs:
+         - vrf: vrf1
+           default_metric: 5
+
+# Task Output:
+# ------------
+#
+# before: {}
 
 # commands:
-# - "router bgp 65536",
-# - "bgp cluster-id 5",
-# - "bgp router-id 192.0.2.10",
-# - "bgp bestpath med confed",
-# - "bgp confederation identifier 4",
-# - "default-metric 5",
-# - "socket receive-buffer-size 514",
-# - "socket send-buffer-size 4098",
-# - "neighbor 192.0.2.13",
-# - "bfd fast-detect strict-mode",
-# - "bfd minimum-interval 20",
-# - "bfd multiplier 6",
-# - "remote-as 65538",
-# - "vrf vrf1",
-# - "default-metric 5"
-
-# Configuration on device After Merge state:
-# --------------------------------------------
+#   - router bgp 65536
+#   - bgp cluster-id 5
+#   - bgp router-id 192.0.2.10
+#   - bgp bestpath med confed
+#   - bgp confederation identifier 4
+#   - default-metric 5
+#   - socket receive-buffer-size 514
+#   - socket send-buffer-size 4098
+#   - neighbor 192.0.2.13
+#   - bfd fast-detect strict-mode
+#   - bfd minimum-interval 20
+#   - bfd multiplier 6
+#   - remote-as 65538
+#   - vrf vrf1
+#   - default-metric 5
+#
+# after:
+#     as_number: '65536'
+#     bgp:
+#       bestpath:
+#         med:
+#           confed: true
+#       cluster_id: '5'
+#       confederation:
+#         identifier: 4
+#       router_id: 192.0.2.10
+#     default_metric: 5
+#     neighbors:
+#     - bfd:
+#         fast_detect:
+#           strict_mode: true
+#         minimum_interval: 20
+#         multiplier: 6
+#       neighbor_address: 192.0.2.13
+#       remote_as: 65538
+#     socket:
+#       receive_buffer_size: 514
+#       send_buffer_size: 4098
+#     vrfs:
+#     - default_metric: 5
+#       vrf: vrf1
+#
+# After state
+# -----------
 
 # RP/0/0/CPU0:10#show running-config router bgp
 # Thu Feb  4 09:44:32.480 UTC
@@ -1019,10 +1045,10 @@ EXAMPLES = """
 #  !
 # !
 
-##### Using replaced ###########################################
-
-# configuration on device before replaced
-# --------------------------------------------
+# Using replaced
+#
+# Before state
+# ------------
 #
 # RP/0/0/CPU0:10#show running-config router bgp
 # Thu Feb  4 09:44:32.480 UTC
@@ -1044,49 +1070,104 @@ EXAMPLES = """
 #   default-metric 5
 #  !
 # !
-# --------------Replace state---------------
-# - name: Replace the following configuration
-#       cisco.iosxr.iosxr_bgp_global:
-#         state: replaced
-#         config:
-#             as_number: 65536
-#             default_metric: 4
-#             socket:
-#               receive_buffer_size: 514
-#               send_buffer_size: 4098
-#             bgp:
-#               confederation:
-#                 identifier: 4
-#               bestpath:
-#                 med:
-#                   confed: True
-#               cluster_id: 5
-#               router_id: 192.0.2.10
-#             neighbors:
-#               - neighbor: 192.0.2.14
-#                 remote_as: 65538
-#                 bfd:
-#                   fast_detect:
-#                     strict_mode: True
-#                   multiplier: 6
-#                   minimum_interval: 20
-#             vrfs:
-#               - vrf: vrf1
-#                 default_metric: 5
-# -------------------------------------------
+
+ - name: Replace the following configuration
+   cisco.iosxr.iosxr_bgp_global:
+     state: replaced
+     config:
+       as_number: 65536
+       default_metric: 4
+       socket:
+         receive_buffer_size: 514
+         send_buffer_size: 4098
+       bgp:
+         confederation:
+           identifier: 4
+         bestpath:
+           med:
+             confed: True
+         cluster_id: 5
+         router_id: 192.0.2.10
+       neighbors:
+         - neighbor: 192.0.2.14
+           remote_as: 65538
+           bfd:
+             fast_detect:
+               strict_mode: True
+             multiplier: 6
+             minimum_interval: 20
+       vrfs:
+         - vrf: vrf1
+           default_metric: 5
+
+# Task Output:
+# ------------
+#
+# before:
+#     as_number: '65536'
+#     bgp:
+#       bestpath:
+#         med:
+#           confed: true
+#       cluster_id: '5'
+#       confederation:
+#         identifier: 4
+#       router_id: 192.0.2.10
+#     default_metric: 5
+#     neighbors:
+#     - bfd:
+#         fast_detect:
+#           strict_mode: true
+#         minimum_interval: 20
+#         multiplier: 6
+#       neighbor_address: 192.0.2.13
+#       remote_as: 65538
+#     socket:
+#       receive_buffer_size: 514
+#       send_buffer_size: 4098
+#     vrfs:
+#     - default_metric: 5
+#       vrf: vrf1
+#
 # commands:
-# - "router bgp 65536",
-# - "default-metric 4",
-# - "neighbor 192.0.2.14",
-# - "bfd fast-detect strict-mode",
-# - "bfd minimum-interval 20",
-# - "bfd multiplier 6",
-# - "remote-as 65538",
-# - "no neighbor 192.0.2.13"
-
-# configuration on device After Replaced  state:
-# ----------------------------------------------
-
+#   - router bgp 65536
+#   - default-metric 4
+#   - neighbor 192.0.2.14
+#   - bfd fast-detect strict-mode
+#   - bfd minimum-interval 20
+#   - bfd multiplier 6
+#   - remote-as 65538
+#   - no neighbor 192.0.2.13
+#
+# after:
+#     as_number: '65536'
+#     bgp:
+#       bestpath:
+#         med:
+#           confed: true
+#       cluster_id: '5'
+#       confederation:
+#         identifier: 4
+#       router_id: 192.0.2.10
+#     default_metric: 4
+#     neighbors:
+#     - bfd:
+#         fast_detect:
+#           strict_mode: true
+#         minimum_interval: 20
+#         multiplier: 6
+#       neighbor_address: 192.0.2.14
+#       remote_as: 65538
+#     socket:
+#       receive_buffer_size: 514
+#       send_buffer_size: 4098
+#     vrfs:
+#     - default_metric: 5
+#       vrf: vrf1
+#
+# After state
+# -----------
+#
 # RP/0/0/CPU0:10#show running-config router bgp
 # Thu Feb  4 09:54:11.161 UTC
 # router bgp 65536
@@ -1108,11 +1189,154 @@ EXAMPLES = """
 #  !
 # !
 
+# Using overridden
+#
+# Before state
+# ------------
+#
+# RP/0/0/CPU0:10#show running-config router bgp
+# Thu Feb  4 09:44:32.480 UTC
+# router bgp 65536
+#  bgp confederation identifier 4
+#  bgp router-id 192.0.2.10
+#  bgp cluster-id 5
+#  default-metric 5
+#  socket send-buffer-size 4098
+#  bgp bestpath med confed
+#  socket receive-buffer-size 514
+#  neighbor 192.0.2.13
+#   remote-as 65538
+#   bfd fast-detect strict-mode
+#   bfd multiplier 6
+#   bfd minimum-interval 20
+#  !
+#  vrf vrf1
+#   default-metric 5
+#  !
+# !
 
-##### Using deleted ############################################
+ - name: Override running config with provided configuration
+   cisco.iosxr.iosxr_bgp_global:
+     state: overridden
+     config:
+       as_number: 65536
+       default_metric: 4
+       socket:
+         receive_buffer_size: 514
+         send_buffer_size: 4098
+       bgp:
+         confederation:
+           identifier: 4
+         bestpath:
+           med:
+             confed: True
+         cluster_id: 5
+         router_id: 192.0.2.10
+       neighbors:
+         - neighbor: 192.0.2.14
+           remote_as: 65538
+           bfd:
+             fast_detect:
+               strict_mode: True
+             multiplier: 6
+             minimum_interval: 20
+       vrfs:
+         - vrf: vrf1
+           default_metric: 5
+#
+# Task Output:
+# ------------
+#
+# before:
+#     as_number: '65536'
+#     bgp:
+#       bestpath:
+#         med:
+#           confed: true
+#       cluster_id: '5'
+#       confederation:
+#         identifier: 4
+#       router_id: 192.0.2.10
+#     default_metric: 5
+#     neighbors:
+#     - bfd:
+#         fast_detect:
+#           strict_mode: true
+#         minimum_interval: 20
+#         multiplier: 6
+#       neighbor_address: 192.0.2.13
+#       remote_as: 65538
+#     socket:
+#       receive_buffer_size: 514
+#       send_buffer_size: 4098
+#     vrfs:
+#     - default_metric: 5
+#       vrf: vrf1
+#
+# commands:
+#   - router bgp 65536
+#   - default-metric 4
+#   - neighbor 192.0.2.14
+#   - bfd fast-detect strict-mode
+#   - bfd minimum-interval 20
+#   - bfd multiplier 6
+#   - remote-as 65538
+#   - no neighbor 192.0.2.13
+#
+# after:
+#     as_number: '65536'
+#     bgp:
+#       bestpath:
+#         med:
+#           confed: true
+#       cluster_id: '5'
+#       confederation:
+#         identifier: 4
+#       router_id: 192.0.2.10
+#     default_metric: 4
+#     neighbors:
+#     - bfd:
+#         fast_detect:
+#           strict_mode: true
+#         minimum_interval: 20
+#         multiplier: 6
+#       neighbor_address: 192.0.2.14
+#       remote_as: 65538
+#     socket:
+#       receive_buffer_size: 514
+#       send_buffer_size: 4098
+#     vrfs:
+#     - default_metric: 5
+#       vrf: vrf1
 
-# configuration on device Before deleted state
-# ---------------------------------------------
+# After state
+# -----------
+#
+# RP/0/0/CPU0:10#show running-config router bgp
+# Thu Feb  4 09:54:11.161 UTC
+# router bgp 65536
+#  bgp confederation identifier 4
+#  bgp router-id 192.0.2.10
+#  bgp cluster-id 5
+#  default-metric 4
+#  socket send-buffer-size 4098
+#  bgp bestpath med confed
+#  socket receive-buffer-size 514
+#  neighbor 192.0.2.14
+#   remote-as 65538
+#   bfd fast-detect strict-mode
+#   bfd multiplier 6
+#   bfd minimum-interval 20
+#  !
+#  vrf vrf1
+#   default-metric 5
+#  !
+# !
+
+# Using deleted
+#
+# Before state
+# ------------
 #
 # RP/0/0/CPU0:10#show running-config router bgp
 # Thu Feb  4 09:54:11.161 UTC
@@ -1135,27 +1359,59 @@ EXAMPLES = """
 #  !
 # !
 #
-# --------------------------------------------------------
-# - name: Delete BGP configurations handled by this module
-#  cisco.iosxr.iosxr_bgp_global:
-#         state: deleted
-#         config:
-#             as_number: 65536
+
+ - name: Delete BGP configurations handled by this module
+   cisco.iosxr.iosxr_bgp_global:
+     config:
+       as_number: 65536
+     state: deleted
+
+# Task Output:
+# ------------
+#
+# before:
+#     as_number: '65536'
+#     bgp:
+#       bestpath:
+#         med:
+#           confed: true
+#       cluster_id: '5'
+#       confederation:
+#         identifier: 4
+#       router_id: 192.0.2.10
+#     default_metric: 4
+#     neighbors:
+#     - bfd:
+#         fast_detect:
+#           strict_mode: true
+#         minimum_interval: 20
+#         multiplier: 6
+#       neighbor_address: 192.0.2.14
+#       remote_as: 65538
+#     socket:
+#       receive_buffer_size: 514
+#       send_buffer_size: 4098
+#     vrfs:
+#     - default_metric: 5
+#       vrf: vrf1
 #
 # commands:
-# "router bgp 65536",
-# "no bgp cluster-id 5",
-# "no bgp router-id 192.0.2.10",
-# "no bgp bestpath med confed",
-# "no bgp confederation identifier 4",
-# "no default-metric 4",
-# "no socket receive-buffer-size 514",
-# "no socket send-buffer-size 4098",
-# "no neighbor 192.0.2.14",
-# "no vrf vrf1"
+#   - router bgp 65536
+#   - no bgp cluster-id 5
+#   - no bgp router-id 192.0.2.10
+#   - no bgp bestpath med confed
+#   - no bgp confederation identifier 4
+#   - no default-metric 4
+#   - no socket receive-buffer-size 514
+#   - no socket send-buffer-size 4098
+#   - no neighbor 192.0.2.14
+#   - no vrf vrf1
 #
-# configuration on device after delete
-# -------------------------------------------
+# after:
+#     as_number: '65536'
+#
+# After state
+# -----------
 #
 # RP/0/0/CPU0:10#show running-config router bgp
 # Thu Feb  4 10:01:08.232 UTC
@@ -1163,11 +1419,10 @@ EXAMPLES = """
 # !
 #
 
-
-################# Using Purged ########################################
-
-# configuration on device Before Purged state
-# --------------------------------------------
+# Using purged
+#
+# Before state
+# ------------
 #
 # RP/0/0/CPU0:10#show running-config router bgp
 # Thu Feb  4 09:54:11.161 UTC
@@ -1175,104 +1430,133 @@ EXAMPLES = """
 #  bgp confederation identifier 4
 #  bgp router-id 192.0.2.10
 #  bgp cluster-id 5
-#  default-metric 4
+#  default-metric 5
 #  socket send-buffer-size 4098
 #  bgp bestpath med confed
 #  socket receive-buffer-size 514
-#  address-family ipv4 unicast
-#  neighbor 192.0.2.14
+#  neighbor 192.0.2.13
 #   remote-as 65538
 #   bfd fast-detect strict-mode
 #   bfd multiplier 6
 #   bfd minimum-interval 20
-#   address-family ipv4 unicast
 #  !
 #  vrf vrf1
 #   default-metric 5
 #  !
 # !
 #
-# - name: Purge all BGP configurations from the device
-#   cisco.iosxr.iosxr_bgp_global:
-#     state: purged
+
+ - name: Purge all BGP configurations from the device
+   cisco.iosxr.iosxr_bgp_global:
+     state: purged
+
 #
-#  commands:
-# - no router bgp 65563
+# Task Output:
+# ------------
 #
-# configuration on device After purged state:
-# ---------------------------------------------
+# before:
+#     as_number: '65536'
+#     bgp:
+#       bestpath:
+#         med:
+#           confed: true
+#       cluster_id: '5'
+#       confederation:
+#         identifier: 4
+#       router_id: 192.0.2.10
+#     default_metric: 5
+#     neighbors:
+#     - bfd:
+#         fast_detect:
+#           strict_mode: true
+#         minimum_interval: 20
+#         multiplier: 6
+#       neighbor_address: 192.0.2.13
+#       remote_as: 65538
+#     socket:
+#       receive_buffer_size: 514
+#       send_buffer_size: 4098
+#     vrfs:
+#     - default_metric: 5
+#       vrf: vrf1
 #
-# #RP/0/0/CPU0:10#show running-config router bgp
-# #Thu Feb  4 09:38:36.245 UTC
-# #% No such configuration item(s)
-# #RP/0/0/CPU0:10#
+# commands:
+#   - no router bgp 65536
 #
+# after: {}
 #
-# ################# Using Rendred #######################################################
+# After state
+# -----------
 #
-# - name: Render platform specific configuration lines (without connecting to the device)
-#   cisco.iosxr.iosxr_bgp_global:
-#         state: rendered
-#         config:
-#             as_number: 1
-#             default_metric: 4
-#             vrfs:
-#               - vrf: vrf3
-#                 bfd:
-#                   minimum_interval: 20
-#                   multiplier: 10
-#                 bgp:
-#                   fast_external_fallover:
-#                     disable: True
-#                   router_id: 1.2.3.4
-#                   auto_policy_soft_reset:
-#                     disable: True
-#                 #rd:
-#                 #  auto: True
-#                 #  #value: 1
-#                 timers:
-#                   keepalive_time: 20
-#                   holdtime: 30
-#               - vrf: vrf2
-#                 bgp:
-#                   enforce_first_as:
-#                     disable: True
-#                 default_metric: 4
-#                 neighbors:
-#                   - neighbor: 1.1.1.3
-#                     remote_as: 2
-#                     graceful_maintenance:
-#                       set: True
-#                       activate:
-#                         #set: True
-#                         inheritance_disable: True
-#                       local_preference:
-#                         value: 1
-#                         #inheritance_disable: True
-#                       as_prepends:
-#                         value: 2
-# rendered output
-# ------------------------------------
-#   "router bgp 1",
-#   "default-metric 4",
-#   "vrf vrf3",
-#   "bfd multiplier 10",
-#   "bfd minimum-interval 20",
-#   "bgp auto-policy-soft-reset disable",
-#   "bgp fast-external-fallover disable",
-#   "bgp router-id 1.2.3.4",
-#   "timers bgp 20 30",
-#   "vrf vrf2",
-#   "neighbor 1.1.1.3",
-#   "remote-as 2",
-#   "graceful-maintenance",
-#   "graceful-maintenance activate inheritance-disable",
-#   "graceful-maintenance local-preference 1",
-#   "graceful-maintenance as-prepends 2",
-#   "bgp enforce-first-as disable",
-#   "default-metric 4"
+# RP/0/0/CPU0:10#show running-config router bgp
+# Thu Feb  4 09:38:36.245 UTC
+# % No such configuration item(s)
+# RP/0/0/CPU0:10#
+
+# Using replaced
 #
-# ############## Using parsed #####################
+ - name: Render platform specific configuration lines (without connecting to the device)
+   cisco.iosxr.iosxr_bgp_global:
+     state: rendered
+     config:
+       as_number: 1
+       default_metric: 4
+       vrfs:
+         - vrf: vrf3
+           bfd:
+             minimum_interval: 20
+             multiplier: 10
+           bgp:
+             fast_external_fallover:
+               disable: True
+             router_id: 1.2.3.4
+             auto_policy_soft_reset:
+               disable: True
+           timers:
+             keepalive_time: 20
+             holdtime: 30
+         - vrf: vrf2
+           bgp:
+             enforce_first_as:
+               disable: True
+           default_metric: 4
+           neighbors:
+             - neighbor: 1.1.1.3
+               remote_as: 2
+               graceful_maintenance:
+                 set: True
+                 activate:
+                   inheritance_disable: True
+                 local_preference:
+                   value: 1
+                 as_prepends:
+                   value: 2
+
+# Task Output:
+# ------------
+#
+# rendered:
+#   - router bgp 1
+#   - default-metric 4
+#   - vrf vrf3
+#   - bfd multiplier 10
+#   - bfd minimum-interval 20
+#   - bgp auto-policy-soft-reset disable
+#   - bgp fast-external-fallover disable
+#   - bgp router-id 1.2.3.4
+#   - timers bgp 20 30
+#   - vrf vrf2
+#   - neighbor 1.1.1.3
+#   - remote-as 2
+#   - graceful-maintenance
+#   - graceful-maintenance activate inheritance-disable
+#   - graceful-maintenance local-preference 1
+#   - graceful-maintenance as-prepends 2
+#   - bgp enforce-first-as disable
+#   - default-metric 4
+
+# Using parsed
+#
 #  parsed.cfg
 #  ------------
 # router bgp 65536
@@ -1294,38 +1578,149 @@ EXAMPLES = """
 #   bfd minimum-interval 20
 #  !
 # !
-# ------------------------------------
 #
-# - name: Parse externally provided BGP config
-#   cisco.iosxr.iosxr_bgp_global:
-#     running_config: "{{ lookup('file', 'parsed.cfg') }}"
-#     state: parsed
+
+ - name: Parse externally provided BGP config
+   cisco.iosxr.iosxr_bgp_global:
+     running_config: "{{ lookup('file', 'parsed.cfg') }}"
+     state: parsed
+
+# Task Output:
+# ------------
 #
-# #Task output using parsed
-#     as_number: "65536"
-#     default_metric: 4
-#     socket:
-#       receive_buffer_size: 514
-#       send_buffer_size: 4098
+# parsed:
+#     as_number: '65536'
 #     bgp:
-#       confederation:
-#         identifier: 4
 #       bestpath:
 #         med:
 #           confed: true
-#       cluster_id: "5"
-#       router_id: "192.0.2.10"
+#       cluster_id: '5'
+#       confederation:
+#         identifier: 4
+#       router_id: 192.0.2.10
+#     default_metric: 4
 #     neighbors:
-#       - neighbor: 192.0.2.11
-#         remote_as: 65537
-#         cluster_id: "3"
-#       - neighbor: "192.0.2.14"
-#         remote_as: 65538
-#         bfd:
-#           fast_detect:
-#             strict_mode: true
-#           multiplier: 6
-#           minimum_interval: 20
+#     - cluster_id: '3'
+#       neighbor_address: 192.0.2.11
+#       remote_as: 65537
+#     - bfd:
+#         fast_detect:
+#           strict_mode: true
+#         minimum_interval: 20
+#         multiplier: 6
+#       neighbor_address: 192.0.2.14
+#       remote_as: 65538
+#     socket:
+#       receive_buffer_size: 514
+#       send_buffer_size: 4098
+
+# Using gathered
+#
+# Before state
+# ------------
+#
+
+# RP/0/0/CPU0:10#show running-config router bgp
+# Thu Feb  4 09:38:36.245 UTC
+# router bgp 65536
+#  bgp confederation identifier 4
+#  bgp router-id 192.0.2.10
+#  bgp cluster-id 5
+#  default-metric 5
+#  socket send-buffer-size 4098
+#  bgp bestpath med confed
+#  socket receive-buffer-size 514
+#  neighbor 192.0.2.13
+#   remote-as 65538
+#   bfd fast-detect strict-mode
+#   bfd multiplier 6
+#   bfd minimum-interval 20
+#  !
+#  vrf vrf1
+#   default-metric 5
+#  !
+# !
+
+ - name: Gather bgp global facts
+   cisco.iosxr.iosxr_bgp_global:
+     state: gathered
+
+# Task Output:
+# ------------
+# gathered:
+#     as_number: '65536'
+#     bgp:
+#       bestpath:
+#         med:
+#           confed: true
+#       cluster_id: '5'
+#       confederation:
+#         identifier: 4
+#       router_id: 192.0.2.10
+#     default_metric: 5
+#     neighbors:
+#     - bfd:
+#         fast_detect:
+#           strict_mode: true
+#         minimum_interval: 20
+#         multiplier: 6
+#       neighbor_address: 192.0.2.13
+#       remote_as: 65538
+#     socket:
+#       receive_buffer_size: 514
+#       send_buffer_size: 4098
+#     vrfs:
+#     - default_metric: 5
+#       vrf: vrf1
+
+"""
+RETURN = """
+before:
+  description: The configuration prior to the model invocation.
+  returned: always
+  type: dict
+  sample: >
+    The configuration returned will always be in the same format
+     of the parameters above.
+after:
+  description: The resulting configuration model invocation.
+  returned: when changed
+  type: dict
+  sample: >
+    The configuration returned will always be in the same format
+     of the parameters above.
+commands:
+  description: The set of commands pushed to the remote device.
+  returned: always
+  type: list
+  sample:
+  - router bgp 65536
+  - bgp cluster-id 5
+  - bgp router-id 192.0.2.10
+  - bgp bestpath med confed
+
+rendered:
+  description: The provided configuration in the task rendered in device-native format (offline).
+  returned: when I(state) is C(rendered)
+  type: list
+  sample:
+  - router bgp 1
+  - default-metric 4
+  - vrf vrf3
+gathered:
+  description: Facts about the network resource gathered from the remote device as structured data.
+  returned: when I(state) is C(gathered)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+parsed:
+  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
+  returned: when I(state) is C(parsed)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 """
 
 from ansible.module_utils.basic import AnsibleModule
