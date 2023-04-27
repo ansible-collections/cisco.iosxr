@@ -29,7 +29,6 @@ from .iosxr_module import TestIosxrModule
 
 
 class TestIosxrNetconfModule(TestIosxrModule):
-
     module = iosxr_netconf
 
     def setUp(self):

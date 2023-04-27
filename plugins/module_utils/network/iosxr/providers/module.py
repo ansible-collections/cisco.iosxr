@@ -14,7 +14,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.provider
 
 
 class NetworkModule(AnsibleModule):
-
     fail_on_missing_provider = True
 
     def __init__(self, connection=None, *args, **kwargs):

@@ -47,7 +47,6 @@ from .iosxr_module import TestIosxrModule, load_fixture
 
 
 class TestIosxrBannerModule(TestIosxrModule):
-
     module = iosxr_banner
 
     def setUp(self):
