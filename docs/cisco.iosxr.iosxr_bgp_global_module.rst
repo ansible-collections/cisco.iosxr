@@ -8997,10 +8997,10 @@ Examples
     # Before state
     # ------------
 
-    #RP/0/0/CPU0:10#show running-config router bgp
-    #Thu Feb  4 09:38:36.245 UTC
-    #% No such configuration item(s)
-    #RP/0/0/CPU0:10#
+    # RP/0/0/CPU0:10#show running-config router bgp
+    # Thu Feb  4 09:38:36.245 UTC
+    # % No such configuration item(s)
+    # RP/0/0/CPU0:10#
 
      - name: Merge the following BGP global configuration
        cisco.iosxr.iosxr_bgp_global:
@@ -9245,7 +9245,7 @@ Examples
     #   default-metric 5
     #  !
     # !
-    #
+
     # Using overridden
     #
     # Before state
@@ -9389,7 +9389,7 @@ Examples
     #   default-metric 5
     #  !
     # !
-    #
+
     # Using deleted
     #
     # Before state
@@ -9542,10 +9542,10 @@ Examples
     # After state
     # -----------
     #
-    # #RP/0/0/CPU0:10#show running-config router bgp
-    # #Thu Feb  4 09:38:36.245 UTC
-    # #% No such configuration item(s)
-    # #RP/0/0/CPU0:10#
+    # RP/0/0/CPU0:10#show running-config router bgp
+    # Thu Feb  4 09:38:36.245 UTC
+    # % No such configuration item(s)
+    # RP/0/0/CPU0:10#
     #
     # Using replaced
     #
@@ -9607,7 +9607,7 @@ Examples
     #   - graceful-maintenance as-prepends 2
     #   - bgp enforce-first-as disable
     #   - default-metric 4
-    #
+
     # Using parsed
     #
     #  parsed.cfg
@@ -9665,7 +9665,7 @@ Examples
     #     socket:
     #       receive_buffer_size: 514
     #       send_buffer_size: 4098
-    #
+
     # Using gathered
     #
     # Before state
