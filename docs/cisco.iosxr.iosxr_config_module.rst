@@ -352,9 +352,9 @@ Notes
 -----
 
 .. note::
-   - This module works with connection ``network_cli``. See `the IOS-XR Platform Options <../network/user_guide/platform_iosxr.html>`_.
+   - This module works with connection ``network_cli``. See https://docs.ansible.com/ansible/latest/network/user_guide/platform_iosxr.html
    - This module does not support ``netconf`` connection
-   - Abbreviated commands are NOT idempotent, see L(Network FAQ,../network/user_guide/faq.html
+   - Abbreviated commands are NOT idempotent, see https://docs.ansible.com/ansible/latest/network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands
    - Avoid service disrupting changes (viz. Management IP) from config replace.
    - Do not use ``end`` in the replace config file.
    - To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they appear if present in the running configuration on device including the indentation.
