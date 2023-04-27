@@ -1,3 +1,0 @@
----
-bugfixes:
-  - interfaces - Fix issue in ``overridden`` state of interfaces RM. (https://github.com/ansible-collections/cisco.iosxr/issues/377)
