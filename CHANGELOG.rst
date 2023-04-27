@@ -5,6 +5,19 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v5.0.2
+======
+
+Bugfixes
+--------
+
+- interfaces - Fix issue in ``overridden`` state of interfaces RM. (https://github.com/ansible-collections/cisco.iosxr/issues/377)
+
+Documentation Changes
+---------------------
+
+- iosxr_bgp_global - add task output to module documentation examples.
+
 v5.0.1
 ======
 
