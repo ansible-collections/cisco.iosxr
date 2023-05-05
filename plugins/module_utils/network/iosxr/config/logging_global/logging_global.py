@@ -178,7 +178,6 @@ class Logging_global(ResourceModule):
                 self.addcmd(hentry, x, negate=True)
 
     def list_to_dict(self, config):
-
         data = deepcopy(config)
         if "tls_servers" in data:
             data["tls_servers"] = {x["name"]: x for x in data["tls_servers"]}
