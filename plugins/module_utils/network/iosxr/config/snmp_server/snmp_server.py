@@ -281,7 +281,6 @@ class Snmp_server(ResourceModule):
             "users",
             "targets",
         ]:
-
             wantx = want.get(x, {})
             havex = have.get(x, {})
             if "." in x:
@@ -350,7 +349,6 @@ class Snmp_server(ResourceModule):
         return host_dict
 
     def list_to_dict(self, config):
-
         data = deepcopy(config)
 
         if data.get("vrfs"):

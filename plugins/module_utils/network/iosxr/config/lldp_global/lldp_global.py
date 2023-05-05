@@ -80,7 +80,6 @@ class Lldp_global(ConfigBase):
             commands.extend(self.set_config(existing_lldp_global_facts))
 
         if commands and self.state in self.ACTION_STATES:
-
             if not self._module.check_mode:
                 self._connection.edit_config(commands)
             result["changed"] = True

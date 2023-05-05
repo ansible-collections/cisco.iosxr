@@ -366,7 +366,6 @@ class PublicKeyManager(object):
         return out
 
     def run(self):
-
         if self._module.params["state"] == "present":
             if not self._module.check_mode:
                 key = self.convert_key_to_base64()
@@ -758,7 +757,6 @@ class NCConfiguration(ConfigBase):
                         self._module.params["update_password"] == "always"
                         and want_item["configured_password"] is not None
                     ):
-
                         want_item["configured_password"] = self.generate_md5_hash(
                             want_item["configured_password"],
                         )

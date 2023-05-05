@@ -580,3 +580,13 @@ releases:
       - revert_int_changes.yaml
       - revert_intl2_l3_changes.yaml
     release_date: "2023-04-03"
+  5.0.2:
+    changes:
+      bugfixes:
+        - interfaces - Fix issue in ``overridden`` state of interfaces RM. (https://github.com/ansible-collections/cisco.iosxr/issues/377)
+      doc_changes:
+        - iosxr_bgp_global - add task output to module documentation examples.
+    fragments:
+      - fix_interfaces_overridden.yaml
+      - update_docs_with_examples.yaml
+    release_date: "2023-04-27"
