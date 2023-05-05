@@ -29,7 +29,6 @@ from .iosxr_module import TestIosxrModule, load_fixture
 
 
 class TestIosxrSystemModule(TestIosxrModule):
-
     module = iosxr_system
 
     def setUp(self):

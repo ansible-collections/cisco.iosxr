@@ -74,7 +74,6 @@ def _tmpl_bgp_dampening(config_data):
 
 
 def _tmpl_maximum_paths_ibgp(config_data):
-
     ibgp_conf = config_data.get("maximum_paths", {}).get("ibgp", {})
     if ibgp_conf:
         command = "maximum-paths ibgp"
@@ -97,7 +96,6 @@ def _tmpl_maximum_paths_ibgp(config_data):
 
 
 def _tmpl_maximum_paths_ebgp(config_data):
-
     ebgp_conf = config_data.get("maximum_paths", {}).get("ebgp", {})
     if ebgp_conf:
         command = "maximum-paths ebgp"
@@ -111,7 +109,6 @@ def _tmpl_maximum_paths_ebgp(config_data):
 
 
 def _tmpl_maximum_paths_eibgp(config_data):
-
     eibgp_conf = config_data.get("maximum_paths", {}).get("eibgp", {})
     if eibgp_conf:
         command = "maximum-paths ebgp"
@@ -137,7 +134,6 @@ def _tmpl_nexthop(config_data):
     nexthop_conf = config_data.get("nexthop", {})
     commands = []
     if nexthop_conf:
-
         if "resolution_prefix_length_minimum" in nexthop_conf:
             command = "nexthop resolution prefix-length minimum " + str(
                 nexthop_conf["resolution_prefix_length_minimum"],
