@@ -356,6 +356,10 @@ def get_interface_type(interface):
         return "FourHundredGigE"
     elif interface.upper().startswith("TWO"):
         return "TwoHundredGigE"
+    elif interface.upper().startswith("MG"):
+        return "management"
+    elif interface.upper().startswith("MA"):
+        return "management"
     else:
         return "unknown"
 

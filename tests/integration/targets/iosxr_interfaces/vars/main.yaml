@@ -5,6 +5,8 @@ merged:
       name: Loopback888
     - enabled: true
       name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
     - description: this is interface0
       enabled: true
       mtu: 65
@@ -31,6 +33,8 @@ merged:
       name: Loopback888
     - enabled: true
       name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
     - description: Configured and Merged by Ansible-Network
       duplex: half
       enabled: true
@@ -49,6 +53,8 @@ merged:
         name: Loopback888
       - enabled: true
         name: Loopback999
+      - enabled: true
+        name: MgmtEth0/RP0/CPU0/0
     commands:
       - interface GigabitEthernet0/0/0/2
       - description Configured and Merged by Ansible-Network
@@ -66,6 +72,8 @@ merged:
         name: Loopback888
       - enabled: true
         name: Loopback999
+      - enabled: true
+        name: MgmtEth0/RP0/CPU0/0
       - description: Configured and Merged by Ansible-Network
         duplex: half
         enabled: true
@@ -83,6 +91,8 @@ parsed:
     - description: test for ansible
       enabled: false
       name: Loopback888
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
     - description: Configured and Merged by Ansible-Network
       duplex: half
       enabled: true
@@ -98,6 +108,8 @@ replaced:
       name: Loopback888
     - enabled: true
       name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
     - description: this is interface0
       enabled: true
       mtu: 65
@@ -122,6 +134,8 @@ replaced:
       name: Loopback888
     - enabled: true
       name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
     - description: Configured and Replaced by Ansible-Network
       enabled: true
       mtu: 110
@@ -149,6 +163,8 @@ overridden:
       name: Loopback888
     - enabled: true
       name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
     - description: this is interface0
       enabled: true
       mtu: 65
@@ -175,6 +191,8 @@ overridden:
       name: Loopback888
     - enabled: true
       name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
     - description: Configured and Overridden by Ansible-Network
       duplex: full
       enabled: false
@@ -187,6 +205,8 @@ gathered:
       name: Loopback888
     - enabled: true
       name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
     - description: This interface is Configured and Merged by Ansible-Network
       duplex: half
       enabled: true
@@ -205,6 +225,8 @@ deleted:
       name: Loopback888
     - enabled: true
       name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
     - description: this is interface0
       enabled: true
       mtu: 65
@@ -229,3 +251,5 @@ deleted:
       name: Loopback888
     - enabled: true
       name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
