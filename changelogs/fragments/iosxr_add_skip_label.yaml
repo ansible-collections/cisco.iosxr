@@ -1,3 +1,0 @@
----
-trivial:
-  - Add label to static routes to skip the tests to resolve issue of deleting day 0 config.

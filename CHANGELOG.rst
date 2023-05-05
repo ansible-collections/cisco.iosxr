@@ -5,6 +5,33 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v5.0.2
+======
+
+Bugfixes
+--------
+
+- interfaces - Fix issue in ``overridden`` state of interfaces RM. (https://github.com/ansible-collections/cisco.iosxr/issues/377)
+
+Documentation Changes
+---------------------
+
+- iosxr_bgp_global - add task output to module documentation examples.
+
+v5.0.1
+======
+
+Bugfixes
+--------
+
+- Fixing L2 Interface recognition for resource modules. (https://github.com/ansible-collections/cisco.iosxr/issues/366)
+- Iosxr_interfaces - Fix issue in interfaces with interface type.
+
+Documentation Changes
+---------------------
+
+- Improve docs of static_routes Resource modules.
+
 v5.0.0
 ======
 
@@ -26,7 +53,6 @@ Bugfixes
 - Bgp_global, Bgp_neighbor_address_family, Bgp_address_family. Make all possible option mutually exclusive.
 - bgp_neighbor_address_family - mark ``soft_reconfiguration`` suboptions ``set``, ``always``, and ``inheritance_disable`` as mutually exclusive. (https://github.com/ansible-collections/cisco.iosxr/issues/325)
 - facts - fix ``ansible_net_model`` and ``ansible_net_seriulnum`` facts gathering issue (https://github.com/ansible-collections/cisco.iosxr/issues/308)
-
 
 v4.1.0
 ======

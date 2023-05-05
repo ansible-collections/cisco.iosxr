@@ -30,7 +30,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
 
 
 class FactsBase(object):
-
     COMMANDS = frozenset()
 
     def __init__(self, module):
@@ -70,7 +69,6 @@ class Default(FactsBase):
 
 
 class Hardware(FactsBase):
-
     COMMANDS = ["dir /all", "show memory summary"]
 
     def populate(self):
@@ -89,7 +87,6 @@ class Hardware(FactsBase):
 
 
 class Config(FactsBase):
-
     COMMANDS = ["show running-config"]
 
     def populate(self):
@@ -98,7 +95,6 @@ class Config(FactsBase):
 
 
 class Interfaces(FactsBase):
-
     COMMANDS = [
         "show interfaces",
         "show ipv6 interface",
