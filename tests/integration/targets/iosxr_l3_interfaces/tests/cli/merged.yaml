@@ -5,6 +5,11 @@
 - ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
+    - name: Gather management_interface facts using gathered state
+      register: management_interface
+      cisco.iosxr.iosxr_l3_interfaces:
+        state: gathered
+
     - name: Merge provided configuration with device configuration
       register: result
       cisco.iosxr.iosxr_l3_interfaces: &id001
@@ -23,6 +28,14 @@
                 secondary: true
         state: merged
 
+    - name: Combine all the dictionaries based on match_keys
+      ansible.builtin.set_fact:
+        combined_before: "{{ merged['before']  | ansible.builtin.union(management_interface['gathered']) }}"
+
+    - name: Combine all the dictionaries based on match_keys
+      ansible.builtin.set_fact:
+        combined_after: "{{ merged['after']  | ansible.builtin.union(management_interface['gathered']) }}"
+
     - name: Assert that correct set of commands were generated
       ansible.builtin.assert:
         that:
@@ -31,12 +44,12 @@
     - name: Assert that before dicts are correctly generated
       ansible.builtin.assert:
         that:
-          - "{{ merged['before'] | symmetric_difference(result['before']) | length == 0 }}"
+          - "{{ combined_before | symmetric_difference(result['before']) | length == 0 }}"
 
     - name: Assert that after dict is correctly generated
       ansible.builtin.assert:
         that:
-          - "{{ merged['after'] | symmetric_difference(result['after']) | length == 0 }}"
+          - "{{ combined_after | symmetric_difference(result['after']) | length == 0 }}"
 
     - name: Merge provided configuration with device configuration (idempotent)
       register: result
