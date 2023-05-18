@@ -285,7 +285,7 @@ class Cliconf(CliconfBase):
             if admin and "admin-" in prompt:
                 self.send_command("exit")
 
-    def get_config(self, source="running", format="text", flags=None):
+    def get_config(self, source="running", flags=None, format="text"):
         if source not in ["running"]:
             raise ValueError("fetching configuration from %s is not supported" % source)
 
