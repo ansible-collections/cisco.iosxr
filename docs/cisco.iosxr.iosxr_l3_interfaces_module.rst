@@ -543,7 +543,7 @@ Examples
     # interface preconfigure GigabitEthernet0/0/0/4
     #  ipv6 address fd5d:12c9:2201:1::1/64
     #  shutdown
-    !
+    #!
 
     - name: "Delete L3 config of all interfaces (This won't delete the interface itself)"
       cisco.iosxr.iosxr_l3_interfaces:
