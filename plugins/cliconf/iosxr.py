@@ -301,10 +301,10 @@ class Cliconf(CliconfBase):
         self,
         candidate=None,
         commit=True,
-        admin=False,
-        exclusive=False,
         replace=None,
         comment=None,
+        admin=False,
+        exclusive=False,
         label=None,
     ):
         operations = self.get_device_operations()
