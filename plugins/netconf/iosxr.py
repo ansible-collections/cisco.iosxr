@@ -207,7 +207,7 @@ class Netconf(NetconfBase):
         return guessed_os
 
     # TODO: change .xml to .data_xml, when ncclient supports data_xml on all platforms
-    def get(self, filter=None, remove_ns=False, with_defaults=None):
+    def get(self, filter=None, with_defaults=None, remove_ns=False):
         if isinstance(filter, list):
             filter = tuple(filter)
         try:

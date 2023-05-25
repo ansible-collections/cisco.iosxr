@@ -301,6 +301,7 @@ class Cliconf(CliconfBase):
         self,
         candidate=None,
         commit=True,
+        diff=False,
         replace=None,
         comment=None,
         admin=False,
