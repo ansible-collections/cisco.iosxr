@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - acls - Fix issue in ``replaced`` state of not replacing ace entries with remark action. (https://github.com/ansible-collections/cisco.iosxr/issues/332)
