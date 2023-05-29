@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Fixing Bundle-Ether/-POS recognition for resource modules. (https://github.com/ansible-collections/cisco.iosxr/issues/369)
