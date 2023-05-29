@@ -1,3 +1,0 @@
----
-bugfixes:
-  - l3_interfaces - Fix issue in ``gather`` state of not gathering management interface. (https://github.com/ansible-collections/cisco.iosxr/issues/381)

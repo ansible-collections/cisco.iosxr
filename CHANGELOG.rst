@@ -4,6 +4,21 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v5.0.3
+======
+
+Bugfixes
+--------
+
+- Fixing Bundle-Ether/-POS recognition for resource modules. (https://github.com/ansible-collections/cisco.iosxr/issues/369)
+- acls - Fix issue in ``replaced`` state of not replacing ace entries with remark action. (https://github.com/ansible-collections/cisco.iosxr/issues/332)
+- l3_interfaces - Fix issue in ``gather`` state of not gathering management interface. (https://github.com/ansible-collections/cisco.iosxr/issues/381)
+
+Documentation Changes
+---------------------
+
+- iosxr_interfaces - Fixed module documentation and examples.
+- iosxr_l3_interfaces - Fixed module documentation and examples.
 
 v5.0.2
 ======

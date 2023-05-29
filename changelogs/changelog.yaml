@@ -590,3 +590,23 @@ releases:
       - fix_interfaces_overridden.yaml
       - update_docs_with_examples.yaml
     release_date: "2023-04-27"
+  5.0.3:
+    changes:
+      bugfixes:
+        - Fixing Bundle-Ether/-POS recognition for resource modules. (https://github.com/ansible-collections/cisco.iosxr/issues/369)
+        - acls - Fix issue in ``replaced`` state of not replacing ace entries with remark
+          action. (https://github.com/ansible-collections/cisco.iosxr/issues/332)
+        - l3_interfaces - Fix issue in ``gather`` state of not gathering management
+          interface. (https://github.com/ansible-collections/cisco.iosxr/issues/381)
+      doc_changes:
+        - iosxr_interfaces - Fixed module documentation and examples.
+        - iosxr_l3_interfaces - Fixed module documentation and examples.
+    fragments:
+      - add_gha_periodic.yaml
+      - black.yaml
+      - bugfix_acl.yaml
+      - ci_codecov.yml
+      - fix_bundle_resources.yml
+      - fix_l3_interface.yaml
+      - healthcheck_pr_1.yml
+    release_date: "2023-05-29"
