@@ -121,7 +121,7 @@ options:
           valid only with respect to Sub-Interface and is not valid when configuring
           for Interface.
         type: list
-        elements: int
+        elements: str
       propagate:
         description:
         - Propagate Layer 2 transport events. Note that it will work only when the

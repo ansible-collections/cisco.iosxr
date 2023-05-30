@@ -317,9 +317,7 @@ class L2_Interfaces(ConfigBase):
                 if l2transport or l2protocol:
                     for each in l2protocol:
                         each = dict(each)
-                        if isinstance(each, dict) and "cpsv" in list(
-                            each.keys(),
-                        ):
+                        if isinstance(each, dict) and each.get("cpsv"):
                             cmd = "l2transport l2protocol {0} {1}".format(
                                 "cpsv",
                                 each.get("cpsv"),
