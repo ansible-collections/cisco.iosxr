@@ -1,0 +1,3 @@
+---
+major_changes:
+  - iosxr_l2_interfaces - fix issue in supporting multiple iosxr version. (https://github.com/ansible-collections/cisco.iosxr/issues/379).
