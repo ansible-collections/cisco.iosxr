@@ -23,7 +23,7 @@
 
     - name: Sleep for 5 seconds and continue with play
       ansible.builtin.wait_for:
-      timeout: 5
+      timeout: 10
 
     - name: Assert that correct set of commands were generated
       ansible.builtin.assert:
