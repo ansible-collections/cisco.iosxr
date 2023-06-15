@@ -21,6 +21,10 @@
           - name: GigabitEthernet0/0/0/1
         state: deleted
 
+    - name: Sleep for 10 seconds and continue with play
+      ansible.builtin.wait_for:
+      timeout: 10
+
     - name: Combine all the dictionaries based on match_keys
       ansible.builtin.set_fact:
         combined_before: "{{ deleted['before']  | ansible.builtin.union(management_interface['gathered']) }}"
