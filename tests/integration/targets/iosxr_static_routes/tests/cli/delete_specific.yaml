@@ -7,7 +7,7 @@
 - ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
-    - name: Delete all destination network entries under a single AFI
+    - name: Delete specific static route entry.
       register: result
       cisco.iosxr.iosxr_static_routes: &id001
         config:
