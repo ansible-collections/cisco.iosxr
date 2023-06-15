@@ -439,7 +439,7 @@ class Static_routes(ConfigBase):
 
         return commands
 
-    def _static_route_poper(self, want_afi, have_afi):
+    def _static_route_popper(self, want_afi, have_afi):
         """ """
         commands = []
 
@@ -511,7 +511,7 @@ class Static_routes(ConfigBase):
                     or {}
                 )
                 if have_afi:
-                    commands.extend(self._static_route_poper(want_afi, have_afi))
+                    commands.extend(self._static_route_popper(want_afi, have_afi))
 
             if "vrf" in want and commands:
                 commands.insert(0, "vrf {0}".format(want["vrf"]))
