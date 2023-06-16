@@ -26,9 +26,9 @@
         config: "{{ combined_after }}"
         state: overridden
 
-    - name: Sleep for 10 seconds and continue with play
+    - name: Sleep for 5 seconds and continue with play
       ansible.builtin.wait_for:
-      timeout: 10
+        timeout: 5
 
     - name: Assert that correct set of commands were generated
       ansible.builtin.assert:
