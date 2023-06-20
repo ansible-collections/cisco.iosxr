@@ -378,3 +378,37 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
             },
         ]
         self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_static_routes_delete_specific_static_route(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        address_families=[
+                            dict(
+                                afi="ipv6",
+                                safi="unicast",
+                                routes=[
+                                    dict(
+                                        dest="2001:db8:1000::/36",
+                                        next_hops=[
+                                            dict(
+                                                interface="FastEthernet0/0/0/7",
+                                                description="DC",
+                                            ),
+                                        ],
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="deleted",
+            ),
+        )
+        commands = [
+            "router static",
+            "address-family ipv6 unicast",
+            "no 2001:db8:1000::/36 FastEthernet0/0/0/7",
+        ]
+        self.execute_module(changed=True, commands=commands)
