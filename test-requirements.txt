@@ -1,13 +1,11 @@
-# For ansible-tox-linters
-black==23.3.0 ; python_version >= '3.7'
+black==22.3.0 ; python_version > '3.5'
 flake8
-yamllint
-
-# Unit test runner
-pytest-ansible ; python_version >= '3.9'
-git+https://github.com/ansible-community/pytest-ansible-units.git ; python_version < '3.9'
+mock
+pexpect
 pytest-xdist
-
+yamllint
+coverage==4.5.4
 google-api-python-client
 grpcio
 protobuf
+git+https://github.com/ansible-community/pytest-ansible-units.git
