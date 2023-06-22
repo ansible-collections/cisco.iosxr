@@ -285,7 +285,6 @@ class Bgp_templates(ResourceModule):
             )
 
     def _bgp_list_to_dict(self, data):
-
         if "neighbor" in data:
             for nbr in data["neighbor"]:
                 if "address_family" in nbr:
