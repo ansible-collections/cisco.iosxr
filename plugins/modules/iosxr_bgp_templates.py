@@ -18,7 +18,7 @@ module: iosxr_bgp_templates
 short_description: Manages BGP templates resource module.
 description:
 - This module configures and manages the attributes of BGP templates on Cisco IOS-XR platforms.
-version_added: 5.0.0
+version_added: 6.0.0
 author: Ashwini Mhatre (@amhatre)
 notes:
 - This module works with connection C(network_cli).

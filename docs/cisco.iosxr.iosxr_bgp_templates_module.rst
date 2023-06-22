@@ -8,7 +8,7 @@ cisco.iosxr.iosxr_bgp_templates
 **Manages BGP templates resource module.**
 
 
-Version added: 5.0.0
+Version added: 6.0.0
 
 .. contents::
    :local:
