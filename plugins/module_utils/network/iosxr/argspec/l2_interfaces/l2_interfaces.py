@@ -68,7 +68,8 @@ class L2_InterfacesArgs(object):
                     },
                     "type": "list",
                 },
-                "q_vlan": {"type": "list", "elements": "str"},
+                "q_vlan": {"type": "list", "elements": "int"},
+                "qvlan": {"type": "list", "elements": "str"},
                 "propagate": {"type": "bool"},
                 "encapsulation": {
                     "type": "dict",

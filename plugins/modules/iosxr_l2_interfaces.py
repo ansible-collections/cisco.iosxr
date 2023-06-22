@@ -120,6 +120,17 @@ options:
           list when configuring Q-in-any vlan as input. Note, that this option is
           valid only with respect to Sub-Interface and is not valid when configuring
           for Interface.
+        - This option is DEPRECATED and replaced with qvlan,
+          this attribute will be removed after 2026-06-01.
+        type: list
+        elements: int
+      qvlan:
+        description:
+        - 802.1Q VLAN configuration. Note that it can accept either 2 VLAN IDs when
+          configuring Q-in-Q VLAN, or it will accept 1 VLAN ID and 'any' as input
+          list when configuring Q-in-any vlan as input. Note, that this option is
+          valid only with respect to Sub-Interface and is not valid when configuring
+          for Interface.
         type: list
         elements: str
       propagate:
