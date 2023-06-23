@@ -262,12 +262,20 @@ class L2_Interfaces(ConfigBase):
 
         return commands
 
+    def _handle_deprecated(self, config):
+        if config.get("q_vlan"):
+            config["qvlan"] = config.get("q_vlan")
+            del config["q_vlan"]
+        return config
+
     def _set_config(self, want, have, module):
         # Set the interface config based on the want and have config
         commands = []
         interface = "interface " + want["name"]
         l2_protocol_bool = False
         # Get the diff b/w want and have
+        want = self._handle_deprecated(want)
+        have = self._handle_deprecated(have)
         diff = dict_diff(have, want)
         if diff:
             # For merging with already configured l2protocol
@@ -286,7 +294,7 @@ class L2_Interfaces(ConfigBase):
 
             wants_native = diff.get("native_vlan")
             l2transport = diff.get("l2transport")
-            q_vlan = diff.get("q_vlan")
+            qvlan = diff.get("qvlan")
             encapsulation = diff.get("encapsulation")
             propagate = diff.get("propagate")
             if l2_protocol_bool is False:
@@ -308,18 +316,16 @@ class L2_Interfaces(ConfigBase):
                             )
                         add_command_to_config_list(interface, cmd, commands)
 
-                if q_vlan and "." in interface:
-                    q_vlans = " ".join(map(str, want.get("q_vlan")))
-                    if q_vlans != have.get("q_vlan"):
+                if qvlan and "." in interface:
+                    q_vlans = " ".join(map(str, want.get("qvlan")))
+                    if q_vlans != have.get("qvlan"):
                         cmd = "dot1q vlan {0}".format(q_vlans)
                         add_command_to_config_list(interface, cmd, commands)
             else:
                 if l2transport or l2protocol:
                     for each in l2protocol:
                         each = dict(each)
-                        if isinstance(each, dict) and "cpsv" in list(
-                            each.keys(),
-                        ):
+                        if isinstance(each, dict) and each.get("cpsv"):
                             cmd = "l2transport l2protocol {0} {1}".format(
                                 "cpsv",
                                 each.get("cpsv"),
@@ -361,6 +367,8 @@ class L2_Interfaces(ConfigBase):
     def _clear_config(self, want, have):
         # Delete the interface config based on the want and have config
         commands = []
+        want = self._handle_deprecated(want)
+        have = self._handle_deprecated(have)
 
         if want.get("name"):
             interface = "interface " + want["name"]
@@ -375,7 +383,7 @@ class L2_Interfaces(ConfigBase):
                     commands,
                 )
 
-            if have.get("q_vlan"):
+            if have.get("qvlan"):
                 remove_command_from_config_list(
                     interface,
                     "encapsulation dot1q",
