@@ -54,14 +54,14 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.mock_load_config.stop()
         self.mock_execute_show_command.stop()
 
-    def _prepare(self):
+    def _prepare(self, config):
         def load_from_file(*args, **kwargs):
-            return load_fixture("iosxr_acls_config.cfg")
+            return load_fixture(config)
 
         self.execute_show_command.side_effect = load_from_file
 
     def test_iosxr_acls_merged(self):
-        self._prepare()
+        self._prepare("iosxr_acls_config.cfg")
         set_module_args(
             dict(
                 config=[
@@ -120,7 +120,7 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=True, commands=commands)
 
     def test_iosxr_acls_merged_idempotent(self):
-        self._prepare()
+        self._prepare("iosxr_acls_config.cfg")
         set_module_args(
             dict(
                 config=[
@@ -148,7 +148,7 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=False, commands=[])
 
     def test_iosxr_acls_replaced(self):
-        self._prepare()
+        self._prepare("iosxr_acls_config.cfg")
         set_module_args(
             dict(
                 config=[
@@ -209,7 +209,7 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=True, commands=commands)
 
     def test_iosxr_acls_replaced_idempotent(self):
-        self._prepare()
+        self._prepare("iosxr_acls_config.cfg")
         set_module_args(
             dict(
                 config=[
@@ -244,7 +244,7 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=False, commands=[])
 
     def test_iosxr_acls_overridden(self):
-        self._prepare()
+        self._prepare("iosxr_acls_config.cfg")
         set_module_args(
             dict(
                 config=[
@@ -307,7 +307,7 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=True, commands=commands)
 
     def test_iosxr_acls_overridden_idempotent(self):
-        self._prepare()
+        self._prepare("iosxr_acls_config.cfg")
         set_module_args(
             dict(
                 config=[
@@ -388,7 +388,7 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=False, commands=[])
 
     def test_iosxr_acls_deletedacls(self):
-        self._prepare()
+        self._prepare("iosxr_acls_config.cfg")
         set_module_args(
             dict(
                 config=[dict(afi="ipv6", acls=[dict(name="acl6_1")])],
@@ -399,13 +399,13 @@ class TestIosxrAclsModule(TestIosxrModule):
         self.execute_module(changed=True, commands=commands)
 
     def test_iosxr_acls_deletedafis(self):
-        self._prepare()
+        self._prepare("iosxr_acls_config.cfg")
         set_module_args(dict(config=[dict(afi="ipv4")], state="deleted"))
         commands = ["no ipv4 access-list acl_2", "no ipv4 access-list acl_1"]
         self.execute_module(changed=True, commands=commands)
 
     def test_iosxr_acls_rendered(self):
-        self._prepare()
+        self._prepare("iosxr_acls_config.cfg")
         set_module_args(
             dict(
                 config=[
@@ -494,3 +494,39 @@ class TestIosxrAclsModule(TestIosxrModule):
             },
         ]
         self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_acls_replaced_remark(self):
+        self._prepare("iosxr_acl_replace_config.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        afi="ipv4",
+                        acls=[
+                            dict(
+                                name="ACL-TEST",
+                                aces=[
+                                    dict(
+                                        sequence="10",
+                                        grant="permit",
+                                        protocol="ipv4",
+                                        source=dict(
+                                            any=True,
+                                        ),
+                                        destination=dict(
+                                            host="1.1.1.1",
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        commands = [
+            "ipv4 access-list ACL-TEST",
+            "10 permit ipv4 any host 1.1.1.1",
+        ]
+        self.execute_module(changed=True, commands=commands)

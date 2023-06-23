@@ -1,6 +1,7 @@
 ---
 parsed:
   - name: Loopback888
+  - name: MgmtEth0/RP0/CPU0/0
   - l2protocol:
       - cpsv: tunnel
     l2transport: true
@@ -14,6 +15,7 @@ merged:
   before:
     - name: Loopback888
     - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
   commands:
     - interface GigabitEthernet0/0/0/1
     - l2transport l2protocol cpsv tunnel
@@ -23,6 +25,7 @@ merged:
   after:
     - name: Loopback888
     - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
     - l2protocol:
         - cpsv: tunnel
       l2transport: true
@@ -37,6 +40,7 @@ replaced:
   before:
     - name: Loopback888
     - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
     - l2protocol:
         - cpsv: tunnel
       l2transport: true
@@ -57,6 +61,7 @@ replaced:
   after:
     - name: Loopback888
     - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
     - l2protocol:
         - cpsv: drop
       l2transport: true
@@ -74,6 +79,7 @@ overridden:
   before:
     - name: Loopback888
     - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
     - l2protocol:
         - cpsv: tunnel
       l2transport: true
@@ -95,7 +101,7 @@ overridden:
   after:
     - name: Loopback888
     - name: Loopback999
-    - name: GigabitEthernet0/0/0/1
+    - name: MgmtEth0/RP0/CPU0/0
     - name: GigabitEthernet0/0/0/3.900
       encapsulation:
         dot1q: 20
@@ -108,6 +114,7 @@ deleted:
   before:
     - name: Loopback888
     - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
     - l2protocol:
         - cpsv: tunnel
       l2transport: true
@@ -131,6 +138,5 @@ deleted:
   after:
     - name: Loopback888
     - name: Loopback999
-    - name: GigabitEthernet0/0/0/1
+    - name: MgmtEth0/RP0/CPU0/0
     - name: GigabitEthernet0/0/0/3.900
-    - name: GigabitEthernet0/0/0/4

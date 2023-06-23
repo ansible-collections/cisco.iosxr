@@ -4,6 +4,11 @@
 
 - ansible.builtin.include_tasks: _remove_config.yaml
 
+- name: Gather management_interface facts using gathered state
+  register: management_interface
+  cisco.iosxr.iosxr_l3_interfaces:
+    state: gathered
+
 - ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
@@ -16,6 +21,18 @@
           - name: GigabitEthernet0/0/0/1
         state: deleted
 
+    - name: Sleep for 5 seconds and continue with play
+      ansible.builtin.wait_for:
+        timeout: 5
+
+    - name: Combine all the dictionaries based on match_keys
+      ansible.builtin.set_fact:
+        combined_before: "{{ deleted['before']  | ansible.builtin.union(management_interface['gathered']) }}"
+
+    - name: Combine all the dictionaries based on match_keys
+      ansible.builtin.set_fact:
+        combined_after: "{{ deleted['after']  | ansible.builtin.union(management_interface['gathered']) }}"
+
     - name: Assert that correct set of commands were generated
       ansible.builtin.assert:
         that:
@@ -24,12 +41,12 @@
     - name: Assert that before dicts are correctly generated
       ansible.builtin.assert:
         that:
-          - "{{ deleted['before'] | symmetric_difference(result['before']) | length == 0 }}"
+          - "{{ combined_before | symmetric_difference(result['before']) | length == 0 }}"
 
     - name: Assert that after dict is correctly generated
       ansible.builtin.assert:
         that:
-          - "{{ deleted['after'] | symmetric_difference(result['after']) | length == 0 }}"
+          - "{{ combined_after | symmetric_difference(result['after']) | length == 0 }}"
 
     - name: Delete attributes of all configured interfaces (idempotent)
       register: result

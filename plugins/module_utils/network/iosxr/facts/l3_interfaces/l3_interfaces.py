@@ -115,8 +115,10 @@ class L3_InterfacesFacts(object):
             if "secondary" in each:
                 each_ipv4["address"] = self.format_ipv4(each.split(" secondary")[0])
                 each_ipv4["secondary"] = True
-            else:
+            elif "secondary" not in each and "dhcp" not in each:
                 each_ipv4["address"] = self.format_ipv4(each)
+            elif "dhcp" in each:
+                each_ipv4["address"] = "dhcp"
             ipv4.append(each_ipv4)
             config["ipv4"] = ipv4
 

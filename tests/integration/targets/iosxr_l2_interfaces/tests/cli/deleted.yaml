@@ -12,6 +12,10 @@
       cisco.iosxr.iosxr_l2_interfaces: &id001
         state: deleted
 
+    - name: Sleep for 5 seconds and continue with play
+      ansible.builtin.wait_for:
+        timeout: 5
+
     - name: Assert that correct set of commands were generated
       ansible.builtin.assert:
         that:
