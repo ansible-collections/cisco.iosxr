@@ -316,6 +316,24 @@ Parameters
                 </td>
                 <td>
                         <div>802.1Q VLAN configuration. Note that it can accept either 2 VLAN IDs when configuring Q-in-Q VLAN, or it will accept 1 VLAN ID and &#x27;any&#x27; as input list when configuring Q-in-any vlan as input. Note, that this option is valid only with respect to Sub-Interface and is not valid when configuring for Interface.</div>
+                        <div>This option is DEPRECATED and replaced with qvlan, this attribute will be removed after 2026-06-01.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>qvlan</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>802.1Q VLAN configuration. Note that it can accept either 2 VLAN IDs when configuring Q-in-Q VLAN, or it will accept 1 VLAN ID and &#x27;any&#x27; as input list when configuring Q-in-any vlan as input. Note, that this option is valid only with respect to Sub-Interface and is not valid when configuring for Interface.</div>
                 </td>
             </tr>
 

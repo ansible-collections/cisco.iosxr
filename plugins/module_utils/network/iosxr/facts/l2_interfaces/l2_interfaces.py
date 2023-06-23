@@ -127,11 +127,11 @@ class L2_InterfacesFacts(object):
                         encapsulation.group(2).split("second-dot1q ")[1],
                     )
         else:
-            config["q_vlan"] = []
+            config["qvlan"] = []
             if dot1q:
-                config["q_vlan"].append(int(dot1q.split(" ")[0]))
+                config["qvlan"].append(int(dot1q.split(" ")[0]))
                 if len(dot1q.split(" ")) > 1:
-                    config["q_vlan"].append(int(dot1q.split(" ")[2]))
+                    config["qvlan"].append(int(dot1q.split(" ")[2]))
 
         if utils.parse_conf_cmd_arg(conf, "l2transport", True):
             config["l2transport"] = True
