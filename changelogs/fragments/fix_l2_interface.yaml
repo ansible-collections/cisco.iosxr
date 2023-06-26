@@ -1,3 +1,0 @@
----
-trivial:
-  - Fix l2_interface integration tests.(https://github.com/ansible-collections/cisco.iosxr/issues/395)
