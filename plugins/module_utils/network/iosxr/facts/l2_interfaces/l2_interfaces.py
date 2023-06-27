@@ -129,9 +129,9 @@ class L2_InterfacesFacts(object):
         else:
             config["qvlan"] = []
             if dot1q:
-                config["qvlan"].append(int(dot1q.split(" ")[0]))
+                config["qvlan"].append(dot1q.split(" ")[0])
                 if len(dot1q.split(" ")) > 1:
-                    config["qvlan"].append(int(dot1q.split(" ")[2]))
+                    config["qvlan"].append(dot1q.split(" ")[2])
 
         if utils.parse_conf_cmd_arg(conf, "l2transport", True):
             config["l2transport"] = True
