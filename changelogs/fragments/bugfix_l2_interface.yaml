@@ -1,5 +1,0 @@
----
-minor_changes:
-  - iosxr_l2_interfaces - fix issue in supporting multiple iosxr version. (https://github.com/ansible-collections/cisco.iosxr/issues/379).
-deprecated_features:
-  - iosxr_l2_interfaces - deprecate q_vlan with qvlan which allows vlans in str format e.g "any"

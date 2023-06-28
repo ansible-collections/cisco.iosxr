@@ -4,6 +4,7 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+
 v5.0.3
 ======
 
@@ -354,12 +355,20 @@ v2.1.0
 Minor Changes
 -------------
 
+- Add iosxr_bgp_templates module (https://github.com/ansible-collections/cisco.iosxr/issues/341).
 - Add support for available_network_resources key, which allows to fetch the available resources for a platform (https://github.com/ansible-collections/cisco.iosxr/issues/119).
 - Update psudo-atomic operation scenario tests with correct assertion.
+- iosxr_l2_interfaces - fix issue in supporting multiple iosxr version. (https://github.com/ansible-collections/cisco.iosxr/issues/379).
+
+Deprecated Features
+-------------------
+
+- iosxr_l2_interfaces - deprecate q_vlan with qvlan which allows vlans in str format e.g "any"
 
 Bugfixes
 --------
 
+- Add support to delete specific static route entry.(https://github.com/ansible-collections/cisco.iosxr/issues/375)
 - Avoid using default value for comment for iosxr version > 7.2(Module=iosxr_config)
 - Avoid using default value for comment when "comment is not supported" by device.
 
