@@ -1,0 +1,50 @@
+---
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- ansible.builtin.include_tasks: _populate_config.yaml
+
+- block:
+    - name: Replaced given bgp_templates configuration
+      become: true
+      register: result
+      cisco.iosxr.iosxr_bgp_templates: &replaced
+        config:
+          as_number: 65536
+          neighbor:
+            - address_family:
+                - advertise:
+                    local_labeled_route:
+                      set: true
+                  afi: ipv4
+                  safi: unicast
+              advertisement_interval: 12
+              name: neighbor-group1
+              precedence: flash
+            - cluster_id: "2"
+              description: replace neighbor-group2
+              ebgp_multihop:
+                value: 254
+              graceful_maintenance:
+                as_prepends:
+                  value: 2
+                set: true
+              update_source: Loopback917
+              name: neighbor-group2
+        state: replaced
+
+    - ansible.builtin.assert:
+        that:
+          - result.changed == true
+          - "'no router bgp 65536' not in result.commands"
+          - replaced['commands'] == result['commands']
+
+    - name: Idempotency check
+      become: true
+      register: result
+      cisco.iosxr.iosxr_bgp_templates: *replaced
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml
