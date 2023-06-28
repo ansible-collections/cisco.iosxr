@@ -9,13 +9,14 @@ __metaclass__ = type
 DOCUMENTATION = """
 ---
 author: Ansible Networking Team
-grpc : iosxr
-short_description: gRPC Plugin for IOS XR devices
+name: grpc
+short_description: gRPC plugin for IOS-XR devices
 description:
   - This gRPC plugin provides methods to connect and talk to Cisco IOS XR
     devices over gRPC protocol.
-version_added: ""
+version_added: "3.3.0"
 """
+
 import json
 import os
 import sys
