@@ -73,9 +73,10 @@ class Hardware(FactsBase):
 
     def populate(self):
         super(Hardware, self).populate()
+
         data = self.responses[0]
         self.facts["filesystems"] = self.parse_filesystems(data)
-        self.facts["cpu_utilization"] = self.parse_cpu_utilization(data)
+        self.facts["cpu_utilization"] = self.parse_cpu_utilization(self.responses[2])
 
         data = self.responses[1]
         match = re.search(r"Physical Memory: (\d+)M total \((\d+)", data)
