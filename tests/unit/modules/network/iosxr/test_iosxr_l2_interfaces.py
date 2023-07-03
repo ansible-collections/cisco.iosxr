@@ -244,3 +244,82 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
 
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+
+class TestIosxrL2InterfacesModule1(TestIosxrModule):
+    module = iosxr_l2_interfaces
+
+    def setUp(self):
+        super(TestIosxrL2InterfacesModule1, self).setUp()
+
+        self.mock_get_config = patch(
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
+        )
+        self.get_config = self.mock_get_config.start()
+
+        self.mock_load_config = patch(
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
+        )
+        self.load_config = self.mock_load_config.start()
+
+        self.mock_get_resource_connection_config = patch(
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
+        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
+
+        self.mock_get_resource_connection_facts = patch(
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
+        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
+        self.mock_get_os_version = patch(
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.l2_interfaces.l2_interfaces.get_os_version",
+        )
+        self.get_os_version = self.mock_get_os_version.start()
+        self.get_os_version.return_value = "6.1.3"
+        self.mock_get_os_version1 = patch(
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l2_interfaces.l2_interfaces.get_os_version",
+        )
+        self.get_os_version1 = self.mock_get_os_version1.start()
+        self.get_os_version1.return_value = "6.1.3"
+        self.mock_execute_show_command = patch(
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.l2_interfaces.l2_interfaces.L2_InterfacesFacts.get_config",
+        )
+        self.execute_show_command = self.mock_execute_show_command.start()
+
+    def tearDown(self):
+        super(TestIosxrL2InterfacesModule1, self).tearDown()
+        self.mock_get_resource_connection_config.stop()
+        self.mock_get_resource_connection_facts.stop()
+        self.mock_get_config.stop()
+        self.mock_get_os_version.stop()
+        self.get_os_version1.stop()
+        self.mock_load_config.stop()
+        self.mock_execute_show_command.stop()
+
+    def _prepare(self):
+        def load_from_file(*args, **kwargs):
+            return load_fixture("iosxr_l2_interface_config.cfg")
+
+        self.execute_show_command.side_effect = load_from_file
+
+    def test_iosxr_l2_interfaces_qvlan_parsed(self):
+        self.get_os_version.return_value = "6.1.3"
+        self.maxDiff = None
+        set_module_args(
+            dict(
+                running_config="interface Bundle-Ether399.2900\n l2transport\n  encapsulation dot1q 2900-2902\n  ",
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        print(result["parsed"])
+        parsed_list = [
+            {
+                "name": "Bundle-Ether399.2900",
+                "l2transport": True,
+                "qvlan": [
+                    "2900-2902",
+                ],
+            },
+        ]
+        self.assertEqual(parsed_list, result["parsed"])
