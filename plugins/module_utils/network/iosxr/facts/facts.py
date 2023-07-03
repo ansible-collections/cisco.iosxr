@@ -34,6 +34,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bg
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_neighbor_address_family.bgp_neighbor_address_family import (
     Bgp_neighbor_address_familyFacts,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.bgp_templates.bgp_templates import (
+    Bgp_templatesFacts,
+)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.hostname.hostname import (
     HostnameFacts,
 )
@@ -122,6 +125,7 @@ FACT_RESOURCE_SUBSETS = dict(
     ntp_global=Ntp_globalFacts,
     snmp_server=Snmp_serverFacts,
     hostname=HostnameFacts,
+    bgp_templates=Bgp_templatesFacts,
 )
 
 

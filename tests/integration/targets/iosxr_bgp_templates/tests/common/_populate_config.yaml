@@ -1,0 +1,34 @@
+---
+- name: "Setup"
+  cisco.iosxr.iosxr_config:
+    lines:
+      - "neighbor-group neighbor-group1"
+      - "  advertisement-interval 10"
+      - "  bfd fast-detect strict-mode"
+      - "  internal-vpn-client"
+      - "  precedence critical"
+      - "  address-family ipv4 unicast"
+      - "  advertise local-labeled-route"
+      - "neighbor-group neighbor-group2"
+      - "  dmz-link-bandwidth"
+      - "  description neighbor-group2"
+      - "  cluster-id 1"
+      - "  ebgp-multihop 255"
+      - "  egress-engineering"
+      - "  internal-vpn-client"
+      - "  ignore-connected-check"
+      - "  local-as 6"
+      - "  local address inheritance-disable"
+      - "  precedence flash"
+      - "  receive-buffer-size 512"
+      - "  send-buffer-size 4096"
+      - "  session-open-mode both"
+      - "  tcp mss inheritance-disable"
+      - "  update-source Loopback919"
+      - "  ttl-security"
+      - "  graceful-maintenance"
+      - "  graceful-maintenance as-prepends 0"
+    parents: "router bgp 65536"
+
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
