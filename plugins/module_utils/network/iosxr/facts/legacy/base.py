@@ -69,12 +69,14 @@ class Default(FactsBase):
 
 
 class Hardware(FactsBase):
-    COMMANDS = ["dir /all", "show memory summary"]
+    COMMANDS = ["dir /all", "show memory summary", "show processes cpu | include CPU utilization"]
 
     def populate(self):
         super(Hardware, self).populate()
+
         data = self.responses[0]
         self.facts["filesystems"] = self.parse_filesystems(data)
+        self.facts["cpu_utilization"] = self.parse_cpu_utilization(self.responses[2])
 
         data = self.responses[1]
         match = re.search(r"Physical Memory: (\d+)M total \((\d+)", data)
@@ -84,6 +86,27 @@ class Hardware(FactsBase):
 
     def parse_filesystems(self, data):
         return re.findall(r"^Directory of (\S+)", data, re.M)
+
+    def parse_cpu_utilization(self, data):
+        facts = {}
+        cpu_utilization_regex = re.compile(
+            r"""
+            ^CPU\sutilization\sfor\sone\sminute:(\s(?P<one_min>[0-9]+)?%)?;
+            \sfive\sminutes:\s(?P<five_mins>[0-9]+)?%;
+            \sfifteen\sminutes:\s(?P<fifteen_mins>[0-9]+)?%
+            """,
+            re.VERBOSE,
+        )
+
+        for line in data.split("\n"):
+            cpu_utilization_match = cpu_utilization_regex.match(line)
+
+            if cpu_utilization_match:
+                facts["one_minute"] = int(cpu_utilization_match.group("one_min"))
+                facts["five_minutes"] = int(cpu_utilization_match.group("five_mins"))
+                facts["fifteen_minutes"] = int(cpu_utilization_match.group("fifteen_mins"))
+
+        return facts
 
 
 class Config(FactsBase):
