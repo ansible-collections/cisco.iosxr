@@ -117,3 +117,17 @@ class TestIosxrFacts(TestIosxrModule):
         self.assertIn("config", ansible_facts["ansible_net_gather_subset"])
         self.assertEqual("iosxr01", ansible_facts["ansible_net_hostname"])
         self.assertIn("ansible_net_config", ansible_facts)
+
+    def test_iosxr_facts_cpu_utilization(self):
+        set_module_args({"gather_subset": "hardware"})
+        result = self.execute_module()
+        ansible_facts = result["ansible_facts"]
+        cpu_utilization_data = {
+            "one_minute": 21,
+            "five_minutes": 13,
+            "fifteen_minutes": 8,
+        }
+        self.assertEqual(
+            ansible_facts["ansible_net_cpu_utilization"],
+            cpu_utilization_data,
+        )

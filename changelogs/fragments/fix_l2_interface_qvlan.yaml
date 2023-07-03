@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - l2_interfaces Fix issue in qvlan parsing.(https://github.com/ansible-collections/cisco.iosxr/issues/403)
