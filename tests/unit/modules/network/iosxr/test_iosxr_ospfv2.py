@@ -43,11 +43,6 @@ class TestIosxrOspfV2Module(TestIosxrModule):
         )
         self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
 
-        self.mock_edit_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.providers.CliProvider.edit_config",
-        )
-        self.edit_config = self.mock_edit_config.start()
-
         self.mock_execute_show_command = patch(
             "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ospfv2.ospfv2."
             "Ospfv2Facts.get_ospfv2_data",
@@ -58,7 +53,6 @@ class TestIosxrOspfV2Module(TestIosxrModule):
         super(TestIosxrOspfV2Module, self).tearDown()
         self.mock_get_resource_connection_config.stop()
         self.mock_get_resource_connection_facts.stop()
-        self.mock_edit_config.stop()
         self.mock_get_config.stop()
         self.mock_load_config.stop()
         self.mock_execute_show_command.stop()
