@@ -1,0 +1,5 @@
+---
+minor_changes:
+  - iosxr_facts - Add CPU utilization.
+doc_changes:
+  - iosxr_facts - Add ansible_net_cpu_utilization.
