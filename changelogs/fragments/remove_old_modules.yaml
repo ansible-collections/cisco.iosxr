@@ -1,3 +1,0 @@
----
-deprecated_features:
-  - Deprecated iosxr_bgp module in favor of iosxr_bgp_global,iosxr_bgp_neighbor_address_family and iosxr_bgp_address_family.
