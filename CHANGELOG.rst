@@ -4,6 +4,39 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+
+v6.0.0
+======
+
+Minor Changes
+-------------
+
+- Add iosxr_bgp_templates module (https://github.com/ansible-collections/cisco.iosxr/issues/341).
+- iosxr_facts - Add CPU utilization.
+- iosxr_l2_interfaces - fix issue in supporting multiple iosxr version. (https://github.com/ansible-collections/cisco.iosxr/issues/379).
+
+Deprecated Features
+-------------------
+
+- Deprecated iosxr_bgp module in favor of iosxr_bgp_global,iosxr_bgp_neighbor_address_family and iosxr_bgp_address_family.
+- iosxr_l2_interfaces - deprecate q_vlan with qvlan which allows vlans in str format e.g "any"
+
+Bugfixes
+--------
+
+- Add support to delete specific static route entry.(https://github.com/ansible-collections/cisco.iosxr/issues/375)
+- l2_interfaces Fix issue in qvlan parsing.(https://github.com/ansible-collections/cisco.iosxr/issues/403)
+
+Documentation Changes
+---------------------
+
+- iosxr_facts - Add ansible_net_cpu_utilization.
+
+New Modules
+-----------
+
+- iosxr_bgp_templates - Manages BGP templates resource module.
+
 v5.0.3
 ======
 

@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Add iosxr_bgp_templates module (https://github.com/ansible-collections/cisco.iosxr/issues/341).

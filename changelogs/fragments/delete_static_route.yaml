@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Add support to delete specific static route entry.(https://github.com/ansible-collections/cisco.iosxr/issues/375)
