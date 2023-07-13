@@ -8,15 +8,6 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr_acls
     banner:
       redirect: cisco.iosxr.iosxr_banner
-    bgp:
-      redirect: cisco.iosxr.iosxr_bgp
-      deprecation:
-        removal_date: "2023-01-29"
-        warning_text: See the plugin documentation for more details
-    iosxr_bgp:
-      deprecation:
-        removal_date: "2023-01-29"
-        warning_text: See the plugin documentation for more details
     command:
       redirect: cisco.iosxr.iosxr_command
     config:

@@ -93,66 +93,66 @@ class L2_InterfacesFacts(object):
         """
         config = deepcopy(spec)
         match = re.search(r"^(\S+)", conf)
+        if match:
+            intf = match.group(1)
 
-        intf = match.group(1)
+            if intf.lower() == "preconfigure":
+                match = re.search(r"^(\S+) (.*)", conf)
+                if match:
+                    intf = match.group(2)
 
-        if match.group(1).lower() == "preconfigure":
-            match = re.search(r"^(\S+) (.*)", conf)
-            if match:
-                intf = match.group(2)
+            if get_interface_type(intf) == "unknown":
+                return {}
 
-        if get_interface_type(intf) == "unknown":
-            return {}
+            config["name"] = intf
 
-        config["name"] = intf
+            # populate the facts from the configuration
+            native_vlan = re.search(r"dot1q native vlan (\d+)", conf)
+            if native_vlan:
+                config["native_vlan"] = int(native_vlan.group(1))
 
-        # populate the facts from the configuration
-        native_vlan = re.search(r"dot1q native vlan (\d+)", conf)
-        if native_vlan:
-            config["native_vlan"] = int(native_vlan.group(1))
-
-        dot1q = utils.parse_conf_arg(conf, "encapsulation dot1q")
-        os_version = get_os_version(self._module)
-        if os_version and Version(os_version) > Version("7.0.0"):
-            encapsulation = re.search(
-                r"encapsulation dot1q\s(\d+)\s*(second-dot1q\s\d+)?",
-                conf,
-            )
-            if encapsulation:
-                config["encapsulation"]["dot1q"] = int(
-                    encapsulation.group(1),
+            dot1q = utils.parse_conf_arg(conf, "encapsulation dot1q")
+            os_version = get_os_version(self._module)
+            if os_version and Version(os_version) > Version("7.0.0"):
+                encapsulation = re.search(
+                    r"encapsulation dot1q\s(\d+)\s*(second-dot1q\s\d+)?",
+                    conf,
                 )
-                if encapsulation.group(2):
-                    config["encapsulation"]["second_dot1q"] = int(
-                        encapsulation.group(2).split("second-dot1q ")[1],
+                if encapsulation:
+                    config["encapsulation"]["dot1q"] = int(
+                        encapsulation.group(1),
                     )
-        else:
-            config["qvlan"] = []
-            if dot1q:
-                config["qvlan"].append(int(dot1q.split(" ")[0]))
-                if len(dot1q.split(" ")) > 1:
-                    config["qvlan"].append(int(dot1q.split(" ")[2]))
+                    if encapsulation.group(2):
+                        config["encapsulation"]["second_dot1q"] = int(
+                            encapsulation.group(2).split("second-dot1q ")[1],
+                        )
+            else:
+                config["qvlan"] = []
+                if dot1q:
+                    config["qvlan"].append(dot1q.split(" ")[0])
+                    if len(dot1q.split(" ")) > 1:
+                        config["qvlan"].append(dot1q.split(" ")[2])
 
-        if utils.parse_conf_cmd_arg(conf, "l2transport", True):
-            config["l2transport"] = True
-        if utils.parse_conf_arg(conf, "propagate"):
-            config["propagate"] = True
-        config["l2protocol"] = []
+            if utils.parse_conf_cmd_arg(conf, "l2transport", True):
+                config["l2transport"] = True
+            if utils.parse_conf_arg(conf, "propagate"):
+                config["propagate"] = True
+            config["l2protocol"] = []
 
-        cdp = utils.parse_conf_arg(conf, "l2protocol cdp")
-        pvst = utils.parse_conf_arg(conf, "l2protocol pvst")
-        stp = utils.parse_conf_arg(conf, "l2protocol stp")
-        vtp = utils.parse_conf_arg(conf, "l2protocol vtp")
-        cpsv = utils.parse_conf_arg(conf, "l2protocol cpsv")
-        if cdp:
-            config["l2protocol"].append({"cdp": cdp})
-        if pvst:
-            config["l2protocol"].append({"pvst": pvst})
-        if stp:
-            config["l2protocol"].append({"stp": stp})
-        if vtp:
-            config["l2protocol"].append({"vtp": vtp})
-        if cpsv:
-            config["l2protocol"].append({"cpsv": cpsv})
+            cdp = utils.parse_conf_arg(conf, "l2protocol cdp")
+            pvst = utils.parse_conf_arg(conf, "l2protocol pvst")
+            stp = utils.parse_conf_arg(conf, "l2protocol stp")
+            vtp = utils.parse_conf_arg(conf, "l2protocol vtp")
+            cpsv = utils.parse_conf_arg(conf, "l2protocol cpsv")
+            if cdp:
+                config["l2protocol"].append({"cdp": cdp})
+            if pvst:
+                config["l2protocol"].append({"pvst": pvst})
+            if stp:
+                config["l2protocol"].append({"stp": stp})
+            if vtp:
+                config["l2protocol"].append({"vtp": vtp})
+            if cpsv:
+                config["l2protocol"].append({"cpsv": cpsv})
 
         return utils.remove_empties(config)
