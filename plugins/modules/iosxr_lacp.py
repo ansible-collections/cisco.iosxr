@@ -87,6 +87,7 @@ options:
     - parsed
     - rendered
     - gathered
+    - overridden
     default: merged
 """
 EXAMPLES = """

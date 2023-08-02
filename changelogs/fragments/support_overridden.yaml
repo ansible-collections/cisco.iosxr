@@ -1,0 +1,4 @@
+---
+bugfixs:
+  - Support overridden state in bgp_global,lacp and lldp_global module.(https://github.com/ansible-collections/cisco.iosxr/issues/386)
+  - Fix issue in lacp and lldp_global of local variable commands.
