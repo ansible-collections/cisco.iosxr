@@ -149,7 +149,7 @@ class Lacp(ConfigBase):
             commands = self._state_deleted(want, have)
         elif self.state in ("merged", "rendered"):
             commands = self._state_merged(want, have)
-        elif self.state in  ["replaced", "overridden"]:
+        elif self.state in ["replaced", "overridden"]:
             commands = self._state_replaced(want, have)
 
         return commands

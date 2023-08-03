@@ -686,5 +686,3 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         )
 
         self.execute_module(changed=False, commands=[])
-
- 

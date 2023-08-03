@@ -91,7 +91,6 @@ class TestIosxrLacpModule(TestIosxrModule):
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
-    
 
     def test_iosxr_lacp_merged_idempotent(self):
         self._prepare()
@@ -127,7 +126,7 @@ class TestIosxrLacpModule(TestIosxrModule):
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
-    
+
     def test_iosxr_lacp_overridden(self):
         self._prepare()
         set_module_args(

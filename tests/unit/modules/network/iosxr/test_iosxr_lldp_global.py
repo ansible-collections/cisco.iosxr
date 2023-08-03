@@ -204,7 +204,7 @@ class TestIosxrLldpModule(TestIosxrModule):
             "tlv_select": {"system_description": False},
         }
         self.assertEqual(parsed_list, result["parsed"])
-    
+
     def test_iosxr_lldp_global_overridden(self):
         self._prepare()
         set_module_args(
@@ -228,6 +228,3 @@ class TestIosxrLldpModule(TestIosxrModule):
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
-
-    
-    
