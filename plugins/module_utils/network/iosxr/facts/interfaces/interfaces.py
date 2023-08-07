@@ -93,7 +93,6 @@ class InterfacesFacts(object):
         config = deepcopy(spec)
         match = re.search(r"^(\S+)", conf)
         if match:
-
             intf = match.group(1)
             if match.group(1).lower() == "preconfigure":
                 match = re.search(r"^(\S+) (.*)", conf)
