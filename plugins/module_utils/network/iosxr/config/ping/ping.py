@@ -84,7 +84,8 @@ class Ping:
         Returns the percent of packet loss, received packets, transmitted packets, and RTT data.
         """
 
-        if type(ping_results) is list:
+
+        if isinstance(ping_results, list):
             ping_results = ping_results[0]
 
         ping_data = PingTemplate(lines=ping_results.splitlines())
