@@ -5,6 +5,15 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v6.0.1
+======
+
+Bugfixes
+--------
+
+- Fix grpc sub plugin documentation (#408) (https://github.com/ansible-collections/cisco.iosxr/pull/414)
+- Fix issue in facts gathering for interfaces (https://github.com/ansible-collections/cisco.iosxr/pull/419)
+
 v6.0.0
 ======
 
