@@ -84,7 +84,6 @@ class Ping:
         Returns the percent of packet loss, received packets, transmitted packets, and RTT data.
         """
 
-
         if isinstance(ping_results, list):
             ping_results = ping_results[0]
 
