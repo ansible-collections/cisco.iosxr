@@ -531,3 +531,158 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
 
         result = self.execute_module(changed=True)
         self.assertEqual(set(result["commands"]), set(commands))
+
+    def test_iosxr_bgp_global_ovrridden(self):
+        run_cfg = dedent(
+            """\
+            router bgp 65536
+              bgp confederation identifier 4
+              bgp router-id 192.0.2.10
+              bgp cluster-id 5
+              default-metric 4
+              socket send-buffer-size 4098
+              bgp bestpath med confed
+              socket receive-buffer-size 514
+              neighbor 192.0.2.11
+                remote-as 65537
+                cluster-id 3
+              neighbor 192.0.2.14
+                remote-as 65538
+                bfd fast-detect strict-mode
+                bfd multiplier 6
+                bfd minimum-interval 20
+              vrf vrf1
+                default-metric 5
+            """,
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="65536",
+                    default_metric=5,
+                    socket=dict(
+                        receive_buffer_size=514,
+                        send_buffer_size=4098,
+                    ),
+                    bgp=dict(
+                        confederation=dict(identifier=4),
+                        bestpath=dict(med=dict(confed=True)),
+                        cluster_id=5,
+                        router_id="192.0.2.10",
+                    ),
+                    neighbors=[
+                        dict(
+                            neighbor="192.0.2.13",
+                            remote_as="65538",
+                            bfd=dict(
+                                multiplier=6,
+                                minimum_interval=20,
+                                fast_detect=dict(strict_mode=True),
+                            ),
+                            use=dict(
+                                neighbor_group="test_ng",
+                                session_group="test_sg",
+                            ),
+                            password=dict(
+                                inheritance_disable="true",
+                            ),
+                            local_as=dict(
+                                value="65539",
+                                no_prepend=dict(
+                                    set="true",
+                                ),
+                            ),
+                        ),
+                    ],
+                    vrfs=[dict(vrf="vrf1", default_metric=5)],
+                ),
+                state="overridden",
+            ),
+        )
+        commands = [
+            "router bgp 65536",
+            "no neighbor 192.0.2.11",
+            "no neighbor 192.0.2.14",
+            "default-metric 5",
+            "neighbor 192.0.2.13",
+            "bfd fast-detect strict-mode",
+            "bfd minimum-interval 20",
+            "bfd multiplier 6",
+            "use session-group test_sg",
+            "use neighbor-group test_ng",
+            "local-as 65539 no-prepend",
+            "password inheritance-disable",
+            "remote-as 65538",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_bgp_global_overridden_idempotent(self):
+        run_cfg = dedent(
+            """\
+            router bgp 65536
+              bgp confederation identifier 4
+              bgp router-id 192.0.2.10
+              bgp cluster-id 5
+              default-metric 4
+              socket send-buffer-size 4098
+              bgp bestpath med confed
+              socket receive-buffer-size 514
+              neighbor 192.0.2.11
+                remote-as 65537
+                cluster-id 3
+              neighbor 192.0.2.14
+                remote-as 65538
+                bfd fast-detect strict-mode
+                bfd multiplier 6
+                bfd minimum-interval 20
+                use session-group test_sg
+                use neighbor-group test_ng
+              vrf vrf1
+                default-metric 5
+            """,
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="65536",
+                    default_metric=4,
+                    socket=dict(
+                        receive_buffer_size=514,
+                        send_buffer_size=4098,
+                    ),
+                    bgp=dict(
+                        confederation=dict(identifier=4),
+                        bestpath=dict(med=dict(confed=True)),
+                        cluster_id=5,
+                        router_id="192.0.2.10",
+                    ),
+                    neighbors=[
+                        dict(
+                            neighbor="192.0.2.11",
+                            cluster_id=3,
+                            remote_as="65537",
+                        ),
+                        dict(
+                            neighbor="192.0.2.14",
+                            remote_as="65538",
+                            bfd=dict(
+                                multiplier=6,
+                                minimum_interval=20,
+                                fast_detect=dict(strict_mode=True),
+                            ),
+                            use=dict(
+                                neighbor_group="test_ng",
+                                session_group="test_sg",
+                            ),
+                        ),
+                    ],
+                    vrfs=[dict(vrf="vrf1", default_metric=5)],
+                ),
+                state="overridden",
+            ),
+        )
+
+        self.execute_module(changed=False, commands=[])

@@ -108,6 +108,7 @@ options:
     - parsed
     - gathered
     - rendered
+    - overridden
     default: merged
 
 """
