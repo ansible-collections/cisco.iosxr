@@ -2214,7 +2214,6 @@ EXAMPLES = """
 # !
 # !
 #
-
 """
 RETURN = """
 before:
@@ -2243,9 +2242,8 @@ rendered:
   returned: when I(state) is C(rendered)
   type: list
   sample:
-  - router bgp 1
-  - default-metric 4
-  - vrf vrf3
+  - router ospf 27
+  - area 10 authentication keychain ansi11393
 gathered:
   description: Facts about the network resource gathered from the remote device as structured data.
   returned: when I(state) is C(gathered)

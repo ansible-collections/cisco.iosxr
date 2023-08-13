@@ -2765,9 +2765,8 @@ rendered:
   returned: when I(state) is C(rendered)
   type: list
   sample:
-  - router bgp 1
-  - default-metric 4
-  - vrf vrf3
+  - router ospfv3 27
+  - area 10 hello-interval 2
 gathered:
   description: Facts about the network resource gathered from the remote device as structured data.
   returned: when I(state) is C(gathered)
