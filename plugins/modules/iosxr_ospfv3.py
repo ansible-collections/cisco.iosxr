@@ -2763,21 +2763,21 @@ commands:
 rendered:
   description: The provided configuration in the task rendered in device-native format (offline).
   returned: when I(state) is C(rendered)
-  type: list
+  type: dict
   sample:
   - router ospfv3 27
   - area 10 hello-interval 2
 gathered:
   description: Facts about the network resource gathered from the remote device as structured data.
   returned: when I(state) is C(gathered)
-  type: list
+  type: dict
   sample: >
     This output will always be in the same format as the
     module argspec.
 parsed:
   description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
   returned: when I(state) is C(parsed)
-  type: list
+  type: dict
   sample: >
     This output will always be in the same format as the
     module argspec.
