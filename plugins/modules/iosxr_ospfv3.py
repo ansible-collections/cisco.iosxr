@@ -2763,7 +2763,7 @@ commands:
 rendered:
   description: The provided configuration in the task rendered in device-native format (offline).
   returned: when I(state) is C(rendered)
-  type: dict
+  type: list
   sample:
   - router ospfv3 27
   - area 10 hello-interval 2
