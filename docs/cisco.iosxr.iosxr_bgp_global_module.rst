@@ -9705,6 +9705,7 @@ Examples
 
     # Task Output:
     # ------------
+    #
     # gathered:
     #     as_number: '65536'
     #     bgp:
