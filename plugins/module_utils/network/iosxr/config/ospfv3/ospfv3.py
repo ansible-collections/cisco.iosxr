@@ -113,23 +113,6 @@ class Ospfv3(ResourceModule):
                 if k not in wantd:
                     self.addcmd(have, "pid", True)
 
-
-        # if self.state == "deleted":
-        #     haved_del = deepcopy(haved)
-        #     want_process = {}
-        #     for k, t_want in iteritems(haved_del):
-        #         want_process["process_id"] = t_want.get("process_id")
-        #         if not (len(t_want) == 2 and not t_want.get("areas")):
-        #             self._compare(want=want_process, have=haved_del.get(k, {}))
-        # if self.state == "overridden":
-        #     haved_del = deepcopy(haved)
-        #     want = {}
-        #     for k, t_want in iteritems(haved_del):
-        #         if k not in wantd:
-        #             want["process_id"] = t_want.get("process_id")
-        #             if not (len(t_want) == 2 and not t_want.get("areas")):
-        #                 self._compare(want=want, have=haved_del.get(k, {}))
-
         for k, want in iteritems(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
 
