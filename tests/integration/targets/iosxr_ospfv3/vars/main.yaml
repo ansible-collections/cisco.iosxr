@@ -201,7 +201,6 @@ deleted:
     - no router ospfv3 30
     - no router ospfv3 10
 
-
 round_trip:
   after:
     processes:

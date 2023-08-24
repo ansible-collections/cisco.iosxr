@@ -209,7 +209,7 @@ class TestIosxrOspfV3Module(TestIosxrModule):
             ),
         )
         commands = [
-            "no router ospfv3 30"
+            "no router ospfv3 30",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
