@@ -111,7 +111,7 @@ class Ospfv3(ResourceModule):
         if self.state in ["overridden", "deleted"]:
             for k, have in iteritems(haved):
                 if k not in wantd:
-                    self.addcmd(have, "process_id", True)
+                    self.addcmd(have, "pid", True)
 
 
         # if self.state == "deleted":
