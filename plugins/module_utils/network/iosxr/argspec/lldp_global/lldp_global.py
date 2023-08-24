@@ -62,6 +62,7 @@ class Lldp_globalArgs(object):  # pylint: disable=R0903
             "choices": [
                 "merged",
                 "replaced",
+                "overridden",
                 "deleted",
                 "parsed",
                 "rendered",

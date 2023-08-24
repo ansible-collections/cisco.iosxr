@@ -135,6 +135,7 @@ class Lldp_global(ConfigBase):
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
         """
+        commands = []
         state = self._module.params["state"]
         if state in ("merged", "replaced", "rendered") and not want:
             self._module.fail_json(
@@ -147,7 +148,7 @@ class Lldp_global(ConfigBase):
             commands = self._state_deleted(want, have)
         elif state in ("merged", "rendered"):
             commands = self._state_merged(want, have)
-        elif state == "replaced":
+        elif state in ["replaced", "overridden"]:
             commands = self._state_replaced(want, have)
 
         return commands
