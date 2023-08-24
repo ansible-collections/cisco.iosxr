@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fix issue in deletion of ospf.(https://github.com/ansible-collections/cisco.iosxr/issues/425)
