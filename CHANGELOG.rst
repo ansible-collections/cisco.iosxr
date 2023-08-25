@@ -5,6 +5,15 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v6.0.1
+======
+
+Bugfixes
+--------
+
+- Fix issue in facts gathering for interfaces (https://github.com/ansible-collections/cisco.iosxr/pull/419)
+- Support overridden state in missing modules. (https://github.com/ansible-collections/cisco.iosxr/pull/416)
+
 v6.0.0
 ======
 
