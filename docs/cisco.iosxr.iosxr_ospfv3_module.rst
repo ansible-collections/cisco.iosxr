@@ -9247,99 +9247,69 @@ Examples
         state: merged
 
     #
-    #
-    # ------------------------
-    # Module Execution Result
-    # ------------------------
-    #
-    #  "before": {}
-    #
-    #  "commands": [
-    #         "router ospfv3 10",
-    #         "area 11 default-cost 5",
-    #         "area 11 cost 11",
-    #         "area 22 default-cost 6",
-    #         "router ospfv3 26",
-    #         "authentication disable",
-    #         "router ospfv3 27",
-    #         "area 10 hello-interval 2",
-    #         "router ospfv3 30",
-    #         "cost 2",
-    #         "priority 1",
-    #         "default-metric 10",
-    #         "router-id 2.2.2.2",
-    #         "demand-circuit",
-    #         "packet-size 577",
-    #         "transmit-delay 2",
-    #         "dead-interval 2",
-    #         "hello-interval 1",
-    #         "retransmit-interval 2",
-    #         "mtu-ignore",
-    #         "area 11 default-cost 5",
-    #         "area 22 default-cost 6"
-    #    ]
-    #
-    #  "after": {
-    #         "processes": [
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "11",
-    #                         "cost": 11,
-    #                         "default_cost": 5
-    #                     },
-    #                     {
-    #                         "area_id": "22",
-    #                         "default_cost": 6
-    #                     }
-    #                 ],
-    #                 "process_id": "10"
-    #             },
-    #             {
-    #                 "authentication": {
-    #                     "disable": true
-    #                 },
-    #                 "process_id": "26"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "10",
-    #                         "hello_interval": 2
-    #                     }
-    #                 ],
-    #                 "process_id": "27"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "11",
-    #                         "default_cost": 5
-    #                     },
-    #                     {
-    #                         "area_id": "22",
-    #                         "default_cost": 6
-    #                     }
-    #                 ],
-    #                 "cost": 2,
-    #                 "dead_interval": 2,
-    #                 "default_metric": 10,
-    #                 "demand_circuit": true,
-    #                 "hello_interval": 1,
-    #                 "mtu_ignore": true,
-    #                 "packet_size": 577,
-    #                 "priority": 1,
-    #                 "process_id": "30",
-    #                 "retransmit_interval": 2,
-    #                 "router_id": "2.2.2.2",
-    #                 "transmit_delay": 2
-    #             }
-    #         ]
-    #     }
-    #
-    #
+    # Task Output:
     # ------------
-    # After state
+    #
+    # before: {}
+    #
+    # - router ospfv3 10
+    #   - area 11 default-cost 5
+    #   - area 11 cost 11
+    #   - area 22 default-cost 6
+    #   - router ospfv3 26
+    #   - authentication disable
+    #   - router ospfv3 27
+    #   - area 10 hello-interval 2
+    #   - router ospfv3 30
+    #   - cost 2
+    #   - priority 1
+    #   - default-metric 10
+    #   - router-id 2.2.2.2
+    #   - demand-circuit
+    #   - packet-size 577
+    #   - transmit-delay 2
+    #   - dead-interval 2
+    #   - hello-interval 1
+    #   - retransmit-interval 2
+    #   - mtu-ignore
+    #   - area 11 default-cost 5
+    #   - area 22 default-cost 6
+    #
+    # after:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       process_id: '10'
+    #     - authentication:
+    #         disable: true
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         hello_interval: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: true
+    #       hello_interval: 1
+    #       mtu_ignore: true
+    #       packet_size: 577
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       transmit_delay: 2
+    #
+    # After state:
     # ------------
     #
     # RP/0/RP0/CPU0:anton#show running-config router ospfv3
@@ -9359,49 +9329,6 @@ Examples
     #  area 10
     #   hello-interval 2
     #  !
-    #  area 20
-    #  !
-    #  area 30
-    #  !
-    # !
-    # router ospfv3 30
-    #  cost 2
-    #  priority 1
-    #  mtu-ignore
-    #  packet-size 577
-    #  dead-interval 2
-    #  retransmit-interval 2
-    #  demand-circuit
-    #  hello-interval 1
-    #  transmit-delay 2
-    #  router-id 2.2.2.2
-    #  default-metric 10
-    #  area 11
-    #   default-cost 5
-    #  !
-    #  area 22
-    #   default-cost 6
-    #  !
-    # router ospfv3 10
-    #  area 11
-    #   cost 11
-    #   default-cost 5
-    #  !
-    #  area 22
-    #   default-cost 6
-    #  !
-    # !
-    # router ospfv3 26
-    #  authentication disable
-    # !
-    # router ospfv3 27
-    #  area 10
-    #   hello-interval 2
-    #  !
-    #  area 20
-    #  !
-    #  area 30
-    #  !
     # !
     # router ospfv3 30
     #  cost 2
@@ -9422,14 +9349,11 @@ Examples
     #   default-cost 6
     #  !
     # !
-
-
 
     # Using replaced
     #
-    # ------------
-    # Before state
-    # ------------
+    # Before state:
+    # -------------
     #
     #
     # RP/0/RP0/CPU0:anton#show running-config router ospf
@@ -9448,49 +9372,6 @@ Examples
     # router ospfv3 27
     #  area 10
     #   hello-interval 2
-    #  !
-    #  area 20
-    #  !
-    #  area 30
-    #  !
-    # !
-    # router ospfv3 30
-    #  cost 2
-    #  priority 1
-    #  mtu-ignore
-    #  packet-size 577
-    #  dead-interval 2
-    #  retransmit-interval 2
-    #  demand-circuit
-    #  hello-interval 1
-    #  transmit-delay 2
-    #  router-id 2.2.2.2
-    #  default-metric 10
-    #  area 11
-    #   default-cost 5
-    #  !
-    #  area 22
-    #   default-cost 6
-    #  !
-    # router ospfv3 10
-    #  area 11
-    #   cost 11
-    #   default-cost 5
-    #  !
-    #  area 22
-    #   default-cost 6
-    #  !
-    # !
-    # router ospfv3 26
-    #  authentication disable
-    # !
-    # router ospfv3 27
-    #  area 10
-    #   hello-interval 2
-    #  !
-    #  area 20
-    #  !
-    #  area 30
     #  !
     # !
     # router ospfv3 30
@@ -9530,142 +9411,88 @@ Examples
         state: replaced
 
     #
+    # Task Output:
+    # ------------
     #
-    # ------------------------
-    # Module Execution Result
-    # ------------------------
+    # before:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       process_id: '10'
+    #     - authentication:
+    #         disable: true
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         hello_interval: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: true
+    #       hello_interval: 1
+    #       mtu_ignore: true
+    #       packet_size: 577
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       transmit_delay: 2
     #
-    #  "before": {
-    #         "processes": [
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "11",
-    #                         "cost": 11,
-    #                         "default_cost": 5
-    #                     },
-    #                     {
-    #                         "area_id": "22",
-    #                         "default_cost": 6
-    #                     }
-    #                 ],
-    #                 "process_id": "10"
-    #             },
-    #             {
-    #                 "authentication": {
-    #                     "disable": true
-    #                 },
-    #                 "process_id": "26"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "10",
-    #                         "hello_interval": 2
-    #                     }
-    #                 ],
-    #                 "process_id": "27"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "11",
-    #                         "default_cost": 5
-    #                     },
-    #                     {
-    #                         "area_id": "22",
-    #                         "default_cost": 6
-    #                     }
-    #                 ],
-    #                 "cost": 2,
-    #                 "dead_interval": 2,
-    #                 "default_metric": 10,
-    #                 "demand_circuit": true,
-    #                 "hello_interval": 1,
-    #                 "mtu_ignore": true,
-    #                 "packet_size": 577,
-    #                 "priority": 1,
-    #                 "process_id": "30",
-    #                 "retransmit_interval": 2,
-    #                 "router_id": "2.2.2.2",
-    #                 "transmit_delay": 2
-    #             }
-    #         ]
-    #     }
+    # commands:
+    #   - router ospfv3 27
+    #   - area 20 default-cost 2
+    #   - area 20 cost 2
     #
-    #  "commands": [
-    #         "router ospfv3 27",
-    #         "area 20 default-cost 2",
-    #         "area 20 cost 2"
-    #     ]
-    #
-    #  "after": {
-    #         "processes": [
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "11",
-    #                         "cost": 11,
-    #                         "default_cost": 5
-    #                     },
-    #                     {
-    #                         "area_id": "22",
-    #                         "default_cost": 6
-    #                     }
-    #                 ],
-    #                 "process_id": "10"
-    #             },
-    #             {
-    #                 "authentication": {
-    #                     "disable": true
-    #                 },
-    #                 "process_id": "26"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "10",
-    #                         "hello_interval": 2
-    #                     },
-    #                     {
-    #                         "area_id": "20",
-    #                         "cost": 2,
-    #                         "default_cost": 2
-    #                     }
-    #                 ],
-    #                 "process_id": "27"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "11",
-    #                         "default_cost": 5
-    #                     },
-    #                     {
-    #                         "area_id": "22",
-    #                         "default_cost": 6
-    #                     }
-    #                 ],
-    #                 "cost": 2,
-    #                 "dead_interval": 2,
-    #                 "default_metric": 10,
-    #                 "demand_circuit": true,
-    #                 "hello_interval": 1,
-    #                 "mtu_ignore": true,
-    #                 "packet_size": 577,
-    #                 "priority": 1,
-    #                 "process_id": "30",
-    #                 "retransmit_interval": 2,
-    #                 "router_id": "2.2.2.2",
-    #                 "transmit_delay": 2
-    #             }
-    #         ]
-    #     }
+    # after:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       process_id: '10'
+    #     - authentication:
+    #         disable: true
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         hello_interval: 2
+    #       - area_id: '20'
+    #         cost: 2
+    #         default_cost: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: true
+    #       hello_interval: 1
+    #       mtu_ignore: true
+    #       packet_size: 577
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       transmit_delay: 2
     #
     #
-    # -----------
-    # After state
-    # -----------
+    # After state:
+    # ------------
     #
     # RP/0/RP0/CPU0:anton(config)#do show running-config router ospfv3
     # router ospfv3 10
@@ -9688,8 +9515,6 @@ Examples
     #   cost 2
     #   default-cost 2
     #  !
-    #  area 30
-    #  !
     # !
     # router ospfv3 30
     #  cost 2
@@ -9711,6 +9536,51 @@ Examples
     #  !
     # !
 
+    # Using overridden
+    #
+    # Before state:
+    # -------------
+    #
+    # router ospfv3 10
+    #  area 11
+    #   cost 11
+    #   default-cost 5
+    #  !
+    #  area 22
+    #   default-cost 6
+    #  !
+    # !
+    # router ospfv3 26
+    #  authentication disable
+    # !
+    # router ospfv3 27
+    #  area 10
+    #   hello-interval 2
+    #  !
+    #  area 20
+    #   cost 2
+    #   default-cost 2
+    #  !
+    # !
+    # router ospfv3 30
+    #  cost 2
+    #  priority 1
+    #  mtu-ignore
+    #  packet-size 577
+    #  dead-interval 2
+    #  retransmit-interval 2
+    #  demand-circuit
+    #  hello-interval 1
+    #  transmit-delay 2
+    #  router-id 2.2.2.2
+    #  default-metric 10
+    #  area 11
+    #   default-cost 5
+    #  !
+    #  area 22
+    #   default-cost 6
+    #  !
+    # !
 
     - name: Override existing OSPFv3 configurations from the device
       cisco.iosxr.iosxr_ospfv3:
@@ -9736,138 +9606,97 @@ Examples
         state: overridden
 
     #
+    # Task Output:
+    # ------------
     #
-    # ------------------------
-    # Module Execution Result
-    # ------------------------
+    # before:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       process_id: '10'
+    #     - authentication:
+    #         disable: true
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         hello_interval: 2
+    #       - area_id: '20'
+    #         cost: 2
+    #         default_cost: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: true
+    #       hello_interval: 1
+    #       mtu_ignore: true
+    #       packet_size: 577
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       transmit_delay: 2
     #
-    #  "before": {
-    #         "processes": [
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "11",
-    #                         "cost": 11,
-    #                         "default_cost": 5
-    #                     },
-    #                     {
-    #                         "area_id": "22",
-    #                         "default_cost": 6
-    #                     }
-    #                 ],
-    #                 "process_id": "10"
-    #             },
-    #             {
-    #                 "authentication": {
-    #                     "disable": true
-    #                 },
-    #                 "process_id": "26"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "10",
-    #                         "hello_interval": 2
-    #                     },
-    #                     {
-    #                         "area_id": "20",
-    #                         "cost": 2,
-    #                         "default_cost": 2
-    #                     }
-    #                 ],
-    #                 "process_id": "27"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "11",
-    #                         "default_cost": 5
-    #                     },
-    #                     {
-    #                         "area_id": "22",
-    #                         "default_cost": 6
-    #                     }
-    #                 ],
-    #                 "cost": 2,
-    #                 "dead_interval": 2,
-    #                 "default_metric": 10,
-    #                 "demand_circuit": true,
-    #                 "hello_interval": 1,
-    #                 "mtu_ignore": true,
-    #                 "packet_size": 577,
-    #                 "priority": 1,
-    #                 "process_id": "30",
-    #                 "retransmit_interval": 2,
-    #                 "router_id": "2.2.2.2",
-    #                 "transmit_delay": 2
-    #             }
-    #         ]
-    #     }
+    # commands:
+    #   - router ospfv3 10
+    #   - no area 11 default-cost 5
+    #   - no area 11 cost 11
+    #   - no area 22 default-cost 6
+    #   - router ospfv3 30
+    #   - no cost 2
+    #   - no priority 1
+    #   - no default-metric 10
+    #   - no router-id 2.2.2.2
+    #   - no demand-circuit
+    #   - no packet-size 577
+    #   - no transmit-delay 2
+    #   - no dead-interval 2
+    #   - no hello-interval 1
+    #   - no retransmit-interval 2
+    #   - no mtu-ignore
+    #   - no area 11 default-cost 5
+    #   - no area 22 default-cost 6
+    #   - router ospfv3 27
+    #   - area 10 authentication disable
+    #   - area 20 authentication disable
+    #   - router ospfv3 26
+    #   - no authentication disable
+    #   - area 10 authentication disable
+    #   - area 10 hello-interval 2
     #
-    #  "commands": [
-    #         "router ospfv3 10",
-    #         "no area 11 default-cost 5",
-    #         "no area 11 cost 11",
-    #         "no area 22 default-cost 6",
-    #         "router ospfv3 30",
-    #         "no cost 2",
-    #         "no priority 1",
-    #         "no default-metric 10",
-    #         "no router-id 2.2.2.2",
-    #         "no demand-circuit",
-    #         "no packet-size 577",
-    #         "no transmit-delay 2",
-    #         "no dead-interval 2",
-    #         "no hello-interval 1",
-    #         "no retransmit-interval 2",
-    #         "no mtu-ignore",
-    #         "no area 11 default-cost 5",
-    #         "no area 22 default-cost 6",
-    #         "router ospfv3 26",
-    #         "area 10 hello-interval 4"
-    #     ]
+    # after:
+    #     processes:
+    #     - process_id: '10'
+    #     - areas:
+    #       - area_id: '10'
+    #         authentication:
+    #           disable: true
+    #         hello_interval: 2
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         authentication:
+    #           disable: true
+    #         hello_interval: 2
+    #       - area_id: '20'
+    #         authentication:
+    #           disable: true
+    #         cost: 2
+    #         default_cost: 2
+    #       process_id: '27'
+    #     - process_id: '30'
     #
-    #  "after": {
-    #         "processes": [
-    #             {
-    #                 "process_id": "10"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "10",
-    #                         "hello_interval": 4
-    #                     }
-    #                 ],
-    #                 "authentication": {
-    #                     "disable": true
-    #                 },
-    #                 "process_id": "26"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "10",
-    #                         "hello_interval": 2
-    #                     },
-    #                     {
-    #                         "area_id": "20",
-    #                         "cost": 2,
-    #                         "default_cost": 2
-    #                     }
-    #                 ],
-    #                 "process_id": "27"
-    #             },
-    #             {
-    #                 "process_id": "30"
-    #             }
-    #         ]
-    #     }
-    #
-    #
-    # -----------
-    # After state
-    # -----------
+    # After state:
+    # ------------
     #
     # RP/0/RP0/CPU0:anton#show running-config router ospfv3
     # router ospfv3 10
@@ -9877,20 +9706,20 @@ Examples
     #  !
     # !
     # router ospfv3 26
-    #  authentication disable
     #  area 10
-    #   hello-interval 4
+    #   authentication disable
+    #   hello-interval 2
     #  !
     # !
     # router ospfv3 27
     #  area 10
+    #   authentication disable
     #   hello-interval 2
     #  !
     #  area 20
     #   cost 2
+    #   authentication disable
     #   default-cost 2
-    #  !
-    #  area 30
     #  !
     # !
     # router ospfv3 30
@@ -9899,44 +9728,58 @@ Examples
     #  area 22
     #  !
     # !
-
-
 
     # Using deleted
     #
-    # ------------
-    # Before state
-    # ------------
+    # Before state:
+    # -------------
     #
     #
     # RP/0/RP0/CPU0:anton#show running-config router ospfv3
     # router ospfv3 10
     #  area 11
+    #   cost 11
+    #   default-cost 5
     #  !
     #  area 22
+    #   default-cost 6
     #  !
     # !
     # router ospfv3 26
     #  authentication disable
     #  area 10
-    #   hello-interval 4
+    #   authentication disable
+    #   hello-interval 2
     #  !
     # !
     # router ospfv3 27
     #  area 10
+    #   authentication disable
     #   hello-interval 2
     #  !
     #  area 20
     #   cost 2
+    #   authentication disable
     #   default-cost 2
-    #  !
-    #  area 30
     #  !
     # !
     # router ospfv3 30
+    #  cost 2
+    #  priority 1
+    #  mtu-ignore
+    #  packet-size 577
+    #  dead-interval 2
+    #  retransmit-interval 2
+    #  demand-circuit
+    #  hello-interval 1
+    #  transmit-delay 2
+    #  router-id 2.2.2.2
+    #  default-metric 10
     #  area 11
+    #   default-cost 5
     #  !
     #  area 22
+    #   default-cost 6
     #  !
     # !
 
@@ -9951,92 +9794,295 @@ Examples
         state: deleted
 
     #
+    # Task Output:
+    # ------------
     #
-    # ------------------------
-    # Module Execution Result
-    # ------------------------
+    # before:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       process_id: '10'
+    #     - areas:
+    #       - area_id: '10'
+    #         authentication:
+    #           disable: true
+    #         hello_interval: 2
+    #       authentication:
+    #         disable: true
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         authentication:
+    #           disable: true
+    #         hello_interval: 2
+    #       - area_id: '20'
+    #         authentication:
+    #           disable: true
+    #         cost: 2
+    #         default_cost: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: true
+    #       hello_interval: 1
+    #       mtu_ignore: true
+    #       packet_size: 577
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       transmit_delay: 2
     #
-    #  "before": {
-    #         "processes": [
-    #             {
-    #                 "process_id": "10"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "10",
-    #                         "hello_interval": 4
-    #                     }
-    #                 ],
-    #                 "authentication": {
-    #                     "disable": true
-    #                 },
-    #                 "process_id": "26"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "10",
-    #                         "hello_interval": 2
-    #                     },
-    #                     {
-    #                         "area_id": "20",
-    #                         "cost": 2,
-    #                         "default_cost": 2
-    #                     }
-    #                 ],
-    #                 "process_id": "27"
-    #             },
-    #             {
-    #                 "process_id": "30"
-    #             }
-    #         ]
-    #     },
+    # commands:
+    #   - router ospfv3 10
+    #   - no area 11 default-cost 5
+    #   - no area 11 cost 11
+    #   - no area 22 default-cost 6
+    #   - router ospfv3 26
+    #   - no authentication disable
+    #   - no area 10 authentication disable
+    #   - no area 10 hello-interval 2
+    #   - router ospfv3 27
+    #   - no area 10 authentication disable
+    #   - no area 10 hello-interval 2
+    #   - no area 20 authentication disable
+    #   - no area 20 default-cost 2
+    #   - no area 20 cost 2
+    #   - router ospfv3 30
+    #   - no cost 2
+    #   - no priority 1
+    #   - no default-metric 10
+    #   - no router-id 2.2.2.2
+    #   - no demand-circuit
+    #   - no packet-size 577
+    #   - no transmit-delay 2
+    #   - no dead-interval 2
+    #   - no hello-interval 1
+    #   - no retransmit-interval 2
+    #   - no mtu-ignore
+    #   - no area 11 default-cost 5
+    #   - no area 22 default-cost 6
     #
-    #  "commands": [
-    #         "router ospfv3 26",
-    #         "no authentication disable",
-    #         "no area 10 hello-interval 4",
-    #         "router ospfv3 27",
-    #         "no area 10 hello-interval 2",
-    #         "no area 20 default-cost 2",
-    #         "no area 20 cost 2"
-    #     ]
+    # after:
+    #     processes:
+    #     - process_id: '10'
+    #     - process_id: '26'
+    #     - process_id: '27'
+    #     - process_id: '30'
     #
-    #  "after": {
-    #        "processes": [
-    #            {
-    #                "process_id": "10"
-    #            },
-    #            {
-    #                "process_id": "26"
-    #            },
-    #            {
-    #                "process_id": "27"
-    #            },
-    #            {
-    #                "process_id": "30"
-    #            }
-    #        ]
-    #    }
-    #
-    #
-    # -----------
-    # After state
-    # -----------
+    # After state:
+    # ------------
     #
     # RP/0/RP0/CPU0:anton(config)#show running-config router ospfv3
     # router ospfv3 10
+    #  area 11
+    #  !
+    #  area 22
+    #  !
     # !
     # router ospfv3 26
+    #  area 10
+    #  !
     # !
     # router ospfv3 27
+    #  area 10
+    #  !
+    #  area 20
+    #  !
     # !
     # router ospfv3 30
+    #  area 11
+    #  !
+    #  area 22
+    #  !
+    # !
+
+    # Using deleted
+    #
+    # Before state:
+    # -------------
+    #
+    #
+    # RP/0/RP0/CPU0:anton#show running-config router ospfv3
+    # router ospfv3 10
+    #  area 11
+    #   cost 11
+    #   default-cost 5
+    #  !
+    #  area 22
+    #   default-cost 6
+    #  !
+    # !
+    # router ospfv3 26
+    #  authentication disable
+    #  area 10
+    #   authentication disable
+    #   hello-interval 2
+    #  !
+    # !
+    # router ospfv3 27
+    #  area 10
+    #   authentication disable
+    #   hello-interval 2
+    #  !
+    #  area 20
+    #   cost 2
+    #   authentication disable
+    #   default-cost 2
+    #  !
+    # !
+    # router ospfv3 30
+    #  cost 2
+    #  priority 1
+    #  mtu-ignore
+    #  packet-size 577
+    #  dead-interval 2
+    #  retransmit-interval 2
+    #  demand-circuit
+    #  hello-interval 1
+    #  transmit-delay 2
+    #  router-id 2.2.2.2
+    #  default-metric 10
+    #  area 11
+    #   default-cost 5
+    #  !
+    #  area 22
+    #   default-cost 6
+    #  !
+    # !
+
+    - name: Deleted existing OSPFv3 configurations from the device
+      cisco.iosxr.iosxr_ospfv3:
+        config:
+        state: deleted
+
+    #
+    # Task Output:
+    # ------------
+    #
+    # before:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       process_id: '10'
+    #     - areas:
+    #       - area_id: '10'
+    #         authentication:
+    #           disable: true
+    #         hello_interval: 2
+    #       authentication:
+    #         disable: true
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         authentication:
+    #           disable: true
+    #         hello_interval: 2
+    #       - area_id: '20'
+    #         authentication:
+    #           disable: true
+    #         cost: 2
+    #         default_cost: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: true
+    #       hello_interval: 1
+    #       mtu_ignore: true
+    #       packet_size: 577
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       transmit_delay: 2
+    #
+    # commands:
+    #   - router ospfv3 10
+    #   - no area 11 default-cost 5
+    #   - no area 11 cost 11
+    #   - no area 22 default-cost 6
+    #   - router ospfv3 26
+    #   - no authentication disable
+    #   - no area 10 authentication disable
+    #   - no area 10 hello-interval 2
+    #   - router ospfv3 27
+    #   - no area 10 authentication disable
+    #   - no area 10 hello-interval 2
+    #   - no area 20 authentication disable
+    #   - no area 20 default-cost 2
+    #   - no area 20 cost 2
+    #   - router ospfv3 30
+    #   - no cost 2
+    #   - no priority 1
+    #   - no default-metric 10
+    #   - no router-id 2.2.2.2
+    #   - no demand-circuit
+    #   - no packet-size 577
+    #   - no transmit-delay 2
+    #   - no dead-interval 2
+    #   - no hello-interval 1
+    #   - no retransmit-interval 2
+    #   - no mtu-ignore
+    #   - no area 11 default-cost 5
+    #   - no area 22 default-cost 6
+    #
+    # after:
+    #     processes:
+    #     - process_id: '10'
+    #     - process_id: '26'
+    #     - process_id: '27'
+    #     - process_id: '30'
+    #
+    # After state:
+    # ------------
+    #
+    # RP/0/RP0/CPU0:anton(config)#show running-config router ospfv3
+    # router ospfv3 10
+    #  area 11
+    #  !
+    #  area 22
+    #  !
+    # !
+    # router ospfv3 26
+    #  area 10
+    #  !
+    # !
+    # router ospfv3 27
+    #  area 10
+    #  !
+    #  area 20
+    #  !
+    # !
+    # router ospfv3 30
+    #  area 11
+    #  !
+    #  area 22
+    #  !
     # !
 
 
     # Using parsed
+    #
     # parsed.cfg
     # ------------
     # router ospfv3 10
@@ -10081,71 +10127,44 @@ Examples
         state: parsed
     #
     #
-    # -------------------------
-    # Module Execution Result
-    # -------------------------
+    # Task Output:
+    # ------------
     #
-    #
-    # "parsed": {
-    #         "processes": [
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "11",
-    #                         "cost": 11,
-    #                         "default_cost": 5
-    #                     },
-    #                     {
-    #                         "area_id": "22",
-    #                         "default_cost": 6
-    #                     }
-    #                 ],
-    #                 "process_id": "10"
-    #             },
-    #             {
-    #                 "authentication": {
-    #                     "disable": true
-    #                 },
-    #                 "process_id": "26"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "10",
-    #                         "hello_interval": 2
-    #                     }
-    #                 ],
-    #                 "process_id": "27"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "11",
-    #                         "default_cost": 5
-    #                     },
-    #                     {
-    #                         "area_id": "22",
-    #                         "default_cost": 6
-    #                     }
-    #                 ],
-    #                 "cost": 2,
-    #                 "dead_interval": 2,
-    #                 "default_metric": 10,
-    #                 "demand_circuit": true,
-    #                 "hello_interval": 1,
-    #                 "mtu_ignore": true,
-    #                 "packet_size": 577,
-    #                 "priority": 1,
-    #                 "process_id": "30",
-    #                 "retransmit_interval": 2,
-    #                 "router_id": "2.2.2.2",
-    #                 "transmit_delay": 2
-    #             }
-    #         ]
-    #     }
+    # parsed:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       process_id: '10'
+    #     - authentication:
+    #         disable: true
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         hello_interval: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: true
+    #       hello_interval: 1
+    #       mtu_ignore: true
+    #       packet_size: 577
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       transmit_delay: 2
     #
     # Using rendered
-    #
     #
     - name: Render the commands for provided  configuration
       cisco.iosxr.iosxr_ospfv3:
@@ -10186,35 +10205,32 @@ Examples
 
     #
     #
-    # -------------------------
-    # Module Execution Result
-    # -------------------------
+    # Task Output:
+    # ------------
     #
-    #
-    # "rendered": [
-    #         "router ospfv3 27",
-    #         "area 10 hello-interval 2",
-    #         "router ospfv3 26",
-    #         "authentication disable",
-    #         "router ospfv3 10",
-    #         "area 11 default-cost 5",
-    #         "area 11 cost 11",
-    #         "area 22 default-cost 6",
-    #         "router ospfv3 30",
-    #         "cost 2",
-    #         "priority 1",
-    #         "default-metric 10",
-    #         "router-id 2.2.2.2",
-    #         "demand-circuit",
-    #         "packet-size 577",
-    #         "transmit-delay 2",
-    #         "dead-interval 2",
-    #         "hello-interval 1",
-    #         "retransmit-interval 2",
-    #         "mtu-ignore",
-    #         "area 11 default-cost 5",
-    #         "area 22 default-cost 6"
-    #     ]
+    # rendered:
+    #   - router ospfv3 27
+    #   - area 10 hello-interval 2
+    #   - router ospfv3 26
+    #   - authentication disable
+    #   - router ospfv3 10
+    #   - area 11 default-cost 5
+    #   - area 11 cost 11
+    #   - area 22 default-cost 6
+    #   - router ospfv3 30
+    #   - cost 2
+    #   - priority 1
+    #   - default-metric 10
+    #   - router-id 2.2.2.2
+    #   - demand-circuit
+    #   - packet-size 577
+    #   - transmit-delay 2
+    #   - dead-interval 2
+    #   - hello-interval 1
+    #   - retransmit-interval 2
+    #   - mtu-ignore
+    #   - area 11 default-cost 5
+    #   - area 22 default-cost 6
 
 
     # Using gathered
@@ -10222,7 +10238,7 @@ Examples
     # Before state:
     # -------------
     #
-    # RP/0/RP0/CPU0:anton#show running-config router ospf
+    # RP/0/RP0/CPU0:anton#show running-config router ospfv3
     # router ospfv3 10
     #  area 11
     #   cost 11
@@ -10242,8 +10258,6 @@ Examples
     #   hello-interval 2
     #  !
     #  area 20
-    #  !
-    #  area 30
     #  !
     # !
     # router ospfv3 30
@@ -10271,70 +10285,164 @@ Examples
         state: gathered
     #
     #
-    # -------------------------
-    # Module Execution Result
-    # -------------------------
+    # Task Output:
+    # ------------
     #
-    #    "gathered": {
-    #         "processes": [
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "11",
-    #                         "cost": 11,
-    #                         "default_cost": 5
-    #                     },
-    #                     {
-    #                         "area_id": "22",
-    #                         "default_cost": 6
-    #                     }
-    #                 ],
-    #                 "process_id": "10"
-    #             },
-    #             {
-    #                 "authentication": {
-    #                     "disable": true
-    #                 },
-    #                 "process_id": "26"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "10",
-    #                         "hello_interval": 2
-    #                     }
-    #                 ],
-    #                 "process_id": "27"
-    #             },
-    #             {
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "11",
-    #                         "default_cost": 5
-    #                     },
-    #                     {
-    #                         "area_id": "22",
-    #                         "default_cost": 6
-    #                     }
-    #                 ],
-    #                 "cost": 2,
-    #                 "dead_interval": 2,
-    #                 "default_metric": 10,
-    #                 "demand_circuit": true,
-    #                 "hello_interval": 1,
-    #                 "mtu_ignore": true,
-    #                 "packet_size": 577,
-    #                 "priority": 1,
-    #                 "process_id": "30",
-    #                 "retransmit_interval": 2,
-    #                 "router_id": "2.2.2.2",
-    #                 "transmit_delay": 2
-    #             }
-    #         ]
-    #     }
+    # gathered:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       process_id: '10'
+    #     - authentication:
+    #         disable: true
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         hello_interval: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: true
+    #       hello_interval: 1
+    #       mtu_ignore: true
+    #       packet_size: 577
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       transmit_delay: 2
     #
 
 
+
+Return Values
+-------------
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>after</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when changed</td>
+                <td>
+                            <div>The resulting configuration model invocation.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">The configuration returned will always be in the same format
+     of the parameters above.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>before</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>The configuration prior to the model invocation.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">The configuration returned will always be in the same format
+     of the parameters above.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>commands</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>The set of commands pushed to the remote device.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;router ospfv3 10&#x27;, &#x27;area 11 default-cost 5&#x27;, &#x27;area 11 cost 11&#x27;, &#x27;area 22 default-cost 6&#x27;]</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>gathered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>gathered</code></td>
+                <td>
+                            <div>Facts about the network resource gathered from the remote device as structured data.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>parsed</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>parsed</code></td>
+                <td>
+                            <div>The device native config provided in <em>running_config</em> option parsed into structured data as per module argspec.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>rendered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>rendered</code></td>
+                <td>
+                            <div>The provided configuration in the task rendered in device-native format (offline).</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;router ospfv3 27&#x27;, &#x27;area 10 hello-interval 2&#x27;]</div>
+                </td>
+            </tr>
+    </table>
+    <br/><br/>
 
 
 Status
