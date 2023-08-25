@@ -174,10 +174,7 @@ class TestIosxrOspfV3Module(TestIosxrModule):
         )
 
         commands = [
-            "router ospfv3 30",
-            "no cost 2",
-            "no default-metric 10",
-            "no area 11 default-cost 5",
+            "no router ospfv3 30",
             "router ospfv3 40",
             "cost 2",
             "default-metric 10",
@@ -212,10 +209,7 @@ class TestIosxrOspfV3Module(TestIosxrModule):
             ),
         )
         commands = [
-            "router ospfv3 30",
-            "no cost 2",
-            "no default-metric 10",
-            "no area 11 default-cost 5",
+            "no router ospfv3 30",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
