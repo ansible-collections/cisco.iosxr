@@ -588,7 +588,7 @@ EXAMPLES = """
 
      state: rendered
 
-     
+
 # Task Output
 # -------------
 # "rendered": [
