@@ -92,24 +92,24 @@ class InterfacesFacts(object):
 
         config = deepcopy(spec)
         match = re.search(r"^(\S+)", conf)
+        if match:
+            intf = match.group(1)
+            if match.group(1).lower() == "preconfigure":
+                match = re.search(r"^(\S+) (.*)", conf)
+                if match:
+                    intf = match.group(2)
 
-        intf = match.group(1)
-        if match.group(1).lower() == "preconfigure":
-            match = re.search(r"^(\S+) (.*)", conf)
-            if match:
-                intf = match.group(2)
-
-        if get_interface_type(intf) == "unknown":
-            return {}
-        # populate the facts from the configuration
-        config["name"] = intf
-        config["description"] = utils.parse_conf_arg(conf, "description")
-        if utils.parse_conf_arg(conf, "speed"):
-            config["speed"] = int(utils.parse_conf_arg(conf, "speed"))
-        if utils.parse_conf_arg(conf, "mtu"):
-            config["mtu"] = int(utils.parse_conf_arg(conf, "mtu"))
-        config["duplex"] = utils.parse_conf_arg(conf, "duplex")
-        enabled = utils.parse_conf_cmd_arg(conf, "shutdown", False)
-        config["enabled"] = enabled if enabled is not None else True
+            if get_interface_type(intf) == "unknown":
+                return {}
+            # populate the facts from the configuration
+            config["name"] = intf
+            config["description"] = utils.parse_conf_arg(conf, "description")
+            if utils.parse_conf_arg(conf, "speed"):
+                config["speed"] = int(utils.parse_conf_arg(conf, "speed"))
+            if utils.parse_conf_arg(conf, "mtu"):
+                config["mtu"] = int(utils.parse_conf_arg(conf, "mtu"))
+            config["duplex"] = utils.parse_conf_arg(conf, "duplex")
+            enabled = utils.parse_conf_cmd_arg(conf, "shutdown", False)
+            config["enabled"] = enabled if enabled is not None else True
 
         return utils.remove_empties(config)

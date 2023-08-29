@@ -177,30 +177,13 @@ replaced:
 
 overridden:
   commands:
-    - router ospfv3 10
-    - no area 11 default-cost 5
-    - no area 11 cost 11
-    - no area 22 default-cost 6
-    - router ospfv3 30
-    - no cost 2
-    - no priority 1
-    - no default-metric 10
-    - no router-id 2.2.2.2
-    - no demand-circuit
-    - no packet-size 577
-    - no transmit-delay 2
-    - no dead-interval 2
-    - no hello-interval 1
-    - no retransmit-interval 2
-    - no mtu-ignore
-    - no area 11 default-cost 5
-    - no area 22 default-cost 6
+    - no router ospfv3 10
+    - no router ospfv3 30
     - router ospfv3 27
     - area 20 default-cost 2
     - area 20 cost 2
   after:
     processes:
-      - process_id: "10"
       - authentication:
           disable: true
         process_id: "26"
@@ -211,42 +194,16 @@ overridden:
             cost: 2
             default_cost: 2
         process_id: "27"
-      - process_id: "30"
 deleted:
   commands:
-    - router ospfv3 10
-    - no area 11 default-cost 5
-    - no area 11 cost 11
-    - no area 22 default-cost 6
-    - router ospfv3 26
-    - no authentication disable
-    - router ospfv3 27
-    - no area 10 hello-interval 2
-    - router ospfv3 30
-    - no cost 2
-    - no priority 1
-    - no default-metric 10
-    - no router-id 2.2.2.2
-    - no demand-circuit
-    - no packet-size 577
-    - no transmit-delay 2
-    - no dead-interval 2
-    - no hello-interval 1
-    - no retransmit-interval 2
-    - no mtu-ignore
-    - no area 11 default-cost 5
-    - no area 22 default-cost 6
+    - no router ospfv3 26
+    - no router ospfv3 27
+    - no router ospfv3 30
+    - no router ospfv3 10
 
-  after:
-    processes:
-      - process_id: "10"
-      - process_id: "26"
-      - process_id: "27"
-      - process_id: "30"
 round_trip:
   after:
     processes:
-      - process_id: "10"
       - authentication:
           disable: true
         process_id: "26"
@@ -257,4 +214,3 @@ round_trip:
             cost: 2
             default_cost: 2
         process_id: "27"
-      - process_id: "30"

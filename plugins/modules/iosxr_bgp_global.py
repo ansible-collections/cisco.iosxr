@@ -930,7 +930,7 @@ options:
       description:
       - The state the configuration should be left in.
       type: str
-      choices: [deleted, merged, replaced, gathered, rendered, parsed, purged]
+      choices: [deleted, merged, replaced, gathered, rendered, parsed, purged, overridden]
       default: merged
 """
 EXAMPLES = """
@@ -1647,6 +1647,7 @@ EXAMPLES = """
 
 # Task Output:
 # ------------
+#
 # gathered:
 #     as_number: '65536'
 #     bgp:
