@@ -31,7 +31,7 @@
     - name: Assert that the after dicts were correctly generated
       ansible.builtin.assert:
         that:
-          - "{{ deleted['after'] == result['after'] }}"
+          - "{{ {} == result['after'] }}"
 
     - name: Delete a single OSPF process (idempotent)
       register: result
@@ -61,7 +61,7 @@
     - name: Assert that the after dicts were correctly generated
       ansible.builtin.assert:
         that:
-          - "{{ deleted['after'] ==  result['after'] }}"
+          - "{{ {} ==  result['after'] }}"
 
     - name: Delete all  OSPF processes (idempotent)
       register: result
@@ -71,6 +71,6 @@
     - name: Assert that the before dicts were correctly generated
       ansible.builtin.assert:
         that:
-          - "{{ deleted['after'] == result['before'] }}"
+          - "{{ {} == result['before'] }}"
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml

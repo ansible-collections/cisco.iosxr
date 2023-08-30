@@ -8969,6 +8969,7 @@ Parameters
                                     <li>rendered</li>
                                     <li>parsed</li>
                                     <li>purged</li>
+                                    <li>overridden</li>
                         </ul>
                 </td>
                 <td>
@@ -9704,6 +9705,7 @@ Examples
 
     # Task Output:
     # ------------
+    #
     # gathered:
     #     as_number: '65536'
     #     bgp:

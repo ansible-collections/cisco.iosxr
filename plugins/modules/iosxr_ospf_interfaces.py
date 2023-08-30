@@ -509,76 +509,42 @@ EXAMPLES = """
 
 #
 #
-# ------------------------
-# Module Execution Result
-# ------------------------
-#
-#  "before": []
-#
-#  "commands": [
-#        "router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 cost 20",
-#        "router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest",
-#        "router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest keychain cisco",
-#        "router ospfv3 LAB3 area 0.0.0.2 interface GigabitEthernet 0/0/0/0 cost 30"
-#     ]
-#
-#  "after": [
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "authentication": {
-#                         "message_digest": {
-#                             "keychain": "cisco"
-#                         }
-#                     },
-#                     "cost": 20,
-#                     "processes": [
-#                         {
-#                             "area": {
-#                                 "area_id": "0.0.0.3"
-#                             },
-#                             "process_id": "LAB3"
-#                         }
-#                     ]
-#                 },
-#                 {
-#                     "afi": "ipv6",
-#                     "cost": 30,
-#                     "processes": [
-#                         {
-#                             "area": {
-#                                 "area_id": "0.0.0.2"
-#                             },
-#                             "process_id": "LAB3"
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "GigabitEthernet0/0/0/0",
-#             "type": "gigabitethernet"
-#         }
-#     ]
-#
-#
+# Task Output:
 # ------------
-# After state
+#
+# before: []
+#
+# commands:
+#   - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 cost 20
+#   - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest
+#   - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest keychain cisco
+#   - router ospfv3 LAB3 area 0.0.0.2 interface GigabitEthernet 0/0/0/0 cost 30
+#
+# after:
+#   - address_family:
+#     - afi: ipv4
+#       authentication:
+#         message_digest:
+#           keychain: cisco
+#       cost: 20
+#       processes:
+#       - area:
+#           area_id: 0.0.0.3
+#         process_id: LAB3
+#     - afi: ipv6
+#       cost: 30
+#       processes:
+#       - area:
+#           area_id: 0.0.0.2
+#         process_id: LAB3
+#     name: GigabitEthernet0/0/0/0
+#     type: gigabitethernet
+#
+# After state:
 # ------------
 #
 # RP/0/0/CPU0:an-iosxr-02#show running-config router ospf
 # Thu Oct 23 06:00:57.217 UTC
-# router ospf LAB
-#  area 0.0.0.0
-#  !
-#  area 0.0.0.9
-#  !
-# !
-# router ospf LAB1
-#  area 0.0.0.1
-#  !
-#  area 0.0.0.3
-#  !
-# !
 # router ospf LAB3
 #  area 0.0.0.3
 #   interface GigabitEthernet0/0/0/0
@@ -587,30 +553,22 @@ EXAMPLES = """
 #   !
 #  !
 # !
-# router ospf ipv4
+# router ospfv3 LAB3
+#  area 0.0.0.2
+#   interface GigabitEthernet0/0/0/0
+#    cost 30
+#   !
+#  !
 # !
 
 # Using replaced
 #
-# ------------
-# Before state
-# ------------
+# Before state:
+# -------------
 #
 #
 # RP/0/0/CPU0:an-iosxr-02#show running-config router ospf
 # Thu Oct 23 06:00:57.217 UTC
-# router ospf LAB
-#  area 0.0.0.0
-#  !
-#  area 0.0.0.9
-#  !
-# !
-# router ospf LAB1
-#  area 0.0.0.1
-#  !
-#  area 0.0.0.3
-#  !
-# !
 # router ospf LAB3
 #  area 0.0.0.3
 #   interface GigabitEthernet0/0/0/0
@@ -619,7 +577,12 @@ EXAMPLES = """
 #   !
 #  !
 # !
-# router ospf ipv4
+# router ospfv3 LAB3
+#  area 0.0.0.2
+#   interface GigabitEthernet0/0/0/0
+#    cost 30
+#   !
+#  !
 # !
 
 - name: Replace OSPF interfaces configuration
@@ -644,125 +607,79 @@ EXAMPLES = """
                   area_id: 0.0.0.2
             cost: 30
     state: replaced
-
 #
+# Task Output:
+# ------------
 #
-# ------------------------
-# Module Execution Result
-# ------------------------
+# before:
+#   - address_family:
+#     - afi: ipv4
+#       authentication:
+#         message_digest:
+#           keychain: cisco
+#       cost: 20
+#       processes:
+#       - area:
+#           area_id: 0.0.0.3
+#         process_id: LAB3
+#     - afi: ipv6
+#       cost: 30
+#       processes:
+#       - area:
+#           area_id: 0.0.0.2
+#         process_id: LAB3
+#     name: GigabitEthernet0/0/0/0
+#     type: gigabitethernet
 #
-#  "before": [
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "authentication": {
-#                         "message_digest": {
-#                             "keychain": "cisco"
-#                         }
-#                     },
-#                     "cost": 20,
-#                     "processes": [
-#                         {
-#                             "area": {
-#                                 "area_id": "0.0.0.3"
-#                             },
-#                             "process_id": "LAB3"
-#                         }
-#                     ]
-#                 },
-#                 {
-#                     "afi": "ipv6",
-#                     "cost": 30,
-#                     "processes": [
-#                         {
-#                             "area": {
-#                                 "area_id": "0.0.0.2"
-#                             },
-#                             "process_id": "LAB3"
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "GigabitEthernet0/0/0/0",
-#             "type": "gigabitethernet"
-#         }
-#     ]
+# commands:
+#   - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 cost 30
+#   - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest
+#   - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest keychain ciscoiosxr
 #
-#  "commands": [
-#    "router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 cost 30",
-#    "router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest",
-#    "router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest keychain ciscoiosxr"
-#     ]
+# after:
+#   - address_family:
+#     - afi: ipv4
+#       authentication:
+#         message_digest:
+#           keychain: ciscoiosxr
+#       cost: 30
+#       processes:
+#       - area:
+#           area_id: 0.0.0.3
+#         process_id: LAB3
+#     - afi: ipv6
+#       cost: 30
+#       processes:
+#       - area:
+#           area_id: 0.0.0.2
+#         process_id: LAB3
+#     name: GigabitEthernet0/0/0/0
+#     type: gigabitethernet
 #
-#  "after": [
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "authentication": {
-#                         "message_digest": {
-#                             "keychain": "ciscoiosxr"
-#                         }
-#                     },
-#                     "cost": 30,
-#                     "processes": [
-#                         {
-#                             "area": {
-#                                 "area_id": "0.0.0.3"
-#                             },
-#                             "process_id": "LAB3"
-#                         }
-#                     ]
-#                 },
-#                 {
-#                     "afi": "ipv6",
-#                     "cost": 30,
-#                     "processes": [
-#                         {
-#                             "area": {
-#                                 "area_id": "0.0.0.2"
-#                             },
-#                             "process_id": "LAB3"
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "GigabitEthernet0/0/0/0",
-#             "type": "gigabitethernet"
-#         }
-#     ]
-#
-#
-# -----------
-# After state
-# -----------
+# After state:
+# ------------
 #
 # RP/0/0/CPU0:an-iosxr-02#show running-config router ospf
 # Thu Oct 23 06:10:39.827 UTC
-# router ospf LAB
-#  area 0.0.0.0
-#  !
-#  area 0.0.0.9
-#  !
-# !
-# router ospf LAB1
-#  area 0.0.0.1
-#  !
-#  area 0.0.0.3
-#  !
-# !
 # router ospf LAB3
 #  area 0.0.0.3
 #   interface GigabitEthernet0/0/0/0
 #    cost 30
 #    authentication message-digest keychain ciscoiosxr
 #   !
+# router ospfv3 LAB3
+#  area 0.0.0.2
+#   interface GigabitEthernet0/0/0/0
+#    cost 30
+#   !
 #  !
 # !
-# router ospf ipv4
-# !
 
+# Using overridden
+#
+# Before state
+# ------------
+#
 - name: Override existing OSPF interfaces configuration
   cisco.iosxr.iosxr_ospf_interfaces:
     config:
@@ -782,98 +699,56 @@ EXAMPLES = """
 
 #
 #
-# ------------------------
-# Module Execution Result
-# ------------------------
+# Task Output:
+# ------------
 #
-#  "before": [
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "authentication": {
-#                         "message_digest": {
-#                             "keychain": "ciscoiosxr"
-#                         }
-#                     },
-#                     "cost": 30,
-#                     "processes": [
-#                         {
-#                             "area": {
-#                                 "area_id": "0.0.0.3"
-#                             },
-#                             "process_id": "LAB3"
-#                         }
-#                     ]
-#                 },
-#                 {
-#                     "afi": "ipv6",
-#                     "cost": 30,
-#                     "processes": [
-#                         {
-#                             "area": {
-#                                 "area_id": "0.0.0.2"
-#                             },
-#                             "process_id": "LAB3"
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "GigabitEthernet0/0/0/0",
-#             "type": "gigabitethernet"
-#         }
-#     ]
+# before:
+#   - address_family:
+#     - afi: ipv4
+#       authentication:
+#         message_digest:
+#           keychain: ciscoiosxr
+#       cost: 30
+#       processes:
+#       - area:
+#           area_id: 0.0.0.3
+#         process_id: LAB3
+#     - afi: ipv6
+#       cost: 30
+#       processes:
+#       - area:
+#           area_id: 0.0.0.2
+#         process_id: LAB3
+#     name: GigabitEthernet0/0/0/0
+#     type: gigabitethernet
 #
-#  "commands": [
-#         "no router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0",
-#         "no router ospfv3 LAB3 area 0.0.0.2 interface GigabitEthernet 0/0/0/0",
-#         "router ospf LAB1 area 0.0.0.3 interface GigabitEthernet 0/0/0/1 cost 10",
-#         "router ospf LAB1 area 0.0.0.3 interface GigabitEthernet 0/0/0/1 authentication message-digest",
-#         "router ospf LAB1 area 0.0.0.3 interface GigabitEthernet 0/0/0/1 authentication message-digest keychain iosxr"
-#     ]
+# commands:
+#   - no router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0
+#   - no router ospfv3 LAB3 area 0.0.0.2 interface GigabitEthernet 0/0/0/0
+#   - router ospf LAB1 area 0.0.0.3 interface GigabitEthernet 0/0/0/1 cost 10
+#   - router ospf LAB1 area 0.0.0.3 interface GigabitEthernet 0/0/0/1 authentication message-digest
+#   - router ospf LAB1 area 0.0.0.3 interface GigabitEthernet 0/0/0/1 authentication message-digest keychain iosxr
 #
-#  "after": [
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "authentication": {
-#                         "message_digest": {
-#                             "keychain": "iosxr"
-#                         }
-#                     },
-#                     "cost": 10,
-#                     "processes": [
-#                         {
-#                             "area": {
-#                                 "area_id": "0.0.0.3"
-#                             },
-#                             "process_id": "LAB1"
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "GigabitEthernet0/0/0/1",
-#             "type": "gigabitethernet"
-#         }
-#     ]
+# after:
+#   - address_family:
+#     - afi: ipv4
+#       authentication:
+#         message_digest:
+#           keychain: iosxr
+#       cost: 10
+#       processes:
+#       - area:
+#           area_id: 0.0.0.3
+#         process_id: LAB1
+#     name: GigabitEthernet0/0/0/1
+#     type: gigabitethernet
 #
-#
-# -----------
-# After state
-# -----------
+# After state:
+# ------------
 #
 # RP/0/0/CPU0:an-iosxr-02#show running-config router ospf
 # Thu Oct 23 06:28:15.025 UTC
-# router ospf LAB
-#  area 0.0.0.0
-#  !
-#  area 0.0.0.9
-#  !
-# !
 # router ospf LAB1
-#  area 0.0.0.1
-#  !
 #  area 0.0.0.3
 #   interface GigabitEthernet0/0/0/1
 #    cost 10
@@ -885,27 +760,20 @@ EXAMPLES = """
 #  area 0.0.0.3
 #  !
 # !
-# router ospf ipv4
+# router ospfv3 LAB3
+#  area 0.0.0.2
+#  !
 # !
 
 # Using deleted
 #
-# ------------
-# Before state
-# ------------
+# Before state:
+# -------------
 #
 #
 # RP/0/0/CPU0:an-iosxr-02#show running-config router ospf
 # Thu Oct 23 06:28:15.025 UTC
-# router ospf LAB
-#  area 0.0.0.0
-#  !
-#  area 0.0.0.9
-#  !
-# !
 # router ospf LAB1
-#  area 0.0.0.1
-#  !
 #  area 0.0.0.3
 #   interface GigabitEthernet0/0/0/1
 #    cost 10
@@ -915,9 +783,18 @@ EXAMPLES = """
 # !
 # router ospf LAB3
 #  area 0.0.0.3
+#   interface GigabitEthernet0/0/0/0
+#    cost 20
+#    authentication message-digest keychain cisco
+#   !
 #  !
 # !
-# router ospf ipv4
+# router ospfv3 LAB3
+#  area 0.0.0.2
+#   interface GigabitEthernet0/0/0/0
+#    cost 30
+#   !
+#  !
 # !
 
 - name: Deleted existing OSPF interfaces from the device
@@ -928,70 +805,91 @@ EXAMPLES = """
     state: deleted
 
 #
+# Task Output:
+# ------------
 #
-# ------------------------
-# Module Execution Result
-# ------------------------
+# before:
+#   - address_family:
+#     - afi: ipv4
+#       authentication:
+#         message_digest:
+#           keychain: iosxr
+#       cost: 10
+#       processes:
+#       - area:
+#           area_id: 0.0.0.3
+#         process_id: LAB1
+#     name: GigabitEthernet0/0/0/1
+#     type: gigabitethernet
+#   - address_family:
+#     - afi: ipv4
+#       authentication:
+#         message_digest:
+#           keychain: cisco
+#       cost: 20
+#       processes:
+#       - area:
+#           area_id: 0.0.0.3
+#         process_id: LAB3
+#     - afi: ipv6
+#       cost: 30
+#       processes:
+#       - area:
+#           area_id: 0.0.0.2
+#         process_id: LAB3
+#     name: GigabitEthernet0/0/0/0
+#     type: gigabitethernet
 #
-#  "before": [
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "authentication": {
-#                         "message_digest": {
-#                             "keychain": "iosxr"
-#                         }
-#                     },
-#                     "cost": 10,
-#                     "processes": [
-#                         {
-#                             "area": {
-#                                 "area_id": "0.0.0.3"
-#                             },
-#                             "process_id": "LAB1"
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "GigabitEthernet0/0/0/1",
-#             "type": "gigabitethernet"
-#         }
-#     ],
+# commands:
+#   - no router ospf LAB1 area 0.0.0.3 interface GigabitEthernet 0/0/0/1]
 #
-#  "commands": [
-#         "no router ospf LAB1 area 0.0.0.3 interface GigabitEthernet 0/0/0/1"
-#     ]
+# after:
+#   - address_family:
+#     - afi: ipv4
+#       authentication:
+#         message_digest:
+#           keychain: cisco
+#       cost: 20
+#       processes:
+#       - area:
+#           area_id: 0.0.0.3
+#         process_id: LAB3
+#     - afi: ipv6
+#       cost: 30
+#       processes:
+#       - area:
+#           area_id: 0.0.0.2
+#         process_id: LAB3
+#     name: GigabitEthernet0/0/0/0
+#     type: gigabitethernet
 #
-#  "after": []
-#
-#
-# -----------
-# After state
-# -----------
+# After state:
+# ------------
 #
 # RP/0/0/CPU0:an-iosxr-02#show running-config router ospf
 # Thu Oct 23 06:34:38.319 UTC
-# router ospf LAB
-#  area 0.0.0.0
-#  !
-#  area 0.0.0.9
-#  !
-# !
 # router ospf LAB1
-#  area 0.0.0.1
-#  !
 #  area 0.0.0.3
 #  !
 # !
 # router ospf LAB3
 #  area 0.0.0.3
+#   interface GigabitEthernet0/0/0/0
+#    cost 20
+#    authentication message-digest keychain cisco
+#   !
 #  !
 # !
-# router ospf ipv4
+# router ospfv3 LAB3
+#  area 0.0.0.2
+#   interface GigabitEthernet0/0/0/0
+#    cost 30
+#   !
+#  !
 # !
 
 # Using parsed
+#
 # parsed.cfg
 # ------------
 # router ospf LAB
@@ -1016,45 +914,29 @@ EXAMPLES = """
 # !
 # router ospf ipv4
 # !
-- name: Parsed the device configuration to get output commands
+- name: Parsed running config and display structured facts.
   cisco.iosxr.iosxr_ospf_interfaces:
     running_config: "{{ lookup('file', './parsed.cfg') }}"
     state: parsed
 #
+# Task Output:
+# ------------
 #
-# -------------------------
-# Module Execution Result
-# -------------------------
-#
-#
-# "parsed": [
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "authentication": {
-#                         "message_digest": {
-#                             "keychain": "cisco"
-#                         }
-#                     },
-#                     "cost": 20,
-#                     "processes": [
-#                         {
-#                             "area": {
-#                                 "area_id": "0.0.0.3"
-#                             },
-#                             "process_id": "LAB3"
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "GigabitEthernet0/0/0/0",
-#             "type": "gigabitethernet"
-#         }
-#     ]
-#
+# parsed:
+#   - address_family:
+#     - afi: ipv4
+#       authentication:
+#         message_digest:
+#           keychain: cisco
+#       cost: 20
+#       processes:
+#       - area:
+#           area_id: 0.0.0.3
+#         process_id: LAB3
+#     name: GigabitEthernet0/0/0/0
+#     type: gigabitethernet
+
 # Using rendered
-#
 #
 - name: Render the commands for provided  configuration
   cisco.iosxr.iosxr_ospf_interfaces:
@@ -1080,19 +962,14 @@ EXAMPLES = """
     state: rendered
 
 #
+# Task Output:
+# ------------
 #
-# -------------------------
-# Module Execution Result
-# -------------------------
-#
-#
-# "rendered": [
-#        "router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 cost 20",
-#        "router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest",
-#        "router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest keychain cisco",
-#        "router ospfv3 LAB3 area 0.0.0.2 interface GigabitEthernet 0/0/0/0 cost 30"
-#     ]
-
+# rendered:
+#   - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 cost 20
+#   - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest
+#   - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest keychain cisco
+#   - router ospfv3 LAB3 area 0.0.0.2 interface GigabitEthernet 0/0/0/0 cost 30
 
 # Using gathered
 #
@@ -1101,18 +978,6 @@ EXAMPLES = """
 #
 # RP/0/0/CPU0:an-iosxr-02#show running-config router ospf
 # Thu Oct 23 06:50:38.743 UTC
-# router ospf LAB
-#  area 0.0.0.0
-#  !
-#  area 0.0.0.9
-#  !
-# !
-# router ospf LAB1
-#  area 0.0.0.1
-#  !
-#  area 0.0.0.3
-#  !
-# !
 # router ospf LAB3
 #  area 0.0.0.3
 #   interface GigabitEthernet0/0/0/0
@@ -1121,7 +986,12 @@ EXAMPLES = """
 #   !
 #  !
 # !
-# router ospf ipv4
+# router ospfv3 LAB3
+#  area 0.0.0.2
+#   interface GigabitEthernet0/0/0/0
+#    cost 30
+#   !
+#  !
 # !
 
 
@@ -1129,49 +999,73 @@ EXAMPLES = """
   cisco.iosxr.iosxr_ospf_interfaces:
     state: gathered
 #
+# Task Output:
+# ------------
 #
-# -------------------------
-# Module Execution Result
-# -------------------------
-#
-#    "gathered": [
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "authentication": {
-#                         "message_digest": {
-#                             "keychain": "cisco"
-#                         }
-#                     },
-#                     "cost": 20,
-#                     "processes": [
-#                         {
-#                             "area": {
-#                                 "area_id": "0.0.0.3"
-#                             },
-#                             "process_id": "LAB3"
-#                         }
-#                     ]
-#                 },
-#                 {
-#                     "afi": "ipv6",
-#                     "cost": 30,
-#                     "processes": [
-#                         {
-#                             "area": {
-#                                 "area_id": "0.0.0.2"
-#                             },
-#                             "process_id": "LAB3"
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "GigabitEthernet0/0/0/0",
-#             "type": "gigabitethernet"
-#         }
-#     ]
-#
+# gathered:
+#   - address_family:
+#     - afi: ipv4
+#       authentication:
+#         message_digest:
+#           keychain: cisco
+#       cost: 20
+#       processes:
+#       - area:
+#           area_id: 0.0.0.3
+#         process_id: LAB3
+#     - afi: ipv6
+#       cost: 30
+#       processes:
+#       - area:
+#           area_id: 0.0.0.2
+#         process_id: LAB3
+#     name: GigabitEthernet0/0/0/0
+#     type: gigabitethernet
+"""
+RETURN = """
+before:
+  description: The configuration prior to the model invocation.
+  returned: always
+  type: list
+  sample: >
+    The configuration returned will always be in the same format
+     of the parameters above.
+after:
+  description: The resulting configuration model invocation.
+  returned: when changed
+  type: list
+  sample: >
+    The configuration returned will always be in the same format
+     of the parameters above.
+commands:
+  description: The set of commands pushed to the remote device.
+  returned: always
+  type: list
+  sample:
+  - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 cost 20
+  - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest
+
+rendered:
+  description: The provided configuration in the task rendered in device-native format (offline).
+  returned: when I(state) is C(rendered)
+  type: list
+  sample:
+  - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 cost 20
+
+gathered:
+  description: Facts about the network resource gathered from the remote device as structured data.
+  returned: when I(state) is C(gathered)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+parsed:
+  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
+  returned: when I(state) is C(parsed)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 """
 
 from ansible.module_utils.basic import AnsibleModule
