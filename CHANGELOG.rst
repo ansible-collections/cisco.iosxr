@@ -5,6 +5,25 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v6.0.1
+======
+
+Bugfixes
+--------
+
+- Fix issue in deletion of ospf.(https://github.com/ansible-collections/cisco.iosxr/issues/425)
+- Fix issue in facts gathering for Interfaces RM.(https://github.com/ansible-collections/cisco.iosxr/issues/417)
+- Fix issue in lacp and lldp_global of local variable commands.
+- Support overridden state in bgp_global,lacp and lldp_global module.(https://github.com/ansible-collections/cisco.iosxr/issues/386)
+
+Documentation Changes
+---------------------
+
+- Fix grpc sub plugin documentation.
+- Update ospf_interfaces examples
+- Update ospfv2 examples
+- Update ospfv3 examples
+
 v6.0.0
 ======
 
