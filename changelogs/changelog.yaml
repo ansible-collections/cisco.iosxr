@@ -640,3 +640,23 @@ releases:
         name: iosxr_bgp_templates
         namespace: ""
     release_date: "2023-07-05"
+  6.0.1:
+    changes:
+      bugfixes:
+        - Fix issue in deletion of ospf.(https://github.com/ansible-collections/cisco.iosxr/issues/425)
+        - Fix issue in facts gathering for Interfaces RM.(https://github.com/ansible-collections/cisco.iosxr/issues/417)
+        - Fix issue in lacp and lldp_global of local variable commands.
+        - Support overridden state in bgp_global,lacp and lldp_global module.(https://github.com/ansible-collections/cisco.iosxr/issues/386)
+      doc_changes:
+        - Fix grpc sub plugin documentation.
+        - Update ospf_interfaces examples
+        - Update ospfv2 examples
+        - Update ospfv3 examples
+    fragments:
+      - Fix_interface_facts.yaml
+      - codecov_pr.yml
+      - fix_ospfv3.yaml
+      - sub_plugin_doc.yml
+      - support_overridden.yaml
+      - update_ospfv2_docs.yaml
+    release_date: "2023-09-07"
