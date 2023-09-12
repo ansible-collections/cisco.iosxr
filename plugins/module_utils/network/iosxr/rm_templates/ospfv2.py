@@ -19,11 +19,11 @@ def _tmplt_ospf_default_information(config_data):
             command += " metric {metric}".format(**config_data["default_information_originate"])
         if "metric_type" in config_data["default_information_originate"]:
             command += " metric-type {metric_type}".format(
-                **config_data["default_information_originate"]
+                **config_data["default_information_originate"],
             )
         if "route_policy" in config_data["default_information_originate"]:
             command += " route-policy {route_policy}".format(
-                **config_data["default_information_originate"]
+                **config_data["default_information_originate"],
             )
         return command
 
@@ -35,7 +35,7 @@ def _tmplt_ospf_auto_cost(config_data):
             command += " disable"
         if "reference_bandwidth" in config_data["auto_cost"]:
             command += " reference-bandwidth {reference_bandwidth}".format(
-                **config_data["auto_cost"]
+                **config_data["auto_cost"],
             )
         return command
 
@@ -416,11 +416,11 @@ def _tmplt_ospf_area_nssa_def_info_origin(config_data):
             )
             if "metric" in def_info_origin:
                 command += " metric {metric}".format(
-                    **config_data["nssa"]["default_information_originate"]
+                    **config_data["nssa"]["default_information_originate"],
                 )
             if "metric_type" in def_info_origin:
                 command += " metric-type {metric_type}".format(
-                    **config_data["nssa"]["default_information_originate"]
+                    **config_data["nssa"]["default_information_originate"],
                 )
         return command
 
@@ -531,11 +531,11 @@ def _tmplt_timers_graceful_shutdown(config_data):
         command = "timers graceful-shutdown"
         if "initial_delay" in config_data["timers"]["graceful-shutdown"]:
             command += " initial delay {initial_delay}".format(
-                **config_data["timers"]["graceful-shutdown"]
+                **config_data["timers"]["graceful-shutdown"],
             )
         if "retain_routes" in config_data["timers"]["graceful-shutdown"]:
             command += " retain routes {retain_routes}".format(
-                **config_data["timers"]["graceful-shutdown"]
+                **config_data["timers"]["graceful-shutdown"],
             )
         return command
 
