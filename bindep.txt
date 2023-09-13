@@ -8,4 +8,4 @@ libssh-devel [test platform:rpm]
 libffi-devel [test platform:rpm]
 openssl-devel [test platform:rpm]
 
-python38-lxml [platform:centos-8 platform:rhel-8]
+python3-lxml [platform:centos-8 platform:rhel-8]
