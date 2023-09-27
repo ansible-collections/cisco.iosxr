@@ -4026,9 +4026,10 @@ Examples
     # Before state:
     # -------------
 
-    # RP/0/RP0/CPU0:ios#sh access-lists afi-all
-    # Thu Feb 20 05:07:45.767 UTC
-    # RP/0/RP0/CPU0:ios#
+    # RP/0/RP0/CPU0:ios#show access-lists afi-al
+    # Fri Sep 22 03:57:04.758 UTC
+    # ipv4 access-list acl_1
+    #  10 permit udp 192.168.1.0 0.0.0.255 any
 
     - name: Merge the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_acls:
@@ -4114,12 +4115,126 @@ Examples
               remark: TEST_ACL_2_REMARK
         state: merged
 
+    # Task Output
+    # -----------
+    #
+    # before:
+    #  - acls:
+    #    - aces:
+    #      - destination:
+    #          any: true
+    #        grant: permit
+    #        protocol: udp
+    #        sequence: 10
+    #        source:
+    #          address: 192.168.1.0
+    #          wildcard_bits: 0.0.0.255
+    #      name: acl_1
+    #    afi: ipv4
+    #
+    # commands:
+    #  - ipv6 access-list acl6_1
+    #  - 10 deny tcp 2001:db8:1234::/48 range ftp telnet any syn ttl range 180 250 authen routing log
+    #  - 20 permit icmpv6 any any router-advertisement precedence network destopts
+    #  - ipv4 access-list acl_1
+    #  - 16 remark TEST_ACL_1_REMARK
+    #  - 21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst
+    #  - 23 deny icmp any 198.51.100.0 0.0.0.15 reassembly-timeout dscp lt af12
+    #  - ipv4 access-list acl_2
+    #  - 10 remark TEST_ACL_2_REMARK
+    #
+    # after:
+    #  - acls:
+    #    - aces:
+    #      - destination:
+    #          any: true
+    #        grant: permit
+    #        protocol: udp
+    #        sequence: 10
+    #        source:
+    #          address: 192.168.1.0
+    #          wildcard_bits: 0.0.0.255
+    #      - remark: TEST_ACL_1_REMARK
+    #        sequence: 16
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        grant: permit
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            rst: true
+    #        sequence: 21
+    #        source:
+    #          host: 192.0.2.10
+    #          port_protocol:
+    #            range:
+    #              end: '121'
+    #              start: pop3
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        dscp:
+    #          lt: af12
+    #        grant: deny
+    #        protocol: icmp
+    #        protocol_options:
+    #          icmp:
+    #            reassembly_timeout: true
+    #        sequence: 23
+    #        source:
+    #          any: true
+    #      name: acl_1
+    #    - aces:
+    #      - remark: TEST_ACL_2_REMARK
+    #        sequence: 10
+    #      name: acl_2
+    #    afi: ipv4
+    #  - acls:
+    #    - aces:
+    #      - authen: true
+    #        destination:
+    #          any: true
+    #        grant: deny
+    #        log: true
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            syn: true
+    #        routing: true
+    #        sequence: 10
+    #        source:
+    #          port_protocol:
+    #            range:
+    #              end: telnet
+    #              start: ftp
+    #          prefix: 2001:db8:1234::/48
+    #        ttl:
+    #          range:
+    #            end: 250
+    #            start: 180
+    #      - destination:
+    #          any: true
+    #        destopts: true
+    #        grant: permit
+    #        precedence: network
+    #        protocol: icmpv6
+    #        protocol_options:
+    #          icmpv6:
+    #            router_advertisement: true
+    #        sequence: 20
+    #        source:
+    #          any: true
+    #      name: acl6_1
+    #    afi: ipv6
+
     # After state:
     # -------------
 
-    # RP/0/RP0/CPU0:ios#sh access-lists afi-all
-    # Thu Feb 20 05:22:57.021 UTC
+    # RP/0/RP0/CPU0:ios#show access-lists afi-all
+    # Fri Sep 22 04:35:19.977 UTC
     # ipv4 access-list acl_1
+    #  10 permit udp 192.168.1.0 0.0.0.255 any
     #  16 remark TEST_ACL_1_REMARK
     #  21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst
     #  23 deny icmp any 198.51.100.0 0.0.0.15 reassembly-timeout dscp lt af12
@@ -4134,9 +4249,10 @@ Examples
     # Before state:
     # -------------
 
-    # RP/0/RP0/CPU0:ios#sh access-lists afi-all
-    # Thu Feb 20 05:22:57.021 UTC
+    # RP/0/RP0/CPU0:ios#show access-lists afi-all
+    # Fri Sep 22 04:37:33.542 UTC
     # ipv4 access-list acl_1
+    #  10 permit udp 192.168.1.0 0.0.0.255 any
     #  16 remark TEST_ACL_1_REMARK
     #  21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst
     #  23 deny icmp any 198.51.100.0 0.0.0.15 reassembly-timeout dscp lt af12
@@ -4149,34 +4265,213 @@ Examples
     - name: Update existing ACEs
       cisco.iosxr.iosxr_acls:
         config:
-        - afi: ipv4
-          acls:
-          - name: acl_1
-            aces:
-            - sequence: 21
-              source:
-                prefix: 198.51.100.32/28
-                port_protocol:
-                  range:
-                    start: pop3
-                    end: 121
-              protocol_options:
-                tcp:
-                  syn: true
+          - afi: ipv4
+            acls:
+              - name: acl_1
+                aces:
+                  - sequence: 21
+                    source:
+                      prefix: 198.51.100.32/28
+                      port_protocol:
+                        range:
+                          start: pop3
+                          end: 121
+                    protocol_options:
+                      tcp:
+                        syn: true
 
-            - sequence: 23
-              protocol_options:
-                icmp:
-                  router_advertisement: true
-              dscp:
-                eq: af23
+                  - sequence: 23
+                    protocol_options:
+                      icmp:
+                        router_advertisement: true
+                    dscp:
+                      eq: af23
+
+    # Task Output
+    # -----------
+    #
+    # before:
+    #  - acls:
+    #    - aces:
+    #      - destination:
+    #          any: true
+    #        grant: permit
+    #        protocol: udp
+    #        sequence: 10
+    #        source:
+    #          address: 192.168.1.0
+    #          wildcard_bits: 0.0.0.255
+    #      - remark: TEST_ACL_1_REMARK
+    #        sequence: 16
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        grant: permit
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            rst: true
+    #        sequence: 21
+    #        source:
+    #          host: 192.0.2.10
+    #          port_protocol:
+    #            range:
+    #              end: '121'
+    #              start: pop3
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        dscp:
+    #          lt: af12
+    #        grant: deny
+    #        protocol: icmp
+    #        protocol_options:
+    #          icmp:
+    #            reassembly_timeout: true
+    #        sequence: 23
+    #        source:
+    #          any: true
+    #      name: acl_1
+    #    - aces:
+    #      - remark: TEST_ACL_2_REMARK
+    #        sequence: 10
+    #      name: acl_2
+    #    afi: ipv4
+    #  - acls:
+    #    - aces:
+    #      - authen: true
+    #        destination:
+    #          any: true
+    #        grant: deny
+    #        log: true
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            syn: true
+    #        routing: true
+    #        sequence: 10
+    #        source:
+    #          port_protocol:
+    #            range:
+    #              end: telnet
+    #              start: ftp
+    #          prefix: 2001:db8:1234::/48
+    #        ttl:
+    #          range:
+    #            end: 250
+    #            start: 180
+    #      - destination:
+    #          any: true
+    #        destopts: true
+    #        grant: permit
+    #        precedence: network
+    #        protocol: icmpv6
+    #        protocol_options:
+    #          icmpv6:
+    #            router_advertisement: true
+    #        sequence: 20
+    #        source:
+    #          any: true
+    #      name: acl6_1
+    #    afi: ipv6
+    #
+    # commands:
+    #  - ipv4 access-list acl_1
+    #  - 21 permit tcp 198.51.100.32 0.0.0.15 range pop3 121 198.51.100.0 0.0.0.15 syn
+    #  - 23 deny icmp any 198.51.100.0 0.0.0.15 router-advertisement dscp eq af23
+    # after:
+    #  - acls:
+    #    - aces:
+    #      - destination:
+    #          any: true
+    #        grant: permit
+    #        protocol: udp
+    #        sequence: 10
+    #        source:
+    #          address: 192.168.1.0
+    #          wildcard_bits: 0.0.0.255
+    #      - remark: TEST_ACL_1_REMARK
+    #        sequence: 16
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        grant: permit
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            syn: true
+    #        sequence: 21
+    #        source:
+    #          address: 198.51.100.32
+    #          port_protocol:
+    #            range:
+    #              end: '121'
+    #              start: pop3
+    #          wildcard_bits: 0.0.0.15
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        dscp:
+    #          eq: af23
+    #        grant: deny
+    #        protocol: icmp
+    #        protocol_options:
+    #          icmp:
+    #            router_advertisement: true
+    #        sequence: 23
+    #        source:
+    #          any: true
+    #      name: acl_1
+    #    - aces:
+    #      - remark: TEST_ACL_2_REMARK
+    #        sequence: 10
+    #      name: acl_2
+    #    afi: ipv4
+    #  - acls:
+    #    - aces:
+    #      - authen: true
+    #        destination:
+    #          any: true
+    #        grant: deny
+    #        log: true
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            syn: true
+    #        routing: true
+    #        sequence: 10
+    #        source:
+    #          port_protocol:
+    #            range:
+    #              end: telnet
+    #              start: ftp
+    #          prefix: 2001:db8:1234::/48
+    #        ttl:
+    #          range:
+    #            end: 250
+    #            start: 180
+    #      - destination:
+    #          any: true
+    #        destopts: true
+    #        grant: permit
+    #        precedence: network
+    #        protocol: icmpv6
+    #        protocol_options:
+    #          icmpv6:
+    #            router_advertisement: true
+    #        sequence: 20
+    #        source:
+    #          any: true
+    #      name: acl6_1
+    #    afi: ipv6
 
     # After state:
     # -------------
 
-    # RP/0/RP0/CPU0:ios#sh access-lists afi-all
-    # Thu Feb 20 05:47:18.711 UTC
+    # RP/0/RP0/CPU0:ios#show access-lists afi-all
+    # Wed Sep 27 09:58:38.345 UTC
     # ipv4 access-list acl_1
+    #  10 permit udp 192.168.1.0 0.0.0.255 any
     #  16 remark TEST_ACL_1_REMARK
     #  21 permit tcp 198.51.100.32 0.0.0.15 range pop3 121 198.51.100.0 0.0.0.15 syn
     #  23 deny icmp any 198.51.100.0 0.0.0.15 router-advertisement dscp eq af23
@@ -4191,9 +4486,10 @@ Examples
     # Before state:
     # -------------
 
-    # RP/0/RP0/CPU0:ios#sh access-lists afi-all
-    # Thu Feb 20 05:22:57.021 UTC
+    # RP/0/RP0/CPU0:ios#show access-lists afi-all
+    # Fri Sep 22 05:38:36.205 UTC
     # ipv4 access-list acl_1
+    #  10 permit udp 192.168.1.0 0.0.0.255 any
     #  16 remark TEST_ACL_1_REMARK
     #  21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst
     #  23 deny icmp any 198.51.100.0 0.0.0.15 reassembly-timeout dscp lt af12
@@ -4205,39 +4501,231 @@ Examples
 
     - name: Replace device configurations of listed ACL with provided configurations
       cisco.iosxr.iosxr_acls:
-        config:
-        - afi: ipv4
-          acls:
-          - name: acl_2
-            aces:
-            - sequence: 11
-              grant: permit
-              protocol: igmp
-              source:
-                host: 198.51.100.130
-              destination:
-                any: true
-              ttl:
-                eq: 100
-
-            - sequence: 12
-              grant: deny
-              source:
-                any: true
-              destination:
-                any: true
-              protocol: icmp
         state: replaced
+        config:
+          - afi: ipv4
+            acls:
+              - name: acl_2
+                aces:
+                  - sequence: 11
+                    grant: permit
+                    protocol: igmp
+                    source:
+                      host: 198.51.100.130
+                    destination:
+                      any: true
+                    ttl:
+                      eq: 100
+
+                  - sequence: 12
+                    grant: deny
+                    source:
+                      any: true
+                    destination:
+                      any: true
+                    protocol: icmp
+
+    # Task Output
+    # -----------
+    # before:
+    #  - acls:
+    #    - aces:
+    #      - destination:
+    #          any: true
+    #        grant: permit
+    #        protocol: udp
+    #        sequence: 10
+    #        source:
+    #          address: 192.168.1.0
+    #          wildcard_bits: 0.0.0.255
+    #      - remark: TEST_ACL_1_REMARK
+    #        sequence: 16
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        grant: permit
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            rst: true
+    #        sequence: 21
+    #        source:
+    #          host: 192.0.2.10
+    #          port_protocol:
+    #            range:
+    #              end: '121'
+    #              start: pop3
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        dscp:
+    #          lt: af12
+    #        grant: deny
+    #        protocol: icmp
+    #        protocol_options:
+    #          icmp:
+    #            reassembly_timeout: true
+    #        sequence: 23
+    #        source:
+    #          any: true
+    #      name: acl_1
+    #    - aces:
+    #      - remark: TEST_ACL_2_REMARK
+    #        sequence: 10
+    #      name: acl_2
+    #    afi: ipv4
+    #  - acls:
+    #    - aces:
+    #      - authen: true
+    #        destination:
+    #          any: true
+    #        grant: deny
+    #        log: true
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            syn: true
+    #        routing: true
+    #        sequence: 10
+    #        source:
+    #          port_protocol:
+    #            range:
+    #              end: telnet
+    #              start: ftp
+    #          prefix: 2001:db8:1234::/48
+    #        ttl:
+    #          range:
+    #            end: 250
+    #            start: 180
+    #      - destination:
+    #          any: true
+    #        destopts: true
+    #        grant: permit
+    #        precedence: network
+    #        protocol: icmpv6
+    #        protocol_options:
+    #          icmpv6:
+    #            router_advertisement: true
+    #        sequence: 20
+    #        source:
+    #          any: true
+    #      name: acl6_1
+    #    afi: ipv6
+    #
+    # commands:
+    #  - ipv4 access-list acl_2
+    #  - no 10
+    #  - 11 permit igmp host 198.51.100.130 any ttl eq 100
+    #  - 12 deny icmp any any
+    #
+    # after:
+    #  - acls:
+    #    - aces:
+    #      - destination:
+    #          any: true
+    #        grant: permit
+    #        protocol: udp
+    #        sequence: 10
+    #        source:
+    #          address: 192.168.1.0
+    #          wildcard_bits: 0.0.0.255
+    #      - remark: TEST_ACL_1_REMARK
+    #        sequence: 16
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        grant: permit
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            rst: true
+    #        sequence: 21
+    #        source:
+    #          host: 192.0.2.10
+    #          port_protocol:
+    #            range:
+    #              end: '121'
+    #              start: pop3
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        dscp:
+    #          lt: af12
+    #        grant: deny
+    #        protocol: icmp
+    #        protocol_options:
+    #          icmp:
+    #            reassembly_timeout: true
+    #        sequence: 23
+    #        source:
+    #          any: true
+    #      name: acl_1
+    #    - aces:
+    #      - destination:
+    #          any: true
+    #        grant: permit
+    #        protocol: igmp
+    #        sequence: 11
+    #        source:
+    #          host: 198.51.100.130
+    #        ttl:
+    #          eq: 100
+    #      - destination:
+    #          any: true
+    #        grant: deny
+    #        protocol: icmp
+    #        sequence: 12
+    #        source:
+    #          any: true
+    #      name: acl_2
+    #    afi: ipv4
+    #  - acls:
+    #    - aces:
+    #      - authen: true
+    #        destination:
+    #          any: true
+    #        grant: deny
+    #        log: true
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            syn: true
+    #        routing: true
+    #        sequence: 10
+    #        source:
+    #          port_protocol:
+    #            range:
+    #              end: telnet
+    #              start: ftp
+    #          prefix: 2001:db8:1234::/48
+    #        ttl:
+    #          range:
+    #            end: 250
+    #            start: 180
+    #      - destination:
+    #          any: true
+    #        destopts: true
+    #        grant: permit
+    #        precedence: network
+    #        protocol: icmpv6
+    #        protocol_options:
+    #          icmpv6:
+    #            router_advertisement: true
+    #        sequence: 20
+    #        source:
+    #          any: true
+    #      name: acl6_1
+    #    afi: ipv6
 
     # After state:
     # -------------
-
-    # RP/0/RP0/CPU0:ios#sh access-lists afi-all
-    # Thu Feb 20 06:19:51.496 UTC
+    # RP/0/RP0/CPU0:ios#show access-lists afi-all
+    # Fri Sep 22 05:56:21.103 UTC
     # ipv4 access-list acl_1
+    #  10 permit udp 192.168.1.0 0.0.0.255 any
     #  16 remark TEST_ACL_1_REMARK
-    #  21 permit tcp 198.51.100.32 0.0.0.15 range pop3 121 198.51.100.0 0.0.0.15 syn
-    #  23 deny icmp any 198.51.100.0 0.0.0.15 router-advertisement dscp eq af23
+    #  21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst
+    #  23 deny icmp any 198.51.100.0 0.0.0.15 reassembly-timeout dscp lt af12
     # ipv4 access-list acl_2
     #  11 permit igmp host 198.51.100.130 any ttl eq 100
     #  12 deny icmp any any
@@ -4253,6 +4741,7 @@ Examples
     # RP/0/RP0/CPU0:ios#sh access-lists afi-all
     # Thu Feb 20 05:22:57.021 UTC
     # ipv4 access-list acl_1
+    #  10 permit udp 192.168.1.0 0.0.0.255 any
     #  16 remark TEST_ACL_1_REMARK
     #  21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst
     #  23 deny icmp any 198.51.100.0 0.0.0.15 reassembly-timeout dscp lt af12
@@ -4265,28 +4754,141 @@ Examples
     - name: Overridde all ACLs configuration with provided configuration
       cisco.iosxr.iosxr_acls:
         config:
-        - afi: ipv4
-          acls:
-          - name: acl_1
-            aces:
-            - sequence: 10
-              grant: permit
-              source:
-                any: true
-              destination:
-                any: true
-              protocol: tcp
+          - afi: ipv4
+            acls:
+              - name: acl_1
+                aces:
+                  - sequence: 10
+                    grant: permit
+                    source:
+                      any: true
+                    destination:
+                      any: true
+                    protocol: tcp
 
-          - name: acl_2
-            aces:
-            - sequence: 20
-              grant: permit
-              source:
-                any: true
-              destination:
-                any: true
-              protocol: igmp
+              - name: acl_2
+                aces:
+                  - sequence: 20
+                    grant: permit
+                    source:
+                      any: true
+                    destination:
+                      any: true
+                    protocol: igmp
         state: overridden
+
+    # Task Output
+    # -----------
+    #
+    # before:
+    #  - acls:
+    #    - aces:
+    #      - remark: TEST_ACL_1_REMARK
+    #        sequence: 16
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        grant: permit
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            rst: true
+    #        sequence: 21
+    #        source:
+    #          host: 192.0.2.10
+    #          port_protocol:
+    #            range:
+    #              end: '121'
+    #              start: pop3
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        dscp:
+    #          lt: af12
+    #        grant: deny
+    #        protocol: icmp
+    #        protocol_options:
+    #          icmp:
+    #            reassembly_timeout: true
+    #        sequence: 23
+    #        source:
+    #          any: true
+    #      name: acl_1
+    #    - aces:
+    #      - remark: TEST_ACL_2_REMARK
+    #        sequence: 10
+    #      name: acl_2
+    #    afi: ipv4
+    #  - acls:
+    #    - aces:
+    #      - authen: true
+    #        destination:
+    #          any: true
+    #        grant: deny
+    #        log: true
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            syn: true
+    #        routing: true
+    #        sequence: 10
+    #        source:
+    #          port_protocol:
+    #            range:
+    #              end: telnet
+    #              start: ftp
+    #          prefix: 2001:db8:1234::/48
+    #        ttl:
+    #          range:
+    #            end: 250
+    #            start: 180
+    #      - destination:
+    #          any: true
+    #        destopts: true
+    #        grant: permit
+    #        precedence: network
+    #        protocol: icmpv6
+    #        protocol_options:
+    #          icmpv6:
+    #            router_advertisement: true
+    #        sequence: 20
+    #        source:
+    #          any: true
+    #      name: acl6_1
+    #    afi: ipv6
+    #
+    # commands:
+    #  - no ipv6 access-list acl6_1
+    #  - ipv4 access-list acl_1
+    #  - no 16
+    #  - no 21
+    #  - no 23
+    #  - 10 permit tcp any any
+    #  - ipv4 access-list acl_2
+    #  - no 10
+    #  - 20 permit igmp any any
+    #
+    # after:
+    #  - acls:
+    #    - aces:
+    #      - destination:
+    #          any: true
+    #        grant: permit
+    #        protocol: tcp
+    #        sequence: 10
+    #        source:
+    #          any: true
+    #      name: acl_1
+    #    - aces:
+    #      - destination:
+    #          any: true
+    #        grant: permit
+    #        protocol: igmp
+    #        sequence: 20
+    #        source:
+    #          any: true
+    #      name: acl_2
+    #    afi: ipv4
 
     # After state:
     # -------------
@@ -4303,8 +4905,8 @@ Examples
     # Before state:
     # -------------
 
-    # RP/0/RP0/CPU0:ios#sh access-lists afi-all
-    # Thu Feb 20 05:22:57.021 UTC
+    # RP/0/RP0/CPU0:ios#show access-lists afi-all
+    # Wed Sep 27 09:34:04.831 UTC
     # ipv4 access-list acl_1
     #  16 remark TEST_ACL_1_REMARK
     #  21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst
@@ -4318,10 +4920,134 @@ Examples
     - name: Delete a single ACL
       cisco.iosxr.iosxr_acls:
         config:
-        - afi: ipv6
-          acls:
-          - name: acl6_1
+          - afi: ipv6
+            acls:
+              - name: acl6_1
         state: deleted
+
+    # Task Output
+    # -----------
+    #
+    # before:
+    #  - acls:
+    #    - aces:
+    #      - remark: TEST_ACL_1_REMARK
+    #        sequence: 16
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        grant: permit
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            rst: true
+    #        sequence: 21
+    #        source:
+    #          host: 192.0.2.10
+    #          port_protocol:
+    #            range:
+    #              end: '121'
+    #              start: pop3
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        dscp:
+    #          lt: af12
+    #        grant: deny
+    #        protocol: icmp
+    #        protocol_options:
+    #          icmp:
+    #            reassembly_timeout: true
+    #        sequence: 23
+    #        source:
+    #          any: true
+    #      name: acl_1
+    #    - aces:
+    #      - remark: TEST_ACL_2_REMARK
+    #        sequence: 10
+    #      name: acl_2
+    #    afi: ipv4
+    #  - acls:
+    #    - aces:
+    #      - authen: true
+    #        destination:
+    #          any: true
+    #        grant: deny
+    #        log: true
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            syn: true
+    #        routing: true
+    #        sequence: 10
+    #        source:
+    #          port_protocol:
+    #            range:
+    #              end: telnet
+    #              start: ftp
+    #          prefix: 2001:db8:1234::/48
+    #        ttl:
+    #          range:
+    #            end: 250
+    #            start: 180
+    #      - destination:
+    #          any: true
+    #        destopts: true
+    #        grant: permit
+    #        precedence: network
+    #        protocol: icmpv6
+    #        protocol_options:
+    #          icmpv6:
+    #            router_advertisement: true
+    #        sequence: 20
+    #        source:
+    #          any: true
+    #      name: acl6_1
+    #    afi: ipv6
+    #
+    #  commands:
+    #  - no ipv6 access-list acl6_1
+    #
+    # after:
+    #  - acls:
+    #    - aces:
+    #      - remark: TEST_ACL_1_REMARK
+    #        sequence: 16
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        grant: permit
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            rst: true
+    #        sequence: 21
+    #        source:
+    #          host: 192.0.2.10
+    #          port_protocol:
+    #            range:
+    #              end: '121'
+    #              start: pop3
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        dscp:
+    #          lt: af12
+    #        grant: deny
+    #        protocol: icmp
+    #        protocol_options:
+    #          icmp:
+    #            reassembly_timeout: true
+    #        sequence: 23
+    #        source:
+    #          any: true
+    #      name: acl_1
+    #    - aces:
+    #      - remark: TEST_ACL_2_REMARK
+    #        sequence: 10
+    #      name: acl_2
+    #    afi: ipv4
+
 
     # After state:
     # -------------
@@ -4340,8 +5066,8 @@ Examples
     # Before state:
     # -------------
 
-    # RP/0/RP0/CPU0:ios#sh access-lists afi-all
-    # Thu Feb 20 05:22:57.021 UTC
+    # RP/0/RP0/CPU0:ios#show access-lists afi-all
+    # Wed Sep 27 09:34:04.831 UTC
     # ipv4 access-list acl_1
     #  16 remark TEST_ACL_1_REMARK
     #  21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst
@@ -4355,13 +5081,136 @@ Examples
     - name: Delete all ACLs under one AFI
       cisco.iosxr.iosxr_acls:
         config:
-        - afi: ipv4
+          - afi: ipv4
         state: deleted
+
+    # Task Output
+    # -----------
+    #
+    # before:
+    #  - acls:
+    #    - aces:
+    #      - remark: TEST_ACL_1_REMARK
+    #        sequence: 16
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        grant: permit
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            rst: true
+    #        sequence: 21
+    #        source:
+    #          host: 192.0.2.10
+    #          port_protocol:
+    #            range:
+    #              end: '121'
+    #              start: pop3
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        dscp:
+    #          lt: af12
+    #        grant: deny
+    #        protocol: icmp
+    #        protocol_options:
+    #          icmp:
+    #            reassembly_timeout: true
+    #        sequence: 23
+    #        source:
+    #          any: true
+    #      name: acl_1
+    #    - aces:
+    #      - remark: TEST_ACL_2_REMARK
+    #        sequence: 10
+    #      name: acl_2
+    #    afi: ipv4
+    #  - acls:
+    #    - aces:
+    #      - authen: true
+    #        destination:
+    #          any: true
+    #        grant: deny
+    #        log: true
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            syn: true
+    #        routing: true
+    #        sequence: 10
+    #        source:
+    #          port_protocol:
+    #            range:
+    #              end: telnet
+    #              start: ftp
+    #          prefix: 2001:db8:1234::/48
+    #        ttl:
+    #          range:
+    #            end: 250
+    #            start: 180
+    #      - destination:
+    #          any: true
+    #        destopts: true
+    #        grant: permit
+    #        precedence: network
+    #        protocol: icmpv6
+    #        protocol_options:
+    #          icmpv6:
+    #            router_advertisement: true
+    #        sequence: 20
+    #        source:
+    #          any: true
+    #      name: acl6_1
+    #    afi: ipv6
+    #
+    # commands:
+    #  - no ipv4 access-list acl_1
+    #  - no ipv4 access-list acl_2
+    #
+    # after:
+    #  - acls:
+    #    - aces:
+    #      - authen: true
+    #        destination:
+    #          any: true
+    #        grant: deny
+    #        log: true
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            syn: true
+    #        routing: true
+    #        sequence: 10
+    #        source:
+    #          port_protocol:
+    #            range:
+    #              end: telnet
+    #              start: ftp
+    #          prefix: 2001:db8:1234::/48
+    #        ttl:
+    #          range:
+    #            end: 250
+    #            start: 180
+    #      - destination:
+    #          any: true
+    #        destopts: true
+    #        grant: permit
+    #        precedence: network
+    #        protocol: icmpv6
+    #        protocol_options:
+    #          icmpv6:
+    #            router_advertisement: true
+    #        sequence: 20
+    #        source:
+    #          any: true
+    #      name: acl6_1
+    #    afi: ipv6
 
     # After state:
     # -------------
 
-    # RP/0/RP0/CPU0:ios#sh access-lists afi-all
+    # RP/0/RP0/CPU0:ios#show access-lists afi-all
     # Thu Feb 20 05:22:57.021 UTC
     # ipv6 access-list acl6_1
     #  10 deny tcp 2001:db8:1234::/48 range ftp telnet any syn ttl range 180 250 routing authen log
@@ -4372,8 +5221,8 @@ Examples
     # Before state:
     # -------------
 
-    # RP/0/RP0/CPU0:ios#sh access-lists afi-all
-    # Thu Feb 20 05:22:57.021 UTC
+    # RP/0/RP0/CPU0:ios#show access-lists afi-all
+    # Wed Sep 27 09:34:04.831 UTC
     # ipv4 access-list acl_1
     #  16 remark TEST_ACL_1_REMARK
     #  21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst
@@ -4388,14 +5237,114 @@ Examples
       cisco.iosxr.iosxr_acls:
         state: deleted
 
+
+    # Task Output
+    # -----------
+    #
+    # before:
+    #  - acls:
+    #    - aces:
+    #      - remark: TEST_ACL_1_REMARK
+    #        sequence: 16
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        grant: permit
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            rst: true
+    #        sequence: 21
+    #        source:
+    #          host: 192.0.2.10
+    #          port_protocol:
+    #            range:
+    #              end: '121'
+    #              start: pop3
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        dscp:
+    #          lt: af12
+    #        grant: deny
+    #        protocol: icmp
+    #        protocol_options:
+    #          icmp:
+    #            reassembly_timeout: true
+    #        sequence: 23
+    #        source:
+    #          any: true
+    #      name: acl_1
+    #    - aces:
+    #      - remark: TEST_ACL_2_REMARK
+    #        sequence: 10
+    #      name: acl_2
+    #    afi: ipv4
+    #  - acls:
+    #    - aces:
+    #      - authen: true
+    #        destination:
+    #          any: true
+    #        grant: deny
+    #        log: true
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            syn: true
+    #        routing: true
+    #        sequence: 10
+    #        source:
+    #          port_protocol:
+    #            range:
+    #              end: telnet
+    #              start: ftp
+    #          prefix: 2001:db8:1234::/48
+    #        ttl:
+    #          range:
+    #            end: 250
+    #            start: 180
+    #      - destination:
+    #          any: true
+    #        destopts: true
+    #        grant: permit
+    #        precedence: network
+    #        protocol: icmpv6
+    #        protocol_options:
+    #          icmpv6:
+    #            router_advertisement: true
+    #        sequence: 20
+    #        source:
+    #          any: true
+    #      name: acl6_1
+    #    afi: ipv6
+    #
+    # commands:
+    #  - no ipv4 access-list acl_1
+    #  - no ipv4 access-list acl_2
+    #  - no ipv6 access-list acl6_1
+    #
+    # after: []
+
     # After state:
     # -------------
 
-    # RP/0/RP0/CPU0:ios#sh access-lists afi-all
+    # RP/0/RP0/CPU0:ios#show access-lists afi-all
     # Thu Feb 20 05:07:45.767 UTC
     # RP/0/RP0/CPU0:ios#
 
     # Using gathered to gather ACL facts from the device
+
+    # RP/0/RP0/CPU0:ios#show access-lists afi-all
+    # Wed Sep 27 09:34:04.831 UTC
+    # ipv4 access-list acl_1
+    #  16 remark TEST_ACL_1_REMARK
+    #  21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst
+    #  23 deny icmp any 198.51.100.0 0.0.0.15 reassembly-timeout dscp lt af12
+    # ipv4 access-list acl_2
+    #  10 remark TEST_ACL_2_REMARK
+    # ipv6 access-list acl6_1
+    #  10 deny tcp 2001:db8:1234::/48 range ftp telnet any syn ttl range 180 250 routing authen log
+    #  20 permit icmpv6 any any router-advertisement precedence network destopts
 
     - name: Gather ACL interfaces facts using gathered state
       cisco.iosxr.iosxr_acls:
@@ -4404,134 +5353,82 @@ Examples
     # Task Output (redacted)
     # -----------------------
     #
-
-    # "gathered": [
-    #    {
-    #        "acls": [
-    #            {
-    #                "aces": [
-    #                    {
-    #                        "remark": "TEST_ACL_1_REMARK",
-    #                        "sequence": 16
-    #                    },
-    #                    {
-    #                        "destination": {
-    #                            "address": "198.51.100.0",
-    #                            "wildcard_bits": "0.0.0.15"
-    #                        },
-    #                        "grant": "permit",
-    #                        "protocol": "tcp",
-    #                        "protocol_options": {
-    #                            "tcp": {
-    #                                "rst": true
-    #                            }
-    #                        },
-    #                        "sequence": 21,
-    #                        "source": {
-    #                            "host": "192.0.2.10",
-    #                            "port_protocol": {
-    #                                "range": {
-    #                                    "end": "121",
-    #                                    "start": "pop3"
-    #                                }
-    #                            }
-    #                        }
-    #                    },
-    #                    {
-    #                        "destination": {
-    #                            "address": "198.51.100.0",
-    #                            "wildcard_bits": "0.0.0.15"
-    #                        },
-    #                        "dscp": {
-    #                            "lt": "af12"
-    #                        },
-    #                        "grant": "deny",
-    #                        "protocol": "icmp",
-    #                        "protocol_options": {
-    #                            "icmp": {
-    #                                "reassembly_timeout": true
-    #                            }
-    #                        },
-    #                        "sequence": 23,
-    #                        "source": {
-    #                            "any": true
-    #                        }
-    #                    }
-    #                ],
-    #                "name": "acl_1"
-    #            },
-    #            {
-    #                "aces": [
-    #                    {
-    #                        "remark": "TEST_ACL_2_REMARK",
-    #                        "sequence": 10
-    #                    }
-    #                ],
-    #                "name": "acl_2"
-    #            }
-    #        ],
-    #        "afi": "ipv4"
-    #    },
-    #    {
-    #        "acls": [
-    #            {
-    #                "aces": [
-    #                    {
-    #                        "authen": true,
-    #                        "destination": {
-    #                            "any": true
-    #                        },
-    #                        "grant": "deny",
-    #                        "log": true,
-    #                        "protocol": "tcp",
-    #                        "protocol_options": {
-    #                            "tcp": {
-    #                                "syn": true
-    #                            }
-    #                        },
-    #                        "routing": true,
-    #                        "sequence": 10,
-    #                        "source": {
-    #                            "port_protocol": {
-    #                                "range": {
-    #                                   "end": "telnet",
-    #                                   "start": "ftp"
-    #                                }
-    #                            },
-    #                            "prefix": "2001:db8:1234::/48"
-    #                        },
-    #                        "ttl": {
-    #                            "range": {
-    #                                "end": 250,
-    #                                "start": 180
-    #                            }
-    #                        }
-    #                    },
-    #                    {
-    #                        "destination": {
-    #                            "any": true
-    #                        },
-    #                        "destopts": true,
-    #                        "grant": "permit",
-    #                        "precedence": "network",
-    #                        "protocol": "icmpv6",
-    #                        "protocol_options": {
-    #                            "icmpv6": {
-    #                                "router_advertisement": true
-    #                            }
-    #                        },
-    #                        "sequence": 20,
-    #                        "source": {
-    #                            "any": true
-    #                        }
-    #                    }
-    #                ],
-    #                "name": "acl6_1"
-    #            }
-    #        ],
-    #        "afi": "ipv6"
-    #    }
-    #  ]
+    # gathered:
+    #  - acls:
+    #    - aces:
+    #      - remark: TEST_ACL_1_REMARK
+    #        sequence: 16
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        grant: permit
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            rst: true
+    #        sequence: 21
+    #        source:
+    #          host: 192.0.2.10
+    #          port_protocol:
+    #            range:
+    #              end: '121'
+    #              start: pop3
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        dscp:
+    #          lt: af12
+    #        grant: deny
+    #        protocol: icmp
+    #        protocol_options:
+    #          icmp:
+    #            reassembly_timeout: true
+    #        sequence: 23
+    #        source:
+    #          any: true
+    #      name: acl_1
+    #    - aces:
+    #      - remark: TEST_ACL_2_REMARK
+    #        sequence: 10
+    #      name: acl_2
+    #    afi: ipv4
+    #  - acls:
+    #    - aces:
+    #      - authen: true
+    #        destination:
+    #          any: true
+    #        grant: deny
+    #        log: true
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            syn: true
+    #        routing: true
+    #        sequence: 10
+    #        source:
+    #          port_protocol:
+    #            range:
+    #              end: telnet
+    #              start: ftp
+    #          prefix: 2001:db8:1234::/48
+    #        ttl:
+    #          range:
+    #            end: 250
+    #            start: 180
+    #      - destination:
+    #          any: true
+    #        destopts: true
+    #        grant: permit
+    #        precedence: network
+    #        protocol: icmpv6
+    #        protocol_options:
+    #          icmpv6:
+    #            router_advertisement: true
+    #        sequence: 20
+    #        source:
+    #          any: true
+    #      name: acl6_1
+    #    afi: ipv6
 
     # Using rendered
 
@@ -4564,24 +5461,24 @@ Examples
     # Task Output (redacted)
     # -----------------------
 
-    # "rendered": [
-    #    "ipv4 access-list acl_2",
-    #    "11 permit igmp host 198.51.100.130 any ttl eq 100",
-    #    "12 deny icmp any any"
+    # rendered:
+    #  - ipv4 access-list acl_2
+    #  - 11 permit igmp host 198.51.100.130 any ttl eq 100
+    #  - 12 deny icmp any any
 
     # Using parsed
 
     # parsed.cfg
     # ------------
-    #
     # ipv4 access-list acl_1
-    #  10 remark TEST_ACL_2_REMARK
+    #  16 remark TEST_ACL_1_REMARK
+    #  21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst
+    #  23 deny icmp any 198.51.100.0 0.0.0.15 reassembly-timeout dscp lt af12
     # ipv4 access-list acl_2
-    #  11 deny tcp 2001:db8:1234::/48 range ftp telnet any syn ttl range 180 250 authen routing log
-    #  21 permit icmpv6 any any router-advertisement precedence network packet-length eq 576 destopts
+    #  10 remark TEST_ACL_2_REMARK
     # ipv6 access-list acl6_1
     #  10 deny tcp 2001:db8:1234::/48 range ftp telnet any syn ttl range 180 250 routing authen log
-    #  20 permit icmpv6 any any router-advertisement precedence network packet-length eq 576 destopts
+    #  20 permit icmpv6 any any router-advertisement precedence network destopts
 
     - name: Parse externally provided ACL config to agnostic model
       cisco.iosxr.iosxr_acls:
@@ -4590,141 +5487,82 @@ Examples
 
     # Task Output (redacted)
     # -----------------------
-    #  "parsed": [
-    #        {
-    #            "acls": [
-    #                {
-    #                    "aces": [
-    #                      {
-    #                            "remark": "TEST_ACL_2_REMARK",
-    #                            "sequence": 10
-    #                        }
-    #                    ],
-    #                   "name": "acl_1"
-    #                },
-    #                {
-    #                    "aces": [
-    #                        {
-    #                            "authen": true,
-    #                            "destination": {
-    #                                "any": true
-    #                            },
-    #                            "grant": "deny",
-    #                            "log": true,
-    #                            "protocol": "tcp",
-    #                            "protocol_options": {
-    #                                "tcp": {
-    #                                    "syn": true
-    #                                }
-    #                            },
-    #                            "routing": true,
-    #                            "sequence": 11,
-    #                            "source": {
-    #                                "port_protocol": {
-    #                                    "range": {
-    #                                        "end": "telnet",
-    #                                        "start": "ftp"
-    #                                    }
-    #                                },
-    #                                "prefix": "2001:db8:1234::/48"
-    #                            },
-    #                            "ttl": {
-    #                                "range": {
-    #                                    "end": 250,
-    #                                    "start": 180
-    #                                }
-    #                            }
-    #                        },
-    #                        {
-    #                            "destination": {
-    #                                "any": true
-    #                            },
-    #                            "destopts": true,
-    #                            "grant": "permit",
-    #                            "packet_length": {
-    #                                "eq": 576
-    #                            },
-    #                            "precedence": "network",
-    #                            "protocol": "icmpv6",
-    #                            "protocol_options": {
-    #                                "icmpv6": {
-    #                                    "router_advertisement": true
-    #                                }
-    #                            },
-    #                            "sequence": 21,
-    #                            "source": {
-    #                                "any": true
-    #                            }
-    #                        }
-    #                    ],
-    #                    "name": "acl_2"
-    #                }
-    #            ],
-    #            "afi": "ipv4"
-    #        },
-    #        {
-    #            "acls": [
-    #                {
-    #                    "aces": [
-    #                        {
-    #                            "authen": true,
-    #                            "destination": {
-    #                                "any": true
-    #                            },
-    #                            "grant": "deny",
-    #                            "log": true,
-    #                            "protocol": "tcp",
-    #                            "protocol_options": {
-    #                                "tcp": {
-    #                                    "syn": true
-    #                                }
-    #                            },
-    #                            "routing": true,
-    #                            "sequence": 10,
-    #                            "source": {
-    #                                "port_protocol": {
-    #                                    "range": {
-    #                                        "end": "telnet",
-    #                                        "start": "ftp"
-    #                                    }
-    #                                },
-    #                                "prefix": "2001:db8:1234::/48"
-    #                            },
-    #                            "ttl": {
-    #                                "range": {
-    #                                    "end": 250,
-    #                                    "start": 180
-    #                                }
-    #                            }
-    #                        },
-    #                        {
-    #                            "destination": {
-    #                                "any": true
-    #                            },
-    #                            "destopts": true,
-    #                            "grant": "permit",
-    #                            "packet_length": {
-    #                                "eq": 576
-    #                            },
-    #                            "precedence": "network",
-    #                            "protocol": "icmpv6",
-    #                            "protocol_options": {
-    #                                "icmpv6": {
-    #                                    "router_advertisement": true
-    #                                }
-    #                            },
-    #                            "sequence": 20,
-    #                            "source": {
-    #                                "any": true
-    #                            }
-    #                        }
-    #                    ],
-    #                    "name": "acl6_1"
-    #                }
-    #            ],
-    #            "afi": "ipv6"
-    #        }
-    #    ]
+    # parsed:
+    #  - acls:
+    #    - aces:
+    #      - remark: TEST_ACL_1_REMARK
+    #        sequence: 16
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        grant: permit
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            rst: true
+    #        sequence: 21
+    #        source:
+    #          host: 192.0.2.10
+    #          port_protocol:
+    #            range:
+    #              end: '121'
+    #              start: pop3
+    #      - destination:
+    #          address: 198.51.100.0
+    #          wildcard_bits: 0.0.0.15
+    #        dscp:
+    #          lt: af12
+    #        grant: deny
+    #        protocol: icmp
+    #        protocol_options:
+    #          icmp:
+    #            reassembly_timeout: true
+    #        sequence: 23
+    #        source:
+    #          any: true
+    #      name: acl_1
+    #    - aces:
+    #      - remark: TEST_ACL_2_REMARK
+    #        sequence: 10
+    #      name: acl_2
+    #    afi: ipv4
+    #  - acls:
+    #    - aces:
+    #      - authen: true
+    #        destination:
+    #          any: true
+    #        grant: deny
+    #        log: true
+    #        protocol: tcp
+    #        protocol_options:
+    #          tcp:
+    #            syn: true
+    #        routing: true
+    #        sequence: 10
+    #        source:
+    #          port_protocol:
+    #            range:
+    #              end: telnet
+    #              start: ftp
+    #          prefix: 2001:db8:1234::/48
+    #        ttl:
+    #          range:
+    #            end: 250
+    #            start: 180
+    #      - destination:
+    #          any: true
+    #        destopts: true
+    #        grant: permit
+    #        precedence: network
+    #        protocol: icmpv6
+    #        protocol_options:
+    #          icmpv6:
+    #            router_advertisement: true
+    #        sequence: 20
+    #        source:
+    #          any: true
+    #      name: acl6_1
+    #    afi: ipv6
 
 
 
@@ -4791,6 +5629,57 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;ipv6 access-list acl6_1&#x27;, &#x27;10 deny tcp 2001:db8:1234::/48 range ftp telnet any syn ttl range 180 250 authen routing log&#x27;, &#x27;20 permit icmpv6 any any router-advertisement precedence network destopts&#x27;, &#x27;ipv4 access-list acl_1&#x27;, &#x27;16 remark TEST_ACL_1_REMARK&#x27;, &#x27;21 permit tcp host 192.0.2.10 range pop3 121 198.51.100.0 0.0.0.15 rst&#x27;, &#x27;23 deny icmp any 198.51.100.0 0.0.0.15 reassembly-timeout dscp lt af12&#x27;]</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>gathered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>gathered</code></td>
+                <td>
+                            <div>Facts about the network resource gathered from the remote device as structured data.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>parsed</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>parsed</code></td>
+                <td>
+                            <div>The device native config provided in <em>running_config</em> option parsed into structured data as per module argspec.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>rendered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>rendered</code></td>
+                <td>
+                            <div>The provided configuration in the task rendered in device-native format (offline).</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;ipv6 access-list acl6_1&#x27;, &#x27;10 deny tcp 2001:db8:1234::/48 range ftp telnet any syn ttl range 180 250 authen routing log&#x27;, &#x27;20 permit icmpv6 any any router-advertisement precedence network destopts&#x27;]</div>
                 </td>
             </tr>
     </table>
