@@ -345,7 +345,6 @@ def run(module, result):
     exclusive = module.params["exclusive"]
     check_mode = module.check_mode
     label = module.params["label"]
-
     candidate_config = get_candidate(module)
     running_config = get_running_config(module)
 
@@ -440,7 +439,6 @@ def main():
     required_if = [
         ("match", "strict", ["lines"]),
         ("match", "exact", ["lines"]),
-        ("replace", "block", ["lines"]),
         ("replace", "config", ["src"]),
     ]
 
