@@ -280,7 +280,7 @@ class TestIosxrConfigModule(TestIosxrModule):
         )
 
         self.execute_module(changed=True, commands=commands, sort=False)
-    
+
     def test_iosxr_replace_block_src(self):
         src = load_fixture("iosxr_config_src.cfg")
         set_module_args(dict(replace="block", src=src))
@@ -293,7 +293,7 @@ class TestIosxrConfigModule(TestIosxrModule):
             "no ip address",
         ]
         self.execute_module(changed=True, commands=commands)
-    
+
     def test_iosxr_replace_block_lines(self):
         lines = [
             "ip address 1.2.3.4 255.255.255.0",
@@ -316,7 +316,6 @@ class TestIosxrConfigModule(TestIosxrModule):
         )
         self.execute_module(changed=True, commands=commands, sort=False)
 
-
     def test_iosxr_config_src_and_lines_fails(self):
         args = dict(src="foo", lines="foo")
         set_module_args(args)
@@ -334,6 +333,11 @@ class TestIosxrConfigModule(TestIosxrModule):
 
     def test_iosxr_config_match_strict_requires_lines(self):
         args = dict(match="strict")
+        set_module_args(args)
+        self.execute_module(failed=True)
+
+    def test_iosxr_config_replace_block_requires_lines_or_src(self):
+        args = dict(replace="block")
         set_module_args(args)
         self.execute_module(failed=True)
 

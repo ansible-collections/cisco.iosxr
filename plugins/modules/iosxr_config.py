@@ -437,8 +437,9 @@ def main():
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
 
     required_if = [
-        ("match", "strict", ["lines"]),
-        ("match", "exact", ["lines"]),
+        ("match", "strict", ["lines", "src"], True),
+        ("match", "exact", ["lines", "src"], True),
+        ("replace", "block", ["lines", "src"], True),
         ("replace", "config", ["src"]),
     ]
 
