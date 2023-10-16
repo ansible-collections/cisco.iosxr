@@ -14,3 +14,13 @@ tags: [cisco, iosxr, networking, netconf]
 # NOTE(pabelanger): We create an empty version key to keep ansible-galaxy
 # happy. We dynamically inject version info based on git information.
 version: "6.0.1"
+build_ignore:
+  - .ansible-lint
+  - .github
+  - .yamllint.yml 
+  - codecov.yml
+  - pyproject.toml
+  - test-requirements.txt
+  - '*.tar.gz'
+  - tests
+  - tox.ini

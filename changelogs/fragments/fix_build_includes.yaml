@@ -1,0 +1,3 @@
+---
+trivial:
+  - remove linting configs and test files from the collection build
