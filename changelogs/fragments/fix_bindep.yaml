@@ -1,0 +1,3 @@
+---
+trivial:
+  - Fix `python3-lxml` dependancy in bindep.txt.
