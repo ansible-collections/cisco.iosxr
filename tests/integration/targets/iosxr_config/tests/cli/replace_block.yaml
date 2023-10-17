@@ -1,31 +1,34 @@
 ---
-- ansible.builtin.debug: msg="START cli/replace_block.yaml on connection={{ ansible_connection }}"
+- name: Setup
+  cisco.iosxr.iosxr_config:
+    commands:
+      - no interface GigabitEthernet 0/0/0/5
+  ignore_errors: true
+     
+- name: "Populate interface configuration with replace block and lines options"
+  register: result1
+  cisco.iosxr.iosxr_config:
+    lines:
+      "{{ lookup('template', 'basic/interface_config.j2')  }}"
+    replace: block
+
+- ansible.builtin.assert:
+    that:
+      - result1.changed == true
 
 - name: Setup
   cisco.iosxr.iosxr_config:
     commands:
       - no interface GigabitEthernet 0/0/0/5
-     
-- name: "Populate interface configuration with replace block and lines options"
-  cisco.iosxr.iosxr_config:
-    lines:
-      - "description this is interface1"
-      - "mtu 65"
-      - "speed 10"
-      - "no shutdown"
-    parents: "interface GigabitEthernet 0/0/0/5"
-    replace: block
-
-- ansible.builtin.assert:
-    that:
-      - result.changed == true
+  ignore_errors: true
 
 - name: "Populate interface configuration with replace block and src options"
+  register: result2
   iosxr_config:
     src: basic/interface_config.j2
-    before: "no interface GigabitEthernet0/0/0/5"
     replace: block
 
 - ansible.builtin.assert:
     that:
-      - result.changed == true
+      - result2.changed == true
+      - result1.commands == result2.commands
