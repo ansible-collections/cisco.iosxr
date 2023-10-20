@@ -310,7 +310,7 @@ class TestIosxrConfigModule(TestIosxrModule):
         args = dict(replace="config")
         set_module_args(args)
         self.execute_module(failed=True)
-    
+
     def test_iosxr_config_updates(self):
         src = load_fixture("iosxr_config_src.cfg")
         set_module_args(dict(src=src))
