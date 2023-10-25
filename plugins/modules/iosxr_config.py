@@ -226,7 +226,11 @@ RETURN = """
 commands:
   description: The set of commands that will be pushed to the remote device
   returned: If there are commands to run against the host
-  aliases: updates
+  type: list
+  sample: ['hostname foo', 'router ospf 1', 'router-id 1.1.1.1']
+updates:
+  description: The set of commands that will be pushed to the remote device
+  returned: If there are commands to run against the host
   type: list
   sample: ['hostname foo', 'router ospf 1', 'router-id 1.1.1.1']
 backup_path:
