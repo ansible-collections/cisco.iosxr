@@ -350,7 +350,6 @@ def run(module, result):
     exclusive = module.params["exclusive"]
     check_mode = module.check_mode
     label = module.params["label"]
-
     candidate_config = get_candidate(module)
     running_config = get_running_config(module)
 
@@ -444,9 +443,9 @@ def main():
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
 
     required_if = [
-        ("match", "strict", ["lines"]),
-        ("match", "exact", ["lines"]),
-        ("replace", "block", ["lines"]),
+        ("match", "strict", ["lines", "src"], True),
+        ("match", "exact", ["lines", "src"], True),
+        ("replace", "block", ["lines", "src"], True),
         ("replace", "config", ["src"]),
     ]
 
