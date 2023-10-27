@@ -228,6 +228,11 @@ commands:
   returned: If there are commands to run against the host
   type: list
   sample: ['hostname foo', 'router ospf 1', 'router-id 1.1.1.1']
+updates:
+  description: The set of commands that will be pushed to the remote device
+  returned: If there are commands to run against the host
+  type: list
+  sample: ['hostname foo', 'router ospf 1', 'router-id 1.1.1.1']
 backup_path:
   description: The full path to the backup file
   returned: when backup is yes
@@ -345,7 +350,6 @@ def run(module, result):
     exclusive = module.params["exclusive"]
     check_mode = module.check_mode
     label = module.params["label"]
-
     candidate_config = get_candidate(module)
     running_config = get_running_config(module)
 
@@ -393,6 +397,7 @@ def run(module, result):
                 commands.extend(module.params["after"])
 
             result["commands"] = commands
+            result["updates"] = commands
 
         commit = not check_mode
         diff = load_config(
@@ -438,9 +443,9 @@ def main():
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
 
     required_if = [
-        ("match", "strict", ["lines"]),
-        ("match", "exact", ["lines"]),
-        ("replace", "block", ["lines"]),
+        ("match", "strict", ["lines", "src"], True),
+        ("match", "exact", ["lines", "src"], True),
+        ("replace", "block", ["lines", "src"], True),
         ("replace", "config", ["src"]),
     ]
 

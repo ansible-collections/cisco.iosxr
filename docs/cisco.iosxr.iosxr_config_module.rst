@@ -517,6 +517,23 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">22:28:34</div>
                 </td>
             </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>updates</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>If there are commands to run against the host</td>
+                <td>
+                            <div>The set of commands that will be pushed to the remote device</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;hostname foo&#x27;, &#x27;router ospf 1&#x27;, &#x27;router-id 1.1.1.1&#x27;]</div>
+                </td>
+            </tr>
     </table>
     <br/><br/>
 

@@ -281,6 +281,41 @@ class TestIosxrConfigModule(TestIosxrModule):
 
         self.execute_module(changed=True, commands=commands, sort=False)
 
+    def test_iosxr_replace_block_src(self):
+        src = load_fixture("iosxr_config_src.cfg")
+        set_module_args(dict(replace="block", src=src))
+        self.conn.get_diff = MagicMock(
+            return_value=self.cliconf_obj.get_diff(src, self.running_config),
+        )
+        commands = [
+            "hostname foo",
+            "interface GigabitEthernet0/0",
+            "no ip address",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_iosxr_replace_block_lines(self):
+        lines = [
+            "ip address 1.2.3.4 255.255.255.0",
+            "description test string",
+            "shutdown",
+        ]
+        parents = ["interface GigabitEthernet0/0"]
+        set_module_args(dict(lines=lines, parents=parents, replace="block"))
+        commands = parents + lines
+        module = MagicMock()
+        module.params = {"lines": lines, "parents": parents, "src": None}
+        candidate_config = iosxr_config.get_candidate(module)
+        self.conn.get_diff = MagicMock(
+            return_value=self.cliconf_obj.get_diff(
+                candidate_config,
+                self.running_config,
+                diff_match="none",
+                path=parents,
+            ),
+        )
+        self.execute_module(changed=True, commands=commands, sort=False)
+
     def test_iosxr_config_src_and_lines_fails(self):
         args = dict(src="foo", lines="foo")
         set_module_args(args)
@@ -301,7 +336,7 @@ class TestIosxrConfigModule(TestIosxrModule):
         set_module_args(args)
         self.execute_module(failed=True)
 
-    def test_iosxr_config_replace_block_requires_lines(self):
+    def test_iosxr_config_replace_block_requires_lines_or_src(self):
         args = dict(replace="block")
         set_module_args(args)
         self.execute_module(failed=True)
@@ -310,3 +345,17 @@ class TestIosxrConfigModule(TestIosxrModule):
         args = dict(replace="config")
         set_module_args(args)
         self.execute_module(failed=True)
+
+    def test_iosxr_config_updates(self):
+        src = load_fixture("iosxr_config_src.cfg")
+        set_module_args(dict(src=src))
+        self.conn.get_diff = MagicMock(
+            return_value=self.cliconf_obj.get_diff(src, self.running_config),
+        )
+        commands = [
+            "hostname foo",
+            "interface GigabitEthernet0/0",
+            "no ip address",
+        ]
+        result = self.execute_module(changed=True, commands=commands)
+        self.assertEqual(sorted(result["updates"]), sorted(commands))
