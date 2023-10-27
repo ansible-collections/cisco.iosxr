@@ -1,3 +1,0 @@
----
-minor_changes:
-  - iosxr_config Add updates option in return value(https://github.com/ansible-collections/cisco.iosxr/issues/438).

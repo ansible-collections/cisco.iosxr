@@ -5,6 +5,14 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v6.0.2
+======
+
+Bugfixes
+--------
+
+- Fix `python3-lxml` dependancy in bindep.txt. (https://github.com/ansible-collections/cisco.iosxr/pull/431)
+
 v6.0.1
 ======
 
