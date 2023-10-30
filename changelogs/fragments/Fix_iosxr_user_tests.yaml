@@ -1,0 +1,3 @@
+---
+trivial:
+  - remove public and private keys from iosxr_user tests.
