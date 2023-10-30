@@ -660,3 +660,20 @@ releases:
       - support_overridden.yaml
       - update_ospfv2_docs.yaml
     release_date: "2023-09-07"
+  6.1.0:
+    changes:
+      doc_changes:
+      - Fix docs for prefix_lists RM.
+      - iosxr_acls - update examples and use YAML output in them for better readibility.
+      minor_changes:
+      - iosxr_config - Relax restrictions on I(src) parameter so it can be used more
+        like I(lines). (https://github.com/ansible-collections/cisco.iosxr/issues/343).
+      - iosxr_config Add updates option in return value(https://github.com/ansible-collections/cisco.iosxr/issues/438).
+    fragments:
+    - Fix_iosxr_user_tests.yaml
+    - acls.yaml
+    - fix_bindep.yaml
+    - fix_config_module.yaml
+    - fix_iosxr_config.yaml
+    - prefix_list_doc.yaml
+    release_date: '2023-10-30'
