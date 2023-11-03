@@ -3583,16 +3583,16 @@ Examples
           neighbors:
             - neighbor_address: 192.0.2.2
               address_family:
-                - afi: "ipv4"
-                  safi: "unicast"
+                - afi: ipv4
+                  safi: unicast
                   multipath: true
                   default_originate:
                     set: true
                   weight: 5
             - neighbor_address: 192.0.2.3
               address_family:
-                - afi: "ipv4"
-                  safi: "unicast"
+                - afi: ipv4
+                  safi: unicast
                   multipath: true
                   default_originate:
                     set: true
@@ -3602,8 +3602,8 @@ Examples
               neighbors:
                 - neighbor_address: 192.0.2.4
                   address_family:
-                    - afi: "ipv4"
-                      safi: "unicast"
+                    - afi: ipv4
+                      safi: unicast
                       multipath: true
                       default_originate:
                         set: true
@@ -3612,8 +3612,8 @@ Examples
               neighbors:
                 - neighbor_address: 192.0.2.5
                   address_family:
-                    - afi: "ipv4"
-                      safi: "unicast"
+                    - afi: ipv4
+                      safi: unicast
                       multipath: true
                       default_originate:
                         set: true
@@ -3765,7 +3765,7 @@ Examples
     #     capability orf prefix both
     #     default-originate
 
-    - name:  Delete the provided configuration
+    - name: Delete the provided configuration
       cisco.iosxr.iosxr_bgp_neighbor_address_family:
         state: deleted
         config:
@@ -3773,8 +3773,8 @@ Examples
           neighbors:
             - neighbor_address: 192.0.2.2
               address_family:
-                - afi: "ipv4"
-                  safi: "unicast"
+                - afi: ipv4
+                  safi: unicast
                   multipath: true
                   default_originate:
                     set: true
@@ -3868,8 +3868,8 @@ Examples
           neighbors:
             - neighbor_address: 192.0.2.2
               address_family:
-                - afi: "ipv4"
-                  safi: "unicast"
+                - afi: ipv4
+                  safi: unicast
                   default_originate:
                     set: true
                   weight: 4
@@ -3996,7 +3996,7 @@ Examples
     #     capability orf prefix both
     #     default-originate
 
-    - name:  override the provided configuration
+    - name: override the provided configuration
       cisco.iosxr.iosxr_bgp_neighbor_address_family:
         state: overridden
         config:
@@ -4004,8 +4004,8 @@ Examples
           neighbors:
             - neighbor_address: 192.0.2.2
               address_family:
-                - afi: "ipv4"
-                  safi: "unicast"
+                - afi: ipv4
+                  safi: unicast
                   multipath: true
                   default_originate:
                     set: true
@@ -4077,7 +4077,9 @@ Examples
     #   neighbor 192.0.2.5
     #    remote-as 65540
 
-    - name: Render platform specific configuration lines with state rendered (without connecting to the device)
+    - name: >-
+        Render platform specific configuration lines with state rendered (without
+        connecting to the device)
       cisco.iosxr.iosxr_bgp_neighbor_address_family:
         state: rendered
         config:
@@ -4085,16 +4087,16 @@ Examples
           neighbors:
             - neighbor_address: 192.0.2.2
               address_family:
-                - afi: "ipv4"
-                  safi: "unicast"
+                - afi: ipv4
+                  safi: unicast
                   multipath: true
                   default_originate:
                     set: true
                   weight: 5
             - neighbor_address: 192.0.2.3
               address_family:
-                - afi: "ipv4"
-                  safi: "unicast"
+                - afi: ipv4
+                  safi: unicast
                   multipath: true
                   default_originate:
                     set: true
@@ -4104,8 +4106,8 @@ Examples
               neighbors:
                 - neighbor_address: 192.0.2.4
                   address_family:
-                    - afi: "ipv4"
-                      safi: "unicast"
+                    - afi: ipv4
+                      safi: unicast
                       multipath: true
                       default_originate:
                         set: true
@@ -4114,8 +4116,8 @@ Examples
               neighbors:
                 - neighbor_address: 192.0.2.5
                   address_family:
-                    - afi: "ipv4"
-                      safi: "unicast"
+                    - afi: ipv4
+                      safi: unicast
                       multipath: true
                       default_originate:
                         set: true
@@ -4149,8 +4151,8 @@ Examples
     #
     # Using parsed
     #
-    #parsed.cfg
-    #------------
+    # parsed.cfg
+    # ------------
     # router bgp 65536
     #  bgp router-id 192.0.1.1
     #  address-family ipv4 unicast
@@ -4232,8 +4234,8 @@ Examples
     #               capability_orf_prefix: both
     #
     #
-    #Using Gathered
-    #-----------------
+    # Using Gathered
+    # -----------------
     # Before state state:
     # -------------
     # RP/0/0/CPU0:iosxr-02#show running-config router bgp
@@ -4275,8 +4277,8 @@ Examples
     #
     - name: Gathered the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_bgp_neighbor_address_family:
-            config:
-            state: gathered
+        config:
+        state: gathered
 
 
     # Task output
