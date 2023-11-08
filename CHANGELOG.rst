@@ -210,6 +210,7 @@ Bugfixes
 --------
 
 - Fixing TenGigE Interface recognition for resource modules. (https://github.com/ansible-collections/cisco.iosxr/issues/270)
+- Do not report changes on empty diffs after a config replace. (https://github.com/ansible-collections/cisco.iosxr/issues/269)
 
 v3.3.0
 ======

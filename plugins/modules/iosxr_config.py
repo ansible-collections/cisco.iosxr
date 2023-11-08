@@ -385,6 +385,9 @@ def run(module, result):
             commands = ["load harddisk:/ansible_config.txt"]
             replace_file_path = "harddisk:/ansible_config.txt"
 
+    pattern = r"(^Building configuration.*$|^!! IOS XR Configuration.*$|^end$)"
+    config_diff = re.sub(pattern, "", config_diff, flags=re.M).strip()
+
     if config_diff or commands:
         if not replace_config:
             commands = config_diff.split("\n")
@@ -410,10 +413,10 @@ def run(module, result):
             exclusive=exclusive,
             label=label,
         )
+        diff = re.sub(pattern, "", diff, flags=re.M).strip()
+        result["diff"] = dict(prepared=diff)
         if diff:
-            result["diff"] = dict(prepared=diff)
-
-        result["changed"] = True
+            result["changed"] = True
 
 
 def main():
