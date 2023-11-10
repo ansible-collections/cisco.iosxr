@@ -8,7 +8,7 @@ This collection has been tested against Cisco IOSXR version 7.0.2.
 <!--start requires_ansible-->
 ## Ansible version compatibility
 
-This collection has been tested against following Ansible versions: **>=2.14**.
+This collection has been tested against following Ansible versions: **>=2.9.10**.
 
 For collections that support Ansible 2.9, please ensure you update your `network_os` to use the
 fully qualified collection name (for example, `cisco.ios.ios`).
