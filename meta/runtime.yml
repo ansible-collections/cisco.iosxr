@@ -1,5 +1,5 @@
 ---
-requires_ansible: ">=2.14"
+requires_ansible: ">=2.9.10"
 plugin_routing:
   modules:
     acl_interfaces:
