@@ -60,7 +60,6 @@ class AclsArgs(object):  # pylint: disable=R0903
                                             "host",
                                             "prefix",
                                             "net_group",
-                                            "port_group",
                                         ],
                                         [
                                             "wildcard_bits",
@@ -68,13 +67,11 @@ class AclsArgs(object):  # pylint: disable=R0903
                                             "host",
                                             "prefix",
                                             "net_group",
-                                            "port_group",
                                         ],
                                     ],
                                     "options": {
                                         "host": {"type": "str"},
                                         "net_group": {"type": "str"},
-                                        "port_group": {"type": "str"},
                                         "address": {"type": "str"},
                                         "any": {"type": "bool"},
                                         "prefix": {"type": "str"},
@@ -85,6 +82,7 @@ class AclsArgs(object):  # pylint: disable=R0903
                                                     "gt",
                                                     "lt",
                                                     "neq",
+                                                    "port_group",
                                                     "range",
                                                 ],
                                             ],
@@ -93,6 +91,7 @@ class AclsArgs(object):  # pylint: disable=R0903
                                                 "gt": {"type": "str"},
                                                 "lt": {"type": "str"},
                                                 "neq": {"type": "str"},
+                                                "port_group": {"type": "str"},
                                                 "range": {
                                                     "options": {
                                                         "end": {"type": "str"},
@@ -456,7 +455,6 @@ class AclsArgs(object):  # pylint: disable=R0903
                                             "host",
                                             "prefix",
                                             "net_group",
-                                            "port_group",
                                         ],
                                         [
                                             "wildcard_bits",
@@ -464,13 +462,11 @@ class AclsArgs(object):  # pylint: disable=R0903
                                             "host",
                                             "prefix",
                                             "net_group",
-                                            "port_group",
                                         ],
                                     ],
                                     "options": {
                                         "host": {"type": "str"},
                                         "net_group": {"type": "str"},
-                                        "port_group": {"type": "str"},
                                         "address": {"type": "str"},
                                         "any": {"type": "bool"},
                                         "prefix": {"type": "str"},
@@ -481,6 +477,7 @@ class AclsArgs(object):  # pylint: disable=R0903
                                                     "gt",
                                                     "lt",
                                                     "neq",
+                                                    "port_group",
                                                     "range",
                                                 ],
                                             ],
@@ -489,6 +486,7 @@ class AclsArgs(object):  # pylint: disable=R0903
                                                 "gt": {"type": "str"},
                                                 "lt": {"type": "str"},
                                                 "neq": {"type": "str"},
+                                                "port_group": {"type": "str"},
                                                 "range": {
                                                     "options": {
                                                         "end": {"type": "str"},
