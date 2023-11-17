@@ -29,3 +29,4 @@ plugins/modules/iosxr_logging_global.py import-2.6!skip
 plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.8!skip
 plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.9!skip
 plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.10!skip
+plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.12!skip
