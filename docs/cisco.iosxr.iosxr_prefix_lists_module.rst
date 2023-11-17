@@ -322,50 +322,50 @@ Examples
 
 
     # Before state
-    #RP/0/0/CPU0:10#show running-config
-    #Thu Feb  4 09:38:36.245 UTC
-    #% No such configuration item(s)
-    #RP/0/0/CPU0:10#
+    # RP/0/0/CPU0:10#show running-config
+    # Thu Feb  4 09:38:36.245 UTC
+    # % No such configuration item(s)
+    # RP/0/0/CPU0:10#
     #
 
 
     - name: Merge the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_prefix_lists:
-             state: merged
-             config:
-               - afi: ipv6
-                 prefix_lists:
-                   - name: pl_1
-                     entries:
-                       - prefix: 2001:db8:1234::/48
-                         action: deny
-                         sequence: 1
-                   - name: pl_2
-                     entries:
-                       - sequence: 2
-                         action: remark
-                         description: TEST_PL_2_REMARK
-               - afi: ipv4
-                 prefix_lists:
-                   - name: pl1
-                     entries:
-                       - sequence: 3
-                         action: remark
-                         description: TEST_PL1_2_REMARK
-                       - sequence: 4
-                         action: permit
-                         prefix: 10.0.0.0/24
-                   - name: pl2
-                     entries:
-                       - sequence: 5
-                         action: remark
-                         description: TEST_PL2_REMARK
-                   - name: pl3
-                     entries:
-                       - sequence: 6
-                         action: permit
-                         prefix: 35.0.0.0/8
-                         eq: 0
+        state: merged
+        config:
+          - afi: ipv6
+            prefix_lists:
+              - name: pl_1
+                entries:
+                  - prefix: '2001:db8:1234::/48'
+                    action: deny
+                    sequence: 1
+              - name: pl_2
+                entries:
+                  - sequence: 2
+                    action: remark
+                    description: TEST_PL_2_REMARK
+          - afi: ipv4
+            prefix_lists:
+              - name: pl1
+                entries:
+                  - sequence: 3
+                    action: remark
+                    description: TEST_PL1_2_REMARK
+                  - sequence: 4
+                    action: permit
+                    prefix: 10.0.0.0/24
+              - name: pl2
+                entries:
+                  - sequence: 5
+                    action: remark
+                    description: TEST_PL2_REMARK
+              - name: pl3
+                entries:
+                  - sequence: 6
+                    action: permit
+                    prefix: 35.0.0.0/8
+                    eq: 0
 
     # Task Output
     # -------------
@@ -415,12 +415,12 @@ Examples
 
     # After state:
     # ------------
-    #RP/0/0/CPU0:10#show running-config
+    # RP/0/0/CPU0:10#show running-config
     # ipv6 prefix-list pl_1
     #  1 deny 2001:db8:1234::/48
     # !
     # ipv6 prefix-list pl_2
-    #  2 remark TEST_PL_2_REMARK
+    #  2 remark TEST_PL_2_REMAR
     # !
     # ipv4 prefix-list pl1
     #  3 remark TEST_PL1_2_REMARK
@@ -439,7 +439,7 @@ Examples
 
     # Before state:
     # -------------
-    #RP/0/0/CPU0:10#show running-config
+    # RP/0/0/CPU0:10#show running-config
     #
     # ipv6 prefix-list pl_1
     #  1 deny 2001:db8:1234::/48
@@ -457,29 +457,31 @@ Examples
     #
 
 
-    - name: Replace device configurations of listed prefix lists with provided configurations
+    - name: >-
+        Replace device configurations of listed prefix lists with provided
+        configurations
       register: result
-      cisco.iosxr.iosxr_prefix_lists: &id001
+      cisco.iosxr.iosxr_prefix_lists:
         config:
-               - afi: ipv4
-                 prefix_lists:
-                   - name: pl1
-                     entries:
-                       - sequence: 3
-                         action: permit
-                         prefix: 10.0.0.0/24
-               - afi: ipv6
-                 prefix_lists:
-                   - name: pl_1
-                     entries:
-                       - prefix: 2001:db8:1234::/48
-                         action: permit
-                         sequence: 1
-                   - name: pl_2
-                     entries:
-                       - sequence: 2
-                         action: remark
-                         description: TEST_PL1_2
+          - afi: ipv4
+            prefix_lists:
+              - name: pl1
+                entries:
+                  - sequence: 3
+                    action: permit
+                    prefix: 10.0.0.0/24
+          - afi: ipv6
+            prefix_lists:
+              - name: pl_1
+                entries:
+                  - prefix: '2001:db8:1234::/48'
+                    action: permit
+                    sequence: 1
+              - name: pl_2
+                entries:
+                  - sequence: 2
+                    action: remark
+                    description: TEST_PL1_2
         state: replaced
 
 
@@ -546,7 +548,7 @@ Examples
 
 
     # After state:
-    #RP/0/0/CPU0:10#show running-config
+    # RP/0/0/CPU0:10#show running-config
     #
     # ipv6 prefix-list pl_1
     #  1 deny 2001:db8:1234::/48
@@ -644,7 +646,7 @@ Examples
 
     # After state:
     # ------------
-    #RP/0/0/CPU0:10#show running-config
+    # RP/0/0/CPU0:10#show running-config
     # ipv6 prefix-list pl_1
     #  1 deny 2001:db8:1234::/48
     # !
@@ -665,7 +667,7 @@ Examples
 
     - name: Gather ACL interfaces facts using gathered state
       cisco.iosxr.iosxr_prefix_lists:
-         state: gathered
+        state: gathered
 
     # gathered:
     # - afi: ipv6
@@ -707,7 +709,7 @@ Examples
 
 
     # parsed.cfg
-    #------------------------------
+    # ------------------------------
     # ipv6 prefix-list pl_1
     #  1 deny 2001:db8:1234::/48
     # !
@@ -722,11 +724,10 @@ Examples
     #  5 remark TEST_PL2_REMARK
 
 
-
     - name: Parse externally provided Prefix_lists config to agnostic model
       cisco.iosxr.iosxr_prefix_lists:
-         running_config: "{{ lookup('file', './fixtures/parsed.cfg') }}"
-         state: parsed
+        running_config: '{{ lookup(''file'', ''./fixtures/parsed.cfg'') }}'
+        state: parsed
 
 
     # Task Output
@@ -771,40 +772,39 @@ Examples
     - name: Render platform specific commands from task input using rendered state
       register: result
       cisco.iosxr.iosxr_prefix_lists:
-         config:
-           - afi: ipv6
-             prefix_lists:
-               - name: pl_1
-                 entries:
-                   - prefix: 2001:db8:1234::/48
-                     action: deny
-                     sequence: 1
-               - name: pl_2
-                 entries:
-                   - sequence: 2
-                     action: remark
-                     description: TEST_PL_2_REMARK
-           - afi: ipv4
-             prefix_lists:
-               - name: pl1
-                 entries:
-                   - sequence: 3
-                     action: remark
-                     description: TEST_PL1_2_REMARK
-                   - sequence: 4
-                     action: permit
-                     prefix: 10.0.0.0/24
-               - name: pl2
-                 entries:
-                   - sequence: 5
-                     action: remark
-                     description: TEST_PL2_REMARK
-                   - sequence: 6
-                     action: permit
-                     prefix: 35.0.0.0/8
-                     eq: 0
-
-         state: rendered
+        config:
+          - afi: ipv6
+            prefix_lists:
+              - name: pl_1
+                entries:
+                  - prefix: '2001:db8:1234::/48'
+                    action: deny
+                    sequence: 1
+              - name: pl_2
+                entries:
+                  - sequence: 2
+                    action: remark
+                    description: TEST_PL_2_REMARK
+          - afi: ipv4
+            prefix_lists:
+              - name: pl1
+                entries:
+                  - sequence: 3
+                    action: remark
+                    description: TEST_PL1_2_REMARK
+                  - sequence: 4
+                    action: permit
+                    prefix: 10.0.0.0/24
+              - name: pl2
+                entries:
+                  - sequence: 5
+                    action: remark
+                    description: TEST_PL2_REMARK
+                  - sequence: 6
+                    action: permit
+                    prefix: 35.0.0.0/8
+                    eq: 0
+        state: rendered
 
 
     # Task Output
@@ -818,14 +818,12 @@ Examples
     #         "ipv4 prefix-list pl2 6 permit 35.0.0.0/8 eq 0"
     #     ]
 
-
-
     # Using overridden:
 
 
     # Before state:
     # -------------
-    #RP/0/0/CPU0:10#show running-config
+    # RP/0/0/CPU0:10#show running-config
     #
     # ipv6 prefix-list pl_1
     #  1 deny 2001:db8:1234::/48
@@ -842,22 +840,22 @@ Examples
     #
     - name: Overridde all Prefix_lists configuration with provided configuration
       cisco.iosxr.iosxr_prefix_lists:
-            config:
-               - afi: ipv4
-                 prefix_lists:
-                   - name: pl3
-                     entries:
-                       - sequence: 3
-                         action: remark
-                         description: TEST_PL1_3_REMARK
-                       - sequence: 4
-                         action: permit
-                         prefix: 10.0.0.0/24
-                       - sequence: 6
-                         action: permit
-                         prefix: 35.0.0.0/8
-                         eq: 0
-            state: overridden
+        config:
+          - afi: ipv4
+            prefix_lists:
+              - name: pl3
+                entries:
+                  - sequence: 3
+                    action: remark
+                    description: TEST_PL1_3_REMARK
+                  - sequence: 4
+                    action: permit
+                    prefix: 10.0.0.0/24
+                  - sequence: 6
+                    action: permit
+                    prefix: 35.0.0.0/8
+                    eq: 0
+        state: overridden
 
 
     # Task Output
@@ -916,14 +914,14 @@ Examples
 
 
     # After state:
-    #RP/0/0/CPU0:10#show running-config
+    # RP/0/0/CPU0:10#show running-config
     #
-    #ipv4 prefix-list pl3
+    # ipv4 prefix-list pl3
     # 3 remark TEST_PL1_3_REMARK
     # 4 permit 10.0.0.0/24
     # 6 permit 35.0.0.0/8 eq 0
     # !
-    #!
+    # !
 
 
 

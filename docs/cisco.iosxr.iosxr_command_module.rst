@@ -153,32 +153,32 @@ Examples
     - name: run multiple commands on remote nodes
       cisco.iosxr.iosxr_command:
         commands:
-        - show version
-        - show interfaces
-        - {command: example command that prompts, prompt: expected prompt, answer: yes}
+          - show version
+          - show interfaces
+          - {command: example command that prompts, prompt: expected prompt, answer: true}
 
     - name: run multiple commands and evaluate the output
       cisco.iosxr.iosxr_command:
         commands:
-        - show version
-        - show interfaces
+          - show version
+          - show interfaces
         wait_for:
-        - result[0] contains IOS-XR
-        - result[1] contains Loopback0
+          - result[0] contains IOS-XR
+          - result[1] contains Loopback0
 
-    - name: multiple prompt, multiple answer (mandatory check for all prompts)
+    - name: 'multiple prompt, multiple answer (mandatory check for all prompts)'
       cisco.iosxr.iosxr_command:
         commands:
-            - command: key config-key password-encryption
-              prompt:
-                - "Enter old key :"
-                - "Enter new key :"
-                - "Enter confirm key :"
-              answer:
-                - "test1234"
-                - "test12345"
-                - "test12345"
-              check_all: true
+          - command: key config-key password-encryption
+            prompt:
+              - 'Enter old key :'
+              - 'Enter new key :'
+              - 'Enter confirm key :'
+            answer:
+              - test1234
+              - test12345
+              - test12345
+            check_all: true
 
 
 
