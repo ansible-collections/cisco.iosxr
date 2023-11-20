@@ -123,6 +123,8 @@ class Interfaces(FactsBase):
         "show ipv6 interface",
         "show lldp",
         "show lldp neighbors detail",
+        "show cdp",
+        "show cdp neighbors detail",
     ]
 
     def populate(self):
@@ -141,6 +143,10 @@ class Interfaces(FactsBase):
         if "LLDP is not enabled" not in self.responses[2]:
             neighbors = self.responses[3]
             self.facts["neighbors"] = self.parse_neighbors(neighbors)
+
+        if "CDP is not enabled" not in self.responses[4]:
+            neighbors = self.responses[5]
+            self.facts["neighbors"] = self.parse_cdp_neighbors(neighbors)
 
     def populate_interfaces(self, interfaces):
         facts = dict()
