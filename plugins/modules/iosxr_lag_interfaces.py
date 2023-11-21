@@ -157,26 +157,26 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration
   cisco.iosxr.iosxr_lag_interfaces:
     config:
-    - name: Bundle-Ether10
-      members:
-      - member: GigabitEthernet0/0/0/1
-        mode: inherit
-      - member: GigabitEthernet0/0/0/3
-        mode: inherit
-      mode: active
-      links:
-        max_active: 5
-        min_active: 2
-      load_balancing_hash: src-ip
-
-    - name: Bundle-Ether12
-      members:
-      - member: GigabitEthernet0/0/0/2
-        mode: passive
-      - member: GigabitEthernet0/0/0/4
-        mode: passive
-      load_balancing_hash: dst-ip
+      - name: Bundle-Ether10
+        members:
+          - member: GigabitEthernet0/0/0/1
+            mode: inherit
+          - member: GigabitEthernet0/0/0/3
+            mode: inherit
+        mode: active
+        links:
+          max_active: 5
+          min_active: 2
+        load_balancing_hash: src-ip
+      - name: Bundle-Ether12
+        members:
+          - member: GigabitEthernet0/0/0/2
+            mode: passive
+          - member: GigabitEthernet0/0/0/4
+            mode: passive
+        load_balancing_hash: dst-ip
     state: merged
+
 #
 #
 # -----------
@@ -267,15 +267,14 @@ EXAMPLES = """
 - name: Replace device configuration of listed Bundles with provided configurations
   cisco.iosxr.iosxr_lag_interfaces:
     config:
-    - name: Bundle-Ether12
-      members:
-      - name: GigabitEthernet0/0/0/2
-      mode: passive
-
-    - name: Bundle-Ether11
-      members:
-      - name: GigabitEthernet0/0/0/4
-      load_balancing_hash: src-ip
+      - name: Bundle-Ether12
+        members:
+          - name: GigabitEthernet0/0/0/2
+        mode: passive
+      - name: Bundle-Ether11
+        members:
+          - name: GigabitEthernet0/0/0/4
+        load_balancing_hash: src-ip
     state: replaced
 #
 #
@@ -376,15 +375,16 @@ EXAMPLES = """
 - name: Overrides all device configuration with provided configuration
   cisco.iosxr.iosxr_lag_interfaces:
     config:
-    - name: Bundle-Ether10
-      members:
-      - member: GigabitEthernet0/0/0/1
-        mode: inherit
-      - member: GigabitEthernet0/0/0/2
-        mode: inherit
-      mode: active
-      load_balancing_hash: dst-ip
+      - name: Bundle-Ether10
+        members:
+          - member: GigabitEthernet0/0/0/1
+            mode: inherit
+          - member: GigabitEthernet0/0/0/2
+            mode: inherit
+        mode: active
+        load_balancing_hash: dst-ip
     state: overridden
+
 #
 #
 # ------------
@@ -474,14 +474,16 @@ EXAMPLES = """
 #
 #
 
-- name: Delete attributes of given bundles and removes member interfaces from them
+- name: >-
+    Delete attributes of given bundles and removes member interfaces from them
     (Note - This won't delete the bundles themselves)
   cisco.iosxr.iosxr_lag_interfaces:
     config:
-    - name: Bundle-Ether10
-    - name: Bundle-Ether11
-    - name: Bundle-Ether12
+      - name: Bundle-Ether10
+      - name: Bundle-Ether11
+      - name: Bundle-Ether12
     state: deleted
+
 
 #
 #
@@ -736,25 +738,24 @@ EXAMPLES = """
 - name: Render platform specific commands from task input using rendered state
   cisco.iosxr.iosxr_lag_interfaces:
     config:
-    - name: Bundle-Ether10
-      members:
-      - member: GigabitEthernet0/0/0/1
-        mode: inherit
-      - member: GigabitEthernet0/0/0/3
-        mode: inherit
-      mode: active
-      links:
-        max_active: 5
-        min_active: 2
-      load_balancing_hash: src-ip
-
-    - name: Bundle-Ether12
-      members:
-      - member: GigabitEthernet0/0/0/2
-        mode: passive
-      - member: GigabitEthernet0/0/0/4
-        mode: passive
-      load_balancing_hash: dst-ip
+      - name: Bundle-Ether10
+        members:
+          - member: GigabitEthernet0/0/0/1
+            mode: inherit
+          - member: GigabitEthernet0/0/0/3
+            mode: inherit
+        mode: active
+        links:
+          max_active: 5
+          min_active: 2
+        load_balancing_hash: src-ip
+      - name: Bundle-Ether12
+        members:
+          - member: GigabitEthernet0/0/0/2
+            mode: passive
+          - member: GigabitEthernet0/0/0/4
+            mode: passive
+        load_balancing_hash: dst-ip
     state: rendered
 
 # Output:
@@ -787,9 +788,6 @@ EXAMPLES = """
 #         - " bundle id 12 mode passive"
 #    ]
 #
-#
-
-
 """
 RETURN = """
 before:

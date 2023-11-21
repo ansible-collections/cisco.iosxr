@@ -70,7 +70,7 @@ EXAMPLES = """
 - name: Configure banner from file
   cisco.iosxr.iosxr_banner:
     banner: motd
-    text: "{{ lookup('file', './config_partial/raw_banner.cfg') }}"
+    text: '{{ lookup(''file'', ''./config_partial/raw_banner.cfg'') }}'
     state: present
 """
 
