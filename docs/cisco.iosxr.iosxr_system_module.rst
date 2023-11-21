@@ -196,17 +196,17 @@ Examples
         hostname: iosxr01
         domain_name: test.example.com
         domain_search:
-        - ansible.com
-        - redhat.com
-        - cisco.com
+          - ansible.com
+          - redhat.com
+          - cisco.com
     - name: remove configuration
       cisco.iosxr.iosxr_system:
         hostname: iosxr01
         domain_name: test.example.com
         domain_search:
-        - ansible.com
-        - redhat.com
-        - cisco.com
+          - ansible.com
+          - redhat.com
+          - cisco.com
         state: absent
     - name: configure hostname and domain-name with vrf
       cisco.iosxr.iosxr_system:
@@ -214,9 +214,9 @@ Examples
         vrf: nondefault
         domain_name: test.example.com
         domain_search:
-        - ansible.com
-        - redhat.com
-        - cisco.com
+          - ansible.com
+          - redhat.com
+          - cisco.com
     - name: configure DNS lookup sources
       cisco.iosxr.iosxr_system:
         lookup_source: MgmtEth0/0/CPU0/0
@@ -224,8 +224,8 @@ Examples
     - name: configure name servers
       cisco.iosxr.iosxr_system:
         name_servers:
-        - 8.8.8.8
-        - 8.8.4.4
+          - 8.8.8.8
+          - 8.8.4.4
 
 
 
