@@ -224,18 +224,18 @@ EXAMPLES = """
 - name: set multiple users to group sys-admin
   cisco.iosxr.iosxr_user:
     aggregate:
-    - name: netop
-    - name: netend
+      - name: netop
+      - name: netend
     group: sysadmin
     state: present
 - name: set multiple users to multiple groups
   cisco.iosxr.iosxr_user:
     aggregate:
-    - name: netop
-    - name: netend
+      - name: netop
+      - name: netend
     groups:
-    - sysadmin
-    - root-system
+      - sysadmin
+      - root-system
     state: present
 - name: Change Password for User netop
   cisco.iosxr.iosxr_user:

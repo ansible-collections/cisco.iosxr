@@ -492,7 +492,7 @@ EXAMPLES = """
         address_family:
           - afi: ipv4
             processes:
-              - process_id: "LAB3"
+              - process_id: LAB3
                 area:
                   area_id: 0.0.0.3
             cost: 20
@@ -501,7 +501,7 @@ EXAMPLES = """
                 keychain: cisco
           - afi: ipv6
             processes:
-              - process_id: "LAB3"
+              - process_id: LAB3
                 area:
                   area_id: 0.0.0.2
             cost: 30
@@ -593,7 +593,7 @@ EXAMPLES = """
         address_family:
           - afi: ipv4
             processes:
-              - process_id: "LAB3"
+              - process_id: LAB3
                 area:
                   area_id: 0.0.0.3
             cost: 30
@@ -602,7 +602,7 @@ EXAMPLES = """
                 keychain: ciscoiosxr
           - afi: ipv6
             processes:
-              - process_id: "LAB3"
+              - process_id: LAB3
                 area:
                   area_id: 0.0.0.2
             cost: 30
@@ -688,7 +688,7 @@ EXAMPLES = """
         address_family:
           - afi: ipv4
             processes:
-              - process_id: "LAB1"
+              - process_id: LAB1
                 area:
                   area_id: 0.0.0.3
             cost: 10
@@ -946,18 +946,18 @@ EXAMPLES = """
         address_family:
           - afi: ipv4
             processes:
-             - process_id: "LAB3"
-               area:
-                 area_id: 0.0.0.3
+              - process_id: LAB3
+                area:
+                  area_id: 0.0.0.3
             cost: 20
             authentication:
               message_digest:
                 keychain: cisco
           - afi: ipv6
             processes:
-             - process_id: "LAB3"
-               area:
-                 area_id: 0.0.0.2
+              - process_id: LAB3
+                area:
+                  area_id: 0.0.0.2
             cost: 30
     state: rendered
 

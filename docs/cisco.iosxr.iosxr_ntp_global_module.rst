@@ -1647,51 +1647,51 @@ Examples
     # ------------
     - name: Merge the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_ntp_global:
-          config:
-              access_group:
-                ipv4:
-                  peer: PeerAcl1
-                  query_only: QueryOnlyAcl1
-                  serve: ServeAcl1
-                  serve_only: ServeOnlyAcl1
-                vrfs:
-                  - ipv4:
-                      peer: PeerAcl3
-                      serve: ServeAcl2
-                    name: siteA
-              authenticate: true
-              broadcastdelay: 1
-              drift:
-                aging_time: 0
-                file: apphost
-              interfaces:
-                - name: GigabitEthernet0/0/0/0
-                  multicast_client: 224.0.0.8
-                  multicast_destination: 224.0.0.8
-                  broadcast_client: true
-              ipv4:
-                dscp: af11
-              ipv6:
-                precedence: routine
-              log_internal_sync: true
-              master: 1
-              max_associations: 10
-              passive: true
-              peers:
-                - iburst: true
-                  peer: 192.0.2.1
-                  vrf: siteC
-              servers:
-                - burst: true
-                  server: 192.0.2.2
-                  vrf: siteD
-              source: GigabitEthernet0/0/0/0
-              source_vrfs:
-                - name: GigabitEthernet0/0/0/0
-                  vrf: siteE
-              trusted_keys:
-                - key_id: 1
-              update_calendar: true
+        config:
+          access_group:
+            ipv4:
+              peer: PeerAcl1
+              query_only: QueryOnlyAcl1
+              serve: ServeAcl1
+              serve_only: ServeOnlyAcl1
+            vrfs:
+              - ipv4:
+                  peer: PeerAcl3
+                  serve: ServeAcl2
+                name: siteA
+          authenticate: true
+          broadcastdelay: 1
+          drift:
+            aging_time: 0
+            file: apphost
+          interfaces:
+            - name: GigabitEthernet0/0/0/0
+              multicast_client: 224.0.0.8
+              multicast_destination: 224.0.0.8
+              broadcast_client: true
+          ipv4:
+            dscp: af11
+          ipv6:
+            precedence: routine
+          log_internal_sync: true
+          master: 1
+          max_associations: 10
+          passive: true
+          peers:
+            - iburst: true
+              peer: 192.0.2.1
+              vrf: siteC
+          servers:
+            - burst: true
+              server: 192.0.2.2
+              vrf: siteD
+          source: GigabitEthernet0/0/0/0
+          source_vrfs:
+            - name: GigabitEthernet0/0/0/0
+              vrf: siteE
+          trusted_keys:
+            - key_id: 1
+          update_calendar: true
     # Commands Fired:
     # ------------
     # "commands": [
@@ -1859,52 +1859,52 @@ Examples
     # ----------------
     - name: Override BGP configuration with provided configuration
       cisco.iosxr.iosxr_ntp_global:
-            state: overridden
-            config:
-              access_group:
-                ipv4:
-                  peer: PeerAcl1
-                  query_only: QueryOnlyAcl1
-                  serve: ServeAcl4
-                  serve_only: ServeOnlyAcl1
-                vrfs:
-                  - ipv4:
-                      peer: PeerAcl3
-                      serve: ServeAcl2
-                    name: siteA
-              authenticate: true
-              broadcastdelay: 1
-              drift:
-                aging_time: 0
-                file: apphost
-              interfaces:
-                - name: GigabitEthernet0/0/0/1
-                  multicast_client: 224.0.0.8
-                  multicast_destination: 224.0.0.8
-                  broadcast_client: true
-              ipv4:
-                dscp: af12
-              ipv6:
-                precedence: routine
-              log_internal_sync: true
-              master: 1
-              max_associations: 10
-              passive: true
-              peers:
-                - iburst: true
-                  peer: 192.0.2.3
-                  vrf: siteC
-              servers:
-                - burst: true
-                  server: 192.0.2.2
-                  vrf: siteD
-              source: GigabitEthernet0/0/0/1
-              source_vrfs:
-                - name: GigabitEthernet0/0/0/0
-                  vrf: siteE
-              trusted_keys:
-                - key_id: 1
-              update_calendar: true
+        state: overridden
+        config:
+          access_group:
+            ipv4:
+              peer: PeerAcl1
+              query_only: QueryOnlyAcl1
+              serve: ServeAcl4
+              serve_only: ServeOnlyAcl1
+            vrfs:
+              - ipv4:
+                  peer: PeerAcl3
+                  serve: ServeAcl2
+                name: siteA
+          authenticate: true
+          broadcastdelay: 1
+          drift:
+            aging_time: 0
+            file: apphost
+          interfaces:
+            - name: GigabitEthernet0/0/0/1
+              multicast_client: 224.0.0.8
+              multicast_destination: 224.0.0.8
+              broadcast_client: true
+          ipv4:
+            dscp: af12
+          ipv6:
+            precedence: routine
+          log_internal_sync: true
+          master: 1
+          max_associations: 10
+          passive: true
+          peers:
+            - iburst: true
+              peer: 192.0.2.3
+              vrf: siteC
+          servers:
+            - burst: true
+              server: 192.0.2.2
+              vrf: siteD
+          source: GigabitEthernet0/0/0/1
+          source_vrfs:
+            - name: GigabitEthernet0/0/0/0
+              vrf: siteE
+          trusted_keys:
+            - key_id: 1
+          update_calendar: true
     # Commands Fired:
     # ---------------
     # "commands": [
@@ -1990,52 +1990,52 @@ Examples
     # ----------------
     - name: Replaced BGP configuration with provided configuration
       cisco.iosxr.iosxr_ntp_global:
-            state: replaced
-            config:
-              access_group:
-                ipv4:
-                  peer: PeerAcl1
-                  query_only: QueryOnlyAcl1
-                  serve: ServeAcl4
-                  serve_only: ServeOnlyAcl1
-                vrfs:
-                  - ipv4:
-                      peer: PeerAcl3
-                      serve: ServeAcl2
-                    name: siteA
-              authenticate: true
-              broadcastdelay: 1
-              drift:
-                aging_time: 0
-                file: apphost
-              interfaces:
-                - name: GigabitEthernet0/0/0/1
-                  multicast_client: 224.0.0.8
-                  multicast_destination: 224.0.0.8
-                  broadcast_client: true
-              ipv4:
-                dscp: af12
-              ipv6:
-                precedence: routine
-              log_internal_sync: true
-              master: 1
-              max_associations: 10
-              passive: true
-              peers:
-                - iburst: true
-                  peer: 192.0.2.3
-                  vrf: siteC
-              servers:
-                - burst: true
-                  server: 192.0.2.2
-                  vrf: siteD
-              source: GigabitEthernet0/0/0/1
-              source_vrfs:
-                - name: GigabitEthernet0/0/0/0
-                  vrf: siteE
-              trusted_keys:
-                - key_id: 1
-              update_calendar: true
+        state: replaced
+        config:
+          access_group:
+            ipv4:
+              peer: PeerAcl1
+              query_only: QueryOnlyAcl1
+              serve: ServeAcl4
+              serve_only: ServeOnlyAcl1
+            vrfs:
+              - ipv4:
+                  peer: PeerAcl3
+                  serve: ServeAcl2
+                name: siteA
+          authenticate: true
+          broadcastdelay: 1
+          drift:
+            aging_time: 0
+            file: apphost
+          interfaces:
+            - name: GigabitEthernet0/0/0/1
+              multicast_client: 224.0.0.8
+              multicast_destination: 224.0.0.8
+              broadcast_client: true
+          ipv4:
+            dscp: af12
+          ipv6:
+            precedence: routine
+          log_internal_sync: true
+          master: 1
+          max_associations: 10
+          passive: true
+          peers:
+            - iburst: true
+              peer: 192.0.2.3
+              vrf: siteC
+          servers:
+            - burst: true
+              server: 192.0.2.2
+              vrf: siteD
+          source: GigabitEthernet0/0/0/1
+          source_vrfs:
+            - name: GigabitEthernet0/0/0/0
+              vrf: siteE
+          trusted_keys:
+            - key_id: 1
+          update_calendar: true
     # Commands Fired:
     # ---------------
     # "commands": [
@@ -2196,7 +2196,9 @@ Examples
     # Using state: rendered
     # Rendered play:
     # --------------
-    - name: Render platform specific configuration lines with state rendered (without connecting to the device)
+    - name: >-
+        Render platform specific configuration lines with state rendered (without
+        connecting to the device)
       cisco.iosxr.iosxr_ntp_global:
         state: rendered
         config:
