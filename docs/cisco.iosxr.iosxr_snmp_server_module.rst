@@ -5417,101 +5417,102 @@ Examples
     # --------------------- EMPTY -----------------
     # Merged play:
     # ------------
+
     - name: Merge the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_snmp_server:
-            config:
-              vrfs:
-                - hosts:
-                    - community: test1
-                      host: 1.1.1.1
-                      traps: true
-                  vrf: vrf1
-              users:
-                - Ipv4_acl: test1
-                  Ipv6_acl: test2
-                  group: test2
-                  user: u1
-                  version: v1
-              timeouts:
-                duplicate: 0
-                inQdrop: 0
-              trap:
-                throttle_time: 12
-              targets:
-                - host: 1.1.1.2
-                  name: test
+        config:
+          vrfs:
+            - hosts:
+                - community: test1
+                  host: 1.1.1.1
+                  traps: true
+              vrf: vrf1
+          users:
+            - Ipv4_acl: test1
+              Ipv6_acl: test2
+              group: test2
+              user: u1
+              version: v1
+          timeouts:
+            duplicate: 0
+            inQdrop: 0
+          trap:
+            throttle_time: 12
+          targets:
+            - host: 1.1.1.2
+              name: test
+          ifmib:
+            internal_cache_max_duration: 4
+          inform:
+            retries: 7
+          chassis_id: test2
+          packetsize: 490
+          queue_length: 2
+          throttle_time: 60
+          trap_source: GigabitEthernet0/0/0/2
+          trap_timeout: 3
+          context:
+            - c1
+            - c2
+          contact: t1
+          correlator:
+            buffer_size: 1024
+          communities:
+            - name: test2
+              ro: true
+              sdrowner: true
+              acl_v4: test
+              acl_v6: test1
+          community_maps:
+            - name: cm1
+              context: c1
+              target_list: t1
+              security_name: s1
+          drop:
+            report_IPv4: test1
+            unknown_user: true
+          ipv6:
+            precedence: routine
+          ipv4:
+            dscp: af11
+          location: test1
+          logging_threshold_oid_processing: 1
+          logging_threshold_pdu_processing: 1
+          mib_bulkstat_max_procmem_size: 101
+          mroutemib_send_all_vrf: true
+          overload_control:
+            overload_drop_time: 4
+            overload_throttle_rate: 6
+          notification_log_mib:
+            GlobalSize: 5
+            size: 5
+          traps:
+            hsrp: true
+            ipsla: true
+            ipsec:
+              start: true
+              stop: true
+            bridgemib: true
+            bulkstat_collection: true
+            cisco_entity_ext: true
+            config: true
+            copy_complete: true
+            addrpool:
+              high: true
+              low: true
+            bfd: true
+            bgp:
+              cbgp2: true
+            l2tun:
+              sessions: true
+              tunnel_down: true
+              tunnel_up: true
+            l2vpn:
+              all: true
+              vc_down: true
+              vc_up: true
+            msdp_peer_state_change: true
 
-              ifmib:
-                internal_cache_max_duration: 4
-              inform:
-                retries: 7
-              chassis_id: test2
-              packetsize: 490
-              queue_length: 2
-              throttle_time: 60
-              trap_source: GigabitEthernet0/0/0/2
-              trap_timeout: 3
-              context:
-                - c1
-                - c2
-              contact: t1
-              correlator:
-                buffer_size: 1024
-              communities:
-                - name: test2
-                  ro: true
-                  sdrowner: true
-                  acl_v4: test
-                  acl_v6: test1
-              community_maps:
-                - name: cm1
-                  context: c1
-                  target_list: t1
-                  security_name: s1
-              drop:
-                report_IPv4: test1
-                unknown_user: true
-              ipv6:
-                precedence: routine
-              ipv4:
-                dscp: af11
-              location: test1
-              logging_threshold_oid_processing: 1
-              logging_threshold_pdu_processing: 1
-              mib_bulkstat_max_procmem_size: 101
-              mroutemib_send_all_vrf: true
-              overload_control:
-                overload_drop_time: 4
-                overload_throttle_rate: 6
-              notification_log_mib:
-                GlobalSize: 5
-                size: 5
-              traps:
-                hsrp: true
-                ipsla: true
-                ipsec:
-                  start: true
-                  stop: true
-                bridgemib: true
-                bulkstat_collection: true
-                cisco_entity_ext: true
-                config: true
-                copy_complete: true
-                addrpool:
-                  high: true
-                  low: true
-                bfd: true
-                bgp:
-                  cbgp2: true
-                l2tun:
-                  sessions: true
-                  tunnel_down: true
-                  tunnel_up: true
-                l2vpn:
-                  all: true
-                  vc_down: true
-                  vc_up: true
-                msdp_peer_state_change: true
     #
     # Commands Fired:
     # ------------
@@ -5822,78 +5823,78 @@ Examples
     # ----------------
     - name: Override Snmp-server configuration with provided configuration
       cisco.iosxr.iosxr_snmp_server:
-            config:
-              timeouts:
-                duplicate: 0
-                inQdrop: 0
-              trap:
-                throttle_time: 13
-              targets:
-                - host: 1.1.1.2
-                  name: test
+        config:
+          timeouts:
+            duplicate: 0
+            inQdrop: 0
+          trap:
+            throttle_time: 13
+          targets:
+            - host: 1.1.1.2
+              name: test
+          ifmib:
+            internal_cache_max_duration: 5
+          inform:
+            retries: 7
+          chassis_id: test
+          packetsize: 491
+          queue_length: 2
+          throttle_time: 60
+          trap_source: GigabitEthernet0/0/0/2
+          trap_timeout: 3
+          context:
+            - c1
+            - c2
+          contact: t1
+          correlator:
+            buffer_size: 1025
+          communities:
+            - name: test1
+              ro: true
+              sdrowner: true
+              acl_v4: test
+              acl_v6: test1
+          community_maps:
+            - name: cm2
+              context: c1
+              target_list: t1
+              security_name: s1
+          drop:
+            report_IPv4: test2
+            unknown_user: true
+          ipv6:
+            precedence: routine
+          ipv4:
+            dscp: af11
+          location: test1
+          logging_threshold_oid_processing: 2
+          logging_threshold_pdu_processing: 2
+          mib_bulkstat_max_procmem_size: 101
+          mroutemib_send_all_vrf: true
+          overload_control:
+            overload_drop_time: 4
+            overload_throttle_rate: 6
+          notification_log_mib:
+            GlobalSize: 5
+            size: 5
+          traps:
+            hsrp: true
+            ipsla: true
+            ipsec:
+              start: true
+              stop: true
+            bridgemib: true
+            bulkstat_collection: true
+            cisco_entity_ext: true
+            config: true
+            copy_complete: true
+            l2vpn:
+              all: true
+              vc_down: true
+              vc_up: true
+            msdp_peer_state_change: true
+        state: overridden
 
-              ifmib:
-                internal_cache_max_duration: 5
-              inform:
-                retries: 7
-              chassis_id: test
-              packetsize: 491
-              queue_length: 2
-              throttle_time: 60
-              trap_source: GigabitEthernet0/0/0/2
-              trap_timeout: 3
-              context:
-                - c1
-                - c2
-              contact: t1
-              correlator:
-                buffer_size: 1025
-              communities:
-                - name: test1
-                  ro: true
-                  sdrowner: true
-                  acl_v4: test
-                  acl_v6: test1
-              community_maps:
-                - name: cm2
-                  context: c1
-                  target_list: t1
-                  security_name: s1
-              drop:
-                report_IPv4: test2
-                unknown_user: true
-              ipv6:
-                precedence: routine
-              ipv4:
-                dscp: af11
-              location: test1
-              logging_threshold_oid_processing: 2
-              logging_threshold_pdu_processing: 2
-              mib_bulkstat_max_procmem_size: 101
-              mroutemib_send_all_vrf: true
-              overload_control:
-                overload_drop_time: 4
-                overload_throttle_rate: 6
-              notification_log_mib:
-                GlobalSize: 5
-                size: 5
-              traps:
-                hsrp: true
-                ipsla: true
-                ipsec:
-                  start: true
-                  stop: true
-                bridgemib: true
-                bulkstat_collection: true
-                cisco_entity_ext: true
-                config: true
-                copy_complete: true
-                l2vpn:
-                  all: true
-                  vc_down: true
-                  vc_up: true
-                msdp_peer_state_change: true
-            state: overridden
     # Commands Fired:
     # ---------------
     # "commands": [
@@ -6033,78 +6034,78 @@ Examples
     # ----------------
     - name: Replace Snmp-server configuration with provided configuration
       cisco.iosxr.iosxr_snmp_server:
-            state: replaced
-            config:
-              timeouts:
-                duplicate: 0
-                inQdrop: 0
-              trap:
-                throttle_time: 13
-              targets:
-                - host: 1.1.1.2
-                  name: test
+        state: replaced
+        config:
+          timeouts:
+            duplicate: 0
+            inQdrop: 0
+          trap:
+            throttle_time: 13
+          targets:
+            - host: 1.1.1.2
+              name: test
+          ifmib:
+            internal_cache_max_duration: 5
+          inform:
+            retries: 7
+          chassis_id: test
+          packetsize: 491
+          queue_length: 2
+          throttle_time: 60
+          trap_source: GigabitEthernet0/0/0/2
+          trap_timeout: 3
+          context:
+            - c1
+            - c2
+          contact: t1
+          correlator:
+            buffer_size: 1025
+          communities:
+            - name: test1
+              ro: true
+              sdrowner: true
+              acl_v4: test
+              acl_v6: test1
+          community_maps:
+            - name: cm2
+              context: c1
+              target_list: t1
+              security_name: s1
+          drop:
+            report_IPv4: test2
+            unknown_user: true
+          ipv6:
+            precedence: routine
+          ipv4:
+            dscp: af11
+          location: test1
+          logging_threshold_oid_processing: 2
+          logging_threshold_pdu_processing: 2
+          mib_bulkstat_max_procmem_size: 101
+          mroutemib_send_all_vrf: true
+          overload_control:
+            overload_drop_time: 4
+            overload_throttle_rate: 6
+          notification_log_mib:
+            GlobalSize: 5
+            size: 5
+          traps:
+            hsrp: true
+            ipsla: true
+            ipsec:
+              start: true
+              stop: true
+            bridgemib: true
+            bulkstat_collection: true
+            cisco_entity_ext: true
+            config: true
+            copy_complete: true
+            l2vpn:
+              all: true
+              vc_down: true
+              vc_up: true
+            msdp_peer_state_change: true
 
-              ifmib:
-                internal_cache_max_duration: 5
-              inform:
-                retries: 7
-              chassis_id: test
-              packetsize: 491
-              queue_length: 2
-              throttle_time: 60
-              trap_source: GigabitEthernet0/0/0/2
-              trap_timeout: 3
-              context:
-                - c1
-                - c2
-              contact: t1
-              correlator:
-                buffer_size: 1025
-              communities:
-                - name: test1
-                  ro: true
-                  sdrowner: true
-                  acl_v4: test
-                  acl_v6: test1
-              community_maps:
-                - name: cm2
-                  context: c1
-                  target_list: t1
-                  security_name: s1
-              drop:
-                report_IPv4: test2
-                unknown_user: true
-              ipv6:
-                precedence: routine
-              ipv4:
-                dscp: af11
-              location: test1
-              logging_threshold_oid_processing: 2
-              logging_threshold_pdu_processing: 2
-              mib_bulkstat_max_procmem_size: 101
-              mroutemib_send_all_vrf: true
-              overload_control:
-                overload_drop_time: 4
-                overload_throttle_rate: 6
-              notification_log_mib:
-                GlobalSize: 5
-                size: 5
-              traps:
-                hsrp: true
-                ipsla: true
-                ipsec:
-                  start: true
-                  stop: true
-                bridgemib: true
-                bulkstat_collection: true
-                cisco_entity_ext: true
-                config: true
-                copy_complete: true
-                l2vpn:
-                  all: true
-                  vc_down: true
-                  vc_up: true
-                msdp_peer_state_change: true
     #
     # Commands Fired:
     # ---------------
@@ -6397,7 +6398,9 @@ Examples
     # Using state: rendered
     # Rendered play:
     # --------------
-    - name: Render platform specific configuration lines with state rendered (without connecting to the device)
+    - name: >-
+        Render platform specific configuration lines with state rendered (without
+        connecting to the device)
       cisco.iosxr.iosxr_snmp_server:
         state: rendered
         config:
@@ -6421,7 +6424,6 @@ Examples
           targets:
             - host: 1.1.1.2
               name: test
-
           ifmib:
             internal_cache_max_duration: 4
           inform:
@@ -6494,6 +6496,7 @@ Examples
               vc_up: true
             msdp_peer_state_change: true
       register: result
+
     # Module Execution Result:
     # ------------------------
     # "rendered": [

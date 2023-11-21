@@ -165,18 +165,17 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration
   cisco.iosxr.iosxr_lacp_interfaces:
     config:
-    - name: Bundle-Ether10
-      churn_logging: actor
-      collector_max_delay: 100
-      switchover_suppress_flaps: 500
-
-    - name: Bundle-Ether11
-      system:
-        mac: 00c2.4c00.bd15
-
-    - name: GigabitEthernet0/0/0/1
-      period: 200
+      - name: Bundle-Ether10
+        churn_logging: actor
+        collector_max_delay: 100
+        switchover_suppress_flaps: 500
+      - name: Bundle-Ether11
+        system:
+          mac: 00c2.4c00.bd15
+      - name: GigabitEthernet0/0/0/1
+        period: 200
     state: merged
+
 
 #
 #
@@ -265,12 +264,12 @@ EXAMPLES = """
 - name: Replace LACP configuration of listed interfaces with provided configuration
   cisco.iosxr.iosxr_lacp_interfaces:
     config:
-    - name: Bundle-Ether10
-      churn_logging: partner
-
-    - name: GigabitEthernet0/0/0/2
-      period: 300
+      - name: Bundle-Ether10
+        churn_logging: partner
+      - name: GigabitEthernet0/0/0/2
+        period: 300
     state: replaced
+
 
 #
 #
@@ -361,14 +360,14 @@ EXAMPLES = """
 - name: Override all interface LACP configuration with provided configuration
   cisco.iosxr.iosxr_lacp_interfaces:
     config:
-    - name: Bundle-Ether12
-      churn_logging: both
-      collector_max_delay: 100
-      switchover_suppress_flaps: 500
-
-    - name: GigabitEthernet0/0/0/1
-      period: 300
+      - name: Bundle-Ether12
+        churn_logging: both
+        collector_max_delay: 100
+        switchover_suppress_flaps: 500
+      - name: GigabitEthernet0/0/0/1
+        period: 300
     state: overridden
+
 
 #
 #
@@ -454,15 +453,17 @@ EXAMPLES = """
 # !
 #
 
-- name: Deleted LACP configurations of provided interfaces (Note - This won't delete
+- name: >-
+    Deleted LACP configurations of provided interfaces (Note - This won't delete
     the interface itself)
   cisco.iosxr.iosxr_lacp_interfaces:
     config:
-    - name: Bundle-Ether10
-    - name: Bundle-Ether11
-    - name: GigabitEthernet0/0/0/1
-    - name: GigabitEthernet0/0/0/2
+      - name: Bundle-Ether10
+      - name: Bundle-Ether11
+      - name: GigabitEthernet0/0/0/1
+      - name: GigabitEthernet0/0/0/2
     state: deleted
+
 
 #
 #
@@ -559,18 +560,17 @@ EXAMPLES = """
 - name: Render platform specific commands from task input using rendered state
   cisco.iosxr.iosxr_lacp_interfaces:
     config:
-    - name: Bundle-Ether10
-      churn_logging: actor
-      collector_max_delay: 100
-      switchover_suppress_flaps: 500
-
-    - name: Bundle-Ether11
-      system:
-        mac: 00c2.4c00.bd15
-
-    - name: GigabitEthernet0/0/0/1
-      period: 200
+      - name: Bundle-Ether10
+        churn_logging: actor
+        collector_max_delay: 100
+        switchover_suppress_flaps: 500
+      - name: Bundle-Ether11
+        system:
+          mac: 00c2.4c00.bd15
+      - name: GigabitEthernet0/0/0/1
+        period: 200
     state: rendered
+
 
 # -------------
 # Output
@@ -587,8 +587,6 @@ EXAMPLES = """
 #     - "interface GigabitEthernet0/0/0/1"
 #     - " lacp period 200"
 #
-
-
 """
 RETURN = """
 before:

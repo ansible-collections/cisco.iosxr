@@ -1653,7 +1653,7 @@ EXAMPLES = """
           retransmit_interval: 2
           packet_size: 577
           priority: 1
-          router_id: '2.2.2.2'
+          router_id: 2.2.2.2
           demand_circuit: true
           mtu_ignore: true
     state: merged
@@ -2199,11 +2199,12 @@ EXAMPLES = """
   cisco.iosxr.iosxr_ospfv3:
     config:
       processes:
-      - process_id: '10'
-      - process_id: '26'
-      - process_id: '27'
-      - process_id: '30'
+        - process_id: '10'
+        - process_id: '26'
+        - process_id: '27'
+        - process_id: '30'
     state: deleted
+
 
 #
 # Task Output:
