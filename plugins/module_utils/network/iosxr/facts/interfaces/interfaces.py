@@ -112,4 +112,4 @@ class InterfacesFacts(object):
             enabled = utils.parse_conf_cmd_arg(conf, "shutdown", False)
             config["enabled"] = enabled if enabled is not None else True
 
-        return utils.remove_empties(config)
+            return utils.remove_empties(config)
