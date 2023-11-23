@@ -1077,48 +1077,47 @@ EXAMPLES = """
   cisco.iosxr.iosxr_ospfv2:
     config:
       processes:
-      - process_id: '27'
-        areas:
-        - area_id: '10'
-          hello_interval: 2
+        - process_id: '27'
+          areas:
+            - area_id: '10'
+              hello_interval: 2
+              authentication:
+                keychain: ansi11393
+        - process_id: '26'
+          adjacency_stagger:
+            max_adjacency: 20
+            min_adjacency: 10
+        - process_id: '10'
           authentication:
-            keychain: ansi11393
-      - process_id: '26'
-        adjacency_stagger:
-          max_adjacency: 20
-          min_adjacency: 10
-      - process_id: '10'
-        authentication:
-          keychain: ansible_test1102
-        areas:
-        - area_id: '11'
-          default_cost: 5
-          cost: 11
-        - area_id: 22
-          default_cost: 6
-      - process_id: '30'
-        areas:
-        - area_id: 11
-          default_cost: 5
-        - area_id: 22
-          default_cost: 6
-
-        cost: 2
-        default_metric: 10
-        transmit_delay: 2
-        hello_interval: 1
-        dead_interval: 2
-        retransmit_interval: 2
-        weight: 2
-        packet_size: 577
-        priority: 1
-        router_id: 2.2.2.2
-        demand_circuit: enable
-        passive: disable
-        summary_in: enable
-        flood_reduction: disable
-        mtu_ignore: enable
-        external_out: disable
+            keychain: ansible_test1102
+          areas:
+            - area_id: '11'
+              default_cost: 5
+              cost: 11
+            - area_id: 22
+              default_cost: 6
+        - process_id: '30'
+          areas:
+            - area_id: 11
+              default_cost: 5
+            - area_id: 22
+              default_cost: 6
+          cost: 2
+          default_metric: 10
+          transmit_delay: 2
+          hello_interval: 1
+          dead_interval: 2
+          retransmit_interval: 2
+          weight: 2
+          packet_size: 577
+          priority: 1
+          router_id: 2.2.2.2
+          demand_circuit: enable
+          passive: disable
+          summary_in: enable
+          flood_reduction: disable
+          mtu_ignore: enable
+          external_out: disable
     state: merged
 
 # Task Output:
@@ -1304,19 +1303,19 @@ EXAMPLES = """
   cisco.iosxr.iosxr_ospfv2:
     config:
       processes:
-      - process_id: 27
-        areas:
-        - area_id: 10
-          hello_interval: 2
-        - area_id: 20
-          cost: 2
-          default_cost: 2
-          authentication:
-            keychain: ansi11393
-      - process_id: 26
-        adjacency_stagger:
-          min_adjacency: 10
-          max_adjacency: 20
+        - process_id: 27
+          areas:
+            - area_id: 10
+              hello_interval: 2
+            - area_id: 20
+              cost: 2
+              default_cost: 2
+              authentication:
+                keychain: ansi11393
+        - process_id: 26
+          adjacency_stagger:
+            min_adjacency: 10
+            max_adjacency: 20
     state: replaced
 
 # Task Output:
@@ -1532,22 +1531,23 @@ EXAMPLES = """
   cisco.iosxr.iosxr_ospfv2:
     config:
       processes:
-      - process_id: 27
-        areas:
-        - area_id: 10
-          hello_interval: 2
-          authentication:
-            keychain: ansi11393
-        - area_id: 20
-          cost: 2
-          default_cost: 2
-          authentication:
-            keychain: ansi11393
-      - process_id: 26
-        adjacency_stagger:
-          min_adjacency: 10
-          max_adjacency: 20
+        - process_id: 27
+          areas:
+            - area_id: 10
+              hello_interval: 2
+              authentication:
+                keychain: ansi11393
+            - area_id: 20
+              cost: 2
+              default_cost: 2
+              authentication:
+                keychain: ansi11393
+        - process_id: 26
+          adjacency_stagger:
+            min_adjacency: 10
+            max_adjacency: 20
     state: overridden
+
 
 #
 # Task Output:
@@ -1742,11 +1742,12 @@ EXAMPLES = """
   cisco.iosxr.iosxr_ospfv2:
     config:
       processes:
-      - process_id: '10'
-      - process_id: '26'
-      - process_id: '27'
-      - process_id: '30'
+        - process_id: '10'
+        - process_id: '26'
+        - process_id: '27'
+        - process_id: '30'
     state: deleted
+
 
 #
 # Task Output:
@@ -1979,49 +1980,49 @@ EXAMPLES = """
   cisco.iosxr.iosxr_ospfv2:
     config:
       processes:
-      - process_id: 27
-        areas:
-        - area_id: 10
-          hello_interval: 2
+        - process_id: 27
+          areas:
+            - area_id: 10
+              hello_interval: 2
+              authentication:
+                keychain: ansi11393
+        - process_id: 26
+          adjacency_stagger:
+            min_adjacency: 10
+            max_adjacency: 20
+        - process_id: 10
           authentication:
-            keychain: ansi11393
-      - process_id: 26
-        adjacency_stagger:
-          min_adjacency: 10
-          max_adjacency: 20
-      - process_id: 10
-        authentication:
-          keychain: ansible_test1102
-        areas:
-        - area_id: 11
-          default_cost: 5
-          cost: 11
-        - area_id: 22
-          default_cost: 6
-      - process_id: 30
-        areas:
-        - area_id: 11
-          default_cost: 5
-        - area_id: 22
-          default_cost: 6
-
-        cost: 2
-        default_metric: 10
-        transmit_delay: 2
-        hello_interval: 1
-        dead_interval: 2
-        retransmit_interval: 2
-        weight: 2
-        packet_size: 577
-        priority: 1
-        router_id: 2.2.2.2
-        demand_circuit: enable
-        passive: disable
-        summary_in: enable
-        flood_reduction: disable
-        mtu_ignore: enable
-        external_out: disable
+            keychain: ansible_test1102
+          areas:
+            - area_id: 11
+              default_cost: 5
+              cost: 11
+            - area_id: 22
+              default_cost: 6
+        - process_id: 30
+          areas:
+            - area_id: 11
+              default_cost: 5
+            - area_id: 22
+              default_cost: 6
+          cost: 2
+          default_metric: 10
+          transmit_delay: 2
+          hello_interval: 1
+          dead_interval: 2
+          retransmit_interval: 2
+          weight: 2
+          packet_size: 577
+          priority: 1
+          router_id: 2.2.2.2
+          demand_circuit: enable
+          passive: disable
+          summary_in: enable
+          flood_reduction: disable
+          mtu_ignore: enable
+          external_out: disable
     state: rendered
+
 
 #
 # Task Output:

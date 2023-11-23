@@ -155,4 +155,4 @@ class L2_InterfacesFacts(object):
             if cpsv:
                 config["l2protocol"].append({"cpsv": cpsv})
 
-        return utils.remove_empties(config)
+            return utils.remove_empties(config)

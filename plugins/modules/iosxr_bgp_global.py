@@ -939,45 +939,44 @@ EXAMPLES = """
 #
 # Before state
 # ------------
-
 # RP/0/0/CPU0:10#show running-config router bgp
 # Thu Feb  4 09:38:36.245 UTC
 # % No such configuration item(s)
 # RP/0/0/CPU0:10#
 
- - name: Merge the following BGP global configuration
-   cisco.iosxr.iosxr_bgp_global:
-     config:
-       as_number: 65536
-       default_metric: 5
-       socket:
-         receive_buffer_size: 514
-         send_buffer_size: 4098
-       bgp:
-         confederation:
-           identifier: 4
-         bestpath:
-           med:
-             confed: True
-         cluster_id: 5
-         router_id: 192.0.2.10
-       neighbors:
-         - neighbor: 192.0.2.13
-           remote_as: 65538
-           bfd:
-             fast_detect:
-               strict_mode: True
-             multiplier: 6
-             minimum_interval: 20
-       vrfs:
-         - vrf: vrf1
-           default_metric: 5
+- name: Merge the following BGP global configuration
+  cisco.iosxr.iosxr_bgp_global:
+    config:
+      as_number: 65536
+      default_metric: 5
+      socket:
+        receive_buffer_size: 514
+        send_buffer_size: 4098
+      bgp:
+        confederation:
+          identifier: 4
+        bestpath:
+          med:
+            confed: true
+        cluster_id: 5
+        router_id: 192.0.2.10
+      neighbors:
+        - neighbor: 192.0.2.13
+          remote_as: 65538
+          bfd:
+            fast_detect:
+              strict_mode: true
+            multiplier: 6
+            minimum_interval: 20
+      vrfs:
+        - vrf: vrf1
+          default_metric: 5
 
+#
 # Task Output:
-# ------------
+# ---------------
 #
 # before: {}
-
 # commands:
 #   - router bgp 65536
 #   - bgp cluster-id 5
@@ -1071,37 +1070,38 @@ EXAMPLES = """
 #  !
 # !
 
- - name: Replace the following configuration
-   cisco.iosxr.iosxr_bgp_global:
-     state: replaced
-     config:
-       as_number: 65536
-       default_metric: 4
-       socket:
-         receive_buffer_size: 514
-         send_buffer_size: 4098
-       bgp:
-         confederation:
-           identifier: 4
-         bestpath:
-           med:
-             confed: True
-         cluster_id: 5
-         router_id: 192.0.2.10
-       neighbors:
-         - neighbor: 192.0.2.14
-           remote_as: 65538
-           bfd:
-             fast_detect:
-               strict_mode: True
-             multiplier: 6
-             minimum_interval: 20
-       vrfs:
-         - vrf: vrf1
-           default_metric: 5
+- name: Replace the following configuration
+  cisco.iosxr.iosxr_bgp_global:
+    state: replaced
+    config:
+      as_number: 65536
+      default_metric: 4
+      socket:
+        receive_buffer_size: 514
+        send_buffer_size: 4098
+      bgp:
+        confederation:
+          identifier: 4
+        bestpath:
+          med:
+            confed: true
+        cluster_id: 5
+        router_id: 192.0.2.10
+      neighbors:
+        - neighbor: 192.0.2.14
+          remote_as: 65538
+          bfd:
+            fast_detect:
+              strict_mode: true
+            multiplier: 6
+            minimum_interval: 20
+      vrfs:
+        - vrf: vrf1
+          default_metric: 5
 
+#
 # Task Output:
-# ------------
+# -------------
 #
 # before:
 #     as_number: '65536'
@@ -1215,37 +1215,37 @@ EXAMPLES = """
 #  !
 # !
 
- - name: Override running config with provided configuration
-   cisco.iosxr.iosxr_bgp_global:
-     state: overridden
-     config:
-       as_number: 65536
-       default_metric: 4
-       socket:
-         receive_buffer_size: 514
-         send_buffer_size: 4098
-       bgp:
-         confederation:
-           identifier: 4
-         bestpath:
-           med:
-             confed: True
-         cluster_id: 5
-         router_id: 192.0.2.10
-       neighbors:
-         - neighbor: 192.0.2.14
-           remote_as: 65538
-           bfd:
-             fast_detect:
-               strict_mode: True
-             multiplier: 6
-             minimum_interval: 20
-       vrfs:
-         - vrf: vrf1
-           default_metric: 5
+- name: Override running config with provided configuration
+  cisco.iosxr.iosxr_bgp_global:
+    state: overridden
+    config:
+      as_number: 65536
+      default_metric: 4
+      socket:
+        receive_buffer_size: 514
+        send_buffer_size: 4098
+      bgp:
+        confederation:
+          identifier: 4
+        bestpath:
+          med:
+            confed: true
+        cluster_id: 5
+        router_id: 192.0.2.10
+      neighbors:
+        - neighbor: 192.0.2.14
+          remote_as: 65538
+          bfd:
+            fast_detect:
+              strict_mode: true
+            multiplier: 6
+            minimum_interval: 20
+      vrfs:
+        - vrf: vrf1
+          default_metric: 5
 #
 # Task Output:
-# ------------
+# -------------
 #
 # before:
 #     as_number: '65536'
@@ -1360,14 +1360,15 @@ EXAMPLES = """
 # !
 #
 
- - name: Delete BGP configurations handled by this module
-   cisco.iosxr.iosxr_bgp_global:
-     config:
-       as_number: 65536
-     state: deleted
+- name: Delete BGP configurations handled by this module
+  cisco.iosxr.iosxr_bgp_global:
+    config:
+      as_number: 65536
+    state: deleted
 
+#
 # Task Output:
-# ------------
+# -------------
 #
 # before:
 #     as_number: '65536'
@@ -1446,13 +1447,13 @@ EXAMPLES = """
 # !
 #
 
- - name: Purge all BGP configurations from the device
-   cisco.iosxr.iosxr_bgp_global:
-     state: purged
+- name: Purge all BGP configurations from the device
+  cisco.iosxr.iosxr_bgp_global:
+    state: purged
 
 #
 # Task Output:
-# ------------
+# -------------
 #
 # before:
 #     as_number: '65536'
@@ -1492,49 +1493,54 @@ EXAMPLES = """
 # Thu Feb  4 09:38:36.245 UTC
 # % No such configuration item(s)
 # RP/0/0/CPU0:10#
-
-# Using replaced
 #
- - name: Render platform specific configuration lines (without connecting to the device)
-   cisco.iosxr.iosxr_bgp_global:
-     state: rendered
-     config:
-       as_number: 1
-       default_metric: 4
-       vrfs:
-         - vrf: vrf3
-           bfd:
-             minimum_interval: 20
-             multiplier: 10
-           bgp:
-             fast_external_fallover:
-               disable: True
-             router_id: 1.2.3.4
-             auto_policy_soft_reset:
-               disable: True
-           timers:
-             keepalive_time: 20
-             holdtime: 30
-         - vrf: vrf2
-           bgp:
-             enforce_first_as:
-               disable: True
-           default_metric: 4
-           neighbors:
-             - neighbor: 1.1.1.3
-               remote_as: 2
-               graceful_maintenance:
-                 set: True
-                 activate:
-                   inheritance_disable: True
-                 local_preference:
-                   value: 1
-                 as_prepends:
-                   value: 2
 
-# Task Output:
-# ------------
 #
+# Using Rendered
+# -----------------
+#
+- name: >-
+    Render platform specific configuration lines (without connecting to the
+    device)
+  cisco.iosxr.iosxr_bgp_global:
+    state: rendered
+    config:
+      as_number: 1
+      default_metric: 4
+      vrfs:
+        - vrf: vrf3
+          bfd:
+            minimum_interval: 20
+            multiplier: 10
+          bgp:
+            fast_external_fallover:
+              disable: true
+            router_id: 1.2.3.4
+            auto_policy_soft_reset:
+              disable: true
+          timers:
+            keepalive_time: 20
+            holdtime: 30
+        - vrf: vrf2
+          bgp:
+            enforce_first_as:
+              disable: true
+          default_metric: 4
+          neighbors:
+            - neighbor: 1.1.1.3
+              remote_as: 2
+              graceful_maintenance:
+                set: true
+                activate:
+                  inheritance_disable: true
+                local_preference:
+                  value: 1
+                as_prepends:
+                  value: 2
+
+#
+# Task output
+# -----------------------
 # rendered:
 #   - router bgp 1
 #   - default-metric 4
@@ -1580,14 +1586,13 @@ EXAMPLES = """
 # !
 #
 
- - name: Parse externally provided BGP config
-   cisco.iosxr.iosxr_bgp_global:
-     running_config: "{{ lookup('file', 'parsed.cfg') }}"
-     state: parsed
+- name: Parse externally provided BGP config
+  cisco.iosxr.iosxr_bgp_global:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
 
-# Task Output:
-# ------------
-#
+# Task output
+# -----------------------
 # parsed:
 #     as_number: '65536'
 #     bgp:
@@ -1641,9 +1646,9 @@ EXAMPLES = """
 #  !
 # !
 
- - name: Gather bgp global facts
-   cisco.iosxr.iosxr_bgp_global:
-     state: gathered
+- name: Gather bgp global facts
+  cisco.iosxr.iosxr_bgp_global:
+    state: gathered
 
 # Task Output:
 # ------------
@@ -1673,7 +1678,6 @@ EXAMPLES = """
 #     vrfs:
 #     - default_metric: 5
 #       vrf: vrf1
-
 """
 RETURN = """
 before:

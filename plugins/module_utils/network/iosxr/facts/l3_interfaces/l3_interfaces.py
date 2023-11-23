@@ -94,43 +94,43 @@ class L3_InterfacesFacts(object):
         """
         config = deepcopy(spec)
         match = re.search(r"^(\S+)", conf)
+        if match:
+            intf = match.group(1)
+            if match.group(1).lower() == "preconfigure":
+                match = re.search(r"^(\S+) (.*)", conf)
+                if match:
+                    intf = match.group(2)
 
-        intf = match.group(1)
-        if match.group(1).lower() == "preconfigure":
-            match = re.search(r"^(\S+) (.*)", conf)
-            if match:
-                intf = match.group(2)
+            if get_interface_type(intf) == "unknown":
+                return {}
 
-        if get_interface_type(intf) == "unknown":
-            return {}
+            # populate the facts from the configuration
+            config["name"] = intf
 
-        # populate the facts from the configuration
-        config["name"] = intf
+            # Get the configured IPV4 details
+            ipv4 = []
+            ipv4_all = re.findall(r"ipv4 address (\S+.*)", conf)
+            for each in ipv4_all:
+                each_ipv4 = dict()
+                if "secondary" in each:
+                    each_ipv4["address"] = self.format_ipv4(each.split(" secondary")[0])
+                    each_ipv4["secondary"] = True
+                elif "secondary" not in each and "dhcp" not in each:
+                    each_ipv4["address"] = self.format_ipv4(each)
+                elif "dhcp" in each:
+                    each_ipv4["address"] = "dhcp"
+                ipv4.append(each_ipv4)
+                config["ipv4"] = ipv4
 
-        # Get the configured IPV4 details
-        ipv4 = []
-        ipv4_all = re.findall(r"ipv4 address (\S+.*)", conf)
-        for each in ipv4_all:
-            each_ipv4 = dict()
-            if "secondary" in each:
-                each_ipv4["address"] = self.format_ipv4(each.split(" secondary")[0])
-                each_ipv4["secondary"] = True
-            elif "secondary" not in each and "dhcp" not in each:
-                each_ipv4["address"] = self.format_ipv4(each)
-            elif "dhcp" in each:
-                each_ipv4["address"] = "dhcp"
-            ipv4.append(each_ipv4)
-            config["ipv4"] = ipv4
-
-        # Get the configured IPV6 details
-        ipv6 = []
-        ipv6_all = re.findall(r"ipv6 address (\S+)", conf)
-        for each in ipv6_all:
-            each_ipv6 = dict()
-            each_ipv6["address"] = each
-            ipv6.append(each_ipv6)
-            config["ipv6"] = ipv6
-        return utils.remove_empties(config)
+            # Get the configured IPV6 details
+            ipv6 = []
+            ipv6_all = re.findall(r"ipv6 address (\S+)", conf)
+            for each in ipv6_all:
+                each_ipv6 = dict()
+                each_ipv6["address"] = each
+                ipv6.append(each_ipv6)
+                config["ipv6"] = ipv6
+            return utils.remove_empties(config)
 
     def format_ipv4(self, address):
         if address.split(" ")[1]:

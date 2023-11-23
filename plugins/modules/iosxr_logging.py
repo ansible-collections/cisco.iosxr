@@ -201,18 +201,18 @@ EXAMPLES = """
 - name: Configure logging using aggregate
   cisco.iosxr.iosxr_logging:
     aggregate:
-    - {dest: console, level: warning}
-    - {dest: buffered, size: 4800000}
-    - {dest: file, name: file3, size: 2048}
-    - {dest: host, name: host3, level: critical}
+      - {dest: console, level: warning}
+      - {dest: buffered, size: 4800000}
+      - {dest: file, name: file3, size: 2048}
+      - {dest: host, name: host3, level: critical}
 
 - name: Delete logging using aggregate
   cisco.iosxr.iosxr_logging:
     aggregate:
-    - {dest: console, level: warning}
-    - {dest: buffered, size: 4800000}
-    - {dest: file, name: file3, size: 2048}
-    - {dest: host, name: host3, level: critical}
+      - {dest: console, level: warning}
+      - {dest: buffered, size: 4800000}
+      - {dest: file, name: file3, size: 2048}
+      - {dest: host, name: host3, level: critical}
     state: absent
 """
 

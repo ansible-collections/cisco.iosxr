@@ -121,13 +121,13 @@ EXAMPLES = """
 - name: Configure Ethernet interfaces
   cisco.iosxr.iosxr_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/2
-      description: Configured by Ansible
-      enabled: true
-    - name: GigabitEthernet0/0/0/3
-      description: Configured by Ansible Network
-      enabled: false
-      duplex: full
+      - name: GigabitEthernet0/0/0/2
+        description: Configured by Ansible
+        enabled: true
+      - name: GigabitEthernet0/0/0/3
+        description: Configured by Ansible Network
+        enabled: false
+        duplex: full
     state: merged
 
 # Task Output
@@ -204,14 +204,14 @@ EXAMPLES = """
 - name: Replace their existing configuration per interface
   cisco.iosxr.iosxr_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/2
-      description: Configured by Ansible
-      enabled: true
-      mtu: 2000
-    - name: GigabitEthernet0/0/0/3
-      description: Configured by Ansible Network
-      enabled: false
-      duplex: auto
+      - name: GigabitEthernet0/0/0/2
+        description: Configured by Ansible
+        enabled: true
+        mtu: 2000
+      - name: GigabitEthernet0/0/0/3
+        description: Configured by Ansible Network
+        enabled: false
+        duplex: auto
     state: replaced
 
 # Task Output
@@ -295,14 +295,14 @@ EXAMPLES = """
 - name: Override interfaces configuration
   cisco.iosxr.iosxr_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/2
-      description: Configured by Ansible
-      enabled: true
-      duplex: auto
-    - name: GigabitEthernet0/0/0/3
-      description: Configured by Ansible Network
-      enabled: false
-      speed: 1000
+      - name: GigabitEthernet0/0/0/2
+        description: Configured by Ansible
+        enabled: true
+        duplex: auto
+      - name: GigabitEthernet0/0/0/3
+        description: Configured by Ansible Network
+        enabled: false
+        speed: 1000
     state: overridden
 
 # Task Output
@@ -382,8 +382,8 @@ EXAMPLES = """
 - name: Delete interfaces arguments
   cisco.iosxr.iosxr_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/2
-    - name: GigabitEthernet0/0/0/3
+      - name: GigabitEthernet0/0/0/2
+      - name: GigabitEthernet0/0/0/3
     state: deleted
 
 # Task Output
@@ -492,17 +492,17 @@ EXAMPLES = """
 - name: Render platform specific commands from task input using rendered state
   cisco.iosxr.iosxr_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/0
-      description: Configured and Merged by Ansible-Network
-      mtu: 110
-      enabled: true
-      duplex: half
-    - name: GigabitEthernet0/0/0/1
-      description: Configured and Merged by Ansible-Network
-      mtu: 2800
-      enabled: false
-      speed: 100
-      duplex: full
+      - name: GigabitEthernet0/0/0/0
+        description: Configured and Merged by Ansible-Network
+        mtu: 110
+        enabled: true
+        duplex: half
+      - name: GigabitEthernet0/0/0/1
+        description: Configured and Merged by Ansible-Network
+        mtu: 2800
+        enabled: false
+        speed: 100
+        duplex: full
     state: rendered
 
 # Task Output
