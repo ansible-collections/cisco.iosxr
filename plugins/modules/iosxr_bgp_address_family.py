@@ -492,17 +492,17 @@ EXAMPLES = """
   cisco.iosxr.iosxr_bgp_address_family:
     state: merged
     config:
-      as_number: "65536"
+      as_number: '65536'
       address_family:
-        - afi: "ipv4"
-          safi: "unicast"
+        - afi: ipv4
+          safi: unicast
           vrf: vrf1
           dynamic_med: 9
           redistribute:
             - protocol: connected
               metric: 10
-        - afi: "ipv4"
-          safi: "unicast"
+        - afi: ipv4
+          safi: unicast
           dynamic_med: 10
           redistribute:
             - protocol: application
@@ -597,10 +597,10 @@ EXAMPLES = """
   cisco.iosxr.iosxr_bgp_address_family:
     state: replaced
     config:
-      as_number: "65536"
+      as_number: '65536'
       address_family:
-        - afi: "ipv4"
-          safi: "unicast"
+        - afi: ipv4
+          safi: unicast
           vrf: vrf1
           dynamic_med: 10
 # Task output
@@ -674,10 +674,10 @@ EXAMPLES = """
   cisco.iosxr.iosxr_bgp_address_family:
     state: overridden
     config:
-      as_number: "65536"
+      as_number: '65536'
       address_family:
-        - afi: "ipv4"
-          safi: "unicast"
+        - afi: ipv4
+          safi: unicast
           vrf: vrf1
           dynamic_med: 10
 
@@ -768,17 +768,17 @@ EXAMPLES = """
   cisco.iosxr.iosxr_bgp_address_family:
     state: rendered
     config:
-      as_number: "65536"
+      as_number: '65536'
       address_family:
-        - afi: "ipv4"
-          safi: "unicast"
+        - afi: ipv4
+          safi: unicast
           vrf: vrf1
           dynamic_med: 9
           redistribute:
             - protocol: connected
               metric: 10
-        - afi: "ipv4"
-          safi: "unicast"
+        - afi: ipv4
+          safi: unicast
           dynamic_med: 10
           redistribute:
             - protocol: application
@@ -808,21 +808,21 @@ EXAMPLES = """
 #
 # Using gathered
 # -------------
-- name: Merge the provided configuration with the existing running configuration
+- name: Gather existing running configuration
   cisco.iosxr.iosxr_bgp_address_family:
     state: gathered
     config:
-      as_number: "65536"
+      as_number: '65536'
       address_family:
-        - afi: "ipv4"
-          safi: "unicast"
+        - afi: ipv4
+          safi: unicast
           vrf: vrf1
           dynamic_med: 9
           redistribute:
             - protocol: connected
               metric: 10
-        - afi: "ipv4"
-          safi: "unicast"
+        - afi: ipv4
+          safi: unicast
           dynamic_med: 10
           redistribute:
             - protocol: application
@@ -860,8 +860,8 @@ EXAMPLES = """
 #
 # Using parsed
 #
-#parsed.cfg
-#------------
+# parsed.cfg
+# ------------
 # router bgp 65536
 #  bgp router-id 192.0.1.1
 #  address-family ipv4 unicast

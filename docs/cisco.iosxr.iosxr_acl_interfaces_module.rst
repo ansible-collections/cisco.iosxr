@@ -240,27 +240,26 @@ Examples
     - name: Merge the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_acl_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/0
-          access_groups:
-          - afi: ipv4
-            acls:
-            - name: acl_1
-              direction: in
-            - name: acl_2
-              direction: out
-          - afi: ipv6
-            acls:
-            - name: acl6_1
-              direction: in
-            - name: acl6_2
-              direction: out
-
-        - name: GigabitEthernet0/0/0/1
-          access_groups:
-          - afi: ipv4
-            acls:
-            - name: acl_1
-              direction: out
+          - name: GigabitEthernet0/0/0/0
+            access_groups:
+              - afi: ipv4
+                acls:
+                  - name: acl_1
+                    direction: in
+                  - name: acl_2
+                    direction: out
+              - afi: ipv6
+                acls:
+                  - name: acl6_1
+                    direction: in
+                  - name: acl6_2
+                    direction: out
+          - name: GigabitEthernet0/0/0/1
+            access_groups:
+              - afi: ipv4
+                acls:
+                  - name: acl_1
+                    direction: out
         state: merged
 
     # After state:
@@ -309,14 +308,14 @@ Examples
     - name: Update acl_interfaces configuration using merged
       cisco.iosxr.iosxr_acl_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/1
-          access_groups:
-          - afi: ipv4
-            acls:
-            - name: acl_2
-              direction: out
-            - name: acl_1
-              direction: in
+          - name: GigabitEthernet0/0/0/1
+            access_groups:
+              - afi: ipv4
+                acls:
+                  - name: acl_2
+                    direction: out
+                  - name: acl_1
+                    direction: in
         state: merged
 
     # After state:
@@ -363,15 +362,17 @@ Examples
     #  ipv4 access-group acl_1 egress
     # !
 
-    - name: Replace device configurations of listed interface with provided configurations
+    - name: >-
+        Replace device configurations of listed interface with provided
+        configurations
       cisco.iosxr.iosxr_acl_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/0
-          access_groups:
-          - afi: ipv6
-            acls:
-            - name: acl6_3
-              direction: in
+          - name: GigabitEthernet0/0/0/0
+            access_groups:
+              - afi: ipv6
+                acls:
+                  - name: acl6_3
+                    direction: in
         state: replaced
 
     # After state:
@@ -418,16 +419,16 @@ Examples
     - name: Overridde all interface ACL configuration with provided configuration
       cisco.iosxr.iosxr_acl_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/1
-          access_groups:
-          - afi: ipv4
-            acls:
-            - name: acl_2
-              direction: in
-          - afi: ipv6
-            acls:
-            - name: acl6_3
-              direction: out
+          - name: GigabitEthernet0/0/0/1
+            access_groups:
+              - afi: ipv4
+                acls:
+                  - name: acl_2
+                    direction: in
+              - afi: ipv6
+                acls:
+                  - name: acl6_3
+                    direction: out
         state: overridden
 
     # After state:
@@ -474,7 +475,7 @@ Examples
     - name: Delete all ACL attributes of GigabitEthernet0/0/0/1
       cisco.iosxr.iosxr_acl_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/1
+          - name: GigabitEthernet0/0/0/1
         state: deleted
 
     # After state:
@@ -674,14 +675,14 @@ Examples
     - name: Render platform specific commands from task input using rendered state
       cisco.iosxr.iosxr_acl_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/0
-          access_groups:
-          - afi: ipv4
-            acls:
-            - name: acl_1
-              direction: in
-            - name: acl_2
-              direction: out
+          - name: GigabitEthernet0/0/0/0
+            access_groups:
+              - afi: ipv4
+                acls:
+                  - name: acl_1
+                    direction: in
+                  - name: acl_2
+                    direction: out
         state: rendered
 
     # Task Output (redacted)

@@ -225,16 +225,16 @@ Examples
     - name: Merge provided configuration with running configuration
       cisco.iosxr.iosxr_lldp_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/1
-          destination:
-            mac_address: ieee-nearest-non-tmpr-bridge
-          transmit: false
-
-        - name: GigabitEthernet0/0/0/2
-          destination:
-            mac_address: ieee-nearest-bridge
-          receive: false
+          - name: GigabitEthernet0/0/0/1
+            destination:
+              mac_address: ieee-nearest-non-tmpr-bridge
+            transmit: false
+          - name: GigabitEthernet0/0/0/2
+            destination:
+              mac_address: ieee-nearest-bridge
+            receive: false
         state: merged
+
 
     #
     #
@@ -347,14 +347,16 @@ Examples
     #
     #
 
-    - name: Replace existing LLDP configurations of specified interfaces with provided
+    - name: >-
+        Replace existing LLDP configurations of specified interfaces with provided
         configuration
       cisco.iosxr.iosxr_lldp_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/1
-          destination:
-            mac_address: ieee-nearest-non-tmpr-bridge
+          - name: GigabitEthernet0/0/0/1
+            destination:
+              mac_address: ieee-nearest-non-tmpr-bridge
         state: replaced
+
 
     #
     #
@@ -471,12 +473,15 @@ Examples
     #
     #
 
-    - name: Override the LLDP configurations of all the interfaces with provided configurations
+    - name: >-
+        Override the LLDP configurations of all the interfaces with provided
+        configurations
       cisco.iosxr.iosxr_lldp_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/1
-          transmit: false
+          - name: GigabitEthernet0/0/0/1
+            transmit: false
         state: overridden
+
 
     #
     #
@@ -743,17 +748,15 @@ Examples
     - name: Render platform specific commands from task input using rendered state
       cisco.iosxr.iosxr_lldp_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/1
-          destination:
-            mac_address: ieee-nearest-non-tmpr-bridge
-          transmit: false
-
-        - name: GigabitEthernet0/0/0/2
-          destination:
-            mac_address: ieee-nearest-bridge
-          receive: false
+          - name: GigabitEthernet0/0/0/1
+            destination:
+              mac_address: ieee-nearest-non-tmpr-bridge
+            transmit: false
+          - name: GigabitEthernet0/0/0/2
+            destination:
+              mac_address: ieee-nearest-bridge
+            receive: false
         state: rendered
-
     # ------------------------
     # Module Execution Result
     # ------------------------
