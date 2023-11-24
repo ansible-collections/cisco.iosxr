@@ -346,9 +346,6 @@ class TestIosxrAclsModule(TestIosxrModule):
                                         source=dict(
                                             address="10.233.0.0",
                                             wildcard_bits="0.0.255.255",
-                                        source=dict(
-                                            address="10.233.0.0",
-                                            wildcard_bits="0.0.255.255",
                                         ),
                                         destination=dict(
                                             net_group="netgroup1",
@@ -533,6 +530,9 @@ class TestIosxrAclsModule(TestIosxrModule):
                                 aces=[
                                     dict(
                                         sequence="10",
+                                        grant="permit",
+                                        protocol="ipv4",
+                                        source=dict(
                                             any=True,
                                         ),
                                         destination=dict(
