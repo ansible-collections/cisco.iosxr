@@ -115,7 +115,7 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             host="1.1.1.1",
                                             port_protocol=dict(
                                                 port_group="portgroup1",
-                                                ),
+                                            ),
                                         ),
                                     ),
                                 ],
@@ -305,7 +305,7 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             host="1.1.1.1",
                                             port_protocol=dict(
                                                 port_group="portgroup1",
-                                                ),
+                                            ),
                                         ),
                                     ),
                                 ],
