@@ -677,3 +677,14 @@ releases:
       - fix_iosxr_config.yaml
       - prefix_list_doc.yaml
     release_date: "2023-10-30"
+  6.1.1:
+    changes:
+      bugfixes:
+        - Fix issue in gathered state of interfaces and l3_interfaces RMs(https://github.com/ansible-collections/cisco.iosxr/issues/452,
+          https://github.com/ansible-collections/cisco.iosxr/issues/451)
+    fragments:
+      - bugfix_interfaces.yaml
+      - fix_acl_interfaces.yaml
+      - fix_python_version.yaml
+      - revert_pylibssh_depn.yaml
+    release_date: "2023-11-27"
