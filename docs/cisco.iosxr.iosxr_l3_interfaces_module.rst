@@ -239,13 +239,13 @@ Examples
     - name: Merge provided configuration with device configuration
       cisco.iosxr.iosxr_l3_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/2
-          ipv4:
-          - address: 192.168.0.1/24
-        - name: GigabitEthernet0/0/0/3
-          ipv4:
-          - address: 192.168.2.1/24
-            secondary: true
+          - name: GigabitEthernet0/0/0/2
+            ipv4:
+              - address: 192.168.0.1/24
+          - name: GigabitEthernet0/0/0/3
+            ipv4:
+              - address: 192.168.2.1/24
+                secondary: true
         state: merged
 
     # Task Output
@@ -313,12 +313,13 @@ Examples
     - name: Override device configuration of all interfaces with provided configuration
       cisco.iosxr.iosxr_l3_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/3
-          ipv4:
-          - address: 192.168.0.2/24
-          - address: 192.168.2.1/24
-            secondary: true
+          - name: GigabitEthernet0/0/0/3
+            ipv4:
+              - address: 192.168.0.2/24
+              - address: 192.168.2.1/24
+                secondary: true
         state: overridden
+
 
     # Task Output
     # -----------
@@ -387,16 +388,19 @@ Examples
     #  ipv4 address 192.168.2.1 255.255.255.0 secondary
     # !
 
-    - name: Replaces device configuration of listed interfaces with provided configuration
+    - name: >-
+        Replaces device configuration of listed interfaces with provided
+        configuration
       cisco.iosxr.iosxr_l3_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/3
-          ipv6:
-          - address: fd5d:12c9:2201:1::1/64
-        - name: GigabitEthernet0/0/0/2
-          ipv4:
-          - address: 192.168.0.2/24
+          - name: GigabitEthernet0/0/0/3
+            ipv6:
+              - address: 'fd5d:12c9:2201:1::1/64'
+          - name: GigabitEthernet0/0/0/2
+            ipv4:
+              - address: 192.168.0.2/24
         state: replaced
+
 
     # Task Output
     # -----------
@@ -464,13 +468,14 @@ Examples
     #  ipv6 address fd5d:12c9:2201:1::1/64
     # !
 
-    - name: "Delete attributes for interfaces (This won't delete the interface itself)"
+    - name: Delete attributes for interfaces (This won't delete the interface itself)
       cisco.iosxr.iosxr_l3_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/3
-        - name: GigabitEthernet0/0/0/4
-        - name: GigabitEthernet0/0/0/3.700
+          - name: GigabitEthernet0/0/0/3
+          - name: GigabitEthernet0/0/0/4
+          - name: GigabitEthernet0/0/0/3.700
         state: deleted
+
 
     # Task Output
     # -----------
@@ -543,7 +548,7 @@ Examples
     # interface preconfigure GigabitEthernet0/0/0/4
     #  ipv6 address fd5d:12c9:2201:1::1/64
     #  shutdown
-    #!
+    # !
 
     - name: "Delete L3 config of all interfaces (This won't delete the interface itself)"
       cisco.iosxr.iosxr_l3_interfaces:
@@ -681,17 +686,18 @@ Examples
     - name: Render platform specific commands from task input using rendered state
       cisco.iosxr.iosxr_l3_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/0
-          ipv4:
-          - address: 198.51.100.1/24
-        - name: GigabitEthernet0/0/0/1
-          ipv6:
-          - address: 2001:db8:0:3::/64
-          ipv4:
-          - address: 192.0.2.1/24
-          - address: 192.0.2.2/24
-            secondary: true
+          - name: GigabitEthernet0/0/0/0
+            ipv4:
+              - address: 198.51.100.1/24
+          - name: GigabitEthernet0/0/0/1
+            ipv6:
+              - address: '2001:db8:0:3::/64'
+            ipv4:
+              - address: 192.0.2.1/24
+              - address: 192.0.2.2/24
+                secondary: true
         state: rendered
+
 
     # Task Output
     # -----------

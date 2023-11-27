@@ -1,6 +1,8 @@
 # Cisco IOSXR Collection
 [![CI](https://zuul-ci.org/gated.svg)](https://dashboard.zuul.ansible.com/t/ansible/project/github.com/ansible-collections/cisco.iosxr) <!--[![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/vyos)](https://codecov.io/gh/ansible-collections/cisco.iosxr)-->
 [![Codecov](https://codecov.io/gh/ansible-collections/cisco.iosxr/branch/main/graph/badge.svg)](https://codecov.io/gh/ansible-collections/cisco.iosxr)
+[![CI](https://github.com/ansible-collections/cisco.iosxr/actions/workflows/tests.yml/badge.svg?branch=main&event=schedule)](https://github.com/ansible-collections/cisco.iosxr/actions/workflows/tests.yml)
+
 The Ansible Cisco IOSXR collection includes a variety of Ansible content to help automate the management of Cisco IOSXR network appliances.
 
 This collection has been tested against Cisco IOSXR version 7.0.2.

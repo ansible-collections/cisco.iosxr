@@ -183,19 +183,20 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/3
-      native_vlan: 20
-    - name: GigabitEthernet0/0/0/4
-      native_vlan: 40
-      l2transport: true
-      l2protocol:
-      - stp: tunnel
-    - name: GigabitEthernet0/0/0/3.900
-      l2transport: true
-      q_vlan:
-      - 20
-      - 40
+      - name: GigabitEthernet0/0/0/3
+        native_vlan: 20
+      - name: GigabitEthernet0/0/0/4
+        native_vlan: 40
+        l2transport: true
+        l2protocol:
+          - stp: tunnel
+      - name: GigabitEthernet0/0/0/3.900
+        l2transport: true
+        q_vlan:
+          - 20
+          - 40
     state: merged
+
 
 # After state:
 # ------------
@@ -245,19 +246,22 @@ EXAMPLES = """
 #  dot1q vlan 20 40
 # !
 
-- name: Replaces device configuration of listed interfaces with provided configuration
+- name: >-
+    Replaces device configuration of listed interfaces with provided
+    configuration
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/4
-      native_vlan: 40
-      l2transport: true
-      l2protocol:
-      - stp: forward
-    - name: GigabitEthernet0/0/0/3.900
-      q_vlan:
-      - 20
-      - any
+      - name: GigabitEthernet0/0/0/4
+        native_vlan: 40
+        l2transport: true
+        l2protocol:
+          - stp: forward
+      - name: GigabitEthernet0/0/0/3.900
+        q_vlan:
+          - 20
+          - any
     state: replaced
+
 
 # After state:
 # -------------
@@ -310,16 +314,17 @@ EXAMPLES = """
 - name: Override device configuration of all interfaces with provided configuration
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/4
-      native_vlan: 40
-      l2transport: true
-      l2protocol:
-      - stp: forward
-    - name: GigabitEthernet0/0/0/3.900
-      q_vlan:
-      - 20
-      - any
+      - name: GigabitEthernet0/0/0/4
+        native_vlan: 40
+        l2transport: true
+        l2protocol:
+          - stp: forward
+      - name: GigabitEthernet0/0/0/3.900
+        q_vlan:
+          - 20
+          - any
     state: overridden
+
 
 # After state:
 # -------------
@@ -369,7 +374,7 @@ EXAMPLES = """
 - name: "Delete L2 attributes of given interfaces (Note: This won't delete the interface itself)"
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/4
+      - name: GigabitEthernet0/0/0/4
     state: deleted
 
 # After state:
@@ -511,25 +516,21 @@ EXAMPLES = """
 - name: Render platform specific commands from task input using rendered state
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-
-    - name: GigabitEthernet0/0/0/1
-      native_vlan: 10
-      l2transport: true
-      l2protocol:
-
-      - pvst: tunnel
-
-      - cdp: forward
-      propagate: true
-
-    - name: GigabitEthernet0/0/0/3.900
-      q_vlan:
-      - 20
-      - 40
-
-    - name: GigabitEthernet0/0/0/4
-      native_vlan: 40
+      - name: GigabitEthernet0/0/0/1
+        native_vlan: 10
+        l2transport: true
+        l2protocol:
+          - pvst: tunnel
+          - cdp: forward
+        propagate: true
+      - name: GigabitEthernet0/0/0/3.900
+        q_vlan:
+          - 20
+          - 40
+      - name: GigabitEthernet0/0/0/4
+        native_vlan: 40
     state: rendered
+
 # Task Output (redacted)
 # -----------------------
 # "rendered": [
@@ -656,9 +657,6 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 40
 # !
-
-
-
 """
 
 RETURN = """
