@@ -381,7 +381,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                 </td>
                 <td>when interfaces is configured</td>
                 <td>
-                            <div>The list of LLDP neighbors from the remote device</div>
+                            <div>The list of LLDP and CDP neighbors from the remote device. If both, CDP and LLDP neighbor data is present on one port, CDP is preferred.</div>
                     <br/>
                 </td>
             </tr>
