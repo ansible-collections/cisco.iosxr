@@ -207,7 +207,6 @@ class Interfaces(FactsBase):
         return facts
 
     def parse_cdp_neighbors(self, neighbors):
-        # import epdb; epdb.serve()
         facts = dict()
         for entry in neighbors.split("-------------------------"):
             if entry == "":
