@@ -207,11 +207,9 @@ class Interfaces(FactsBase):
         return facts
 
     def parse_cdp_neighbors(self, neighbors):
+        # import epdb; epdb.serve()
         facts = dict()
-        nbors = neighbors.split(
-            "------------------------------------------------",
-        )
-        for entry in nbors[1:]:
+        for entry in neighbors.split("-------------------------"):
             if entry == "":
                 continue
             intf_port = self.parse_cdp_intf_port(entry)
