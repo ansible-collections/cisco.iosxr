@@ -4628,52 +4628,52 @@ Examples
     - name: Merge the provided configuration with the existing running configuration
       cisco.iosxr.iosxr_bgp_templates:
         config:
-            as_number: 65536
-            neighbor:
-                - address_family:
-                    - advertise:
-                        local_labeled_route:
-                          set: true
-                      afi: ipv4
-                      safi: unicast
-                  advertisement_interval: 10
-                  bfd:
-                    fast_detect:
-                      strict_mode: true
-                  internal_vpn_client: true
-                  name: neighbor-group1
-                  precedence: critical
-                - cluster_id: "1"
-                  description: neighbor-group2
-                  dmz_link_bandwidth:
-                    set: true
-                  ebgp_multihop:
-                    value: 255
-                  egress_engineering:
-                    set: true
-                  graceful_maintenance:
-                    as_prepends:
-                      value: 0
-                    set: true
-                  ignore_connected_check:
-                    set: true
-                  internal_vpn_client: true
-                  local:
-                    address:
-                      inheritance_disable: true
-                  local_as:
-                    value: 6
-                  name: neighbor-group2
-                  precedence: flash
-                  receive_buffer_size: 512
-                  send_buffer_size: 4096
-                  session_open_mode: both
-                  tcp:
-                    mss:
-                      inheritance_disable: true
-                  ttl_security:
-                    set: true
-                  update_source: Loopback919
+          as_number: 65536
+          neighbor:
+            - address_family:
+                - advertise:
+                    local_labeled_route:
+                      set: true
+                  afi: ipv4
+                  safi: unicast
+              advertisement_interval: 10
+              bfd:
+                fast_detect:
+                  strict_mode: true
+              internal_vpn_client: true
+              name: neighbor-group1
+              precedence: critical
+            - cluster_id: '1'
+              description: neighbor-group2
+              dmz_link_bandwidth:
+                set: true
+              ebgp_multihop:
+                value: 255
+              egress_engineering:
+                set: true
+              graceful_maintenance:
+                as_prepends:
+                  value: 0
+                set: true
+              ignore_connected_check:
+                set: true
+              internal_vpn_client: true
+              local:
+                address:
+                  inheritance_disable: true
+              local_as:
+                value: 6
+              name: neighbor-group2
+              precedence: flash
+              receive_buffer_size: 512
+              send_buffer_size: 4096
+              session_open_mode: both
+              tcp:
+                mss:
+                  inheritance_disable: true
+              ttl_security:
+                set: true
+              update_source: Loopback919
         state: merged
 
     # Task Output
@@ -4833,29 +4833,29 @@ Examples
 
     - name: Replaced given bgp_templates configuration
       cisco.iosxr.iosxr_bgp_templates:
-            config:
-              as_number: 65536
-              neighbor:
-                - address_family:
-                    - advertise:
-                        local_labeled_route:
-                          set: true
-                      afi: ipv4
-                      safi: unicast
-                  advertisement_interval: 12
-                  name: neighbor-group1
-                  precedence: flash
-                - cluster_id: "2"
-                  description: replace neighbor-group2
-                  ebgp_multihop:
-                    value: 254
-                  graceful_maintenance:
-                    as_prepends:
-                      value: 2
-                    set: true
-                  update_source: Loopback917
-                  name: neighbor-group2
-            state: replaced
+        config:
+          as_number: 65536
+          neighbor:
+            - address_family:
+                - advertise:
+                    local_labeled_route:
+                      set: true
+                  afi: ipv4
+                  safi: unicast
+              advertisement_interval: 12
+              name: neighbor-group1
+              precedence: flash
+            - cluster_id: '2'
+              description: replace neighbor-group2
+              ebgp_multihop:
+                value: 254
+              graceful_maintenance:
+                as_prepends:
+                  value: 2
+                set: true
+              update_source: Loopback917
+              name: neighbor-group2
+        state: replaced
 
     # Task Output
     # -----------
@@ -5004,8 +5004,8 @@ Examples
 
     - name: Delete given bgp_nbr_address_family configuration
       cisco.iosxr.iosxr_bgp_templates: &deleted
-            config:
-            state: deleted
+        config:
+        state: deleted
 
     # Task Output
     # -----------
@@ -5044,8 +5044,6 @@ Examples
     # % No such configuration item(s)
     #
     # RP/0/RP0/CPU0:10#
-
-
 
     # Using gathered
     # Before state:
@@ -5087,8 +5085,8 @@ Examples
 
     - name: Gather given bgp_templates configuration
       cisco.iosxr.iosxr_bgp_templates: &id001
-            config:
-            state: gathered
+        config:
+        state: gathered
 
     # Task output
     # -----------
@@ -5179,25 +5177,24 @@ Examples
     #   internal-vpn-client
     #  !
     # !
-
     - name: override given bgp_templates configuration
       cisco.iosxr.iosxr_bgp_templates:
-            config:
-              as_number: 65536
-              neighbor:
-                - address_family:
-                    - advertise:
-                        local_labeled_route:
-                          disable: true
-                      afi: ipv4
-                      safi: unicast
-                  advertisement_interval: 12
-                  bfd:
-                    fast_detect:
-                      strict_mode: true
-                  name: neighbor-group1
-                  precedence: flash
-            state: overridden
+        config:
+          as_number: 65536
+          neighbor:
+            - address_family:
+                - advertise:
+                    local_labeled_route:
+                      disable: true
+                  afi: ipv4
+                  safi: unicast
+              advertisement_interval: 12
+              bfd:
+                fast_detect:
+                  strict_mode: true
+              name: neighbor-group1
+              precedence: flash
+        state: overridden
 
     # Task Output
     # -----------
@@ -5276,7 +5273,9 @@ Examples
 
 
     # Using rendered
-    - name: Render platform specific configuration lines with state rendered (without connecting to the device)
+    - name: >-
+        Render platform specific configuration lines with state rendered (without
+        connecting to the device)
       cisco.iosxr.iosxr_bgp_templates:
         config:
           as_number: 65536
@@ -5294,7 +5293,7 @@ Examples
               internal_vpn_client: true
               name: neighbor-group1
               precedence: critical
-            - cluster_id: "1"
+            - cluster_id: '1'
               description: neighbor-group2
               dmz_link_bandwidth:
                 set: true

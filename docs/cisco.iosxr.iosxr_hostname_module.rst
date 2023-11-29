@@ -133,9 +133,9 @@ Examples
     # Before state:
     # -------------
 
-    #RP/0/RP0/CPU0:ios#show running-config hostname
-    #Thu Jan 20 19:48:56.011 UTC
-    #hostname ios
+    # RP/0/RP0/CPU0:ios#show running-config hostname
+    # Thu Jan 20 19:48:56.011 UTC
+    # hostname ios
 
     # Merged play:
     # ------------
@@ -156,7 +156,7 @@ Examples
     # ------------
 
     # RP/0/0/CPU0:Router1#show running-config hostname
-    #Thu Jan 20 19:48:56.011 UTC
+    # Thu Jan 20 19:48:56.011 UTC
     # hostname Router1
 
 
@@ -165,7 +165,7 @@ Examples
     # -------------
 
     # RP/0/0/CPU0:Router1#show running-config hostname
-    #Thu Jan 20 19:48:56.011 UTC
+    # Thu Jan 20 19:48:56.011 UTC
     # hostname Router1
 
     # Deleted play:
@@ -184,9 +184,9 @@ Examples
 
     # After state:
     # ------------
-    #RP/0/RP0/CPU0:ios#show running-config hostname
-    #Thu Jan 20 19:55:12.971 UTC
-    #hostname ios
+    # RP/0/RP0/CPU0:ios#show running-config hostname
+    # Thu Jan 20 19:55:12.971 UTC
+    # hostname ios
 
     # Using state: overridden
     # Before state:
@@ -213,17 +213,17 @@ Examples
     # After state:
     # ------------
 
-    #RP/0/RP0/CPU0:RouterTest#show running-config hostname
-    #Thu Jan 20 19:48:56.011 UTC
-    #hostname RouterTest
+    # RP/0/RP0/CPU0:RouterTest#show running-config hostname
+    # Thu Jan 20 19:48:56.011 UTC
+    # hostname RouterTest
 
     # Using state: replaced
     # Before state:
     # -------------
 
-    #RP/0/RP0/CPU0:RouterTest#show running-config hostname
-    #Thu Jan 20 19:48:56.011 UTC
-    #hostname RouterTest
+    # RP/0/RP0/CPU0:RouterTest#show running-config hostname
+    # Thu Jan 20 19:48:56.011 UTC
+    # hostname RouterTest
 
     # Replaced play:
     # --------------
@@ -247,9 +247,9 @@ Examples
     # Before state:
     # -------------
 
-    #RP/0/RP0/CPU0:RouterTest#show running-config hostname
-    #Thu Jan 20 19:48:56.011 UTC
-    #hostname RouterTest
+    # RP/0/RP0/CPU0:RouterTest#show running-config hostname
+    # Thu Jan 20 19:48:56.011 UTC
+    # hostname RouterTest
 
     # Gathered play:
     # --------------

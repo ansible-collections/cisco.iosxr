@@ -709,85 +709,80 @@ EXAMPLES = """
 - name: Merge the provided configuration with the existing running configuration
   cisco.iosxr.iosxr_acls:
     config:
-    - afi: ipv6
-      acls:
-      - name: acl6_1
-        aces:
-        - sequence: 10
-          grant: deny
-          protocol: tcp
-          source:
-            prefix: 2001:db8:1234::/48
-            port_protocol:
-              range:
-                start: ftp
-                end: telnet
-          destination:
-            any: true
-          protocol_options:
-            tcp:
-              syn: true
-          ttl:
-            range:
-              start: 180
-              end: 250
-          routing: true
-          authen: true
-          log: true
-
-        - sequence: 20
-          grant: permit
-          protocol: icmpv6
-          source:
-            any: true
-          destination:
-            any: true
-          protocol_options:
-            icmpv6:
-              router_advertisement: true
-          precedence: network
-          destopts: true
-
-    - afi: ipv4
-      acls:
-      - name: acl_1
-        aces:
-        - sequence: 16
-          remark: TEST_ACL_1_REMARK
-
-        - sequence: 21
-          grant: permit
-          protocol: tcp
-          source:
-            host: 192.0.2.10
-            port_protocol:
-              range:
-                start: pop3
-                end: 121
-          destination:
-            address: 198.51.100.0
-            wildcard_bits: 0.0.0.15
-          protocol_options:
-            tcp:
-              rst: true
-
-        - sequence: 23
-          grant: deny
-          protocol: icmp
-          source:
-            any: true
-          destination:
-            prefix: 198.51.100.0/28
-          protocol_options:
-            icmp:
-              reassembly_timeout: true
-          dscp:
-            lt: af12
-
-      - name: acl_2
-        aces:
-        - sequence: 10
-          remark: TEST_ACL_2_REMARK
+      - afi: ipv6
+        acls:
+          - name: acl6_1
+            aces:
+              - sequence: 10
+                grant: deny
+                protocol: tcp
+                source:
+                  prefix: '2001:db8:1234::/48'
+                  port_protocol:
+                    range:
+                      start: ftp
+                      end: telnet
+                destination:
+                  any: true
+                protocol_options:
+                  tcp:
+                    syn: true
+                ttl:
+                  range:
+                    start: 180
+                    end: 250
+                routing: true
+                authen: true
+                log: true
+              - sequence: 20
+                grant: permit
+                protocol: icmpv6
+                source:
+                  any: true
+                destination:
+                  any: true
+                protocol_options:
+                  icmpv6:
+                    router_advertisement: true
+                precedence: network
+                destopts: true
+      - afi: ipv4
+        acls:
+          - name: acl_1
+            aces:
+              - sequence: 16
+                remark: TEST_ACL_1_REMARK
+              - sequence: 21
+                grant: permit
+                protocol: tcp
+                source:
+                  host: 192.0.2.10
+                  port_protocol:
+                    range:
+                      start: pop3
+                      end: 121
+                destination:
+                  address: 198.51.100.0
+                  wildcard_bits: 0.0.0.15
+                protocol_options:
+                  tcp:
+                    rst: true
+              - sequence: 23
+                grant: deny
+                protocol: icmp
+                source:
+                  any: true
+                destination:
+                  prefix: 198.51.100.0/28
+                protocol_options:
+                  icmp:
+                    reassembly_timeout: true
+                dscp:
+                  lt: af12
+          - name: acl_2
+            aces:
+              - sequence: 10
+                remark: TEST_ACL_2_REMARK
     state: merged
 
 # Task Output
@@ -954,7 +949,6 @@ EXAMPLES = """
                 protocol_options:
                   tcp:
                     syn: true
-
               - sequence: 23
                 protocol_options:
                   icmp:
@@ -1191,7 +1185,6 @@ EXAMPLES = """
                   any: true
                 ttl:
                   eq: 100
-
               - sequence: 12
                 grant: deny
                 source:
@@ -1440,7 +1433,6 @@ EXAMPLES = """
                 destination:
                   any: true
                 protocol: tcp
-
           - name: acl_2
             aces:
               - sequence: 20
@@ -2110,27 +2102,26 @@ EXAMPLES = """
 - name: Render platform specific commands (without connecting to the device)
   cisco.iosxr.iosxr_acls:
     config:
-    - afi: ipv4
-      acls:
-      - name: acl_2
-        aces:
-        - sequence: 11
-          grant: permit
-          protocol: igmp
-          source:
-            host: 198.51.100.130
-          destination:
-            any: true
-          ttl:
-            eq: 100
-
-        - sequence: 12
-          grant: deny
-          source:
-            any: true
-          destination:
-            any: true
-          protocol: icmp
+      - afi: ipv4
+        acls:
+          - name: acl_2
+            aces:
+              - sequence: 11
+                grant: permit
+                protocol: igmp
+                source:
+                  host: 198.51.100.130
+                destination:
+                  any: true
+                ttl:
+                  eq: 100
+              - sequence: 12
+                grant: deny
+                source:
+                  any: true
+                destination:
+                  any: true
+                protocol: icmp
     state: rendered
 
 # Task Output (redacted)

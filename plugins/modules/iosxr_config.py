@@ -195,28 +195,26 @@ EXAMPLES = """
 - name: configure interface settings
   cisco.iosxr.iosxr_config:
     lines:
-    - description test interface
-    - ip address 172.31.1.1 255.255.255.0
+      - description test interface
+      - ip address 172.31.1.1 255.255.255.0
     parents: interface GigabitEthernet0/0/0/0
 
 - name: load a config from disk and replace the current config
   cisco.iosxr.iosxr_config:
     src: config.cfg
     replace: config
-    backup: yes
+    backup: 'yes'
 
-- name: for idempotency, use full-form commands
+- name: 'for idempotency, use full-form commands'
   cisco.iosxr.iosxr_config:
     lines:
-      # - shut
-    - shutdown
-    # parents: int g0/0/0/1
+      - shutdown
     parents: interface GigabitEthernet0/0/0/1
 
 - name: configurable backup path
   cisco.iosxr.iosxr_config:
     src: config.cfg
-    backup: yes
+    backup: true
     backup_options:
       filename: backup.cfg
       dir_path: /home/user
@@ -224,6 +222,11 @@ EXAMPLES = """
 
 RETURN = """
 commands:
+  description: The set of commands that will be pushed to the remote device
+  returned: If there are commands to run against the host
+  type: list
+  sample: ['hostname foo', 'router ospf 1', 'router-id 1.1.1.1']
+updates:
   description: The set of commands that will be pushed to the remote device
   returned: If there are commands to run against the host
   type: list
@@ -345,7 +348,6 @@ def run(module, result):
     exclusive = module.params["exclusive"]
     check_mode = module.check_mode
     label = module.params["label"]
-
     candidate_config = get_candidate(module)
     running_config = get_running_config(module)
 
@@ -393,6 +395,7 @@ def run(module, result):
                 commands.extend(module.params["after"])
 
             result["commands"] = commands
+            result["updates"] = commands
 
         commit = not check_mode
         diff = load_config(
@@ -438,9 +441,9 @@ def main():
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
 
     required_if = [
-        ("match", "strict", ["lines"]),
-        ("match", "exact", ["lines"]),
-        ("replace", "block", ["lines"]),
+        ("match", "strict", ["lines", "src"], True),
+        ("match", "exact", ["lines", "src"], True),
+        ("replace", "block", ["lines", "src"], True),
         ("replace", "config", ["src"]),
     ]
 

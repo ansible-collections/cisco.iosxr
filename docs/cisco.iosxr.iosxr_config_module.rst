@@ -375,28 +375,26 @@ Examples
     - name: configure interface settings
       cisco.iosxr.iosxr_config:
         lines:
-        - description test interface
-        - ip address 172.31.1.1 255.255.255.0
+          - description test interface
+          - ip address 172.31.1.1 255.255.255.0
         parents: interface GigabitEthernet0/0/0/0
 
     - name: load a config from disk and replace the current config
       cisco.iosxr.iosxr_config:
         src: config.cfg
         replace: config
-        backup: yes
+        backup: 'yes'
 
-    - name: for idempotency, use full-form commands
+    - name: 'for idempotency, use full-form commands'
       cisco.iosxr.iosxr_config:
         lines:
-          # - shut
-        - shutdown
-        # parents: int g0/0/0/1
+          - shutdown
         parents: interface GigabitEthernet0/0/0/1
 
     - name: configurable backup path
       cisco.iosxr.iosxr_config:
         src: config.cfg
-        backup: yes
+        backup: true
         backup_options:
           filename: backup.cfg
           dir_path: /home/user
@@ -515,6 +513,23 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">22:28:34</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>updates</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>If there are commands to run against the host</td>
+                <td>
+                            <div>The set of commands that will be pushed to the remote device</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;hostname foo&#x27;, &#x27;router ospf 1&#x27;, &#x27;router-id 1.1.1.1&#x27;]</div>
                 </td>
             </tr>
     </table>

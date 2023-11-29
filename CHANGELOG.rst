@@ -5,6 +5,29 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v6.1.1
+======
+
+Bugfixes
+--------
+
+- Fix issue in gathered state of interfaces and l3_interfaces RMs(https://github.com/ansible-collections/cisco.iosxr/issues/452, https://github.com/ansible-collections/cisco.iosxr/issues/451)
+
+v6.1.0
+======
+
+Minor Changes
+-------------
+
+- iosxr_config - Relax restrictions on I(src) parameter so it can be used more like I(lines). (https://github.com/ansible-collections/cisco.iosxr/issues/343).
+- iosxr_config Add updates option in return value(https://github.com/ansible-collections/cisco.iosxr/issues/438).
+
+Documentation Changes
+---------------------
+
+- Fix docs for prefix_lists RM.
+- iosxr_acls - update examples and use YAML output in them for better readibility.
+
 v6.0.1
 ======
 
