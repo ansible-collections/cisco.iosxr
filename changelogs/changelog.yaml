@@ -677,3 +677,27 @@ releases:
       - fix_iosxr_config.yaml
       - prefix_list_doc.yaml
     release_date: "2023-10-30"
+  6.1.1:
+    changes:
+      bugfixes:
+        - Fix issue in gathered state of interfaces and l3_interfaces RMs(https://github.com/ansible-collections/cisco.iosxr/issues/452,
+          https://github.com/ansible-collections/cisco.iosxr/issues/451)
+    fragments:
+      - bugfix_interfaces.yaml
+      - fix_acl_interfaces.yaml
+      - fix_python_version.yaml
+      - revert_pylibssh_depn.yaml
+    release_date: "2023-11-27"
+  7.0.0:
+    changes:
+      major_changes:
+        - Bumping `requires_ansible` to `>=2.14.0`, since previous ansible-core versions
+          are EoL now.
+      release_summary:
+        Starting from this release, the minimum `ansible-core` version
+        this collection requires is `2.14.0`. The last known version compatible with
+        ansible-core<2.14 is `v6.1.1`.
+    fragments:
+      - trivial_lint.yaml
+      - update_ansible_version.yaml
+    release_date: "2023-11-30"
