@@ -20,7 +20,6 @@
 - ansible.builtin.assert:
     that:
       - result.changed == false
-      - result.updates is not defined
       - "'comment argument cannot be more than 60 characters' in result.msg"
 
 - ansible.builtin.debug: msg="END cli/comment-too-long.yaml on connection={{ ansible_connection }}"

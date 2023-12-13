@@ -1,0 +1,3 @@
+---
+trivial:
+  - Fix iosxr_config integration tests
