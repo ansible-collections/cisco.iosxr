@@ -131,3 +131,19 @@ class TestIosxrFacts(TestIosxrModule):
             ansible_facts["ansible_net_cpu_utilization"],
             cpu_utilization_data,
         )
+
+    def test_iosxr_facts_neighbors(self):
+        set_module_args(dict(gather_subset="interfaces"))
+        result = self.execute_module()
+        ansible_facts = result["ansible_facts"]["ansible_net_neighbors"]
+        expected_neighbors = {
+            "Ethernet0/1": [
+                {
+                    "host": "device2.cisco.com",
+                    "platform": "cisco 4500",
+                    "port": "Ethernet0",
+                    "ip": "171.68.162.134",
+                },
+            ],
+        }
+        self.assertCountEqual(ansible_facts.keys(), expected_neighbors.keys())

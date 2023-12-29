@@ -31,3 +31,9 @@
     that:
       - result2.changed == true
       - result1.commands == result2.commands
+
+- name: Cleanup
+  cisco.iosxr.iosxr_config:
+    commands:
+      - no interface GigabitEthernet 0/0/0/5
+  ignore_errors: true

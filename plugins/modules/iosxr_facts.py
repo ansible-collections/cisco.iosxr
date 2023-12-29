@@ -172,7 +172,8 @@ ansible_net_interfaces:
   returned: when interfaces is configured
   type: dict
 ansible_net_neighbors:
-  description: The list of LLDP neighbors from the remote device
+  description: The list of LLDP and CDP neighbors from the remote device. If both,
+      CDP and LLDP neighbor data is present on one port, CDP is preferred.
   returned: when interfaces is configured
   type: dict
 
