@@ -701,3 +701,11 @@ releases:
       - trivial_lint.yaml
       - update_ansible_version.yaml
     release_date: "2023-11-30"
+  7.1.0:
+    changes:
+      minor_changes:
+        - iosxr_facts - Add cdp neighbors in ansible_net_neighbors dictionary (https://github.com/ansible-collections/cisco.iosxr/pull/457).
+    fragments:
+      - fix_add_cdp_neighbors.yaml
+      - fix_iosxr_config.yaml
+    release_date: "2024-01-08"
