@@ -1,0 +1,14 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_prefix_lists parsed integration tests on connection={{ ansible_connection }}
+
+- name: Parse externally provided prefix_lists configuration to agnostic model
+  register: result
+  cisco.iosxr.iosxr_prefix_lists:
+    running_config: "{{ lookup('file', './fixtures/parsed.cfg') }}"
+    state: parsed
+
+- name: Assert that configuration was correctly parsed
+  ansible.builtin.assert:
+    that:
+      - "{{ parsed | symmetric_difference(result['parsed']) |length == 0 }}"

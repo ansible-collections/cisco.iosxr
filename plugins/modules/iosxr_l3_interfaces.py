@@ -28,12 +28,13 @@ The module file for ios_l3_interfaces
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 DOCUMENTATION = """
 module: iosxr_l3_interfaces
-short_description: L3 interfaces resource module
+short_description: Resource module to configure L3 interfaces.
 description: This module provides declarative management of Layer-3 interface on Cisco
   IOS-XR devices.
 version_added: 1.0.0
@@ -41,7 +42,6 @@ author:
 - Sumit Jaiswal (@justjais)
 - Rohit Thakur (@rohitthakur2590)
 notes:
-- Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 options:
   config:
@@ -113,56 +113,70 @@ EXAMPLES = """
 # -------------
 #
 # viosxr#show running-config interface
-# interface GigabitEthernet0/0/0/1
-#  shutdown
+# interface Loopback888
 # !
-# interface GigabitEthernet0/0/0/2
-#  shutdown
+# interface Loopback999
 # !
-# interface GigabitEthernet0/0/0/3
-#  ipv4 address 192.168.0.2 255.255.255.0
-#  shutdown
+# interface MgmtEth0/RP0/CPU0/0
+#  ipv4 address dhcp
 # !
-# interface GigabitEthernet0/0/0/3.700
+# interface preconfigure GigabitEthernet0/0/0/2
 # !
-# interface GigabitEthernet0/0/0/4
-#  ipv6 address fd5d:12c9:2201:1::1/64
-#  shutdown
+# interface preconfigure GigabitEthernet0/0/0/3
 # !
 
 - name: Merge provided configuration with device configuration
   cisco.iosxr.iosxr_l3_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/2
-      ipv4:
-      - address: 192.168.0.1/24
-    - name: GigabitEthernet0/0/0/3
-      ipv4:
-      - address: 192.168.2.1/24
-        secondary: true
+      - name: GigabitEthernet0/0/0/2
+        ipv4:
+          - address: 192.168.0.1/24
+      - name: GigabitEthernet0/0/0/3
+        ipv4:
+          - address: 192.168.2.1/24
+            secondary: true
     state: merged
+
+# Task Output
+# -----------
+#
+# before:
+# - name: Loopback888
+# - name: Loopback999
+# - name: GigabitEthernet0/0/0/2
+# - name: GigabitEthernet0/0/0/3
+# commands:
+# - interface GigabitEthernet0/0/0/2
+# - ipv4 address 192.168.0.1 255.255.255.0
+# - interface GigabitEthernet0/0/0/3
+# - ipv4 address 192.168.2.1 255.255.255.0 secondary
+# after:
+# - name: Loopback888
+# - name: Loopback999
+# - ipv4:
+#   - address: 192.168.0.1/24
+#   name: GigabitEthernet0/0/0/2
+# - ipv4:
+#   - address: 192.168.2.1/24
+#     secondary: true
+#   name: GigabitEthernet0/0/0/3
 
 # After state:
 # ------------
 #
 # viosxr#show running-config interface
-# interface GigabitEthernet0/0/0/1
-#  shutdown
+# interface Loopback888
 # !
-# interface GigabitEthernet0/0/0/2
+# interface Loopback999
+# !
+# interface MgmtEth0/RP0/CPU0/0
+#  ipv4 address dhcp
+# !
+# interface preconfigure GigabitEthernet0/0/0/2
 #  ipv4 address 192.168.0.1 255.255.255.0
-#  shutdown
 # !
-# interface GigabitEthernet0/0/0/3
-#  ipv4 address 192.168.1.0 255.255.255.0
+# interface preconfigure GigabitEthernet0/0/0/3
 #  ipv4 address 192.168.2.1 255.255.255.0 secondary
-#  shutdown
-# !
-# interface GigabitEthernet0/0/0/3.700
-# !
-# interface GigabitEthernet0/0/0/4
-#  ipv6 address fd5d:12c9:2201:1::1/64
-#  shutdown
 # !
 
 # Using overridden
@@ -171,57 +185,76 @@ EXAMPLES = """
 # -------------
 #
 # viosxr#show running-config interface
-# interface GigabitEthernet0/0/0/1
-#  shutdown
+# interface Loopback888
 # !
-# interface GigabitEthernet0/0/0/2
+# interface Loopback999
+# !
+# interface MgmtEth0/RP0/CPU0/0
+#  ipv4 address dhcp
+# !
+# interface preconfigure GigabitEthernet0/0/0/2
 #  ipv4 address 192.168.0.1 255.255.255.0
-#  shutdown
 # !
-# interface GigabitEthernet0/0/0/3
-#  ipv4 address 192.168.1.0 255.255.255.0
-#  shutdown
-# !
-# interface GigabitEthernet0/0/0/3.700
-# !
-# interface GigabitEthernet0/0/0/4
-#  ipv6 address fd5d:12c9:2201:1::1/64
-#  shutdown
+# interface preconfigure GigabitEthernet0/0/0/3
+#  ipv4 address 192.168.2.1 255.255.255.0 secondary
 # !
 
 - name: Override device configuration of all interfaces with provided configuration
   cisco.iosxr.iosxr_l3_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/3
-      ipv4:
-      - address: 192.168.0.1/24
-    - name: GigabitEthernet0/0/0/3.700
-      ipv4:
-      - address: 192.168.0.2/24
-      - address: 192.168.2.1/24
-        secondary: true
+      - name: GigabitEthernet0/0/0/3
+        ipv4:
+          - address: 192.168.0.2/24
+          - address: 192.168.2.1/24
+            secondary: true
     state: overridden
+
+
+# Task Output
+# -----------
+#
+# before:
+# - name: Loopback888
+# - name: Loopback999
+# - ipv4:
+#   - address: 192.168.0.1/24
+#   name: GigabitEthernet0/0/0/2
+# - ipv4:
+#   - address: 192.168.2.1/24
+#     secondary: true
+#   name: GigabitEthernet0/0/0/3
+# commands:
+# - interface GigabitEthernet0/0/0/2
+# - no ipv4 address
+# - interface GigabitEthernet0/0/0/3
+# - ipv4 address 192.168.0.2 255.255.255.0
+# - ipv4 address 192.168.0.1 255.255.255.0
+# after:
+# - name: Loopback888
+# - name: Loopback999
+# - name: GigabitEthernet0/0/0/2
+# - ipv4:
+#   - address: 192.168.0.1/24
+#   - address: 192.168.2.1/24
+#     secondary: true
+#   name: GigabitEthernet0/0/0/3
 
 # After state:
 # -------------
 #
 # viosxr#show running-config interface
-# interface GigabitEthernet0/0/0/1
-#  shutdown
+# interface Loopback888
 # !
-# interface GigabitEthernet0/0/0/2
-#  shutdown
+# interface Loopback999
 # !
-# interface GigabitEthernet0/0/0/3
+# interface MgmtEth0/RP0/CPU0/0
+#  ipv4 address dhcp
+# !
+# interface preconfigure GigabitEthernet0/0/0/2
+# !
+# interface preconfigure GigabitEthernet0/0/0/3
 #  ipv4 address 192.168.0.1 255.255.255.0
-#  shutdown
-# !
-# interface GigabitEthernet0/0/0/3.700
-#  ipv4 address 192.168.0.2 255.255.255.0
 #  ipv4 address 192.168.2.1 255.255.255.0 secondary
-# !
-# interface GigabitEthernet0/0/0/4
-#  shutdown
 # !
 
 # Using replaced
@@ -230,55 +263,78 @@ EXAMPLES = """
 # -------------
 #
 # viosxr#show running-config interface
-# interface GigabitEthernet0/0/0/1
-#  shutdown
+# interface Loopback888
 # !
-# interface GigabitEthernet0/0/0/2
-#  shutdown
+# interface Loopback999
 # !
-# interface GigabitEthernet0/0/0/3
-#  ipv4 address 192.168.0.2 255.255.255.0
-#  shutdown
+# interface MgmtEth0/RP0/CPU0/0
+#  ipv4 address dhcp
 # !
-# interface GigabitEthernet0/0/0/3.700
+# interface preconfigure GigabitEthernet0/0/0/2
+# !
+# interface preconfigure GigabitEthernet0/0/0/3
 #  ipv4 address 192.168.0.1 255.255.255.0
-# !
-# interface GigabitEthernet0/0/0/4
-#  ipv6 address fd5d:12c9:2201:1::1/64
-#  shutdown
+#  ipv4 address 192.168.2.1 255.255.255.0 secondary
 # !
 
-- name: Replaces device configuration of listed interfaces with provided configuration
+- name: >-
+    Replaces device configuration of listed interfaces with provided
+    configuration
   cisco.iosxr.iosxr_l3_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/3
-      ipv6:
-      - address: fd5d:12c9:2201:1::1/64
-    - name: GigabitEthernet0/0/0/4
-      ipv4:
-      - address: 192.168.0.2/24
+      - name: GigabitEthernet0/0/0/3
+        ipv6:
+          - address: 'fd5d:12c9:2201:1::1/64'
+      - name: GigabitEthernet0/0/0/2
+        ipv4:
+          - address: 192.168.0.2/24
     state: replaced
+
+
+# Task Output
+# -----------
+#
+# before:
+# - name: Loopback888
+# - name: Loopback999
+# - name: GigabitEthernet0/0/0/2
+# - ipv4:
+#   - address: 192.168.0.1/24
+#   - address: 192.168.2.1/24
+#     secondary: true
+#   name: GigabitEthernet0/0/0/3
+# commands:
+# - interface GigabitEthernet0/0/0/3
+# - no ipv4 address
+# - ipv6 address fd5d:12c9:2201:1::1/64
+# - interface GigabitEthernet0/0/0/2
+# - ipv4 address 192.168.0.2 255.255.255.0
+# after:
+# - name: Loopback888
+# - name: Loopback999
+# - ipv4:
+#   - address: 192.168.0.2/24
+#   name: GigabitEthernet0/0/0/2
+# - ipv6:
+#   - address: fd5d:12c9:2201:1::1/64
+#   name: GigabitEthernet0/0/0/3
 
 # After state:
 # -------------
 #
 # viosxr#show running-config interface
-# interface GigabitEthernet0/0/0/1
-#  shutdown
+# interface Loopback888
 # !
-# interface GigabitEthernet0/0/0/2
-#  shutdown
+# interface Loopback999
 # !
-# interface GigabitEthernet0/0/0/3
-#  ipv6 address fd5d:12c9:2201:1::1/64
-#  shutdown
+# interface MgmtEth0/RP0/CPU0/0
+#  ipv4 address dhcp
 # !
-# interface GigabitEthernet0/0/0/3.700
-#  ipv4 address 192.168.0.1 255.255.255.0
-# !
-# interface GigabitEthernet0/0/0/4
+# interface preconfigure GigabitEthernet0/0/0/2
 #  ipv4 address 192.168.0.2 255.255.255.0
-#  shutdown
+# !
+# interface preconfigure GigabitEthernet0/0/0/3
+#  ipv6 address fd5d:12c9:2201:1::1/64
 # !
 
 # Using deleted
@@ -287,112 +343,180 @@ EXAMPLES = """
 # -------------
 #
 # viosxr#show running-config interface
-# interface GigabitEthernet0/0/0/1
-#  ipv4 address 192.168.2.1 255.255.255.0
-#  shutdown
+# interface Loopback888
 # !
-# interface GigabitEthernet0/0/0/2
-#  ipv4 address 192.168.3.1 255.255.255.0
-#  shutdown
+# interface Loopback999
 # !
-# interface GigabitEthernet0/0/0/3
+# interface MgmtEth0/RP0/CPU0/0
+#  ipv4 address dhcp
+# !
+# interface preconfigure GigabitEthernet0/0/0/2
 #  ipv4 address 192.168.0.2 255.255.255.0
-#  shutdown
 # !
-# interface GigabitEthernet0/0/0/3.700
-#  ipv4 address 192.168.0.1 255.255.255.0
-# !
-# interface GigabitEthernet0/0/0/4
+# interface preconfigure GigabitEthernet0/0/0/3
 #  ipv6 address fd5d:12c9:2201:1::1/64
-#  shutdown
 # !
 
-- name: "Delete L3 attributes of given interfaces (Note: This won't delete the interface itself)"
+- name: Delete attributes for interfaces (This won't delete the interface itself)
   cisco.iosxr.iosxr_l3_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/3
-    - name: GigabitEthernet0/0/0/4
-    - name: GigabitEthernet0/0/0/3.700
+      - name: GigabitEthernet0/0/0/3
+      - name: GigabitEthernet0/0/0/4
+      - name: GigabitEthernet0/0/0/3.700
     state: deleted
+
+
+# Task Output
+# -----------
+#
+# before:
+# - name: Loopback888
+# - name: Loopback999
+# - ipv4:
+#   - address: 192.168.0.2/24
+#   name: GigabitEthernet0/0/0/2
+# - ipv6:
+#   - address: fd5d:12c9:2201:1::1/64
+#   name: GigabitEthernet0/0/0/3
+# commands:
+# - interface GigabitEthernet0/0/0/3
+# - no ipv6 address
+# after:
+# - name: Loopback888
+# - name: Loopback999
+# - ipv4:
+#   - address: 192.168.0.2/24
+#   name: GigabitEthernet0/0/0/2
+# - name: GigabitEthernet0/0/0/3
 
 # After state:
 # -------------
 #
 # viosxr#show running-config interface
-# interface GigabitEthernet0/0/0/1
-#  ipv4 address 192.168.2.1 255.255.255.0
-#  shutdown
+# interface Loopback888
 # !
-# interface GigabitEthernet0/0/0/2
-#  ipv4 address 192.168.3.1 255.255.255.0
-#  shutdown
+# interface Loopback999
 # !
-# interface GigabitEthernet0/0/0/3
-#  shutdown
+# interface MgmtEth0/RP0/CPU0/0
+#  ipv4 address dhcp
 # !
-# interface GigabitEthernet0/0/0/3.700
+# interface preconfigure GigabitEthernet0/0/0/2
+#  ipv4 address 192.168.0.2 255.255.255.0
 # !
-# interface GigabitEthernet0/0/0/4
-#  shutdown
+# interface preconfigure GigabitEthernet0/0/0/3
 # !
 
-# Using Deleted without any config passed
-# "(NOTE: This will delete all of configured resource module attributes from each configured interface)"
+# Using deleted - will delete all interface configuration and not interface
 
 # Before state:
 # -------------
 #
 # viosxr#show running-config interface
-# interface GigabitEthernet0/0/0/1
+# interface Loopback888
+# !
+# interface Loopback999
+# !
+# interface MgmtEth0/RP0/CPU0/0
+#  ipv4 address dhcp
+# !
+# interface preconfigure GigabitEthernet0/0/0/1
 #  ipv4 address 192.168.2.1 255.255.255.0
 #  shutdown
 # !
-# interface GigabitEthernet0/0/0/2
+# interface preconfigure GigabitEthernet0/0/0/2
 #  ipv4 address 192.168.3.1 255.255.255.0
 #  shutdown
 # !
-# interface GigabitEthernet0/0/0/3
+# interface preconfigure GigabitEthernet0/0/0/3
 #  ipv4 address 192.168.0.2 255.255.255.0
 #  shutdown
 # !
-# interface GigabitEthernet0/0/0/3.700
+# interface preconfigure GigabitEthernet0/0/0/3.700
 #  ipv4 address 192.168.0.1 255.255.255.0
 # !
-# interface GigabitEthernet0/0/0/4
+# interface preconfigure GigabitEthernet0/0/0/4
 #  ipv6 address fd5d:12c9:2201:1::1/64
 #  shutdown
 # !
 
-
-- name: "Delete L3 attributes of all interfaces (Note: This won't delete the interface itself)"
+- name: "Delete L3 config of all interfaces (This won't delete the interface itself)"
   cisco.iosxr.iosxr_l3_interfaces:
     state: deleted
+
+# Task Output
+# -----------
+#
+# before:
+# - name: Loopback888
+# - name: Loopback999
+# - ipv4:
+#   - address: 192.168.2.1/24
+#   name: GigabitEthernet0/0/0/1
+# - ipv4:
+#   - address: 192.168.3.1/24
+#   name: GigabitEthernet0/0/0/2
+# - ipv4:
+#   - address: 192.168.0.2/24
+#   name: GigabitEthernet0/0/0/3
+# - ipv4:
+#   - address: 192.168.0.1/24
+#   name: GigabitEthernet0/0/0/3.700
+# - ipv6:
+#   - address: fd5d:12c9:2201:1::1/64
+#   name: GigabitEthernet0/0/0/4
+# commands:
+# - interface GigabitEthernet0/0/0/1
+# - no ipv4 address
+# - interface GigabitEthernet0/0/0/2
+# - no ipv4 address
+# - interface GigabitEthernet0/0/0/3
+# - no ipv4 address
+# - interface GigabitEthernet0/0/0/3.700
+# - no ipv4 address
+# - interface GigabitEthernet0/0/0/4
+# - no ipv6 address
+# after:
+# - name: Loopback888
+# - name: Loopback999
+# - name: GigabitEthernet0/0/0/1
+# - name: GigabitEthernet0/0/0/2
+# - name: GigabitEthernet0/0/0/3
+# - name: GigabitEthernet0/0/0/3.700
+# - name: GigabitEthernet0/0/0/4
 
 # After state:
 # -------------
 #
 # viosxr#show running-config interface
-# interface GigabitEthernet0/0/0/1
+# interface Loopback888
+# !
+# interface Loopback999
+# !
+# interface MgmtEth0/RP0/CPU0/0
+#  ipv4 address dhcp
+# !
+# interface preconfigure GigabitEthernet0/0/0/1
 #  shutdown
 # !
-# interface GigabitEthernet0/0/0/2
+# interface preconfigure GigabitEthernet0/0/0/2
 #  shutdown
 # !
-# interface GigabitEthernet0/0/0/3
+# interface preconfigure GigabitEthernet0/0/0/3
 #  shutdown
 # !
-# interface GigabitEthernet0/0/0/3.700
+# interface preconfigure GigabitEthernet0/0/0/3.700
 # !
-# interface GigabitEthernet0/0/0/4
+# interface preconfigure GigabitEthernet0/0/0/4
 #  shutdown
 # !
 
 
 # Using parsed
-# parsed.cfg
-# ------------
+
+# File: parsed.cfg
+# ----------------
 #
-# nterface Loopback888
+# interface Loopback888
 #  description test for ansible
 #  shutdown
 # !
@@ -423,79 +547,60 @@ EXAMPLES = """
 #  ipv4 address 192.0.22.1 255.255.255.0
 #  ipv4 address 192.0.23.1 255.255.255.0
 # !
-# - name: Convert L3 interfaces config to argspec without connecting to the appliance
-#   cisco.iosxr.iosxr_l3_interfaces:
-#     running_config: "{{ lookup('file', './parsed.cfg') }}"
-#     state: parsed
-# Task Output (redacted)
-# -----------------------
-# "parsed": [
-#         {
-#             "ipv4": [
-#                 {
-#                     "address": "192.0.2.1 255.255.255.0"
-#                 },
-#                 {
-#                     "address": "192.0.2.2 255.255.255.0",
-#                     "secondary": true
-#                 }
-#             ],
-#             "ipv6": [
-#                 {
-#                     "address": "2001:db8:0:3::/64"
-#                 }
-#             ],
-#             "name": "GigabitEthernet0/0/0/0"
-#         },
-#         {
-#             "name": "GigabitEthernet0/0/0/1"
-#         },
-#         {
-#             "ipv4": [
-#                 {
-#                     "address": "192.0.22.1 255.255.255.0"
-#                 },
-#                 {
-#                     "address": "192.0.23.1 255.255.255.0"
-#                 }
-#             ],
-#             "name": "GigabitEthernet0/0/0/3"
-#         }
-#     ]
 
+- name: Convert L3 interfaces config to argspec without connecting to the appliance
+  cisco.iosxr.iosxr_l3_interfaces:
+    running_config: "{{ lookup('file', './parsed.cfg') }}"
+    state: parsed
+
+# Task Output
+# -----------
+#
+# parsed:
+# - ipv4:
+#   - address: 192.0.2.1 255.255.255.0
+#   - address: 192.0.2.2 255.255.255.0
+#     secondary: true
+#   ipv6:
+#   - address: 2001:db8:0:3::/64
+#   name: GigabitEthernet0/0/0/0
+# - name: GigabitEthernet0/0/0/1
+# - ipv4:
+#   - address: 192.0.22.1 255.255.255.0
+#   - address: 192.0.23.1 255.255.255.0
+#   name: GigabitEthernet0/0/0/3
 
 # Using rendered
+
 - name: Render platform specific commands from task input using rendered state
   cisco.iosxr.iosxr_l3_interfaces:
     config:
-
-    - name: GigabitEthernet0/0/0/0
-      ipv4:
-
-      - address: 198.51.100.1/24
-
-    - name: GigabitEthernet0/0/0/1
-      ipv6:
-
-      - address: 2001:db8:0:3::/64
-      ipv4:
-
-      - address: 192.0.2.1/24
-
-      - address: 192.0.2.2/24
-        secondary: true
+      - name: GigabitEthernet0/0/0/0
+        ipv4:
+          - address: 198.51.100.1/24
+      - name: GigabitEthernet0/0/0/1
+        ipv6:
+          - address: '2001:db8:0:3::/64'
+        ipv4:
+          - address: 192.0.2.1/24
+          - address: 192.0.2.2/24
+            secondary: true
     state: rendered
-# Task Output (redacted)
-# -----------------------
-# "rendered": [
-#         "interface GigabitEthernet0/0/0/0",
-#         "ipv4 address 198.51.100.1 255.255.255.0",
-#         "interface GigabitEthernet0/0/0/1",
-#         "ipv4 address 192.0.2.2 255.255.255.0 secondary",
-#         "ipv4 address 192.0.2.1 255.255.255.0",
-#         "ipv6 address 2001:db8:0:3::/64"
-#     ]
+
+
+# Task Output
+# -----------
+#
+# rendered:
+# - interface GigabitEthernet0/0/0/0
+# - ipv4 address 198.51.100.1 255.255.255.0
+# - interface GigabitEthernet0/0/0/1
+# - ipv4 address 192.0.2.2 255.255.255.0 secondary
+# - ipv4 address 192.0.2.1 255.255.255.0
+# - ipv6 address 2001:db8:0:3::/64
+
 # Using gathered
+
 # Before state:
 # ------------
 #
@@ -534,84 +639,27 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 40
 # !
-- name: Gather IOSXR l3 interfaces as in given arguments
+
+- name: Gather l3 interfaces facts
   cisco.iosxr.iosxr_l3_interfaces:
     config:
     state: gathered
-# Task Output (redacted)
-# -----------------------
-#
-# "gathered": [
-#         {
-#             "name": "Loopback888"
-#         },
-#         {
-#             "ipv4": [
-#                 {
-#                     "address": "192.0.2.1 255.255.255.0"
-#                 },
-#                 {
-#                     "address": "192.0.2.2 255.255.255.0",
-#                     "secondary": true
-#                 }
-#             ],
-#             "ipv6": [
-#                 {
-#                     "address": "2001:db8:0:3::/64"
-#                 }
-#             ],
-#             "name": "GigabitEthernet0/0/0/0"
-#         },
-#         {
-#             "name": "GigabitEthernet0/0/0/1"
-#         },
-#         {
-#             "name": "GigabitEthernet0/0/0/3"
-#         },
-#         {
-#             "name": "GigabitEthernet0/0/0/4"
-#         }
-#     ]
-# After state:
-# ------------
-#
-# RP/0/0/CPU0:an-iosxr-02#show running-config  interface
-# interface Loopback888
-#  description test for ansible
-#  shutdown
-# !
-# interface MgmtEth0/0/CPU0/0
-#  ipv4 address 10.8.38.70 255.255.255.0
-# !
-# interface GigabitEthernet0/0/0/0
-#  description Configured and Merged by Ansible-Network
-#  mtu 66
-#  ipv4 address 192.0.2.1 255.255.255.0
-#  ipv4 address 192.0.2.2 255.255.255.0 secondary
-#  ipv6 address 2001:db8:0:3::/64
-#  duplex half
-# !
-# interface GigabitEthernet0/0/0/1
-#  description Configured and Merged by Ansible-Network
-#  mtu 66
-#  speed 100
-#  duplex full
-#  dot1q native vlan 10
-#  l2transport
-#   l2protocol cdp forward
-#   l2protocol pvst tunnel
-#   propagate remote-status
-#  !
-# !
-# interface GigabitEthernet0/0/0/3
-#  shutdown
-# !
-# interface GigabitEthernet0/0/0/4
-#  shutdown
-#  dot1q native vlan 40
-# !
 
-
+# Task Output
+# -----------
+#
+# gathered:
+# - name: Loopback888
+# - ipv4:
+#   - address: 192.0.2.1 255.255.255.0
+#   - address: 192.0.2.2 255.255.255.0
+#     secondary: true
+#   ipv6:
+#   - address: 2001:db8:0:3::/64
+#   name: GigabitEthernet0/0/0/0
+# - name: GigabitEthernet0/0/0/1
+# - name: GigabitEthernet0/0/0/3
+# - name: GigabitEthernet0/0/0/4
 """
 
 RETURN = """
@@ -634,6 +682,7 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.l3_interfaces.l3_interfaces import (
     L3_InterfacesArgs,
 )

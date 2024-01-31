@@ -13,22 +13,23 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 import platform
 import re
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    run_commands,
-    get_capabilities,
-)
 from ansible.module_utils.six import iteritems
 from ansible.module_utils.six.moves import zip
 
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    get_capabilities,
+    run_commands,
+)
+
 
 class FactsBase(object):
-
     COMMANDS = frozenset()
 
     def __init__(self, module):
@@ -39,7 +40,9 @@ class FactsBase(object):
 
     def populate(self):
         self.responses = run_commands(
-            self.module, list(self.COMMANDS), check_rc=False
+            self.module,
+            list(self.COMMANDS),
+            check_rc=False,
         )
 
 
@@ -54,8 +57,7 @@ class Default(FactsBase):
         device_info = resp["device_info"]
 
         platform_facts["system"] = device_info["network_os"]
-
-        for item in ("model", "image", "version", "platform", "hostname"):
+        for item in ("serialnum", "model", "image", "version", "platform", "hostname"):
             val = device_info.get("network_os_%s" % item)
             if val:
                 platform_facts[item] = val
@@ -67,13 +69,14 @@ class Default(FactsBase):
 
 
 class Hardware(FactsBase):
-
-    COMMANDS = ["dir /all", "show memory summary"]
+    COMMANDS = ["dir /all", "show memory summary", "show processes cpu | include CPU utilization"]
 
     def populate(self):
         super(Hardware, self).populate()
+
         data = self.responses[0]
         self.facts["filesystems"] = self.parse_filesystems(data)
+        self.facts["cpu_utilization"] = self.parse_cpu_utilization(self.responses[2])
 
         data = self.responses[1]
         match = re.search(r"Physical Memory: (\d+)M total \((\d+)", data)
@@ -84,9 +87,29 @@ class Hardware(FactsBase):
     def parse_filesystems(self, data):
         return re.findall(r"^Directory of (\S+)", data, re.M)
 
+    def parse_cpu_utilization(self, data):
+        facts = {}
+        cpu_utilization_regex = re.compile(
+            r"""
+            ^CPU\sutilization\sfor\sone\sminute:(\s(?P<one_min>[0-9]+)?%)?;
+            \sfive\sminutes:\s(?P<five_mins>[0-9]+)?%;
+            \sfifteen\sminutes:\s(?P<fifteen_mins>[0-9]+)?%
+            """,
+            re.VERBOSE,
+        )
+
+        for line in data.split("\n"):
+            cpu_utilization_match = cpu_utilization_regex.match(line)
+
+            if cpu_utilization_match:
+                facts["one_minute"] = int(cpu_utilization_match.group("one_min"))
+                facts["five_minutes"] = int(cpu_utilization_match.group("five_mins"))
+                facts["fifteen_minutes"] = int(cpu_utilization_match.group("fifteen_mins"))
+
+        return facts
+
 
 class Config(FactsBase):
-
     COMMANDS = ["show running-config"]
 
     def populate(self):
@@ -95,12 +118,13 @@ class Config(FactsBase):
 
 
 class Interfaces(FactsBase):
-
     COMMANDS = [
         "show interfaces",
         "show ipv6 interface",
         "show lldp",
         "show lldp neighbors detail",
+        "show cdp",
+        "show cdp neighbors detail",
     ]
 
     def populate(self):
@@ -119,6 +143,10 @@ class Interfaces(FactsBase):
         if "LLDP is not enabled" not in self.responses[2]:
             neighbors = self.responses[3]
             self.facts["neighbors"] = self.parse_neighbors(neighbors)
+
+        if "CDP is not enabled" not in self.responses[4]:
+            neighbors = self.responses[5]
+            self.facts["neighbors"] = self.parse_cdp_neighbors(neighbors)
 
     def populate_interfaces(self, interfaces):
         facts = dict()
@@ -163,7 +191,7 @@ class Interfaces(FactsBase):
     def parse_neighbors(self, neighbors):
         facts = dict()
         nbors = neighbors.split(
-            "------------------------------------------------"
+            "------------------------------------------------",
         )
         for entry in nbors[1:]:
             if entry == "":
@@ -175,6 +203,25 @@ class Interfaces(FactsBase):
             fact["host"] = self.parse_lldp_host(entry)
             fact["remote_description"] = self.parse_lldp_remote_desc(entry)
             fact["port"] = self.parse_lldp_port(entry)
+            facts[intf].append(fact)
+        return facts
+
+    def parse_cdp_neighbors(self, neighbors):
+        facts = dict()
+        for entry in neighbors.split("-------------------------"):
+            if entry == "":
+                continue
+            intf_port = self.parse_cdp_intf_port(entry)
+            if intf_port is None:
+                return facts
+            intf, port = intf_port
+            if intf not in facts:
+                facts[intf] = list()
+            fact = dict()
+            fact["host"] = self.parse_cdp_host(entry)
+            fact["platform"] = self.parse_cdp_platform(entry)
+            fact["port"] = port
+            fact["ip"] = self.parse_cdp_ip(entry)
             facts[intf].append(fact)
         return facts
 
@@ -257,5 +304,25 @@ class Interfaces(FactsBase):
 
     def parse_lldp_port(self, data):
         match = re.search(r"Port id: (.+)$", data, re.M)
+        if match:
+            return match.group(1)
+
+    def parse_cdp_intf_port(self, data):
+        match = re.search(r"^Interface: (.+),  Port ID \(outgoing port\): (.+)$", data, re.M)
+        if match:
+            return match.group(1), match.group(2)
+
+    def parse_cdp_host(self, data):
+        match = re.search(r"^Device ID: (.+)$", data, re.M)
+        if match:
+            return match.group(1)
+
+    def parse_cdp_platform(self, data):
+        match = re.search(r"^Platform: (.+),", data, re.M)
+        if match:
+            return match.group(1)
+
+    def parse_cdp_ip(self, data):
+        match = re.search(r"^  IP address: (.+)$", data, re.M)
         if match:
             return match.group(1)

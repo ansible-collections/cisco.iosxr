@@ -26,12 +26,12 @@ The arg spec for the iosxr_ospfv2 module
 """
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 class Ospfv2Args(object):  # pylint: disable=R0903
-    """The arg spec for the iosxr_ospfv2 module
-    """
+    """The arg spec for the iosxr_ospfv2 module"""
 
     def __init__(self, **kwargs):
         pass
@@ -50,13 +50,13 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                 "min_adjacency": {"type": "int"},
                             },
                             "required_together": [
-                                ["min_adjacency", "max_adjacency"]
+                                ["min_adjacency", "max_adjacency"],
                             ],
                             "type": "dict",
                         },
                         "apply_weight": {
                             "mutually_exclusive": [
-                                ["bandwidth", "default_weight"]
+                                ["bandwidth", "default_weight"],
                             ],
                             "options": {
                                 "bandwidth": {"type": "int"},
@@ -74,13 +74,19 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                             "keychain",
                                             "message_digest",
                                             "no_auth",
-                                        ]
+                                        ],
                                     ],
                                     "options": {
-                                        "keychain": {"type": "str"},
+                                        "keychain": {
+                                            "type": "str",
+                                            "no_log": False,
+                                        },
                                         "message_digest": {
                                             "options": {
-                                                "keychain": {"type": "str"}
+                                                "keychain": {
+                                                    "type": "str",
+                                                    "no_log": False,
+                                                },
                                             },
                                             "type": "dict",
                                         },
@@ -90,14 +96,18 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                 },
                                 "authentication_key": {
                                     "mutually_exclusive": [
-                                        ["clear", "encrypted"]
+                                        ["clear", "encrypted"],
                                     ],
                                     "options": {
                                         "clear": {"type": "str"},
                                         "encrypted": {"type": "str"},
-                                        "password": {"type": "str"},
+                                        "password": {
+                                            "type": "str",
+                                            "no_log": True,
+                                        },
                                     },
                                     "type": "dict",
+                                    "no_log": True,
                                 },
                                 "bfd": {
                                     "options": {
@@ -105,7 +115,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "strict_mode": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                             "type": "dict",
@@ -124,11 +134,11 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         "ldp": {
                                             "options": {
                                                 "auto_config": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "sync": {"type": "bool"},
                                                 "sync_igp_shortcuts": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                             "type": "dict",
@@ -158,11 +168,11 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                                 "type7": {
                                                     "options": {
                                                         "always": {
-                                                            "type": "bool"
-                                                        }
+                                                            "type": "bool",
+                                                        },
                                                     },
                                                     "type": "dict",
-                                                }
+                                                },
                                             },
                                             "type": "dict",
                                         },
@@ -172,7 +182,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                 "ranges": {
                                     "elements": "dict",
                                     "mutually_exclusive": [
-                                        ["advertise", "not_advertise"]
+                                        ["advertise", "not_advertise"],
                                     ],
                                     "options": {
                                         "address": {
@@ -215,15 +225,19 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                                     "keychain",
                                                     "message_digest",
                                                     "no_auth",
-                                                ]
+                                                ],
                                             ],
                                             "options": {
-                                                "keychain": {"type": "str"},
+                                                "keychain": {
+                                                    "type": "str",
+                                                    "no_log": False,
+                                                },
                                                 "message_digest": {
                                                     "options": {
                                                         "keychain": {
-                                                            "type": "str"
-                                                        }
+                                                            "type": "str",
+                                                            "no_log": False,
+                                                        },
                                                     },
                                                     "type": "dict",
                                                 },
@@ -233,14 +247,18 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         },
                                         "authentication_key": {
                                             "mutually_exclusive": [
-                                                ["clear", "encrypted"]
+                                                ["clear", "encrypted"],
                                             ],
                                             "options": {
                                                 "clear": {"type": "str"},
                                                 "encrypted": {"type": "str"},
-                                                "password": {"type": "str"},
+                                                "password": {
+                                                    "type": "str",
+                                                    "no_log": True,
+                                                },
                                             },
                                             "type": "dict",
+                                            "no_log": True,
                                         },
                                         "dead_interval": {"type": "int"},
                                         "hello_interval": {"type": "int"},
@@ -256,23 +274,26 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                                 },
                                                 "md5": {
                                                     "mutually_exclusive": [
-                                                        ["clear", "encrypted"]
+                                                        ["clear", "encrypted"],
                                                     ],
                                                     "options": {
                                                         "clear": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "encrypted": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "password": {
-                                                            "type": "str"
+                                                            "type": "str",
+                                                            "no_log": True,
                                                         },
                                                     },
                                                     "type": "dict",
+                                                    "no_log": False,
                                                 },
                                             },
                                             "type": "dict",
+                                            "no_log": False,
                                         },
                                         "retransmit_interval": {"type": "int"},
                                         "transmit_delay": {"type": "int"},
@@ -284,13 +305,16 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                         },
                         "authentication": {
                             "mutually_exclusive": [
-                                ["keychain", "message_digest", "no_auth"]
+                                ["keychain", "message_digest", "no_auth"],
                             ],
                             "options": {
-                                "keychain": {"type": "str"},
+                                "keychain": {"type": "str", "no_log": False},
                                 "message_digest": {
                                     "options": {
-                                        "keychain": {"type": "str"},
+                                        "keychain": {
+                                            "type": "str",
+                                            "no_log": False,
+                                        },
                                         "set": {"type": "bool"},
                                     },
                                     "type": "dict",
@@ -304,13 +328,14 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                             "options": {
                                 "clear": {"type": "bool"},
                                 "encrypted": {"type": "bool"},
-                                "password": {"type": "str"},
+                                "password": {"type": "str", "no_log": True},
                             },
                             "type": "dict",
+                            "no_log": True,
                         },
                         "auto_cost": {
                             "mutually_exclusive": [
-                                ["reference_bandwidth", "disable"]
+                                ["reference_bandwidth", "disable"],
                             ],
                             "options": {
                                 "disable": {"type": "bool"},
@@ -378,7 +403,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         "wildcard": {"type": "str"},
                                     },
                                     "required_together": [
-                                        ["value", "source", "wildcard"]
+                                        ["value", "source", "wildcard"],
                                     ],
                                     "type": "list",
                                 },
@@ -410,7 +435,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                         "distribute_list": {
                             "elements": "dict",
                             "mutually_exclusive": [
-                                ["access_list", "route_policy"]
+                                ["access_list", "route_policy"],
                             ],
                             "options": {
                                 "access_list": {"type": "str"},
@@ -478,7 +503,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         "external_lsa": {
                                             "options": {
                                                 "max_metric_value": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "set": {"type": "bool"},
                                             },
@@ -489,7 +514,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "wait_for_bgp_asn": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "wait_period": {"type": "int"},
                                             },
@@ -499,7 +524,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         "summary_lsa": {
                                             "options": {
                                                 "max_metric_value": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "set": {"type": "bool"},
                                             },
@@ -507,7 +532,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         },
                                     },
                                     "type": "dict",
-                                }
+                                },
                             },
                             "type": "dict",
                         },
@@ -516,18 +541,23 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                 "id": {"required": True, "type": "int"},
                                 "md5": {
                                     "mutually_exclusive": [
-                                        ["clear", "encrypted"]
+                                        ["clear", "encrypted"],
                                     ],
                                     "options": {
                                         "clear": {"type": "bool"},
                                         "encrypted": {"type": "bool"},
-                                        "password": {"type": "str"},
+                                        "password": {
+                                            "type": "str",
+                                            "no_log": True,
+                                        },
                                     },
                                     "required": True,
                                     "type": "dict",
+                                    "no_log": False,
                                 },
                             },
                             "type": "dict",
+                            "no_log": False,
                         },
                         "microloop_avoidance": {
                             "mutually_exclusive": [
@@ -535,7 +565,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                     "protected",
                                     "rib_update_delay",
                                     "segment_routing",
-                                ]
+                                ],
                             ],
                             "options": {
                                 "protected": {"type": "bool"},
@@ -572,7 +602,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                                     "type": "list",
                                                 },
                                                 "route_policy": {
-                                                    "type": "str"
+                                                    "type": "str",
                                                 },
                                             },
                                             "type": "dict",
@@ -745,7 +775,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         "lsa_all": {
                                             "options": {
                                                 "initial_delay": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "max_delay": {"type": "int"},
                                                 "min_delay": {"type": "int"},
@@ -755,11 +785,11 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         "spf": {
                                             "options": {
                                                 "change_delay": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "max_wait": {"type": "int"},
                                                 "second_delay": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                             },
                                             "type": "dict",
@@ -774,7 +804,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                         "weight": {"type": "int"},
                     },
                     "type": "list",
-                }
+                },
             },
             "type": "dict",
         },

@@ -12,23 +12,23 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 import re
+
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lldp_interfaces.lldp_interfaces import (
     Lldp_interfacesArgs,
 )
 
 
 class Lldp_interfacesFacts(object):
-    """ The iosxr lldp_interfaces fact class
-    """
+    """The iosxr lldp_interfaces fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -44,8 +44,11 @@ class Lldp_interfacesFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_config(self, connection):
+        return connection.get_config(flags="interface")
+
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for lldp_interfaces
+        """Populate the facts for lldp_interfaces
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
@@ -54,7 +57,7 @@ class Lldp_interfacesFacts(object):
         """
 
         if not data:
-            data = connection.get_config(flags="interface")
+            data = self.get_config(connection)
         interfaces = ("\n" + data).split("\ninterface ")
 
         objs = []
@@ -69,7 +72,8 @@ class Lldp_interfacesFacts(object):
         if objs:
             facts["lldp_interfaces"] = []
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             for cfg in params["config"]:
                 facts["lldp_interfaces"].append(utils.remove_empties(cfg))
@@ -98,9 +102,7 @@ class Lldp_interfacesFacts(object):
             config["name"] = match.group(1) + match.group(2)
 
             for key in ["receive", "transmit"]:
-                config[key] = (
-                    False if ("{0} disable".format(key)) in conf else None
-                )
+                config[key] = False if ("{0} disable".format(key)) in conf else None
 
             for x in ["ieee-nearest-bridge", "ieee-nearest-non-tmpr-bridge"]:
                 if x in conf:

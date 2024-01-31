@@ -18,32 +18,35 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import re
 
-from ansible.plugins.terminal import TerminalBase
 from ansible.errors import AnsibleConnectionFailure
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.terminal_base import TerminalBase
 
 
 class TerminalModule(TerminalBase):
-
     terminal_stdout_re = [
-        re.compile(br"[\r\n]*[\w+\-\.:\/\[\]]+(?:\([^\)]+\)){,3}(?:>|#) ?$"),
-        re.compile(br"]]>]]>[\r\n]?"),
+        re.compile(rb"[\r\n]*[\w+\-\.:\/\[\]]+(?:\([^\)]+\)){,3}(?:>|#) ?$"),
+        re.compile(rb"]]>]]>[\r\n]?"),
     ]
 
     terminal_stderr_re = [
-        re.compile(br"% ?Error"),
-        re.compile(br"% ?Bad secret"),
-        re.compile(br"% ?This command is not authorized"),
-        re.compile(br"invalid input", re.I),
-        re.compile(br"(?:incomplete|ambiguous) command", re.I),
-        re.compile(br"(?<!\()connection timed out(?!\))", re.I),
-        re.compile(br"[^\r\n]+ not found", re.I),
-        re.compile(br"'[^']' +returned error code: ?\d+"),
-        re.compile(br"Failed to commit", re.I),
+        re.compile(rb"% ?Error"),
+        re.compile(rb"% ?Bad secret"),
+        re.compile(rb"% ?This command is not authorized"),
+        re.compile(rb"invalid input", re.I),
+        re.compile(rb"(?:incomplete|ambiguous) command", re.I),
+        re.compile(rb"(?<!\()connection timed out(?!\))", re.I),
+        re.compile(rb"[^\r\n]+ not found", re.I),
+        re.compile(rb"'[^']' +returned error code: ?\d+"),
+        re.compile(rb"Failed to commit", re.I),
+        re.compile(rb"show configuration failed \[inheritance\]", re.I),
     ]
+
+    terminal_config_prompt = re.compile(r"^.+\(config(-.*)?\)#$")
 
     def on_open_shell(self):
         try:

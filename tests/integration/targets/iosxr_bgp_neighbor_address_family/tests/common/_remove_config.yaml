@@ -1,0 +1,10 @@
+---
+- name: Remove pre-existing BGP configurations
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no router bgp 65536
+      - no route-policy test1
+      - no route-policy test2
+  ignore_errors: true
+  vars:
+    ansible_connection: ansible.netcommon.network_cli

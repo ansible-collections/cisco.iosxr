@@ -5,28 +5,28 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from copy import deepcopy
 import re
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ospfv3 import (
-    Ospfv3Template,
+from copy import deepcopy
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
+    NetworkTemplate,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.ospfv3.ospfv3 import (
     Ospfv3Args,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
-    NetworkTemplate,
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ospfv3 import (
+    Ospfv3Template,
 )
 
 
 class Ospfv3Facts(object):
-    """ The iosxr snmp fact class
-    """
+    """The iosxr snmp fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -47,7 +47,7 @@ class Ospfv3Facts(object):
         return connection.get("show running-config router ospfv3")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for interfaces
+        """Populate the facts for interfaces
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
@@ -62,17 +62,9 @@ class Ospfv3Facts(object):
         area_str, process, curr_process = "", "", ""
         data = data.splitlines()
         for line in data:
-            if (
-                line.startswith("router ospfv3")
-                and curr_process != ""
-                and curr_process != line
-            ):
+            if line.startswith("router ospfv3") and curr_process != "" and curr_process != line:
                 end_mark, count, end_flag, area_str = 0, 0, 0, ""
-            if (
-                end_mark == 0
-                and count == 0
-                and line.startswith("router ospfv3")
-            ):
+            if end_mark == 0 and count == 0 and line.startswith("router ospfv3"):
                 curr_process = line
                 process = re.sub("\n", "", line)
                 count += 1
@@ -89,7 +81,9 @@ class Ospfv3Facts(object):
                 elif v_read:
                     if "!" not in line:
                         command = virtual_str.replace("  ", " ") + re.sub(
-                            "\n", "", line
+                            "\n",
+                            "",
+                            line,
                         )
                         config_commands.append(command.replace("   ", " "))
                     else:
@@ -110,7 +104,11 @@ class Ospfv3Facts(object):
                     areas.append(re.sub("\n", "", command))
         data = config_commands
         ipv4 = {"processes": []}
-        rmmod = NetworkTemplate(lines=data, tmplt=Ospfv3Template())
+        rmmod = NetworkTemplate(
+            lines=data,
+            tmplt=Ospfv3Template(),
+            module=self._module,
+        )
         current = rmmod.parse()
 
         # convert some of the dicts to lists
@@ -118,34 +116,40 @@ class Ospfv3Facts(object):
             if key in current and current[key]:
                 current[key] = current[key].values()
                 current[key] = sorted(
-                    current[key], key=lambda k, sk=sortv: k[sk]
+                    current[key],
+                    key=lambda k, sk=sortv: k[sk],
                 )
 
         for process in current.get("processes", []):
             if "areas" in process:
                 process["areas"] = list(process["areas"].values())
                 process["areas"] = sorted(
-                    process["areas"], key=lambda k, sk="area_id": k[sk]
+                    process["areas"],
+                    key=lambda k, sk="area_id": k[sk],
                 )
                 for area in process["areas"]:
                     if "ranges" in area:
                         area["ranges"] = sorted(
-                            area["ranges"], key=lambda k, s="ranges": k[s]
+                            area["ranges"],
+                            key=lambda k, s="ranges": k[s],
                         )
                     if "virtual_link" in area:
                         area["virtual_link"] = list(
-                            area["virtual_link"].values()
+                            area["virtual_link"].values(),
                         )
                         area["virtual_link"] = sorted(
-                            area["virtual_link"], key=lambda k, sk="id": k[sk]
+                            area["virtual_link"],
+                            key=lambda k, sk="id": k[sk],
                         )
             ipv4["processes"].append(process)
 
         ansible_facts["ansible_network_resources"].pop("ospfv3", None)
         facts = {}
         if current:
-            params = utils.validate_config(
-                self.argument_spec, {"config": ipv4}
+            params = rmmod.validate_config(
+                self.argument_spec,
+                {"config": ipv4},
+                redact=True,
             )
             params = utils.remove_empties(params)
 

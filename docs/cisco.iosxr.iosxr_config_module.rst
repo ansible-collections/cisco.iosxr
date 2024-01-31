@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_config
 ************************
 
-**Manage Cisco IOS XR configuration sections**
+**Module to manage configuration sections.**
 
 
 Version added: 1.0.0
@@ -179,7 +179,26 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The module, by default, will connect to the remote device and retrieve the current running-config to use as a base for comparing against the contents of source.  There are times when it is not desirable to have the task get the current running-config for every task in a playbook.  The <em>config</em> argument allows the implementer to pass in the configuration to use as the base config for comparison.</div>
+                        <div>The module, by default, will connect to the remote device and retrieve the current running-config to use as a base for comparing against the contents of source.  There are times when it is not desirable to have the task get the current running-config for every task in a playbook.  The <em>config</em> argument allows the implementer to pass in the configuration to use as the base config for comparison. The configuration lines for this option should be similar to how it will appear if present in the running-configuration of the device to ensure idempotency and correct diff.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>disable_default_comment</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>disable default comment when set to True.</div>
                 </td>
             </tr>
             <tr>
@@ -249,7 +268,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The ordered set of commands that should be configured in the section.  The commands must be the exact same commands as found in the device running-config.  Be sure to note the configuration command syntax as some commands are automatically modified by the device config parser.</div>
+                        <div>The ordered set of commands that should be configured in the section. The commands must be the exact same commands as found in the device running-config as found in the device running-config to ensure idempotency and correct diff. Be sure to note the configuration command syntax as some commands are automatically modified by the device config parser.</div>
                         <div style="font-size: small; color: darkgreen"><br/>aliases: commands</div>
                 </td>
             </tr>
@@ -293,142 +312,6 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>provider</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div><b>Deprecated</b></div>
-                        <div>Starting with Ansible 2.5 we recommend using <code>connection: network_cli</code>.</div>
-                        <div>For more information please see the <a href='../network/getting_started/network_differences.html#multiple-communication-protocols'>Network Guide</a>.</div>
-                        <div><hr/></div>
-                        <div>A dict object containing connection details.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>host</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Specifies the DNS host name or address for connecting to the remote device over the specified transport.  The value of host is used as the destination address for the transport.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>password</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Specifies the password to use to authenticate the connection to the remote device.   This value is used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_PASSWORD</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Specifies the port to use when building the connection to the remote device.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>ssh_keyfile</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">path</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Specifies the SSH key to use to authenticate the connection to the remote device.   This value is the path to the key used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_SSH_KEYFILE</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>timeout</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Specifies the timeout in seconds for communicating with the network device for either connecting or sending commands.  If the timeout is exceeded before the operation is completed, the module will error.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>transport</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>cli</b>&nbsp;&larr;</div></li>
-                                    <li>netconf</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Specifies the type of connection based transport.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>username</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Configures the username to use to authenticate the connection to the remote device.  This value is used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_USERNAME</code> will be used instead.</div>
-                </td>
-            </tr>
-
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>replace</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -458,7 +341,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Specifies the source path to the file that contains the configuration or configuration template to load.  The path to the source file can either be the full path on the Ansible control host or a relative path from the playbook or role root directory.  This argument is mutually exclusive with <em>lines</em>, <em>parents</em>.</div>
+                        <div>Specifies the source path to the file that contains the configuration or configuration template to load. The path to the source file can either be the full path on the Ansible control host or a relative path from the playbook or role root directory.  This argument is mutually exclusive with <em>lines</em>, <em>parents</em>. The configuration lines in the source file should be similar to how it will appear if present in the running-configuration of the device to ensure idempotency and correct diff.</div>
                 </td>
             </tr>
     </table>
@@ -469,12 +352,12 @@ Notes
 -----
 
 .. note::
-   - This module works with connection ``network_cli``. See `the IOS-XR Platform Options <../network/user_guide/platform_iosxr.html>`_.
-   - Tested against IOS XRv 6.1.3.
+   - This module works with connection ``network_cli``. See https://docs.ansible.com/ansible/latest/network/user_guide/platform_iosxr.html
    - This module does not support ``netconf`` connection
-   - Abbreviated commands are NOT idempotent, see L(Network FAQ,../network/user_guide/faq.html
+   - Abbreviated commands are NOT idempotent, see https://docs.ansible.com/ansible/latest/network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands
    - Avoid service disrupting changes (viz. Management IP) from config replace.
    - Do not use ``end`` in the replace config file.
+   - To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they appear if present in the running configuration on device including the indentation.
    - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
    - For more information on using Ansible to manage Cisco devices see the `Cisco integration page <https://www.ansible.com/integrations/networks/cisco>`_.
 
@@ -483,7 +366,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: configure top level configuration
       cisco.iosxr.iosxr_config:
@@ -492,28 +375,26 @@ Examples
     - name: configure interface settings
       cisco.iosxr.iosxr_config:
         lines:
-        - description test interface
-        - ip address 172.31.1.1 255.255.255.0
+          - description test interface
+          - ip address 172.31.1.1 255.255.255.0
         parents: interface GigabitEthernet0/0/0/0
 
     - name: load a config from disk and replace the current config
       cisco.iosxr.iosxr_config:
         src: config.cfg
         replace: config
-        backup: yes
+        backup: 'yes'
 
-    - name: for idempotency, use full-form commands
+    - name: 'for idempotency, use full-form commands'
       cisco.iosxr.iosxr_config:
         lines:
-          # - shut
-        - shutdown
-        # parents: int g0/0/0/1
+          - shutdown
         parents: interface GigabitEthernet0/0/0/1
 
     - name: configurable backup path
       cisco.iosxr.iosxr_config:
         src: config.cfg
-        backup: yes
+        backup: true
         backup_options:
           filename: backup.cfg
           dir_path: /home/user
@@ -632,6 +513,23 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">22:28:34</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>updates</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>If there are commands to run against the host</td>
+                <td>
+                            <div>The set of commands that will be pushed to the remote device</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;hostname foo&#x27;, &#x27;router ospf 1&#x27;, &#x27;router-id 1.1.1.1&#x27;]</div>
                 </td>
             </tr>
     </table>

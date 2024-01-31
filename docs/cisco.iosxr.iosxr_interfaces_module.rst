@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_interfaces
 ****************************
 
-**Interfaces resource module**
+**Resource module to configure interfaces.**
 
 
 Version added: 1.0.0
@@ -206,232 +206,346 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
-   - This module works with connection ``network_cli``. See `the IOS-XR Platform Options <../network/user_guide/platform_iosxr.html>`_.
+   - This module works with connection ``network_cli``. See https://docs.ansible.com/ansible/latest/network/user_guide/platform_iosxr.html
+   - The module examples uses callback plugin (stdout_callback = yaml) to generate task output in yaml format.
 
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # Using merged
+
     # Before state:
     # -------------
     #
     # viosxr#show running-config interface
-    # interface GigabitEthernet0/0/0/1
-    #  shutdown
+    # interface Loopback888
     # !
-    # interface GigabitEthernet0/0/0/2
-    #  vrf custB
-    #  ipv4 address 178.18.169.23 255.255.255.0
-    #  dot1q native vlan 30
+    # interface Loopback999
     # !
-    # interface GigabitEthernet0/0/0/3
-    #  description Replaced by Ansible Team
-    #  mtu 2000
-    #  vrf custB
-    #  ipv4 address 10.10.0.2 255.255.255.0
-    #  dot1q native vlan 1021
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
     # !
+
     - name: Configure Ethernet interfaces
       cisco.iosxr.iosxr_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/2
-          description: Configured by Ansible
-          enabled: true
-        - name: GigabitEthernet0/0/0/3
-          description: Configured by Ansible Network
-          enabled: false
-          duplex: full
+          - name: GigabitEthernet0/0/0/2
+            description: Configured by Ansible
+            enabled: true
+          - name: GigabitEthernet0/0/0/3
+            description: Configured by Ansible Network
+            enabled: false
+            duplex: full
         state: merged
+
+    # Task Output
+    # -----------
+    #
+    # before:
+    # - enabled: true
+    #   name: Loopback888
+    # - enabled: true
+    #   name: Loopback999
+    # commands:
+    # - interface GigabitEthernet0/0/0/2
+    # - description Configured by Ansible
+    # - no shutdown
+    # - interface GigabitEthernet0/0/0/3
+    # - description Configured by Ansible Network
+    # - duplex full
+    # - shutdown
+    # after:
+    # - enabled: true
+    #   name: Loopback888
+    # - enabled: true
+    #   name: Loopback999
+    # - description: Configured by Ansible
+    #   enabled: true
+    #   name: GigabitEthernet0/0/0/2
+    # - description: Configured by Ansible Network
+    #   duplex: full
+    #   enabled: false
+    #   name: GigabitEthernet0/0/0/3
+
     # After state:
     # ------------
     #
     # viosxr#show running-config interface
-    # interface GigabitEthernet0/0/0/1
-    #  shutdown
+    # interface Loopback888
     # !
-    # interface GigabitEthernet0/0/0/2
-    #  description Configured and Merged by Ansible Network
-    #  vrf custB
-    #  ipv4 address 178.18.169.23 255.255.255.0
-    #  dot1q native vlan 30
+    # interface Loopback999
     # !
-    # interface GigabitEthernet0/0/0/3
-    #  description Configured and Merged by Ansible Network
-    #  mtu 2600
-    #  vrf custB
-    #  ipv4 address 10.10.0.2 255.255.255.0
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface preconfigure GigabitEthernet0/0/0/2
+    #  description Configured by Ansible
+    # !
+    # interface preconfigure GigabitEthernet0/0/0/3
+    #  description Configured by Ansible Network
     #  duplex full
     #  shutdown
-    #  dot1q native vlan 1021
     # !
+
     # Using replaced
+
     # Before state:
     # ------------
     #
     # viosxr#show running-config interface
-    # interface GigabitEthernet0/0/0/1
+    # interface Loopback888
+    # !
+    # interface Loopback999
+    # !
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface preconfigure GigabitEthernet0/0/0/2
     #  description Configured by Ansible
+    # !
+    # interface preconfigure GigabitEthernet0/0/0/3
+    #  description Configured by Ansible Network
+    #  duplex full
     #  shutdown
     # !
-    # interface GigabitEthernet0/0/0/2
-    #  description Test
-    #  vrf custB
-    #  ipv4 address 178.18.169.23 255.255.255.0
-    #  dot1q native vlan 30
-    # !
-    # interface GigabitEthernet0/0/0/3
-    #  vrf custB
-    #  ipv4 address 10.10.0.2 255.255.255.0
-    #  dot1q native vlan 1021
-    # !
-    - name: Configure following interfaces and replace their existing config
+
+    - name: Replace their existing configuration per interface
       cisco.iosxr.iosxr_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/2
-          description: Configured by Ansible
-          enabled: true
-          mtu: 2000
-        - name: GigabitEthernet0/0/0/3
-          description: Configured by Ansible Network
-          enabled: false
-          duplex: auto
+          - name: GigabitEthernet0/0/0/2
+            description: Configured by Ansible
+            enabled: true
+            mtu: 2000
+          - name: GigabitEthernet0/0/0/3
+            description: Configured by Ansible Network
+            enabled: false
+            duplex: auto
         state: replaced
+
+    # Task Output
+    # -----------
+    #
+    # before:
+    # - enabled: true
+    #   name: Loopback888
+    # - enabled: true
+    #   name: Loopback999
+    # - description: Configured by Ansible
+    #   enabled: true
+    #   name: GigabitEthernet0/0/0/2
+    # - description: Configured by Ansible Network
+    #   duplex: full
+    #   enabled: false
+    #   name: GigabitEthernet0/0/0/3
+    # commands:
+    # - interface GigabitEthernet0/0/0/2
+    # - mtu 2000
+    # - interface GigabitEthernet0/0/0/3
+    # - duplex half
+    # after:
+    # - enabled: true
+    #   name: Loopback888
+    # - enabled: true
+    #   name: Loopback999
+    # - description: Configured by Ansible
+    #   enabled: true
+    #   mtu: 2000
+    #   name: GigabitEthernet0/0/0/2
+    # - description: Configured by Ansible Network
+    #   duplex: half
+    #   enabled: false
+    #   name: GigabitEthernet0/0/0/3
+
     # After state:
     # ------------
     #
     # viosxr#show running-config interface
-    # interface GigabitEthernet0/0/0/1
+    # interface Loopback888
+    # !
+    # interface Loopback999
+    # !
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface preconfigure GigabitEthernet0/0/0/2
     #  description Configured by Ansible
-    #  shutdown
-    # !
-    # interface GigabitEthernet0/0/0/2
-    #  description Configured and Replaced by Ansible
     #  mtu 2000
-    #  vrf custB
-    #  ipv4 address 178.18.169.23 255.255.255.0
-    #  dot1q native vlan 30
     # !
-    # interface GigabitEthernet0/0/0/3
-    #  description Configured and Replaced by Ansible Network
-    #  vrf custB
-    #  ipv4 address 10.10.0.2 255.255.255.0
+    # interface preconfigure GigabitEthernet0/0/0/3
+    #  description Configured by Ansible Network
     #  duplex half
     #  shutdown
-    #  dot1q native vlan 1021
     # !
+
     # Using overridden
+
     # Before state:
     # ------------
     #
     # viosxr#show running-config interface
-    # interface GigabitEthernet0/0/0/1
+    # interface Loopback888
+    # !
+    # interface Loopback999
+    # !
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface preconfigure GigabitEthernet0/0/0/2
+    #  description Configured by Ansible
+    #  mtu 2000
+    # !
+    # interface preconfigure GigabitEthernet0/0/0/3
+    #  description Configured by Ansible Network
+    #  duplex half
     #  shutdown
     # !
-    # interface GigabitEthernet0/0/0/2
-    #  description Configured by Ansible
-    #  vrf custB
-    #  ipv4 address 178.18.169.23 255.255.255.0
-    #  dot1q native vlan 30
-    # !
-    # interface GigabitEthernet0/0/0/3
-    #  description Configured by Ansible
-    #  mtu 2600
-    #  vrf custB
-    #  ipv4 address 10.10.0.2 255.255.255.0
-    #  duplex full
-    #  shutdown
-    #  dot1q native vlan 1021
-    # !
-    - name: Override interfaces
+
+    - name: Override interfaces configuration
       cisco.iosxr.iosxr_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/2
-          description: Configured by Ansible
-          enabled: true
-          duplex: auto
-        - name: GigabitEthernet0/0/0/3
-          description: Configured by Ansible Network
-          enabled: false
-          speed: 1000
+          - name: GigabitEthernet0/0/0/2
+            description: Configured by Ansible
+            enabled: true
+            duplex: auto
+          - name: GigabitEthernet0/0/0/3
+            description: Configured by Ansible Network
+            enabled: false
+            speed: 1000
         state: overridden
+
+    # Task Output
+    # -----------
+    #
+    # before:
+    # - enabled: true
+    #   name: Loopback888
+    # - enabled: true
+    #   name: Loopback999
+    # - description: Configured by Ansible
+    #   enabled: true
+    #   mtu: 2000
+    #   name: GigabitEthernet0/0/0/2
+    # - description: Configured by Ansible Network
+    #   duplex: half
+    #   enabled: false
+    #   name: GigabitEthernet0/0/0/3
+    # commands:
+    # - interface GigabitEthernet0/0/0/2
+    # - no mtu
+    # - duplex half
+    # - interface GigabitEthernet0/0/0/3
+    # - no description
+    # - no shutdown
+    # - no duplex
+    # after:
+    # - enabled: true
+    #   name: Loopback888
+    # - enabled: true
+    #   name: Loopback999
+    # - description: Configured by Ansible
+    #   duplex: half
+    #   enabled: true
+    #   name: GigabitEthernet0/0/0/2
+    # - enabled: true
+    #   name: GigabitEthernet0/0/0/3
+
     # After state:
     # ------------
     #
     # viosxr#show running-config interface
-    # interface GigabitEthernet0/0/0/1
-    #  shutdown
+    # interface Loopback888
     # !
-    # interface GigabitEthernet0/0/0/2
-    #  description Configured and Overridden by Ansible Network
-    #  vrf custB
-    #  ipv4 address 178.18.169.23 255.255.255.0
-    #  speed 1000
-    #  dot1q native vlan 30
+    # interface Loopback999
     # !
-    # interface GigabitEthernet0/0/0/3
-    #  description Configured and Overridden by Ansible Network
-    #  mtu 2000
-    #  vrf custB
-    #  ipv4 address 10.10.0.2 255.255.255.0
-    #  duplex full
-    #  shutdown
-    #  dot1q native vlan 1021
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
     # !
+    # interface preconfigure GigabitEthernet0/0/0/2
+    #  description Configured by Ansible
+    #  duplex half
+    # !
+    # interface preconfigure GigabitEthernet0/0/0/3
+    # !
+
     # Using deleted
+
     # Before state:
     # ------------
     #
     # viosxr#show running-config interface
-    # interface GigabitEthernet0/0/0/1
-    #  shutdown
+    # interface Loopback888
     # !
-    # interface GigabitEthernet0/0/0/2
-    #  description Configured and Overridden by Ansible Network
-    #  vrf custB
-    #  ipv4 address 178.18.169.23 255.255.255.0
-    #  speed 1000
-    #  dot1q native vlan 30
+    # interface Loopback999
     # !
-    # interface GigabitEthernet0/0/0/3
-    #  description Configured and Overridden by Ansible Network
-    #  mtu 2000
-    #  vrf custB
-    #  ipv4 address 10.10.0.2 255.255.255.0
-    #  duplex full
-    #  shutdown
-    #  dot1q native vlan 1021
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
     # !
-    - name: Delete IOSXR interfaces as in given arguments
+    # interface preconfigure GigabitEthernet0/0/0/2
+    #  description Configured by Ansible
+    #  duplex half
+    # !
+    # interface preconfigure GigabitEthernet0/0/0/3
+    # !
+
+    - name: Delete interfaces arguments
       cisco.iosxr.iosxr_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/2
-        - name: GigabitEthernet0/0/0/3
+          - name: GigabitEthernet0/0/0/2
+          - name: GigabitEthernet0/0/0/3
         state: deleted
+
+    # Task Output
+    # -----------
+    #
+    # before:
+    # - enabled: true
+    #   name: Loopback888
+    # - enabled: true
+    #   name: Loopback999
+    # - description: Configured by Ansible
+    #   duplex: half
+    #   enabled: true
+    #   name: GigabitEthernet0/0/0/2
+    # - enabled: true
+    #   name: GigabitEthernet0/0/0/3
+    # commands:
+    # - interface GigabitEthernet0/0/0/2
+    # - no description
+    # - no duplex
+    # after:
+    # - enabled: true
+    #   name: Loopback888
+    # - enabled: true
+    #   name: Loopback999
+    # - enabled: true
+    #   name: GigabitEthernet0/0/0/2
+    # - enabled: true
+    #   name: GigabitEthernet0/0/0/3
+
     # After state:
     # ------------
     #
     # viosxr#show running-config interface
-    # interface GigabitEthernet0/0/0/1
-    #  shutdown
+    # interface Loopback888
     # !
-    # interface GigabitEthernet0/0/0/2
-    #  vrf custB
-    #  ipv4 address 178.18.169.23 255.255.255.0
-    #  dot1q native vlan 30
+    # interface Loopback999
     # !
-    # interface GigabitEthernet0/0/0/3
-    #  vrf custB
-    #  ipv4 address 10.10.0.2 255.255.255.0
-    #  dot1q native vlan 1021
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
     # !
+    # interface preconfigure GigabitEthernet0/0/0/2
+    # !
+    # interface preconfigure GigabitEthernet0/0/0/3
+    # !
+
     # Using parsed
-    # parsed.cfg
-    # ------------
+
+    # File: parsed.cfg
+    # ----------------
     #
     # interface Loopback888
     #  description test for ansible
@@ -452,95 +566,76 @@ Examples
     # interface GigabitEthernet0/0/0/4
     #  shutdown
     # !
-    # - name: Convert ACL interfaces config to argspec without connecting to the appliance
+
+    # - name: Parse provided configuration
     #   cisco.iosxr.iosxr_interfaces:
     #     running_config: "{{ lookup('file', './parsed.cfg') }}"
     #     state: parsed
-    # Task Output (redacted)
-    # -----------------------
-    # "parsed": [
-    #        {
-    #            "name": "MgmtEth0/RP0/CPU0/0"
-    #        },
-    #        {
-    #            "access_groups": [
-    #                {
-    #                    "acls": [
-    #                        {
-    #                            "direction": "in",
-    #                            "name": "acl_1"
-    #                        },
-    #                        {
-    #                            "direction": "out",
-    #                            "name": "acl_2"
-    #                        }
-    #                    ],
-    #                    "afi": "ipv4"
-    #                },
-    #                {
-    #                    "acls": [
-    #                        {
-    #                            "direction": "in",
-    #                            "name": "acl6_1"
-    #                        },
-    #                        {
-    #                            "direction": "out",
-    #                            "name": "acl6_2"
-    #                        }
-    #                    ],
-    #                    "afi": "ipv6"
-    #                }
-    #            ],
-    #            "name": "GigabitEthernet0/0/0/0"
-    #        },
-    #        {
-    #            "access_groups": [
-    #                {
-    #                    "acls": [
-    #                        {
-    #                            "direction": "out",
-    #                            "name": "acl_1"
-    #                        }
-    #                    ],
-    #                    "afi": "ipv4"
-    #                }
-    #            ],
-    #            "name": "GigabitEthernet0/0/0/1"
-    #        }
-    #    ]
-    # }
+
+    # Task Output
+    # -----------
+    #
+    # parsed:
+    # - name: MgmtEth0/RP0/CPU0/0
+    # - access_groups:
+    #   - acls:
+    #     - direction: in
+    #       name: acl_1
+    #     - direction: out
+    #       name: acl_2
+    #     afi: ipv4
+    #   - acls:
+    #     - direction: in
+    #       name: acl6_1
+    #     - direction: out
+    #       name: acl6_2
+    #     afi: ipv6
+    #   name: GigabitEthernet0/0/0/0
+    # - access_groups:
+    #   - acls:
+    #     - direction: out
+    #       name: acl_1
+    #     afi: ipv4
+    #   name: GigabitEthernet0/0/0/1
+
+
     # Using rendered
+
     - name: Render platform specific commands from task input using rendered state
       cisco.iosxr.iosxr_interfaces:
         config:
-        - name: GigabitEthernet0/0/0/0
-          description: Configured and Merged by Ansible-Network
-          mtu: 110
-          enabled: true
-          duplex: half
-        - name: GigabitEthernet0/0/0/1
-          description: Configured and Merged by Ansible-Network
-          mtu: 2800
-          enabled: false
-          speed: 100
-          duplex: full
+          - name: GigabitEthernet0/0/0/0
+            description: Configured and Merged by Ansible-Network
+            mtu: 110
+            enabled: true
+            duplex: half
+          - name: GigabitEthernet0/0/0/1
+            description: Configured and Merged by Ansible-Network
+            mtu: 2800
+            enabled: false
+            speed: 100
+            duplex: full
         state: rendered
-    # Task Output (redacted)
-    # -----------------------
-    # "rendered": [
-    #         "interface GigabitEthernet0/0/0/0",
-    #         "description Configured and Merged by Ansible-Network",
-    #         "mtu 110",
-    #         "duplex half",
-    #         "no shutdown",
-    #         "interface GigabitEthernet0/0/0/1",
-    #         "description Configured and Merged by Ansible-Network",
-    #         "mtu 2800",
-    #         "speed 100",
-    #         "duplex full",
-    #         "shutdown"
-    #     ]
+
+    # Task Output
+    # -----------
+    #
+    # rendered:
+    # - interface GigabitEthernet0/0/0/0
+    # - description Configured and Merged by Ansible-Network
+    # - mtu 110
+    # - duplex half
+    # - no shutdown
+    # - interface GigabitEthernet0/0/0/1
+    # - description Configured and Merged by Ansible-Network
+    # - mtu 2800
+    # - speed 100
+    # - duplex full
+    # - shutdown
+
+
     # Using gathered
+
     # Before state:
     # ------------
     #
@@ -564,58 +659,28 @@ Examples
     # interface GigabitEthernet0/0/0/4
     # shutdown
     # !
-    - name: Gather IOSXR interfaces as in given arguments
+
+    - name: Gather facts for interfaces
       cisco.iosxr.iosxr_interfaces:
         config:
         state: gathered
-    # Task Output (redacted)
-    # -----------------------
+
+    # Task Output
+    # -----------
     #
-    # "gathered": [
-    #         {
-    #             "description": "test for ansible",
-    #             "enabled": false,
-    #             "name": "Loopback888"
-    #         },
-    #         {
-    #             "description": "Configured and Merged by Ansible-Network",
-    #             "duplex": "half",
-    #             "enabled": true,
-    #             "mtu": 110,
-    #             "name": "GigabitEthernet0/0/0/0"
-    #         },
-    #         {
-    #             "enabled": false,
-    #             "name": "GigabitEthernet0/0/0/3"
-    #         },
-    #         {
-    #             "enabled": false,
-    #             "name": "GigabitEthernet0/0/0/4"
-    #         }
-    #     ]
-    # After state:
-    # ------------
-    #
-    # RP/0/0/CPU0:an-iosxr-02#show running-config  interface
-    # interface Loopback888
-    # description test for ansible
-    # shutdown
-    # !
-    # interface MgmtEth0/0/CPU0/0
-    # ipv4 address 10.8.38.70 255.255.255.0
-    # !
-    # interface GigabitEthernet0/0/0/0
-    # description Configured and Merged by Ansible-Network
-    # mtu 110
-    # ipv4 address 172.31.1.1 255.255.255.0
-    # duplex half
-    # !
-    # interface GigabitEthernet0/0/0/3
-    # shutdown
-    # !
-    # interface GigabitEthernet0/0/0/4
-    # shutdown
-    # !
+    # gathered:
+    # - description: test for ansible
+    #   enabled: false
+    #   name: Loopback888
+    # - description: Configured and Merged by Ansible-Network
+    #   duplex: half
+    #   enabled: true
+    #   mtu: 110
+    #   name: GigabitEthernet0/0/0/0
+    # - enabled: false
+    #   name: GigabitEthernet0/0/0/3
+    # - enabled: false
+    #   name: GigabitEthernet0/0/0/4
 
 
 

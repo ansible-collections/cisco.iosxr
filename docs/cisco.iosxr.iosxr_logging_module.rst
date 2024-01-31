@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_logging
 *************************
 
-**Configuration management of system logging services on network devices**
+**(deprecated, removed after 2023-08-01) Configuration management of system logging services on network devices**
 
 
 Version added: 1.0.0
@@ -13,6 +13,13 @@ Version added: 1.0.0
 .. contents::
    :local:
    :depth: 1
+
+DEPRECATED
+----------
+:Removed in collection release after 2023-08-01
+:Why: Updated module released with more functionality.
+:Alternative: iosxr_logging_global
+
 
 
 Synopsis
@@ -153,6 +160,22 @@ Parameters
                 <td>
                         <div>When <code>dest</code> = <em>file</em> name indicates file-name</div>
                         <div>When <code>dest</code> = <em>host</em> name indicates the host-name or ip-address of syslog server.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>path</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Set file path.</div>
                 </td>
             </tr>
             <tr>
@@ -307,27 +330,7 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>provider</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div><b>Deprecated</b></div>
-                        <div>Starting with Ansible 2.5 we recommend using <code>connection: network_cli</code>.</div>
-                        <div>For more information please see the <a href='../network/getting_started/network_differences.html#multiple-communication-protocols'>Network Guide</a>.</div>
-                        <div><hr/></div>
-                        <div>A dict object containing connection details.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>host</b>
+                    <b>path</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -336,110 +339,9 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Specifies the DNS host name or address for connecting to the remote device over the specified transport.  The value of host is used as the destination address for the transport.</div>
+                        <div>Set file path.</div>
                 </td>
             </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>password</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Specifies the password to use to authenticate the connection to the remote device.   This value is used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_PASSWORD</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Specifies the port to use when building the connection to the remote device.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>ssh_keyfile</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">path</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Specifies the SSH key to use to authenticate the connection to the remote device.   This value is the path to the key used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_SSH_KEYFILE</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>timeout</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Specifies the timeout in seconds for communicating with the network device for either connecting or sending commands.  If the timeout is exceeded before the operation is completed, the module will error.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>transport</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>cli</b>&nbsp;&larr;</div></li>
-                                    <li>netconf</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Specifies the type of connection based transport.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>username</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Configures the username to use to authenticate the connection to the remote device.  This value is used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_USERNAME</code> will be used instead.</div>
-                </td>
-            </tr>
-
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
@@ -500,7 +402,6 @@ Notes
 
 .. note::
    - This module works with connection ``network_cli`` and ``netconf``. See `the IOS-XR Platform Options <../network/user_guide/platform_iosxr.html>`_.
-   - Tested against IOS XRv 6.1.3
    - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
    - For more information on using Ansible to manage Cisco devices see the `Cisco integration page <https://www.ansible.com/integrations/networks/cisco>`_.
 
@@ -509,7 +410,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: configure logging for syslog server host
       cisco.iosxr.iosxr_logging:
@@ -556,18 +457,18 @@ Examples
     - name: Configure logging using aggregate
       cisco.iosxr.iosxr_logging:
         aggregate:
-        - {dest: console, level: warning}
-        - {dest: buffered, size: 4800000}
-        - {dest: file, name: file3, size: 2048}
-        - {dest: host, name: host3, level: critical}
+          - {dest: console, level: warning}
+          - {dest: buffered, size: 4800000}
+          - {dest: file, name: file3, size: 2048}
+          - {dest: host, name: host3, level: critical}
 
     - name: Delete logging using aggregate
       cisco.iosxr.iosxr_logging:
         aggregate:
-        - {dest: console, level: warning}
-        - {dest: buffered, size: 4800000}
-        - {dest: file, name: file3, size: 2048}
-        - {dest: host, name: host3, level: critical}
+          - {dest: console, level: warning}
+          - {dest: buffered, size: 4800000}
+          - {dest: file, name: file3, size: 2048}
+          - {dest: host, name: host3, level: critical}
         state: absent
 
 
@@ -624,6 +525,10 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
 
 Status
 ------
+
+
+- This module will be removed in a release after 2023-08-01. *[deprecated]*
+- For more information see `DEPRECATED`_.
 
 
 Authors

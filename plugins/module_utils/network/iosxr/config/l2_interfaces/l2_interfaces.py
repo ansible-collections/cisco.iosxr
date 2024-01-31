@@ -11,28 +11,26 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
     remove_empties,
+    to_list,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import get_os_version
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    normalize_interface,
-    dict_to_set,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    remove_command_from_config_list,
+    Version,
     add_command_to_config_list,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    dict_diff,
     filter_dict_having_none_value,
+    normalize_interface,
+    remove_command_from_config_list,
     remove_duplicate_interface,
 )
 
@@ -47,22 +45,24 @@ class L2_Interfaces(ConfigBase):
     gather_network_resources = ["l2_interfaces"]
 
     def get_l2_interfaces_facts(self, data=None):
-        """ Get the 'facts' (the current configuration)
+        """Get the 'facts' (the current configuration)
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         l2_interfaces_facts = facts["ansible_network_resources"].get(
-            "l2_interfaces"
+            "l2_interfaces",
         )
         if not l2_interfaces_facts:
             return []
         return l2_interfaces_facts
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
         :rtype: A dictionary
         :returns: The result from module execution
         """
@@ -96,10 +96,10 @@ class L2_Interfaces(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_l2_interfaces_facts(
-                data=running_config
+                data=running_config,
             )
 
         if self.state in self.ACTION_STATES:
@@ -114,7 +114,7 @@ class L2_Interfaces(ConfigBase):
         return result
 
     def set_config(self, existing_l2_interfaces_facts):
-        """ Collect the configuration from the args passed to the module,
+        """Collect the configuration from the args passed to the module,
             collect the current configuration (as a dict from facts)
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
@@ -126,7 +126,7 @@ class L2_Interfaces(ConfigBase):
         return to_list(resp)
 
     def set_state(self, want, have):
-        """ Select the appropriate function based on the state provided
+        """Select the appropriate function based on the state provided
         :param want: the desired configuration as a dictionary
         :param have: the current configuration as a dictionary
         :rtype: A list
@@ -135,14 +135,11 @@ class L2_Interfaces(ConfigBase):
         """
         commands = []
 
-        if (
-            self.state in ("overridden", "merged", "replaced", "rendered")
-            and not want
-        ):
+        if self.state in ("overridden", "merged", "replaced", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    self.state
-                )
+                    self.state,
+                ),
             )
 
         if self.state == "overridden":
@@ -157,7 +154,7 @@ class L2_Interfaces(ConfigBase):
         return commands
 
     def _state_replaced(self, want, have, module):
-        """ The command generator when state is replaced
+        """The command generator when state is replaced
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
@@ -166,10 +163,7 @@ class L2_Interfaces(ConfigBase):
         for interface in want:
             interface["name"] = normalize_interface(interface["name"])
             for each in have:
-                if (
-                    each["name"] == interface["name"]
-                    or interface["name"] in each["name"]
-                ):
+                if each["name"] == interface["name"] or interface["name"] in each["name"]:
                     break
             else:
                 commands.extend(self._set_config(interface, {}, module))
@@ -184,7 +178,7 @@ class L2_Interfaces(ConfigBase):
         return commands
 
     def _state_overridden(self, want, have, module):
-        """ The command generator when state is overridden
+        """The command generator when state is overridden
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
@@ -223,7 +217,7 @@ class L2_Interfaces(ConfigBase):
         return commands
 
     def _state_merged(self, want, have, module):
-        """ The command generator when state is merged
+        """The command generator when state is merged
         :rtype: A list
         :returns: the commands necessary to merge the provided into
                   the current configuration
@@ -234,10 +228,7 @@ class L2_Interfaces(ConfigBase):
             interface["name"] = normalize_interface(interface["name"])
             interface = remove_empties(interface)
             for each in have:
-                if (
-                    each["name"] == interface["name"]
-                    or interface["name"] in each["name"]
-                ):
+                if each["name"] == interface["name"] or interface["name"] in each["name"]:
                     break
             else:
                 commands.extend(self._set_config(interface, {}, module))
@@ -247,7 +238,7 @@ class L2_Interfaces(ConfigBase):
         return commands
 
     def _state_deleted(self, want, have):
-        """ The command generator when state is deleted
+        """The command generator when state is deleted
         :rtype: A list
         :returns: the commands necessary to remove the current configuration
                   of the provided objects
@@ -258,10 +249,7 @@ class L2_Interfaces(ConfigBase):
             for interface in want:
                 interface["name"] = normalize_interface(interface["name"])
                 for each in have:
-                    if (
-                        each["name"] == interface["name"]
-                        or interface["name"] in each["name"]
-                    ):
+                    if each["name"] == interface["name"] or interface["name"] in each["name"]:
                         break
                 else:
                     continue
@@ -274,16 +262,21 @@ class L2_Interfaces(ConfigBase):
 
         return commands
 
+    def _handle_deprecated(self, config):
+        if config.get("q_vlan"):
+            config["qvlan"] = config.get("q_vlan")
+            del config["q_vlan"]
+        return config
+
     def _set_config(self, want, have, module):
         # Set the interface config based on the want and have config
         commands = []
         interface = "interface " + want["name"]
         l2_protocol_bool = False
         # Get the diff b/w want and have
-        want_dict = dict_to_set(want)
-        have_dict = dict_to_set(have)
-        diff = want_dict - have_dict
-
+        want = self._handle_deprecated(want)
+        have = self._handle_deprecated(have)
+        diff = dict_diff(have, want)
         if diff:
             # For merging with already configured l2protocol
             if have.get("l2protocol") and len(have.get("l2protocol")) > 1:
@@ -299,26 +292,65 @@ class L2_Interfaces(ConfigBase):
             else:
                 l2protocol = {}
 
-            diff = dict(diff)
             wants_native = diff.get("native_vlan")
             l2transport = diff.get("l2transport")
-            q_vlan = diff.get("q_vlan")
+            qvlan = diff.get("qvlan")
+            encapsulation = diff.get("encapsulation")
             propagate = diff.get("propagate")
             if l2_protocol_bool is False:
                 l2protocol = diff.get("l2protocol")
 
-            if wants_native:
-                cmd = "dot1q native vlan {0}".format(wants_native)
-                add_command_to_config_list(interface, cmd, commands)
+            os_version = get_os_version(self._module)
+            if os_version and Version(os_version) < Version("7.0.0"):
+                if wants_native:
+                    cmd = "dot1q native vlan {0}".format(wants_native)
+                    add_command_to_config_list(interface, cmd, commands)
+
+                if l2transport or l2protocol:
+                    for each in l2protocol:
+                        each = dict(each)
+                        if isinstance(each, dict) and list(each.keys())[0] != "cpsv":
+                            cmd = "l2transport l2protocol {0} {1}".format(
+                                list(each.keys())[0],
+                                list(each.values())[0],
+                            )
+                        add_command_to_config_list(interface, cmd, commands)
+
+                if qvlan and "." in interface:
+                    q_vlans = " ".join(map(str, want.get("qvlan")))
+                    if q_vlans != have.get("qvlan"):
+                        cmd = "dot1q vlan {0}".format(q_vlans)
+                        add_command_to_config_list(interface, cmd, commands)
+            else:
+                if l2transport or l2protocol:
+                    for each in l2protocol:
+                        each = dict(each)
+                        if isinstance(each, dict) and each.get("cpsv"):
+                            cmd = "l2transport l2protocol {0} {1}".format(
+                                "cpsv",
+                                each.get("cpsv"),
+                            )
+                            add_command_to_config_list(
+                                interface,
+                                cmd,
+                                commands,
+                            )
+                            break
+                if encapsulation:
+                    encapsulation = dict(encapsulation)
+                    if encapsulation.get("dot1q"):
+                        if encapsulation.get("second_dot1q"):
+                            cmd = "encapsulation dot1q {0} second-dot1q {1}".format(
+                                encapsulation.get("dot1q"),
+                                encapsulation.get("second_dot1q"),
+                            )
+                        else:
+                            cmd = "encapsulation dot1q {0}".format(
+                                encapsulation.get("dot1q"),
+                            )
+                        add_command_to_config_list(interface, cmd, commands)
 
             if l2transport or l2protocol:
-                for each in l2protocol:
-                    each = dict(each)
-                    if isinstance(each, dict):
-                        cmd = "l2transport l2protocol {0} {1}".format(
-                            list(each.keys())[0], list(each.values())[0]
-                        )
-                    add_command_to_config_list(interface, cmd, commands)
                 if propagate and not have.get("propagate"):
                     cmd = "l2transport propagate remote-status"
                     add_command_to_config_list(interface, cmd, commands)
@@ -327,47 +359,60 @@ class L2_Interfaces(ConfigBase):
             ):
                 module.fail_json(
                     msg="L2transport L2protocol or Propagate can only be configured when "
-                    "L2transport set to True!"
+                    "L2transport set to True!",
                 )
-
-            if q_vlan and "." in interface:
-                q_vlans = " ".join(map(str, want.get("q_vlan")))
-                if q_vlans != have.get("q_vlan"):
-                    cmd = "dot1q vlan {0}".format(q_vlans)
-                    add_command_to_config_list(interface, cmd, commands)
 
         return commands
 
     def _clear_config(self, want, have):
         # Delete the interface config based on the want and have config
         commands = []
+        want = self._handle_deprecated(want)
+        have = self._handle_deprecated(have)
 
         if want.get("name"):
             interface = "interface " + want["name"]
         else:
             interface = "interface " + have["name"]
-        if have.get("native_vlan"):
-            remove_command_from_config_list(
-                interface, "dot1q native vlan", commands
-            )
+        os_version = get_os_version(self._module)
+        if os_version and Version(os_version) < Version("7.0.0"):
+            if have.get("native_vlan"):
+                remove_command_from_config_list(
+                    interface,
+                    "dot1q native vlan",
+                    commands,
+                )
 
-        if have.get("q_vlan"):
-            remove_command_from_config_list(
-                interface, "encapsulation dot1q", commands
-            )
+            if have.get("qvlan"):
+                remove_command_from_config_list(
+                    interface,
+                    "encapsulation dot1q",
+                    commands,
+                )
+        else:
+            if have.get("encapsulation"):
+                remove_command_from_config_list(
+                    interface,
+                    "encapsulation dot1q",
+                    commands,
+                )
 
         if have.get("l2protocol") and (
             want.get("l2protocol") is None or want.get("propagate") is None
         ):
             if "no l2transport" not in commands:
                 remove_command_from_config_list(
-                    interface, "l2transport", commands
+                    interface,
+                    "l2transport",
+                    commands,
                 )
         elif have.get("l2transport") and have.get("l2transport") != want.get(
-            "l2transport"
+            "l2transport",
         ):
             if "no l2transport" not in commands:
                 remove_command_from_config_list(
-                    interface, "l2transport", commands
+                    interface,
+                    "l2transport",
+                    commands,
                 )
         return commands

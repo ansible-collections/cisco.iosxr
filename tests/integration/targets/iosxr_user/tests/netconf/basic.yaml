@@ -1,61 +1,62 @@
 ---
 - name: Remove users prior to tests
-  connection: ansible.netcommon.network_cli
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   cisco.iosxr.iosxr_config:
     lines:
       - no username ansible1
       - no username ansible2
       - no username ansible3
-    provider: '{{ cli }}'
 
-- name: Create user (SetUp)
-  connection: ansible.netcommon.netconf
+- name: Create user (setup)
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     name: ansible1
     configured_password: password
     state: present
-    provider: '{{ netconf }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"ansible1" in result.xml[0]'
       - '"secret" in result.xml[0]'
 
 - name: Create user with update_password always (not idempotent)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     name: ansible1
     configured_password: password
     update_password: always
     state: present
-    provider: '{{ netconf }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"ansible1" in result.xml[0]'
       - '"secret" in result.xml[0]'
 
 - name: Create user again with update_password on_create (idempotent)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     name: ansible1
     configured_password: password
     update_password: on_create
     state: present
-    provider: '{{ netconf }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.xml | length == 0
 
 - name: Modify user group
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     name: ansible1
@@ -63,16 +64,16 @@
     update_password: on_create
     group: sysadmin
     state: present
-    provider: '{{ netconf }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"ansible1" in result.xml[0]'
       - '"sysadmin" in result.xml[0]'
 
 - name: Modify user group again (idempotent)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     name: ansible1
@@ -80,28 +81,26 @@
     update_password: on_create
     group: sysadmin
     state: present
-    provider: '{{ netconf }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.xml | length == 0
 
-- name: Collection of users (SetUp)
-  connection: ansible.netcommon.netconf
+- name: Collection of users (setup)
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
-
       - name: ansible2
 
       - name: ansible3
     configured_password: password
     state: present
     group: sysadmin
-    provider: '{{ netconf }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"ansible2" in result.xml[0]'
@@ -112,20 +111,19 @@
       - '"sysadmin" in result.xml[1]'
 
 - name: Add collection of users again with update_password always (not idempotent)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
-
       - name: ansible2
 
       - name: ansible3
     configured_password: password
     state: present
     group: sysadmin
-    provider: '{{ netconf }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"ansible2" in result.xml[0]'
@@ -133,11 +131,11 @@
       - '"secret" in result.xml[0]'
 
 - name: Add collection of users again with update_password on_create (idempotent)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
-
       - name: ansible2
 
       - name: ansible3
@@ -145,28 +143,26 @@
     update_password: on_create
     state: present
     group: sysadmin
-    provider: '{{ netconf }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.xml | length == 0
 
 - name: Delete collection of users
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
-
       - name: ansible1
 
       - name: ansible2
 
       - name: ansible3
     state: absent
-    provider: '{{ netconf }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"ansible1" in result.xml[0]'
@@ -174,20 +170,19 @@
       - '"ansible3" in result.xml[0]'
 
 - name: Delete collection of users again (idempotent)
-  connection: ansible.netcommon.netconf
+  vars:
+    ansible_connection: ansible.netcommon.netconf
   register: result
   cisco.iosxr.iosxr_user:
     aggregate:
-
       - name: ansible1
 
       - name: ansible2
 
       - name: ansible3
     state: absent
-    provider: '{{ netconf }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.xml | length == 0

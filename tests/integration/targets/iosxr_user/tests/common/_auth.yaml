@@ -1,0 +1,116 @@
+---
+- block:
+    - name: Generate /etc/ssh/ RSA host key
+      ansible.builtin.command: ssh-keygen -q -t rsa -f "{{role_path}}"/mykey -C "" -N ""
+      args:
+        creates: "{{role_path}}/mykey"
+
+    - name: Generate /etc/ssh/ RSA host key
+      ansible.builtin.command: ssh-keygen -q -t rsa -f "{{role_path}}"/mykey1 -C "" -N ""
+      args:
+        creates: "{{role_path}}/mykey1"
+
+    - name: Create user with password
+      connection: ansible.netcommon.network_cli
+      cisco.iosxr.iosxr_user:
+        name: auth_user
+        state: present
+        configured_password: pass123
+
+    - name: Test login
+      ansible.builtin.expect:
+        command: ssh auth_user@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no show version
+        responses:
+          (?i)password: pass123
+      connection: ansible.netcommon.network_cli
+
+    - name: Test login with invalid password (should fail)
+      ansible.builtin.expect:
+        command: ssh auth_user@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no show version
+        responses:
+          (?i)password: badpass
+      ignore_errors: true
+      connection: ansible.netcommon.network_cli
+      register: results
+
+    - name: Check that attempt failed
+      ansible.builtin.assert:
+        that:
+          - results.failed
+
+    - name: Create user with private key (contents input)
+      connection: ansible.netcommon.network_cli
+      cisco.iosxr.iosxr_user:
+        name: auth_user
+        state: present
+        public_key_contents: '{{ lookup(''file'', "{{role_path}}/mykey.pub") }}'
+
+    - name: Test login with private key
+      ansible.builtin.expect:
+        command: ssh auth_user@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i {{role_path}}/mykey show version
+        responses:
+          (?i)password: pass123
+      connection: ansible.netcommon.network_cli
+
+    - name: Remove user and key
+      connection: ansible.netcommon.network_cli
+      cisco.iosxr.iosxr_user:
+        name: auth_user
+        state: absent
+
+    - name: Test login with private key (should fail, no user)
+      ansible.builtin.expect:
+        command: ssh auth_user@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i {{role_path}}/mykey show version
+        responses:
+          (?i)password: pass123
+      ignore_errors: true
+      connection: ansible.netcommon.network_cli
+      register: results
+
+    - name: Create user with private key (path input)
+      connection: ansible.netcommon.network_cli
+      cisco.iosxr.iosxr_user:
+        name: auth_user1
+        state: present
+        public_key: "{{role_path}}/mykey.pub"
+
+    - name: Test login with private key
+      ansible.builtin.expect:
+        command: ssh auth_user1@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i {{role_path}}/mykey show version
+        responses:
+          (?i)password: pass123
+      ignore_errors: true
+      connection: ansible.netcommon.network_cli
+
+    - name: Change private key for user
+      connection: ansible.netcommon.network_cli
+      cisco.iosxr.iosxr_user:
+        name: auth_user1
+        state: present
+        public_key_contents: '{{ lookup(''file'', "{{role_path}}/mykey1.pub") }}'
+
+    - name: Test login with invalid private key (should fail)
+      ansible.builtin.expect:
+        command: ssh auth_user1@{{ ansible_ssh_host }} -p {{ ansible_ssh_port|default(22) }} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i {{role_path}}/mykey show version
+        responses:
+          (?i)password: pass123
+      ignore_errors: true
+      connection: ansible.netcommon.network_cli
+      register: results
+
+    - name: Check that attempt failed
+      ansible.builtin.assert:
+        that:
+          - results.failed
+  always:
+    - name: Delete user
+      connection: ansible.netcommon.network_cli
+      cisco.iosxr.iosxr_user:
+        name: "{{item}}"
+        state: absent
+      with_items:
+        - auth_user
+        - auth_user1
+
+    - name: Remove keys
+      ansible.builtin.command: "rm -rf {{role_path}}/mykey*"

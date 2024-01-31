@@ -1,20 +1,17 @@
 ---
-- debug:
-    msg: START isoxr_lag_interfaces round trip integration tests on connection={{
-      ansible_connection }}
+- ansible.builtin.debug:
+    msg: START isoxr_lag_interfaces round trip integration tests on connection={{ ansible_connection }}
 
 - block:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml
 
     - name: Apply the provided configuration (base config)
       register: base_config
       cisco.iosxr.iosxr_lag_interfaces:
         config:
-
           - name: Bundle-Ether10
+            mode: active
             members:
-
               - member: GigabitEthernet0/0/0/1
                 mode: passive
             links:
@@ -28,8 +25,8 @@
     - name: Gather interfaces facts
       cisco.iosxr.iosxr_facts:
         gather_subset:
-          - '!all'
-          - '!min'
+          - "!all"
+          - "!min"
         gather_network_resources:
           - lag_interfaces
 
@@ -37,10 +34,8 @@
       register: result
       cisco.iosxr.iosxr_lag_interfaces:
         config:
-
           - name: Bundle-Ether10
             members:
-
               - member: GigabitEthernet0/0/0/9
                 mode: active
 
@@ -52,20 +47,17 @@
         state: overridden
 
     - name: Assert that changes were applied
-      assert:
-        that: "{{ round_trip['after'] | symmetric_difference(result['after']) |length\
-          \ == 0  }}"
+      ansible.builtin.assert:
+        that: "{{ round_trip['after'] | symmetric_difference(result['after']) |length == 0  }}"
 
-    - name: Revert back to base config using facts round trip
+    - name: Revert back to base configuration using facts round trip
       register: revert
       cisco.iosxr.iosxr_lag_interfaces:
         config: "{{ ansible_facts['network_resources']['lag_interfaces'] }}"
         state: overridden
 
-    - name: Assert that config was reverted
-      assert:
-        that: "{{ base_config['after'] | symmetric_difference(revert['after']) |length\
-          \ == 0 }}"
+    - name: Assert that configuration was reverted
+      ansible.builtin.assert:
+        that: "{{ base_config['after'] | symmetric_difference(revert['after']) |length == 0 }}"
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

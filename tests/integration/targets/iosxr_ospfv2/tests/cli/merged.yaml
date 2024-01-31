@@ -1,13 +1,11 @@
 ---
-- debug:
-    msg: START iosxr_ospfv2 merged integration tests on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START iosxr_ospfv2 merged integration tests on connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
-    - name: Merge the provided configuration with the exisiting running configuration
+    - name: Merge the provided configuration with the existing running configuration
       register: result
       cisco.iosxr.iosxr_ospfv2: &id001
         config:
@@ -22,7 +20,7 @@
                 max_adjacency: 20
               authentication:
                 message_digest:
-                  keychain: 'ansible1101pass'
+                  keychain: "ansible1101pass"
             - process_id: 10
               areas:
                 - area_id: 11
@@ -45,7 +43,7 @@
               retransmit_interval: 2
               packet_size: 577
               priority: 1
-              router_id: '2.2.2.2'
+              router_id: "2.2.2.2"
               demand_circuit: enable
               passive: disable
               summary_in: enable
@@ -55,33 +53,30 @@
         state: merged
 
     - name: Assert that before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that: "{{ merged['before'] == result['before'] }}"
 
     - name: Assert that correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['commands'] | symmetric_difference(result['commands']) |length\
-            \ == 0 }}"
+          - "{{ merged['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that after dicts was correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ merged['after'] == result['after'] }}"
 
-    - name: Merge the provided configuration with the existing running configuration
-        (IDEMPOTENT)
+    - name: Merge the provided configuration with the existing running configuration (idempotent)
       register: result
       cisco.iosxr.iosxr_ospfv2: *id001
-
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
           - result.commands|length == 0
 
     - name: Assert that before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ merged['after'] == result['before'] }}"
 
@@ -102,31 +97,28 @@
                 max_adjacency: 21
               authentication:
                 message_digest:
-                  keychain: 'ansible1101pass'
+                  keychain: "ansible1101pass"
 
     - name: Assert that before dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that: "{{ merged['after'] == result['before'] }}"
 
     - name: Assert that correct set of commands were generated
-      assert:
+      ansible.builtin.assert:
         that:
-          - "{{ merged['update_commands'] | symmetric_difference(result['commands'])\
-            \ |length == 0 }}"
+          - "{{ merged['update_commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that after dicts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that: "{{ merged['update_after'] == result['after'] }}"
 
-    - name: Update existing ospfv2 configuration using merged (IDEMPOTENT)
+    - name: Update existing ospfv2 configuration using merged (idempotent)
       register: result
       cisco.iosxr.iosxr_ospfv2: *id002
-
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
           - result.commands|length == 0
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

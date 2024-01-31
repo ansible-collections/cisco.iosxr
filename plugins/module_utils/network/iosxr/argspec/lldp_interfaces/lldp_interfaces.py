@@ -28,12 +28,12 @@ The arg spec for the iosxr_lldp_interfaces module
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 class Lldp_interfacesArgs(object):  # pylint: disable=R0903
-    """The arg spec for the iosxr_lldp_interfaces module
-    """
+    """The arg spec for the iosxr_lldp_interfaces module"""
 
     def __init__(self, **kwargs):
         pass
@@ -51,7 +51,7 @@ class Lldp_interfacesArgs(object):  # pylint: disable=R0903
                                 "ieee-nearest-bridge",
                                 "ieee-nearest-non-tmpr-bridge",
                             ],
-                        }
+                        },
                     },
                 },
                 "name": {"type": "str"},

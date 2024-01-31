@@ -18,6 +18,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 GENERATOR_VERSION = "1.0"
@@ -25,7 +26,7 @@ GENERATOR_VERSION = "1.0"
 
 DOCUMENTATION = """
 module: iosxr_l2_interfaces
-short_description: L2 interfaces resource module
+short_description: Resource Module to configure L2 interfaces.
 description: This module manages the Layer-2 interface attributes on Cisco IOS-XR
   devices.
 version_added: 1.0.0
@@ -33,7 +34,6 @@ author:
 - Sumit Jaiswal (@justjais)
 - Rohit Thakur (@rohitthakur2590)
 notes:
-- Tested against Cisco IOS-XRv Version 6.1.3 on VIRL.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 options:
   config:
@@ -95,6 +95,24 @@ options:
             - forward
             - tunnel
             type: str
+          cpsv:
+            description:
+              - CDP, PVST+, STP, and VTP protocols.
+            choices:
+            - drop
+            - reverse-tunnel
+            - tunnel
+            type: str
+      encapsulation:
+        description: Specify which packets will be matched by this sub-interface.
+        type: dict
+        suboptions:
+          dot1q:
+            type: int
+            description: IEEE 802.1Q VLAN-tagged packets.
+          second_dot1q:
+            type: int
+            description: IEEE 802.1Q VLAN-tagged packets.
       q_vlan:
         description:
         - 802.1Q VLAN configuration. Note that it can accept either 2 VLAN IDs when
@@ -102,8 +120,19 @@ options:
           list when configuring Q-in-any vlan as input. Note, that this option is
           valid only with respect to Sub-Interface and is not valid when configuring
           for Interface.
+        - This option is DEPRECATED and replaced with qvlan,
+          this attribute will be removed after 2026-06-01.
         type: list
         elements: int
+      qvlan:
+        description:
+        - 802.1Q VLAN configuration. Note that it can accept either 2 VLAN IDs when
+          configuring Q-in-Q VLAN, or it will accept 1 VLAN ID and 'any' as input
+          list when configuring Q-in-any vlan as input. Note, that this option is
+          valid only with respect to Sub-Interface and is not valid when configuring
+          for Interface.
+        type: list
+        elements: str
       propagate:
         description:
         - Propagate Layer 2 transport events. Note that it will work only when the
@@ -154,19 +183,20 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/3
-      native_vlan: 20
-    - name: GigabitEthernet0/0/0/4
-      native_vlan: 40
-      l2transport: true
-      l2protocol:
-      - stp: tunnel
-    - name: GigabitEthernet0/0/0/3.900
-      l2transport: true
-      q_vlan:
-      - 20
-      - 40
+      - name: GigabitEthernet0/0/0/3
+        native_vlan: 20
+      - name: GigabitEthernet0/0/0/4
+        native_vlan: 40
+        l2transport: true
+        l2protocol:
+          - stp: tunnel
+      - name: GigabitEthernet0/0/0/3.900
+        l2transport: true
+        q_vlan:
+          - 20
+          - 40
     state: merged
+
 
 # After state:
 # ------------
@@ -216,19 +246,22 @@ EXAMPLES = """
 #  dot1q vlan 20 40
 # !
 
-- name: Replaces device configuration of listed interfaces with provided configuration
+- name: >-
+    Replaces device configuration of listed interfaces with provided
+    configuration
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/4
-      native_vlan: 40
-      l2transport: true
-      l2protocol:
-      - stp: forward
-    - name: GigabitEthernet0/0/0/3.900
-      q_vlan:
-      - 20
-      - any
+      - name: GigabitEthernet0/0/0/4
+        native_vlan: 40
+        l2transport: true
+        l2protocol:
+          - stp: forward
+      - name: GigabitEthernet0/0/0/3.900
+        q_vlan:
+          - 20
+          - any
     state: replaced
+
 
 # After state:
 # -------------
@@ -281,16 +314,17 @@ EXAMPLES = """
 - name: Override device configuration of all interfaces with provided configuration
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/4
-      native_vlan: 40
-      l2transport: true
-      l2protocol:
-      - stp: forward
-    - name: GigabitEthernet0/0/0/3.900
-      q_vlan:
-      - 20
-      - any
+      - name: GigabitEthernet0/0/0/4
+        native_vlan: 40
+        l2transport: true
+        l2protocol:
+          - stp: forward
+      - name: GigabitEthernet0/0/0/3.900
+        q_vlan:
+          - 20
+          - any
     state: overridden
+
 
 # After state:
 # -------------
@@ -340,7 +374,7 @@ EXAMPLES = """
 - name: "Delete L2 attributes of given interfaces (Note: This won't delete the interface itself)"
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/4
+      - name: GigabitEthernet0/0/0/4
     state: deleted
 
 # After state:
@@ -482,25 +516,21 @@ EXAMPLES = """
 - name: Render platform specific commands from task input using rendered state
   cisco.iosxr.iosxr_l2_interfaces:
     config:
-
-    - name: GigabitEthernet0/0/0/1
-      native_vlan: 10
-      l2transport: true
-      l2protocol:
-
-      - pvst: tunnel
-
-      - cdp: forward
-      propagate: true
-
-    - name: GigabitEthernet0/0/0/3.900
-      q_vlan:
-      - 20
-      - 40
-
-    - name: GigabitEthernet0/0/0/4
-      native_vlan: 40
+      - name: GigabitEthernet0/0/0/1
+        native_vlan: 10
+        l2transport: true
+        l2protocol:
+          - pvst: tunnel
+          - cdp: forward
+        propagate: true
+      - name: GigabitEthernet0/0/0/3.900
+        q_vlan:
+          - 20
+          - 40
+      - name: GigabitEthernet0/0/0/4
+        native_vlan: 40
     state: rendered
+
 # Task Output (redacted)
 # -----------------------
 # "rendered": [
@@ -627,9 +657,6 @@ EXAMPLES = """
 #  shutdown
 #  dot1q native vlan 40
 # !
-
-
-
 """
 
 RETURN = """
@@ -651,6 +678,7 @@ commands:
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.l2_interfaces.l2_interfaces import (
     L2_InterfacesArgs,
 )

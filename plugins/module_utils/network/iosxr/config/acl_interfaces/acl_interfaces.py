@@ -13,20 +13,20 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.acl_interfaces import (
-    Acl_interfacesTemplate,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
+    ResourceModule,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
-    ResourceModule,
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.acl_interfaces import (
+    Acl_interfacesTemplate,
 )
 
 
@@ -45,7 +45,7 @@ class Acl_interfaces(ResourceModule):
         )
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -56,7 +56,7 @@ class Acl_interfaces(ResourceModule):
         return self.result
 
     def gen_config(self):
-        """ Select the appropriate function based on the state provided
+        """Select the appropriate function based on the state provided
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
@@ -93,7 +93,8 @@ class Acl_interfaces(ResourceModule):
         self._compare_lists(want=want, have=have)
         if len(self.commands) != begin:
             self.commands.insert(
-                begin, self._tmplt.render(want or have, "interface", False)
+                begin,
+                self._tmplt.render(want or have, "interface", False),
             )
 
     def _compare_lists(self, want, have):
@@ -116,11 +117,7 @@ class Acl_interfaces(ResourceModule):
     def _list_to_dict(self, entry):
         for item in entry.values():
             for ag in item.get("access_groups", []):
-                ag["acls"] = {
-                    subentry["direction"]: subentry
-                    for subentry in ag.get("acls", [])
-                }
+                ag["acls"] = {subentry["direction"]: subentry for subentry in ag.get("acls", [])}
             item["access_groups"] = {
-                subentry["afi"]: subentry
-                for subentry in item.get("access_groups", [])
+                subentry["afi"]: subentry for subentry in item.get("access_groups", [])
             }

@@ -1,12 +1,10 @@
 ---
-- debug:
-    msg: START iosxr_ospfv3 rendered integration tests on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START iosxr_ospfv3 rendered integration tests on connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
     - name: Use rendered state to convert task input to device specific commands
       register: result
       cisco.iosxr.iosxr_ospfv3:
@@ -41,28 +39,25 @@
               retransmit_interval: 2
               packet_size: 577
               priority: 1
-              router_id: '2.2.2.2'
+              router_id: "2.2.2.2"
               demand_circuit: true
               passive: false
               flood_reduction: false
               mtu_ignore: true
         state: rendered
 
-    - assert:
+    - ansible.builtin.assert:
         that:
-          - "{{ merged['commands'] | symmetric_difference(result['rendered'])\
-          \ |length==0 }}"
+          - "{{ merged['commands'] | symmetric_difference(result['rendered']) |length==0 }}"
           - "result.changed == false"
 
-    - name: Gather Ospfv3 facts from the device and assert that its empty
+    - name: Gather ospfv3 facts from the device and assert that its empty
       register: result
       cisco.iosxr.iosxr_ospfv3:
         state: gathered
 
-    - name: Make sure that rendered task actually did not make any changes to the
-        device
-      assert:
+    - name: Make sure that rendered task actually did not make any changes to the device
+      ansible.builtin.assert:
         that: "{{ result['gathered'] == {} }}"
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

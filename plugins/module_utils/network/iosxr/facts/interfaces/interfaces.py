@@ -11,24 +11,25 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from copy import deepcopy
 import re
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
+
+from copy import deepcopy
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.interfaces.interfaces import (
+    InterfacesArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     get_interface_type,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.interfaces.interfaces import (
-    InterfacesArgs,
-)
 
 
 class InterfacesFacts(object):
-    """ The iosxr interfaces fact class
-    """
+    """The iosxr interfaces fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -44,8 +45,11 @@ class InterfacesFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_config(self, connection):
+        return connection.get_config(flags="interface")
+
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for interfaces
+        """Populate the facts for interfaces
         :param module: the module instance
         :param connection: the device connection
         :param data: previously collected conf
@@ -54,7 +58,7 @@ class InterfacesFacts(object):
         """
         objs = []
         if not data:
-            data = connection.get("show running-config interface")
+            data = self.get_config(connection)
 
         # operate on a collection of resource x
         config = ("\n" + data).split("\ninterface ")
@@ -68,7 +72,8 @@ class InterfacesFacts(object):
         if objs:
             facts["interfaces"] = []
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             for cfg in params["config"]:
                 facts["interfaces"].append(utils.remove_empties(cfg))
@@ -87,24 +92,24 @@ class InterfacesFacts(object):
 
         config = deepcopy(spec)
         match = re.search(r"^(\S+)", conf)
+        if match:
+            intf = match.group(1)
+            if match.group(1).lower() == "preconfigure":
+                match = re.search(r"^(\S+) (.*)", conf)
+                if match:
+                    intf = match.group(2)
 
-        intf = match.group(1)
-        if match.group(1).lower() == "preconfigure":
-            match = re.search(r"^(\S+) (.*)", conf)
-            if match:
-                intf = match.group(2)
+            if get_interface_type(intf) == "unknown":
+                return {}
+            # populate the facts from the configuration
+            config["name"] = intf
+            config["description"] = utils.parse_conf_arg(conf, "description")
+            if utils.parse_conf_arg(conf, "speed"):
+                config["speed"] = int(utils.parse_conf_arg(conf, "speed"))
+            if utils.parse_conf_arg(conf, "mtu"):
+                config["mtu"] = int(utils.parse_conf_arg(conf, "mtu"))
+            config["duplex"] = utils.parse_conf_arg(conf, "duplex")
+            enabled = utils.parse_conf_cmd_arg(conf, "shutdown", False)
+            config["enabled"] = enabled if enabled is not None else True
 
-        if get_interface_type(intf) == "unknown":
-            return {}
-        # populate the facts from the configuration
-        config["name"] = intf
-        config["description"] = utils.parse_conf_arg(conf, "description")
-        if utils.parse_conf_arg(conf, "speed"):
-            config["speed"] = int(utils.parse_conf_arg(conf, "speed"))
-        if utils.parse_conf_arg(conf, "mtu"):
-            config["mtu"] = int(utils.parse_conf_arg(conf, "mtu"))
-        config["duplex"] = utils.parse_conf_arg(conf, "duplex")
-        enabled = utils.parse_conf_cmd_arg(conf, "shutdown", False)
-        config["enabled"] = enabled if enabled is not None else True
-
-        return utils.remove_empties(config)
+            return utils.remove_empties(config)

@@ -1,7 +1,6 @@
 ---
-- debug:
-    msg: START iosxr_lag_interfaces rendered integration tests on connection={{
-      ansible_connection }}
+- ansible.builtin.debug:
+    msg: START iosxr_lag_interfaces rendered integration tests on connection={{ ansible_connection }}
 
 - name: Render platform specific commands from task input using rendered state
   register: result
@@ -17,7 +16,6 @@
         links:
           max_active: 5
           min_active: 2
-        load_balancing_hash: src-ip
 
       - name: Bundle-Ether12
         members:
@@ -25,10 +23,9 @@
             mode: passive
           - member: GigabitEthernet0/0/0/4
             mode: passive
-        load_balancing_hash: dst-ip
     state: rendered
 
 - name: Assert that correct set of commands were rendered
-  assert:
+  ansible.builtin.assert:
     that:
       - rendered['commands'].sort() == result['rendered'].sort()

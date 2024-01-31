@@ -5,18 +5,19 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_command
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
-short_description: Run commands on remote devices running Cisco IOS XR
+short_description: Module to run commands on remote devices.
 description:
 - Sends arbitrary commands to an IOS XR node and returns the results read from the
   device. This module includes an argument that will cause the module to wait for
   a specific condition before returning or timing out if the condition is not met.
 - This module does not support running commands in configuration mode. Please use
-  M(iosxr_config) to configure iosxr devices.
+  M(cisco.iosxr.iosxr_config) to configure iosxr devices.
 version_added: 1.0.0
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
@@ -25,7 +26,6 @@ notes:
   width 512 and terminal exec prompt no-timestamp.
 - This module works with C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 - This module does not support C(netconf) connection.
-- Tested against IOS XR 6.1.3
 options:
   commands:
     description:
@@ -88,18 +88,32 @@ EXAMPLES = """
 - name: run multiple commands on remote nodes
   cisco.iosxr.iosxr_command:
     commands:
-    - show version
-    - show interfaces
-    - {command: example command that prompts, prompt: expected prompt, answer: yes}
+      - show version
+      - show interfaces
+      - {command: example command that prompts, prompt: expected prompt, answer: true}
 
 - name: run multiple commands and evaluate the output
   cisco.iosxr.iosxr_command:
     commands:
-    - show version
-    - show interfaces
+      - show version
+      - show interfaces
     wait_for:
-    - result[0] contains IOS-XR
-    - result[1] contains Loopback0
+      - result[0] contains IOS-XR
+      - result[1] contains Loopback0
+
+- name: 'multiple prompt, multiple answer (mandatory check for all prompts)'
+  cisco.iosxr.iosxr_command:
+    commands:
+      - command: key config-key password-encryption
+        prompt:
+          - 'Enter old key :'
+          - 'Enter new key :'
+          - 'Enter confirm key :'
+        answer:
+          - test1234
+          - test12345
+          - test12345
+        check_all: true
 """
 
 RETURN = """
@@ -126,13 +140,9 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.parsing import (
     Conditional,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_lines,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    run_commands,
-    iosxr_argument_spec,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_lines
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import run_commands
 
 
 def parse_commands(module, warnings):
@@ -145,7 +155,7 @@ def parse_commands(module, warnings):
         if module.check_mode and not command.startswith("show"):
             warnings.append(
                 "Only show commands are supported when using check mode, not "
-                "executing %s" % command
+                "executing %s" % command,
             )
             commands.remove(item)
 
@@ -161,11 +171,7 @@ def main():
         interval=dict(default=1, type="int"),
     )
 
-    argument_spec.update(iosxr_argument_spec)
-
-    module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
-    )
+    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
     warnings = list()
     result = {"changed": False, "warnings": warnings}
@@ -202,9 +208,7 @@ def main():
         msg = "One or more conditional statements have not been satisfied"
         module.fail_json(msg=msg, failed_conditions=failed_conditions)
 
-    result.update(
-        {"stdout": responses, "stdout_lines": list(to_lines(responses))}
-    )
+    result.update({"stdout": responses, "stdout_lines": list(to_lines(responses))})
 
     module.exit_json(**result)
 

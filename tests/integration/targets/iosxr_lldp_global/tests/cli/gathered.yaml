@@ -1,13 +1,11 @@
 ---
-- debug:
-    msg: START iosxr_lldp_global gathered integration tests on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START iosxr_lldp_global gathered integration tests on connection={{ ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
-    - name: Merge the provided configuration with the exisiting running configuration
+    - name: Merge the provided configuration with the existing running configuration
       register: result
       cisco.iosxr.iosxr_lldp_global:
         config:
@@ -26,9 +24,8 @@
         state: gathered
 
     - name: Assert that facts were correctly generated
-      assert:
+      ansible.builtin.assert:
         that: merged['after'] == result['gathered']
 
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

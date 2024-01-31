@@ -19,11 +19,12 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
-author: Ansible Networking Team
-netconf: iosxr
+author: Ansible Networking Team (@ansible-network)
+name: iosxr
 short_description: Use iosxr netconf plugin to run netconf commands on Cisco IOSXR
   platform
 description:
@@ -39,20 +40,25 @@ options:
       the ncclient device handler name refer ncclient library documentation.
 """
 
+import collections
 import json
 import re
-import collections
 
+from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils._text import to_native, to_text
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.netconf import (
     remove_namespaces,
 )
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.netconf_base import (
+    NetconfBase,
+    ensure_ncclient,
+)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     build_xml,
     etree_find,
 )
-from ansible.errors import AnsibleConnectionFailure
-from ansible.plugins.netconf import NetconfBase, ensure_ncclient
+
 
 try:
     from ncclient import manager
@@ -75,62 +81,71 @@ class Netconf(NetconfBase):
         install_meta = collections.OrderedDict()
         install_meta.update(
             [
+                ("prepare", {"xpath": "install/prepare", "tag": True}),
                 (
-                    "boot-variables",
-                    {"xpath": "install/boot-variables", "tag": True},
-                ),
-                (
-                    "boot-variable",
+                    "prepared-boot-image",
                     {
-                        "xpath": "install/boot-variables/boot-variable",
-                        "tag": True,
-                        "lead": True,
-                    },
-                ),
-                ("software", {"xpath": "install/software", "tag": True}),
-                (
-                    "alias-devices",
-                    {"xpath": "install/software/alias-devices", "tag": True},
-                ),
-                (
-                    "alias-device",
-                    {
-                        "xpath": "install/software/alias-devices/alias-device",
+                        "xpath": "install/prepare/prepared-boot-image",
                         "tag": True,
                     },
                 ),
+                ("version", {"xpath": "install/version", "tag": True}),
+                ("label", {"xpath": "install/version/label", "tag": True}),
                 (
-                    "m:device-name",
-                    {
-                        "xpath": "install/software/alias-devices/alias-device/device-name",
-                        "value": "disk0:",
-                    },
+                    "hardware-info",
+                    {"xpath": "install/version/hardware-info", "tag": True},
                 ),
-            ]
+                ("package", {"xpath": "install/version/package", "tag": True}),
+            ],
         )
-
-        install_filter = build_xml("install", install_meta, opcode="filter")
+        install_filter = build_xml(
+            "install",
+            install_meta,
+            opcode="filter",
+            namespace="install",
+        )
         try:
             reply = self.get(install_filter)
             resp = remove_namespaces(
-                re.sub(r'<\?xml version="1.0" encoding="UTF-8"\?>', "", reply)
+                re.sub(r'<\?xml version="1.0" encoding="UTF-8"\?>', "", reply),
             )
-            ele_boot_variable = etree_find(resp, "boot-variable/boot-variable")
-            if ele_boot_variable is not None:
-                device_info["network_os_image"] = re.split(
-                    "[:|,]", ele_boot_variable.text
-                )[1]
-            ele_package_name = etree_find(reply, "package-name")
+            ele_package_name = etree_find(resp.strip(), "name")
             if ele_package_name is not None:
                 device_info["network_os_package"] = ele_package_name.text
-                device_info["network_os_version"] = re.split(
-                    "-", ele_package_name.text
-                )[-1]
+            ele_label = etree_find(resp.strip(), "label")
+            if ele_label is not None:
+                device_info["network_os_version"] = ele_label.text
 
-            hostname_filter = build_xml("host-names", opcode="filter")
+            model_search_strs = [
+                r"^[Cc]isco (.+) \(\) processor",
+                r"^[Cc]isco (.+) \(revision",
+                r"^[Cc]isco (\S+ \S+).+bytes of .*memory",
+            ]
+            ele_hardware_info = etree_find(resp.strip(), "hardware-info")
+            if ele_hardware_info is not None:
+                for item in model_search_strs:
+                    match = re.search(item, ele_hardware_info.text, re.M)
+                    if match:
+                        device_info["network_os_model"] = match.group(1)
+                        break
+        except Exception as exc:
+            error_msg = to_text(exc, errors="surrogate_or_strict").strip()
+            if "bad-namespace" in error_msg:
+                device_info = self.get_device_info_old_version()
+            else:
+                self._connection.queue_message(
+                    "vvvv",
+                    "Fail to retrieve device info %s" % exc,
+                )
+        try:
+            hostname_filter = build_xml(
+                "host-names",
+                opcode="filter",
+                namespace="host-names",
+            )
             reply = self.get(hostname_filter)
             resp = remove_namespaces(
-                re.sub(r'<\?xml version="1.0" encoding="UTF-8"\?>', "", reply)
+                re.sub(r'<\?xml version="1.0" encoding="UTF-8"\?>', "", reply),
             )
             hostname_ele = etree_find(resp.strip(), "host-name")
             device_info["network_os_hostname"] = (
@@ -138,7 +153,8 @@ class Netconf(NetconfBase):
             )
         except Exception as exc:
             self._connection.queue_message(
-                "vvvv", "Fail to retrieve device info %s" % exc
+                "vvvv",
+                "Fail to retrieve device info %s" % exc,
             )
         return device_info
 
@@ -151,7 +167,7 @@ class Netconf(NetconfBase):
         result["client_capabilities"] = list(self.m.client_capabilities)
         result["session_id"] = self.m.session_id
         result["device_operations"] = self.get_device_operations(
-            result["server_capabilities"]
+            result["server_capabilities"],
         )
         return json.dumps(result)
 
@@ -191,17 +207,15 @@ class Netconf(NetconfBase):
         return guessed_os
 
     # TODO: change .xml to .data_xml, when ncclient supports data_xml on all platforms
-    def get(self, filter=None, remove_ns=False):
+    def get(self, filter=None, with_defaults=None, remove_ns=False):
         if isinstance(filter, list):
             filter = tuple(filter)
         try:
-            resp = self.m.get(filter=filter)
+            resp = self.m.get(filter=filter, with_defaults=with_defaults)
             if remove_ns:
                 response = remove_namespaces(resp)
             else:
-                response = (
-                    resp.data_xml if hasattr(resp, "data_xml") else resp.xml
-                )
+                response = resp.data_xml if hasattr(resp, "data_xml") else resp.xml
             return response
         except RPCError as exc:
             raise Exception(to_xml(exc.xml))
@@ -214,9 +228,7 @@ class Netconf(NetconfBase):
             if remove_ns:
                 response = remove_namespaces(resp)
             else:
-                response = (
-                    resp.data_xml if hasattr(resp, "data_xml") else resp.xml
-                )
+                response = resp.data_xml if hasattr(resp, "data_xml") else resp.xml
             return response
         except RPCError as exc:
             raise Exception(to_xml(exc.xml))
@@ -245,27 +257,29 @@ class Netconf(NetconfBase):
             if remove_ns:
                 response = remove_namespaces(resp)
             else:
-                response = (
-                    resp.data_xml if hasattr(resp, "data_xml") else resp.xml
-                )
+                response = resp.data_xml if hasattr(resp, "data_xml") else resp.xml
             return response
         except RPCError as exc:
             raise Exception(to_xml(exc.xml))
 
     def commit(
-        self, confirmed=False, timeout=None, persist=None, remove_ns=False
+        self,
+        confirmed=False,
+        timeout=None,
+        persist=None,
+        remove_ns=False,
     ):
         timeout = to_text(timeout, errors="surrogate_or_strict")
         try:
             resp = self.m.commit(
-                confirmed=confirmed, timeout=timeout, persist=persist
+                confirmed=confirmed,
+                timeout=timeout,
+                persist=persist,
             )
             if remove_ns:
                 response = remove_namespaces(resp)
             else:
-                response = (
-                    resp.data_xml if hasattr(resp, "data_xml") else resp.xml
-                )
+                response = resp.data_xml if hasattr(resp, "data_xml") else resp.xml
             return response
         except RPCError as exc:
             raise Exception(to_xml(exc.xml))
@@ -276,9 +290,7 @@ class Netconf(NetconfBase):
             if remove_ns:
                 response = remove_namespaces(resp)
             else:
-                response = (
-                    resp.data_xml if hasattr(resp, "data_xml") else resp.xml
-                )
+                response = resp.data_xml if hasattr(resp, "data_xml") else resp.xml
             return response
         except RPCError as exc:
             raise Exception(to_xml(exc.xml))
@@ -289,9 +301,78 @@ class Netconf(NetconfBase):
             if remove_ns:
                 response = remove_namespaces(resp)
             else:
-                response = (
-                    resp.data_xml if hasattr(resp, "data_xml") else resp.xml
-                )
+                response = resp.data_xml if hasattr(resp, "data_xml") else resp.xml
             return response
         except RPCError as exc:
             raise Exception(to_xml(exc.xml))
+
+    def get_device_info_old_version(self):
+        device_info = {}
+        device_info["network_os"] = "iosxr"
+        install_meta = collections.OrderedDict()
+        install_meta.update(
+            [
+                (
+                    "boot-variables",
+                    {"xpath": "install/boot-variables", "tag": True},
+                ),
+                (
+                    "boot-variable",
+                    {
+                        "xpath": "install/boot-variables/boot-variable",
+                        "tag": True,
+                        "lead": True,
+                    },
+                ),
+                ("software", {"xpath": "install/software", "tag": True}),
+                (
+                    "alias-devices",
+                    {"xpath": "install/software/alias-devices", "tag": True},
+                ),
+                (
+                    "alias-device",
+                    {
+                        "xpath": "install/software/alias-devices/alias-device",
+                        "tag": True,
+                    },
+                ),
+                (
+                    "m:device-name",
+                    {
+                        "xpath": "install/software/alias-devices/alias-device/device-name",
+                        "value": "disk0:",
+                    },
+                ),
+            ],
+        )
+
+        install_filter = build_xml(
+            "install",
+            install_meta,
+            opcode="filter",
+            namespace="install_old",
+        )
+        try:
+            reply = self.get(install_filter)
+            resp = remove_namespaces(
+                re.sub(r'<\?xml version="1.0" encoding="UTF-8"\?>', "", reply),
+            )
+            ele_boot_variable = etree_find(resp, "boot-variable/boot-variable")
+            if ele_boot_variable is not None:
+                device_info["network_os_image"] = re.split(
+                    "[:|,]",
+                    ele_boot_variable.text,
+                )[1]
+            ele_package_name = etree_find(reply, "package-name")
+            if ele_package_name is not None:
+                device_info["network_os_package"] = ele_package_name.text
+                device_info["network_os_version"] = re.split(
+                    "-",
+                    ele_package_name.text,
+                )[-1]
+        except Exception as exc:
+            self._connection.queue_message(
+                "vvvv",
+                "Fail to retrieve device info %s" % exc,
+            )
+        return device_info

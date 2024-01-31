@@ -27,6 +27,7 @@ The arg spec for the iosxr_l2_interfaces module
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -60,11 +61,23 @@ class L2_InterfacesArgs(object):
                             "type": "str",
                             "choices": ["drop", "forward", "tunnel"],
                         },
+                        "cpsv": {
+                            "type": "str",
+                            "choices": ["drop", "reverse-tunnel", "tunnel"],
+                        },
                     },
                     "type": "list",
                 },
                 "q_vlan": {"type": "list", "elements": "int"},
+                "qvlan": {"type": "list", "elements": "str"},
                 "propagate": {"type": "bool"},
+                "encapsulation": {
+                    "type": "dict",
+                    "options": {
+                        "dot1q": {"type": "int"},
+                        "second_dot1q": {"type": "int"},
+                    },
+                },
             },
             "type": "list",
         },

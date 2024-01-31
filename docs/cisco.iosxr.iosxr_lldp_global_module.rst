@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_lldp_global
 *****************************
 
-**LLDP resource module**
+**Resource module to configure LLDP.**
 
 
 Version added: 1.0.0
@@ -273,6 +273,7 @@ Parameters
                                     <li>parsed</li>
                                     <li>gathered</li>
                                     <li>rendered</li>
+                                    <li>overridden</li>
                         </ul>
                 </td>
                 <td>
@@ -287,7 +288,6 @@ Notes
 -----
 
 .. note::
-   - Tested against IOS-XR 6.1.3.
    - This module works with connection ``network_cli``. See `the IOS-XR Platform Options <../network/user_guide/platform_iosxr.html>`_.
 
 
@@ -295,7 +295,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # Using merged
     #

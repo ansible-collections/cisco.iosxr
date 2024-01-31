@@ -12,22 +12,21 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lldp_global.lldp_global import (
     Lldp_globalArgs,
 )
 
 
 class Lldp_globalFacts(object):
-    """ The iosxr lldp fact class
-    """
+    """The iosxr lldp fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -43,8 +42,11 @@ class Lldp_globalFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_config(self, connection):
+        return connection.get_config(flags="lldp")
+
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for lldp
+        """Populate the facts for lldp
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
@@ -52,10 +54,10 @@ class Lldp_globalFacts(object):
         :returns: facts
         """
         if not data:
-            data = connection.get_config(flags="lldp")
+            data = self.get_config(connection)
 
         obj = {}
-        if data:
+        if "lldp" in data:
             lldp_obj = self.render_config(self.generated_spec, data)
             if lldp_obj:
                 obj = lldp_obj
@@ -94,10 +96,7 @@ class Lldp_globalFacts(object):
                     "system_capabilities",
                 ]:
                     config[key][item] = (
-                        False
-                        if ("{0} disable".format(item.replace("_", "-")))
-                        in conf
-                        else None
+                        False if ("{0} disable".format(item.replace("_", "-"))) in conf else None
                     )
 
             else:

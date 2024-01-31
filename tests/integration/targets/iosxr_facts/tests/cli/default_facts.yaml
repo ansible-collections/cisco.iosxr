@@ -1,21 +1,21 @@
 ---
-- debug: msg="START cli/default_facts.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/default_facts.yaml on connection={{ ansible_connection }}"
 
-- name: test getting default facts
+- name: Test getting default facts
   register: result
   cisco.iosxr.iosxr_facts:
-    provider: '{{ cli }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
-      - "'hardware' in result.ansible_facts.ansible_net_gather_subset"
       - "'default' in result.ansible_facts.ansible_net_gather_subset"
-      - "'interfaces' in result.ansible_facts.ansible_net_gather_subset"
-      - result.ansible_facts.ansible_net_filesystems is defined
       - "'config' not in result.ansible_facts.ansible_net_gather_subset"
-      - result.ansible_facts.ansible_net_filesystems is defined
-      - result.ansible_facts.ansible_net_interfaces | length > 1
-      - result.ansible_facts.ansible_net_config is not defined
+      - result.ansible_facts.ansible_net_hostname is defined
+      - result.ansible_facts.ansible_net_model is defined
+      - result.ansible_facts.ansible_net_python_version is defined
+      - result.ansible_facts.ansible_net_system is defined
+      - result.ansible_facts.ansible_net_version is defined
+      - result.ansible_facts.ansible_net_serialnum is defined
+      - result.ansible_facts.ansible_network_resources == {}
 
-- debug: msg="END cli/default.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/default.yaml on connection={{ ansible_connection }}"

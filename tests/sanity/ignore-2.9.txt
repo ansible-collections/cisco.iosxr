@@ -1,3 +1,0 @@
-plugins/action/iosxr.py action-plugin-docs # base class for deprecated network platform modules using `connection: local
-plugins/modules/iosxr_interface.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
-plugins/modules/iosxr_interface.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict

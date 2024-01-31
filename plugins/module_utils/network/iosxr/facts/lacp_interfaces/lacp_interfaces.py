@@ -12,24 +12,24 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 import re
+
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible.module_utils.six import iteritems
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lacp_interfaces.lacp_interfaces import (
     Lacp_interfacesArgs,
 )
-from ansible.module_utils.six import iteritems
 
 
 class Lacp_interfacesFacts(object):
-    """ The iosxr lacp_interfaces fact class
-    """
+    """The iosxr lacp_interfaces fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -45,8 +45,11 @@ class Lacp_interfacesFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_config(self, connection):
+        return connection.get_config(flags="interface")
+
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for lacp_interfaces
+        """Populate the facts for lacp_interfaces
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
@@ -55,7 +58,7 @@ class Lacp_interfacesFacts(object):
         """
 
         if not data:
-            data = connection.get_config(flags="interface")
+            data = self.get_config(connection)
         interfaces = ("\n" + data).split("\ninterface ")
 
         objs = []
@@ -69,7 +72,8 @@ class Lacp_interfacesFacts(object):
         if objs:
             facts["lacp_interfaces"] = []
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             for cfg in params["config"]:
                 facts["lacp_interfaces"].append(utils.remove_empties(cfg))
@@ -109,7 +113,8 @@ class Lacp_interfacesFacts(object):
 
             for key in config["system"].keys():
                 config["system"][key] = utils.parse_conf_arg(
-                    conf, "lacp system {0}".format(key)
+                    conf,
+                    "lacp system {0}".format(key),
                 )
 
         return utils.remove_empties(config)

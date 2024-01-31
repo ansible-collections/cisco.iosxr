@@ -5,13 +5,13 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_ospfv2
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
+
 from .iosxr_module import TestIosxrModule, load_fixture
 
 
@@ -22,39 +22,30 @@ class TestIosxrOspfV2Module(TestIosxrModule):
         super(TestIosxrOspfV2Module, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base."
-            "get_resource_connection"
+            "get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module."
-            "get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base."
+            "get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
-
-        self.mock_edit_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.providers.providers.CliProvider.edit_config"
-        )
-        self.edit_config = self.mock_edit_config.start()
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
 
         self.mock_execute_show_command = patch(
             "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.ospfv2.ospfv2."
-            "Ospfv2Facts.get_ospfv2_data"
+            "Ospfv2Facts.get_ospfv2_data",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -62,7 +53,6 @@ class TestIosxrOspfV2Module(TestIosxrModule):
         super(TestIosxrOspfV2Module, self).tearDown()
         self.mock_get_resource_connection_config.stop()
         self.mock_get_resource_connection_facts.stop()
-        self.mock_edit_config.stop()
         self.mock_get_config.stop()
         self.mock_load_config.stop()
         self.mock_execute_show_command.stop()
@@ -83,17 +73,19 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                             default_metric=10,
                             cost=2,
                             areas=[dict(area_id="11", default_cost=5)],
-                        )
-                    ]
+                            log_adjacency_changes=dict(set=True),
+                        ),
+                    ],
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = [
             "router ospf 300",
             "cost 2",
             "default-metric 10",
             "area 11 default-cost 5",
+            "log adjacency changes",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -108,11 +100,11 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                             default_metric=10,
                             cost=2,
                             areas=[dict(area_id="11", default_cost=5)],
-                        )
-                    ]
+                        ),
+                    ],
                 ),
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -132,10 +124,10 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                             cost=2,
                             areas=[dict(area_id="11", default_cost=5)],
                         ),
-                    ]
+                    ],
                 ),
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "router ospf 30",
@@ -158,11 +150,11 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                             default_metric=10,
                             cost=2,
                             areas=[dict(area_id="11", default_cost=5)],
-                        )
-                    ]
+                        ),
+                    ],
                 ),
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -176,11 +168,12 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                             default_metric=10,
                             cost=2,
                             areas=[dict(area_id="11", default_cost=5)],
-                        )
-                    ]
+                            log_adjacency_changes=dict(set=True),
+                        ),
+                    ],
                 ),
                 state="overridden",
-            )
+            ),
         )
 
         commands = [
@@ -192,6 +185,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
             "cost 2",
             "default-metric 10",
             "area 11 default-cost 5",
+            "log adjacency changes",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -206,11 +200,11 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                             default_metric=10,
                             cost=2,
                             areas=[dict(area_id="11", default_cost=5)],
-                        )
-                    ]
+                        ),
+                    ],
                 ),
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -219,7 +213,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
             dict(
                 config=dict(processes=[dict(process_id="30", cost=2)]),
                 state="deleted",
-            )
+            ),
         )
         commands = [
             "router ospf 30",
@@ -235,7 +229,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
             dict(
                 running_config="router ospf 50\n cost 2\n area 11\n  default-cost 5\n !\n!",
                 state="parsed",
-            )
+            ),
         )
         result = self.execute_module(changed=False)
         parsed_list = {
@@ -244,8 +238,8 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                     process_id="50",
                     cost=2,
                     areas=[dict(area_id="11", default_cost=5)],
-                )
-            ]
+                ),
+            ],
         }
         self.assertEqual(parsed_list, result["parsed"])
 
@@ -259,17 +253,19 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                             default_metric=10,
                             cost=2,
                             areas=[dict(area_id="11", default_cost=5)],
-                        )
-                    ]
+                            log_adjacency_changes=dict(set=True),
+                        ),
+                    ],
                 ),
                 state="rendered",
-            )
+            ),
         )
         commands = [
             "area 11 default-cost 5",
             "cost 2",
+            "log adjacency changes",
             "default-metric 10",
             "router ospf 60",
         ]
         result = self.execute_module(changed=False)
-        self.assertEqual(sorted(result["rendered"]), commands)
+        self.assertEqual(sorted(result["rendered"]), sorted(commands))

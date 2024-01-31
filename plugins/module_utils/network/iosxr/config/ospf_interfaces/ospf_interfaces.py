@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -19,15 +20,14 @@ created.
 
 
 from ansible.module_utils.six import iteritems
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
+    ResourceModule,
+)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
-    ResourceModule,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ospf_interfaces import (
     Ospf_interfacesTemplate,
 )
@@ -86,7 +86,7 @@ class Ospf_interfaces(ResourceModule):
         ]
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
         :rtype: A dictionary
         :returns: The result from module execution
         """
@@ -96,8 +96,8 @@ class Ospf_interfaces(ResourceModule):
         return self.result
 
     def generate_commands(self):
-        """ Generate configuration commands to send based on
-            want, have and desired state.
+        """Generate configuration commands to send based on
+        want, have and desired state.
         """
         wantd = {entry["name"]: entry for entry in self.want}
         haved = {entry["name"]: entry for entry in self.have}
@@ -112,9 +112,7 @@ class Ospf_interfaces(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
+            haved = {k: v for k, v in iteritems(haved) if k in wantd or not wantd}
             have_int = []
             if wantd == {}:
                 for k, have in iteritems(haved):
@@ -227,14 +225,12 @@ class Ospf_interfaces(ResourceModule):
         for name, family in iteritems(entry):
             if "address_family" in family:
                 family["address_family"] = {
-                    entry["afi"]: entry
-                    for entry in family.get("address_family", [])
+                    entry["afi"]: entry for entry in family.get("address_family", [])
                 }
                 self._ospf_int_list_to_dict(family["address_family"])
         for name, ospf_processes in iteritems(entry):
             if "processes" in ospf_processes:
                 ospf_processes["processes"] = {
-                    entry["process_id"]: entry
-                    for entry in ospf_processes.get("processes", [])
+                    entry["process_id"]: entry for entry in ospf_processes.get("processes", [])
                 }
                 self._ospf_int_list_to_dict(ospf_processes["processes"])

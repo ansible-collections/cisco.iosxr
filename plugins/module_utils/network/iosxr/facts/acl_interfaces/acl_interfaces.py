@@ -12,23 +12,23 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 from copy import deepcopy
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.acl_interfaces import (
-    Acl_interfacesTemplate,
-)
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.acl_interfaces.acl_interfaces import (
     Acl_interfacesArgs,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.acl_interfaces import (
+    Acl_interfacesTemplate,
 )
 
 
 class Acl_interfacesFacts(object):
-    """ The iosxr acl_interfaces fact class
-    """
+    """The iosxr acl_interfaces fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -44,8 +44,11 @@ class Acl_interfacesFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_config(self, connection):
+        return connection.get_config(flags="interface")
+
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for acl_interfaces
+        """Populate the facts for acl_interfaces
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
@@ -54,7 +57,7 @@ class Acl_interfacesFacts(object):
         """
 
         if not data:
-            data = connection.get_config(flags="interface")
+            data = self.get_config(connection)
 
         config_parser = Acl_interfacesTemplate(lines=data.splitlines())
         entry = sorted(

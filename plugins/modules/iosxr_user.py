@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -15,7 +16,7 @@ author:
 - Trishna Guha (@trishnaguha)
 - Sebastiaan van Doesselaar (@sebasdoes)
 - Kedar Kekan (@kedarX)
-short_description: Manage the aggregate of local users on Cisco IOS XR device
+short_description: Module to manage the aggregates of local users.
 description:
 - This module provides declarative management of the local usernames configured on
   network devices. It allows playbooks to manage either individual usernames or the
@@ -27,7 +28,6 @@ extends_documentation_fragment:
 notes:
 - This module works with connection C(network_cli) and C(netconf). See L(the IOS-XR
   Platform Options,../network/user_guide/platform_iosxr.html).
-- Tested against IOS XRv 6.1.3
 options:
   aggregate:
     description:
@@ -204,7 +204,6 @@ requirements:
 - ncclient >= 0.5.3 when using netconf
 - lxml >= 4.1.1 when using netconf
 - base64 when using I(public_key_contents) or I(public_key)
-- paramiko when using I(public_key_contents) or I(public_key)
 """
 
 EXAMPLES = """
@@ -225,18 +224,18 @@ EXAMPLES = """
 - name: set multiple users to group sys-admin
   cisco.iosxr.iosxr_user:
     aggregate:
-    - name: netop
-    - name: netend
+      - name: netop
+      - name: netend
     group: sysadmin
     state: present
 - name: set multiple users to multiple groups
   cisco.iosxr.iosxr_user:
     aggregate:
-    - name: netop
-    - name: netend
+      - name: netop
+      - name: netend
     groups:
-    - sysadmin
-    - root-system
+      - sysadmin
+      - root-system
     state: present
 - name: Change Password for User netop
   cisco.iosxr.iosxr_user:
@@ -281,27 +280,30 @@ xml:
     </config>'
 """
 
-import os
-from functools import partial
-from copy import deepcopy
 import collections
+import os
+
+from copy import deepcopy
+from functools import partial
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.compat.paramiko import paramiko
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
 )
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    get_config,
-    load_config,
-    is_netconf,
-    is_cliconf,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
     build_xml,
+    copy_file,
     etree_findall,
+    get_capabilities,
+    get_config,
+    get_connection,
+    is_cliconf,
+    is_netconf,
+    load_config,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import Version
+
 
 try:
     from base64 import b64decode
@@ -317,8 +319,7 @@ class PublicKeyManager(object):
         self._result = result
 
     def convert_key_to_base64(self):
-        """ IOS-XR only accepts base64 decoded files, this converts the public key to a temp file.
-        """
+        """IOS-XR only accepts base64 decoded files, this converts the public key to a temp file."""
         if self._module.params["aggregate"]:
             name = "aggregate"
         else:
@@ -339,19 +340,7 @@ class PublicKeyManager(object):
         return "/tmp/publickey_%s.b64" % (name)
 
     def copy_key_to_node(self, base64keyfile):
-        """ Copy key to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well.
-        """
-        provider = self._module.params.get("provider") or {}
-        node = provider.get("host")
-        if node is None:
-            return False
-
-        user = provider.get("username")
-        if user is None:
-            return False
-
-        password = provider.get("password")
-        ssh_keyfile = provider.get("ssh_keyfile")
+        """Copy key to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well."""
 
         if self._module.params["aggregate"]:
             name = "aggregate"
@@ -361,122 +350,55 @@ class PublicKeyManager(object):
         src = base64keyfile
         dst = "/harddisk:/publickey_%s.b64" % (name)
 
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        if not ssh_keyfile:
-            ssh.connect(node, username=user, password=password)
-        else:
-            ssh.connect(node, username=user, allow_agent=True)
-        sftp = ssh.open_sftp()
-        sftp.put(src, dst)
-        sftp.close()
-        ssh.close()
+        copy_file(self._module, src, dst)
 
     def addremovekey(self, command):
-        """ Add or remove key based on command
-        """
-        provider = self._module.params.get("provider") or {}
-        node = provider.get("host")
-        if node is None:
-            return False
+        """Add or remove key based on command"""
+        admin = self._module.params.get("admin")
 
-        user = provider.get("username")
-        if user is None:
-            return False
+        conn = get_connection(self._module)
+        if admin:
+            conn.send_command("admin")
+        out = conn.send_command(command, prompt="yes/no", answer="yes")
+        if admin:
+            conn.send_command("exit")
 
-        password = provider.get("password")
-        ssh_keyfile = provider.get("ssh_keyfile")
-
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        if not ssh_keyfile:
-            ssh.connect(node, username=user, password=password)
-        else:
-            ssh.connect(node, username=user, allow_agent=True)
-        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(
-            "%s \r" % (command)
-        )
-        readmsg = ssh_stdout.read(
-            100
-        )  # We need to read a bit to actually apply for some reason
-        if (
-            ("already" in readmsg)
-            or ("removed" in readmsg)
-            or ("really" in readmsg)
-        ):
-            ssh_stdin.write("yes\r")
-        ssh_stdout.read(
-            1
-        )  # We need to read a bit to actually apply for some reason
-        ssh.close()
-
-        return readmsg
+        return out
 
     def run(self):
         if self._module.params["state"] == "present":
             if not self._module.check_mode:
                 key = self.convert_key_to_base64()
-                copykeys = self.copy_key_to_node(key)
-                if copykeys is False:
-                    self._result["warnings"].append(
-                        "Please set up your provider before running this playbook"
-                    )
+                self.copy_key_to_node(key)
 
                 if self._module.params["aggregate"]:
                     for user in self._module.params["aggregate"]:
                         cmdtodo = (
-                            "admin crypto key import authentication rsa username %s harddisk:/publickey_aggregate.b64"
+                            "crypto key import authentication rsa username %s harddisk:/publickey_aggregate.b64"
                             % (user)
                         )
-                        addremove = self.addremovekey(cmdtodo)
-                        if addremove is False:
-                            self._result["warnings"].append(
-                                "Please set up your provider before running this playbook"
-                            )
+                        self.addremovekey(cmdtodo)
                 else:
                     cmdtodo = (
-                        "admin crypto key import authentication rsa username %s harddisk:/publickey_%s.b64"
-                        % (
-                            self._module.params["name"],
-                            self._module.params["name"],
-                        )
+                        "crypto key import authentication rsa username %s harddisk:/publickey_%s.b64"
+                        % (self._module.params["name"], self._module.params["name"])
                     )
-                    addremove = self.addremovekey(cmdtodo)
-                    if addremove is False:
-                        self._result["warnings"].append(
-                            "Please set up your provider before running this playbook"
-                        )
+                    self.addremovekey(cmdtodo)
         elif self._module.params["state"] == "absent":
             if not self._module.check_mode:
                 if self._module.params["aggregate"]:
                     for user in self._module.params["aggregate"]:
-                        cmdtodo = (
-                            "admin crypto key zeroize authentication rsa username %s"
-                            % (user)
-                        )
-                        addremove = self.addremovekey(cmdtodo)
-                        if addremove is False:
-                            self._result["warnings"].append(
-                                "Please set up your provider before running this playbook"
-                            )
+                        cmdtodo = "crypto key zeroize authentication rsa username %s" % (user)
+                        self.addremovekey(cmdtodo)
                 else:
-                    cmdtodo = (
-                        "admin crypto key zeroize authentication rsa username %s"
-                        % (self._module.params["name"])
+                    cmdtodo = "crypto key zeroize authentication rsa username %s" % (
+                        self._module.params["name"]
                     )
-                    addremove = self.addremovekey(cmdtodo)
-                    if addremove is False:
-                        self._result["warnings"].append(
-                            "Please set up your provider before running this playbook"
-                        )
+                    self.addremovekey(cmdtodo)
         elif self._module.params["purge"] is True:
             if not self._module.check_mode:
-                cmdtodo = "admin crypto key zeroize authentication rsa all"
-                addremove = self.addremovekey(cmdtodo)
-                if addremove is False:
-                    self._result["warnings"].append(
-                        "Please set up your provider before running this playbook"
-                    )
+                cmdtodo = "crypto key zeroize authentication rsa all"
+                self.addremovekey(cmdtodo)
 
         return self._result
 
@@ -504,9 +426,7 @@ class ConfigBase(object):
         # if key does exist, do a type check on it to validate it
         else:
             value_type = self._module.argument_spec[key].get("type", "str")
-            type_checker = self._module._CHECK_ARGUMENT_TYPES_DISPATCHER[
-                value_type
-            ]
+            type_checker = self._module._CHECK_ARGUMENT_TYPES_DISPATCHER[value_type]
             type_checker(item[key])
             value = item[key]
 
@@ -522,10 +442,7 @@ class ConfigBase(object):
 
         aggregate = list()
         if not users:
-            if (
-                not self._module.params["name"]
-                and self._module.params["purge"]
-            ):
+            if not self._module.params["name"] and self._module.params["purge"]:
                 pass
             elif not self._module.params["name"]:
                 self._module.fail_json(msg="username is required")
@@ -555,6 +472,10 @@ class CliConfiguration(ConfigBase):
 
     def map_config_to_obj(self):
         data = get_config(self._module, config_filter="username")
+
+        if "No such configuration item" in data:
+            return
+
         users = data.strip().rstrip("!").split("!")
 
         for user in users:
@@ -568,12 +489,7 @@ class CliConfiguration(ConfigBase):
                 if group_or_secret[0] == "group":
                     group = group_or_secret[1]
 
-            obj = {
-                "name": name,
-                "state": "present",
-                "configured_password": None,
-                "group": group,
-            }
+            obj = {"name": name, "state": "present", "configured_password": None, "group": group}
             self._have.append(obj)
 
     def map_obj_to_commands(self):
@@ -592,9 +508,7 @@ class CliConfiguration(ConfigBase):
                 commands.append(user_cmd)
 
                 if w["configured_password"]:
-                    commands.append(
-                        user_cmd + " secret " + w["configured_password"]
-                    )
+                    commands.append(user_cmd + " secret " + w["configured_password"])
                 if w["group"]:
                     commands.append(user_cmd + " group " + w["group"])
                 elif w["groups"]:
@@ -604,13 +518,8 @@ class CliConfiguration(ConfigBase):
             elif state == "present" and obj_in_have:
                 user_cmd = "username " + name
 
-                if (
-                    self._module.params["update_password"] == "always"
-                    and w["configured_password"]
-                ):
-                    commands.append(
-                        user_cmd + " secret " + w["configured_password"]
-                    )
+                if self._module.params["update_password"] == "always" and w["configured_password"]:
+                    commands.append(user_cmd + " secret " + w["configured_password"])
                 if w["group"] and w["group"] != obj_in_have["group"]:
                     commands.append(user_cmd + " group " + w["group"])
                 elif w["groups"]:
@@ -631,9 +540,7 @@ class CliConfiguration(ConfigBase):
         if commands:
             commit = not self._module.check_mode
             admin = self._module.params["admin"]
-            diff = load_config(
-                self._module, commands, commit=commit, admin=admin
-            )
+            diff = load_config(self._module, commands, commit=commit, admin=admin)
             if diff:
                 self._result["diff"] = dict(prepared=diff)
 
@@ -663,78 +570,118 @@ class NCConfiguration(ConfigBase):
         cmd = "openssl passwd -salt `openssl rand -base64 3` -1 "
         return os.popen(cmd + arg).readlines()[0].strip()
 
-    def map_obj_to_xml_rpc(self):
-        self._locald_meta.update(
-            [
-                (
-                    "aaa_locald",
-                    {"xpath": "aaa/usernames", "tag": True, "ns": True},
-                ),
-                (
-                    "username",
-                    {
-                        "xpath": "aaa/usernames/username",
-                        "tag": True,
-                        "attrib": "operation",
-                    },
-                ),
-                ("a:name", {"xpath": "aaa/usernames/username/name"}),
-                (
-                    "a:configured_password",
-                    {
-                        "xpath": "aaa/usernames/username/secret",
-                        "operation": "edit",
-                    },
-                ),
-            ]
-        )
-
-        self._locald_group_meta.update(
-            [
-                (
-                    "aaa_locald",
-                    {"xpath": "aaa/usernames", "tag": True, "ns": True},
-                ),
-                (
-                    "username",
-                    {
-                        "xpath": "aaa/usernames/username",
-                        "tag": True,
-                        "attrib": "operation",
-                    },
-                ),
-                ("a:name", {"xpath": "aaa/usernames/username/name"}),
-                (
-                    "usergroups",
-                    {
-                        "xpath": "aaa/usernames/username/usergroup-under-usernames",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "usergroup",
-                    {
-                        "xpath": "aaa/usernames/username/usergroup-under-usernames/usergroup-under-username",
-                        "tag": True,
-                        "operation": "edit",
-                    },
-                ),
-                (
-                    "a:group",
-                    {
-                        "xpath": "aaa/usernames/username/usergroup-under-usernames/usergroup-under-username/name",
-                        "operation": "edit",
-                    },
-                ),
-            ]
-        )
+    def map_obj_to_xml_rpc(self, os_version):
+        if os_version and Version(os_version) > Version("7.0"):
+            self._locald_meta.update(
+                [
+                    ("aaa_locald", {"xpath": "aaa/usernames", "tag": True, "ns": True}),
+                    (
+                        "username",
+                        {"xpath": "aaa/usernames/username", "tag": True, "attrib": "operation"},
+                    ),
+                    ("a:name", {"xpath": "aaa/usernames/username/name"}),
+                    ("a:ordering_index", {"xpath": "aaa/usernames/username/ordering-index"}),
+                    (
+                        "secret",
+                        {
+                            "xpath": "aaa/usernames/username/secret",
+                            "tag": True,
+                            "operation": "edit",
+                        },
+                    ),
+                    ("a:type", {"xpath": "aaa/usernames/username/secret/type", "value": "type5"}),
+                    (
+                        "a:configured_password",
+                        {"xpath": "aaa/usernames/username/secret/secret5", "operation": "edit"},
+                    ),
+                ],
+            )
+            self._locald_group_meta.update(
+                [
+                    ("aaa_locald", {"xpath": "aaa/usernames", "tag": True, "ns": True}),
+                    (
+                        "username",
+                        {"xpath": "aaa/usernames/username", "tag": True, "attrib": "operation"},
+                    ),
+                    ("a:name", {"xpath": "aaa/usernames/username/name"}),
+                    ("a:ordering_index", {"xpath": "aaa/usernames/username/ordering-index"}),
+                    (
+                        "usergroups",
+                        {
+                            "xpath": "aaa/usernames/username/usergroup-under-usernames",
+                            "tag": True,
+                            "operation": "edit",
+                        },
+                    ),
+                    (
+                        "usergroup",
+                        {
+                            "xpath": "aaa/usernames/username/usergroup-under-usernames/usergroup-under-username",
+                            "tag": True,
+                            "operation": "edit",
+                        },
+                    ),
+                    (
+                        "a:group",
+                        {
+                            "xpath": "aaa/usernames/username/usergroup-under-usernames/usergroup-under-username/name",
+                            "operation": "edit",
+                        },
+                    ),
+                ],
+            )
+        else:
+            self._locald_meta.update(
+                [
+                    ("aaa_locald", {"xpath": "aaa/usernames", "tag": True, "ns": True}),
+                    (
+                        "username",
+                        {"xpath": "aaa/usernames/username", "tag": True, "attrib": "operation"},
+                    ),
+                    ("a:name", {"xpath": "aaa/usernames/username/name"}),
+                    (
+                        "a:configured_password",
+                        {"xpath": "aaa/usernames/username/secret", "operation": "edit"},
+                    ),
+                ],
+            )
+            self._locald_group_meta.update(
+                [
+                    ("aaa_locald", {"xpath": "aaa/usernames", "tag": True, "ns": True}),
+                    (
+                        "username",
+                        {"xpath": "aaa/usernames/username", "tag": True, "attrib": "operation"},
+                    ),
+                    ("a:name", {"xpath": "aaa/usernames/username/name"}),
+                    (
+                        "usergroups",
+                        {
+                            "xpath": "aaa/usernames/username/usergroup-under-usernames",
+                            "tag": True,
+                            "operation": "edit",
+                        },
+                    ),
+                    (
+                        "usergroup",
+                        {
+                            "xpath": "aaa/usernames/username/usergroup-under-usernames/usergroup-under-username",
+                            "tag": True,
+                            "operation": "edit",
+                        },
+                    ),
+                    (
+                        "a:group",
+                        {
+                            "xpath": "aaa/usernames/username/usergroup-under-usernames/usergroup-under-username/name",
+                            "operation": "edit",
+                        },
+                    ),
+                ],
+            )
 
         state = self._module.params["state"]
         _get_filter = build_xml("aaa", opcode="filter")
-        running = get_config(
-            self._module, source="running", config_filter=_get_filter
-        )
+        running = get_config(self._module, source="running", config_filter=_get_filter)
 
         elements = etree_findall(running, "username")
         users = list()
@@ -743,16 +690,10 @@ class NCConfiguration(ConfigBase):
             users.append(name_list[0].text)
             list_size = len(name_list)
             if list_size == 1:
-                self._have.append(
-                    {"name": name_list[0].text, "group": None, "groups": None}
-                )
+                self._have.append({"name": name_list[0].text, "group": None, "groups": None})
             elif list_size == 2:
                 self._have.append(
-                    {
-                        "name": name_list[0].text,
-                        "group": name_list[1].text,
-                        "groups": None,
-                    }
+                    {"name": name_list[0].text, "group": name_list[1].text, "groups": None},
                 )
             elif list_size > 2:
                 name_iter = iter(name_list)
@@ -761,33 +702,45 @@ class NCConfiguration(ConfigBase):
                 for name in name_iter:
                     tmp_list.append(name.text)
 
-                self._have.append(
-                    {
-                        "name": name_list[0].text,
-                        "group": None,
-                        "groups": tmp_list,
-                    }
-                )
+                self._have.append({"name": name_list[0].text, "group": None, "groups": tmp_list})
+            if os_version and Version(os_version) > Version("7.0"):
+                ordering_index = etree_findall(element, "ordering-index")
+                if len(self._have) > 0:
+                    self._have[-1].update(ordering_index=ordering_index[0].text)
 
         locald_params = list()
         locald_group_params = list()
         opcode = None
+        ordering_index_list = [
+            int(user.get("ordering_index")) for user in self._have if user.get("ordering_index")
+        ]
 
         if state == "absent":
             opcode = "delete"
             for want_item in self._want:
                 if want_item["name"] in users:
+                    obj_in_have = search_obj_in_list(want_item["name"], self._have)
+                    if os_version and Version(os_version) > Version("7.0"):
+                        want_item["ordering_index"] = obj_in_have["ordering_index"]
                     want_item["configured_password"] = None
                     locald_params.append(want_item)
         elif state == "present":
             opcode = "merge"
             for want_item in self._want:
+                obj_in_have = search_obj_in_list(want_item["name"], self._have)
                 if want_item["name"] not in users:
+                    if os_version and Version(os_version) > Version("7.0"):
+                        want_item["configured_password"] = self.generate_md5_hash(
+                            want_item["configured_password"],
+                        )
+                        new_ordering_index = ordering_index_list[-1] + 1
+                        want_item["ordering_index"] = str(new_ordering_index)
+                        ordering_index_list.append(new_ordering_index)
+                        want_item["type"] = "type5"
                     want_item["configured_password"] = self.generate_md5_hash(
-                        want_item["configured_password"]
+                        want_item["configured_password"],
                     )
                     locald_params.append(want_item)
-
                     if want_item["group"] is not None:
                         locald_group_params.append(want_item)
                     if want_item["groups"] is not None:
@@ -795,22 +748,22 @@ class NCConfiguration(ConfigBase):
                             want_item["group"] = group
                             locald_group_params.append(want_item.copy())
                 else:
+                    if os_version and Version(os_version) > Version("7.0"):
+                        if obj_in_have:
+                            # Add iosxr 7.0 > specific parameters
+                            want_item["type"] = "type5"
+                            want_item["ordering_index"] = obj_in_have["ordering_index"]
                     if (
                         self._module.params["update_password"] == "always"
                         and want_item["configured_password"] is not None
                     ):
-                        want_item[
-                            "configured_password"
-                        ] = self.generate_md5_hash(
-                            want_item["configured_password"]
+                        want_item["configured_password"] = self.generate_md5_hash(
+                            want_item["configured_password"],
                         )
                         locald_params.append(want_item)
                     else:
                         want_item["configured_password"] = None
 
-                    obj_in_have = search_obj_in_list(
-                        want_item["name"], self._have
-                    )
                     if (
                         want_item["group"] is not None
                         and want_item["group"] != obj_in_have["group"]
@@ -834,12 +787,7 @@ class NCConfiguration(ConfigBase):
         if opcode is not None:
             if locald_params:
                 _edit_filter_list.append(
-                    build_xml(
-                        "aaa",
-                        xmap=self._locald_meta,
-                        params=locald_params,
-                        opcode=opcode,
-                    )
+                    build_xml("aaa", xmap=self._locald_meta, params=locald_params, opcode=opcode),
                 )
 
             if locald_group_params:
@@ -849,19 +797,13 @@ class NCConfiguration(ConfigBase):
                         xmap=self._locald_group_meta,
                         params=locald_group_params,
                         opcode=opcode,
-                    )
+                    ),
                 )
 
             if purge_params:
                 _edit_filter_list.append(
-                    build_xml(
-                        "aaa",
-                        xmap=self._locald_meta,
-                        params=purge_params,
-                        opcode="delete",
-                    )
+                    build_xml("aaa", xmap=self._locald_meta, params=purge_params, opcode="delete"),
                 )
-
         diff = None
         if _edit_filter_list:
             commit = not self._module.check_mode
@@ -881,29 +823,25 @@ class NCConfiguration(ConfigBase):
             self._result["changed"] = True
 
     def run(self):
+        os_version = get_capabilities(self._module).get("device_info").get("network_os_version")
         self.map_params_to_obj()
-        self.map_obj_to_xml_rpc()
+        self.map_obj_to_xml_rpc(os_version)
 
         return self._result
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     element_spec = dict(
         name=dict(type="str"),
         configured_password=dict(type="str", no_log=True),
-        update_password=dict(
-            type="str", default="always", choices=["on_create", "always"]
-        ),
+        update_password=dict(type="str", default="always", choices=["on_create", "always"]),
         admin=dict(type="bool", default=False),
         public_key=dict(type="str"),
         public_key_contents=dict(type="str"),
         group=dict(type="str", aliases=["role"]),
         groups=dict(type="list", elements="str"),
-        state=dict(
-            type="str", default="present", choices=["present", "absent"]
-        ),
+        state=dict(type="str", default="present", choices=["present", "absent"]),
     )
     aggregate_spec = deepcopy(element_spec)
     aggregate_spec["name"] = dict(required=True)
@@ -928,7 +866,6 @@ def main():
     )
 
     argument_spec.update(element_spec)
-    argument_spec.update(iosxr_argument_spec)
 
     module = AnsibleModule(
         argument_spec=argument_spec,
@@ -940,12 +877,7 @@ def main():
         if not HAS_B64:
             module.fail_json(
                 msg="library base64 is required but does not appear to be "
-                "installed. It can be installed using `pip install base64`"
-            )
-        if paramiko is None:
-            module.fail_json(
-                msg="library paramiko is required but does not appear to be "
-                "installed. It can be installed using `pip install paramiko`"
+                "installed. It can be installed using `pip install base64`",
             )
 
     result = {"changed": False, "warnings": []}
@@ -953,8 +885,6 @@ def main():
     config_object = None
     if is_cliconf(module):
         # Commenting the below cliconf deprecation support call for Ansible 2.9 as it'll be continued to be supported
-        # module.deprecate("cli support for 'iosxr_interface' is deprecated. Use transport netconf instead",
-        #                  version='2.9')
         config_object = CliConfiguration(module, result)
     elif is_netconf(module):
         config_object = NCConfiguration(module, result)

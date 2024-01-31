@@ -12,21 +12,25 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from copy import deepcopy
+import re
 
 from collections import deque
+from copy import deepcopy
+
+from ansible.module_utils._text import to_text
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.acls.acls import (
     AclsArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     isipaddress,
 )
+
 
 PROTOCOL_OPTIONS = {
     "tcp": ("ack", "fin", "psh", "rst", "syn", "urg", "established"),
@@ -133,8 +137,7 @@ PROTOCOL_OPTIONS = {
 
 
 class AclsFacts(object):
-    """ The iosxr acls fact class
-    """
+    """The iosxr acls fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -155,7 +158,7 @@ class AclsFacts(object):
         return connection.get("show access-lists afi-all")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for acls
+        """Populate the facts for acls
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
@@ -168,13 +171,14 @@ class AclsFacts(object):
         objs = []
 
         acl_lines = data.splitlines()
-
         # We iterate through the data and create a list of ACLs
         # where each ACL is a dictionary in the following format:
         # {'afi': 'ipv4', 'name': 'acl_1', 'aces': ['10 permit 172.16.0.0 0.0.255.255', '20 deny 192.168.34.0 0.0.0.255']}
         if acl_lines:
             acl, acls = {}, []
             for line in acl_lines:
+                if "matches" in line:
+                    line = re.sub(r"\([^()]*\)", "", line)
                 if line.startswith("ip"):
                     if acl:
                         acls.append(acl)
@@ -251,7 +255,7 @@ class AclsFacts(object):
         :returns: The ACE in structured format
         """
 
-        def __parse_src_dest(rendered_ace, ace_queue, direction):
+        def _parse_src_dest(rendered_ace, ace_queue, direction):
             """
             Parses the ACE queue and populates address, wildcard_bits,
             host or any keys in the source/destination dictionary of
@@ -265,20 +269,23 @@ class AclsFacts(object):
             element = ace_queue.popleft()
             if element == "host":
                 rendered_ace[direction] = {"host": ace_queue.popleft()}
-
+            elif element == "net-group":
+                rendered_ace[direction] = {"net_group": ace_queue.popleft()}
+            elif element == "port-group":
+                rendered_ace[direction] = {"port_group": ace_queue.popleft()}
             elif element == "any":
                 rendered_ace[direction] = {"any": True}
 
             elif "/" in element:
                 rendered_ace[direction] = {"prefix": element}
 
-            elif isipaddress(element):
+            elif isipaddress(to_text(element)):
                 rendered_ace[direction] = {
                     "address": element,
                     "wildcard_bits": ace_queue.popleft(),
                 }
 
-        def __parse_port_protocol(rendered_ace, ace_queue, direction):
+        def _parse_port_protocol(rendered_ace, ace_queue, direction):
             """
             Parses the ACE queue and populates `port_protocol` dictionary in the
             ACE dictionary, i.e., `rendered_ace`.
@@ -306,9 +313,12 @@ class AclsFacts(object):
                 else:
                     port_protocol[element] = ace_queue.popleft()
 
-                rendered_ace[direction]["port_protocol"] = port_protocol
+                if rendered_ace.get(direction):
+                    rendered_ace[direction]["port_protocol"] = port_protocol
+                else:
+                    rendered_ace[direction] = {"port_protocol": port_protocol}
 
-        def __parse_protocol_options(rendered_ace, ace_queue, protocol):
+        def _parse_protocol_options(rendered_ace, ace_queue, protocol):
             """
             Parses the ACE queue and populates protocol specific options
             of the required dictionary and updates the ACE dictionary, i.e.,
@@ -329,7 +339,7 @@ class AclsFacts(object):
 
                 rendered_ace["protocol_options"] = protocol_options
 
-        def __parse_match_options(rendered_ace, ace_queue):
+        def _parse_match_options(rendered_ace, ace_queue):
             """
             Parses the ACE queue and populates remaining options in the ACE dictionary,
             i.e., `rendered_ace`
@@ -427,21 +437,25 @@ class AclsFacts(object):
             rendered_ace["protocol"] = ace_queue.popleft()
 
             # Populate source dictionary
-            __parse_src_dest(rendered_ace, ace_queue, direction="source")
+            _parse_src_dest(rendered_ace, ace_queue, direction="source")
             # Populate port_protocol key in source dictionary
-            __parse_port_protocol(rendered_ace, ace_queue, direction="source")
+            _parse_port_protocol(rendered_ace, ace_queue, direction="source")
             # Populate destination dictionary
-            __parse_src_dest(rendered_ace, ace_queue, direction="destination")
+            _parse_src_dest(rendered_ace, ace_queue, direction="destination")
             # Populate port_protocol key in destination dictionary
-            __parse_port_protocol(
-                rendered_ace, ace_queue, direction="destination"
+            _parse_port_protocol(
+                rendered_ace,
+                ace_queue,
+                direction="destination",
             )
             # Populate protocol_options dictionary
-            __parse_protocol_options(
-                rendered_ace, ace_queue, protocol=rendered_ace["protocol"]
+            _parse_protocol_options(
+                rendered_ace,
+                ace_queue,
+                protocol=rendered_ace["protocol"],
             )
             # Populate remaining match options' dictionaries
-            __parse_match_options(rendered_ace, ace_queue)
+            _parse_match_options(rendered_ace, ace_queue)
 
             # At this stage the queue should be empty
             # If the queue is not empty, it means that

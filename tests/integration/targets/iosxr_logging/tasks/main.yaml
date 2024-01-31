@@ -1,3 +1,6 @@
 ---
-- include: cli.yaml
-- include: netconf.yaml
+- name: Include the CLI tasks
+  ansible.builtin.include_tasks: cli.yaml
+
+- name: Include the netconf tasks
+  ansible.builtin.include_tasks: netconf.yaml

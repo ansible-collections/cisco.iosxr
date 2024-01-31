@@ -1,11 +1,9 @@
 ---
-- debug:
-    msg: START isoxr_lldp_global round trip integration tests on connection={{ ansible_connection
-      }}
+- ansible.builtin.debug:
+    msg: START isoxr_lldp_global round trip integration tests on connection={{ ansible_connection }}
 
 - block:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml
 
     - name: Apply the provided configuration (base config)
       register: base_config
@@ -18,8 +16,8 @@
     - name: Gather interfaces facts
       cisco.iosxr.iosxr_facts:
         gather_subset:
-          - '!all'
-          - '!min'
+          - "!all"
+          - "!min"
         gather_network_resources:
           - lldp_global
 
@@ -34,18 +32,17 @@
         state: merged
 
     - name: Assert that changes were applied
-      assert:
+      ansible.builtin.assert:
         that: "{{ round_trip['after'] == result['after'] }}"
 
-    - name: Revert back to base config using facts round trip
+    - name: Revert back to base configuration using facts round trip
       register: revert
       cisco.iosxr.iosxr_lldp_global:
         config: "{{ ansible_facts['network_resources']['lldp_global'] }}"
         state: replaced
 
-    - name: Assert that config was reverted
-      assert:
+    - name: Assert that configuration was reverted
+      ansible.builtin.assert:
         that: "{{ base_config['after'] == revert['after'] }}"
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

@@ -5,7 +5,7 @@
 cisco.iosxr.iosxr_ospfv2
 ************************
 
-**OSPFv2 resource module**
+**Resource module to configure OSPFv2.**
 
 
 Version added: 1.0.0
@@ -5560,7 +5560,6 @@ Notes
 -----
 
 .. note::
-   - Tested against IOS-XR 6.1.3
    - This module works with connection ``network_cli``. See `the IOS-XR Platform Options <../network/user_guide/platform_iosxr.html>`_
 
 
@@ -5568,7 +5567,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # Using merged
 
@@ -5584,173 +5583,132 @@ Examples
       cisco.iosxr.iosxr_ospfv2:
         config:
           processes:
-          - process_id: '27'
-            areas:
-            - area_id: '10'
-              hello_interval: 2
+            - process_id: '27'
+              areas:
+                - area_id: '10'
+                  hello_interval: 2
+                  authentication:
+                    keychain: ansi11393
+            - process_id: '26'
+              adjacency_stagger:
+                max_adjacency: 20
+                min_adjacency: 10
+            - process_id: '10'
               authentication:
-                keychain: ansi11393
-          - process_id: '26'
-            adjacency_stagger:
-              max_adjacency: 20
-              min_adjacency: 10
-          - process_id: '10'
-            authentication:
-              keychain: ansible_test1102
-            areas:
-            - area_id: '11'
-              default_cost: 5
-              cost: 11
-            - area_id: 22
-              default_cost: 6
-          - process_id: '30'
-            areas:
-            - area_id: 11
-              default_cost: 5
-            - area_id: 22
-              default_cost: 6
-
-            cost: 2
-            default_metric: 10
-            transmit_delay: 2
-            hello_interval: 1
-            dead_interval: 2
-            retransmit_interval: 2
-            weight: 2
-            packet_size: 577
-            priority: 1
-            router_id: 2.2.2.2
-            demand_circuit: enable
-            passive: disable
-            summary_in: enable
-            flood_reduction: disable
-            mtu_ignore: enable
-            external_out: disable
+                keychain: ansible_test1102
+              areas:
+                - area_id: '11'
+                  default_cost: 5
+                  cost: 11
+                - area_id: 22
+                  default_cost: 6
+            - process_id: '30'
+              areas:
+                - area_id: 11
+                  default_cost: 5
+                - area_id: 22
+                  default_cost: 6
+              cost: 2
+              default_metric: 10
+              transmit_delay: 2
+              hello_interval: 1
+              dead_interval: 2
+              retransmit_interval: 2
+              weight: 2
+              packet_size: 577
+              priority: 1
+              router_id: 2.2.2.2
+              demand_circuit: enable
+              passive: disable
+              summary_in: enable
+              flood_reduction: disable
+              mtu_ignore: enable
+              external_out: disable
         state: merged
 
-    #
-    #
-    # ------------------------
-    # Module Execution Result
-    # ------------------------
-    #
-    #  "before": {}
-    #
-    #  "commands": [
-    #        "router ospf 30",
-    #        "cost 2",
-    #        "weight 2",
-    #        "passive disable",
-    #        "priority 1",
-    #        "flood-reduction disable",
-    #        "default-metric 10",
-    #        "router-id 2.2.2.2",
-    #        "demand-circuit enable",
-    #        "packet-size 577",
-    #        "transmit-delay 2",
-    #        "summary-in enable",
-    #        "external-out disable",
-    #        "dead-interval 2",
-    #        "hello-interval 1",
-    #        "retransmit-interval 2",
-    #        "mtu-ignore enable",
-    #        "area 11 default-cost 5",
-    #        "area 22 default-cost 6",
-    #        "router ospf 26",
-    #        "adjacency stagger 10 20",
-    #        "authentication message-digest keychain ansible1101pass",
-    #        "router ospf 27",
-    #        "area 10 authentication keychain ansi11393",
-    #        "area 10 hello-interval 2",
-    #        "router ospf 10",
-    #        "authentication keychain ansible_test1102",
-    #        "area 11 default-cost 5",
-    #        "area 11 cost 11",
-    #        "area 22 default-cost 6"
-    #    ]
-    #
-    #  "after": {
-    #        "processes": [
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "cost": 11,
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "authentication": {
-    #                    "keychain": "ansible_test1102"
-    #                },
-    #                "process_id": "10"
-    #            },
-    #            {
-    #                "adjacency_stagger": {
-    #                    "max_adjacency": 20,
-    #                    "min_adjacency": 10
-    #                },
-    #                "authentication": {
-    #                    "message_digest": {
-    #                        "keychain": "ansible1101pass"
-    #                    }
-    #                },
-    #                "process_id": "26"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "10",
-    #                        "authentication": {
-    #                            "keychain": "ansi11393"
-    #                        },
-    #                        "hello_interval": 2
-    #                    }
-    #                ],
-    #                "process_id": "27"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "cost": 2,
-    #                "dead_interval": 2,
-    #                "default_metric": 10,
-    #                "demand_circuit": "enable",
-    #                "external_out": "disable",
-    #                "flood_reduction": "disable",
-    #                "hello_interval": 1,
-    #                "mtu_ignore": "enable",
-    #                "packet_size": 577,
-    #                "passive": "disable",
-    #                "priority": 1,
-    #                "process_id": "30",
-    #                "retransmit_interval": 2,
-    #                "router_id": "2.2.2.2",
-    #                "summary_in": "enable",
-    #                "transmit_delay": 2,
-    #                "weight": 2
-    #            }
-    #        ]
-    #    }
-    #
-    #
-    # ------------
-    # After state
+    # Task Output:
     # ------------
     #
-    # RP/0/RP0/CPU0:anton#show running-config router ospf
-    # Thu Jun 11 16:06:44.406 UTC
+    # before: {}
+    #
+    # commands:
+    #   - router ospf 30
+    #   - cost 2
+    #   - weight 2
+    #   - passive disable
+    #   - priority 1
+    #   - flood-reduction disable
+    #   - default-metric 10
+    #   - router-id 2.2.2.2
+    #   - demand-circuit enable
+    #   - packet-size 577
+    #   - transmit-delay 2
+    #   - summary-in enable
+    #   - external-out disable
+    #   - dead-interval 2
+    #   - hello-interval 1
+    #   - retransmit-interval 2
+    #   - mtu-ignore enable
+    #   - area 11 default-cost 5
+    #   - area 22 default-cost 6
+    #   - router ospf 26
+    #   - adjacency stagger 10 20
+    #   - router ospf 10
+    #   - authentication keychain ansible_test1102
+    #   - area 11 default-cost 5
+    #   - area 11 cost 11
+    #   - area 22 default-cost 6
+    #   - router ospf 27
+    #   - area 10 authentication keychain ansi11393
+    #   - area 10 hello-interval 2
+    #
+    # after:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       authentication:
+    #         keychain: ansible_test1102
+    #       process_id: '10'
+    #     - adjacency_stagger:
+    #         max_adjacency: 20
+    #         min_adjacency: 10
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         authentication:
+    #           keychain: ansi11393
+    #         hello_interval: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: enable
+    #       external_out: disable
+    #       flood_reduction: disable
+    #       hello_interval: 1
+    #       mtu_ignore: enable
+    #       packet_size: 577
+    #       passive: disable
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       summary_in: enable
+    #       transmit_delay: 2
+    #       weight: 2
+    #
+    # After state:
+    # ------------
+    #
     # router ospf 10
     #  authentication keychain ansible_test1102
     #  area 11
@@ -5762,14 +5720,13 @@ Examples
     #  !
     # !
     # router ospf 26
-    #  authentication message-digest keychain ansible1101pass
     #  adjacency stagger 10 20
     # !
     # router ospf 27
     #  area 10
-    #  authentication keychain ansi11393
+    #   authentication keychain ansi11393
     #   hello-interval 2
-    # !
+    #  !
     # !
     # router ospf 30
     #  router-id 2.2.2.2
@@ -5795,14 +5752,11 @@ Examples
     #   default-cost 6
     #  !
     # !
-    #
-
 
     # Using replaced
     #
-    # ------------
-    # Before state
-    # ------------
+    # Before state:
+    # -------------
     #
     #
     # RP/0/RP0/CPU0:anton#show running-config router ospf
@@ -5818,14 +5772,13 @@ Examples
     #  !
     # !
     # router ospf 26
-    #  authentication message-digest keychain ansible1101pass
     #  adjacency stagger 10 20
     # !
     # router ospf 27
     #  area 10
-    #  authentication keychain ansi11393
+    #   authentication keychain ansi11393
     #   hello-interval 2
-    # !
+    #  !
     # !
     # router ospf 30
     #  router-id 2.2.2.2
@@ -5852,199 +5805,128 @@ Examples
     #  !
     # !
     #
-
-    - name: Replace OSPFv2 routes configurations from the device
+    - name: Replace running OSPFv2 routes configurations with provided config.
       cisco.iosxr.iosxr_ospfv2:
         config:
           processes:
-          - process_id: 27
-            areas:
-            - area_id: 10
-              hello_interval: 2
-            - area_id: 20
-              cost: 2
-              default_cost: 2
-              authentication:
-                keychain: ansi11393
-          - process_id: 26
-            adjacency_stagger:
-              min_adjacency: 10
-              max_adjacency: 20
+            - process_id: 27
+              areas:
+                - area_id: 10
+                  hello_interval: 2
+                - area_id: 20
+                  cost: 2
+                  default_cost: 2
+                  authentication:
+                    keychain: ansi11393
+            - process_id: 26
+              adjacency_stagger:
+                min_adjacency: 10
+                max_adjacency: 20
         state: replaced
 
+    # Task Output:
+    # ------------
     #
+    # before:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       authentication:
+    #         keychain: ansible_test1102
+    #       process_id: '10'
+    #     - adjacency_stagger:
+    #         max_adjacency: 20
+    #         min_adjacency: 10
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         authentication:
+    #           keychain: ansi11393
+    #         hello_interval: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: enable
+    #       external_out: disable
+    #       flood_reduction: disable
+    #       hello_interval: 1
+    #       mtu_ignore: enable
+    #       packet_size: 577
+    #       passive: disable
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       summary_in: enable
+    #       transmit_delay: 2
+    #       weight: 2
     #
-    # ------------------------
-    # Module Execution Result
-    # ------------------------
+    # commands:
+    #   - router ospf 27
+    #   - no area 10 authentication keychain ansi11393
+    #   - area 20 authentication keychain ansi11393
+    #   - area 20 default-cost 2
+    #   - area 20 cost 2
     #
-    #  "before": {
-    #        "processes": [
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "cost": 11,
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "authentication": {
-    #                    "keychain": "ansible_test1102"
-    #                },
-    #                "process_id": "10"
-    #            },
-    #            {
-    #                "adjacency_stagger": {
-    #                    "max_adjacency": 20,
-    #                    "min_adjacency": 10
-    #                },
-    #                "authentication": {
-    #                    "message_digest": {
-    #                        "keychain": "ansible1101pass"
-    #                    }
-    #                },
-    #                "process_id": "26"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "10",
-    #                        "authentication": {
-    #                            "keychain": "ansi11393"
-    #                        },
-    #                        "hello_interval": 2
-    #                    }
-    #                ],
-    #                "process_id": "27"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "cost": 2,
-    #                "dead_interval": 2,
-    #                "default_metric": 10,
-    #                "demand_circuit": "enable",
-    #                "external_out": "disable",
-    #                "flood_reduction": "disable",
-    #                "hello_interval": 1,
-    #                "mtu_ignore": "enable",
-    #                "packet_size": 577,
-    #                "passive": "disable",
-    #                "priority": 1,
-    #                "process_id": "30",
-    #                "retransmit_interval": 2,
-    #                "router_id": "2.2.2.2",
-    #                "summary_in": "enable",
-    #                "transmit_delay": 2,
-    #                "weight": 2
-    #            }
-    #        ]
-    #    }
+    # after:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       authentication:
+    #         keychain: ansible_test1102
+    #       process_id: '10'
+    #     - adjacency_stagger:
+    #         max_adjacency: 20
+    #         min_adjacency: 10
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         hello_interval: 2
+    #       - area_id: '20'
+    #         authentication:
+    #           keychain: ansi11393
+    #         cost: 2
+    #         default_cost: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: enable
+    #       external_out: disable
+    #       flood_reduction: disable
+    #       hello_interval: 1
+    #       mtu_ignore: enable
+    #       packet_size: 577
+    #       passive: disable
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       summary_in: enable
+    #       transmit_delay: 2
+    #       weight: 2
     #
-    #  "commands": [
-    #        "router ospf 27",
-    #        "no area 10 authentication keychain ansi11393",
-    #        "area 20 authentication keychain ansi11393",
-    #        "area 20 default-cost 2",
-    #        "area 20 cost 2"
-    #    ]
-    #
-    #  "after": {
-    #        "processes": [
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "cost": 11,
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "authentication": {
-    #                    "keychain": "ansible_test1102"
-    #                },
-    #                "process_id": "10"
-    #            },
-    #            {
-    #                "adjacency_stagger": {
-    #                    "max_adjacency": 20,
-    #                    "min_adjacency": 10
-    #                },
-    #                "authentication": {
-    #                    "message_digest": {
-    #                        "keychain": "ansible1101pass"
-    #                    }
-    #                },
-    #                "process_id": "26"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "10",
-    #                        "hello_interval": 2
-    #                    },
-    #                    {
-    #                        "area_id": "20",
-    #                        "authentication": {
-    #                            "keychain": "ansi11393"
-    #                        },
-    #                        "cost": 2,
-    #                        "default_cost": 2
-    #                    }
-    #                ],
-    #                "process_id": "27"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "cost": 2,
-    #                "dead_interval": 2,
-    #                "default_metric": 10,
-    #                "demand_circuit": "enable",
-    #                "external_out": "disable",
-    #                "flood_reduction": "disable",
-    #                "hello_interval": 1,
-    #                "mtu_ignore": "enable",
-    #                "packet_size": 577,
-    #                "passive": "disable",
-    #                "priority": 1,
-    #                "process_id": "30",
-    #                "retransmit_interval": 2,
-    #                "router_id": "2.2.2.2",
-    #                "summary_in": "enable",
-    #                "transmit_delay": 2,
-    #                "weight": 2
-    #            }
-    #        ]
-    #    }
-    #
-    #
-    # -----------
-    # After state
-    # -----------
+    # After state:
+    # ------------
     #
     # RP/0/RP0/CPU0:anton(config)#do show running-config router ospf
     # Thu Jun 11 16:40:31.038 UTC
@@ -6059,7 +5941,6 @@ Examples
     #  !
     # !
     # router ospf 26
-    #  authentication message-digest keychain ansible1101pass
     #  adjacency stagger 10 20
     # !
     # router ospf 27
@@ -6096,15 +5977,11 @@ Examples
     #   default-cost 6
     #  !
     # !
-    #
-
 
     # Using overridden
     #
-    # ------------
-    # Before state
-    # ------------
-    #
+    # Before state:
+    # -------------
     #
     # RP/0/RP0/CPU0:anton#show running-config router ospf
     # Thu Jun 11 16:06:44.406 UTC
@@ -6119,14 +5996,17 @@ Examples
     #  !
     # !
     # router ospf 26
-    #  authentication message-digest keychain ansible1101pass
     #  adjacency stagger 10 20
     # !
     # router ospf 27
     #  area 10
-    #  authentication keychain ansi11393
     #   hello-interval 2
-    # !
+    #  !
+    #  area 20
+    #   cost 2
+    #   authentication keychain ansi11393
+    #   default-cost 2
+    #  !
     # !
     # router ospf 30
     #  router-id 2.2.2.2
@@ -6152,195 +6032,141 @@ Examples
     #   default-cost 6
     #  !
     # !
-    #
 
-    - name: Override existing OSPFv2 configurations from the device
+    - name: Override existing OSPFv2 configurations with provided config.
       cisco.iosxr.iosxr_ospfv2:
         config:
           processes:
-          - process_id: 27
-            areas:
-            - area_id: 10
-              hello_interval: 2
-              authentication:
-                keychain: ansi11393
-            - area_id: 20
-              cost: 2
-              default_cost: 2
-              authentication:
-                keychain: ansi11393
-          - process_id: 26
-            adjacency_stagger:
-              min_adjacency: 10
-              max_adjacency: 20
+            - process_id: 27
+              areas:
+                - area_id: 10
+                  hello_interval: 2
+                  authentication:
+                    keychain: ansi11393
+                - area_id: 20
+                  cost: 2
+                  default_cost: 2
+                  authentication:
+                    keychain: ansi11393
+            - process_id: 26
+              adjacency_stagger:
+                min_adjacency: 10
+                max_adjacency: 20
         state: overridden
 
+
     #
+    # Task Output:
+    # ------------
     #
-    # ------------------------
-    # Module Execution Result
-    # ------------------------
+    # before:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       authentication:
+    #         keychain: ansible_test1102
+    #       process_id: '10'
+    #     - adjacency_stagger:
+    #         max_adjacency: 20
+    #         min_adjacency: 10
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         hello_interval: 2
+    #       - area_id: '20'
+    #         authentication:
+    #           keychain: ansi11393
+    #         cost: 2
+    #         default_cost: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: enable
+    #       external_out: disable
+    #       flood_reduction: disable
+    #       hello_interval: 1
+    #       mtu_ignore: enable
+    #       packet_size: 577
+    #       passive: disable
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       summary_in: enable
+    #       transmit_delay: 2
+    #       weight: 2
+
     #
-    #  "before": {
-    #        "processes": [
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "cost": 11,
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "authentication": {
-    #                    "keychain": "ansible_test1102"
-    #                },
-    #                "process_id": "10"
-    #            },
-    #            {
-    #                "adjacency_stagger": {
-    #                    "max_adjacency": 20,
-    #                    "min_adjacency": 10
-    #                },
-    #                "authentication": {
-    #                    "message_digest": {
-    #                        "keychain": "ansible1101pass"
-    #                    }
-    #                },
-    #                "process_id": "26"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "10",
-    #                        "authentication": {
-    #                            "keychain": "ansi11393"
-    #                        },
-    #                        "hello_interval": 2
-    #                    }
-    #                ],
-    #                "process_id": "27"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "cost": 2,
-    #                "dead_interval": 2,
-    #                "default_metric": 10,
-    #                "demand_circuit": "enable",
-    #                "external_out": "disable",
-    #                "flood_reduction": "disable",
-    #                "hello_interval": 1,
-    #                "mtu_ignore": "enable",
-    #                "packet_size": 577,
-    #                "passive": "disable",
-    #                "priority": 1,
-    #                "process_id": "30",
-    #                "retransmit_interval": 2,
-    #                "router_id": "2.2.2.2",
-    #                "summary_in": "enable",
-    #                "transmit_delay": 2,
-    #                "weight": 2
-    #            }
-    #        ]
-    #    }
+    # commands:
+    #   - router ospf 10
+    #   - no authentication keychain ansible_test1102
+    #   - no area 11 default-cost 5
+    #   - no area 11 cost 11
+    #   - no area 22 default-cost 6
+    #   - router ospf 30
+    #   - no cost 2
+    #   - no weight 2
+    #   - no passive disable
+    #   - no priority 1
+    #   - no flood-reduction disable
+    #   - no default-metric 10
+    #   - no router-id 2.2.2.2
+    #   - no demand-circuit enable
+    #   - no packet-size 577
+    #   - no transmit-delay 2
+    #   - no summary-in enable
+    #   - no external-out disable
+    #   - no dead-interval 2
+    #   - no hello-interval 1
+    #   - no retransmit-interval 2
+    #   - no mtu-ignore enable
+    #   - no area 11 default-cost 5
+    #   - no area 22 default-cost 6
+    #   - router ospf 27
+    #   - area 10 authentication keychain ansi11393
     #
-    #  "commands": [
-    #        "router ospf 10",
-    #        "no authentication keychain ansible_test1102",
-    #        "no area 11 default-cost 5",
-    #        "no area 11 cost 11",
-    #        "no area 22 default-cost 6",
-    #        "router ospf 30",
-    #        "no cost 2",
-    #        "no weight 2",
-    #        "no passive disable",
-    #        "no priority 1",
-    #        "no flood-reduction disable",
-    #        "no default-metric 10",
-    #        "no router-id 2.2.2.2",
-    #        "no demand-circuit enable",
-    #        "no packet-size 577",
-    #        "no transmit-delay 2",
-    #        "no summary-in enable",
-    #        "no external-out disable",
-    #        "no dead-interval 2",
-    #        "no hello-interval 1",
-    #        "no retransmit-interval 2",
-    #        "no mtu-ignore enable",
-    #        "no area 11 default-cost 5",
-    #        "no area 22 default-cost 6",
-    #        "router ospf 27",
-    #        "area 20 authentication keychain ansi11393",
-    #        "area 20 default-cost 2",
-    #        "area 20 cost 2"
-    #    ]
+    # after:
+    #     processes:
+    #     - process_id: '10'
+    #     - adjacency_stagger:
+    #         max_adjacency: 20
+    #         min_adjacency: 10
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         authentication:
+    #           keychain: ansi11393
+    #         hello_interval: 2
+    #       - area_id: '20'
+    #         authentication:
+    #           keychain: ansi11393
+    #         cost: 2
+    #         default_cost: 2
+    #       process_id: '27'
+    #     - process_id: '30'
     #
-    #  "after": {
-    #        "processes": [
-    #            {
-    #                "process_id": "10"
-    #            },
-    #            {
-    #                "adjacency_stagger": {
-    #                    "max_adjacency": 20,
-    #                    "min_adjacency": 10
-    #                },
-    #                "authentication": {
-    #                    "message_digest": {
-    #                        "keychain": "ansible1101pass"
-    #                    }
-    #                },
-    #                "process_id": "26"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "10",
-    #                        "authentication": {
-    #                            "keychain": "ansi11393"
-    #                        },
-    #                        "hello_interval": 2
-    #                    },
-    #                    {
-    #                        "area_id": "20",
-    #                        "authentication": {
-    #                            "keychain": "ansi11393"
-    #                        },
-    #                        "cost": 2,
-    #                        "default_cost": 2
-    #                    }
-    #                ],
-    #                "process_id": "27"
-    #            },
-    #            {
-    #                "process_id": "30"
-    #            }
-    #        ]
-    #    }
-    #
-    #
-    # -----------
-    # After state
-    # -----------
+    # After state:
+    # ------------
     #
     # RP/0/RP0/CPU0:anton#show running-config router ospf
     # Thu Jun 11 16:50:36.332 UTC
     # router ospf 10
+    #  area 11
+    #  !
+    #  area 22
+    #  !
     # !
     # router ospf 26
-    #  authentication message-digest keychain ansible1101pass
     #  adjacency stagger 10 20
     # !
     # router ospf 27
@@ -6355,16 +6181,17 @@ Examples
     #  !
     # !
     # router ospf 30
+    #  area 11
+    #  !
+    #  area 22
+    #  !
     # !
     #
 
-
     # Using deleted
     #
-    # ------------
-    # Before state
-    # ------------
-    #
+    # Before state:
+    # -------------
     #
     # RP/0/RP0/CPU0:anton#show running-config router ospf
     # Thu Jun 11 16:06:44.406 UTC
@@ -6379,14 +6206,18 @@ Examples
     #  !
     # !
     # router ospf 26
-    #  authentication message-digest keychain ansible1101pass
     #  adjacency stagger 10 20
     # !
     # router ospf 27
     #  area 10
-    #  authentication keychain ansi11393
+    #   authentication keychain ansi11393
     #   hello-interval 2
-    # !
+    #  !
+    #  area 20
+    #   cost 2
+    #   authentication keychain ansi11393
+    #   default-cost 2
+    #  !
     # !
     # router ospf 30
     #  router-id 2.2.2.2
@@ -6412,163 +6243,136 @@ Examples
     #   default-cost 6
     #  !
     # !
-    #
 
-    - name: Deleted existing OSPFv2 configurations from the device
+    - name: Deleted provided ospfv2 processes.
       cisco.iosxr.iosxr_ospfv2:
         config:
           processes:
-          - process_id: '10'
-          - process_id: '26'
-          - process_id: '27'
-          - process_id: '30'
+            - process_id: '10'
+            - process_id: '26'
+            - process_id: '27'
+            - process_id: '30'
         state: deleted
 
+
     #
+    # Task Output:
+    # ------------
     #
-    # ------------------------
-    # Module Execution Result
-    # ------------------------
+    # before:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       authentication:
+    #         keychain: ansible_test1102
+    #       process_id: '10'
+    #     - adjacency_stagger:
+    #         max_adjacency: 20
+    #         min_adjacency: 10
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         authentication:
+    #           keychain: ansi11393
+    #         hello_interval: 2
+    #       - area_id: '20'
+    #         authentication:
+    #           keychain: ansi11393
+    #         cost: 2
+    #         default_cost: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: enable
+    #       external_out: disable
+    #       flood_reduction: disable
+    #       hello_interval: 1
+    #       mtu_ignore: enable
+    #       packet_size: 577
+    #       passive: disable
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       summary_in: enable
+    #       transmit_delay: 2
+    #       weight: 2
     #
-    #  "before": {
-    #        "processes": [
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "cost": 11,
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "authentication": {
-    #                    "keychain": "ansible_test1102"
-    #                },
-    #                "process_id": "10"
-    #            },
-    #            {
-    #                "adjacency_stagger": {
-    #                    "max_adjacency": 20,
-    #                    "min_adjacency": 10
-    #                },
-    #                "authentication": {
-    #                    "message_digest": {
-    #                        "keychain": "ansible1101pass"
-    #                    }
-    #                },
-    #                "process_id": "26"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "10",
-    #                        "authentication": {
-    #                            "keychain": "ansi11393"
-    #                        },
-    #                        "hello_interval": 2
-    #                    }
-    #                ],
-    #                "process_id": "27"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "cost": 2,
-    #                "dead_interval": 2,
-    #                "default_metric": 10,
-    #                "demand_circuit": "enable",
-    #                "external_out": "disable",
-    #                "flood_reduction": "disable",
-    #                "hello_interval": 1,
-    #                "mtu_ignore": "enable",
-    #                "packet_size": 577,
-    #                "passive": "disable",
-    #                "priority": 1,
-    #                "process_id": "30",
-    #                "retransmit_interval": 2,
-    #                "router_id": "2.2.2.2",
-    #                "summary_in": "enable",
-    #                "transmit_delay": 2,
-    #                "weight": 2
-    #            }
-    #        ]
-    #    },
+    # commands:
+    #   - router ospf 10
+    #   - no authentication keychain ansible_test1102
+    #   - no area 11 default-cost 5
+    #   - no area 11 cost 11
+    #   - no area 22 default-cost 6
+    #   - router ospf 26
+    #   - no adjacency stagger 10 20
+    #   - router ospf 27
+    #   - no area 10 authentication keychain ansi11393
+    #   - no area 10 hello-interval 2
+    #   - no area 20 authentication keychain ansi11393
+    #   - no area 20 default-cost 2
+    #   - no area 20 cost 2
+    #   - router ospf 30
+    #   - no cost 2
+    #   - no weight 2
+    #   - no passive disable
+    #   - no priority 1
+    #   - no flood-reduction disable
+    #   - no default-metric 10
+    #   - no router-id 2.2.2.2
+    #   - no demand-circuit enable
+    #   - no packet-size 577
+    #   - no transmit-delay 2
+    #   - no summary-in enable
+    #   - no external-out disable
+    #   - no dead-interval 2
+    #   - no hello-interval 1
+    #   - no retransmit-interval 2
+    #   - no mtu-ignore enable
+    #   - no area 11 default-cost 5
+    #   - no area 22 default-cost 6
     #
-    #  "commands": [
-    #        "router ospf 10",
-    #        "no authentication keychain ansible_test1102",
-    #        "no area 11 default-cost 5",
-    #        "no area 11 cost 11",
-    #        "no area 22 default-cost 6",
-    #        "router ospf 26",
-    #        "no adjacency stagger 10 20",
-    #        "no authentication message-digest keychain ansible1101pass",
-    #        "router ospf 27",
-    #        "no area 10 authentication keychain ansi11393",
-    #        "no area 10 hello-interval 2",
-    #        "router ospf 30",
-    #        "no cost 2",
-    #        "no weight 2",
-    #        "no passive disable",
-    #        "no priority 1",
-    #        "no flood-reduction disable",
-    #        "no default-metric 10",
-    #        "no router-id 2.2.2.2",
-    #        "no demand-circuit enable",
-    #        "no packet-size 577",
-    #        "no transmit-delay 2",
-    #        "no summary-in enable",
-    #        "no external-out disable",
-    #        "no dead-interval 2",
-    #        "no hello-interval 1",
-    #        "no retransmit-interval 2",
-    #        "no mtu-ignore enable",
-    #        "no area 11 default-cost 5",
-    #        "no area 22 default-cost 6"
-    #    ]
-    #
-    #  "after": {
-    #        "processes": [
-    #            {
-    #                "process_id": "10"
-    #            },
-    #            {
-    #                "process_id": "26"
-    #            },
-    #            {
-    #                "process_id": "27"
-    #            },
-    #            {
-    #                "process_id": "30"
-    #            }
-    #        ]
-    #    }
-    #
-    #
-    # -----------
-    # After state
-    # -----------
+    # after:
+    #     processes:
+    #     - process_id: '10'
+    #     - process_id: '26'
+    #     - process_id: '27'
+    #     - process_id: '30'
+
+    # After state:
+    # ------------
     #
     # RP/0/RP0/CPU0:anton(config)#show running-config router ospf
     # Thu Jun 11 17:07:34.218 UTC
     # router ospf 10
+    #  area 11
+    #  !
+    #  area 22
+    #  !
     # !
     # router ospf 26
     # !
     # router ospf 27
+    #  area 10
+    #  !
+    #  area 20
+    #  !
     # !
     # router ospf 30
+    #  area 11
+    #  !
+    #  area 22
+    #  !
     # !
 
 
@@ -6620,184 +6424,146 @@ Examples
     #   default-cost 6
     #  !
     # !
+    #
     - name: Parsed the device configuration to get output commands
       cisco.iosxr.iosxr_ospfv2:
         running_config: "{{ lookup('file', './parsed.cfg') }}"
         state: parsed
     #
+    # Task Output:
+    # ------------
     #
-    # -------------------------
-    # Module Execution Result
-    # -------------------------
-    #
-    #
-    # "parsed": {
-    #        "processes": [
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "cost": 11,
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "authentication": {
-    #                    "keychain": "ansible_test1102"
-    #                },
-    #                "process_id": "10"
-    #            },
-    #            {
-    #                "adjacency_stagger": {
-    #                    "max_adjacency": 20,
-    #                    "min_adjacency": 10
-    #                },
-    #                "authentication": {
-    #                    "message_digest": {
-    #                        "keychain": "ansible1101pass"
-    #                    }
-    #                },
-    #                "process_id": "26"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "10",
-    #                        "authentication": {
-    #                            "keychain": "ansi11393"
-    #                        },
-    #                        "hello_interval": 2
-    #                    }
-    #                ],
-    #                "process_id": "27"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "cost": 2,
-    #                "dead_interval": 2,
-    #                "default_metric": 10,
-    #                "demand_circuit": "enable",
-    #                "external_out": "disable",
-    #                "flood_reduction": "disable",
-    #                "hello_interval": 1,
-    #                "mtu_ignore": "enable",
-    #                "packet_size": 577,
-    #                "passive": "disable",
-    #                "priority": 1,
-    #                "process_id": "30",
-    #                "retransmit_interval": 2,
-    #                "router_id": "2.2.2.2",
-    #                "summary_in": "enable",
-    #                "transmit_delay": 2,
-    #                "weight": 2
-    #            }
-    #        ]
-    #    }
-
-
+    # parsed:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       authentication:
+    #         keychain: ansible_test1102
+    #       process_id: '10'
+    #     - adjacency_stagger:
+    #         max_adjacency: 20
+    #         min_adjacency: 10
+    #       authentication:
+    #         message_digest:
+    #           keychain: ansible1101pass
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         authentication:
+    #           keychain: ansi11393
+    #         hello_interval: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: enable
+    #       external_out: disable
+    #       flood_reduction: disable
+    #       hello_interval: 1
+    #       mtu_ignore: enable
+    #       packet_size: 577
+    #       passive: disable
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       summary_in: enable
+    #       transmit_delay: 2
+    #       weight: 2
 
     # Using rendered
-    #
     #
     - name: Render the commands for provided  configuration
       cisco.iosxr.iosxr_ospfv2:
         config:
           processes:
-          - process_id: 27
-            areas:
-            - area_id: 10
-              hello_interval: 2
+            - process_id: 27
+              areas:
+                - area_id: 10
+                  hello_interval: 2
+                  authentication:
+                    keychain: ansi11393
+            - process_id: 26
+              adjacency_stagger:
+                min_adjacency: 10
+                max_adjacency: 20
+            - process_id: 10
               authentication:
-                keychain: ansi11393
-          - process_id: 26
-            adjacency_stagger:
-              min_adjacency: 10
-              max_adjacency: 20
-          - process_id: 10
-            authentication:
-              keychain: ansible_test1102
-            areas:
-            - area_id: 11
-              default_cost: 5
-              cost: 11
-            - area_id: 22
-              default_cost: 6
-          - process_id: 30
-            areas:
-            - area_id: 11
-              default_cost: 5
-            - area_id: 22
-              default_cost: 6
-
-            cost: 2
-            default_metric: 10
-            transmit_delay: 2
-            hello_interval: 1
-            dead_interval: 2
-            retransmit_interval: 2
-            weight: 2
-            packet_size: 577
-            priority: 1
-            router_id: 2.2.2.2
-            demand_circuit: enable
-            passive: disable
-            summary_in: enable
-            flood_reduction: disable
-            mtu_ignore: enable
-            external_out: disable
+                keychain: ansible_test1102
+              areas:
+                - area_id: 11
+                  default_cost: 5
+                  cost: 11
+                - area_id: 22
+                  default_cost: 6
+            - process_id: 30
+              areas:
+                - area_id: 11
+                  default_cost: 5
+                - area_id: 22
+                  default_cost: 6
+              cost: 2
+              default_metric: 10
+              transmit_delay: 2
+              hello_interval: 1
+              dead_interval: 2
+              retransmit_interval: 2
+              weight: 2
+              packet_size: 577
+              priority: 1
+              router_id: 2.2.2.2
+              demand_circuit: enable
+              passive: disable
+              summary_in: enable
+              flood_reduction: disable
+              mtu_ignore: enable
+              external_out: disable
         state: rendered
 
+
     #
+    # Task Output:
+    # ------------
     #
-    # -------------------------
-    # Module Execution Result
-    # -------------------------
-    #
-    #
-    # "rendered": [
-    #        "router ospf 27",
-    #        "area 10 authentication keychain ansi11393",
-    #        "area 10 hello-interval 2",
-    #        "router ospf 26",
-    #        "adjacency stagger 10 20",
-    #        "authentication message-digest keychain ansible1101pass",
-    #        "router ospf 10",
-    #        "authentication keychain ansible_test1102",
-    #        "area 11 default-cost 5",
-    #        "area 11 cost 11",
-    #        "area 22 default-cost 6",
-    #        "router ospf 30",
-    #        "cost 2",
-    #        "weight 2",
-    #        "passive disable",
-    #        "priority 1",
-    #        "flood-reduction disable",
-    #        "default-metric 10",
-    #        "router-id 2.2.2.2",
-    #        "demand-circuit enable",
-    #        "packet-size 577",
-    #        "transmit-delay 2",
-    #        "summary-in enable",
-    #        "external-out disable",
-    #        "dead-interval 2",
-    #        "hello-interval 1",
-    #        "retransmit-interval 2",
-    #        "mtu-ignore enable",
-    #        "area 11 default-cost 5",
-    #        "area 22 default-cost 6"
-    #    ]
+    # rendered:
+    #   - router ospf 27
+    #   - area 10 authentication keychain ansi11393
+    #   - area 10 hello-interval 2
+    #   - router ospf 26
+    #   - adjacency stagger 10 20
+    #   - router ospf 10
+    #   - authentication keychain ansible_test1102
+    #   - area 11 default-cost 5
+    #   - area 11 cost 11
+    #   - area 22 default-cost 6
+    #   - router ospf 30
+    #   - cost 2
+    #   - weight 2
+    #   - passive disable
+    #   - priority 1
+    #   - flood-reduction disable
+    #   - default-metric 10
+    #   - router-id 2.2.2.2
+    #   - demand-circuit enable
+    #   - packet-size 577
+    #   - transmit-delay 2
+    #   - summary-in enable
+    #   - external-out disable
+    #   - dead-interval 2
+    #   - hello-interval 1
+    #   - retransmit-interval 2
+    #   - mtu-ignore enable
+    #   - area 11 default-cost 5
+    #   - area 22 default-cost 6
 
 
     # Using gathered
@@ -6818,14 +6584,15 @@ Examples
     #  !
     # !
     # router ospf 26
-    #  authentication message-digest keychain ansible1101pass
     #  adjacency stagger 10 20
     # !
     # router ospf 27
     #  area 10
-    #  authentication keychain ansi11393
+    #   authentication keychain ansi11393
     #   hello-interval 2
-    # !
+    #  !
+    #  area 20
+    #  !
     # !
     # router ospf 30
     #  router-id 2.2.2.2
@@ -6857,84 +6624,52 @@ Examples
         state: gathered
     #
     #
-    # -------------------------
-    # Module Execution Result
-    # -------------------------
+    # Task Output:
+    # ------------
     #
-    #    "gathered": {
-    #        "processes": [
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "cost": 11,
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "authentication": {
-    #                    "keychain": "ansible_test1102"
-    #                },
-    #                "process_id": "10"
-    #            },
-    #            {
-    #                "adjacency_stagger": {
-    #                    "max_adjacency": 20,
-    #                    "min_adjacency": 10
-    #                },
-    #                "authentication": {
-    #                    "message_digest": {
-    #                        "keychain": "ansible1101pass"
-    #                    }
-    #                },
-    #                "process_id": "26"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "10",
-    #                        "authentication": {
-    #                            "keychain": "ansi11393"
-    #                        },
-    #                        "hello_interval": 2
-    #                    }
-    #                ],
-    #                "process_id": "27"
-    #            },
-    #            {
-    #                "areas": [
-    #                    {
-    #                        "area_id": "11",
-    #                        "default_cost": 5
-    #                    },
-    #                    {
-    #                        "area_id": "22",
-    #                        "default_cost": 6
-    #                    }
-    #                ],
-    #                "cost": 2,
-    #                "dead_interval": 2,
-    #                "default_metric": 10,
-    #                "demand_circuit": "enable",
-    #                "external_out": "disable",
-    #                "flood_reduction": "disable",
-    #                "hello_interval": 1,
-    #                "mtu_ignore": "enable",
-    #                "packet_size": 577,
-    #                "passive": "disable",
-    #                "priority": 1,
-    #                "process_id": "30",
-    #                "retransmit_interval": 2,
-    #                "router_id": "2.2.2.2",
-    #                "summary_in": "enable",
-    #                "transmit_delay": 2,
-    #                "weight": 2
-    #            }
-    #        ]
-    #    }
+    # gathered:
+    #     processes:
+    #     - areas:
+    #       - area_id: '11'
+    #         cost: 11
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       authentication:
+    #         keychain: ansible_test1102
+    #       process_id: '10'
+    #     - adjacency_stagger:
+    #         max_adjacency: 20
+    #         min_adjacency: 10
+    #       process_id: '26'
+    #     - areas:
+    #       - area_id: '10'
+    #         authentication:
+    #           keychain: ansi11393
+    #         hello_interval: 2
+    #       process_id: '27'
+    #     - areas:
+    #       - area_id: '11'
+    #         default_cost: 5
+    #       - area_id: '22'
+    #         default_cost: 6
+    #       cost: 2
+    #       dead_interval: 2
+    #       default_metric: 10
+    #       demand_circuit: enable
+    #       external_out: disable
+    #       flood_reduction: disable
+    #       hello_interval: 1
+    #       mtu_ignore: enable
+    #       packet_size: 577
+    #       passive: disable
+    #       priority: 1
+    #       process_id: '30'
+    #       retransmit_interval: 2
+    #       router_id: 2.2.2.2
+    #       summary_in: enable
+    #       transmit_delay: 2
+    #       weight: 2
     #
     # After state:
     # -------------
@@ -6985,7 +6720,6 @@ Examples
     #  default-cost 6
     # !
     # !
-    #
     #
 
 
@@ -7053,6 +6787,57 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;router ospf 30&#x27;, &quot;authentication message-digest keychain &#x27;ansible1101pass&#x27;&quot;]</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>gathered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>gathered</code></td>
+                <td>
+                            <div>Facts about the network resource gathered from the remote device as structured data.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>parsed</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>parsed</code></td>
+                <td>
+                            <div>The device native config provided in <em>running_config</em> option parsed into structured data as per module argspec.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>rendered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>rendered</code></td>
+                <td>
+                            <div>The provided configuration in the task rendered in device-native format (offline).</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;router ospf 27&#x27;, &#x27;area 10 authentication keychain ansi11393&#x27;]</div>
                 </td>
             </tr>
     </table>

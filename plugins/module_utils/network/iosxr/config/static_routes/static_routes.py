@@ -13,24 +13,22 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
+from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
-from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    search_obj_in_list,
-    remove_empties,
     dict_diff,
     dict_merge,
+    remove_empties,
+    search_obj_in_list,
+    to_list,
 )
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 
 
 class Static_routes(ConfigBase):
@@ -46,23 +44,25 @@ class Static_routes(ConfigBase):
         super(Static_routes, self).__init__(module)
 
     def get_static_routes_facts(self, data=None):
-        """ Get the 'facts' (the current configuration)
+        """Get the 'facts' (the current configuration)
 
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         static_routes_facts = facts["ansible_network_resources"].get(
-            "static_routes"
+            "static_routes",
         )
         if not static_routes_facts:
             return []
         return static_routes_facts
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -97,10 +97,10 @@ class Static_routes(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_static_routes_facts(
-                data=running_config
+                data=running_config,
             )
 
         if self.state in self.ACTION_STATES:
@@ -115,7 +115,7 @@ class Static_routes(ConfigBase):
         return result
 
     def set_config(self, existing_static_routes_facts):
-        """ Collect the configuration from the args passed to the module,
+        """Collect the configuration from the args passed to the module,
             collect the current configuration (as a dict from facts)
 
         :rtype: A list
@@ -128,7 +128,7 @@ class Static_routes(ConfigBase):
         return to_list(resp)
 
     def set_state(self, want, have):
-        """ Select the appropriate function based on the state provided
+        """Select the appropriate function based on the state provided
 
         :param want: the desired configuration as a dictionary
         :param have: the current configuration as a dictionary
@@ -139,14 +139,11 @@ class Static_routes(ConfigBase):
         state = self._module.params["state"]
         commands = []
 
-        if (
-            state in ("overridden", "merged", "replaced", "rendered")
-            and not want
-        ):
+        if state in ("overridden", "merged", "replaced", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    state
-                )
+                    state,
+                ),
             )
 
         if state == "overridden":
@@ -163,8 +160,9 @@ class Static_routes(ConfigBase):
                     if obj_in_have:
                         commands.extend(
                             self._state_deleted(
-                                remove_empties(w_item), obj_in_have
-                            )
+                                remove_empties(w_item),
+                                obj_in_have,
+                            ),
                         )
 
         else:
@@ -172,14 +170,18 @@ class Static_routes(ConfigBase):
                 obj_in_have = self._find_vrf(w_item, have)
                 if state == "merged" or self.state == "rendered":
                     commands.extend(
-                        self._state_merged(remove_empties(w_item), obj_in_have)
+                        self._state_merged(
+                            remove_empties(w_item),
+                            obj_in_have,
+                        ),
                     )
 
                 elif state == "replaced":
                     commands.extend(
                         self._state_replaced(
-                            remove_empties(w_item), obj_in_have
-                        )
+                            remove_empties(w_item),
+                            obj_in_have,
+                        ),
                     )
 
         if commands:
@@ -188,7 +190,7 @@ class Static_routes(ConfigBase):
         return commands
 
     def _state_replaced(self, want, have):
-        """ The command generator when state is replaced
+        """The command generator when state is replaced
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
@@ -199,7 +201,8 @@ class Static_routes(ConfigBase):
         for want_afi in want.get("address_families", []):
             have_afi = (
                 self.find_af_context(
-                    want_afi, have.get("address_families", [])
+                    want_afi,
+                    have.get("address_families", []),
                 )
                 or {}
             )
@@ -215,10 +218,10 @@ class Static_routes(ConfigBase):
                 )
 
                 rotated_have_next_hops = self.rotate_next_hops(
-                    have_route.get("next_hops", {})
+                    have_route.get("next_hops", {}),
                 )
                 rotated_want_next_hops = self.rotate_next_hops(
-                    want_route.get("next_hops", {})
+                    want_route.get("next_hops", {}),
                 )
 
                 for key in rotated_have_next_hops.keys():
@@ -248,14 +251,15 @@ class Static_routes(ConfigBase):
                                 dest=want_route["dest"],
                                 next_hop=key,
                                 updates=updates,
-                            )
+                            ),
                         )
 
             if update_commands:
                 update_commands.insert(
                     0,
                     "address-family {0} {1}".format(
-                        want_afi["afi"], want_afi["safi"]
+                        want_afi["afi"],
+                        want_afi["safi"],
                     ),
                 )
                 commands.extend(update_commands)
@@ -266,7 +270,7 @@ class Static_routes(ConfigBase):
         return commands
 
     def _state_overridden(self, want, have):
-        """ The command generator when state is overridden
+        """The command generator when state is overridden
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
@@ -290,8 +294,9 @@ class Static_routes(ConfigBase):
                     for have_afi in h_item.get("address_families", []):
                         commands.append(
                             "no address-family {0} {1}".format(
-                                have_afi["afi"], have_afi["safi"]
-                            )
+                                have_afi["afi"],
+                                have_afi["safi"],
+                            ),
                         )
 
             # For VRFs/Global Entry present in want, we also need to delete extraneous routes
@@ -302,7 +307,8 @@ class Static_routes(ConfigBase):
                 for have_afi in h_item.get("address_families", []):
                     want_afi = (
                         self.find_af_context(
-                            have_afi, w_item.get("address_families", [])
+                            have_afi,
+                            w_item.get("address_families", []),
                         )
                         or {}
                     )
@@ -318,14 +324,15 @@ class Static_routes(ConfigBase):
                         )
                         if not w_route:
                             update_commands.append(
-                                "no {0}".format(h_route["dest"])
+                                "no {0}".format(h_route["dest"]),
                             )
 
                     if update_commands:
                         update_commands.insert(
                             0,
                             "address-family {0} {1}".format(
-                                want_afi["afi"], want_afi["safi"]
+                                want_afi["afi"],
+                                want_afi["safi"],
                             ),
                         )
                         del_cmds.extend(update_commands)
@@ -340,13 +347,13 @@ class Static_routes(ConfigBase):
         for w_item in want:
             h_item = self._find_vrf(w_item, have)
             commands.extend(
-                self._state_replaced(remove_empties(w_item), h_item)
+                self._state_replaced(remove_empties(w_item), h_item),
             )
 
         return commands
 
     def _state_merged(self, want, have):
-        """ The command generator when state is merged
+        """The command generator when state is merged
 
         :rtype: A list
         :returns: the commands necessary to merge the provided into
@@ -357,7 +364,8 @@ class Static_routes(ConfigBase):
         for want_afi in want.get("address_families", []):
             have_afi = (
                 self.find_af_context(
-                    want_afi, have.get("address_families", [])
+                    want_afi,
+                    have.get("address_families", []),
                 )
                 or {}
             )
@@ -380,10 +388,10 @@ class Static_routes(ConfigBase):
                 # in case `dest_vrf` is not specified, `forward_router_address` and `interface`
                 # become the unique identifier
                 rotated_have_next_hops = self.rotate_next_hops(
-                    have_route.get("next_hops", {})
+                    have_route.get("next_hops", {}),
                 )
                 rotated_want_next_hops = self.rotate_next_hops(
-                    want_route.get("next_hops", {})
+                    want_route.get("next_hops", {}),
                 )
 
                 # for every dict in the want next_hops dictionaries, if the key
@@ -413,14 +421,15 @@ class Static_routes(ConfigBase):
                                     rotated_have_next_hops.get(key, {}),
                                     updates,
                                 ),
-                            )
+                            ),
                         )
 
             if update_commands:
                 update_commands.insert(
                     0,
                     "address-family {0} {1}".format(
-                        want_afi["afi"], want_afi["safi"]
+                        want_afi["afi"],
+                        want_afi["safi"],
                     ),
                 )
                 commands.extend(update_commands)
@@ -430,8 +439,59 @@ class Static_routes(ConfigBase):
 
         return commands
 
+    def _static_route_popper(self, want_afi, have_afi):
+        """ """
+        commands = []
+
+        update_commands = []
+        if not want_afi.get("routes", []):
+            commands.append(
+                "no address-family {0} {1}".format(
+                    have_afi["afi"],
+                    have_afi["safi"],
+                ),
+            )
+        else:
+            for have_route in have_afi.get("routes", []):
+                want_route = (
+                    search_obj_in_list(
+                        have_route["dest"],
+                        want_afi.get("routes", []),
+                        key="dest",
+                    )
+                    or {}
+                )
+
+                rotated_want_next_hops = self.rotate_next_hops(
+                    want_route.get("next_hops", {}),
+                )
+                rotated_have_next_hops = self.rotate_next_hops(
+                    have_route.get("next_hops", {}),
+                )
+
+                for key in rotated_want_next_hops.keys():
+                    if key in rotated_have_next_hops:
+                        cmd = "no {0}".format(want_route["dest"])
+                        for item in key:
+                            if "." in item or ":" in item or "/" in item:
+                                cmd += " {0}".format(item)
+                            else:
+                                cmd += " vrf {0}".format(item)
+                        update_commands.append(cmd)
+            if update_commands:
+                update_commands.insert(
+                    0,
+                    "address-family {0} {1}".format(
+                        have_afi["afi"],
+                        have_afi["safi"],
+                    ),
+                )
+                commands.extend(update_commands)
+
+        return commands
+
     def _state_deleted(self, want, have):
-        """ The command generator when state is deleted
+        """The command generator when state is deleted
 
         :rtype: A list
         :returns: the commands necessary to remove the current configuration
@@ -445,23 +505,21 @@ class Static_routes(ConfigBase):
             for want_afi in want.get("address_families", []):
                 have_afi = (
                     self.find_af_context(
-                        want_afi, have.get("address_families", [])
+                        want_afi,
+                        have.get("address_families", []),
                     )
                     or {}
                 )
                 if have_afi:
-                    commands.append(
-                        "no address-family {0} {1}".format(
-                            have_afi["afi"], have_afi["safi"]
-                        )
-                    )
+                    commands.extend(self._static_route_popper(want_afi, have_afi))
+
             if "vrf" in want and commands:
                 commands.insert(0, "vrf {0}".format(want["vrf"]))
 
         return commands
 
     def _find_vrf(self, item, entries):
-        """ This method iterates through the items
+        """This method iterates through the items
             in `entries` and returns the object that
             matches `item`.
 
@@ -481,7 +539,7 @@ class Static_routes(ConfigBase):
         return obj
 
     def find_af_context(self, want_af_context, have_address_families):
-        """ This method iterates through the have AFs
+        """This method iterates through the have AFs
             and returns the one that matches the want AF
 
         :rtype: A dict
@@ -496,7 +554,7 @@ class Static_routes(ConfigBase):
                 return have_af
 
     def rotate_next_hops(self, next_hops):
-        """ This method iterates through the list of
+        """This method iterates through the list of
             next hops for a given destination network
             and converts it to a dictionary of dictionaries.
             Each dictionary has a primary key indicated by the
@@ -523,7 +581,7 @@ class Static_routes(ConfigBase):
         return next_hops_dict
 
     def _compute_commands(self, dest, next_hop, updates=None):
-        """ This method computes a static route entry command
+        """This method computes a static route entry command
             from the specified `dest`, `next_hop` and `updates`
 
         :rtype: A str

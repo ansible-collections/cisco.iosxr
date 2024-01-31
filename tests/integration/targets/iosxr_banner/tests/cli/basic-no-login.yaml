@@ -3,32 +3,29 @@
   cisco.iosxr.iosxr_banner:
     banner: login
     text: "@Junk login banner\nover multiple lines\n@"
-    provider: '{{ cli }}'
     state: present
 
-- name: remove login
+- name: Remove login
   register: result
   cisco.iosxr.iosxr_banner:
     banner: login
     state: absent
-    provider: '{{ cli }}'
 
-- debug:
-    msg: '{{ result }}'
+- ansible.builtin.debug:
+    msg: "{{ result }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'no banner login' in result.commands[0]"
 
-- name: remove login (idempotent)
+- name: Remove login (idempotent)
   register: result
   cisco.iosxr.iosxr_banner:
     banner: login
     state: absent
-    provider: '{{ cli }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.commands | length == 0

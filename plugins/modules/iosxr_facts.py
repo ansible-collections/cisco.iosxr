@@ -9,12 +9,13 @@ The module file for iosxr_facts
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 DOCUMENTATION = """
 module: iosxr_facts
-short_description: Get facts about iosxr devices.
+short_description: Module to collect facts from remote devices.
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 description:
@@ -24,7 +25,6 @@ description:
   or disable collection of additional facts.
 version_added: 1.0.0
 notes:
-- Tested against IOS-XR 6.1.3.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 author:
 - Ricardo Carrillo Cruz (@rcarrillocruz)
@@ -35,9 +35,9 @@ options:
     - When supplied, this argument will restrict the facts collected to a given subset.  Possible
       values for this argument include all, hardware, config, and interfaces.  Can
       specify a list of values to include a larger subset.  Values can also be used
-      with an initial C(M(!)) to specify that a specific subset should not be collected.
+      with an initial C(!) to specify that a specific subset should not be collected.
     required: false
-    default: '!config'
+    default: 'min'
     type: list
     elements: str
   gather_network_resources:
@@ -45,13 +45,17 @@ options:
     - When supplied, this argument will restrict the facts collected to a given subset.
       Possible values for this argument include all and the resources like interfaces,
       lacp etc. Can specify a list of values to include a larger subset. Values can
-      also be used with an initial C(M(!)) to specify that a specific subset should
+      also be used with an initial C(!) to specify that a specific subset should
       not be collected. Valid subsets are 'all', 'lacp', 'lacp_interfaces', 'lldp_global',
       'lldp_interfaces', 'interfaces', 'l2_interfaces', 'l3_interfaces', 'lag_interfaces',
       'acls', 'acl_interfaces', 'static_routes', 'ospfv2'.
     required: false
     type: list
     elements: str
+  available_network_resources:
+    description: When 'True' a list of network resources for which resource modules are available will be provided.
+    type: bool
+    default: false
 """
 
 EXAMPLES = """
@@ -63,25 +67,25 @@ EXAMPLES = """
 # Collect only the config and default facts
 - cisco.iosxr.iosxr_facts:
     gather_subset:
-    - config
+      - config
 
 # Do not collect hardware facts
 - cisco.iosxr.iosxr_facts:
     gather_subset:
-    - '!hardware'
+      - '!hardware'
 
 # Collect only the lacp facts
 - cisco.iosxr.iosxr_facts:
     gather_subset:
-    - '!all'
-    - '!min'
+      - '!all'
+      - '!min'
     gather_network_resources:
-    - lacp
+      - lacp
 
 # Do not collect lacp_interfaces facts
 - cisco.iosxr.iosxr_facts:
     gather_network_resources:
-    - '!lacp_interfaces'
+      - '!lacp_interfaces'
 
 # Collect lacp and minimal default facts
 - cisco.iosxr.iosxr_facts:
@@ -91,11 +95,11 @@ EXAMPLES = """
 # Collect only the interfaces facts
 - cisco.iosxr.iosxr_facts:
     gather_subset:
-    - '!all'
-    - '!min'
+      - '!all'
+      - '!min'
     gather_network_resources:
-    - interfaces
-    - l2_interfaces
+      - interfaces
+      - l2_interfaces
 """
 
 RETURN = """
@@ -143,6 +147,10 @@ ansible_net_memtotal_mb:
   description: The total memory on the remote device in Mb
   returned: when hardware is configured
   type: int
+ansible_net_cpu_utilization:
+  description: The current CPU utilization of the device
+  returned: when hardware is configured
+  type: dict
 
 # config
 ansible_net_config:
@@ -164,7 +172,8 @@ ansible_net_interfaces:
   returned: when interfaces is configured
   type: dict
 ansible_net_neighbors:
-  description: The list of LLDP neighbors from the remote device
+  description: The list of LLDP and CDP neighbors from the remote device. If both,
+      CDP and LLDP neighbor data is present on one port, CDP is preferred.
   returned: when interfaces is configured
   type: dict
 
@@ -176,13 +185,12 @@ ansible_net_gather_network_resources:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
-)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.facts.facts import (
     FactsArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
+    FACT_RESOURCE_SUBSETS,
     Facts,
 )
 
@@ -194,21 +202,17 @@ def main():
     :returns: ansible_facts
     """
     argument_spec = FactsArgs.argument_spec
-    argument_spec.update(iosxr_argument_spec)
 
-    module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
-    )
+    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
     warnings = []
-    if module.params["gather_subset"] == "!config":
-        warnings.append(
-            "default value for `gather_subset` will be changed to `min` from `!config` v2.11 onwards"
-        )
 
+    ansible_facts = {}
+    if module.params.get("available_network_resources"):
+        ansible_facts["available_network_resources"] = sorted(FACT_RESOURCE_SUBSETS.keys())
     result = Facts(module).get_facts()
-
-    ansible_facts, additional_warnings = result
+    additional_facts, additional_warnings = result
+    ansible_facts.update(additional_facts)
     warnings.extend(additional_warnings)
 
     module.exit_json(ansible_facts=ansible_facts, warnings=warnings)

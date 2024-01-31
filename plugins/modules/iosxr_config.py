@@ -5,13 +5,14 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 DOCUMENTATION = """
 module: iosxr_config
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
-short_description: Manage Cisco IOS XR configuration sections
+short_description: Module to manage configuration sections.
 description:
 - Cisco IOS XR configurations use a simple block indent file syntax for segmenting
   configuration into sections.  This module provides an implementation for working
@@ -20,20 +21,23 @@ version_added: 1.0.0
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 notes:
-- This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
-- Tested against IOS XRv 6.1.3.
+- This module works with connection C(network_cli).
+    See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_iosxr.html)
 - This module does not support C(netconf) connection
-- Abbreviated commands are NOT idempotent, see L(Network FAQ,../network/user_guide/faq.html
-  #why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands).
+- Abbreviated commands are NOT idempotent, see
+    U(https://docs.ansible.com/ansible/latest/network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands)
 - Avoid service disrupting changes (viz. Management IP) from config replace.
 - Do not use C(end) in the replace config file.
+- To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they
+  appear if present in the running configuration on device including the indentation.
 options:
   lines:
     description:
-    - The ordered set of commands that should be configured in the section.  The commands
-      must be the exact same commands as found in the device running-config.  Be sure
-      to note the configuration command syntax as some commands are automatically
-      modified by the device config parser.
+    - The ordered set of commands that should be configured in the section. The commands
+      must be the exact same commands as found in the device running-config as found in the
+      device running-config to ensure idempotency and correct diff. Be sure to note the
+      configuration command syntax as some commands are automatically modified by the
+      device config parser.
     type: list
     elements: str
     aliases:
@@ -48,9 +52,11 @@ options:
   src:
     description:
     - Specifies the source path to the file that contains the configuration or configuration
-      template to load.  The path to the source file can either be the full path on
+      template to load. The path to the source file can either be the full path on
       the Ansible control host or a relative path from the playbook or role root directory.  This
-      argument is mutually exclusive with I(lines), I(parents).
+      argument is mutually exclusive with I(lines), I(parents). The configuration lines in the
+      source file should be similar to how it will appear if present in the running-configuration
+      of the device to ensure idempotency and correct diff.
     type: path
   before:
     description:
@@ -113,6 +119,8 @@ options:
       are times when it is not desirable to have the task get the current running-config
       for every task in a playbook.  The I(config) argument allows the implementer
       to pass in the configuration to use as the base config for comparison.
+      The configuration lines for this option should be similar to how it will appear if present
+      in the running-configuration of the device to ensure idempotency and correct diff.
     type: str
   backup:
     description:
@@ -172,6 +180,11 @@ options:
       configuration changes until the exclusive session ends.
     type: bool
     default: false
+  disable_default_comment:
+    description:
+    - disable default comment when set to True.
+    type: bool
+    default: false
 """
 
 EXAMPLES = """
@@ -182,28 +195,26 @@ EXAMPLES = """
 - name: configure interface settings
   cisco.iosxr.iosxr_config:
     lines:
-    - description test interface
-    - ip address 172.31.1.1 255.255.255.0
+      - description test interface
+      - ip address 172.31.1.1 255.255.255.0
     parents: interface GigabitEthernet0/0/0/0
 
 - name: load a config from disk and replace the current config
   cisco.iosxr.iosxr_config:
     src: config.cfg
     replace: config
-    backup: yes
+    backup: 'yes'
 
-- name: for idempotency, use full-form commands
+- name: 'for idempotency, use full-form commands'
   cisco.iosxr.iosxr_config:
     lines:
-      # - shut
-    - shutdown
-    # parents: int g0/0/0/1
+      - shutdown
     parents: interface GigabitEthernet0/0/0/1
 
 - name: configurable backup path
   cisco.iosxr.iosxr_config:
     src: config.cfg
-    backup: yes
+    backup: true
     backup_options:
       filename: backup.cfg
       dir_path: /home/user
@@ -211,6 +222,11 @@ EXAMPLES = """
 
 RETURN = """
 commands:
+  description: The set of commands that will be pushed to the remote device
+  returned: If there are commands to run against the host
+  type: list
+  sample: ['hostname foo', 'router ospf 1', 'router-id 1.1.1.1']
+updates:
   description: The set of commands that will be pushed to the remote device
   returned: If there are commands to run against the host
   type: list
@@ -241,38 +257,40 @@ time:
   type: str
   sample: "22:28:34"
 """
+import os
 import re
+import tempfile
 
-from ansible.module_utils._text import to_text, to_bytes
+from ansible.module_utils._text import to_bytes, to_text
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import ConnectionError
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    load_config,
-    get_config,
-    get_connection,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
-    copy_file,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.config import (
     NetworkConfig,
     dumps,
 )
 
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
+    copy_file,
+    get_config,
+    get_connection,
+    load_config,
+)
+
+
 DEFAULT_COMMIT_COMMENT = "configured by iosxr_config"
 
 
 def copy_file_to_node(module):
-    """ Copy config file to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well.
-    """
-    src = "/tmp/ansible_config.txt"
-    file = open(src, "wb")
+    """Copy config file to IOS-XR node. We use SFTP because older IOS-XR versions don't handle SCP very well."""
+    file = tempfile.NamedTemporaryFile("wb", delete=False)
+    src = os.path.realpath(file.name)
     file.write(to_bytes(module.params["src"], errors="surrogate_or_strict"))
     file.close()
 
     dst = "/harddisk:/ansible_config.txt"
     copy_file(module, src, dst, "sftp")
+
+    os.remove(src)
 
     return True
 
@@ -280,28 +298,24 @@ def copy_file_to_node(module):
 def check_args(module, warnings):
     if module.params["comment"]:
         if len(module.params["comment"]) > 60:
-            module.fail_json(
-                msg="comment argument cannot be more than 60 characters"
-            )
+            module.fail_json(msg="comment argument cannot be more than 60 characters")
     if module.params["label"]:
         label = module.params["label"]
         if len(label) > 30:
-            module.fail_json(
-                msg="label argument cannot be more than 30 characters"
-            )
+            module.fail_json(msg="label argument cannot be more than 30 characters")
         if not label[0].isalpha():
             module.fail_json(msg="label argument must begin with an alphabet")
         valid_chars = re.match(r"[\w-]*$", label)
         if not valid_chars:
             module.fail_json(
                 msg="label argument must only contain alphabets,"
-                + "digits, underscores or hyphens"
+                + "digits, underscores or hyphens",
             )
     if module.params["force"]:
         warnings.append(
             "The force argument is deprecated, please use "
             "match=none instead.  This argument will be "
-            "removed in the future"
+            "removed in the future",
         )
 
 
@@ -334,7 +348,6 @@ def run(module, result):
     exclusive = module.params["exclusive"]
     check_mode = module.check_mode
     label = module.params["label"]
-
     candidate_config = get_candidate(module)
     running_config = get_running_config(module)
     #test commit
@@ -382,6 +395,7 @@ def run(module, result):
                 commands.extend(module.params["after"])
 
             result["commands"] = commands
+            result["updates"] = commands
 
         commit = not check_mode
         diff = load_config(
@@ -401,8 +415,7 @@ def run(module, result):
 
 
 def main():
-    """main entry point for module execution
-    """
+    """main entry point for module execution"""
     backup_spec = dict(filename=dict(), dir_path=dict(type="path"))
     argument_spec = dict(
         src=dict(type="path"),
@@ -410,9 +423,7 @@ def main():
         parents=dict(type="list", elements="str"),
         before=dict(type="list", elements="str"),
         after=dict(type="list", elements="str"),
-        match=dict(
-            default="line", choices=["line", "strict", "exact", "none"]
-        ),
+        match=dict(default="line", choices=["line", "strict", "exact", "none"]),
         replace=dict(default="line", choices=["line", "block", "config"]),
         # this argument is deprecated in favor of setting match: none
         # it will be removed in a future version
@@ -422,18 +433,17 @@ def main():
         backup_options=dict(type="dict", options=backup_spec),
         comment=dict(default=DEFAULT_COMMIT_COMMENT),
         admin=dict(type="bool", default=False),
+        disable_default_comment=dict(type="bool", default=False),
         exclusive=dict(type="bool", default=False),
         label=dict(),
     )
 
-    argument_spec.update(iosxr_argument_spec)
-
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
 
     required_if = [
-        ("match", "strict", ["lines"]),
-        ("match", "exact", ["lines"]),
-        ("replace", "block", ["lines"]),
+        ("match", "strict", ["lines", "src"], True),
+        ("match", "exact", ["lines", "src"], True),
+        ("replace", "block", ["lines", "src"], True),
         ("replace", "config", ["src"]),
     ]
 
@@ -446,8 +456,13 @@ def main():
 
     if module.params["force"] is True:
         module.params["match"] = "none"
-
+    if (
+        module.params["disable_default_comment"] is True
+        and module.params["comment"] == DEFAULT_COMMIT_COMMENT
+    ):
+        module.params["comment"] = None
     warnings = list()
+
     check_args(module, warnings)
 
     result = dict(changed=False, warnings=warnings)
@@ -457,6 +472,19 @@ def main():
 
     if any((module.params["src"], module.params["lines"])):
         run(module, result)
+
+    if result.get("changed") and any((module.params["src"], module.params["lines"])):
+        msg = (
+            "To ensure idempotency and correct diff the input configuration lines should be"
+            " similar to how they appear if present in"
+            " the running configuration on device"
+        )
+        if module.params["src"]:
+            msg += " including the indentation"
+        if "warnings" in result:
+            result["warnings"].append(msg)
+        else:
+            result["warnings"] = msg
 
     module.exit_json(**result)
 

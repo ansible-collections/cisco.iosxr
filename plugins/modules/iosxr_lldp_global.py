@@ -28,18 +28,18 @@ The module file for iosxr_lldp_global
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 DOCUMENTATION = """
 module: iosxr_lldp_global
-short_description: LLDP resource module
+short_description: Resource module to configure LLDP.
 description:
 - This module manages Global Link Layer Discovery Protocol (LLDP) settings on IOS-XR
   devices.
 version_added: 1.0.0
 notes:
-- Tested against IOS-XR 6.1.3.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 author: Nilashish Chakraborty (@NilashishC)
 options:
@@ -108,6 +108,7 @@ options:
     - parsed
     - gathered
     - rendered
+    - overridden
     default: merged
 
 """
@@ -425,9 +426,6 @@ EXAMPLES = """
 #        "lldp tlv-select management-address disable",
 #        "lldp timer 3000"
 #  ]
-
-
-
 """
 RETURN = """
 before:
@@ -453,6 +451,7 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lldp_global.lldp_global import (
     Lldp_globalArgs,
 )

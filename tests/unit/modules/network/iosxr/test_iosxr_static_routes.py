@@ -5,13 +5,13 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_static_routes
-from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
+from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
+
 from .iosxr_module import TestIosxrModule, load_fixture
 
 
@@ -22,31 +22,27 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
         super(TestIosxrStaticRoutesModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.static_routes.static_routes.Static_routesFacts.get_device_data"
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.static_routes.static_routes.Static_routesFacts.get_device_data",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -81,16 +77,16 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
                                             dict(
                                                 interface="GigabitEthernet0/0/0/1",
                                                 admin_distance=55,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "router static",
@@ -118,16 +114,16 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
                                                 interface="192.0.2.12",
                                                 description="DEV",
                                                 dest_vrf="test_1",
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -148,15 +144,15 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
                                                 interface="GigabitEthernet0/0/0/2",
                                                 track="ip_sla_2",
                                                 vrflabel=1200,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
-                        ]
-                    )
-                ]
-            )
+                            ),
+                        ],
+                    ),
+                ],
+            ),
         )
         commands = [
             "router static",
@@ -181,15 +177,15 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
                                             dict(
                                                 forward_router_address="192.0.2.11",
                                                 admin_distance=100,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
-                        ]
-                    )
-                ]
-            )
+                            ),
+                        ],
+                    ),
+                ],
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -209,16 +205,16 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
                                             dict(
                                                 forward_router_address="192.0.2.11",
                                                 admin_distance=100,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
-                        ]
-                    )
+                            ),
+                        ],
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "router static",
@@ -254,14 +250,14 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
                                                 metric=120,
                                             ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
-                        ]
-                    )
+                            ),
+                        ],
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -291,14 +287,14 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
                                                 metric=120,
                                             ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "router static",
@@ -316,10 +312,10 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
         set_module_args(
             dict(
                 config=[
-                    dict(address_families=[dict(afi="ipv4", safi="unicast")])
+                    dict(address_families=[dict(afi="ipv4", safi="unicast")]),
                 ],
                 state="deleted",
-            )
+            ),
         )
 
         commands = ["router static", "no address-family ipv4 unicast"]
@@ -335,4 +331,84 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
         set_module_args(dict(state="deleted"))
 
         commands = ["no router static"]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_iosxr_static_routes_parsed(self):
+        set_module_args(
+            dict(
+                running_config="router static\n address-family ipv4 unicast\n  0.0.0.0/0 172.31.32.1\n  "
+                "10.0.0.0/8 Null0 200\n  11.0.0.0/8 Loopback888\n  203.0.113.0/24 TenGigE0/0/0/0\n !\n!",
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        parsed_list = [
+            {
+                "address_families": [
+                    {
+                        "afi": "ipv4",
+                        "routes": [
+                            {
+                                "dest": "0.0.0.0/0",
+                                "next_hops": [
+                                    {"forward_router_address": "172.31.32.1"},
+                                ],
+                            },
+                            {
+                                "dest": "10.0.0.0/8",
+                                "next_hops": [
+                                    {
+                                        "admin_distance": 200,
+                                        "interface": "Null0",
+                                    },
+                                ],
+                            },
+                            {
+                                "dest": "11.0.0.0/8",
+                                "next_hops": [{"interface": "Loopback888"}],
+                            },
+                            {
+                                "dest": "203.0.113.0/24",
+                                "next_hops": [{"interface": "TenGigE0/0/0/0"}],
+                            },
+                        ],
+                        "safi": "unicast",
+                    },
+                ],
+            },
+        ]
+        self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_static_routes_delete_specific_static_route(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        address_families=[
+                            dict(
+                                afi="ipv6",
+                                safi="unicast",
+                                routes=[
+                                    dict(
+                                        dest="2001:db8:1000::/36",
+                                        next_hops=[
+                                            dict(
+                                                interface="FastEthernet0/0/0/7",
+                                                description="DC",
+                                            ),
+                                        ],
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="deleted",
+            ),
+        )
+        commands = [
+            "router static",
+            "address-family ipv6 unicast",
+            "no 2001:db8:1000::/36 FastEthernet0/0/0/7",
+        ]
         self.execute_module(changed=True, commands=commands)

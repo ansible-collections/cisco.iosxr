@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -53,7 +54,6 @@ options:
     - absent
 notes:
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
-- Tested against Cisco IOS XR Software, Version 6.1.3
 """
 
 EXAMPLES = """
@@ -77,14 +77,13 @@ commands:
 import re
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
-)
+from ansible.module_utils.six import iteritems
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     get_config,
     load_config,
 )
-from ansible.module_utils.six import iteritems
+
 
 USE_PERSISTENT_CONNECTION = True
 
@@ -98,9 +97,7 @@ def map_obj_to_commands(updates):
             commands.append("no netconf-yang agent ssh")
 
         if "netconf_port" in have:
-            commands.append(
-                "no ssh server netconf port %s" % have["netconf_port"]
-            )
+            commands.append("no ssh server netconf port %s" % have["netconf_port"])
 
         if have["netconf_vrf"]:
             for vrf in have["netconf_vrf"]:
@@ -109,15 +106,9 @@ def map_obj_to_commands(updates):
         if have["state"] == "absent":
             commands.append("netconf-yang agent ssh")
 
-        if want["netconf_port"] is not None and (
-            want["netconf_port"] != have.get("netconf_port")
-        ):
-            commands.append(
-                "ssh server netconf port %s" % want["netconf_port"]
-            )
-        if want["netconf_vrf"] is not None and (
-            want["netconf_vrf"] not in have["netconf_vrf"]
-        ):
+        if want["netconf_port"] is not None and (want["netconf_port"] != have.get("netconf_port")):
+            commands.append("ssh server netconf port %s" % want["netconf_port"])
+        if want["netconf_vrf"] is not None and (want["netconf_vrf"] not in have["netconf_vrf"]):
             commands.append("ssh server netconf vrf %s" % want["netconf_vrf"])
 
     return commands
@@ -152,9 +143,7 @@ def map_config_to_obj(module):
             obj.update({"netconf_port": parse_port(config)})
         if "netconf vrf" in config:
             obj["netconf_vrf"].append(parse_vrf(config))
-    if "ssh" in netconf_config and (
-        "netconf_port" in obj or obj["netconf_vrf"]
-    ):
+    if "ssh" in netconf_config and ("netconf_port" in obj or obj["netconf_vrf"]):
         obj.update({"state": "present"})
 
     if "ssh" in netconf_config and "netconf_port" not in obj:
@@ -185,18 +174,14 @@ def map_params_to_obj(module):
 
 
 def main():
-    """main entry point for module execution
-    """
+    """main entry point for module execution"""
     argument_spec = dict(
         netconf_port=dict(type="int", default=830, aliases=["listens_on"]),
         netconf_vrf=dict(aliases=["vrf"], default="default"),
         state=dict(default="present", choices=["present", "absent"]),
     )
-    argument_spec.update(iosxr_argument_spec)
 
-    module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
-    )
+    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
     warnings = list()
 

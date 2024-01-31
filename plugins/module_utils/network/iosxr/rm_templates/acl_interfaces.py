@@ -1,10 +1,11 @@
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import re
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
     NetworkTemplate,
 )
 
@@ -17,10 +18,12 @@ class Acl_interfacesTemplate(NetworkTemplate):
     PARSERS = [
         {
             'name': 'interface',
-            'getval': re.compile(r'''
+            'getval': re.compile(
+                r'''
               ^interface
               \s(preconfigure)*\s*
-              (?P<name>\S+)$''', re.VERBOSE),
+              (?P<name>\S+)$''', re.VERBOSE,
+            ),
             'setval': 'interface {{ name }}',
             'result': {
                 '{{ name }}': {
@@ -28,7 +31,7 @@ class Acl_interfacesTemplate(NetworkTemplate):
                     'access_groups': {},
                 },
             },
-            'shared': True
+            'shared': True,
         },
         {
             "name": "access_groups",
@@ -52,10 +55,10 @@ class Acl_interfacesTemplate(NetworkTemplate):
                                     "direction": "{{ 'in' if direction == 'ingress' else 'out' }}",
                                 },
                             ],
-                        }
-                    }
-                }
-            }
+                        },
+                    },
+                },
+            },
         },
     ]
     # fmt: on

@@ -1,5 +1,5 @@
 ---
-- name: Setup (Populate OSPF interfaces config)
+- name: Setup (populate OSPF interfaces config)
   cisco.iosxr.iosxr_ospf_interfaces:
     config:
       - name: GigabitEthernet0/0/0/0

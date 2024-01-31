@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -14,22 +15,22 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-from copy import deepcopy
 import re
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
+
+from copy import deepcopy
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.ospf_interfaces.ospf_interfaces import (
+    Ospf_interfacesArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ospf_interfaces import (
     Ospf_interfacesTemplate,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.ospf_interfaces.ospf_interfaces import (
-    Ospf_interfacesArgs,
-)
 
 
 class Ospf_interfacesFacts(object):
-    """ The iosxr ospf_interfaces facts class
-    """
+    """The iosxr ospf_interfaces facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -50,7 +51,7 @@ class Ospf_interfacesFacts(object):
         return connection.get(cmd)
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Ospf_interfaces network resource
+        """Populate the facts for Ospf_interfaces network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
@@ -70,11 +71,7 @@ class Ospf_interfacesFacts(object):
         data = data.splitlines()
 
         for line in data:
-            if (
-                line.startswith("router")
-                and curr_process != ""
-                and curr_process != line
-            ):
+            if line.startswith("router") and curr_process != "" and curr_process != line:
                 end_mark, count, end_flag, area_str = 0, 0, 0, ""
             if end_mark == 0 and count == 0 and line.startswith("router ospf"):
                 curr_process = line
@@ -95,7 +92,9 @@ class Ospf_interfacesFacts(object):
                 elif v_read:
                     if "!" not in line:
                         command = ospf_int.replace("  ", " ") + re.sub(
-                            "\n", "", line
+                            "\n",
+                            "",
+                            line,
                         )
                         config_commands.append(command.replace("   ", " "))
                     else:
@@ -116,7 +115,10 @@ class Ospf_interfacesFacts(object):
                     areas.append(re.sub("\n", "", command))
         data = config_commands
 
-        ospf_interfaces_parser = Ospf_interfacesTemplate(lines=data)
+        ospf_interfaces_parser = Ospf_interfacesTemplate(
+            lines=data,
+            module=self._module,
+        )
         objs = list(ospf_interfaces_parser.parse().values())
         if objs:
             for item in objs:
@@ -128,7 +130,11 @@ class Ospf_interfacesFacts(object):
         ansible_facts["ansible_network_resources"].pop("ospf_interfaces", None)
 
         params = utils.remove_empties(
-            utils.validate_config(self.argument_spec, {"config": objs})
+            ospf_interfaces_parser.validate_config(
+                self.argument_spec,
+                {"config": objs},
+                redact=True,
+            ),
         )
 
         facts["ospf_interfaces"] = params.get("config", [])

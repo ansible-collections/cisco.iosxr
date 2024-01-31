@@ -1,5 +1,5 @@
 ---
-- name: Remove LLDP interface config
+- name: Remove lldp interface configuration
   loop:
     - 0/0/0/0
     - 0/0/0/1
@@ -10,7 +10,7 @@
       - shutdown
     parents: interface GigabitEthernet{{ item }}
 
-- name: Remove unwanted interfaces from config
+- name: Remove unwanted interfaces from configuration
   loop:
     - 0/0/0/2
     - 0/0/0/3

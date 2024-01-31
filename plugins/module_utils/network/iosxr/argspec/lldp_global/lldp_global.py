@@ -27,12 +27,12 @@ The arg spec for the iosxr_lldp_global module
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 class Lldp_globalArgs(object):  # pylint: disable=R0903
-    """The arg spec for the iosxr_lldp module
-    """
+    """The arg spec for the iosxr_lldp module"""
 
     def __init__(self, **kwargs):
         pass
@@ -62,6 +62,7 @@ class Lldp_globalArgs(object):  # pylint: disable=R0903
             "choices": [
                 "merged",
                 "replaced",
+                "overridden",
                 "deleted",
                 "parsed",
                 "rendered",

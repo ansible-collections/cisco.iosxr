@@ -28,18 +28,18 @@ The module file for iosxr_lldp_interfaces
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 DOCUMENTATION = """
 module: iosxr_lldp_interfaces
-short_description: LLDP interfaces resource module
+short_description: Resource module to configure LLDP interfaces.
 description:
 - This module manages Link Layer Discovery Protocol (LLDP) attributes of interfaces
   on IOS-XR devices.
 version_added: 1.0.0
 notes:
-- Tested against IOS-XR 6.1.3.
 - This module works with connection C(network_cli). See L(the IOS-XR Platform Options,../network/user_guide/platform_iosxr.html).
 author: Nilashish Chakraborty (@nilashishc)
 options:
@@ -120,16 +120,16 @@ EXAMPLES = """
 - name: Merge provided configuration with running configuration
   cisco.iosxr.iosxr_lldp_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/1
-      destination:
-        mac_address: ieee-nearest-non-tmpr-bridge
-      transmit: false
-
-    - name: GigabitEthernet0/0/0/2
-      destination:
-        mac_address: ieee-nearest-bridge
-      receive: false
+      - name: GigabitEthernet0/0/0/1
+        destination:
+          mac_address: ieee-nearest-non-tmpr-bridge
+        transmit: false
+      - name: GigabitEthernet0/0/0/2
+        destination:
+          mac_address: ieee-nearest-bridge
+        receive: false
     state: merged
+
 
 #
 #
@@ -242,14 +242,16 @@ EXAMPLES = """
 #
 #
 
-- name: Replace existing LLDP configurations of specified interfaces with provided
+- name: >-
+    Replace existing LLDP configurations of specified interfaces with provided
     configuration
   cisco.iosxr.iosxr_lldp_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/1
-      destination:
-        mac_address: ieee-nearest-non-tmpr-bridge
+      - name: GigabitEthernet0/0/0/1
+        destination:
+          mac_address: ieee-nearest-non-tmpr-bridge
     state: replaced
+
 
 #
 #
@@ -366,12 +368,15 @@ EXAMPLES = """
 #
 #
 
-- name: Override the LLDP configurations of all the interfaces with provided configurations
+- name: >-
+    Override the LLDP configurations of all the interfaces with provided
+    configurations
   cisco.iosxr.iosxr_lldp_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/1
-      transmit: false
+      - name: GigabitEthernet0/0/0/1
+        transmit: false
     state: overridden
+
 
 #
 #
@@ -638,17 +643,15 @@ EXAMPLES = """
 - name: Render platform specific commands from task input using rendered state
   cisco.iosxr.iosxr_lldp_interfaces:
     config:
-    - name: GigabitEthernet0/0/0/1
-      destination:
-        mac_address: ieee-nearest-non-tmpr-bridge
-      transmit: false
-
-    - name: GigabitEthernet0/0/0/2
-      destination:
-        mac_address: ieee-nearest-bridge
-      receive: false
+      - name: GigabitEthernet0/0/0/1
+        destination:
+          mac_address: ieee-nearest-non-tmpr-bridge
+        transmit: false
+      - name: GigabitEthernet0/0/0/2
+        destination:
+          mac_address: ieee-nearest-bridge
+        receive: false
     state: rendered
-
 # ------------------------
 # Module Execution Result
 # ------------------------
@@ -661,7 +664,6 @@ EXAMPLES = """
 #        "lldp receive disable",
 #        "lldp destination mac-address ieee-nearest-bridge"
 # ]
-
 """
 RETURN = """
 before:
@@ -687,6 +689,7 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lldp_interfaces.lldp_interfaces import (
     Lldp_interfacesArgs,
 )

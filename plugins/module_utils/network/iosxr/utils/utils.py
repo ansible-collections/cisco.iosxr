@@ -8,18 +8,26 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
+from functools import total_ordering
+
 from ansible.module_utils._text import to_text
-from ansible_collections.ansible.netcommon.plugins.module_utils.compat import (
-    ipaddress,
-)
+from ansible.module_utils.basic import missing_required_lib
+from ansible.module_utils.common.network import is_masklen, to_netmask
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_diff,
-    is_masklen,
-    to_netmask,
     search_obj_in_list,
 )
+
+
+try:
+    import ipaddress
+
+    HAS_IPADDRESS = True
+except ImportError:
+    HAS_IPADDRESS = False
 
 
 def remove_command_from_config_list(interface, cmd, commands):
@@ -100,7 +108,7 @@ def filter_dict_having_none_value(want, have):
                     have_ip = have.get("ipv4")
                     for each in have_ip:
                         if len(want_ip) > 1 and each.get("secondary"):
-                            have_ip = each.get("address").split(" ")[0]
+                            have_ip = each.get("address").split("/")[0]
                             if have_ip != want_ip[0]:
                                 diff_ip = True
                     if each.get("secondary") and diff_ip is True:
@@ -108,11 +116,7 @@ def filter_dict_having_none_value(want, have):
                     test_dict.update({"ipv4": test_key_dict})
                 # Checks if want doesn't have secondary IP but have has secondary IP set
                 elif have.get("ipv4"):
-                    if [
-                        True
-                        for each_have in have.get("ipv4")
-                        if "secondary" in each_have
-                    ]:
+                    if [True for each_have in have.get("ipv4") if "secondary" in each_have]:
                         test_dict.update({"ipv4": {"secondary": True}})
         if k == "l2protocol":
             diff = True
@@ -222,15 +226,15 @@ def validate_ipv4(value, module):
         if len(address) != 2:
             module.fail_json(
                 msg="address format is <ipv4 address>/<mask>, got invalid format {0}".format(
-                    value
-                )
+                    value,
+                ),
             )
 
         if not is_masklen(address[1]):
             module.fail_json(
                 msg="invalid value for mask: {0}, mask should be in range 0-32".format(
-                    address[1]
-                )
+                    address[1],
+                ),
             )
 
 
@@ -240,15 +244,15 @@ def validate_ipv6(value, module):
         if len(address) != 2:
             module.fail_json(
                 msg="address format is <ipv6 address>/<mask>, got invalid format {0}".format(
-                    value
-                )
+                    value,
+                ),
             )
         else:
             if not 0 <= int(address[1]) <= 128:
                 module.fail_json(
                     msg="invalid value for mask: {0}, mask should be in range 0-128".format(
-                        address[1]
-                    )
+                        address[1],
+                    ),
                 )
 
 
@@ -266,8 +270,7 @@ def validate_n_expand_ipv4(module, want):
 
 
 def normalize_interface(name):
-    """Return the normalized interface name
-    """
+    """Return the normalized interface name"""
     if not name:
         return
 
@@ -282,7 +285,7 @@ def normalize_interface(name):
         if_type = "GigabitEthernet"
     elif name.lower().startswith("fa"):
         if_type = "FastEthernet"
-    elif name.lower().startswith("fo"):
+    elif name.lower().startswith("for"):
         if_type = "FortyGigE"
     elif name.lower().startswith("te"):
         if_type = "TenGigE"
@@ -294,10 +297,16 @@ def normalize_interface(name):
         if_type = "Vlan"
     elif name.lower().startswith("lo"):
         if_type = "Loopback"
-    elif name.lower().startswith("be"):
+    elif name.lower().startswith("bundle-e"):
         if_type = "Bundle-Ether"
-    elif name.lower().startswith("bp"):
+    elif name.lower().startswith("bundle-p"):
         if_type = "Bundle-POS"
+    elif name.lower().startswith("fif"):
+        if_type = "FiftyGigE"
+    elif name.lower().startswith("fou"):
+        if_type = "FourHundredGigE"
+    elif name.lower().startswith("two"):
+        if_type = "TwoHundredGigE"
     else:
         if_type = None
 
@@ -306,7 +315,6 @@ def normalize_interface(name):
         number = number_list[-1].strip()
     else:
         number = _get_number(name)
-
     if if_type:
         proper_interface = if_type + number
     else:
@@ -316,38 +324,53 @@ def normalize_interface(name):
 
 
 def get_interface_type(interface):
-    """Gets the type of interface
-    """
+    """Gets the type of interface"""
 
     if interface.upper().startswith("GI"):
         return "GigabitEthernet"
     elif interface.upper().startswith("FA"):
         return "FastEthernet"
-    elif interface.upper().startswith("FO"):
+    elif interface.upper().startswith("FORT"):
         return "FortyGigE"
     elif interface.upper().startswith("ET"):
         return "Ethernet"
     elif interface.upper().startswith("LO"):
         return "Loopback"
-    elif interface.upper().startswith("BE"):
+    elif interface.upper().startswith("BUNDLE-E"):
         return "Bundle-Ether"
+    elif interface.upper().startswith("BUNDLE-P"):
+        return "Bundle-POS"
     elif interface.upper().startswith("NV"):
         return "nve"
+    elif interface.upper().startswith("TE"):
+        return "TenGigE"
     elif interface.upper().startswith("TWE"):
         return "TwentyFiveGigE"
     elif interface.upper().startswith("HU"):
         return "HundredGigE"
     elif interface.upper().startswith("PRE"):
         return "preconfigure"
+    elif interface.upper().startswith("FIF"):
+        return "FiftyGigE"
+    elif interface.upper().startswith("FOU"):
+        return "FourHundredGigE"
+    elif interface.upper().startswith("TWO"):
+        return "TwoHundredGigE"
+    elif interface.upper().startswith("MG"):
+        return "management"
+    elif interface.upper().startswith("MA"):
+        return "management"
     else:
         return "unknown"
 
 
 def isipaddress(data):
     """
-        Checks if the passed string is
-        a valid IPv4 or IPv6 address
+    Checks if the passed string is
+    a valid IPv4 or IPv6 address
     """
+    if not HAS_IPADDRESS:
+        raise Exception(missing_required_lib("ipaddress"))
     isipaddress = True
 
     try:
@@ -360,9 +383,11 @@ def isipaddress(data):
 
 def is_ipv4_address(data):
     """
-        Checks if the passed string is
-        a valid IPv4 address
+    Checks if the passed string is
+    a valid IPv4 address
     """
+    if not HAS_IPADDRESS:
+        raise Exception(missing_required_lib("ipaddress"))
     if "/" in data:
         data = data.split("/")[0]
 
@@ -373,11 +398,13 @@ def is_ipv4_address(data):
 
 
 def prefix_to_address_wildcard(prefix):
-    """ Converts a IPv4 prefix into address and
+    """Converts a IPv4 prefix into address and
         wildcard mask
 
     :returns: IPv4 address and wildcard mask
     """
+    if not HAS_IPADDRESS:
+        raise Exception(missing_required_lib("ipaddress"))
     wildcard = []
 
     subnet = to_text(ipaddress.IPv4Network(to_text(prefix)).netmask)
@@ -389,3 +416,62 @@ def prefix_to_address_wildcard(prefix):
     wildcard = ".".join(wildcard)
 
     return prefix.split("/")[0], wildcard
+
+
+def flatten_config(data, context):
+    """Flatten different contexts in
+        the running-config for easier parsing.
+    :param data: dict
+    :param context: str
+    :returns: flattened running config
+    """
+    data = data.split("\n")
+    in_cxt = False
+    cur = {}
+
+    for index, x in enumerate(data):
+        cur_indent = len(x) - len(x.lstrip())
+        if x.strip().startswith(context):
+            in_cxt = True
+            cur["context"] = x
+            cur["indent"] = cur_indent
+        elif cur and (cur_indent <= cur["indent"]):
+            in_cxt = False
+        elif in_cxt:
+            data[index] = cur["context"] + " " + x.strip()
+    return "\n".join(data)
+
+
+@total_ordering
+class Version:
+    """Simple class to compare arbitrary versions"""
+
+    def __init__(self, version_string):
+        self.components = version_string.split(".")
+
+    def __eq__(self, other):
+        other = _coerce(other)
+        if not isinstance(other, Version):
+            return NotImplemented
+
+        return self.components == other.components
+
+    def __lt__(self, other):
+        other = _coerce(other)
+        if not isinstance(other, Version):
+            return NotImplemented
+
+        return self.components < other.components
+
+
+def _coerce(other):
+    if isinstance(other, str):
+        other = Version(other)
+    if isinstance(other, (int, float)):
+        other = Version(str(other))
+    return other
+
+
+def netmask_to_cidr(netmask):
+    # convert netmask to cidr and returns the cidr notation
+    return str(sum([bin(int(x)).count("1") for x in netmask.split(".")]))

@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -14,7 +15,7 @@ module: iosxr_banner
 author:
 - Trishna Guha (@trishnaguha)
 - Kedar Kekan (@kedarX)
-short_description: Manage multiline banners on Cisco IOS XR devices
+short_description: Module to configure multiline banners.
 description:
 - This module will configure both exec and motd banners on remote device running Cisco
   IOS XR. It allows playbooks to add or remove banner text from the running configuration.
@@ -25,7 +26,6 @@ requirements:
 extends_documentation_fragment:
 - cisco.iosxr.iosxr
 notes:
-- Tested against IOS XRv 6.1.3.
 - This module works with connection C(network_cli) and C(netconf). See L(the IOS-XR
   Platform Options,../network/user_guide/platform_iosxr.html).
 options:
@@ -70,7 +70,7 @@ EXAMPLES = """
 - name: Configure banner from file
   cisco.iosxr.iosxr_banner:
     banner: motd
-    text: "{{ lookup('file', './config_partial/raw_banner.cfg') }}"
+    text: '{{ lookup(''file'', ''./config_partial/raw_banner.cfg'') }}'
     state: present
 """
 
@@ -100,24 +100,18 @@ xml:
         </config>'
 """
 
-import re
 import collections
+import re
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    get_config,
-    load_config,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_argument_spec,
-)
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     build_xml,
-    is_cliconf,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     etree_find,
+    get_config,
+    is_cliconf,
     is_netconf,
+    load_config,
 )
 
 
@@ -137,7 +131,7 @@ class ConfigBase(object):
                 "banner": self._module.params["banner"],
                 "text": text,
                 "state": self._module.params["state"],
-            }
+            },
         )
 
 
@@ -152,16 +146,12 @@ class CliConfiguration(ConfigBase):
             if self._have.get("state") != "absent" and (
                 "text" in self._have.keys() and self._have["text"]
             ):
-                commands.append(
-                    "no banner {0!s}".format(self._module.params["banner"])
-                )
+                commands.append("no banner {0!s}".format(self._module.params["banner"]))
         elif state == "present":
             if self._want["text"] and self._want["text"].encode().decode(
-                "unicode_escape"
+                "unicode_escape",
             ) != self._have.get("text"):
-                banner_cmd = "banner {0!s} ".format(
-                    self._module.params["banner"]
-                )
+                banner_cmd = "banner {0!s} ".format(self._module.params["banner"])
                 banner_cmd += self._want["text"].strip()
                 commands.append(banner_cmd)
         self._result["commands"] = commands
@@ -200,20 +190,10 @@ class NCConfiguration(ConfigBase):
         self._banners_meta = collections.OrderedDict()
         self._banners_meta.update(
             [
-                (
-                    "banner",
-                    {
-                        "xpath": "banners/banner",
-                        "tag": True,
-                        "attrib": "operation",
-                    },
-                ),
+                ("banner", {"xpath": "banners/banner", "tag": True, "attrib": "operation"}),
                 ("a:banner", {"xpath": "banner/banner-name"}),
-                (
-                    "a:text",
-                    {"xpath": "banner/banner-text", "operation": "edit"},
-                ),
-            ]
+                ("a:text", {"xpath": "banner/banner-text", "operation": "edit"}),
+            ],
         )
 
     def map_obj_to_xml_rpc(self):
@@ -225,9 +205,7 @@ class NCConfiguration(ConfigBase):
             opcode="filter",
         )
 
-        running = get_config(
-            self._module, source="running", config_filter=_get_filter
-        )
+        running = get_config(self._module, source="running", config_filter=_get_filter)
 
         banner_name = None
         banner_text = None
@@ -236,11 +214,7 @@ class NCConfiguration(ConfigBase):
             banner_text = etree_find(running, "banner-text").text
 
         opcode = None
-        if (
-            state == "absent"
-            and banner_name == self._module.params["banner"]
-            and len(banner_text)
-        ):
+        if state == "absent" and banner_name == self._module.params["banner"] and len(banner_text):
             opcode = "delete"
         elif state == "present":
             opcode = "merge"
@@ -279,15 +253,12 @@ class NCConfiguration(ConfigBase):
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     argument_spec = dict(
         banner=dict(required=True, choices=["login", "motd"]),
         text=dict(),
         state=dict(default="present", choices=["present", "absent"]),
     )
-
-    argument_spec.update(iosxr_argument_spec)
 
     required_if = [("state", "present", ("text",))]
 
@@ -300,8 +271,6 @@ def main():
     config_object = None
     if is_cliconf(module):
         # Commenting the below cliconf deprecation support call for Ansible 2.9 as it'll be continued to be supported
-        # module.deprecate("cli support for 'iosxr_interface' is deprecated. Use transport netconf instead",
-        #                  version='2.9')
         config_object = CliConfiguration(module)
     elif is_netconf(module):
         config_object = NCConfiguration(module)

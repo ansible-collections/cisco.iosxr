@@ -11,28 +11,23 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    get_interface_type,
-    dict_to_set,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
-    remove_command_from_config_list,
     add_command_to_config_list,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    dict_to_set,
     filter_dict_having_none_value,
+    get_interface_type,
+    normalize_interface,
+    remove_command_from_config_list,
     remove_duplicate_interface,
 )
 
@@ -52,12 +47,14 @@ class Interfaces(ConfigBase):
         super(Interfaces, self).__init__(module)
 
     def get_interfaces_facts(self, data=None):
-        """ Get the 'facts' (the current configuration)
+        """Get the 'facts' (the current configuration)
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         interfaces_facts = facts["ansible_network_resources"].get("interfaces")
         if not interfaces_facts:
@@ -65,7 +62,7 @@ class Interfaces(ConfigBase):
         return interfaces_facts
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
         :rtype: A dictionary
         :returns: The result from module execution
         """
@@ -99,7 +96,7 @@ class Interfaces(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_interfaces_facts(data=running_config)
 
@@ -115,7 +112,7 @@ class Interfaces(ConfigBase):
         return result
 
     def set_config(self, existing_interfaces_facts):
-        """ Collect the configuration from the args passed to the module,
+        """Collect the configuration from the args passed to the module,
             collect the current configuration (as a dict from facts)
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
@@ -128,7 +125,7 @@ class Interfaces(ConfigBase):
         return to_list(resp)
 
     def set_state(self, want, have):
-        """ Select the appropriate function based on the state provided
+        """Select the appropriate function based on the state provided
         :param want: the desired configuration as a dictionary
         :param have: the current configuration as a dictionary
         :rtype: A list
@@ -136,14 +133,11 @@ class Interfaces(ConfigBase):
                   to the desired configuration
         """
         commands = []
-        if (
-            self.state in ("overridden", "merged", "replaced", "rendered")
-            and not want
-        ):
+        if self.state in ("overridden", "merged", "replaced", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    self.state
-                )
+                    self.state,
+                ),
             )
 
         if self.state == "overridden":
@@ -158,7 +152,7 @@ class Interfaces(ConfigBase):
         return commands
 
     def _state_replaced(self, want, have):
-        """ The command generator when state is replaced
+        """The command generator when state is replaced
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
@@ -167,10 +161,7 @@ class Interfaces(ConfigBase):
 
         for interface in want:
             for each in have:
-                if (
-                    each["name"] == interface["name"]
-                    or interface["name"] in each["name"]
-                ):
+                if each["name"] == interface["name"] or interface["name"] in each["name"]:
                     break
             else:
                 continue
@@ -184,61 +175,69 @@ class Interfaces(ConfigBase):
         return commands
 
     def _state_overridden(self, want, have):
-        """ The command generator when state is overridden
+        """The command generator when state is overridden
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
         """
         commands = []
+        not_in_have = set()
+        in_have = set()
 
         for each in have:
             for interface in want:
-                if (
-                    each["name"] == interface["name"]
-                    or interface["name"] in each["name"]
-                ):
+                interface["name"] = normalize_interface(interface["name"])
+                if each["name"] == interface["name"]:
+                    in_have.add(interface["name"])
                     break
+                if interface["name"] != each["name"]:
+                    not_in_have.add(interface["name"])
             else:
                 # We didn't find a matching desired state, which means we can
                 # pretend we received an empty desired state.
                 interface = dict(name=each["name"])
-                commands.extend(self._clear_config(interface, each))
+                kwargs = {"want": interface, "have": each}
+                commands.extend(self._clear_config(**kwargs))
                 continue
             have_dict = filter_dict_having_none_value(interface, each)
-            want = dict()
-            commands.extend(self._clear_config(want, have_dict))
+            commands.extend(self._clear_config(dict(), have_dict))
             commands.extend(self._set_config(interface, each))
+        # Add the want interface that's not already configured in have interface
+        for each in not_in_have - in_have:
+            for every in want:
+                interface = "interface {0}".format(every["name"])
+                if each and interface not in commands:
+                    commands.extend(self._set_config(every, {}))
         # Remove the duplicate interface call
         commands = remove_duplicate_interface(commands)
 
         return commands
 
     def _state_merged(self, want, have):
-        """ The command generator when state is merged
+        """The command generator when state is merged
         :rtype: A list
         :returns: the commands necessary to merge the provided into
                   the current configuration
         """
         commands = []
-
+        flag = 0
         for interface in want:
             if self.state == "rendered":
                 commands.extend(self._set_config(interface, dict()))
             else:
                 for each in have:
-                    if (
-                        each["name"] == interface["name"]
-                        or interface["name"] in each["name"]
-                    ):
+                    if each["name"] == interface["name"] or interface["name"] in each["name"]:
+                        flag = 1
                         break
+                if flag == 1:
+                    commands.extend(self._set_config(interface, each))
                 else:
-                    continue
-                commands.extend(self._set_config(interface, each))
+                    commands.extend(self._set_config(interface, dict()))
 
         return commands
 
     def _state_deleted(self, want, have):
-        """ The command generator when state is deleted
+        """The command generator when state is deleted
         :rtype: A list
         :returns: the commands necessary to remove the current configuration
                   of the provided objects
@@ -248,10 +247,7 @@ class Interfaces(ConfigBase):
         if want:
             for interface in want:
                 for each in have:
-                    if (
-                        each["name"] == interface["name"]
-                        or interface["name"] in each["name"]
-                    ):
+                    if each["name"] == interface["name"] or interface["name"] in each["name"]:
                         break
                 else:
                     continue
@@ -267,8 +263,8 @@ class Interfaces(ConfigBase):
     def _set_config(self, want, have):
         # Set the interface config based on the want and have config
         commands = []
+        want["name"] = normalize_interface(want["name"])
         interface = "interface " + want["name"]
-
         # Get the diff b/w want and have
         want_dict = dict_to_set(want)
         have_dict = dict_to_set(have)
@@ -299,11 +295,11 @@ class Interfaces(ConfigBase):
             interface = "interface " + have["name"]
 
         if have.get("description") and want.get("description") != have.get(
-            "description"
+            "description",
         ):
             remove_command_from_config_list(interface, "description", commands)
         if not have.get("enabled") and want.get("enabled") != have.get(
-            "enabled"
+            "enabled",
         ):
             # if enable is False set enable as True which is the default behavior
             remove_command_from_config_list(interface, "shutdown", commands)
@@ -321,6 +317,17 @@ class Interfaces(ConfigBase):
                 and want.get("duplex") != have.get("duplex")
             ):
                 remove_command_from_config_list(interface, "duplex", commands)
+
+        if interface_type.lower() in [
+            "gigabitethernet",
+            "fourhundredgige",
+            "fiftygige",
+            "fortygige",
+            "hundredgige",
+            "twohundredgige",
+            "tengige",
+            "twentyfivegige",
+        ]:
             if have.get("mtu") and want.get("mtu") != have.get("mtu"):
                 remove_command_from_config_list(interface, "mtu", commands)
 

@@ -12,22 +12,22 @@ created
 """
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 from copy import deepcopy
-from ansible.module_utils.six import iteritems
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
-)
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ospfv2 import (
-    Ospfv2Template,
-)
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
+from ansible.module_utils.six import iteritems
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
+)
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.ospfv2 import (
+    Ospfv2Template,
 )
 
 
@@ -50,7 +50,7 @@ class Ospfv2(ResourceModule):
         )
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
         :rtype: A dictionary
         :returns: The result from module execution
         """
@@ -60,7 +60,7 @@ class Ospfv2(ResourceModule):
         return self.result
 
     def gen_config(self):
-        """ Select the appropriate function based on the state provided
+        """Select the appropriate function based on the state provided
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
@@ -84,28 +84,21 @@ class Ospfv2(ResourceModule):
         for thing in wantd, haved:
             for _pid, proc in iteritems(thing):
                 for area in proc.get("areas", []):
-                    virtual_link = {
-                        entry["id"]: entry
-                        for entry in area.get("virtual_link", [])
-                    }
+                    virtual_link = {entry["id"]: entry for entry in area.get("virtual_link", [])}
                     if bool(virtual_link):
                         area["virtual_link"] = virtual_link
-                    ranges = {
-                        entry["address"]: entry
-                        for entry in area.get("ranges", [])
-                    }
+                    ranges = {entry["address"]: entry for entry in area.get("ranges", [])}
                     if bool(ranges):
                         area["ranges"] = ranges
 
-                proc["areas"] = {
-                    entry["area_id"]: entry for entry in proc.get("areas", [])
-                }
+                proc["areas"] = {entry["area_id"]: entry for entry in proc.get("areas", [])}
                 if proc.get("distribute_list"):
                     if "acls" in proc.get("distribute_list"):
                         proc["distribute_list"]["acls"] = {
                             entry["name"]: entry
                             for entry in proc["distribute_list"].get(
-                                "acls", []
+                                "acls",
+                                [],
                             )
                         }
 
@@ -116,9 +109,7 @@ class Ospfv2(ResourceModule):
         # if state is deleted, limit the have to anything in want
         # set want to nothing
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
+            haved = {k: v for k, v in iteritems(haved) if k in wantd or not wantd}
             wantd = {}
 
         # delete processes first so we do run into "more than one" errors
@@ -178,7 +169,7 @@ class Ospfv2(ResourceModule):
             "link_down_fast_detect",
             "nsr",
             "database_filter",
-            "log_adjacency",
+            "log_adjacency_changes",
             "distribute_bgp_ls",
             "distribute_link_state",
             "max_lsa",
@@ -245,7 +236,8 @@ class Ospfv2(ResourceModule):
         hvlinks = have.get("virtual_link", {})
         for name, entry in iteritems(wvlinks):
             self._area_compare_virtual_link(
-                want=entry, have=hvlinks.pop(name, {})
+                want=entry,
+                have=hvlinks.pop(name, {}),
             )
         for name, entry in iteritems(hvlinks):
             self._area_compare_virtual_link(want={}, have=entry)

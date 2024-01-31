@@ -18,21 +18,15 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-import sys
-import copy
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
-    iosxr_provider_spec,
-)
+from ansible.utils.display import Display
 from ansible_collections.ansible.netcommon.plugins.action.network import (
     ActionModule as ActionNetworkModule,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    load_provider,
-)
-from ansible.utils.display import Display
+
 
 display = Display()
 
@@ -42,111 +36,14 @@ class ActionModule(ActionNetworkModule):
         del tmp  # tmp no longer has any effect
 
         module_name = self._task.action.split(".")[-1]
-        self._config_module = (
-            True if module_name in ["iosxr_config", "config"] else False
-        )
-        force_cli = module_name in (
-            "iosxr_netconf",
-            "iosxr_config",
-            "iosxr_command",
-            "iosxr_facts",
-        )
+        self._config_module = True if module_name in ["iosxr_config", "config"] else False
+        force_cli = module_name in ("iosxr_netconf", "iosxr_config", "iosxr_command", "iosxr_facts")
         persistent_connection = self._play_context.connection.split(".")[-1]
         warnings = []
 
-        if self._play_context.connection == "local":
-            provider = load_provider(iosxr_provider_spec, self._task.args)
-            pc = copy.deepcopy(self._play_context)
-            pc.network_os = "cisco.iosxr.iosxr"
-            if force_cli or provider["transport"] == "cli":
-                pc.connection = "ansible.netcommon.network_cli"
-                pc.port = int(
-                    provider["port"] or self._play_context.port or 22
-                )
-            elif provider["transport"] == "netconf":
-                pc.connection = "ansible.netcommon.netconf"
-                pc.port = int(
-                    provider["port"] or self._play_context.port or 830
-                )
-            else:
-                return {
-                    "failed": True,
-                    "msg": "Transport type %s is not valid for this module"
-                    % provider["transport"],
-                }
-
-            pc.remote_addr = provider["host"] or self._play_context.remote_addr
-            pc.port = int(provider["port"] or self._play_context.port or 22)
-            pc.remote_user = (
-                provider["username"] or self._play_context.connection_user
-            )
-            pc.password = provider["password"] or self._play_context.password
-
-            connection = self._shared_loader_obj.connection_loader.get(
-                "ansible.netcommon.persistent",
-                pc,
-                sys.stdin,
-                task_uuid=self._task._uuid,
-            )
-
-            # TODO: Remove below code after ansible minimal is cut out
-            if connection is None:
-                pc.network_os = "iosxr"
-                if pc.connection.split(".")[-1] == "netconf":
-                    pc.connection = "netconf"
-                else:
-                    pc.connection = "network_cli"
-
-                connection = self._shared_loader_obj.connection_loader.get(
-                    "persistent", pc, sys.stdin, task_uuid=self._task._uuid
-                )
-
-            display.vvv(
-                "using connection plugin %s (was local)" % pc.connection,
-                pc.remote_addr,
-            )
-
-            command_timeout = (
-                int(provider["timeout"])
-                if provider["timeout"]
-                else connection.get_option("persistent_command_timeout")
-            )
-            connection.set_options(
-                direct={"persistent_command_timeout": command_timeout}
-            )
-
-            socket_path = connection.run()
-            display.vvvv("socket_path: %s" % socket_path, pc.remote_addr)
-            if not socket_path:
-                return {
-                    "failed": True,
-                    "msg": "unable to open shell. Please see: "
-                    + "https://docs.ansible.com/ansible/network_debug_troubleshooting.html#unable-to-open-shell",
-                }
-
-            task_vars["ansible_socket"] = socket_path
-            warnings.append(
-                [
-                    "connection local support for this module is deprecated and will be removed in version 2.14, use connection %s"
-                    % pc.connection
-                ]
-            )
-        elif persistent_connection in ("netconf", "network_cli"):
-            if force_cli and persistent_connection != "network_cli":
-                return {
-                    "failed": True,
-                    "msg": "Connection type %s is not valid for module %s"
-                    % (self._play_context.connection, module_name),
-                }
-            provider = self._task.args.get("provider", {})
-            if any(provider.values()):
-                display.warning(
-                    "provider is unnecessary when using {0} and will be ignored".format(
-                        self._play_context.connection
-                    )
-                )
-                del self._task.args["provider"]
-        else:
+        if (not force_cli and persistent_connection not in ("netconf", "network_cli")) or (
+            force_cli and persistent_connection != "network_cli"
+        ):
             return {
                 "failed": True,
                 "msg": "Connection type %s is not valid for this module"

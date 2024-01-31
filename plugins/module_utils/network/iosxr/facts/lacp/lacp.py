@@ -12,21 +12,21 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 from copy import deepcopy
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lacp.lacp import (
     LacpArgs,
 )
 
 
 class LacpFacts(object):
-    """ The iosxr lacp fact class
-    """
+    """The iosxr lacp fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -42,8 +42,11 @@ class LacpFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_config(self, connection):
+        return connection.get_config(flags="lacp")
+
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for lacp
+        """Populate the facts for lacp
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
@@ -51,10 +54,10 @@ class LacpFacts(object):
         :returns: facts
         """
         if not data:
-            data = connection.get_config(flags="lacp")
+            data = self.get_config(connection)
 
         obj = {}
-        if data:
+        if "lacp" in data:
             lacp_obj = self.render_config(self.generated_spec, data)
             if lacp_obj:
                 obj = lacp_obj
@@ -81,9 +84,7 @@ class LacpFacts(object):
         config = deepcopy(spec)
 
         system_priority = utils.parse_conf_arg(conf, "priority")
-        config["system"]["priority"] = (
-            int(system_priority) if system_priority else system_priority
-        )
+        config["system"]["priority"] = int(system_priority) if system_priority else system_priority
         config["system"]["mac"]["address"] = utils.parse_conf_arg(conf, "mac")
 
         return config

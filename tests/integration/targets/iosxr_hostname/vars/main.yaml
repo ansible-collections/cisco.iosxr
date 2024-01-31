@@ -1,0 +1,24 @@
+---
+merged:
+  commands:
+    - hostname iosxr1
+  after:
+    hostname: "iosxr1"
+
+deleted:
+  before:
+    hostname: "iosxr1"
+  commands:
+    - no hostname iosxr1
+
+parsed:
+  config:
+    hostname: "test"
+
+gathered:
+  config:
+    hostname: "iosxr1"
+
+rendered:
+  commands:
+    - hostname test

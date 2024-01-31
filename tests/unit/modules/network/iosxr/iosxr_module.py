@@ -18,10 +18,11 @@
 # Make coding more python3-ish
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-import os
 import json
+import os
 
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import (
     AnsibleExitJson,
@@ -61,7 +62,6 @@ class TestIosxrModule(ModuleTestCase):
         sort=True,
         defaults=False,
     ):
-
         self.load_fixtures(commands)
 
         if failed:
@@ -80,7 +80,9 @@ class TestIosxrModule(ModuleTestCase):
                 )
             else:
                 self.assertEqual(
-                    commands, result["commands"], result["commands"]
+                    commands,
+                    result["commands"],
+                    result["commands"],
                 )
 
         return result
