@@ -5,6 +5,14 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v7.1.0
+======
+
+Minor Changes
+-------------
+
+- iosxr_facts - Add cdp neighbors in ansible_net_neighbors dictionary (https://github.com/ansible-collections/cisco.iosxr/pull/457).
+
 v7.0.0
 ======
 
