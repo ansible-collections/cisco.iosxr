@@ -350,7 +350,7 @@ def run(module, result):
     label = module.params["label"]
     candidate_config = get_candidate(module)
     running_config = get_running_config(module)
-    #test commit
+    # test commit
     commands = None
     replace_file_path = None
     connection = get_connection(module)
