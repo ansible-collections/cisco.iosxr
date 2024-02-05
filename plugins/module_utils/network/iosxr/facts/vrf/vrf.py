@@ -26,6 +26,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templ
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.vrf.vrf import (
     VrfArgs,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    flatten_config,
+)
 
 
 class VrfFacts(object):
@@ -46,37 +49,55 @@ class VrfFacts(object):
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
     def get_config(self, connection):
-        return connection.get("show running-config")
+        return connection.get("show running-config vrf")
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for Vrf network resource
-
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
-
         :rtype: dictionary
         :returns: facts
         """
         facts = {}
-        objs = []
-
-        import epdb; epdb.serve()
-
+        objs = {}
+        obj = {}
         if not data:
-            data = connection.get()
+            data = self.get_config(connection)
+
+        export_data = flatten_config(data, "export")
+        import_data = flatten_config(export_data, "import")
+        address_data = flatten_config(import_data, "address-family")
+        data = flatten_config(address_data, "vrf")
 
         # parse native config using the Vrf template
-        vrf_parser = VrfTemplate(lines=data.splitlines(), module=self._module)
-        objs = list(vrf_parser.parse().values())
+        vrf_parser = VrfTemplate(lines=data.splitlines())
+        obj = vrf_parser.parse()
+        objs["vrfs"] = list(obj.values())
+
+        for vrf in objs.get("vrfs", []):
+            af = vrf.get("address_families", {})
+            if af:
+                self._post_parse(vrf)
+            else:
+                vrf["address_families"] = []
 
         ansible_facts['ansible_network_resources'].pop('vrf', None)
 
         params = utils.remove_empties(
-            vrf_parser.validate_config(self.argument_spec, {"config": objs}, redact=True)
+            vrf_parser.validate_config(self.argument_spec, {"config": objs}),
         )
 
-        facts['vrf'] = params['config']
+        facts["vrf"] = params.get("config", {})
         ansible_facts['ansible_network_resources'].update(facts)
 
         return ansible_facts
+
+    def _post_parse(self, af_data):
+        """Converts the intermediate data structure
+            to valid format as per argspec.
+        :param obj: dict
+        """
+        af = af_data.get("address_families", {})
+        if af:
+            af_data["address_families"] = list(af.values())

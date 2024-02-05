@@ -14,13 +14,13 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: iosxr_vrfs
-short_description: Resource module to manage global VRF configuration.
+short_description: Module to manage global VRF configuration.
 description:
-  - This module manages VRF definitions on Cisco IOS-XR devices. It enables playbooks to handle either individual VRFs or the complete VRF collection. It also permits removing non-explicitly stated VRF definitions from the setup.
+  - This module manages VRF configurations on Cisco IOS-XR devices. It enables playbooks to handle either individual VRFs or the complete VRF collection. It also permits removing non-explicitly stated VRF definitions from the setup.
 version_added: 7.2.0
 author: Ruchi Pakhle (@Ruchip16)
 notes:
-  - Tested against Cisco IOS_XR Version 17.3 on CML.
+  - Tested against Cisco IOSXR Version 7.0.2.
   - This module works with connection C(network_cli). See L(the IOS_XR Platform Options,../network/user_guide/platform_iosxr.html)
   - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
   - For more information on using Ansible to manage Cisco devices see the `Cisco integration page <https://www.ansible.com/integrations/networks/cisco>`_.
@@ -29,125 +29,132 @@ options:
     description: A list of device configurations for VRF.
     type: dict
     suboptions:
-      address_families:
-        description: Enable address family and enter its config mode - AFI/SAFI configuration
+      vrfs:
+        description: A list of device configurations for VRF.
         type: list
         elements: dict
         suboptions:
-          afi:
-            description: Address Family Identifier (AFI)
+          name:
+            description: Name of the VRF.
             type: str
-            choices: ['ipv4', 'ipv6']
-          safi:
-            description: Address Family modifier
+            required: true
+          description:
+            description: A description for the VRF.
             type: str
-            choices: [ 'flowspec', 'multicast', 'unicast']
-          export:
-            description: VRF export
-            type: dict
+          address_families:
+            description: Enable address family and enter its config mode - AFI/SAFI configuration
+            type: list
+            elements: dict
             suboptions:
-              route_policy: &route_policy
-                description: Use route_policy for export
+              afi:
+                description: Address Family Identifier (AFI)
                 type: str
-              route_target: &route_target
-                description: Specify export route target extended communities.
+                choices: ['ipv4', 'ipv6']
+              safi:
+                description: Address Family modifier
                 type: str
-              to:
-                description: Export routes to a VRF
+                choices: [ 'flowspec', 'multicast', 'unicast']
+              export:
+                description: VRF export
                 type: dict
                 suboptions:
-                  default_vrf: &default_vrf
-                    description: Export routes to default VRF
-                    type: dict
-                    suboptions:
-                      route_policy:
-                        description: Use route_policy for export
-                        type: str
-                  vrf:
+                  route_policy: &route_policy
+                    description: Use route_policy for export
+                    type: str
+                  route_target: &route_target
+                    description: Specify export route target extended communities.
+                    type: str
+                  to:
                     description: Export routes to a VRF
                     type: dict
                     suboptions:
-                      allow_imported_vpn:
-                        description: Allow export of imported VPN routes to non-default VRF
-                        type: bool
-          import:
-            description: VRF import
-            type: dict
-            suboptions:
-              route_policy: *route_policy
-              route_target: *route_target
-              from:
-                description: Import routes from a VRF
+                      default_vrf: &default_vrf
+                        description: Export routes to default VRF
+                        type: dict
+                        suboptions:
+                          route_policy: *route_policy
+                      vrf:
+                        description: Export routes to a VRF
+                        type: dict
+                        suboptions:
+                          allow_imported_vpn:
+                            description: Allow export of imported VPN routes to non-default VRF
+                            type: bool
+              import:
+                description: VRF import
                 type: dict
                 suboptions:
-                  bridge_domain:
-                    description: VRF import
-                    type: dict
-                    suboptions:
-                      advertise_as_vpn: &advertise_as_vpn
-                        description: Advertise local EVPN imported routes to PEs
-                        type: bool
-                  default_vrf: *default_vrf
-                  vrf:
+                  route_policy: *route_policy
+                  route_target: *route_target
+                  from:
                     description: Import routes from a VRF
                     type: dict
                     suboptions:
-                      advertise_as_vpn: *advertise_as_vpn
-          maximum:
-            description: Set maximum prefix limit
+                      bridge_domain:
+                        description: VRF import
+                        type: dict
+                        suboptions:
+                          advertise_as_vpn: &advertise_as_vpn
+                            description: Advertise local EVPN imported routes to PEs
+                            type: bool
+                      default_vrf: *default_vrf
+                      vrf:
+                        description: Import routes from a VRF
+                        type: dict
+                        suboptions:
+                          advertise_as_vpn: *advertise_as_vpn
+              maximum:
+                description: Set maximum prefix limit
+                type: dict
+                suboptions:
+                  prefix:
+                    description:  Set table's maximum prefix limit.
+                    type: int
+                  threshold:
+                    description: mid-thresh (% of max).
+                    type: int
+          evpn_route_sync:
+            description: EVPN Instance VPN ID used to synchronize the VRF route(s).
+            type: int
+          fallback_vrf:
+            description: Fallback VRF name
+            type: str
+          mhost:
+            description: Multicast host stack options
             type: dict
             suboptions:
-              prefix:
-                description:  Set table's maximum prefix limit.
-                type: int
-              threshold:
-                description: mid-thresh (% of max).
-                type: int
-      description:
-        description: Provides a short description of the VRF definition in the current active configuration.
-        type: str
-      evpn_route_sync:
-        description: EVPN Instance VPN ID used to synchronize the VRF route(s).
-        type: int
-      fallback_vrf:
-        description: Fallback VRF name
-        type: str
-      mhost:
-        description: Multicast host stack options
-        type: dict
-        suboptions:
-          afi:
-            description: Address Family Identifier (AFI)
+              afi:
+                description: Address Family Identifier (AFI)
+                type: str
+                choices: ['ipv4', 'ipv6']
+              default_interface:
+                description: Default interface for multicast.
+                type: str
+          rd:
+            description: VPN Route Distinguisher (RD).
             type: str
-            choices: ['ipv4', 'ipv6']
-          default_interface:
-            description: Default interface for multicast.
-            type: str
-      rd:
-        description: VPN Route Distinguisher (RD).
-        type: str
-      remote_route_filtering:
-        description: Enable/Disable remote route filtering per VRF
-        type: bool
-      vpn:
-        description: VPN ID for the VRF
-        type: dict
-        suboptions:
-          id:
-            description: VPN ID for the VRF.
-            type: int
+          remote_route_filtering:
+            description: Enable/Disable remote route filtering per VRF
+            type: bool
+          vpn:
+            description: VPN ID for the VRF
+            type: dict
+            suboptions:
+              id:
+                description: VPN ID for the VRF.
+                type: int
   running_config:
     description: The state the configuration should be left in.
       - State I(deleted) only removes VRF attributes that this modules
       manages and does not negate the VRF process completely. Thereby, preserving
       address_family related configurations under VRF context.
-      - Refer to examples for more details.
+      - Refer to examples for more details.https://github.com/ansible-network/resource_module_models/pull/243/commits/4c40fc3daa8e484051aac3eddf7c4b420b06dbdb
     type: str
   state:
     description: The state the configuration should be left in.
     type: str
-    choices: [deleted, merged, replaced, gathered, rendered, parsed]
-    default: mergedk
+    choices: [parsed, gathered, deleted, merged, replaced, rendered]
+    default: merged
 """
 
 EXAMPLES = """
@@ -202,10 +209,10 @@ parsed:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.iosxr.iosxr.plugins.module_utils.network.iosxr.argspec.vrf.vrf import (
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.vrf.vrf import (
     VrfArgs,
 )
-from ansible_collections.cisco.iosxr.iosxr.plugins.module_utils.network.iosxr.config.vrf.vrf import (
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.vrf.vrf import (
     Vrf,
 )
 

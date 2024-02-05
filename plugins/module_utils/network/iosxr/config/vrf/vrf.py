@@ -1,4 +1,3 @@
-#
 # -*- coding: utf-8 -*-
 # Copyright 2024 Red Hat
 # GNU General Public License v3.0+
@@ -48,6 +47,22 @@ class Vrf(ResourceModule):
             tmplt=VrfTemplate(),
         )
         self.parsers = [
+            "description",
+            "address_family",
+            "export",
+            "import",
+            "route_target",
+            "route_policy",
+            "bridge_domain_advertise_as_vpn",
+            "default_vrf",
+            "vrf_advertise_as_vpn",
+            "evpn_route_sync",
+            "fallback_vrf",
+            "mhost_ipv4_default_interface",
+            "rd",
+            "remote_route_filtering_disable",
+            "vpn_id",
+
         ]
 
     def execute_module(self):
@@ -65,8 +80,10 @@ class Vrf(ResourceModule):
         """ Generate configuration commands to send based on
             want, have and desired state.
         """
-        wantd = {entry['name']: entry for entry in self.want}
-        haved = {entry['name']: entry for entry in self.have}
+        wantd = self.want
+        haved = self.have
+        for entry in self.want, self.have:
+            self._vrf_list_to_dict(entry)
 
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
@@ -80,10 +97,10 @@ class Vrf(ResourceModule):
             wantd = {}
 
         # remove superfluous config for overridden and deleted
-        if self.state in ["overridden", "deleted"]:
-            for k, have in iteritems(haved):
-                if k not in wantd:
-                    self._compare(want={}, have=have)
+        # if self.state in ["overridden", "deleted"]:
+        #     for k, have in iteritems(haved):
+        #         if k not in wantd:
+        #             self._compare(want={}, have=have)
 
         for k, want in iteritems(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
@@ -95,3 +112,20 @@ class Vrf(ResourceModule):
            for the Vrf network resource.
         """
         self.compare(parsers=self.parsers, want=want, have=have)
+        if self.commands and "vrf" not in self.commands[0]:
+            self.commands.insert(0, self.tmplt.render({"vrf": want["vrf"]}, "vrf", False))
+
+    def _vrf_list_to_dict(self, entry):
+        """Convert list of items to dict of items
+           for efficient diff calculation.
+        :params entry: data dictionary
+        """
+
+        if "address_family" in entry:
+            entry["address_family"] = {
+                "address_family_" + x["afi"] + "_" + x["safi"]: x
+                for x in entry.get("address_family", [])
+            }
+
+    def _get_config(self):
+        return self._connection.get("show running-config vrf")

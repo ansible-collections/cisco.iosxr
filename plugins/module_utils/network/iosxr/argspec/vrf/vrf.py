@@ -36,110 +36,134 @@ class VrfArgs(object):  # pylint: disable=R0903
         "config": {
             "type": "dict",
             "options": {
-                "address_families": {
+                "vrfs": {
                     "type": "list",
                     "elements": "dict",
                     "options": {
-                        "afi": {"type": "str", "choices": ["ipv4", "ipv6"]},
-                        "safi": {
-                            "type": "str",
-                            "choices": ["flowspec", "multicast", "unicast"],
-                        },
-                        "export": {
-                            "type": "dict",
+                        "name": {"type": "str", "required": True},
+                        "description": {"type": "str"},
+                        "address_families": {
+                            "type": "list",
+                            "elements": "dict",
                             "options": {
-                                "route_policy": {"type": "str"},
-                                "route_target": {"type": "str"},
-                                "to": {
+                                "afi": {
+                                    "type": "str",
+                                    "choices": ["ipv4", "ipv6"],
+                                },
+                                "safi": {
+                                    "type": "str",
+                                    "choices": [
+                                        "flowspec",
+                                        "multicast",
+                                        "unicast",
+                                    ],
+                                },
+                                "export": {
                                     "type": "dict",
                                     "options": {
-                                        "default_vrf": {
+                                        "route_policy": {"type": "str"},
+                                        "route_target": {"type": "str"},
+                                        "to": {
                                             "type": "dict",
                                             "options": {
-                                                "route_policy": {"type": "str"}
-                                            },
-                                        },
-                                        "vrf": {
-                                            "type": "dict",
-                                            "options": {
-                                                "allow_imported_vpn": {
-                                                    "type": "bool"
-                                                }
+                                                "default_vrf": {
+                                                    "type": "dict",
+                                                    "options": {
+                                                        "route_policy": {
+                                                            "type": "str"
+                                                        }
+                                                    },
+                                                },
+                                                "vrf": {
+                                                    "type": "dict",
+                                                    "options": {
+                                                        "allow_imported_vpn": {
+                                                            "type": "bool"
+                                                        }
+                                                    },
+                                                },
                                             },
                                         },
                                     },
                                 },
-                            },
-                        },
-                        "import": {
-                            "type": "dict",
-                            "options": {
-                                "route_policy": {"type": "str"},
-                                "route_target": {"type": "str"},
-                                "from": {
+                                "import": {
                                     "type": "dict",
                                     "options": {
-                                        "bridge_domain": {
+                                        "route_policy": {"type": "str"},
+                                        "route_target": {"type": "str"},
+                                        "from": {
                                             "type": "dict",
                                             "options": {
-                                                "advertise_as_vpn": {
-                                                    "type": "bool"
-                                                }
-                                            },
-                                        },
-                                        "default_vrf": {
-                                            "type": "dict",
-                                            "options": {
-                                                "route_policy": {"type": "str"}
-                                            },
-                                        },
-                                        "vrf": {
-                                            "type": "dict",
-                                            "options": {
-                                                "advertise_as_vpn": {
-                                                    "type": "bool"
-                                                }
+                                                "bridge_domain": {
+                                                    "type": "dict",
+                                                    "options": {
+                                                        "advertise_as_vpn": {
+                                                            "type": "bool"
+                                                        }
+                                                    },
+                                                },
+                                                "default_vrf": {
+                                                    "type": "dict",
+                                                    "options": {
+                                                        "route_policy": {
+                                                            "type": "str"
+                                                        }
+                                                    },
+                                                },
+                                                "vrf": {
+                                                    "type": "dict",
+                                                    "options": {
+                                                        "advertise_as_vpn": {
+                                                            "type": "bool"
+                                                        }
+                                                    },
+                                                },
                                             },
                                         },
                                     },
                                 },
+                                "maximum": {
+                                    "type": "dict",
+                                    "options": {
+                                        "prefix": {"type": "int"},
+                                        "threshold": {"type": "int"},
+                                    },
+                                },
                             },
                         },
-                        "maximum": {
+                        "evpn_route_sync": {"type": "int"},
+                        "fallback_vrf": {"type": "str"},
+                        "mhost": {
                             "type": "dict",
                             "options": {
-                                "prefix": {"type": "int"},
-                                "threshold": {"type": "int"},
+                                "afi": {
+                                    "type": "str",
+                                    "choices": ["ipv4", "ipv6"],
+                                },
+                                "default_interface": {"type": "str"},
                             },
                         },
+                        "rd": {"type": "str"},
+                        "remote_route_filtering": {"type": "bool"},
+                        "vpn": {
+                            "type": "dict",
+                            "options": {"id": {"type": "int"}},
+                        },
                     },
-                },
-                "description": {"type": "str"},
-                "evpn_route_sync": {"type": "int"},
-                "fallback_vrf": {"type": "str"},
-                "mhost": {
-                    "type": "dict",
-                    "options": {
-                        "afi": {"type": "str", "choices": ["ipv4", "ipv6"]},
-                        "default_interface": {"type": "str"},
-                    },
-                },
-                "rd": {"type": "str"},
-                "remote_route_filtering": {"type": "bool"},
-                "vpn": {"type": "dict", "options": {"id": {"type": "int"}}},
+                }
             },
         },
         "running_config": {"type": "str"},
         "state": {
             "type": "str",
             "choices": [
+                "parsed",
+                "gathered",
                 "deleted",
                 "merged",
                 "replaced",
-                "gathered",
                 "rendered",
-                "parsed",
             ],
-            "default": "mergedk",
+            "default": "merged",
         },
     }  # pylint: disable=C0301
