@@ -1,4 +1,4 @@
-black==23.3.0 ; python_version > '3.9'
+black==23.3.0
 flake8
 mock
 pexpect
@@ -8,4 +8,5 @@ coverage==4.5.4
 google-api-python-client
 grpcio
 protobuf
-pytest-ansible ; python_version >= '3.9'
+pytest-ansible
+pytest-xdist
