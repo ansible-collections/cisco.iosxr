@@ -10,3 +10,4 @@ grpcio
 protobuf
 pytest-ansible
 pytest-xdist
+pytest-cov
