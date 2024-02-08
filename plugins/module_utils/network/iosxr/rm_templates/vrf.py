@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,6 +16,7 @@ the given network resource.
 """
 
 import re
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
     NetworkTemplate,
 )
@@ -36,7 +38,8 @@ class VrfTemplate(NetworkTemplate):
                 r"""
                 ^vrf\s(?P<name>\S+)
                 \s+description\s(?P<description>.+$)
-                $""", re.VERBOSE),
+                $""", re.VERBOSE,
+            ),
             "setval": "vrf {{ name }} description {{ description }}",
             "result": {
                 '{{ name }}': {
@@ -126,7 +129,8 @@ class VrfTemplate(NetworkTemplate):
                 ^vrf\s(?P<name>\S+)
                 (?P<address_families>\s+address-family\s(?P<afi>\S+)\s(?P<safi>\S+))
                 \s+export\sto\sdefault-vrf\sroute-policy\s(?P<export_to_default_vrf_route_policy>\S+)
-                $""", re.VERBOSE),
+                $""", re.VERBOSE,
+            ),
             "setval": "vrf {{ name }} export to default-vrf route-policy {{ export to default-vrf route_policy }}",
             "compval": "default_vrf",
             "result": {
@@ -267,7 +271,8 @@ class VrfTemplate(NetworkTemplate):
                 ^vrf\s(?P<name>\S+)
                 (?P<address_families>\s+address-family\s(?P<afi>\S+)\s(?P<safi>\S+))
                 \s+import\sfrom\sdefault-vrf\sroute-policy\s(?P<import_from_default_vrf_route_policy>\S+)
-                $""", re.VERBOSE),
+                $""", re.VERBOSE,
+            ),
             "setval": "vrf {{ name }} import from default-vrf route-policy {{ import from default-vrf route_policy }}",
             "compval": "default_vrf",
             "result": {
@@ -377,7 +382,8 @@ class VrfTemplate(NetworkTemplate):
                 r"""
                 ^vrf\s(?P<name>\S+)
                 \s+evpn-route-sync\s(?P<evpn_route_sync>\d+)
-                $""", re.VERBOSE),
+                $""", re.VERBOSE,
+            ),
             "setval": "vrf {{ name }} evpn-route-sync {{ evpn_route_sync }}",
             "result": {
                 '{{ name }}': {
@@ -392,7 +398,8 @@ class VrfTemplate(NetworkTemplate):
                 r"""
                 ^vrf\s(?P<name>\S+)
                 \s+fallback-vrf\s\"(?P<fallback_vrf>\S+)\"
-                $""", re.VERBOSE),
+                $""", re.VERBOSE,
+            ),
             "setval": "vrf {{ name }} fallback-vrf {{ fallback_vrf }}",
             "result": {
                 '{{ name }}': {
@@ -472,7 +479,7 @@ class VrfTemplate(NetworkTemplate):
                     'name': '{{ name }}',
                     "vpn": {
                         "id": "{{ id }}",
-                    }
+                    },
                 },
             },
         },

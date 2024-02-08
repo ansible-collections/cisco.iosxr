@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 #############################################
@@ -29,8 +30,7 @@ The arg spec for the iosxr_vrf module
 
 
 class VrfArgs(object):  # pylint: disable=R0903
-    """The arg spec for the iosxr_vrf module
-    """
+    """The arg spec for the iosxr_vrf module"""
 
     argument_spec = {
         "config": {
@@ -70,16 +70,16 @@ class VrfArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "route_policy": {
-                                                            "type": "str"
-                                                        }
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "vrf": {
                                                     "type": "dict",
                                                     "options": {
                                                         "allow_imported_vpn": {
-                                                            "type": "bool"
-                                                        }
+                                                            "type": "bool",
+                                                        },
                                                     },
                                                 },
                                             },
@@ -98,24 +98,24 @@ class VrfArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "advertise_as_vpn": {
-                                                            "type": "bool"
-                                                        }
+                                                            "type": "bool",
+                                                        },
                                                     },
                                                 },
                                                 "default_vrf": {
                                                     "type": "dict",
                                                     "options": {
                                                         "route_policy": {
-                                                            "type": "str"
-                                                        }
+                                                            "type": "str",
+                                                        },
                                                     },
                                                 },
                                                 "vrf": {
                                                     "type": "dict",
                                                     "options": {
                                                         "advertise_as_vpn": {
-                                                            "type": "bool"
-                                                        }
+                                                            "type": "bool",
+                                                        },
                                                     },
                                                 },
                                             },
@@ -150,7 +150,7 @@ class VrfArgs(object):  # pylint: disable=R0903
                             "options": {"id": {"type": "int"}},
                         },
                     },
-                }
+                },
             },
         },
         "running_config": {"type": "str"},

@@ -10,6 +10,7 @@ The module file for iosxr_vrf
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -209,12 +210,11 @@ parsed:
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.vrf.vrf import (
     VrfArgs,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.vrf.vrf import (
-    Vrf,
-)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.vrf.vrf import Vrf
 
 
 def main():
