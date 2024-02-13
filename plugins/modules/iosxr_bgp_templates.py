@@ -50,7 +50,8 @@ options:
                   safi:
                     description: Address Family modifier
                     type: str
-                    choices: [ 'flowspec', 'mdt', 'multicast', 'mvpn', 'rt-filter', 'tunnel', 'unicast', 'labeled-unicast' , 'sr-policy', 'link-state', 'evpn', 'mspw', 'vpls-vpws']
+                    choices: [ 'flowspec', 'mdt', 'multicast', 'mvpn', 'rt-filter', 'tunnel',
+                    'unicast', 'labeled-unicast' , 'sr-policy', 'link-state', 'evpn', 'mspw', 'vpls-vpws']
                   signalling:
                     type: dict
                     description: Signalling protocols to disable, BGP or LDP

@@ -239,6 +239,22 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
                                     safi="unicast",
                                     advertise=dict(local_labeled_route=dict(set=True)),
                                 ),
+                                dict(
+                                    afi="vpn4",
+                                    safi="unicast",
+                                ),
+                                dict(
+                                    afi="vpn6",
+                                    safi="unicast",
+                                ),
+                                dict(
+                                    afi="link-state",
+                                    safi="link-state",
+                                ),
+                                dict(
+                                    afi="l2vpn",
+                                    safi="evpn",
+                                ),
                             ],
                         ),
                         dict(
@@ -324,6 +340,10 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
             "bfd fast-detect strict-mode",
             "internal-vpn-client",
             "precedence critical",
+            "address-family vpn4 unicast",
+            "address-family vpn6 unicast",
+            "address-family link-state link-state",
+            "address-family l2vpn evpn",
             "address-family ipv4 unicast",
             "advertise local-labeled-route",
             "neighbor-group test1",
@@ -1128,6 +1148,14 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
                   precedence critical
                   advertisement-interval 10
                   internal-vpn-client
+                  address-family vpn4 unicast
+                  !
+                  address-family vpn6 unicast
+                  !
+                  address-family link-state link-state
+                  !
+                  address-family l2vpn evpn
+                  !
                   address-family ipv4 unicast
                    advertise local-labeled-route
                   !
@@ -1199,6 +1227,10 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
                     "advertisement_interval": 10,
                     "internal_vpn_client": True,
                     "address_family": [
+                        {"afi": "vpn4", "safi": "unicast"},
+                        {"afi": "vpn6", "safi": "unicast"},
+                        {"afi": "link-state", "safi": "link-state"},
+                        {"afi": "l2vpn", "safi": "evpn"},
                         {
                             "afi": "ipv4",
                             "safi": "unicast",
@@ -1263,4 +1295,5 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
             ],
         }
         result = self.execute_module(changed=False)
+        print(result["gathered"])
         self.assertEqual(gathered, result["gathered"])
