@@ -225,6 +225,10 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>ipv4</li>
                                     <li>ipv6</li>
+                                    <li>vpn4</li>
+                                    <li>vpn6</li>
+                                    <li>link-state</li>
+                                    <li>l2vpn</li>
                         </ul>
                 </td>
                 <td>
@@ -1419,6 +1423,10 @@ Parameters
                                     <li>unicast</li>
                                     <li>labeled-unicast</li>
                                     <li>sr-policy</li>
+                                    <li>link-state</li>
+                                    <li>evpn</li>
+                                    <li>mspw</li>
+                                    <li>vpls-vpws</li>
                         </ul>
                 </td>
                 <td>

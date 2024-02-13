@@ -46,11 +46,11 @@ options:
                   afi:
                     description: address family.
                     type: str
-                    choices: [ 'ipv4', 'ipv6' ]
+                    choices: [ 'ipv4', 'ipv6', 'vpn4', 'vpn6', 'link-state', 'l2vpn']
                   safi:
                     description: Address Family modifier
                     type: str
-                    choices: [ 'flowspec', 'mdt', 'multicast', 'mvpn', 'rt-filter', 'tunnel', 'unicast', 'labeled-unicast' , 'sr-policy']
+                    choices: [ 'flowspec', 'mdt', 'multicast', 'mvpn', 'rt-filter', 'tunnel', 'unicast', 'labeled-unicast' , 'sr-policy', 'link-state', 'evpn', 'mspw', 'vpls-vpws']
                   signalling:
                     type: dict
                     description: Signalling protocols to disable, BGP or LDP
