@@ -1295,5 +1295,4 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
             ],
         }
         result = self.execute_module(changed=False)
-        print(result["gathered"])
         self.assertEqual(gathered, result["gathered"])
