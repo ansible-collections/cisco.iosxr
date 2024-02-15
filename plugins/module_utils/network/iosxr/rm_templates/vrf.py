@@ -37,7 +37,7 @@ class VrfTemplate(NetworkTemplate):
                 ^vrf\s(?P<name>\S+)
                 \s+description\s(?P<description>.+$)
                 $""", re.VERBOSE),
-            "setval": "vrf {{ name }} description {{ description }}",
+            "setval": "description {{ description }}",
             "result": {
                 '{{ name }}': {
                     'name': '{{ name }}',
@@ -53,7 +53,7 @@ class VrfTemplate(NetworkTemplate):
                 (?P<address_families>\s+address-family\s(?P<afi>\S+)\s(?P<safi>\S+))
                 $""", re.VERBOSE,
             ),
-            "setval": "vrf {{ name }} address-families {{ afi}} {{safi}}",
+            "setval": "address-family {{ afi}} {{safi}}",
             "result": {
                 '{{ name }}': {
                     'name': '{{ name }}',
@@ -76,8 +76,8 @@ class VrfTemplate(NetworkTemplate):
                 \s+export\sroute-policy\s(?P<export_route_policy>\S+)
                 $""", re.VERBOSE,
             ),
-            "setval": "vrf {{ name }} export {{ export_route_policy }}",
-            "compval": "export",
+            "setval": "export {{ export.route_policy }}",
+            "compval": "export.route_policy",
             "result": {
                 '{{ name }}': {
                     'name': '{{ name }}',
@@ -102,7 +102,7 @@ class VrfTemplate(NetworkTemplate):
                 \s+export\sroute-target\s(?P<export_route_target>\S+)
                 $""", re.VERBOSE,
             ),
-            "setval": "vrf {{ name }} export {{ export_route_target }}",
+            "setval": "export {{ export_route_target }}",
             "compval": "export",
             "result": {
                 '{{ name }}': {
@@ -127,7 +127,7 @@ class VrfTemplate(NetworkTemplate):
                 (?P<address_families>\s+address-family\s(?P<afi>\S+)\s(?P<safi>\S+))
                 \s+export\sto\sdefault-vrf\sroute-policy\s(?P<export_to_default_vrf_route_policy>\S+)
                 $""", re.VERBOSE),
-            "setval": "vrf {{ name }} export to default-vrf route-policy {{ export to default-vrf route_policy }}",
+            "setval": "export to default-vrf route-policy {{ export.to.default_vrf.route_policy }}",
             "compval": "default_vrf",
             "result": {
                 '{{ name }}': {
@@ -378,7 +378,7 @@ class VrfTemplate(NetworkTemplate):
                 ^vrf\s(?P<name>\S+)
                 \s+evpn-route-sync\s(?P<evpn_route_sync>\d+)
                 $""", re.VERBOSE),
-            "setval": "vrf {{ name }} evpn-route-sync {{ evpn_route_sync }}",
+            "setval": "evpn-route-sync {{ evpn_route_sync }}",
             "result": {
                 '{{ name }}': {
                     'name': '{{ name }}',
@@ -391,9 +391,9 @@ class VrfTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^vrf\s(?P<name>\S+)
-                \s+fallback-vrf\s\"(?P<fallback_vrf>\S+)\"
+                \s+fallback-vrf\s(?P<fallback_vrf>\S+)
                 $""", re.VERBOSE),
-            "setval": "vrf {{ name }} fallback-vrf {{ fallback_vrf }}",
+            "setval": "fallback-vrf {{ fallback_vrf }}",
             "result": {
                 '{{ name }}': {
                     'name': '{{ name }}',
@@ -411,8 +411,8 @@ class VrfTemplate(NetworkTemplate):
                 \s+default-interface\s(?P<ipv4_default_interface>\S+)
                 $""", re.VERBOSE,
             ),
-            "setval": "vrf {{ name }} mhost ipv4 default-interface {{ mhost ipv4 default_interface }}",
-            "compval": "mhost.ipv4.default.interface",
+            "setval": "mhost ipv4 default-interface {{ mhost.ipv4.default_interface }}",
+            "compval": "mhost.ipv4.default_interface",
             "result": {
                 '{{ name }}': {
                     'name': '{{ name }}',
@@ -431,7 +431,7 @@ class VrfTemplate(NetworkTemplate):
                 \s+rd\s(?P<rd>\S+)
                 $""", re.VERBOSE,
             ),
-            "setval": "vrf {{ name }} rd {{ rd }}",
+            "setval": "rd {{ rd }}",
             "compval": "rd",
             "result": {
                 '{{ name }}': {
@@ -445,15 +445,16 @@ class VrfTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^vrf\s(?P<name>\S+)
-                \s+remote-route-filtering\s(?P<disable>disable)
+                \s+remote-route-filtering\s(?P<value>\S+)
+                \sdisable(?P<disable>)
                 $""", re.VERBOSE,
             ),
-            "setval": "vrf {{ name }} remote-route-filtering disable",
+            "setval": "remote-route-filtering disable {{ remote_route_filtering.disable }}",
             "compval": "remote_route_filtering.disable",
             "result": {
                 '{{ name }}': {
                     'name': '{{ name }}',
-                    "remote_route_filtering": "{{ True if disable is defined }}",
+                    "remote_route_filtering": "{{ disable.lower() == 'disable' | ternary(true, false) }}",
                 },
             },
         },
@@ -462,11 +463,11 @@ class VrfTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 ^vrf\s(?P<name>\S+)
-                \s+vpn\s(?P<id>\d+)
+                \s+vpn\s(?P<id>\S+)
                 $""", re.VERBOSE,
             ),
-            "setval": "vrf {{ name }} vpn {{ id }}",
-            "compval": "vpn_id",
+            "setval": "vpn id {{ vpn.id }}",
+            "compval": "vpn.id",
             "result": {
                 '{{ name }}': {
                     'name': '{{ name }}',

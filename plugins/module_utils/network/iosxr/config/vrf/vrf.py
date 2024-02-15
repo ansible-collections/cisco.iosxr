@@ -40,7 +40,7 @@ class Vrf(ResourceModule):
 
     def __init__(self, module):
         super(Vrf, self).__init__(
-            empty_fact_val={},
+            empty_fact_val=[],
             facts_module=Facts(module),
             module=module,
             resource="vrf",
@@ -49,22 +49,22 @@ class Vrf(ResourceModule):
         self.parsers = [
             "description",
             "address_family",
-            "export_route_policy",
+            # "export_route_policy",
             "export_route_target",
-            "export_to_default_vrf_route_policy",
-            "export_to_vrf_allow_imported_vpn",
-            "import_route_target",
-            "import_route_policy",
-            "import_from_bridge_domain_advertise_as_vpn",
-            "import_from_default_vrf_route_policy",
-            "import_from_vrf_advertise_as_vpn",
-            "maximum_prefix",
-            "maximum_threshold",
+            # "export_to_default_vrf_route_policy",
+            # "export_to_vrf_allow_imported_vpn",
+            # "import_route_target",
+            # "import_route_policy",
+            # "import_from_bridge_domain_advertise_as_vpn",
+            # "import_from_default_vrf_route_policy",
+            # "import_from_vrf_advertise_as_vpn",
+            # "maximum_prefix",
+            # "maximum_threshold",
             "evpn_route_sync",
             "fallback_vrf",
             "mhost_ipv4_default_interface",
-            "rd",
-            "remote_route_filtering_disable",
+            # "rd",
+            # "remote_route_filtering_disable",
             "vpn_id",
 
         ]
@@ -75,8 +75,10 @@ class Vrf(ResourceModule):
         :rtype: A dictionary
         :returns: The result from module execution
         """
+        # import epdb; epdb.serve()
         if self.state not in ["parsed", "gathered"]:
             self.generate_commands()
+            # import epdb; epdb.serve()
             self.run_commands()
         return self.result
 
@@ -84,10 +86,15 @@ class Vrf(ResourceModule):
         """ Generate configuration commands to send based on
             want, have and desired state.
         """
+        # import epdb; epdb.serve()
         wantd = self.want
         haved = self.have
-        for entry in self.want, self.have:
-            self._vrf_list_to_dict(entry)
+        # for entry in wantd, haved:
+        #     self._vrf_list_to_dict(entry)
+
+        # import epdb; epdb.serve()
+        wantd = self._vrf_list_to_dict(wantd)
+        haved = self._vrf_list_to_dict(haved)
 
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
@@ -100,14 +107,7 @@ class Vrf(ResourceModule):
             }
             wantd = {}
 
-        # remove superfluous config for overridden and deleted
-        # if self.state in ["overridden", "deleted"]:
-        #     for k, have in iteritems(haved):
-        #         if k not in wantd:
-        #             self._compare(want={}, have=have)
-
-        for k, want in iteritems(wantd):
-            self._compare(want=want, have=haved.pop(k, {}))
+        self._compare(want=wantd, have=haved)
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
@@ -115,9 +115,68 @@ class Vrf(ResourceModule):
            the `want` and `have` data with the `parsers` defined
            for the Vrf network resource.
         """
-        self.compare(parsers=self.parsers, want=want, have=have)
-        if self.commands and "vrf" not in self.commands[0]:
-            self.commands.insert(0, self.tmplt.render({"vrf": want["vrf"]}, "vrf", False))
+
+        self._compare_vrf(want=want, have=have)
+        # self.compare(parsers=self.parsers, want=want, have=have)
+        # if self.commands and "vrf" not in self.commands[0]:
+        #     self.commands.insert(0, self.tmplt.render({"vrf": want["vrf"]}, "vrf", False))
+
+    def _compare_vrf(self, want, have):
+        """Custom handling of vrfs option
+        :params want: the want VRF dictionary
+        :params have: the have VRF dictionary
+        """
+
+        for name, entry in iteritems(want):
+            begin = len(self.commands)
+            vrf_have = have.pop(name, {})
+
+            self.compare(parsers=self.parsers, want=entry, have=vrf_have)
+            # self._compare_lists(want=entry, have=af_have)
+            self._compare_af(entry, vrf_have)
+            if len(self.commands) != begin:
+                self.commands.insert(begin, "vrf {0}".format(name))
+
+        # for deleted and overridden state
+        if self.state != "replaced":
+            for name, entry in iteritems(have):
+                self.addcmd("no vrf {0}".format(name))
+
+    def _compare_af(self, want, have):
+        """Custom handling of afs option
+        :params want: the want VRF dictionary
+        :params have: the have VRF dictionary
+        """
+        wafs = want.get("address_families", {})
+        hafs = have.get("address_families", {})
+        for name, entry in iteritems(wafs):
+            begin = len(self.commands)
+            af_have = hafs.pop(name, {})
+
+            self.compare(parsers=self.parsers, want=entry, have=af_have)
+            # self._compare_lists(want=entry, have=af_have)
+            # import epdb; epdb.serve()
+            if len(self.commands) != begin:
+                self.commands.insert(
+                    begin,
+                    self._tmplt.render(
+                        {
+                            "afi": entry.get("afi"),
+                            "safi": entry.get("safi"),
+                        },
+                        "address_families",
+                        False,
+                    ),
+                )
+
+        # for deleted and overridden state
+        if self.state != "replaced":
+            for name, entry in iteritems(hafs):
+                self.addcmd(
+                    {"afi": entry.get("afi"), "safi": entry.get("safi")},
+                    "address_family",
+                    True,
+                )
 
     def _vrf_list_to_dict(self, entry):
         """Convert list of items to dict of items
@@ -125,11 +184,14 @@ class Vrf(ResourceModule):
         :params entry: data dictionary
         """
 
-        if "address_family" in entry:
-            entry["address_family"] = {
-                "address_family_" + x["afi"] + "_" + x["safi"]: x
-                for x in entry.get("address_family", [])
-            }
+        for vrf in entry:
+            if "address_families" in vrf:
+                vrf["address_families"] = {
+                    (x["afi"], x.get("safi")): x for x in vrf["address_families"]
+                }
+
+        entry = {x["name"]: x for x in entry}
+        return entry
 
     def _get_config(self):
         return self._connection.get("show running-config vrf")

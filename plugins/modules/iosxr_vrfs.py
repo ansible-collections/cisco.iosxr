@@ -138,7 +138,7 @@ options:
         suboptions:
           id:
             description: VPN ID for the VRF.
-            type: str
+            type: int
   running_config:
     description: The state the configuration should be left in.
       - State I(deleted) only removes VRF attributes that this modules
@@ -205,10 +205,10 @@ parsed:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.iosxr.iosxr.plugins.module_utils.network.iosxr.argspec.vrf.vrf import (
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.vrf.vrf import (
     VrfArgs,
 )
-from ansible_collections.cisco.iosxr.iosxr.plugins.module_utils.network.iosxr.config.vrf.vrf import (
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.vrf.vrf import (
     Vrf,
 )
 

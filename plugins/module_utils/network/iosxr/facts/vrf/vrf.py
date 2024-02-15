@@ -59,9 +59,11 @@ class VrfFacts(object):
         :rtype: dictionary
         :returns: facts
         """
+        # import epdb; epdb.serve()
         facts = {}
-        objs = {}
+        objs = []
         obj = {}
+
         if not data:
             data = self.get_config(connection)
 
@@ -73,9 +75,10 @@ class VrfFacts(object):
         # parse native config using the Vrf template
         vrf_parser = VrfTemplate(lines=data.splitlines())
         obj = vrf_parser.parse()
-        objs["vrfs"] = list(obj.values())
+        objs = list(obj.values())
 
-        for vrf in objs.get("vrfs", []):
+        # import epdb; epdb.serve()
+        for vrf in objs:
             af = vrf.get("address_families", {})
             if af:
                 self._post_parse(vrf)
@@ -83,7 +86,6 @@ class VrfFacts(object):
                 vrf["address_families"] = []
 
         ansible_facts['ansible_network_resources'].pop('vrf', None)
-
         params = utils.remove_empties(
             vrf_parser.validate_config(self.argument_spec, {"config": objs}),
         )
