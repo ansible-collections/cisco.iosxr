@@ -46,7 +46,7 @@ options:
                   afi:
                     description: address family.
                     type: str
-                    choices: [ 'ipv4', 'ipv6', 'vpn4', 'vpn6', 'link-state', 'l2vpn']
+                    choices: [ 'ipv4', 'ipv6', 'vpnv4', 'vpnv6', 'link-state', 'l2vpn']
                   safi:
                     description: Address Family modifier
                     type: str

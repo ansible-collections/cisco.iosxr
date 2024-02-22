@@ -51,8 +51,8 @@ class Bgp_templatesArgs(object):  # pylint: disable=R0903
                                     "choices": [
                                         "ipv4",
                                         "ipv6",
-                                        "vpn4",
-                                        "vpn6",
+                                        "vpnv4",
+                                        "vpnv6",
                                         "link-state",
                                         "l2vpn",
                                     ],
