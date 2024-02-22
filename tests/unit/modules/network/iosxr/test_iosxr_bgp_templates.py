@@ -240,11 +240,11 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
                                     advertise=dict(local_labeled_route=dict(set=True)),
                                 ),
                                 dict(
-                                    afi="vpn4",
+                                    afi="vpnv4",
                                     safi="unicast",
                                 ),
                                 dict(
-                                    afi="vpn6",
+                                    afi="vpnv6",
                                     safi="unicast",
                                 ),
                                 dict(
@@ -340,8 +340,8 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
             "bfd fast-detect strict-mode",
             "internal-vpn-client",
             "precedence critical",
-            "address-family vpn4 unicast",
-            "address-family vpn6 unicast",
+            "address-family vpnv4 unicast",
+            "address-family vpnv6 unicast",
             "address-family link-state link-state",
             "address-family l2vpn evpn",
             "address-family ipv4 unicast",
@@ -1148,9 +1148,9 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
                   precedence critical
                   advertisement-interval 10
                   internal-vpn-client
-                  address-family vpn4 unicast
+                  address-family vpnv4 unicast
                   !
-                  address-family vpn6 unicast
+                  address-family vpnv6 unicast
                   !
                   address-family link-state link-state
                   !
@@ -1227,8 +1227,8 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
                     "advertisement_interval": 10,
                     "internal_vpn_client": True,
                     "address_family": [
-                        {"afi": "vpn4", "safi": "unicast"},
-                        {"afi": "vpn6", "safi": "unicast"},
+                        {"afi": "vpnv4", "safi": "unicast"},
+                        {"afi": "vpnv6", "safi": "unicast"},
                         {"afi": "link-state", "safi": "link-state"},
                         {"afi": "l2vpn", "safi": "evpn"},
                         {

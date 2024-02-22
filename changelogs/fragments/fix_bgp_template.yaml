@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fix 'afi' value in bgp_templates RM to valid values.
