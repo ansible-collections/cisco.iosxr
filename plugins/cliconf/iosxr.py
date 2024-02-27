@@ -200,12 +200,8 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     NetworkConfig,
     dumps,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
-from ansible_collections.ansible.netcommon.plugins.plugin_utils.cliconf_base import (
-    CliconfBase,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.cliconf_base import CliconfBase
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     mask_config_blocks_from_diff,
@@ -274,7 +270,8 @@ class Cliconf(CliconfBase):
 
     def configure(self, admin=False, exclusive=False):
         prompt = to_text(
-            self._connection.get_prompt(), errors="surrogate_or_strict"
+            self._connection.get_prompt(),
+            errors="surrogate_or_strict",
         ).strip()
         if not prompt.endswith(")#"):
             if admin and "admin-" not in prompt:
@@ -286,7 +283,8 @@ class Cliconf(CliconfBase):
 
     def abort(self, admin=False):
         prompt = to_text(
-            self._connection.get_prompt(), errors="surrogate_or_strict"
+            self._connection.get_prompt(),
+            errors="surrogate_or_strict",
         ).strip()
         if prompt.endswith(")#"):
             self.send_command("abort")
@@ -318,7 +316,11 @@ class Cliconf(CliconfBase):
     ):
         operations = self.get_device_operations()
         self.check_edit_config_capability(
-            operations, candidate, commit, replace, comment
+            operations,
+            candidate,
+            commit,
+            replace,
+            comment,
         )
 
         resp = {}
@@ -431,9 +433,7 @@ class Cliconf(CliconfBase):
         else:
             configdiffobjs = candidate_obj.items
 
-        diff["config_diff"] = (
-            dumps(configdiffobjs, "commands") if configdiffobjs else ""
-        )
+        diff["config_diff"] = dumps(configdiffobjs, "commands") if configdiffobjs else ""
         return diff
 
     def get(
@@ -474,7 +474,7 @@ class Cliconf(CliconfBase):
                 cmd_obj["command"] = "commit replace confirmed"
                 if self.get_option("commit_confirmed_timeout"):
                     cmd_obj["command"] += " {0}".format(
-                        self.get_option("commit_confirmed_timeout")
+                        self.get_option("commit_confirmed_timeout"),
                     )
 
             cmd_obj[
@@ -486,15 +486,15 @@ class Cliconf(CliconfBase):
             cmd_obj["command"] = "commit confirmed"
             if self.get_option("commit_confirmed_timeout"):
                 cmd_obj["command"] += " {0}".format(
-                    self.get_option("commit_confirmed_timeout")
+                    self.get_option("commit_confirmed_timeout"),
                 )
             if self.get_option("commit_label"):
                 cmd_obj["command"] += " label {0}".format(
-                    self.get_option("commit_label")
+                    self.get_option("commit_label"),
                 )
             if self.get_option("commit_comment"):
                 cmd_obj["command"] += " comment {0}".format(
-                    self.get_option("commit_comment")
+                    self.get_option("commit_comment"),
                 )
 
         else:
@@ -528,7 +528,7 @@ class Cliconf(CliconfBase):
             output = cmd.pop("output", None)
             if output:
                 raise ValueError(
-                    "'output' value %s is not supported for run_commands" % output
+                    "'output' value %s is not supported for run_commands" % output,
                 )
 
             try:
@@ -543,8 +543,7 @@ class Cliconf(CliconfBase):
                     out = to_text(out, errors="surrogate_or_strict").strip()
                 except UnicodeError:
                     raise ConnectionError(
-                        message="Failed to decode output from %s: %s"
-                        % (cmd, to_text(out)),
+                        message="Failed to decode output from %s: %s" % (cmd, to_text(out)),
                     )
 
                 try:
