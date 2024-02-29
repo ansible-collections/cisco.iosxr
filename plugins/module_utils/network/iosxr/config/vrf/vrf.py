@@ -49,22 +49,21 @@ class Vrf(ResourceModule):
         self.parsers = [
             "description",
             "address_family",
-            # "export_route_policy",
+            "export_route_policy",
             "export_route_target",
-            # "export_to_default_vrf_route_policy",
-            # "export_to_vrf_allow_imported_vpn",
-            # "import_route_target",
-            # "import_route_policy",
-            # "import_from_bridge_domain_advertise_as_vpn",
-            # "import_from_default_vrf_route_policy",
-            # "import_from_vrf_advertise_as_vpn",
-            # "maximum_prefix",
-            # "maximum_threshold",
+            "export_to_default_vrf_route_policy",
+            "export_to_vrf_allow_imported_vpn",
+            "import_route_target",
+            "import_route_policy",
+            "import_from_bridge_domain_advertise_as_vpn",
+            "import_from_default_vrf_route_policy",
+            "import_from_vrf_advertise_as_vpn",
+            "maximum_prefix",
             "evpn_route_sync",
             "fallback_vrf",
-            "mhost_ipv4_default_interface",
-            # "rd",
-            # "remote_route_filtering_disable",
+            "mhost_default_interface",
+            "rd",
+            "remote_route_filtering_disable",
             "vpn_id",
 
         ]
@@ -75,10 +74,9 @@ class Vrf(ResourceModule):
         :rtype: A dictionary
         :returns: The result from module execution
         """
-        # import epdb; epdb.serve()
+
         if self.state not in ["parsed", "gathered"]:
             self.generate_commands()
-            # import epdb; epdb.serve()
             self.run_commands()
         return self.result
 
@@ -86,17 +84,14 @@ class Vrf(ResourceModule):
         """ Generate configuration commands to send based on
             want, have and desired state.
         """
-        # import epdb; epdb.serve()
+
         wantd = self.want
         haved = self.have
-        # for entry in wantd, haved:
-        #     self._vrf_list_to_dict(entry)
 
-        # import epdb; epdb.serve()
         wantd = self._vrf_list_to_dict(wantd)
         haved = self._vrf_list_to_dict(haved)
 
-        # if state is merged, merge want onto have and then compare
+        # if state is merged, merge want into have and then compare
         if self.state == "merged":
             wantd = dict_merge(haved, wantd)
 
@@ -117,9 +112,6 @@ class Vrf(ResourceModule):
         """
 
         self._compare_vrf(want=want, have=have)
-        # self.compare(parsers=self.parsers, want=want, have=have)
-        # if self.commands and "vrf" not in self.commands[0]:
-        #     self.commands.insert(0, self.tmplt.render({"vrf": want["vrf"]}, "vrf", False))
 
     def _compare_vrf(self, want, have):
         """Custom handling of vrfs option
@@ -132,15 +124,15 @@ class Vrf(ResourceModule):
             vrf_have = have.pop(name, {})
 
             self.compare(parsers=self.parsers, want=entry, have=vrf_have)
-            # self._compare_lists(want=entry, have=af_have)
             self._compare_af(entry, vrf_have)
             if len(self.commands) != begin:
                 self.commands.insert(begin, "vrf {0}".format(name))
 
         # for deleted and overridden state
         if self.state != "replaced":
+            begin = len(self.commands)
             for name, entry in iteritems(have):
-                self.addcmd("no vrf {0}".format(name))
+                self.commands.insert(begin, "no vrf {0}".format(name))
 
     def _compare_af(self, want, have):
         """Custom handling of afs option
@@ -154,8 +146,6 @@ class Vrf(ResourceModule):
             af_have = hafs.pop(name, {})
 
             self.compare(parsers=self.parsers, want=entry, have=af_have)
-            # self._compare_lists(want=entry, have=af_have)
-            # import epdb; epdb.serve()
             if len(self.commands) != begin:
                 self.commands.insert(
                     begin,
@@ -164,7 +154,7 @@ class Vrf(ResourceModule):
                             "afi": entry.get("afi"),
                             "safi": entry.get("safi"),
                         },
-                        "address_families",
+                        "address_family",
                         False,
                     ),
                 )

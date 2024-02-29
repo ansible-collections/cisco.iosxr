@@ -110,10 +110,7 @@ class VrfArgs(object):  # pylint: disable=R0903
                         },
                         "maximum": {
                             "type": "dict",
-                            "options": {
-                                "prefix": {"type": "int"},
-                                "threshold": {"type": "int"},
-                            },
+                            "options": {"prefix": {"type": "int"}},
                         },
                     },
                 },
@@ -127,7 +124,10 @@ class VrfArgs(object):  # pylint: disable=R0903
                     },
                 },
                 "rd": {"type": "str"},
-                "remote_route_filtering": {"type": "bool"},
+                "remote_route_filtering": {
+                    "type": "dict",
+                    "options": {"disable": {"type": "bool"}},
+                },
                 "vpn": {"type": "dict", "options": {"id": {"type": "str"}}},
             },
         },
@@ -141,6 +141,7 @@ class VrfArgs(object):  # pylint: disable=R0903
                 "merged",
                 "replaced",
                 "rendered",
+                "overridden",
             ],
             "default": "merged",
         },

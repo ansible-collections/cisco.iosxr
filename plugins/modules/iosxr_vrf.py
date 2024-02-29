@@ -106,9 +106,6 @@ options:
               prefix:
                 description:  Set table's maximum prefix limit.
                 type: int
-              threshold:
-                description: mid-thresh (% of max).
-                type: int
       evpn_route_sync:
         description: EVPN Instance VPN ID used to synchronize the VRF route(s).
         type: int
@@ -131,7 +128,11 @@ options:
         type: str
       remote_route_filtering:
         description: Enable/Disable remote route filtering per VRF
-        type: bool
+        type: dict
+        suboptions:
+          disable:
+            description: Disable remote route filtering per VRF
+            type: bool
       vpn:
         description: VPN ID for the VRF
         type: dict
@@ -149,7 +150,7 @@ options:
   state:
     description: The state the configuration should be left in.
     type: str
-    choices: [parsed, gathered, deleted, merged, replaced, rendered]
+    choices: [parsed, gathered, deleted, merged, replaced, rendered, overridden]
     default: merged
 """
 
