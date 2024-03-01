@@ -709,3 +709,14 @@ releases:
       - fix_add_cdp_neighbors.yaml
       - fix_iosxr_config.yaml
     release_date: "2024-01-08"
+  7.2.0:
+    changes:
+      bugfixes:
+        - Fix 'afi' value in bgp_templates RM to valid values.
+      minor_changes:
+        - Add missing options in afi and safi in address-family of bgp_templates RM.
+    fragments:
+      - bugfix_bgp_templates.yaml
+      - fix_bgp_template.yaml
+      - fix_nightly.yaml
+    release_date: "2024-03-01"
