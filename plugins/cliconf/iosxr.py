@@ -200,12 +200,8 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     NetworkConfig,
     dumps,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
-from ansible_collections.ansible.netcommon.plugins.plugin_utils.cliconf_base import (
-    CliconfBase,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.cliconf_base import CliconfBase
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     mask_config_blocks_from_diff,
@@ -437,9 +433,7 @@ class Cliconf(CliconfBase):
         else:
             configdiffobjs = candidate_obj.items
 
-        diff["config_diff"] = (
-            dumps(configdiffobjs, "commands") if configdiffobjs else ""
-        )
+        diff["config_diff"] = dumps(configdiffobjs, "commands") if configdiffobjs else ""
         return diff
 
     def get(
@@ -483,9 +477,9 @@ class Cliconf(CliconfBase):
                         self.get_option("commit_confirmed_timeout"),
                     )
 
-            cmd_obj["prompt"] = (
-                "This commit will replace or remove the entire running configuration"
-            )
+            cmd_obj[
+                "prompt"
+            ] = "This commit will replace or remove the entire running configuration"
             cmd_obj["answer"] = "yes"
 
         elif self.get_option("commit_confirmed"):
@@ -549,8 +543,7 @@ class Cliconf(CliconfBase):
                     out = to_text(out, errors="surrogate_or_strict").strip()
                 except UnicodeError:
                     raise ConnectionError(
-                        message="Failed to decode output from %s: %s"
-                        % (cmd, to_text(out)),
+                        message="Failed to decode output from %s: %s" % (cmd, to_text(out)),
                     )
 
                 try:
