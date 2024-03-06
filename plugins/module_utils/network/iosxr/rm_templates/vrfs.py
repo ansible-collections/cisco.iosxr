@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,6 +16,7 @@ the given network resource.
 """
 
 import re
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
     NetworkTemplate,
 )
@@ -36,7 +38,8 @@ class VrfTemplate(NetworkTemplate):
                 r"""
                 ^vrf\s(?P<name>\S+)
                 \s+description\s(?P<description>.+$)
-                $""", re.VERBOSE),
+                $""", re.VERBOSE,
+            ),
             "setval": "description {{ description }}",
             "result": {
                 '{{ name }}': {
@@ -125,7 +128,8 @@ class VrfTemplate(NetworkTemplate):
                 ^vrf\s(?P<name>\S+)
                 (?P<address_families>\s+address-family\s(?P<afi>\S+)\s(?P<safi>\S+))
                 \s+export\sto\sdefault-vrf\sroute-policy\s(?P<export_to_default_vrf_route_policy>\S+)
-                $""", re.VERBOSE),
+                $""", re.VERBOSE,
+            ),
             "setval": "export to default-vrf route-policy {{ export.to.default_vrf.route_policy }}",
             "compval": "export.to.default_vrf.route_policy",
             "result": {
@@ -266,7 +270,8 @@ class VrfTemplate(NetworkTemplate):
                 ^vrf\s(?P<name>\S+)
                 (?P<address_families>\s+address-family\s(?P<afi>\S+)\s(?P<safi>\S+))
                 \s+import\sfrom\sdefault-vrf\sroute-policy\s(?P<import_config_from_default_vrf_route_policy>\S+)
-                $""", re.VERBOSE),
+                $""", re.VERBOSE,
+            ),
             "setval": "import from default-vrf route-policy {{ import_config.from.default_vrf.route_policy }}",
             "compval": "import_config.from.default_vrf.route_policy",
             "result": {
@@ -350,7 +355,8 @@ class VrfTemplate(NetworkTemplate):
                 r"""
                 ^vrf\s(?P<name>\S+)
                 \s+evpn-route-sync\s(?P<evpn_route_sync>\d+)
-                $""", re.VERBOSE),
+                $""", re.VERBOSE,
+            ),
             "setval": "evpn-route-sync {{ evpn_route_sync }}",
             "result": {
                 '{{ name }}': {
@@ -365,7 +371,8 @@ class VrfTemplate(NetworkTemplate):
                 r"""
                 ^vrf\s(?P<name>\S+)
                 \s+fallback-vrf\s(?P<fallback_vrf>\S+)
-                $""", re.VERBOSE),
+                $""", re.VERBOSE,
+            ),
             "setval": "fallback-vrf {{ fallback_vrf }}",
             "result": {
                 '{{ name }}': {
@@ -427,7 +434,7 @@ class VrfTemplate(NetworkTemplate):
                     'name': '{{ name }}',
                     "remote_route_filtering": {
                         "disable": "{{ true if disable is defined }}",
-                    }
+                    },
                 },
             },
         },
@@ -446,7 +453,7 @@ class VrfTemplate(NetworkTemplate):
                     'name': '{{ name }}',
                     "vpn": {
                         "id": "{{ vpn_id }}",
-                    }
+                    },
                 },
             },
         },
