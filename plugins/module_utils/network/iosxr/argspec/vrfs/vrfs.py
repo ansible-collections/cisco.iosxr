@@ -24,12 +24,12 @@ __metaclass__ = type
 ##############################################
 
 """
-The arg spec for the iosxr_vrf module
+The arg spec for the iosxr_vrfs module
 """
 
 
-class VrfArgs(object):  # pylint: disable=R0903
-    """The arg spec for the iosxr_vrf module
+class VrfsArgs(object):  # pylint: disable=R0903
+    """The arg spec for the iosxr_vrfs module
     """
 
     argument_spec = {
@@ -74,7 +74,7 @@ class VrfArgs(object):  # pylint: disable=R0903
                                 },
                             },
                         },
-                        "import": {
+                        "import_config": {
                             "type": "dict",
                             "options": {
                                 "route_policy": {"type": "str"},
@@ -133,7 +133,6 @@ class VrfArgs(object):  # pylint: disable=R0903
         },
         "running_config": {"type": "str"},
         "state": {
-            "type": "str",
             "choices": [
                 "parsed",
                 "gathered",
@@ -144,5 +143,6 @@ class VrfArgs(object):  # pylint: disable=R0903
                 "overridden",
             ],
             "default": "merged",
+            "type": "str",
         },
     }  # pylint: disable=C0301

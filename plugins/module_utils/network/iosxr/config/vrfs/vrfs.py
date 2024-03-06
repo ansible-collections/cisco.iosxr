@@ -28,7 +28,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.r
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
     Facts,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.vrf import (
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.vrfs import (
     VrfTemplate,
 )
 
@@ -53,11 +53,11 @@ class Vrf(ResourceModule):
             "export_route_target",
             "export_to_default_vrf_route_policy",
             "export_to_vrf_allow_imported_vpn",
-            "import_route_target",
-            "import_route_policy",
-            "import_from_bridge_domain_advertise_as_vpn",
-            "import_from_default_vrf_route_policy",
-            "import_from_vrf_advertise_as_vpn",
+            "import_config_route_target",
+            "import_config_route_policy",
+            "import_config_from_bridge_domain_advertise_as_vpn",
+            "import_config_from_default_vrf_route_policy",
+            "import_config_from_vrf_advertise_as_vpn",
             "maximum_prefix",
             "evpn_route_sync",
             "fallback_vrf",
@@ -74,7 +74,7 @@ class Vrf(ResourceModule):
         :rtype: A dictionary
         :returns: The result from module execution
         """
-
+        # import epdb; epdb.serve()
         if self.state not in ["parsed", "gathered"]:
             self.generate_commands()
             self.run_commands()

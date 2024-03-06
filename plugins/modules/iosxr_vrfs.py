@@ -5,7 +5,7 @@
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-The module file for iosxr_vrf
+The module file for iosxr_vrfs
 """
 
 from __future__ import absolute_import, division, print_function
@@ -76,7 +76,7 @@ options:
                       allow_imported_vpn:
                         description: Allow export of imported VPN routes to non-default VRF
                         type: bool
-          import:
+          import_config:
             description: VRF import
             type: dict
             suboptions:
@@ -106,9 +106,6 @@ options:
               prefix:
                 description:  Set table's maximum prefix limit.
                 type: int
-              threshold:
-                description: mid-thresh (% of max).
-                type: int
       evpn_route_sync:
         description: EVPN Instance VPN ID used to synchronize the VRF route(s).
         type: int
@@ -131,26 +128,47 @@ options:
         type: str
       remote_route_filtering:
         description: Enable/Disable remote route filtering per VRF
-        type: bool
+        type: dict
+        suboptions:
+          disable:
+            description: Disable remote route filtering per VRF
+            type: bool
       vpn:
         description: VPN ID for the VRF
         type: dict
         suboptions:
           id:
             description: VPN ID for the VRF.
-            type: int
+            type: str
   running_config:
-    description: The state the configuration should be left in.
-      - State I(deleted) only removes VRF attributes that this modules
-      manages and does not negate the VRF process completely. Thereby, preserving
-      address_family related configurations under VRF context.
-      - Refer to examples for more details.https://github.com/ansible-network/resource_module_models/pull/243/commits/4c40fc3daa8e484051aac3eddf7c4b420b06dbdb
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the IOS-XR device by
+        executing the command B(show running-config vrf).
+      - The state I(parsed) reads the configuration from C(running_config) option and
+        transforms it into Ansible structured data as per the resource module's argspec
+        and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
-    description: The state the configuration should be left in.
-    type: str
-    choices: [parsed, gathered, deleted, merged, replaced, rendered]
+    choices: [parsed, gathered, deleted, merged, replaced, rendered, overridden]
     default: merged
+    description:
+      - The state the configuration should be left in
+      - The states I(rendered), I(gathered) and I(parsed) does not perform any change
+        on the device.
+      - The state I(rendered) will transform the configuration in C(config) option to
+        platform specific CLI commands which will be returned in the I(rendered) key
+        within the result. For state I(rendered) active connection to remote host is
+        not required.
+      - The state I(gathered) will fetch the running configuration from device and transform
+        it into structured data in the format as per the resource module argspec and
+        the value is returned in the I(gathered) key within the result.
+      - The state I(parsed) reads the configuration from C(running_config) option and
+        transforms it into JSON format as per the resource module parameters and the
+        value is returned in the I(parsed) key within the result. The value of C(running_config)
+        option should be the same format as the output of command I(show running-config vrf).
+        connection to remote host is not required.
+    type: str
 """
 
 EXAMPLES = """
@@ -205,10 +223,10 @@ parsed:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.vrf.vrf import (
-    VrfArgs,
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.vrfs.vrfs import (
+    VrfsArgs,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.vrf.vrf import (
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.vrfs.vrfs import (
     Vrf,
 )
 
@@ -220,7 +238,7 @@ def main():
     :returns: the result form module invocation
     """
     module = AnsibleModule(
-        argument_spec=VrfArgs.argument_spec,
+        argument_spec=VrfsArgs.argument_spec,
         mutually_exclusive=[["config", "running_config"]],
         required_if=[
             ["state", "merged", ["config"]],

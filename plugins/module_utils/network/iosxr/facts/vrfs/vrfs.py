@@ -20,11 +20,11 @@ from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.vrf import (
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.vrfs import (
     VrfTemplate,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.vrf.vrf import (
-    VrfArgs,
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.vrfs.vrfs import (
+    VrfsArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     flatten_config,
@@ -34,21 +34,13 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.ut
 class VrfFacts(object):
     """ The iosxr vrf facts class"""
 
-    def __init__(self, module, subspec='config', options='options'):
+    def __init__(self, module, subspec="config", options="options"):
         self._module = module
-        self.argument_spec = VrfArgs.argument_spec
-        spec = deepcopy(self.argument_spec)
-        if subspec:
-            if options:
-                facts_argument_spec = spec[subspec][options]
-            else:
-                facts_argument_spec = spec[subspec]
-        else:
-            facts_argument_spec = spec
-
-        self.generated_spec = utils.generate_dict(facts_argument_spec)
+        self.argument_spec = VrfsArgs.argument_spec
 
     def get_config(self, connection):
+        """ Get the configuration from the device"""
+
         return connection.get("show running-config vrf")
 
     def populate_facts(self, connection, ansible_facts, data=None):
@@ -59,7 +51,7 @@ class VrfFacts(object):
         :rtype: dictionary
         :returns: facts
         """
-        # import epdb; epdb.serve()
+
         facts = {}
         objs = []
         obj = {}
@@ -73,11 +65,10 @@ class VrfFacts(object):
         data = flatten_config(address_data, "vrf")
 
         # parse native config using the Vrf template
-        vrf_parser = VrfTemplate(lines=data.splitlines())
+        vrf_parser = VrfTemplate(lines=data.splitlines(), module=self._module)
         obj = vrf_parser.parse()
         objs = list(obj.values())
 
-        # import epdb; epdb.serve()
         for vrf in objs:
             af = vrf.get("address_families", {})
             if af:
@@ -87,7 +78,11 @@ class VrfFacts(object):
 
         ansible_facts['ansible_network_resources'].pop('vrf', None)
         params = utils.remove_empties(
-            vrf_parser.validate_config(self.argument_spec, {"config": objs}),
+            vrf_parser.validate_config(
+                self.argument_spec,
+                {"config": objs},
+                redact=True,
+            ),
         )
 
         facts["vrf"] = params.get("config", {})

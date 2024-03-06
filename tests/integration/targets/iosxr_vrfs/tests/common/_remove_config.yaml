@@ -1,0 +1,7 @@
+---
+- name: Remove configurations
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no vrf VRF7
+  vars:
+    ansible_connection: ansible.netcommon.network_cli

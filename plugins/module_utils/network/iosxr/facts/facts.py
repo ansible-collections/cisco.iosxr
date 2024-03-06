@@ -95,7 +95,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.st
     Static_routesFacts,
 )
 
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vrf.vrf import (
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vrfs.vrfs import (
     VrfFacts,
 )
 
