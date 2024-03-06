@@ -1,3 +1,0 @@
----
-minor_changes:
-  - iosxr_facts - Add cdp neighbors in ansible_net_neighbors dictionary (https://github.com/ansible-collections/cisco.iosxr/pull/457).

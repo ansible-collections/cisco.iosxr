@@ -20,7 +20,8 @@ PEP440 is the schema used to describe the versions of Ansible.
 <!--end requires_ansible-->
 
 ### Supported connections
-The Cisco IOSXR collection supports ``network_cli``  and ``netconf`` connections.
+
+The Cisco IOS-XR collection supports ``network_cli``  and ``netconf`` connections. A detailed platform guide can be found [here](https://github.com/ansible-collections/cisco.iosxr/blob/main/platform_guide.rst).
 
 ## Included content
 <!--start collection content-->

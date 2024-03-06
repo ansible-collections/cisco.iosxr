@@ -48,7 +48,14 @@ class Bgp_templatesArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "afi": {
                                     "type": "str",
-                                    "choices": ["ipv4", "ipv6"],
+                                    "choices": [
+                                        "ipv4",
+                                        "ipv6",
+                                        "vpnv4",
+                                        "vpnv6",
+                                        "link-state",
+                                        "l2vpn",
+                                    ],
                                 },
                                 "safi": {
                                     "type": "str",
@@ -62,6 +69,10 @@ class Bgp_templatesArgs(object):  # pylint: disable=R0903
                                         "unicast",
                                         "labeled-unicast",
                                         "sr-policy",
+                                        "link-state",
+                                        "evpn",
+                                        "mspw",
+                                        "vpls-vpws",
                                     ],
                                 },
                                 "signalling": {
