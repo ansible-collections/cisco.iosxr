@@ -25,7 +25,7 @@
     - name: Assert that facts were correctly generated
       ansible.builtin.assert:
         that:
-          - "{{ gathered['after']['address_family'] | symmetric_difference(result['gathered']['address_family']) |length == 0 }}"
-          - gathered['after']['as_number'] == result['gathered']['as_number']
+          - "{{ gathered['after'] | symmetric_difference(result['gathered']) |length == 0 }}"
+          - gathered['after'] == result['gathered']
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml

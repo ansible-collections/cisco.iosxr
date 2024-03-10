@@ -10,7 +10,6 @@ The module file for iosxr_vrfs
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -159,7 +158,8 @@ options:
         on the device.
       - The state I(rendered) will transform the configuration in C(config) option to
         platform specific CLI commands which will be returned in the I(rendered) key
-        within the result. For state I(rendered) active connection to remote host is
+        within the result.
+      - For state I(rendered) active connection to remote host is
         not required.
       - The state I(gathered) will fetch the running configuration from device and transform
         it into structured data in the format as per the resource module argspec and
@@ -173,62 +173,755 @@ options:
 """
 
 EXAMPLES = """
+# Using merged
+# Before state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config vrf
+# Fri Feb  9 07:02:35.789 UTC
+# !
+# cdp
+# cdp holdtime 30
+# cdp advertise v1
+# vrf tet
+#
+- name: Merge provided configuration with device configuration
+  hosts: iosxr
+  gather_facts: false
+  tasks:
+    - name: Merge provided configuration with device configuration
+      cisco.iosxr.iosxr_vrfs:
+        config:
+          - name: VRF4
+            description: VRF4 Description
+            evpn_route_sync: 793
+            fallback_vrf: "test-vrf"
+            address_families:
+              - afi: "ipv4"
+                safi: "unicast"
+                export:
+                  route_target: "10.0.0.1:300"
+                  route_policy: "rm-policy"
+                  to:
+                    default_vrf:
+                      route_policy: "rm-policy"
+                    vrf:
+                      allow_imported_vpn: "true"
+                import_config:
+                  route_target: "10.1.3.4:400"
+                  route_policy: "test-policy"
+                  from:
+                    bridge_domain:
+                      advertise_as_vpn: "true"
+                    default_vrf:
+                      route_policy: "test-policy"
+                    vrf:
+                      advertise_as_vpn: "true"
+                maximum:
+                  prefix: 100
+            remote_route_filtering:
+              disable: "true"
+            rd: "3:4"
+            mhost:
+              afi: "ipv4"
+              default_interface: "Loopback0"
+            vpn:
+              id: "2:3"
+        state: merged
+# Task output
+# -------------
+# commands:
+# - vrf VRF4
+# - description VRF4 Description
+# - evpn-route-sync 793
+# - fallback-vrf test-vrf
+# - mhost ipv4 default-interface Loopback0
+# - rd 3:4
+# - remote-route-filtering disable
+# - vpn id 2:3
+# - address-family ipv4 unicast
+# - export route-policy rm-policy
+# - export route-target 10.0.0.1:300
+# - export to default-vrf route-policy rm-policy
+# - export to vrf allow-imported-vpn
+# - import route-target 10.1.3.4:400
+# - import route-policy test-policy
+# - import from bridge-domain advertise-as-vpn
+# - import from default-vrf route-policy test-policy
+# - import from vrf advertise-as-vpn
+# - maximum prefix 100
+#
+#
+# after:
+#   name: VRF4
+#   description: VRF4 Description
+#   evpn_route_sync: 793
+#   fallback_vrf: "test-vrf"
+#   mhost:
+#     afi: "ipv4"
+#     default_interface: "Loopback0"
+#   rd: "3:4"
+#   remote_route_filtering:
+#     disable: "true"
+#   vpn:
+#     id: "2:3"
+#   address_families:
+#     - afi: "ipv4"
+#       safi: "unicast"
+#       export:
+#         route_target: "10.0.0.1:300"
+#         route_policy: "rm-policy"
+#         to:
+#           default_vrf:
+#             route_policy: "rm-policy"
+#           vrf:
+#             allow_imported_vpn: "true"
+#       import_config:
+#         route_target: "10.1.3.4:400"
+#         route_policy: "test-policy"
+#         from:
+#           bridge_domain:
+#             advertise_as_vpn: "true"
+#           default_vrf:
+#             route_policy: "test-policy"
+#           vrf:
+#             advertise_as_vpn: "true"
+#       maximum:
+#         prefix: 10
+#
+# After state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config vrf
+# Sat Feb 20 03:49:43.618 UTC
+#  vrf VRF4
+#  description "This is test VRF"
+#  address-family ipv4 unicast
+#   export to default-vrf route-policy "rm-policy"
+#   export to vrf allow-imported-vpn
+#   export route-policy "export-policy"
+#   export route-target
+#    10.1.2.3:200
+#   import route-target
+#    10.0.0.1:300
+#   import route-policy "test-policy"
+#   import from bridge-domain advertise-as-vpn
+#   import from default-vrf route-policy "new-policy"
+#   import from vrf advertise-as-vpn
+#   maximum prefix 23
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 456
+#  vpn 56
+#  fallback-vrf "test-vrf"
+#  remote-route-filtering disable
+#  address-family ipv4 flowspec
+#  rd "testing"
+#
+# Using replaced
+# Before state:
+# -------------
+# RP/0/0/CPU0:iosxr-02#show running-config vrf
+# Sat Feb 20 03:49:43.618 UTC
+#  vrf VRF4
+#  description "This is test VRF"
+#  address-family ipv4 unicast
+#   export to default-vrf route-policy "rm-policy"
+#   export to vrf allow-imported-vpn
+#   export route-policy "export-policy"
+#   export route-target
+#    10.1.2.3:200
+#   import route-target
+#    10.0.0.1:300
+#   import route-policy "test-policy"
+#   import from bridge-domain advertise-as-vpn
+#   import from default-vrf route-policy "new-policy"
+#   import from vrf advertise-as-vpn
+#   maximum prefix 23
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 456
+#  vpn 56
+#  fallback-vrf "test-vrf"
+#  remote-route-filtering disable
+#  address-family ipv4 flowspec
+#  rd "testing"
+#
+#
+- name: Replace the provided configuration with the existing running configuration
+  hosts: iosxr
+  gather_facts: false
+  tasks:
+    - name: Replace the provided configuration with the existing running configuration
+      cisco.iosxr.iosxr_vrfs:
+        config:
+          - name: VRF7
+            description: VRF7 description
+            evpn_route_sync: 398
+            fallback_vrf: "replaced-vrf"
+            address_families:
+              - afi: "ipv4"
+                safi: "unicast"
+                export:
+                  route_target: "192.12.3.2:300"
+                  route_policy: "rm-policy"
+                  to:
+                    default_vrf:
+                      route_policy: "rm-policy"
+                    vrf:
+                      allow_imported_vpn: "true"
+                import_config:
+                  route_target: "12.2.3.4:900"
+                  route_policy: "test-policy"
+                  from:
+                    bridge_domain:
+                      advertise_as_vpn: "true"
+                    default_vrf:
+                      route_policy: "test-policy"
+                    vrf:
+                      advertise_as_vpn: "true"
+                maximum:
+                  prefix: 200
+            remote_route_filtering:
+              disable: "true"
+            rd: "67:9"
+            mhost:
+              afi: "ipv4"
+              default_interface: "Loopback0"
+            vpn:
+              id: "4:5"
+        state: replaced
 
-"""
+# -------------
+# commands:
+# - vrf VRF7
+# - description VRF7 description
+# - evpn-route-sync 398
+# - fallback-vrf replaced-vrf
+# - mhost ipv4 default-interface Loopback0
+# - rd 67:9
+# - remote-route-filtering disable
+# - vpn id 4:5
+# - address-family ipv4 unicast
+# - export route-policy rm-policy
+# - export route-target 192.12.3.2:300
+# - export to default-vrf route-policy rm-policy
+# - export to vrf allow-imported-vpn
+# - import route-target 12.2.3.4:900
+# - import route-policy test-policy
+# - import from bridge-domain advertise-as-vpn
+# - import from default-vrf route-policy test-policy
+# - import from vrf advertise-as-vpn
+# - maximum prefix 200
+#
+# after:
+#   name: VRF7
+#   description: VRF7 description
+#   evpn_route_sync: 398
+#   fallback_vrf: "replaced-vrf"
+#   address_families:
+#     - afi: "ipv4"
+#       safi: "unicast"
+#       export:
+#         route_target: "192.12.3.2:300"
+#         route_policy: "rm-policy"
+#         to:
+#           default_vrf:
+#             route_policy: "rm-policy"
+#           vrf:
+#             allow_imported_vpn: "true"
+#       import_config:
+#         route_target: "12.2.3.4:900"
+#         route_policy: "test-policy"
+#         from:
+#           bridge_domain:
+#             advertise_as_vpn: "true"
+#           default_vrf:
+#             route_policy: "test-policy"
+#           vrf:
+#             advertise_as_vpn: "true"
+#       maximum:
+#         prefix: 200
+#   remote_route_filtering:
+#     disable: "true"
+#   rd: "67:9"
+#   mhost:
+#     afi: "ipv4"
+#     default_interface: "Loopback0"
+#   vpn:
+#     id: "4:5"
+#
+# After state:
+# -------------
+# RP/0/RP0/CPU0:ios(config)#show running-config vrf
+# Sun Mar 10 16:48:53.204 UTC
+# vrf VRF4
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 793
+#  description VRF4 Description
+#  vpn id 2:3
+#  fallback-vrf parsed-vrf
+#  remote-route-filtering disable
+#  rd 3:4
+#  address-family ipv4 unicast
+#  --More-- vrf VRF4
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 793
+#  description VRF4 Description
+#  vpn id 2:3
+#  fallback-vrf parsed-vrf
+#  remote-route-filtering disable
+#  rd 3:4
+#  address-family ipv4 unicast
+#   import route-policy test-policy
+#   import from vrf advertise-as-vpn
+#   import from bridge-domain advertise-as-vpn
+#   import from default-vrf route-policy test-policy
+#   import route-target
+#    10.1.3.4:400
+#   !
+#   export route-policy rm-policy
+#   export to vrf allow-imported-vpn
+#   export to default-vrf route-policy rm-policy
+#   export route-target
+#    10.0.0.1:300
+#   !
+#   maximum prefix 100
+#  !
+# !
+# vrf VRF7
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 398
+#  description VRF7 description
+#  vpn id 4:5
+#  fallback-vrf replaced-vrf
+#  remote-route-filtering disable
+#  rd 67:9
+#  address-family ipv4 unicast
+#   import route-policy test-policy
+#   import from vrf advertise-as-vpn
+#   import from bridge-domain advertise-as-vpn
+#   import from default-vrf route-policy test-policy
+#   import route-target
+#    12.2.3.4:900
+#   !
+#   export route-policy rm-policy
+#   export to vrf allow-imported-vpn
+#   export to default-vrf route-policy rm-policy
+#   export route-target
+#    192.12.3.2:300
+#   !
+#   maximum prefix 200
+#  !
+# !
+#
+# Using overridden
+# Before state:
+# -------------
+# RP/0/RP0/CPU0:ios(config)#show running-config vrf
+# Sun Mar 10 16:48:53.204 UTC
+# vrf VRF4
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 793
+#  description VRF4 Description
+#  vpn id 2:3
+#  fallback-vrf parsed-vrf
+#  remote-route-filtering disable
+#  rd 3:4
+#  address-family ipv4 unicast
+#  --More-- vrf VRF4
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 793
+#  description VRF4 Description
+#  vpn id 2:3
+#  fallback-vrf parsed-vrf
+#  remote-route-filtering disable
+#  rd 3:4
+#  address-family ipv4 unicast
+#   import route-policy test-policy
+#   import from vrf advertise-as-vpn
+#   import from bridge-domain advertise-as-vpn
+#   import from default-vrf route-policy test-policy
+#   import route-target
+#    10.1.3.4:400
+#   !
+#   export route-policy rm-policy
+#   export to vrf allow-imported-vpn
+#   export to default-vrf route-policy rm-policy
+#   export route-target
+#    10.0.0.1:300
+#   !
+#   maximum prefix 100
+#  !
+# !
+# vrf VRF7
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 398
+#  description VRF7 description
+#  vpn id 4:5
+#  fallback-vrf replaced-vrf
+#  remote-route-filtering disable
+#  rd 67:9
+#  address-family ipv4 unicast
+#   import route-policy test-policy
+#   import from vrf advertise-as-vpn
+#   import from bridge-domain advertise-as-vpn
+#   import from default-vrf route-policy test-policy
+#   import route-target
+#    12.2.3.4:900
+#   !
+#   export route-policy rm-policy
+#   export to vrf allow-imported-vpn
+#   export to default-vrf route-policy rm-policy
+#   export route-target
+#    192.12.3.2:300
+#   !
+#   maximum prefix 200
+#  !
+# !
+- name: Override the provided configuration with the existing running configuration
+  hosts: iosxr
+  gather_facts: false
+  tasks:
+    - name: Override the provided configuration with the existing running configuration
+      cisco.iosxr.iosxr_vrfs:
+        state: overridden
+        config:
+          - name: VRF6
+            description: VRF6 Description
+            evpn_route_sync: 101
+            fallback_vrf: "overridden-vrf"
+            address_families:
+              - afi: "ipv4"
+                safi: "unicast"
+                export:
+                  route_target: "10.0.0.1:300"
+                  route_policy: "rm-policy1"
+                  to:
+                    default_vrf:
+                      route_policy: "rm-policy"
+                    vrf:
+                      allow_imported_vpn: "true"
+                import_config:
+                  route_target: "10.1.3.4:900"
+                  route_policy: "test-policy"
+                  from:
+                    bridge_domain:
+                      advertise_as_vpn: "true"
+                    default_vrf:
+                      route_policy: "test-policy"
+                    vrf:
+                      advertise_as_vpn: "true"
+                maximum:
+                  prefix: 500
+            remote_route_filtering:
+              disable: "true"
+            rd: "67:9"
+            mhost:
+              afi: "ipv4"
+              default_interface: "Loopback0"
+            vpn:
+              id: "4:5"
 
-RETURN = """
-before:
-  description: The configuration prior to the module execution.
-  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
-  type: dict
-  sample: >
-    This output will always be in the same format as the
-    module argspec.
-after:
-  description: The resulting configuration after module execution.
-  returned: when changed
-  type: dict
-  sample: >
-    This output will always be in the same format as the
-    module argspec.
-commands:
-  description: The set of commands pushed to the remote device.
-  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
-  type: list
-  sample:
-    - sample command 1
-    - sample command 2
-    - sample command 3
-rendered:
-  description: The provided configuration in the task rendered in device-native format (offline).
-  returned: when I(state) is C(rendered)
-  type: list
-  sample:
-    - sample command 1
-    - sample command 2
-    - sample command 3
-gathered:
-  description: Facts about the network resource gathered from the remote device as structured data.
-  returned: when I(state) is C(gathered)
-  type: list
-  sample: >
-    This output will always be in the same format as the
-    module argspec.
-parsed:
-  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
-  returned: when I(state) is C(parsed)
-  type: list
-  sample: >
-    This output will always be in the same format as the
-    module argspec.
+# Task output
+# -------------
+# commands:
+# - vrf VRF6
+# - description VRF6 Description
+# - evpn-route-sync 101
+# - fallback-vrf overridden-vrf
+# - mhost ipv4 default-interface Loopback0
+# - rd 67:9
+# - remote-route-filtering disable
+# - vpn id 4:5
+# - address-family ipv4 unicast
+# - export route-policy rm-policy1
+# - export route-target 10.0.0.1:300
+# - export to default-vrf route-policy rm-policy
+# - export to vrf allow-imported-vpn
+# - import route-target 10.1.3.4:900
+# - import route-policy test-policy
+# - import from bridge-domain advertise-as-vpn
+# - import from default-vrf route-policy test-policy
+# - import from vrf advertise-as-vpn
+# - maximum prefix 500
+# - no vrf VRF7
+# - no vrf VRF4
+#
+#
+# after:
+# name: VRF6
+# description: VRF6 Description
+# evpn_route_sync: 101
+# fallback_vrf: "overridden-vrf"
+# address_families:
+#   - afi: "ipv4"
+#     safi: "unicast"
+#     export:
+#       route_target: "10.0.0.1:300"
+#       route_policy: "rm-policy1"
+#       to:
+#         default_vrf:
+#           route_policy: "rm-policy"
+#         vrf:
+#           allow_imported_vpn: "true"
+#     import_config:
+#       route_target: "10.1.3.4:900"
+#       route_policy: "test-policy"
+#       from:
+#         bridge_domain:
+#           advertise_as_vpn: "true"
+#         default_vrf:
+#           route_policy: "test-policy"
+#         vrf:
+#           advertise_as_vpn: "true"
+#     maximum:
+#       prefix: 500
+# remote_route_filtering:
+#   disable: "true"
+# rd: "67:9"
+# mhost:
+#   afi: "ipv4"
+#   default_interface: "Loopback0"
+# vpn:
+#   id: "4:5"
+#
+# After state:
+# -------------
+# RP/0/RP0/CPU0:ios(config)#show running-config vrf
+# Sun Mar 10 16:54:53.007 UTC
+# vrf VRF6
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 101
+#  description VRF6 Description
+#  vpn id 4:5
+#  fallback-vrf overridden-vrf
+#  remote-route-filtering disable
+#  rd 67:9
+#  address-family ipv4 unicast
+#   import route-policy test-policy
+#   import from vrf advertise-as-vpn
+#   import from bridge-domain advertise-as-vpn
+#   import from default-vrf route-policy test-policy
+#   import route-target
+#    10.1.3.4:900
+#   !
+#   export route-policy rm-policy1
+#   export to vrf allow-imported-vpn
+#   export to default-vrf route-policy rm-policy
+#   export route-target
+#    10.0.0.1:300
+#   !
+#   maximum prefix 500
+#
+#
+# Using deleted
+# Before state:
+# -------------
+# RP/0/RP0/CPU0:ios(config)#show running-config vrf
+# Sun Mar 10 16:54:53.007 UTC
+# vrf VRF6
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 101
+#  description VRF6 Description
+#  vpn id 4:5
+#  fallback-vrf overridden-vrf
+#  remote-route-filtering disable
+#  rd 67:9
+#  address-family ipv4 unicast
+#   import route-policy test-policy
+#   import from vrf advertise-as-vpn
+#   import from bridge-domain advertise-as-vpn
+#   import from default-vrf route-policy test-policy
+#   import route-target
+#    10.1.3.4:900
+#   !
+#   export route-policy rm-policy1
+#   export to vrf allow-imported-vpn
+#   export to default-vrf route-policy rm-policy
+#   export route-target
+#    10.0.0.1:300
+#   !
+#   maximum prefix 500
+#
+- name: Delete the provided configuration
+  hosts: iosxr
+  gather_facts: false
+  tasks:
+    - name: Delete the provided configuration
+      cisco.iosxr.iosxr_vrfs:
+        state: deleted
+
+# Task output
+# -------------
+# commands:
+# - no vrf VRF6
+#
+# After state:
+# -------------
+# RP/0/RP0/CPU0:ios(config)#show running-config vrf
+# Sun Mar 10 17:02:38.981 UTC
+# % No such configuration item(s)
+#
+# Using rendered
+# -------------
+#
+- name: Render provided configuration with device configuration
+      cisco.iosxr.iosxr_vrfs:
+        config:
+          - name: VRF4
+            description: VRF4 Description
+            evpn_route_sync: 793
+            fallback_vrf: "parsed-vrf"
+            address_families:
+              - afi: "ipv4"
+                safi: "unicast"
+                export:
+                  route_target: "10.0.0.1:300"
+                  route_policy: "rm-policy"
+                  to:
+                    default_vrf:
+                      route_policy: "rm-policy"
+                    vrf:
+                      allow_imported_vpn: "true"
+                import_config:
+                  route_target: "10.1.3.4:400"
+                  route_policy: "test-policy"
+                  from:
+                    bridge_domain:
+                      advertise_as_vpn: "true"
+                    default_vrf:
+                      route_policy: "test-policy"
+                    vrf:
+                      advertise_as_vpn: "true"
+                maximum:
+                  prefix: 100
+            remote_route_filtering:
+              disable: "true"
+            rd: "3:4"
+            mhost:
+              afi: "ipv4"
+              default_interface: "Loopback0"
+            vpn:
+              id: "2:3"
+        state: rendered
+# Task output
+# -------------
+# commands:
+# - vrf VRF4
+# - description VRF4 Description
+# - evpn-route-sync 793
+# - fallback-vrf parsed-vrf
+# - mhost ipv4 default-interface Loopback0
+# - rd 3:4
+# - remote-route-filtering disable
+# - vpn id 2:3
+# - address-family ipv4 unicast
+# - export route-policy rm-policy
+# - export route-target 10.0.0.1:300
+# - export to default-vrf route-policy rm-policy
+# - export to vrf allow-imported-vpn
+# - import route-target 10.1.3.4:400
+# - import route-policy test-policy
+# - import from bridge-domain advertise-as-vpn
+# - import from default-vrf route-policy test-policy
+# - import from vrf advertise-as-vpn
+# - maximum prefix 100
+#
+# Using gathered
+# -------------
+- name: Display existing running configuration
+  hosts: iosxr
+  gather_facts: false
+  tasks:
+    - name: Gather existing running configuration
+      cisco.iosxr.iosxr_vrfs:
+        state: gathered
+
+# gathered:
+#
+# name: VRF7
+# description: VRF7 description
+# evpn_route_sync: 398
+# fallback_vrf: "replaced-vrf"
+# address_families:
+#   - afi: "ipv4"
+#     safi: "unicast"
+#     export:
+#       route_target: "192.12.3.2:300"
+#       route_policy: "rm-policy"
+#       to:
+#         default_vrf:
+#           route_policy: "rm-policy"
+#         vrf:
+#           allow_imported_vpn: "true"
+#     import_config:
+#       route_target: "12.2.3.4:900"
+#       route_policy: "test-policy"
+#       from:
+#         bridge_domain:
+#           advertise_as_vpn: "true"
+#         default_vrf:
+#           route_policy: "test-policy"
+#         vrf:
+#           advertise_as_vpn: "true"
+#     maximum:
+#       prefix: 200
+# remote_route_filtering:
+#   disable: "true"
+# rd: "67:9"
+# mhost:
+#   afi: "ipv4"
+#   default_interface: "Loopback0"
+# vpn:
+#   id: "4:5"
+#
+# Using parsed
+#
+# parsed.cfg
+# ------------
+# vrf test
+#  description "This is test VRF"
+#  address-family ipv4 unicast
+#   export to default-vrf route-policy "rm-policy"
+#   export to vrf allow-imported-vpn
+#   export route-policy "export-policy"
+#   export route-target
+#    10.1.2.3:200
+#   import route-target
+#    10.0.0.1:300
+#   import route-policy "test-policy"
+#   import from bridge-domain advertise-as-vpn
+#   import from default-vrf route-policy "new-policy"
+#   import from vrf advertise-as-vpn
+#   maximum prefix 23
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 456
+#  vpn 56
+#  fallback-vrf "test-vrf"
+#  remote-route-filtering disable
+#  address-family ipv4 flowspec
+#  rd "testing"
+#  !
+# !
+# vrf my_vrf
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 235
+#  description "this is sample vrf for feature testing"
+#  fallback-vrf "parsed-vrf"
+#  rd "2:3"
+#  remote-route-filtering disable
+#  vpn 23
+#  address-family ipv4 flowspec
+#   import route-policy rm-policy
+#   import from bridge-domain advertise-as-vpn
+#   import route-target
+#    10.1.2.3:300
 """
 
 from ansible.module_utils.basic import AnsibleModule
-
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.vrfs.vrfs import (
     VrfsArgs,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.vrfs.vrfs import Vrf
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.vrfs.vrfs import (
+    Vrf,
+)
 
 
 def main():
