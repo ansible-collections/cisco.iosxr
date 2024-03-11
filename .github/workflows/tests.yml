@@ -35,6 +35,7 @@ jobs:
       - sanity
       - unit-galaxy
       - ansible-lint
+      - unit-source
     runs-on: ubuntu-latest
     steps:
       - run: >-
