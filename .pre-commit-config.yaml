@@ -3,8 +3,7 @@ repos:
   - repo: https://github.com/ansible-network/collection_prep
     rev: 1.1.1
     hooks:
-      # - id: autoversion # removed as being handled by GHA push and release drafter
-      - id: update-docs
+      - id: autoversion # removed as being handled by GHA push and release drafter
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
