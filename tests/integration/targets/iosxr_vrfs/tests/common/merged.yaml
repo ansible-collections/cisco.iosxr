@@ -6,12 +6,12 @@
 
 - block:
     - name: Merge provided configuration with device configuration
-      cisco.iosxr.iosxr_vrfs: &id001
+      cisco.iosxr.iosxr_vrfs: &merged
         config:
-          - name: VRF4
-            description: VRF4 Description
+          - name: test-vrf3
+            description: Testing3
             evpn_route_sync: 793
-            fallback_vrf: "parsed-vrf"
+            fallback_vrf: merged-vrf
             address_families:
               - afi: "ipv4"
                 safi: "unicast"
@@ -46,28 +46,33 @@
         state: merged
       register: result
 
-    - name: Assert that before dicts were correctly generated
-      ansible.builtin.assert:
-        that: "{{ result['before'] == {} }}"
-
     - name: Assert that correct set of commands were generated
       ansible.builtin.assert:
         that:
           - "{{ merged['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
-    - name: Assert that after dicts were correctly generated
+    - name: Assert that after dicts was correctly generated
       ansible.builtin.assert:
         that:
-          - merged['after'] == result['after']
+          - "{{ merged['after'] | symmetric_difference(result['after']) |length == 0 }}"
+
+    - name: Assert that before dicts were correctly generated
+      ansible.builtin.assert:
+        that:
+          - "{{ merged['before'] | symmetric_difference(result['before']) |length == 0 }}"
 
     - name: Merge the provided configuration with the existing running configuration (idempotent)
-      cisco.iosxr.iosxr_vrfs: *id001
+      cisco.iosxr.iosxr_vrfs: *merged
       register: result
-
     - name: Assert that the previous task was idempotent
       ansible.builtin.assert:
         that:
           - result['changed'] == false
           - result.commands|length == 0
+
+    - name: Assert that before dicts were correctly generated
+      ansible.builtin.assert:
+        that:
+          - "{{ merged['after'] | symmetric_difference(result['before']) |length == 0 }}"
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml

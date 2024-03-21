@@ -1,10 +1,10 @@
 ---
 merged:
   commands:
-    - vrf VRF4,
-    - description VRF4 Description
+    - vrf test-vrf,
+    - description Testing
     - evpn-route-sync 793
-    - fallback-vrf parsed-vrf
+    - fallback-vrf merged-vrf
     - mhost ipv4 default-interface Loopback0
     - rd 3:4
     - remote-route-filtering disable
@@ -21,10 +21,10 @@ merged:
     - import from vrf advertise-as-vpn
     - maximum prefix 100
   after:
-    - name: VRF4
-      description: VRF4 Description
+    - name: test-vrf
+      description: Testing
       evpn_route_sync: 793
-      fallback_vrf: "parsed-vrf"
+      fallback_vrf: "merged-vrf"
       mhost:
         afi: "ipv4"
         default_interface: "Loopback0"
@@ -59,8 +59,8 @@ merged:
 
 overridden:
   commands:
-    - vrf VRF6
-    - description VRF6 Description
+    - vrf test-vrf2
+    - description testing
     - evpn-route-sync 101
     - fallback-vrf overridden-vrf
     - mhost ipv4 default-interface Loopback0
@@ -83,7 +83,7 @@ overridden:
 
 deleted:
   commands:
-    - no vrf VRF6
+    - no vrf test-vrf2
 
 replaced:
   commands:
@@ -109,8 +109,8 @@ replaced:
 
 rendered:
   commands:
-    - vrf VRF4
-    - description VRF4 Description
+    - vrf test-vrf
+    - description Test VRF
     - evpn-route-sync 793
     - fallback-vrf parsed-vrf
     - mhost ipv4 default-interface Loopback0

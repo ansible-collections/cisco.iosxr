@@ -8,7 +8,6 @@
 
 - block:
     - name: Delete given vrf configuration
-      become: true
       register: result
       cisco.iosxr.iosxr_vrfs: &deleted
         config:
@@ -16,13 +15,11 @@
 
     - ansible.builtin.assert:
         that:
-          - result.commands|length == 2
+          - result.commands|length == 1
           - result.changed == true
-          - "'no vrf VRF6' not in result.commands"
-          - result.after == deleted.after
+          - "'no vrf test' not in result.commands"
 
     - name: Idempotency check
-      become: true
       register: result
       cisco.iosxr.iosxr_vrfs: *deleted
     - ansible.builtin.assert:

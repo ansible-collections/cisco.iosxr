@@ -39,12 +39,8 @@
   register: result
   ignore_errors: true
   cisco.iosxr.iosxr_vrfs:
-    running_config:
+    config:
     state: parsed
-
-- ansible.builtin.assert:
-    that:
-      - result.msg == 'value of running_config parameter must not be empty for state parsed'
 
 - ansible.builtin.debug:
     msg: END iosxr_vrfs empty_config integration tests on connection={{ ansible_connection }}

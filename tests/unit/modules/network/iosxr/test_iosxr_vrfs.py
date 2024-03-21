@@ -56,19 +56,19 @@ class TestIosxrVrfsModule(TestIosxrModule):
         run_cfg = dedent(
             """\
             vrf test
-            mhost ipv4 default-interface Loopback0
-            evpn-route-sync 235
-            description "this is sample vrf for feature testing"
-            fallback-vrf "parsed-vrf"
-            rd "2:3"
-            remote-route-filtering disable
-            vpn 23
-            address-family ipv4 flowspec
-             import route-policy rm-policy
-             import from bridge-domain advertise-as-vpn
-             import route-target
-              10.1.2.3:300
-            """,
+             mhost ipv4 default-interface Loopback0
+             evpn-route-sync 235
+             description "this is sample vrf for feature testing"
+             fallback-vrf "parsed-vrf"
+             rd "2:3"
+             remote-route-filtering disable
+             vpn 23
+             address-family ipv4 flowspec
+              import route-policy rm-policy
+              import from bridge-domain advertise-as-vpn
+              import route-target
+               10.1.2.3:300
+            """
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -173,245 +173,448 @@ class TestIosxrVrfsModule(TestIosxrModule):
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
-    def test_iosxr_bgp_address_family_replaced(self):
+    def test_iosxr_vrfs_replaced(self):
         run_cfg = dedent(
             """\
-            router bgp 65536
+            vrf VRF7
+             mhost ipv4 default-interface Loopback0
+             evpn-route-sync 398
+             description VRF7 description
+             vpn id 4:5
+             fallback-vrf replaced-vrf
+             remote-route-filtering disable
+             rd 67:9
              address-family ipv4 unicast
-              bgp attribute-download
-              advertise best-external
-              dynamic-med interval 10
-              bgp scan-time 20
-              redistribute connected metric 10
-              redistribute isis test3 metric 4
-              redistribute application test1 metric 10
-              allocate-label all
-            address-family ipv4 mvpn
+              import route-policy test-policy
+              import from vrf advertise-as-vpn
+              import from bridge-domain advertise-as-vpn
+              import from default-vrf route-policy test-policy
+              import route-target
+               12.2.3.4:900
+              !
+              export route-policy rm-policy
+              export to vrf allow-imported-vpn
+              export to default-vrf route-policy rm-policy
+              export route-target
+               192.12.3.2:300
+              !
+              maximum prefix 200
             """,
         )
         self.get_config.return_value = run_cfg
 
         set_module_args(
             dict(
-                config=dict(
-                    as_number="65536",
-                    address_family=[
-                        dict(
+                config=[
+                    dict(
+                        name="VRF7",
+                        description="VRF7 description",
+                        evpn_route_sync=398,
+                        fallback_vrf="replaced-vrf",
+                        mhost=dict(
                             afi="ipv4",
-                            safi="unicast",
-                            dynamic_med=4,
-                            redistribute=[
-                                dict(
-                                    protocol="application",
-                                    id="test1",
-                                    metric=10,
-                                ),
-                                dict(protocol="connected", metric=10),
-                                dict(protocol="isis", id="test3", metric=4),
-                            ],
+                            default_interface="Loopback0",
                         ),
-                    ],
-                ),
+                        rd="67:9",
+                        remote_route_filtering=dict(disable=True),
+                        vpn="4:5",
+                        address_families=[
+                            dict(
+                                afi="ipv4",
+                                safi="unicast",
+                                export=dict(
+                                    route_policy="rm-policy",
+                                    route_target="192.12.3.2:300",
+                                    to=dict(
+                                        default_vrf=dict(route_policy="rm-policy"),
+                                        vrf=dict(allow_imported_vpn=True),
+                                    ),
+                                ),
+                                import_config=dict(
+                                    from_config=dict(
+                                        bridge_domain=dict(advertise_as_vpn=True),
+                                        default_vrf=dict(route_policy="test-policy"),
+                                        vrf=dict(advertise_as_vpn=True),
+                                    ),
+                                    route_policy="test-policy",
+                                    route_target="12.2.3.4:900",
+                                ),
+                                maximum=dict(prefix=200),
+                            ),
+                        ],
+                    ),
+                ],
                 state="replaced",
             ),
         )
         commands = [
-            "router bgp 65536",
+            "vrf VRF7",
+            "description VRF7 description",
+            "evpn-route-sync 398",
+            "fallback-vrf replaced-vrf",
+            "mhost ipv4 default-interface Loopback0",
+            "rd 67:9",
+            "remote-route-filtering disable",
+            "vpn id 4:5",
             "address-family ipv4 unicast",
-            "no advertise best-external",
-            "no allocate-label all",
-            "no bgp attribute-download",
-            "no bgp scan-time 20",
-            "dynamic-med interval 4",
+            "export route-policy rm-policy",
+            "export route-target 192.12.3.2:300",
+            "export to default-vrf route-policy rm-policy",
+            "export to vrf allow-imported-vpn",
+            "import route-target 12.2.3.4:900",
+            "import route-policy test-policy",
+            "import from bridge-domain advertise-as-vpn",
+            "import from default-vrf route-policy test-policy",
+            "import from vrf advertise-as-vpn",
+            "maximum prefix 200"
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
-    def test_iosxr_bgp_address_family_replaced_idempotent(self):
+    def test_iosxr_vrfs_replaced_idempotent(self):
         run_cfg = dedent(
             """\
-            router bgp 65536
+            vrf VRF7
+             mhost ipv4 default-interface Loopback0
+             evpn-route-sync 398
+             description VRF7 description
+             vpn id 4:5
+             fallback-vrf replaced-vrf
+             remote-route-filtering disable
+             rd 67:9
              address-family ipv4 unicast
-              dynamic-med interval 4
-              redistribute connected metric 10
-              redistribute isis test3 metric 4
-              redistribute application test1 metric 10
-            address-family ipv4 mvpn
+              import route-policy test-policy
+              import from vrf advertise-as-vpn
+              import from bridge-domain advertise-as-vpn
+              import from default-vrf route-policy test-policy
+              import route-target
+               12.2.3.4:900
+              !
+              export route-policy rm-policy
+              export to vrf allow-imported-vpn
+              export to default-vrf route-policy rm-policy
+              export route-target
+               192.12.3.2:300
+              !
+              maximum prefix 200
             """,
         )
         self.get_config.return_value = run_cfg
 
         set_module_args(
             dict(
-                config=dict(
-                    as_number="65536",
-                    address_family=[
-                        dict(
+                config=[
+                    dict(
+                        name="VRF7",
+                        description="VRF7 description",
+                        evpn_route_sync=398,
+                        fallback_vrf="replaced-vrf",
+                        mhost=dict(
                             afi="ipv4",
-                            safi="unicast",
-                            dynamic_med=4,
-                            redistribute=[
-                                dict(
-                                    protocol="application",
-                                    id="test1",
-                                    metric=10,
-                                ),
-                                dict(protocol="connected", metric=10),
-                                dict(protocol="isis", id="test3", metric=4),
-                            ],
+                            default_interface="Loopback0",
                         ),
-                    ],
-                ),
-                state="merged",
+                        rd="67:9",
+                        remote_route_filtering=dict(disable=True),
+                        vpn="4:5",
+                        address_families=[
+                            dict(
+                                afi="ipv4",
+                                safi="unicast",
+                                export=dict(
+                                    route_policy="rm-policy",
+                                    route_target="192.12.3.2:300",
+                                    to=dict(
+                                        default_vrf=dict(route_policy="rm-policy"),
+                                        vrf=dict(allow_imported_vpn=True),
+                                    ),
+                                ),
+                                import_config=dict(
+                                    from_config=dict(
+                                        bridge_domain=dict(advertise_as_vpn=True),
+                                        default_vrf=dict(route_policy="test-policy"),
+                                        vrf=dict(advertise_as_vpn=True),
+                                    ),
+                                    route_policy="test-policy",
+                                    route_target="12.2.3.4:900",
+                                ),
+                                maximum=dict(prefix=200),
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
             ),
         )
         self.execute_module(changed=False, commands=[])
 
-    def test_iosxr_bgp_address_family_deleted(self):
+    def test_iosxr_vrfs_deleted(self):
         run_cfg = dedent(
             """\
-            router bgp 65536
+            vrf VRF7
+             mhost ipv4 default-interface Loopback0
+             evpn-route-sync 398
+             description VRF7 description
+             vpn id 4:5
+             fallback-vrf replaced-vrf
+             remote-route-filtering disable
+             rd 67:9
              address-family ipv4 unicast
-              bgp attribute-download
-              advertise best-external
-              dynamic-med interval 10
-              bgp scan-time 20
-              redistribute connected metric 10
-              redistribute isis test3 metric 4
-              redistribute application test1 metric 10
-              allocate-label all
+              import route-policy test-policy
+              import from vrf advertise-as-vpn
+              import from bridge-domain advertise-as-vpn
+              import from default-vrf route-policy test-policy
+              import route-target
+               12.2.3.4:900
+              !
+              export route-policy rm-policy
+              export to vrf allow-imported-vpn
+              export to default-vrf route-policy rm-policy
+              export route-target
+               192.12.3.2:300
+              !
+              maximum prefix 200
             """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(dict(config=dict(), state="deleted"))
 
-        commands = ["router bgp 65536", "no address-family ipv4 unicast"]
+        commands = ["no vrf VRF7", "no vrf VRF4"]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
-    def test_iosxr_bgp_address_family_deleted1(self):
+    def test_iosxr_vrfs_deleted_idempotent(self):
         run_cfg = dedent(
             """\
-            router bgp 65536
-             address-family ipv6 unicast
-              dynamic-med interval 4
-             address-family ipv4 unicast
-              bgp attribute-download
-              advertise best-external
-              dynamic-med interval 10
-              bgp scan-time 20
-              redistribute connected metric 10
-              redistribute isis test3 metric 4
-              redistribute application test1 metric 10
-              allocate-label all
             """,
         )
         self.get_config.return_value = run_cfg
-        set_module_args(
-            dict(
-                config=dict(
-                    as_number=65536,
-                    address_family=[
-                        dict(afi="ipv6", safi="unicast", dynamic_med=4),
-                    ],
-                ),
-                state="deleted",
-            ),
-        )
-        commands = ["router bgp 65536", "no address-family ipv6 unicast"]
-        result = self.execute_module(changed=True)
-        self.assertEqual(sorted(result["commands"]), sorted(commands))
-
-    def test_iosxr_bgp_address_family_deleted_idempotent(self):
-        run_cfg = dedent(
-            """\
-            "router bgp 65536"
-            """,
-        )
-        self.get_config.return_value = run_cfg
-        set_module_args(dict(config=dict(as_number="65536"), state="deleted"))
+        set_module_args(dict(config=[], state="deleted"))
 
         result = self.execute_module(changed=False)
         self.assertEqual(result["commands"], [])
 
-    def test_iosxr_bgp_address_family_rendered(self):
+    def test_iosxr_vrfs_rendered(self):
         set_module_args(
             dict(
-                config=dict(
-                    as_number="65536",
-                    address_family=[
-                        dict(
+                config=[
+                    dict(
+                        name="VRF4",
+                        description="VRF4 Description",
+                        evpn_route_sync=793,
+                        fallback_vrf="parsed-vrf",
+                        mhost=dict(
                             afi="ipv4",
-                            safi="unicast",
-                            dynamic_med=10,
-                            redistribute=[
-                                dict(
-                                    protocol="application",
-                                    id="test1",
-                                    metric=10,
-                                ),
-                                dict(protocol="connected", metric=10),
-                                dict(protocol="isis", id="test3", metric=4),
-                            ],
-                            bgp=dict(scan_time=20, attribute_download=True),
-                            advertise_best_external=True,
-                            allocate_label=dict(all=True),
+                            default_interface="Loopback0",
                         ),
-                    ],
-                ),
-                state="rendered",
+                        rd="3:4",
+                        remote_route_filtering=dict(disable=True),
+                        vpn="2:3",
+                        address_families=[
+                            dict(
+                                afi="ipv4",
+                                safi="unicast",
+                                export=dict(
+                                    route_policy="rm-policy",
+                                    route_target="10.0.0.1:300",
+                                    to=dict(
+                                        default_vrf=dict(route_policy="rm-policy"),
+                                        vrf=dict(allow_imported_vpn=True),
+                                    ),
+                                ),
+                                import_config=dict(
+                                    from_config=dict(
+                                        bridge_domain=dict(advertise_as_vpn=True),
+                                        default_vrf=dict(route_policy="test-policy"),
+                                        vrf=dict(advertise_as_vpn=True),
+                                    ),
+                                    route_policy="test-policy",
+                                    route_target="10.1.3.4:400",
+                                ),
+                                maximum=dict(prefix=100),
+                            ),
+                        ],
+                    ),
+                ],
+                state="merged",
             ),
         )
         commands = [
-            "router bgp 65536",
+            "vrf VRF4",
+            "description VRF4 Description",
+            "evpn-route-sync 793",
+            "fallback-vrf parsed-vrf",
+            "mhost ipv4 default-interface Loopback0",
+            "rd 3:4",
+            "remote-route-filtering disable",
+            "vpn id 2:3",
             "address-family ipv4 unicast",
-            "advertise best-external",
-            "allocate-label all",
-            "bgp attribute-download",
-            "bgp scan-time 20",
-            "dynamic-med interval 10",
-            "redistribute application test1 metric 10",
-            "redistribute connected metric 10",
-            "redistribute isis test3 metric 4",
+            "export route-policy rm-policy",
+            "export route-target 10.0.0.1:300",
+            "export to default-vrf route-policy rm-policy",
+            "export to vrf allow-imported-vpn",
+            "import route-target 10.1.3.4:400",
+            "import route-policy test-policy",
+            "import from bridge-domain advertise-as-vpn",
+            "import from default-vrf route-policy test-policy",
+            "import from vrf advertise-as-vpn",
+            "maximum prefix 100",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
 
-    def test_iosxr_bgp_address_family_parsed(self):
-        self.maxDiff = None
+    def test_iosxr_vrfs_parsed(self):
         run_cfg = dedent(
             """\
-            router bgp 65536
-             address-family ipv4 unicast
-              bgp attribute-download
-              advertise best-external
-              dynamic-med interval 10
-              bgp scan-time 20
-              redistribute application test1 metric 10
-              allocate-label all
+            vrf my_vrf
+             mhost ipv4 default-interface Loopback0
+             evpn-route-sync 235
+             description "this is sample vrf for feature testing"
+             fallback-vrf "parsed-vrf"
+             rd "2:3"
+             remote-route-filtering disable
+             vpn 23
+             address-family ipv4 flowspec
+              import route-policy rm-policy
+              import from bridge-domain advertise-as-vpn
+              import route-target
+               10.1.2.3:300
             """,
         )
         set_module_args(dict(running_config=run_cfg, state="parsed"))
         result = self.execute_module(changed=False)
-        parsed_list = {
-            "address_family": [
-                {
-                    "advertise_best_external": True,
-                    "safi": "unicast",
-                    "afi": "ipv4",
-                    "allocate_label": {"all": True},
-                    "bgp": {"attribute_download": True, "scan_time": 20},
-                    "dynamic_med": 10,
-                    "redistribute": [
-                        {
-                            "protocol": "application",
-                            "metric": 10,
-                            "id": "test1",
+        parsed_list = [
+            {
+                "address_families": [
+                    {
+                        "afi": "ipv4",
+                        "import_config": {
+                            "from": {
+                                "bridge_domain": {
+                                    "advertise_as_vpn": "true"
+                                }
+                            },
+                            "route_policy": "rm-policy",
+                            "route_target": "10.1.2.3:300"
                         },
-                    ],
+                        "safi": "flowspec"
+                    }
+                ],
+                "description": "this is sample vrf for feature testing",
+                "evpn_route_sync": 235,
+                "fallback_vrf": "parsed-vrf",
+                "mhost": {
+                    "afi": "ipv4",
+                    "default_interface": "Loopback0"
                 },
-            ],
-            "as_number": "65536",
-        }
+                "name": "my_vrf",
+                "rd": "2:3",
+                "remote_route_filtering": {
+                    "disable": "true"
+                }
+            }
+        ]
 
         self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_vrfs_overridden(self):
+        """Unit test for overridden state"""
+
+        run_cfg = dedent(
+            """\
+            vrf VRF6
+             mhost ipv4 default-interface Loopback0
+             evpn-route-sync 101
+             description VRF6 Description
+             vpn id 4:5
+             fallback-vrf overridden-vrf
+             remote-route-filtering disable
+             rd 67:9
+             address-family ipv4 unicast
+              import route-policy test-policy
+              import from vrf advertise-as-vpn
+              import from bridge-domain advertise-as-vpn
+              import from default-vrf route-policy test-policy
+              import route-target
+               10.1.3.4:900
+              !
+              export route-policy rm-policy1
+              export to vrf allow-imported-vpn
+              export to default-vrf route-policy rm-policy
+              export route-target
+               10.0.0.1:300
+              !
+              maximum prefix 500
+            """,
+        )
+
+        self.get_config.return_value = run_cfg
+
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="VRF6",
+                        description="VRF6 description",
+                        evpn_route_sync=101,
+                        fallback_vrf="overridden-vrf",
+                        mhost=dict(
+                            afi="ipv4",
+                            default_interface="Loopback0",
+                        ),
+                        rd="67:9",
+                        remote_route_filtering=dict(disable=True),
+                        vpn="4:5",
+                        address_families=[
+                            dict(
+                                afi="ipv4",
+                                safi="unicast",
+                                export=dict(
+                                    route_policy="rm-policy1",
+                                    route_target="10.0.0.1:300",
+                                    to=dict(
+                                        default_vrf=dict(route_policy="rm-policy"),
+                                        vrf=dict(allow_imported_vpn=True),
+                                    ),
+                                ),
+                                import_config=dict(
+                                    from_config=dict(
+                                        bridge_domain=dict(advertise_as_vpn=True),
+                                        default_vrf=dict(route_policy="test-policy"),
+                                        vrf=dict(advertise_as_vpn=True),
+                                    ),
+                                    route_policy="test-policy",
+                                    route_target="10.1.3.4:900",
+                                ),
+                                maximum=dict(prefix=500),
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        commands = [
+            "vrf VRF6",
+            "description VRF6 Description",
+            "evpn-route-sync 101",
+            "fallback-vrf overridden-vrf",
+            "mhost ipv4 default-interface Loopback0",
+            "rd 67:9",
+            "remote-route-filtering disable",
+            "vpn id 4:5",
+            "address-family ipv4 unicast",
+            "export route-policy rm-policy1",
+            "export route-target 10.0.0.1:300",
+            "export to default-vrf route-policy rm-policy",
+            "export to vrf allow-imported-vpn",
+            "import route-target 10.1.3.4:900",
+            "import route-policy test-policy",
+            "import from bridge-domain advertise-as-vpn",
+            "import from default-vrf route-policy test-policy",
+            "import from vrf advertise-as-vpn",
+            "maximum prefix 500",
+            "no vrf VRF4",
+        ]
+
+        result = self.execute_module(changed=True)
+        self.assertEqual(set(result["commands"]), set(commands))

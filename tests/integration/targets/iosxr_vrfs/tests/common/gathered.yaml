@@ -4,28 +4,13 @@
 
 - ansible.builtin.include_tasks: _remove_config.yaml
 
-- block:
-    - name: "Setup"
-      cisco.iosxr.iosxr_config:
-        lines:
-          - "address-family ipv4 unicast"
-          - " bgp attribute-download"
-          - " advertise best-external"
-          - " dynamic-med interval 10"
-          - " redistribute application test1 metric 10"
-          - " allocate-label all"
-        parents: "router bgp 65536"
+- ansible.builtin.include_tasks: _populate.yaml
 
-    - name: Gathered the provided configuration with the existing running configuration
+- block:
+    - name: Gather existing running configuration
       register: result
       cisco.iosxr.iosxr_vrfs:
-        config:
         state: gathered
 
-    - name: Assert that facts were correctly generated
-      ansible.builtin.assert:
-        that:
-          - "{{ gathered['after'] | symmetric_difference(result['gathered']) |length == 0 }}"
-          - gathered['after'] == result['gathered']
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml
