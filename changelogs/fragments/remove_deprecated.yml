@@ -1,0 +1,3 @@
+---
+major_changes:
+  - iosxr_logging - Remove deprecated logging legacy module.
