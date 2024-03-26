@@ -3,10 +3,18 @@
   register: result
   cisco.iosxr.iosxr_vrfs:
     config:
-      - name: test-vrf
-        description: Testing
+      - name: VRF4
+        description: VRF4 Description
         evpn_route_sync: 793
         fallback_vrf: merged-vrf
+        mhost:
+          afi: "ipv4"
+          default_interface: "Loopback0"
+        rd: "3:4"
+        remote_route_filtering:
+          disable: "true"
+        vpn:
+          id: "2:3"
         address_families:
           - afi: "ipv4"
             safi: "unicast"
@@ -30,11 +38,3 @@
                   advertise_as_vpn: "true"
             maximum:
               prefix: 100
-        remote_route_filtering:
-          disable: "true"
-        rd: "3:4"
-        mhost:
-          afi: "ipv4"
-          default_interface: "Loopback0"
-        vpn:
-          id: "2:3"

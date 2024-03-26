@@ -11,7 +11,7 @@
       register: result
       cisco.iosxr.iosxr_vrfs: &replaced
         config:
-          - name: test-vrf3
+          - name: VRF7
             description: description
             evpn_route_sync: 398
             fallback_vrf: "replaced-vrf"

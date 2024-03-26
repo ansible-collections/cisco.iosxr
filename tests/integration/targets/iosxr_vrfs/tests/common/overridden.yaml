@@ -8,9 +8,9 @@
 
 - block:
     - name: Override the provided configuration with the existing running configuration
-      cisco.iosxr.iosxr_vrfs:
+      cisco.iosxr.iosxr_vrfs: &overridden
         config:
-          - name: test-vrf2
+          - name: VRF6
             description: testing
             evpn_route_sync: 101
             fallback_vrf: overridden-vrf
@@ -51,7 +51,7 @@
     - name: Assert that correct set of commands were generated
       ansible.builtin.assert:
         that:
-          - "{{ overridden['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
+          - "{{ overridden['commands'] | symmetric_difference(result['commands']) | length == 0 }}"
 
     - name: Assert that before dicts are correctly generated
       ansible.builtin.assert:
@@ -63,13 +63,14 @@
         that:
           - "{{ overridden['after'] | symmetric_difference(result['after']) |length == 0 }}"
 
-    # - name: Idempotency check
-    #   register: result
-    #   cisco.iosxr.iosxr_vrfs: *overridden
-    #   ansible.builtin.assert:
-    #     that:
-    #       - result['changed'] == false
-    #       - result.commands|length == 0
+    - name: Idempotency check
+      cisco.iosxr.iosxr_vrfs: *overridden
+      register: result
+    - name: Assert that no changes were made
+      ansible.builtin.assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
 
     - name: Assert that before dict is correctly generated
       ansible.builtin.assert:
