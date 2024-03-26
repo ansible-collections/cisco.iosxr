@@ -1,6 +1,5 @@
 ncclient
 paramiko
-ipaddress
 grpcio
 protobuf
 ansible-pylibssh

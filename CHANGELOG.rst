@@ -5,6 +5,19 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v7.2.0
+======
+
+Minor Changes
+-------------
+
+- Add missing options in afi and safi in address-family of bgp_templates RM.
+
+Bugfixes
+--------
+
+- Fix 'afi' value in bgp_templates RM to valid values.
+
 v7.1.0
 ======
 

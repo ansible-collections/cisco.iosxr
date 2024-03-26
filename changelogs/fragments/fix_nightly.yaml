@@ -1,3 +1,0 @@
----
-trivial:
-  - Fix nightly job updating valid pytest-ansible and black version.
