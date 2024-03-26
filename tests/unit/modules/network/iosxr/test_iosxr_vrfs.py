@@ -270,7 +270,7 @@ class TestIosxrVrfsModule(TestIosxrModule):
             # "import from bridge-domain advertise-as-vpn",
             # "import from default-vrf route-policy test-policy",
             # "import from vrf advertise-as-vpn",
-            "maximum prefix 200"
+            "maximum prefix 200",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -441,7 +441,7 @@ class TestIosxrVrfsModule(TestIosxrModule):
             # "import from default-vrf route-policy test-policy",
             # "import from vrf advertise-as-vpn",
             "maximum prefix 500",
-            "no vrf VRF7"
+            "no vrf VRF7",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -659,14 +659,14 @@ class TestIosxrVrfsModule(TestIosxrModule):
                 "name": "my_vrf",
                 "mhost": {
                     "afi": "ipv4",
-                    "default_interface": "Loopback0"
+                    "default_interface": "Loopback0",
                 },
                 "evpn_route_sync": 235,
                 "description": "this is sample vrf for feature testing",
                 "fallback_vrf": "parsed-vrf",
                 "rd": "2:3",
                 "remote_route_filtering": {
-                    "disable": True
+                    "disable": True,
                 },
                 "address_families": [
                     {
@@ -674,11 +674,11 @@ class TestIosxrVrfsModule(TestIosxrModule):
                         "safi": "flowspec",
                         "import_config": {
                             "route_policy": "rm-policy",
-                            "route_target": "10.1.2.3:300"
+                            "route_target": "10.1.2.3:300",
                         },
-                    }
+                    },
                 ],
-            }
+            },
         ]
 
         self.assertEqual(parsed_list, result["parsed"])
