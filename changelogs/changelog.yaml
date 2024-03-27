@@ -52,11 +52,6 @@ releases:
       - description: LLDP interfaces resource module
         name: iosxr_lldp_interfaces
         namespace: ""
-      - description:
-          Configuration management of system logging services on network
-          devices
-        name: iosxr_logging
-        namespace: ""
       - description: Configures NetConf sub-system service on Cisco IOS-XR devices
         name: iosxr_netconf
         namespace: ""
@@ -720,3 +715,15 @@ releases:
       - fix_bgp_template.yaml
       - fix_nightly.yaml
     release_date: "2024-03-01"
+  8.0.0:
+    changes:
+      major_changes:
+         - This release removes previously deprecated module and attributes from this
+          collection. Please refer to the **Removed Features** section for details.
+      removed_features:
+        - Remove deprecated iosxr_logging module which is replaced with iosxr_logging_global
+          resource module.
+    fragments:
+      - remove_deprecated.yaml
+      - trivial_tests_updates.yaml
+    release_date: "2024-03-27"
