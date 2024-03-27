@@ -5,7 +5,7 @@
 
 The Ansible Cisco IOSXR collection includes a variety of Ansible content to help automate the management of Cisco IOSXR network appliances.
 
-This collection has been tested against Cisco IOSXR version 7.0.2.
+This collection has been tested against Cisco IOS-XR version 7.0.2
 
 <!--start requires_ansible-->
 ## Ansible version compatibility
@@ -76,7 +76,7 @@ Click the ``Content`` button to see the list of content included in this collect
 
 ## Installing this collection
 
-You can install the Cisco IOSXR collection with the Ansible Galaxy CLI:
+You can install the Cisco IOS-XR collection with the Ansible Galaxy CLI:
 
     ansible-galaxy collection install cisco.iosxr
 
