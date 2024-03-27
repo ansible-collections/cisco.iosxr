@@ -21,7 +21,7 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 from ansible_collections.cisco.iosxr.plugins.cliconf.iosxr import Cliconf
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_config
