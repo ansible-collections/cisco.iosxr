@@ -70,7 +70,7 @@ if sys.version_info >= (3,) and sys.version_info < (3, 4, 4):
             data_as_list[-1] = data_as_list[-1][:-1]
 
         for line in data_as_list:
-            yield from line
+            yield line
 
     def mock_open(mock=None, read_data=""):
         """
@@ -100,7 +100,7 @@ if sys.version_info >= (3,) and sys.version_info < (3, 4, 4):
                 while True:
                     yield handle.readline.return_value
             for line in _data:
-                yield from line
+                yield line
 
         global file_spec
         if file_spec is None:
