@@ -5,6 +5,19 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v8.0.0
+======
+
+Major Changes
+-------------
+
+- This release removes previously deprecated module and attributes from this collection. Please refer to the **Removed Features** section for details.
+
+Removed Features (previously deprecated)
+----------------------------------------
+
+- Remove deprecated iosxr_logging module which is replaced with iosxr_logging_global resource module.
+
 v7.2.0
 ======
 
