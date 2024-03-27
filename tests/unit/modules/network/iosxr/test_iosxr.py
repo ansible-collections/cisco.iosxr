@@ -22,15 +22,15 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from os import path
+from unittest import TestCase
 
 from ansible.module_utils._text import to_bytes, to_text
 from mock import MagicMock
 
 from ansible_collections.cisco.iosxr.plugins.cliconf import iosxr
-from ansible_collections.cisco.iosxr.tests.unit.compat import unittest
 
 
-class TestPluginCLIConfIOSXR(unittest.TestCase):
+class TestPluginCLIConfIOSXR(TestCase):
     """Test class for IOSXR CLI Conf Methods"""
 
     def setUp(self):
