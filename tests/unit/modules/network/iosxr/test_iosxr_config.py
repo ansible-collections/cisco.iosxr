@@ -21,10 +21,10 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
+from unittest.mock import MagicMock, patch
 
 from ansible_collections.cisco.iosxr.plugins.cliconf.iosxr import Cliconf
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_config
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import MagicMock, patch
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule, load_fixture
