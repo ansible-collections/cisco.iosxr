@@ -1,5 +1,0 @@
----
-major_changes:
-  - "This release removes the iosxr_logging deprecated module from this collection in favour of iosxr_logging_global module."
-removed_features:
-  - The iosxr_logging module has been removed with this release.
