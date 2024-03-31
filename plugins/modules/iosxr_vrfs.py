@@ -82,7 +82,7 @@ options:
             suboptions:
               route_policy: *route_policy
               route_target: *route_target
-              from:
+              from_config:
                 description: Import routes from a VRF
                 type: dict
                 suboptions:
@@ -179,10 +179,7 @@ EXAMPLES = """
 # RP/0/0/CPU0:iosxr-02#show running-config vrf
 # Fri Feb  9 07:02:35.789 UTC
 # !
-# cdp
-# cdp holdtime 30
-# cdp advertise v1
-# vrf tet
+# vrf test
 #
 - name: Merge provided configuration with device configuration
   hosts: iosxr
@@ -209,7 +206,7 @@ EXAMPLES = """
                 import_config:
                   route_target: "10.1.3.4:400"
                   route_policy: "test-policy"
-                  from:
+                  from_config:
                     bridge_domain:
                       advertise_as_vpn: "true"
                     default_vrf:
@@ -278,7 +275,7 @@ EXAMPLES = """
 #       import_config:
 #         route_target: "10.1.3.4:400"
 #         route_policy: "test-policy"
-#         from:
+#         from_config:
 #           bridge_domain:
 #             advertise_as_vpn: "true"
 #           default_vrf:
@@ -369,7 +366,7 @@ EXAMPLES = """
                 import_config:
                   route_target: "12.2.3.4:900"
                   route_policy: "test-policy"
-                  from:
+                  from_config:
                     bridge_domain:
                       advertise_as_vpn: "true"
                     default_vrf:
@@ -429,7 +426,7 @@ EXAMPLES = """
 #       import_config:
 #         route_target: "12.2.3.4:900"
 #         route_policy: "test-policy"
-#         from:
+#         from_config:
 #           bridge_domain:
 #             advertise_as_vpn: "true"
 #           default_vrf:
@@ -601,7 +598,7 @@ EXAMPLES = """
                 import_config:
                   route_target: "10.1.3.4:900"
                   route_policy: "test-policy"
-                  from:
+                  from_config:
                     bridge_domain:
                       advertise_as_vpn: "true"
                     default_vrf:
@@ -664,7 +661,7 @@ EXAMPLES = """
 #     import_config:
 #       route_target: "10.1.3.4:900"
 #       route_policy: "test-policy"
-#       from:
+#       from_config:
 #         bridge_domain:
 #           advertise_as_vpn: "true"
 #         default_vrf:
@@ -783,7 +780,7 @@ EXAMPLES = """
                 import_config:
                   route_target: "10.1.3.4:400"
                   route_policy: "test-policy"
-                  from:
+                  from_config:
                     bridge_domain:
                       advertise_as_vpn: "true"
                     default_vrf:
@@ -854,7 +851,7 @@ EXAMPLES = """
 #     import_config:
 #       route_target: "12.2.3.4:900"
 #       route_policy: "test-policy"
-#       from:
+#       from_config:
 #         bridge_domain:
 #           advertise_as_vpn: "true"
 #         default_vrf:
