@@ -1,5 +1,5 @@
 ---
 major_changes:
-- Adds a new module `iosxr_vrfs` to manage VRFs on Cisco IOS-XR devices.
-- The module provides the ability to manage VRFs, VRF address families, and VRF VPNs.
-- https://github.com/ansible-collections/cisco.iosxr/pull/467
+  - Adds a new module `iosxr_vrfs` to manage VRFs on Cisco IOS-XR devices.
+  - The module provides the ability to manage VRFs, VRF address families, and VRF VPNs.
+  - https://github.com/ansible-collections/cisco.iosxr/pull/467

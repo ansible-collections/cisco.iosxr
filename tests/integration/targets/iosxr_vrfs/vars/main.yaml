@@ -58,7 +58,6 @@ merged:
           maximum:
             prefix: 100
 
-
 replaced:
   commands:
     - vrf VRF7

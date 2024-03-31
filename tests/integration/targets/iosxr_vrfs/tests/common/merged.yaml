@@ -43,7 +43,7 @@
                       advertise_as_vpn: true
                 maximum:
                   prefix: 100
-        state : merged
+        state: merged
       register: result
 
     - name: Assert that before dicts were correctly generated
