@@ -16,7 +16,9 @@ DOCUMENTATION = """
 module: iosxr_vrfs
 short_description: Manages global VRF configuration.
 description:
-  - This module manages VRF configurations on Cisco IOS-XR devices. It enables playbooks to handle either individual VRFs or the complete VRF collection. It also permits removing non-explicitly stated VRF definitions from the setup.
+  - This module manages VRF configurations on Cisco IOS-XR devices.
+  - It enables playbooks to handle either individual VRFs or the complete VRF collection.
+  - It also permits removing non-explicitly stated VRF definitions from the setup.
 version_added: 7.2.0
 author: Ruchi Pakhle (@Ruchip16)
 notes:
