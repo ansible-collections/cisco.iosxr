@@ -757,9 +757,12 @@ EXAMPLES = """
 # % No such configuration item(s)
 #
 # Using rendered
-# -------------
-#
+# ----------------
 - name: Render provided configuration with device configuration
+  hosts: iosxr
+  gather_facts: false
+  tasks:
+    - name: Render provided configuration with device configuration
       cisco.iosxr.iosxr_vrfs:
         config:
           - name: VRF4
@@ -798,6 +801,8 @@ EXAMPLES = """
             vpn:
               id: "2:3"
         state: rendered
+      register: result
+
 # Task output
 # -------------
 # commands:
