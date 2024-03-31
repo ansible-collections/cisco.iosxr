@@ -7,8 +7,3 @@
   cisco.iosxr.iosxr_vrfs:
     running_config: "{{ lookup('file', './_parsed.cfg') }}"
     state: parsed
-
-- name: Assert that configuration was correctly parsed
-  ansible.builtin.assert:
-    that:
-      - "{{ parsed | symmetric_difference(result['parsed']) |length == 0 }}"

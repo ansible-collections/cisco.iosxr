@@ -79,7 +79,7 @@ class VrfsArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "route_policy": {"type": "str"},
                                 "route_target": {"type": "str"},
-                                "from": {
+                                "from_config": {
                                     "type": "dict",
                                     "options": {
                                         "bridge_domain": {

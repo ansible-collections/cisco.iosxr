@@ -17,7 +17,7 @@
               default_interface: "Loopback0"
             rd: "3:4"
             remote_route_filtering:
-              disable: "true"
+              disable: true
             vpn:
               id: "2:3"
             address_families:
@@ -30,19 +30,19 @@
                     default_vrf:
                       route_policy: "rm-policy"
                     vrf:
-                      allow_imported_vpn: "true"
+                      allow_imported_vpn: true
                 import_config:
                   route_target: "10.1.3.4:400"
                   route_policy: "test-policy"
-                  from:
+                  from_config:
                     bridge_domain:
-                      advertise_as_vpn: "true"
+                      advertise_as_vpn: true
                     default_vrf:
                       route_policy: "test-policy"
                     vrf:
-                      advertise_as_vpn: "true"
+                      advertise_as_vpn: true
                 maximum:
-                  prefix: 200
+                  prefix: 100
         state : merged
       register: result
 

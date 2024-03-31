@@ -234,7 +234,7 @@ class VrfTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "import_config_from_bridge_domain_advertise_as_vpn",
+            "name": "import_config_from_config_bridge_domain_advertise_as_vpn",
             "getval": re.compile(
                 r"""
                 ^vrf\s(?P<name>\S+)
@@ -243,7 +243,7 @@ class VrfTemplate(NetworkTemplate):
                 $""", re.VERBOSE,
             ),
             "setval": "import from bridge-domain advertise-as-vpn",
-            "compval": "import_config.from.bridge_domain.advertise_as_vpn",
+            "compval": "import_config.from_config.bridge_domain.advertise_as_vpn",
             "result": {
                 '{{ name }}': {
                     'name': '{{ name }}',
@@ -252,7 +252,7 @@ class VrfTemplate(NetworkTemplate):
                             "afi": "{{ afi}}",
                             "safi": "{{safi}}",
                             "import_config": {
-                                "from": {
+                                "from_config": {
                                     "bridge_domain": {
                                         "advertise_as_vpn": "{{ true if advertise_as_vpn is defined }}",
                                     },
@@ -264,16 +264,16 @@ class VrfTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "import_config_from_default_vrf_route_policy",
+            "name": "import_config_from_config_default_vrf_route_policy",
             "getval": re.compile(
                 r"""
                 ^vrf\s(?P<name>\S+)
                 (?P<address_families>\s+address-family\s(?P<afi>\S+)\s(?P<safi>\S+))
-                \s+import\sfrom\sdefault-vrf\sroute-policy\s(?P<import_config_from_default_vrf_route_policy>\S+)
+                \s+import\sfrom\sdefault-vrf\sroute-policy\s(?P<import_config_from_config_default_vrf_route_policy>\S+)
                 $""", re.VERBOSE,
             ),
-            "setval": "import from default-vrf route-policy {{ import_config.from.default_vrf.route_policy }}",
-            "compval": "import_config.from.default_vrf.route_policy",
+            "setval": "import from default-vrf route-policy {{ import_config.from_config.default_vrf.route_policy }}",
+            "compval": "import_config.from_config.default_vrf.route_policy",
             "result": {
                 '{{ name }}': {
                     'name': '{{ name }}',
@@ -282,9 +282,9 @@ class VrfTemplate(NetworkTemplate):
                             "afi": "{{ afi}}",
                             "safi": "{{safi}}",
                             "import_config": {
-                                "from": {
+                                "from_config": {
                                     "default_vrf": {
-                                        "route_policy": "{{ import_config_from_default_vrf_route_policy }}",
+                                        "route_policy": "{{ import_config_from_config_default_vrf_route_policy }}",
                                     },
                                 },
                             },
@@ -294,7 +294,7 @@ class VrfTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "import_config_from_vrf_advertise_as_vpn",
+            "name": "import_config_from_config_vrf_advertise_as_vpn",
             "getval": re.compile(
                 r"""
                 ^vrf\s(?P<name>\S+)
@@ -303,7 +303,7 @@ class VrfTemplate(NetworkTemplate):
                 $""", re.VERBOSE,
             ),
             "setval": "import from vrf advertise-as-vpn",
-            "compval": "import_config.from.vrf.advertise_as_vpn",
+            "compval": "import_config.from_config.vrf.advertise_as_vpn",
             "result": {
                 '{{ name }}': {
                     'name': '{{ name }}',
@@ -312,7 +312,7 @@ class VrfTemplate(NetworkTemplate):
                             "afi": "{{ afi}}",
                             "safi": "{{safi}}",
                             "import_config": {
-                                "from": {
+                                "from_config": {
                                     "vrf": {
                                         "advertise_as_vpn": "{{ true if advertise_as_vpn is defined }}",
                                     },

@@ -139,11 +139,11 @@ class TestIosxrVrfsModule(TestIosxrModule):
                                     ),
                                 ),
                                 import_config=dict(
-                                    # from_config=dict(
-                                    #     bridge_domain=dict(advertise_as_vpn=True),
-                                    #     default_vrf=dict(route_policy="test-policy"),
-                                    #     vrf=dict(advertise_as_vpn=True),
-                                    # ),
+                                    from_config=dict(
+                                        bridge_domain=dict(advertise_as_vpn=True),
+                                        default_vrf=dict(route_policy="test-policy"),
+                                        vrf=dict(advertise_as_vpn=True),
+                                    ),
                                     route_policy="test-policy",
                                     route_target="10.1.3.4:400",
                                 ),
@@ -171,9 +171,9 @@ class TestIosxrVrfsModule(TestIosxrModule):
             "export to vrf allow-imported-vpn",
             "import route-target 10.1.3.4:400",
             "import route-policy test-policy",
-            # "import from bridge-domain advertise-as-vpn",
-            # "import from default-vrf route-policy test-policy",
-            # "import from vrf advertise-as-vpn",
+            "import from bridge-domain advertise-as-vpn",
+            "import from default-vrf route-policy test-policy",
+            "import from vrf advertise-as-vpn",
             "maximum prefix 100",
         ]
         result = self.execute_module(changed=True)
@@ -193,6 +193,9 @@ class TestIosxrVrfsModule(TestIosxrModule):
              rd 3:4
              address-family ipv4 unicast
               import route-policy test-policy
+              import from bridge-domain advertise-as-vpn
+              import from default-vrf route-policy test-policy
+              import from vrf advertise-as-vpn
               import route-target
                10.1.3.4:400
               !
@@ -235,11 +238,11 @@ class TestIosxrVrfsModule(TestIosxrModule):
                                     ),
                                 ),
                                 import_config=dict(
-                                    # from_config=dict(
-                                    #     bridge_domain=dict(advertise_as_vpn=True),
-                                    #     default_vrf=dict(route_policy="test-policy"),
-                                    #     vrf=dict(advertise_as_vpn=True),
-                                    # ),
+                                    from_config=dict(
+                                        bridge_domain=dict(advertise_as_vpn=True),
+                                        default_vrf=dict(route_policy="test-policy"),
+                                        vrf=dict(advertise_as_vpn=True),
+                                    ),
                                     route_policy="test-policy",
                                     route_target="12.2.3.4:900",
                                 ),
@@ -267,9 +270,9 @@ class TestIosxrVrfsModule(TestIosxrModule):
             "export to vrf allow-imported-vpn",
             "import route-target 12.2.3.4:900",
             "import route-policy test-policy",
-            # "import from bridge-domain advertise-as-vpn",
-            # "import from default-vrf route-policy test-policy",
-            # "import from vrf advertise-as-vpn",
+            "import from bridge-domain advertise-as-vpn",
+            "import from default-vrf route-policy test-policy",
+            "import from vrf advertise-as-vpn",
             "maximum prefix 200"
         ]
         result = self.execute_module(changed=True)
@@ -289,6 +292,9 @@ class TestIosxrVrfsModule(TestIosxrModule):
              rd 67:9
              address-family ipv4 unicast
               import route-policy test-policy
+              import from bridge-domain advertise-as-vpn
+              import from default-vrf route-policy test-policy
+              import from vrf advertise-as-vpn
               import route-target
                12.2.3.4:900
               !
@@ -331,11 +337,11 @@ class TestIosxrVrfsModule(TestIosxrModule):
                                     ),
                                 ),
                                 import_config=dict(
-                                    # from_config=dict(
-                                    #     bridge_domain=dict(advertise_as_vpn=True),
-                                    #     default_vrf=dict(route_policy="test-policy"),
-                                    #     vrf=dict(advertise_as_vpn=True),
-                                    # ),
+                                    from_config=dict(
+                                        bridge_domain=dict(advertise_as_vpn=True),
+                                        default_vrf=dict(route_policy="test-policy"),
+                                        vrf=dict(advertise_as_vpn=True),
+                                    ),
                                     route_policy="test-policy",
                                     route_target="12.2.3.4:900",
                                 ),
@@ -363,6 +369,9 @@ class TestIosxrVrfsModule(TestIosxrModule):
              rd 67:9
              address-family ipv4 unicast
               import route-policy test-policy
+              import from bridge-domain advertise-as-vpn
+              import from default-vrf route-policy test-policy
+              import from vrf advertise-as-vpn
               import route-target
                12.2.3.4:900
               !
@@ -405,11 +414,11 @@ class TestIosxrVrfsModule(TestIosxrModule):
                                     ),
                                 ),
                                 import_config=dict(
-                                    # from_config=dict(
-                                    #     bridge_domain=dict(advertise_as_vpn=True),
-                                    #     default_vrf=dict(route_policy="test-policy"),
-                                    #     vrf=dict(advertise_as_vpn=True),
-                                    # ),
+                                    from_config=dict(
+                                        bridge_domain=dict(advertise_as_vpn=True),
+                                        default_vrf=dict(route_policy="test-policy"),
+                                        vrf=dict(advertise_as_vpn=True),
+                                    ),
                                     route_policy="test-policy",
                                     route_target="10.1.3.4:900",
                                 ),
@@ -437,9 +446,9 @@ class TestIosxrVrfsModule(TestIosxrModule):
             "export to vrf allow-imported-vpn",
             "import route-target 10.1.3.4:900",
             "import route-policy test-policy",
-            # "import from bridge-domain advertise-as-vpn",
-            # "import from default-vrf route-policy test-policy",
-            # "import from vrf advertise-as-vpn",
+            "import from bridge-domain advertise-as-vpn",
+            "import from default-vrf route-policy test-policy",
+            "import from vrf advertise-as-vpn",
             "maximum prefix 500",
             "no vrf VRF7"
         ]
@@ -460,6 +469,9 @@ class TestIosxrVrfsModule(TestIosxrModule):
              rd 67:9
              address-family ipv4 unicast
               import route-policy test-policy
+              import from bridge-domain advertise-as-vpn
+              import from default-vrf route-policy test-policy
+              import from vrf advertise-as-vpn
               import route-target
                10.1.3.4:900
               !
@@ -502,11 +514,11 @@ class TestIosxrVrfsModule(TestIosxrModule):
                                     ),
                                 ),
                                 import_config=dict(
-                                    # from_config=dict(
-                                    #     bridge_domain=dict(advertise_as_vpn=True),
-                                    #     default_vrf=dict(route_policy="test-policy"),
-                                    #     vrf=dict(advertise_as_vpn=True),
-                                    # ),
+                                    from_config=dict(
+                                        bridge_domain=dict(advertise_as_vpn=True),
+                                        default_vrf=dict(route_policy="test-policy"),
+                                        vrf=dict(advertise_as_vpn=True),
+                                    ),
                                     route_policy="test-policy",
                                     route_target="10.1.3.4:900",
                                 ),
@@ -534,6 +546,9 @@ class TestIosxrVrfsModule(TestIosxrModule):
              rd 67:9
              address-family ipv4 unicast
               import route-policy test-policy
+              import from bridge-domain advertise-as-vpn
+              import from default-vrf route-policy test-policy
+              import from vrf advertise-as-vpn
               import route-target
                12.2.3.4:900
               !
@@ -595,11 +610,11 @@ class TestIosxrVrfsModule(TestIosxrModule):
                                     ),
                                 ),
                                 import_config=dict(
-                                    # from_config=dict(
-                                    #     bridge_domain=dict(advertise_as_vpn=True),
-                                    #     default_vrf=dict(route_policy="test-policy"),
-                                    #     vrf=dict(advertise_as_vpn=True),
-                                    # ),
+                                    from_config=dict(
+                                        bridge_domain=dict(advertise_as_vpn=True),
+                                        default_vrf=dict(route_policy="test-policy"),
+                                        vrf=dict(advertise_as_vpn=True),
+                                    ),
                                     route_policy="test-policy",
                                     route_target="10.1.3.4:400",
                                 ),
@@ -627,9 +642,9 @@ class TestIosxrVrfsModule(TestIosxrModule):
             "export to vrf allow-imported-vpn",
             "import route-target 10.1.3.4:400",
             "import route-policy test-policy",
-            # "import from bridge-domain advertise-as-vpn",
-            # "import from default-vrf route-policy test-policy",
-            # "import from vrf advertise-as-vpn",
+            "import from bridge-domain advertise-as-vpn",
+            "import from default-vrf route-policy test-policy",
+            "import from vrf advertise-as-vpn",
             "maximum prefix 100",
         ]
         result = self.execute_module(changed=False)

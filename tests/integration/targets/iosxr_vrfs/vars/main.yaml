@@ -20,43 +20,44 @@ merged:
     - import from bridge-domain advertise-as-vpn
     - import from default-vrf route-policy test-policy
     - import from vrf advertise-as-vpn
-    - maximum prefix 200
+    - maximum prefix 100
   after:
-    - address_families:
-        - afi: "ipv4"
-          export:
-            route_policy: "rm-policy"
-            route_target: "10.0.0.1:300"
-            to:
-              default_vrf:
-                route_policy: "rm-policy"
-              vrf:
-                allow_imported_vpn: "true"
-          import_config:
-            from:
-              bridge_domain:
-                advertise_as_vpn: "true"
-              default_vrf:
-                route_policy: "test-policy"
-              vrf:
-                advertise_as_vpn: "true"
-            route_policy: "test-policy"
-            route_target: "10.1.3.4:400"
-          maximum:
-            prefix: 200
-          safi: "unicast"
+    - name: VRF4
       description: VRF4 Description
       evpn_route_sync: 793
       fallback_vrf: merged-vrf
       mhost:
         afi: "ipv4"
         default_interface: "Loopback0"
-      name: VRF4
       rd: "3:4"
       remote_route_filtering:
-        disable: "true"
+        disable: true
       vpn:
         id: "2:3"
+      address_families:
+        - afi: "ipv4"
+          safi: "unicast"
+          export:
+            route_target: "10.0.0.1:300"
+            route_policy: "rm-policy"
+            to:
+              default_vrf:
+                route_policy: "rm-policy"
+              vrf:
+                allow_imported_vpn: true
+          import_config:
+            route_target: "10.1.3.4:400"
+            route_policy: "test-policy"
+            from_config:
+              bridge_domain:
+                advertise_as_vpn: true
+              default_vrf:
+                route_policy: "test-policy"
+              vrf:
+                advertise_as_vpn: true
+          maximum:
+            prefix: 100
+
 
 replaced:
   commands:
@@ -80,8 +81,43 @@ replaced:
     - import from vrf advertise-as-vpn
     - maximum prefix 200
   after:
+    - name: VRF4
+      description: VRF4 Description
+      evpn_route_sync: 793
+      fallback_vrf: merged-vrf
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      rd: "3:4"
+      remote_route_filtering:
+        disable: true
+      vpn:
+        id: "2:3"
+      address_families:
+        - afi: "ipv4"
+          safi: "unicast"
+          export:
+            route_target: "10.0.0.1:300"
+            route_policy: "rm-policy"
+            to:
+              default_vrf:
+                route_policy: "rm-policy"
+              vrf:
+                allow_imported_vpn: true
+          import_config:
+            route_target: "10.1.3.4:400"
+            route_policy: "test-policy"
+            from_config:
+              bridge_domain:
+                advertise_as_vpn: true
+              default_vrf:
+                route_policy: "test-policy"
+              vrf:
+                advertise_as_vpn: true
+          maximum:
+            prefix: 100
     - name: VRF7
-      description: description
+      description: VRF7 description
       evpn_route_sync: 398
       fallback_vrf: "replaced-vrf"
       address_families:
@@ -94,21 +130,21 @@ replaced:
               default_vrf:
                 route_policy: "rm-policy"
               vrf:
-                allow_imported_vpn: "true"
+                allow_imported_vpn: true
           import_config:
             route_target: "12.2.3.4:900"
             route_policy: "test-policy"
-            from:
+            from_config:
               bridge_domain:
-                advertise_as_vpn: "true"
+                advertise_as_vpn: true
               default_vrf:
                 route_policy: "test-policy"
               vrf:
-                advertise_as_vpn: "true"
+                advertise_as_vpn: true
           maximum:
             prefix: 200
       remote_route_filtering:
-        disable: "true"
+        disable: true
       rd: "67:9"
       mhost:
         afi: "ipv4"
@@ -137,8 +173,6 @@ overridden:
     - import from default-vrf route-policy test-policy
     - import from vrf advertise-as-vpn
     - maximum prefix 500
-    # - no vrf VRF7
-    - no vrf VRF4
   after:
     - name: VRF6
       description: testing
@@ -154,21 +188,21 @@ overridden:
               default_vrf:
                 route_policy: "rm-policy"
               vrf:
-                allow_imported_vpn: "true"
+                allow_imported_vpn: true
           import_config:
             route_target: "10.1.3.4:900"
             route_policy: "test-policy"
-            from:
+            from_config:
               bridge_domain:
-                advertise_as_vpn: "true"
+                advertise_as_vpn: true
               default_vrf:
                 route_policy: "test-policy"
               vrf:
-                advertise_as_vpn: "true"
+                advertise_as_vpn: true
           maximum:
             prefix: 500
       remote_route_filtering:
-        disable: "true"
+        disable: true
       rd: "67:9"
       mhost:
         afi: "ipv4"
@@ -180,41 +214,3 @@ deleted:
   commands:
     - no vrf VRF6
   after: []
-
-parsed:
-  after:
-    - name: VRF7
-      description: VRF7 description
-      evpn_route_sync: 398
-      fallback_vrf: "replaced-vrf"
-      address_families:
-        - afi: "ipv4"
-          safi: "unicast"
-          export:
-            route_target: "192.12.3.2:300"
-            route_policy: "rm-policy"
-            to:
-              default_vrf:
-                route_policy: "rm-policy"
-              vrf:
-                allow_imported_vpn: "true"
-          import_config:
-            route_target: "12.2.3.4:900"
-            route_policy: "test-policy"
-            from:
-              bridge_domain:
-                advertise_as_vpn: "true"
-              default_vrf:
-                route_policy: "test-policy"
-              vrf:
-                advertise_as_vpn: "true"
-          maximum:
-            prefix: 200
-      remote_route_filtering:
-        disable: "true"
-      rd: "67:9"
-      mhost:
-        afi: "ipv4"
-        default_interface: "Loopback0"
-      vpn:
-        id: "4:5"

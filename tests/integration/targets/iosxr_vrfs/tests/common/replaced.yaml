@@ -8,11 +8,10 @@
 
 - block:
     - name: Replace given vrf configuration with provided configurations
-      register: result
       cisco.iosxr.iosxr_vrfs: &replaced
         config:
           - name: VRF7
-            description: description
+            description: VRF7 description
             evpn_route_sync: 398
             fallback_vrf: "replaced-vrf"
             address_families:
@@ -25,21 +24,21 @@
                     default_vrf:
                       route_policy: "rm-policy"
                     vrf:
-                      allow_imported_vpn: "true"
+                      allow_imported_vpn: true
                 import_config:
                   route_target: "12.2.3.4:900"
                   route_policy: "test-policy"
-                  from:
+                  from_config:
                     bridge_domain:
-                      advertise_as_vpn: "true"
+                      advertise_as_vpn: true
                     default_vrf:
                       route_policy: "test-policy"
                     vrf:
-                      advertise_as_vpn: "true"
+                      advertise_as_vpn: true
                 maximum:
                   prefix: 200
             remote_route_filtering:
-              disable: "true"
+              disable: true
             rd: "67:9"
             mhost:
               afi: "ipv4"
@@ -47,18 +46,17 @@
             vpn:
               id: "4:5"
         state: replaced
+      register: result
 
     - name: Assert that correct set of commands were generated
       ansible.builtin.assert:
         that:
-          - "{{ replaced['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
+          - "{{ replaced['commands'] | symmetric_difference(result['commands']) | length == 0 }}"
 
     - name: Assert that before dicts are correctly generated
       ansible.builtin.assert:
         that:
           - "{{ merged['after'] | symmetric_difference(result['before']) |length == 0 }}"
-    - ansible.builtin.debug:
-        msg: "{{ replaced['after'] | symmetric_difference(result['after']) }}"
 
     - name: Assert that after dict is correctly generated
       ansible.builtin.assert:
