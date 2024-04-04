@@ -225,8 +225,8 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>ipv4</li>
                                     <li>ipv6</li>
-                                    <li>vpn4</li>
-                                    <li>vpn6</li>
+                                    <li>vpnv4</li>
+                                    <li>vpnv6</li>
                                     <li>link-state</li>
                                     <li>l2vpn</li>
                         </ul>

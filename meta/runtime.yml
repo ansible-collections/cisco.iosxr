@@ -30,15 +30,6 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr_lldp_global
     lldp_interfaces:
       redirect: cisco.iosxr.iosxr_lldp_interfaces
-    logging:
-      redirect: cisco.iosxr.iosxr_logging
-      deprecation:
-        removal_date: "2023-08-01"
-        warning_text: See the plugin documentation for more details
-    iosxr_logging:
-      deprecation:
-        removal_date: "2023-08-01"
-        warning_text: See the plugin documentation for more details
     logging_global:
       redirect: cisco.iosxr.iosxr_logging_global
     netconf:

@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Add missing options in afi and safi in address-family of bgp_templates RM.
