@@ -71,7 +71,6 @@ class Vrf(ResourceModule):
         :rtype: A dictionary
         :returns: The result from module execution
         """
-        # import epdb; epdb.serve()
         if self.state not in ["parsed", "gathered"]:
             self.generate_commands()
             self.run_commands()
