@@ -9,9 +9,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from textwrap import dedent
+from unittest.mock import patch
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_ping
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule
@@ -135,7 +135,7 @@ class TestIosxrPingModule(TestIosxrModule):
         }
         self.assertEqual(result, mock_res)
 
-    def test_iosxr_ping_state_absent_pass(self):
+    def test_iosxr_ping_state_absent_pass_1(self):
         self.execute_show_command.return_value = dedent(
             """\
             Type escape sequence to abort.

@@ -23,9 +23,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from textwrap import dedent
+from unittest.mock import patch
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_bgp_templates
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule
@@ -239,6 +239,22 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
                                     safi="unicast",
                                     advertise=dict(local_labeled_route=dict(set=True)),
                                 ),
+                                dict(
+                                    afi="vpnv4",
+                                    safi="unicast",
+                                ),
+                                dict(
+                                    afi="vpnv6",
+                                    safi="unicast",
+                                ),
+                                dict(
+                                    afi="link-state",
+                                    safi="link-state",
+                                ),
+                                dict(
+                                    afi="l2vpn",
+                                    safi="evpn",
+                                ),
                             ],
                         ),
                         dict(
@@ -324,6 +340,10 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
             "bfd fast-detect strict-mode",
             "internal-vpn-client",
             "precedence critical",
+            "address-family vpnv4 unicast",
+            "address-family vpnv6 unicast",
+            "address-family link-state link-state",
+            "address-family l2vpn evpn",
             "address-family ipv4 unicast",
             "advertise local-labeled-route",
             "neighbor-group test1",
@@ -1128,6 +1148,14 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
                   precedence critical
                   advertisement-interval 10
                   internal-vpn-client
+                  address-family vpnv4 unicast
+                  !
+                  address-family vpnv6 unicast
+                  !
+                  address-family link-state link-state
+                  !
+                  address-family l2vpn evpn
+                  !
                   address-family ipv4 unicast
                    advertise local-labeled-route
                   !
@@ -1199,6 +1227,10 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
                     "advertisement_interval": 10,
                     "internal_vpn_client": True,
                     "address_family": [
+                        {"afi": "vpnv4", "safi": "unicast"},
+                        {"afi": "vpnv6", "safi": "unicast"},
+                        {"afi": "link-state", "safi": "link-state"},
+                        {"afi": "l2vpn", "safi": "evpn"},
                         {
                             "afi": "ipv4",
                             "safi": "unicast",

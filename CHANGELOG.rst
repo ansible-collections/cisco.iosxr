@@ -5,6 +5,32 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v8.0.0
+======
+
+Major Changes
+-------------
+
+- This release removes previously deprecated module and attributes from this collection. Please refer to the **Removed Features** section for details.
+
+Removed Features (previously deprecated)
+----------------------------------------
+
+- Remove deprecated iosxr_logging module which is replaced with iosxr_logging_global resource module.
+
+v7.2.0
+======
+
+Minor Changes
+-------------
+
+- Add missing options in afi and safi in address-family of bgp_templates RM.
+
+Bugfixes
+--------
+
+- Fix 'afi' value in bgp_templates RM to valid values.
+
 v7.1.0
 ======
 

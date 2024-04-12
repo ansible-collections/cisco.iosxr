@@ -23,9 +23,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from textwrap import dedent
+from unittest.mock import patch
 
 from ansible_collections.cisco.iosxr.plugins.modules import iosxr_bgp_neighbor_address_family
-from ansible_collections.cisco.iosxr.tests.unit.compat.mock import patch
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule
