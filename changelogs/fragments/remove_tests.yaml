@@ -1,3 +1,0 @@
----
-trivial:
-  - Remove tests related to iosxr_logging deprecated module.

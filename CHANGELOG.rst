@@ -5,6 +5,21 @@ Cisco Iosxr Collection Release Notes
 .. contents:: Topics
 
 
+v9.0.0
+======
+
+Major Changes
+-------------
+
+- Update the netcommon base version to support cli_restore plugin.
+
+Minor Changes
+-------------
+
+- Add support for cli_restore functionality.
+- Please refer the PR to know more about core changes (https://github.com/ansible-collections/ansible.netcommon/pull/618).
+- cli_restore module is part of netcommon.
+
 v8.0.0
 ======
 
@@ -370,7 +385,7 @@ Minor Changes
 New Modules
 -----------
 
-- iosxr_hostname - Manages hostname resource module
+- iosxr_hostname - Resource module to configure hostname.
 
 v2.6.0
 ======
@@ -395,7 +410,7 @@ Documentation Changes
 New Modules
 -----------
 
-- iosxr_snmp_server - Manages snmp-server resource module
+- iosxr_snmp_server - Resource module to configure snmp server.
 
 v2.5.0
 ======
@@ -431,7 +446,7 @@ Bugfixes
 New Modules
 -----------
 
-- iosxr_logging_global - Manages logging attributes of Cisco IOSXR network devices
+- iosxr_logging_global - Resource module to configure logging.
 
 v2.3.0
 ======
@@ -453,7 +468,7 @@ Bugfixes
 New Modules
 -----------
 
-- iosxr_prefix_lists - Prefix-Lists resource module.
+- iosxr_prefix_lists - Resource module to configure prefix lists.
 
 v2.2.0
 ======
@@ -539,9 +554,9 @@ Bugfixes
 New Modules
 -----------
 
-- iosxr_bgp_address_family - Manages BGP Address Family resource module.
-- iosxr_bgp_global - Manages BGP global resource module.
-- iosxr_bgp_neighbor_address_family - Manages BGP neighbor address family resource module.
+- iosxr_bgp_address_family - Resource module to configure BGP Address family.
+- iosxr_bgp_global - Resource module to configure BGP.
+- iosxr_bgp_neighbor_address_family - Resource module to configure BGP Neighbor Address family.
 
 v1.2.1
 ======
@@ -569,7 +584,7 @@ Bugfixes
 New Modules
 -----------
 
-- iosxr_ospf_interfaces - OSPF Interfaces Resource Module.
+- iosxr_ospf_interfaces - Resource module to configure OSPF interfaces.
 
 v1.1.0
 ======
@@ -583,7 +598,7 @@ Minor Changes
 New Modules
 -----------
 
-- iosxr_ospfv3 - ospfv3 resource module
+- iosxr_ospfv3 - Resource module to configure OSPFv3.
 
 v1.0.5
 ======
@@ -647,25 +662,22 @@ Netconf
 New Modules
 -----------
 
-- iosxr_acl_interfaces - ACL interfaces resource module
-- iosxr_acls - ACLs resource module
-- iosxr_banner - Manage multiline banners on Cisco IOS XR devices
-- iosxr_bgp - Configure global BGP protocol settings on Cisco IOS-XR
-- iosxr_command - Run commands on remote devices running Cisco IOS XR
-- iosxr_config - Manage Cisco IOS XR configuration sections
-- iosxr_facts - Get facts about iosxr devices.
-- iosxr_interface - (deprecated, removed after 2022-06-01) Manage Interface on Cisco IOS XR network devices
-- iosxr_interfaces - Interfaces resource module
-- iosxr_l2_interfaces - L2 interfaces resource module
-- iosxr_l3_interfaces - L3 interfaces resource module
-- iosxr_lacp - LACP resource module
-- iosxr_lacp_interfaces - LACP interfaces resource module
-- iosxr_lag_interfaces - LAG interfaces resource module
-- iosxr_lldp_global - LLDP resource module
-- iosxr_lldp_interfaces - LLDP interfaces resource module
-- iosxr_logging - Configuration management of system logging services on network devices
+- iosxr_acl_interfaces - Resource module to configure ACL interfaces.
+- iosxr_acls - Resource module to configure ACLs.
+- iosxr_banner - Module to configure multiline banners.
+- iosxr_command - Module to run commands on remote devices.
+- iosxr_config - Module to manage configuration sections.
+- iosxr_facts - Module to collect facts from remote devices.
+- iosxr_interfaces - Resource module to configure interfaces.
+- iosxr_l2_interfaces - Resource Module to configure L2 interfaces.
+- iosxr_l3_interfaces - Resource module to configure L3 interfaces.
+- iosxr_lacp - Resource module to configure LACP.
+- iosxr_lacp_interfaces - Resource module to configure LACP interfaces.
+- iosxr_lag_interfaces - Resource module to configure LAG interfaces.
+- iosxr_lldp_global - Resource module to configure LLDP.
+- iosxr_lldp_interfaces - Resource module to configure LLDP interfaces.
 - iosxr_netconf - Configures NetConf sub-system service on Cisco IOS-XR devices
-- iosxr_ospfv2 - OSPFv2 resource module
-- iosxr_static_routes - Static routes resource module
-- iosxr_system - Manage the system attributes on Cisco IOS XR devices
-- iosxr_user - Manage the aggregate of local users on Cisco IOS XR device
+- iosxr_ospfv2 - Resource module to configure OSPFv2.
+- iosxr_static_routes - Resource module to configure static routes.
+- iosxr_system - Module to manage the system attributes.
+- iosxr_user - Module to manage the aggregates of local users.
