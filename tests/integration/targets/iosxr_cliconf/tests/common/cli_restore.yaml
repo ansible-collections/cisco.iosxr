@@ -1,0 +1,84 @@
+---
+- ansible.builtin.debug: msg="END cliconf/cli_restore.yaml on connection={{ ansible_connection }}"
+
+- block:
+    - name: Prepare appliance for restore
+      ansible.builtin.debug:
+        msg:
+          - "Task to prepare appliance for restore operation"
+
+    - name: Overwrite startup config - archive
+      cisco.iosxr.iosxr_config:
+        lines:
+          - "archive"
+
+    - name: Delete iosxr hostname config
+      register: result
+      cisco.iosxr.iosxr_hostname:
+        config:
+        state: deleted
+
+    - name: Add iosxr hostname config
+      register: result
+      cisco.iosxr.iosxr_hostname:
+        config:
+          hostname: "IOSXRTest"
+        state: merged
+
+    - name: Get running configuration
+      register: result
+      ansible.netcommon.cli_command:
+        command: show running-config
+
+    - name: Copy configuration to file
+      ansible.builtin.copy:
+        content: "{{ result['stdout'] }}"
+        dest: /tmp/iosxr01.cfg
+
+    - name: Modify backedup config
+      ansible.builtin.replace:
+        path: "/tmp/iosxr01.cfg"
+        regexp: IOSXRTest
+        replace: IOSXRTest_restored
+
+    - name: Copy config file to remote host
+      ansible.netcommon.net_put:
+        src: /tmp/iosxr01.cfg
+        protocol: scp
+        dest: "/misc/scratch/iosxr01.cfg"
+
+    - name: Replace syslog test file configuration
+      ansible.netcommon.cli_restore:
+        filename: "iosxr01.cfg"
+        path: "/misc/scratch/"
+
+    - name: Get hostname configuration
+      register: result
+      cisco.iosxr.iosxr_hostname:
+        state: gathered
+
+    - name: Assert that hostname config change is reflected
+      ansible.builtin.assert:
+        that:
+          - "'IOSXRTest_restored' in  result.gathered.hostname"
+
+    - name: Rerun restore
+      ansible.netcommon.cli_restore:
+        filename: "iosxr01.cfg"
+        path: "/misc/scratch/"
+
+    - name: Assert that the previous task was idempotent
+      ansible.builtin.assert:
+        that:
+          - result['changed'] == false
+  always:
+    - name: Delete hostname config
+      cisco.iosxr.iosxr_hostname:
+        state: deleted
+
+    - name: Delete the backup file post backup
+      cisco.iosxr.iosxr_command:
+        commands:
+          - command: "delete /misc/scratch/iosxr01.cfg"
+
+- ansible.builtin.debug: msg="END cliconf/cli_restore.yaml on connection={{ ansible_connection }}"
