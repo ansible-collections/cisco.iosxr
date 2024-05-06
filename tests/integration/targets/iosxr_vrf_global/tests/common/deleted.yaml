@@ -1,6 +1,6 @@
 ---
 - ansible.builtin.debug:
-    msg: Start iosxr_vrfs deleted integration tests connection={{ ansible_connection}}
+    msg: Start iosxr_vrf_global deleted integration tests connection={{ ansible_connection}}
 
 - ansible.builtin.include_tasks: _remove_config.yaml
 
@@ -9,7 +9,7 @@
 - block:
     - name: Delete given vrf configuration
       register: result
-      cisco.iosxr.iosxr_vrfs: &deleted
+      cisco.iosxr.iosxr_vrf_global: &deleted
         config:
         state: deleted
 
@@ -21,7 +21,7 @@
 
     - name: Idempotency check
       register: result
-      cisco.iosxr.iosxr_vrfs: *deleted
+      cisco.iosxr.iosxr_vrf_global: *deleted
     - ansible.builtin.assert:
         that:
           - result.commands|length == 0

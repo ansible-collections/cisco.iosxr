@@ -1,5 +1,5 @@
 ---
 - name: Remove configurations
   register: result
-  cisco.iosxr.iosxr_vrfs:
+  cisco.iosxr.iosxr_vrf_global:
     state: deleted

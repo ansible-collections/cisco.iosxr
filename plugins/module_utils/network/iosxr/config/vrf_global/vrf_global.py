@@ -10,7 +10,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 """
-The iosxr_vrf config file.
+The iosxr_vrf_global config file.
 It is in this file where the current configuration (as dict)
 is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to its desired end-state is
@@ -26,37 +26,26 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 )
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.vrfs import (
-    VrfTemplate,
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.vrf_global import (
+    Vrf_globalTemplate,
 )
 
 
-class Vrf(ResourceModule):
+class Vrf_global(ResourceModule):
     """
-    The iosxr_vrf config class
+    The iosxr_vrf_global config class
     """
 
     def __init__(self, module):
-        super(Vrf, self).__init__(
+        super(Vrf_global, self).__init__(
             empty_fact_val=[],
             facts_module=Facts(module),
             module=module,
-            resource="vrf",
-            tmplt=VrfTemplate(),
+            resource="vrf_global",
+            tmplt=Vrf_globalTemplate(),
         )
         self.parsers = [
             "description",
-            "address_family",
-            "export_route_policy",
-            "export_route_target",
-            "export_to_default_vrf_route_policy",
-            "export_to_vrf_allow_imported_vpn",
-            "import_config_route_target",
-            "import_config_route_policy",
-            "import_config_from_config_bridge_domain_advertise_as_vpn",
-            "import_config_from_config_default_vrf_route_policy",
-            "import_config_from_config_vrf_advertise_as_vpn",
-            "maximum_prefix",
             "evpn_route_sync",
             "fallback_vrf",
             "mhost_default_interface",
@@ -118,7 +107,7 @@ class Vrf(ResourceModule):
             vrf_have = have.pop(name, {})
 
             self.compare(parsers=self.parsers, want=entry, have=vrf_have)
-            self._compare_af(entry, vrf_have)
+            # self._compare_af(entry, vrf_have)
             if len(self.commands) != begin:
                 self.commands.insert(begin, "vrf {0}".format(name))
 
@@ -128,51 +117,11 @@ class Vrf(ResourceModule):
             for name, entry in iteritems(have):
                 self.commands.insert(begin, "no vrf {0}".format(name))
 
-    def _compare_af(self, want, have):
-        """Custom handling of afs option
-        :params want: the want VRF dictionary
-        :params have: the have VRF dictionary
-        """
-        wafs = want.get("address_families", {})
-        hafs = have.get("address_families", {})
-        for name, entry in iteritems(wafs):
-            begin = len(self.commands)
-            af_have = hafs.pop(name, {})
-
-            self.compare(parsers=self.parsers, want=entry, have=af_have)
-            if len(self.commands) != begin:
-                self.commands.insert(
-                    begin,
-                    self._tmplt.render(
-                        {
-                            "afi": entry.get("afi"),
-                            "safi": entry.get("safi"),
-                        },
-                        "address_family",
-                        False,
-                    ),
-                )
-
-        # for deleted and overridden state
-        if self.state != "replaced":
-            for name, entry in iteritems(hafs):
-                self.addcmd(
-                    {"afi": entry.get("afi"), "safi": entry.get("safi")},
-                    "address_family",
-                    True,
-                )
-
     def _vrf_list_to_dict(self, entry):
         """Convert list of items to dict of items
            for efficient diff calculation.
         :params entry: data dictionary
         """
-
-        for vrf in entry:
-            if "address_families" in vrf:
-                vrf["address_families"] = {
-                    (x["afi"], x.get("safi")): x for x in vrf["address_families"]
-                }
 
         entry = {x["name"]: x for x in entry}
         return entry

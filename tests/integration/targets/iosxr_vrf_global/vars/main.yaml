@@ -1,0 +1,90 @@
+---
+merged:
+  before: []
+  commands:
+    - vrf VRF4
+    - description VRF4 Description
+    - evpn-route-sync 793
+    - fallback-vrf merged-vrf
+    - mhost ipv4 default-interface Loopback0
+    - rd 3:4
+    - remote-route-filtering disable
+    - vpn id 2:3
+  after:
+    - name: VRF4
+      description: VRF4 Description
+      evpn_route_sync: 793
+      fallback_vrf: merged-vrf
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      rd: "3:4"
+      remote_route_filtering:
+        disable: true
+      vpn:
+        id: "2:3"
+
+replaced:
+  commands:
+    - vrf VRF7
+    - description VRF7 description
+    - evpn-route-sync 398
+    - fallback-vrf replaced-vrf
+    - mhost ipv4 default-interface Loopback0
+    - rd 67:9
+    - remote-route-filtering disable
+    - vpn id 4:5
+  after:
+    - name: VRF4
+      description: VRF4 Description
+      evpn_route_sync: 793
+      fallback_vrf: merged-vrf
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      rd: "3:4"
+      remote_route_filtering:
+        disable: true
+      vpn:
+        id: "2:3"
+    - name: VRF7
+      description: VRF7 description
+      evpn_route_sync: 398
+      fallback_vrf: "replaced-vrf"
+      remote_route_filtering:
+        disable: true
+      rd: "67:9"
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      vpn:
+        id: "4:5"
+
+overridden:
+  commands:
+    - vrf VRF6
+    - description testing
+    - evpn-route-sync 101
+    - fallback-vrf overridden-vrf
+    - mhost ipv4 default-interface Loopback0
+    - rd 67:9
+    - remote-route-filtering disable
+    - vpn id 4:5
+  after:
+    - name: VRF6
+      description: testing
+      evpn_route_sync: 101
+      fallback_vrf: overridden-vrf
+      remote_route_filtering:
+        disable: true
+      rd: "67:9"
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      vpn:
+        id: "4:5"
+
+deleted:
+  commands:
+    - no vrf VRF6
+  after: []
