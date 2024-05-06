@@ -56,9 +56,6 @@ class Vrf_globalFacts(object):
         if not data:
             data = self.get_config(connection)
 
-        # export_data = flatten_config(data, "export")
-        # import_data = flatten_config(export_data, "import")
-        # address_data = flatten_config(import_data, "address-family")
         data = flatten_config(data, "vrf")
 
         # parse native config using the Vrf_global template
