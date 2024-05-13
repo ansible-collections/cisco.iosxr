@@ -81,7 +81,7 @@ class Vrf_globalTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "mhost_default_interface",
+            "name": "mhost.default_interface",
             "getval": re.compile(
                 r"""
                 ^vrf\s(?P<name>\S+)
@@ -138,7 +138,7 @@ class Vrf_globalTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "vpn_id",
+            "name": "vpn.id",
             "getval": re.compile(
                 r"""
                 ^vrf\s(?P<name>\S+)
