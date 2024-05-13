@@ -5,7 +5,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 #############################################
@@ -25,20 +24,19 @@ __metaclass__ = type
 ##############################################
 
 """
-The arg spec for the iosxr_vrfs module
+The arg spec for the iosxr_vrf_address_family module
 """
 
 
-class VrfsArgs(object):  # pylint: disable=R0903
-    """The arg spec for the iosxr_vrfs module"""
+class Vrf_address_familyArgs(object):  # pylint: disable=R0903
+    """The arg spec for the iosxr_vrf_address_family module
+    """
 
     argument_spec = {
         "config": {
-            "type": "list",
-            "elements": "dict",
+            "type": "dict",
             "options": {
                 "name": {"type": "str", "required": True},
-                "description": {"type": "str"},
                 "address_families": {
                     "type": "list",
                     "elements": "dict",
@@ -59,15 +57,15 @@ class VrfsArgs(object):  # pylint: disable=R0903
                                         "default_vrf": {
                                             "type": "dict",
                                             "options": {
-                                                "route_policy": {"type": "str"},
+                                                "route_policy": {"type": "str"}
                                             },
                                         },
                                         "vrf": {
                                             "type": "dict",
                                             "options": {
                                                 "allow_imported_vpn": {
-                                                    "type": "bool",
-                                                },
+                                                    "type": "bool"
+                                                }
                                             },
                                         },
                                     },
@@ -86,22 +84,22 @@ class VrfsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "advertise_as_vpn": {
-                                                    "type": "bool",
-                                                },
+                                                    "type": "bool"
+                                                }
                                             },
                                         },
                                         "default_vrf": {
                                             "type": "dict",
                                             "options": {
-                                                "route_policy": {"type": "str"},
+                                                "route_policy": {"type": "str"}
                                             },
                                         },
                                         "vrf": {
                                             "type": "dict",
                                             "options": {
                                                 "advertise_as_vpn": {
-                                                    "type": "bool",
-                                                },
+                                                    "type": "bool"
+                                                }
                                             },
                                         },
                                     },
@@ -114,21 +112,6 @@ class VrfsArgs(object):  # pylint: disable=R0903
                         },
                     },
                 },
-                "evpn_route_sync": {"type": "int"},
-                "fallback_vrf": {"type": "str"},
-                "mhost": {
-                    "type": "dict",
-                    "options": {
-                        "afi": {"type": "str", "choices": ["ipv4", "ipv6"]},
-                        "default_interface": {"type": "str"},
-                    },
-                },
-                "rd": {"type": "str"},
-                "remote_route_filtering": {
-                    "type": "dict",
-                    "options": {"disable": {"type": "bool"}},
-                },
-                "vpn": {"type": "dict", "options": {"id": {"type": "str"}}},
             },
         },
         "running_config": {"type": "str"},
