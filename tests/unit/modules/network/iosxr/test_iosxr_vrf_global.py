@@ -150,6 +150,19 @@ class TestIosxrVrfGlobalModule(TestIosxrModule):
             dict(
                 config=[
                     dict(
+                        name="VRF4",
+                        description="VRF4 description",
+                        evpn_route_sync=793,
+                        fallback_vrf="parsed-vrf",
+                        mhost=dict(
+                            afi="ipv4",
+                            default_interface="Loopback0",
+                        ),
+                        rd="3:4",
+                        remote_route_filtering=dict(disable=True),
+                        vpn=dict(id="23"),
+                    ),
+                    dict(
                         name="VRF7",
                         description="VRF7 description",
                         evpn_route_sync=398,
@@ -183,6 +196,14 @@ class TestIosxrVrfGlobalModule(TestIosxrModule):
         """Test the idempotent nature of the iosxr_vrf_global module in replaced state."""
         run_cfg = dedent(
             """\
+            vrf VRF4
+             mhost ipv4 default-interface Loopback0
+             evpn-route-sync 793
+             description VRF4 description
+             vpn id 23
+             fallback-vrf parsed-vrf
+             remote-route-filtering disable
+             rd 3:4
             vrf VRF7
              mhost ipv4 default-interface Loopback0
              evpn-route-sync 398
@@ -198,6 +219,19 @@ class TestIosxrVrfGlobalModule(TestIosxrModule):
         set_module_args(
             dict(
                 config=[
+                    dict(
+                        name="VRF4",
+                        description="VRF4 description",
+                        evpn_route_sync=793,
+                        fallback_vrf="parsed-vrf",
+                        mhost=dict(
+                            afi="ipv4",
+                            default_interface="Loopback0",
+                        ),
+                        rd="3:4",
+                        remote_route_filtering=dict(disable=True),
+                        vpn=dict(id="23"),
+                    ),
                     dict(
                         name="VRF7",
                         description="VRF7 description",
@@ -221,6 +255,14 @@ class TestIosxrVrfGlobalModule(TestIosxrModule):
         """Test the overridden state of the iosxr_vrf_global module."""
         run_cfg = dedent(
             """\
+            vrf VRF4
+             mhost ipv4 default-interface Loopback0
+             evpn-route-sync 793
+             description VRF4 description
+             vpn id 2:3
+             fallback-vrf merged-vrf
+             remote-route-filtering disable
+             rd 3:4
             vrf VRF7
              mhost ipv4 default-interface Loopback0
              evpn-route-sync 398
@@ -228,7 +270,7 @@ class TestIosxrVrfGlobalModule(TestIosxrModule):
              vpn id 4:5
              fallback-vrf replaced-vrf
              remote-route-filtering disable
-             rd 67:9
+             rd 6:9
             """,
         )
         self.get_config.return_value = run_cfg
@@ -236,6 +278,82 @@ class TestIosxrVrfGlobalModule(TestIosxrModule):
         set_module_args(
             dict(
                 config=[
+                    dict(
+                        name="VRF4",
+                    ),
+                    dict(
+                        name="VRF6",
+                        description="VRF6 description",
+                        evpn_route_sync=101,
+                        fallback_vrf="overridden-vrf",
+                        mhost=dict(
+                            afi="ipv4",
+                            default_interface="Loopback0",
+                        ),
+                        rd="9:8",
+                        remote_route_filtering=dict(disable=True),
+                        vpn=dict(id="23:3"),
+                    ),
+                    dict(
+                        name="VRF7",
+                    ),
+                ],
+                state="overridden",
+            ),
+        )
+        commands = [
+            "vrf VRF4",
+            "no description VRF4 description",
+            "no evpn-route-sync 793",
+            "no fallback-vrf merged-vrf",
+            "no mhost ipv4 default-interface Loopback0",
+            "no rd 3:4",
+            "no remote-route-filtering disable",
+            "no vpn id 2:3",
+            "vrf VRF7",
+            "no description VRF7 description",
+            "no evpn-route-sync 398",
+            "no fallback-vrf replaced-vrf",
+            "no mhost ipv4 default-interface Loopback0",
+            "no rd 6:9",
+            "no remote-route-filtering disable",
+            "no vpn id 4:5",
+            "vrf VRF6",
+            "description VRF6 description",
+            "evpn-route-sync 101",
+            "fallback-vrf overridden-vrf",
+            "mhost ipv4 default-interface Loopback0",
+            "rd 9:8",
+            "remote-route-filtering disable",
+            "vpn id 23:3",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_vrf_global_overridden_idempotent(self):
+        """Test the idempotent nature of the iosxr_vrf_global module in overridden state."""
+        run_cfg = dedent(
+            """\
+            vrf VRF4
+            vrf VRF6
+             mhost ipv4 default-interface Loopback0
+             evpn-route-sync 101
+             description VRF6 description
+             vpn id 4:5
+             fallback-vrf overridden-vrf
+             remote-route-filtering disable
+             rd 67:9
+            vrf VRF7
+            """,
+        )
+        self.get_config.return_value = run_cfg
+
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="VRF4",
+                    ),
                     dict(
                         name="VRF6",
                         description="VRF6 description",
@@ -249,55 +367,8 @@ class TestIosxrVrfGlobalModule(TestIosxrModule):
                         remote_route_filtering=dict(disable=True),
                         vpn=dict(id="4:5"),
                     ),
-                ],
-                state="overridden",
-            ),
-        )
-        commands = [
-            "vrf VRF6",
-            "description VRF6 description",
-            "evpn-route-sync 101",
-            "fallback-vrf overridden-vrf",
-            "mhost ipv4 default-interface Loopback0",
-            "rd 67:9",
-            "remote-route-filtering disable",
-            "vpn id 4:5",
-            "no vrf VRF7",
-        ]
-        result = self.execute_module(changed=True)
-        self.assertEqual(sorted(result["commands"]), sorted(commands))
-
-    def test_iosxr_vrf_global_overridden_idempotent(self):
-        """Test the idempotent nature of the iosxr_vrf_global module in overridden state."""
-        run_cfg = dedent(
-            """\
-            vrf VRF6
-             mhost ipv4 default-interface Loopback0
-             evpn-route-sync 101
-             description VRF6 description
-             vpn id 4:5
-             fallback-vrf overridden-vrf
-             remote-route-filtering disable
-             rd 67:9
-            """,
-        )
-        self.get_config.return_value = run_cfg
-
-        set_module_args(
-            dict(
-                config=[
                     dict(
-                        name="VRF6",
-                        description="VRF6 description",
-                        evpn_route_sync=101,
-                        fallback_vrf="overridden-vrf",
-                        mhost=dict(
-                            afi="ipv4",
-                            default_interface="Loopback0",
-                        ),
-                        rd="67:9",
-                        remote_route_filtering=dict(disable=True),
-                        vpn=dict(id="4:5"),
+                        name="VRF7",
                     ),
                 ],
                 state="overridden",
@@ -309,20 +380,46 @@ class TestIosxrVrfGlobalModule(TestIosxrModule):
         """Test the deleted state of the iosxr_vrf_global module."""
         run_cfg = dedent(
             """\
-            vrf VRF7
+            vrf VRF4
+            vrf VRF6
              mhost ipv4 default-interface Loopback0
-             evpn-route-sync 398
-             description VRF7 description
-             vpn id 4:5
-             fallback-vrf replaced-vrf
+             evpn-route-sync 101
+             description VRF6 description
+             vpn id 23:3
+             fallback-vrf overridden-vrf
              remote-route-filtering disable
-             rd 67:9
+             rd 9:8
+            vrf VRF7
             """,
         )
         self.get_config.return_value = run_cfg
-        set_module_args(dict(state="deleted"))
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="VRF4",
+                    ),
+                    dict(
+                        name="VRF6",
+                    ),
+                    dict(
+                        name="VRF7",
+                    ),
+                ],
+                state="deleted",
+            ),
+        )
 
-        commands = ["no vrf VRF7"]
+        commands = [
+            "vrf VRF6",
+            "no description VRF6 description",
+            "no evpn-route-sync 101",
+            "no fallback-vrf overridden-vrf",
+            "no mhost ipv4 default-interface Loopback0",
+            "no rd 9:8",
+            "no remote-route-filtering disable",
+            "no vpn id 23:3",
+        ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
@@ -337,6 +434,25 @@ class TestIosxrVrfGlobalModule(TestIosxrModule):
 
         result = self.execute_module(changed=False)
         self.assertEqual(result["commands"], [])
+
+    def test_ios_vrf_global_purged(self):
+        """Test the purged state of the iosxr_vrf_global module."""
+        run_cfg = dedent(
+            """\
+            vrf VRF4
+            vrf VRF6
+            vrf VRF7
+            """,
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(dict(state="purged"))
+        commands = [
+            "no vrf VRF4",
+            "no vrf VRF6",
+            "no vrf VRF7",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_vrf_global_rendered(self):
         """Test the rendered state of the iosxr_vrf_global module."""

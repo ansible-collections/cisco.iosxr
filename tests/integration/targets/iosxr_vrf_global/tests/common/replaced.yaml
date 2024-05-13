@@ -16,7 +16,7 @@
             fallback_vrf: "replaced-vrf"
             remote_route_filtering:
               disable: true
-            rd: "67:9"
+            rd: "6:9"
             mhost:
               afi: "ipv4"
               default_interface: "Loopback0"

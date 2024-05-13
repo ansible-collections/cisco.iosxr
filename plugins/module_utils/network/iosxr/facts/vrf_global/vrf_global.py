@@ -72,7 +72,7 @@ class Vrf_globalFacts(object):
             ),
         )
 
-        facts["vrf_global"] = params.get("config", {})
+        facts["vrf_global"] = params.get("config", [])
         ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts

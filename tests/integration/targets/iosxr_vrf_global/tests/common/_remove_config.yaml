@@ -2,4 +2,4 @@
 - name: Remove configurations
   register: result
   cisco.iosxr.iosxr_vrf_global:
-    state: deleted
+    state: purged

@@ -33,6 +33,21 @@ class Vrf_globalTemplate(NetworkTemplate):
     # fmt: off
     PARSERS = [
         {
+            "name": "name",
+            "getval": re.compile(
+                r"""
+                ^vrf\s(?P<name>\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "vrf {{ name }}",
+            "result": {
+                '{{ name }}': {
+                    'name': '{{ name }}',
+                },
+            },
+            "shared": True,
+        },
+        {
             "name": "description",
             "getval": re.compile(
                 r"""
@@ -119,7 +134,7 @@ class Vrf_globalTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "remote_route_filtering_disable",
+            "name": "remote_route_filtering.disable",
             "getval": re.compile(
                 r"""
                 ^vrf\s(?P<name>\S+)

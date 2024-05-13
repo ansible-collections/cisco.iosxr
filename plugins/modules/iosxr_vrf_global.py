@@ -297,26 +297,40 @@ EXAMPLES = """
             fallback_vrf: "overridden-vrf"
             remote_route_filtering:
               disable: "true"
-            rd: "67:9"
+            rd: "9:8"
             mhost:
               afi: "ipv4"
               default_interface: "Loopback0"
             vpn:
-              id: "4:5"
+              id: "23:3"
 
 # Task output
 # -------------
 # commands:
+# - vrf VRF4
+# - no description VRF4 Description
+# - no evpn-route-sync 793
+# - no fallback-vrf merged-vrf
+# - no mhost ipv4 default-interface Loopback0
+# - no rd 3:4
+# - no remote-route-filtering disable
+# - no vpn id 2:3
+# - vrf VRF7
+# - no description VRF7 description
+# - no evpn-route-sync 398
+# - no fallback-vrf replaced-vrf
+# - no mhost ipv4 default-interface Loopback0
+# - no rd 6:9
+# - no remote-route-filtering disable
+# - no vpn id 4:5
 # - vrf VRF6
 # - description VRF6 Description
 # - evpn-route-sync 101
 # - fallback-vrf overridden-vrf
 # - mhost ipv4 default-interface Loopback0
-# - rd 67:9
+# - rd 9:8
 # - remote-route-filtering disable
-# - vpn id 4:5
-# - no vrf VRF7
-# - no vrf VRF4
+# - vpn id 23:3
 #
 #
 # after:
@@ -326,17 +340,18 @@ EXAMPLES = """
 # fallback_vrf: "overridden-vrf"
 # remote_route_filtering:
 #   disable: "true"
-# rd: "67:9"
+# rd: "9:8"
 # mhost:
 #   afi: "ipv4"
 #   default_interface: "Loopback0"
 # vpn:
-#   id: "4:5"
+#   id: "23:3"
 #
 # After state:
 # -------------
 # RP/0/RP0/CPU0:ios(config)#show running-config vrf
 # Sun Mar 10 16:54:53.007 UTC
+# vrf VRF4
 # vrf VRF6
 #  mhost ipv4 default-interface Loopback0
 #  evpn-route-sync 101
@@ -345,13 +360,14 @@ EXAMPLES = """
 #  fallback-vrf overridden-vrf
 #  remote-route-filtering disable
 #  rd 67:9
-#
+# vrf VRF7
 #
 # Using deleted
 # Before state:
 # -------------
 # RP/0/RP0/CPU0:ios(config)#show running-config vrf
 # Sun Mar 10 16:54:53.007 UTC
+# vrf VRF4
 # vrf VRF6
 #  mhost ipv4 default-interface Loopback0
 #  evpn-route-sync 101
@@ -360,6 +376,7 @@ EXAMPLES = """
 #  fallback-vrf overridden-vrf
 #  remote-route-filtering disable
 #  rd 67:9
+# vrf VRF7
 #
 - name: Delete the provided configuration
   hosts: iosxr
@@ -367,18 +384,55 @@ EXAMPLES = """
   tasks:
     - name: Delete the provided configuration
       cisco.iosxr.iosxr_vrf_global:
+        config:
         state: deleted
-
 # Task output
 # -------------
 # commands:
-# - no vrf VRF6
+# - vrf VRF6
+# - no description VRF6 Description
+# - no evpn-route-sync 101
+# - no fallback-vrf overridden-vrf
+# - no mhost ipv4 default-interface Loopback0
+# - no rd 9:8
+# - no remote-route-filtering disable
+# - no vpn id 23:3
 #
 # After state:
 # -------------
 # RP/0/RP0/CPU0:ios(config)#show running-config vrf
 # Sun Mar 10 17:02:38.981 UTC
-# % No such configuration item(s)
+# vrf VRF4
+# vrf VRF6
+# vrf VRF7
+#
+# Using purged
+# Before state:
+# -------------
+# RP/0/RP0/CPU0:ios(config)#show running-config vrf
+# vrf VRF4
+# vrf VRF6
+# vrf VRF7
+#
+- name: Purge all the configuration from the device
+  hosts: iosxr
+  gather_facts: false
+  tasks:
+    - name: Purge all the configuration from the device
+      cisco.iosxr.iosxr_vrf_global:
+        state: purged
+# Task output
+# -------------
+# commands:
+# - no vrf VRF4
+# - no vrf VRF6
+# - no vrf VRF7
+#
+# After state:
+# -------------
+# RP/0/RP0/CPU0:ios(config)#show running-config vrf
+# Sun Mar 10 17:02:38.981 UTC
+# -
 #
 # Using rendered
 # ----------------

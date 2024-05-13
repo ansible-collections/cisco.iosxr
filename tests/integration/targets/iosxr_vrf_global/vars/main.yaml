@@ -31,7 +31,7 @@ replaced:
     - evpn-route-sync 398
     - fallback-vrf replaced-vrf
     - mhost ipv4 default-interface Loopback0
-    - rd 67:9
+    - rd 6:9
     - remote-route-filtering disable
     - vpn id 4:5
   after:
@@ -53,7 +53,7 @@ replaced:
       fallback_vrf: "replaced-vrf"
       remote_route_filtering:
         disable: true
-      rd: "67:9"
+      rd: "6:9"
       mhost:
         afi: "ipv4"
         default_interface: "Loopback0"
@@ -63,28 +63,38 @@ replaced:
 overridden:
   commands:
     - vrf VRF6
-    - description testing
+    - description VRF6 Description
     - evpn-route-sync 101
     - fallback-vrf overridden-vrf
     - mhost ipv4 default-interface Loopback0
-    - rd 67:9
+    - rd 9:8
     - remote-route-filtering disable
-    - vpn id 4:5
+    - vpn id 23:3
   after:
     - name: VRF6
-      description: testing
+      description: VRF6 Description
       evpn_route_sync: 101
       fallback_vrf: overridden-vrf
       remote_route_filtering:
         disable: true
-      rd: "67:9"
+      rd: "9:8"
       mhost:
         afi: "ipv4"
         default_interface: "Loopback0"
       vpn:
-        id: "4:5"
+        id: "23:3"
 
 deleted:
   commands:
-    - no vrf VRF6
-  after: []
+    - vrf VRF6
+    - no description VRF6 Description
+    - no evpn-route-sync 101
+    - no fallback-vrf overridden-vrf
+    - no mhost ipv4 default-interface Loopback0
+    - no rd 9:8
+    - no remote-route-filtering disable
+    - no vpn id 23:3
+  after:
+    - name: VRF4
+    - name: VRF6
+    - name: VRF7

@@ -16,7 +16,7 @@ is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to its desired end-state is
 created.
 """
-import q
+
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
@@ -50,7 +50,7 @@ class Vrf_global(ResourceModule):
             "fallback_vrf",
             "mhost.default_interface",
             "rd",
-            "remote_route_filtering_disable",
+            "remote_route_filtering.disable",
             "vpn.id",
         ]
 
@@ -69,7 +69,6 @@ class Vrf_global(ResourceModule):
         """Generate configuration commands to send based on
         want, have and desired state.
         """
-
         wantd = self.want
         haved = self.have
 
@@ -85,10 +84,9 @@ class Vrf_global(ResourceModule):
             haved = {k: v for k, v in haved.items() if k in wantd or not wantd}
             wantd = {}
 
+        # remove superfluous config for overridden and deleted
         if self.state in ["overridden", "deleted"]:
             for k, have in haved.items():
-                q(k)
-                q(have)
                 if k not in wantd:
                     self._compare(want={}, have=have, vrf=k)
 
@@ -100,6 +98,11 @@ class Vrf_global(ResourceModule):
             self._compare(want=want, have=haved.pop(k, {}), vrf=k)
 
     def _compare(self, want, have, vrf):
+        """Leverages the base class `compare()` method and
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Vrf network resource.
+        """
         begin = len(self.commands)
         self.compare(self.parsers, want=want, have=have)
         if len(self.commands) != begin:
@@ -110,11 +113,9 @@ class Vrf_global(ResourceModule):
            for efficient diff calculation.
         :params entry: data dictionary
         """
-
         entry = {x["name"]: x for x in entry}
         return entry
 
     def purge(self, have):
         """Purge the VRF configuration"""
         self.commands.append("no vrf {0}".format(have["name"]))
-

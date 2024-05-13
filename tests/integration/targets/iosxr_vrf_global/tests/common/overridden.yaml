@@ -11,17 +11,17 @@
       cisco.iosxr.iosxr_vrf_global: &overridden
         config:
           - name: VRF6
-            description: testing
+            description: VRF6 Description
             evpn_route_sync: 101
             fallback_vrf: overridden-vrf
             mhost:
               afi: "ipv4"
               default_interface: "Loopback0"
-            rd: "67:9"
+            rd: "9:8"
             remote_route_filtering:
               disable: true
             vpn:
-              id: "4:5"
+              id: "23:3"
         state: overridden
       register: result
 
