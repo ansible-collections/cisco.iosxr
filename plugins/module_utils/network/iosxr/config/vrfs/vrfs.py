@@ -1,4 +1,3 @@
-#
 # -*- coding: utf-8 -*-
 # Copyright 2024 Red Hat
 # GNU General Public License v3.0+
@@ -7,60 +6,67 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
-The iosxr_vrf_address_family config file.
+The iosxr_vrf config file.
 It is in this file where the current configuration (as dict)
 is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to its desired end-state is
 created.
 """
-import q
+
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    dict_merge,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import (
-    Facts,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_merge,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.vrf_address_family import (
-    Vrf_address_familyTemplate,
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.vrfs import (
+    VrfTemplate,
 )
 
 
-class Vrf_address_family(ResourceModule):
+class Vrf(ResourceModule):
     """
-    The iosxr_vrf_address_family config class
+    The iosxr_vrf config class
     """
 
     def __init__(self, module):
-        super(Vrf_address_family, self).__init__(
-            empty_fact_val={},
+        super(Vrf, self).__init__(
+            empty_fact_val=[],
             facts_module=Facts(module),
             module=module,
-            resource="vrf_address_family",
-            tmplt=Vrf_address_familyTemplate(),
+            resource="vrf",
+            tmplt=VrfTemplate(),
         )
         self.parsers = [
+            "description",
             "address_family",
-            "export.route_policy",
-            "export.route_target",
-            "export.to.default_vrf.route_policy",
-            "export.to.vrf.allow_imported_vpn",
-            "import_config.route_target",
-            "import_config.route_policy",
-            "import_config.from_config.bridge_domain.advertise_as_vpn",
-            "import_config.from_config.default_vrf.route_policy",
-            "import_config.from_config.vrf.advertise_as_vpn",
-            "maximum.prefix",
+            "export_route_policy",
+            "export_route_target",
+            "export_to_default_vrf_route_policy",
+            "export_to_vrf_allow_imported_vpn",
+            "import_config_route_target",
+            "import_config_route_policy",
+            "import_config_from_config_bridge_domain_advertise_as_vpn",
+            "import_config_from_config_default_vrf_route_policy",
+            "import_config_from_config_vrf_advertise_as_vpn",
+            "maximum_prefix",
+            "evpn_route_sync",
+            "fallback_vrf",
+            "mhost_default_interface",
+            "rd",
+            "remote_route_filtering_disable",
+            "vpn_id",
         ]
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -71,34 +77,34 @@ class Vrf_address_family(ResourceModule):
         return self.result
 
     def generate_commands(self):
-        """ Generate configuration commands to send based on
-            want, have and desired state.
+        """Generate configuration commands to send based on
+        want, have and desired state.
         """
+
         wantd = self.want
         haved = self.have
 
         wantd = self._vrf_list_to_dict(wantd)
         haved = self._vrf_list_to_dict(haved)
 
-        # if state is merged, merge want onto have and then compare
+        # if state is merged, merge want into have and then compare
         if self.state == "merged":
             wantd = dict_merge(haved, wantd)
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            to_del = {"address_families": self._set_to_delete(haved, wantd)}
-            haved.update(to_del)
-
-            wantd = {"name": haved.get("name")}
+            haved = {k: v for k, v in iteritems(haved) if k in wantd or not wantd}
+            wantd = {}
 
         self._compare(want=wantd, have=haved)
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
-           populates the list of commands to be run by comparing
-           the `want` and `have` data with the `parsers` defined
-           for the Vrf_address_family network resource.
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Vrf network resource.
         """
+
         self._compare_vrf(want=want, have=have)
 
     def _compare_vrf(self, want, have):
@@ -173,12 +179,3 @@ class Vrf_address_family(ResourceModule):
 
     def _get_config(self):
         return self._connection.get("show running-config vrf")
-
-    def _set_to_delete(self, haved, wantd):
-        afs_to_del = {}
-        h_addrs = haved.get("address_families", {})
-        w_addrs = wantd.get("address_families", {})
-        for af, h_addr in iteritems(h_addrs):
-            if af in w_addrs:
-                afs_to_del[af] = h_addr
-        return afs_to_del
