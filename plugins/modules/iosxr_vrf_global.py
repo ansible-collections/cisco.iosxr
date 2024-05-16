@@ -226,7 +226,7 @@ EXAMPLES = """
 #   evpn_route_sync: 398
 #   fallback_vrf: "replaced-vrf"
 #   remote_route_filtering:
-#     disable: "true"
+#     disable: true
 #   rd: "67:9"
 #   mhost:
 #     afi: "ipv4"
@@ -517,6 +517,55 @@ EXAMPLES = """
 #  rd "2:3"
 #  remote-route-filtering disable
 #  vpn 23
+"""
+
+RETURN = """
+before:
+  description: The configuration prior to the model invocation.
+  returned: always
+  type: dict
+  sample: >
+    The configuration returned will always be in the same format
+     of the parameters above.
+after:
+  description: The resulting configuration model invocation.
+  returned: when changed
+  type: dict
+  sample: >
+    The configuration returned will always be in the same format
+     of the parameters above.
+commands:
+  description: The set of commands pushed to the remote device.
+  returned: always
+  type: list
+  sample:
+  - vrf VRF7
+  - description VRF7 description
+  - rd: 67:9
+  - fallback-vrf replaced-vrf
+rendered:
+  description: The provided configuration in the task rendered in device-native format (offline).
+  returned: when I(state) is C(rendered)
+  type: list
+  sample:
+  - vrf VRF4
+  - description VRF4 Description
+  - evpn-route-sync 793
+  - fallback-vrf parsed-vrf
+gathered:
+  description: Facts about the network resource gathered from the remote device as structured data.
+  returned: when I(state) is C(gathered)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+parsed:
+  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
+  returned: when I(state) is C(parsed)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 """
 
 from ansible.module_utils.basic import AnsibleModule
