@@ -308,6 +308,11 @@ class Cliconf(CliconfBase):
         exclusive=False,
         label=None,
     ):
+        if diff:
+            self._connection.queue_message(
+                "warning",
+                message="setting `diff=True` in edit_config() results in failing sanity checks",
+            )
         operations = self.get_device_operations()
         self.check_edit_config_capability(operations, candidate, commit, replace, comment)
 
