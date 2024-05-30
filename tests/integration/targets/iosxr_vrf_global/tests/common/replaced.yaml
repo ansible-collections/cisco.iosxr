@@ -30,10 +30,10 @@
         that:
           - "{{ replaced['commands'] | symmetric_difference(result['commands']) | length == 0 }}"
 
-    - name: Assert that before dicts are correctly generated
+    - name: Assert that before dict is correctly generated
       ansible.builtin.assert:
         that:
-          - "{{ merged['after'] | symmetric_difference(result['before']) |length == 0 }}"
+          - "{{ replaced['before'] == result['before'] }}"
 
     - name: Assert that after dict is correctly generated
       ansible.builtin.assert:
@@ -47,10 +47,5 @@
         that:
           - result['changed'] == false
           - result.commands|length == 0
-
-    - name: Assert that before dict is correctly generated
-      ansible.builtin.assert:
-        that:
-          - "{{ replaced['after'] | symmetric_difference(result['before']) |length == 0 }}"
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml

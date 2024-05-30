@@ -7,7 +7,7 @@
 - ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-    - name: Delete all VRF configuration from the device
+    - name: Purge all VRF configuration from the device
       cisco.iosxr.iosxr_vrf_global: &id001
         state: purged
       register: result
@@ -28,7 +28,7 @@
         that:
           - result['after'] == []
 
-    - name: Delete all VRF configuration from the device (idempotent)
+    - name: Purge all VRF configuration from the device (idempotent)
       register: result
       cisco.iosxr.iosxr_vrf_global: *id001
     - name: Assert that task was idempotent

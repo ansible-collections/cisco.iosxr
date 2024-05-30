@@ -16,7 +16,21 @@
     - ansible.builtin.assert:
         that:
           - result.changed == true
-          - "'no vrf test' not in result.commands"
+
+    - name: Assert that correct set of commands were generated
+      ansible.builtin.assert:
+        that:
+          - "{{ deleted['commands'] | symmetric_difference(result['commands']) | length == 0 }}"
+
+    - name: Assert that before dicts are correctly generated
+      ansible.builtin.assert:
+        that:
+          - "{{ merged['after'] | symmetric_difference(result['before']) | length == 0 }}"
+
+    - name: Assert that after dicts are correctly generated
+      ansible.builtin.assert:
+        that:
+          - deleted['after'] == result['after']
 
     - name: Idempotency check
       register: result

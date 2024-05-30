@@ -12,5 +12,11 @@
       cisco.iosxr.iosxr_vrf_global:
         state: gathered
 
+    - name: Assert
+      ansible.builtin.assert:
+        that:
+          - result.changed == false
+          - gathered['after'] == result['gathered']
+
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml
