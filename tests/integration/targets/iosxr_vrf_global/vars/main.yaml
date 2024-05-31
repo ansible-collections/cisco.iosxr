@@ -122,6 +122,19 @@ overridden:
         id: "23:3"
 
 deleted:
+  before:
+    - name: VRF4
+      description: VRF4 Description
+      evpn_route_sync: 793
+      fallback_vrf: merged-vrf
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      rd: "3:4"
+      remote_route_filtering:
+        disable: true
+      vpn:
+        id: "2:3"
   commands:
     - vrf VRF4
     - no description VRF4 Description
