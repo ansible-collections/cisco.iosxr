@@ -23,8 +23,8 @@ version_added: 9.0.0
 author: Ruchi Pakhle (@Ruchip16)
 notes:
   - Tested against Cisco IOS-XR Version 9.0.0
-  - This module works with connection C(network_cli). See L(the IOS_XR Platform Options, https://github.com/ansible-collections/cisco.iosxr/blob/main/platform_guide.rst)
-  - For more information on using Ansible to manage Cisco devices see the `Cisco integration page <https://www.ansible.com/integrations/networks/cisco>`_.
+  - This module works with connection C(network_cli).
+  - See L(the IOS_XR Platform Options, https://github.com/ansible-collections/cisco.iosxr/blob/main/platform_guide.rst)
 options:
   config:
     description: A dictionary of options for VRF configurations.
