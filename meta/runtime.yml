@@ -60,3 +60,5 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr_snmp_server
     hostname:
       redirect: cisco.iosxr.iosxr_hostname
+    vrf_global:
+      redirect: cisco.iosxr.iosxr_vrf_global
