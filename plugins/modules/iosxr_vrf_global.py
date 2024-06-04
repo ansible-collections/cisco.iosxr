@@ -24,7 +24,9 @@ author: Ruchi Pakhle (@Ruchip16)
 notes:
   - Tested against Cisco IOS-XR Version 9.0.0
   - This module works with connection C(network_cli).
-  - See L(the IOS_XR Platform Options, https://github.com/ansible-collections/cisco.iosxr/blob/main/platform_guide.rst)
+  - See L(the IOS_XR Platform Options, https://github.com/ansible-collections/cisco.iosxr/blob/main/platform_guide.rst).
+  - The module examples uses callback plugin (stdout_callback = yaml) to generate task
+    output in yaml format.
 options:
   config:
     description: A dictionary of options for VRF configurations.
@@ -100,40 +102,50 @@ options:
         value is returned in the I(parsed) key within the result. The value of C(running_config)
         option should be the same format as the output of command I(show running-config vrf).
         connection to remote host is not required.
+      - The state I(purged) removes all the VRF configurations from the
+        target device. Use caution with this state.
+      - The state I(deleted) only removes the VRF attributes that this module
+        manages and does not negate the VRF completely. Thereby, preserving
+        address-family related configurations under VRF context.
+      - Refer to examples for more details.
     type: str
 """
 
 EXAMPLES = """
+
 # Using merged
+#
 # Before state:
 # -------------
+#
 # RP/0/0/CPU0:iosxr-02#show running-config vrf
 # Fri Feb  9 07:02:35.789 UTC
 # !
 # vrf test
 #
+
 - name: Merge provided configuration with device configuration
-  hosts: iosxr
-  gather_facts: false
-  tasks:
-    - name: Merge provided configuration with device configuration
-      cisco.iosxr.iosxr_vrf_global:
-        config:
-          - name: VRF4
-            description: VRF4 Description
-            evpn_route_sync: 793
-            fallback_vrf: "test-vrf"
-            remote_route_filtering:
-              disable: "true"
-            rd: "3:4"
-            mhost:
-              afi: "ipv4"
-              default_interface: "Loopback0"
-            vpn:
-              id: "2:3"
-        state: merged
-# Task output
-# -------------
+  cisco.iosxr.iosxr_vrf_global:
+    config:
+      - name: VRF4
+        description: VRF4 Description
+        evpn_route_sync: 793
+        fallback_vrf: "test-vrf"
+        remote_route_filtering:
+          disable: "true"
+        rd: "3:4"
+        mhost:
+          afi: "ipv4"
+          default_interface: "Loopback0"
+        vpn:
+          id: "2:3"
+    state: merged
+
+# Task Output:
+# ------------
+#
+# before: []
+#
 # commands:
 # - vrf VRF4
 # - description VRF4 Description
@@ -144,9 +156,8 @@ EXAMPLES = """
 # - remote-route-filtering disable
 # - vpn id 2:3
 #
-#
 # after:
-#   name: VRF4
+# - name: VRF4
 #   description: VRF4 Description
 #   evpn_route_sync: 793
 #   fallback_vrf: "test-vrf"
@@ -160,67 +171,188 @@ EXAMPLES = """
 #     id: "2:3"
 #
 # After state:
-# -------------
+# ------------
+#
 # RP/0/0/CPU0:iosxr-02#show running-config vrf
 # Sat Feb 20 03:49:43.618 UTC
-#  vrf VRF4
-#  description "This is test VRF"
+# vrf VRF4
+#  description "VRF4 Description"
 #  mhost ipv4 default-interface Loopback0
-#  evpn-route-sync 456
-#  vpn 56
+#  evpn-route-sync 793
+#  vpn id 2:3
 #  fallback-vrf "test-vrf"
 #  remote-route-filtering disable
-#  rd "testing"
-#
+#  rd "3:4"
+
 # Using replaced
+#
 # Before state:
 # -------------
+#
 # RP/0/0/CPU0:iosxr-02#show running-config vrf
 # Sat Feb 20 03:49:43.618 UTC
-#  vrf VRF4
-#  description "This is test VRF"
+# vrf VRF4
+#  description "VRF4 Description"
 #  mhost ipv4 default-interface Loopback0
-#  evpn-route-sync 456
-#  vpn 56
+#  evpn-route-sync 793
+#  vpn id 2:3
 #  fallback-vrf "test-vrf"
 #  remote-route-filtering disable
-#  rd "testing"
-#
-#
-- name: Replace the provided configuration with the existing running configuration
-  hosts: iosxr
-  gather_facts: false
-  tasks:
-    - name: Replace the provided configuration with the existing running configuration
-      cisco.iosxr.iosxr_vrf_global:
-        config:
-          - name: VRF7
-            description: VRF7 description
-            evpn_route_sync: 398
-            fallback_vrf: "replaced-vrf"
-            remote_route_filtering:
-              disable: "true"
-            rd: "67:9"
-            mhost:
-              afi: "ipv4"
-              default_interface: "Loopback0"
-            vpn:
-              id: "4:5"
-        state: replaced
+#  rd "3:4"
 
-# -------------
+- name: Replace the provided configuration with the existing running configuration
+  cisco.iosxr.iosxr_vrf_global:
+    config:
+      - name: VRF7
+        description: VRF7 description
+        evpn_route_sync: 398
+        fallback_vrf: "replaced-vrf"
+        remote_route_filtering:
+          disable: "true"
+        rd: "67:9"
+        mhost:
+          afi: "ipv4"
+          default_interface: "Loopback0"
+        vpn:
+          id: "4:5"
+    state: replaced
+
+# Task Output:
+# ------------
+#
+# before:
+# - name: VRF4
+#   description: VRF4 Description
+#   evpn_route_sync: 793
+#   fallback_vrf: "test-vrf"
+#   mhost:
+#     afi: "ipv4"
+#     default_interface: "Loopback0"
+#   rd: "3:4"
+#   remote_route_filtering:
+#     disable: "true"
+#   vpn:
+#     id: "2:3"
+#
 # commands:
+# - vrf VRF4
+# - no vpn id 2:3
 # - vrf VRF7
 # - description VRF7 description
 # - evpn-route-sync 398
 # - fallback-vrf replaced-vrf
 # - mhost ipv4 default-interface Loopback0
-# - rd 67:9
+# - rd 6:9
 # - remote-route-filtering disable
 # - vpn id 4:5
 #
 # after:
-#   name: VRF7
+#   - name: VRF4
+#     description: VRF4 Description
+#     evpn_route_sync: 793
+#     fallback_vrf: "test-vrf"
+#     mhost:
+#       afi: "ipv4"
+#       default_interface: "Loopback0"
+#     rd: "3:4"
+#     remote_route_filtering:
+#       disable: "true"
+#   - name: VRF7
+#     description: VRF7 description
+#     evpn_route_sync: 398
+#     fallback_vrf: "replaced-vrf"
+#     remote_route_filtering:
+#       disable: true
+#     rd: "67:9"
+#     mhost:
+#       afi: "ipv4"
+#       default_interface: "Loopback0"
+#     vpn:
+#       id: "4:5"
+#
+# After state:
+# ------------
+#
+# RP/0/RP0/CPU0:ios(config)#show running-config vrf
+# Sun Mar 10 16:48:53.204 UTC
+# vrf VRF4
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 793
+#  description VRF4 Description
+#  fallback-vrf test-vrf
+#  remote-route-filtering disable
+#  rd 3:4
+# !
+# vrf VRF7
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 398
+#  description VRF7 description
+#  vpn id 4:5
+#  fallback-vrf replaced-vrf
+#  remote-route-filtering disable
+#  rd 67:9
+#  !
+# !
+
+# Using overridden
+#
+# Before state:
+# -------------
+#
+# RP/0/RP0/CPU0:ios(config)#show running-config vrf
+# Sun Mar 10 16:48:53.204 UTC
+# vrf VRF4
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 793
+#  description VRF4 Description
+#  fallback-vrf test-vrf
+#  remote-route-filtering disable
+#  rd 3:4
+#  !
+# !
+# vrf VRF7
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 398
+#  description VRF7 description
+#  vpn id 4:5
+#  fallback-vrf replaced-vrf
+#  remote-route-filtering disable
+#  rd 67:9
+#  !
+# !
+
+- name: Override the provided configuration with the existing running configuration
+  cisco.iosxr.iosxr_vrf_global:
+    state: overridden
+    config:
+      - name: VRF6
+        description: VRF6 Description
+        evpn_route_sync: 101
+        fallback_vrf: "overridden-vrf"
+        remote_route_filtering:
+          disable: "true"
+        rd: "9:8"
+        mhost:
+          afi: "ipv4"
+          default_interface: "Loopback0"
+        vpn:
+          id: "23:3"
+
+# Task Output:
+# ------------
+#
+# before:
+# - name: VRF4
+#   description: VRF4 Description
+#   evpn_route_sync: 793
+#   fallback_vrf: "test-vrf"
+#   mhost:
+#     afi: "ipv4"
+#     default_interface: "Loopback0"
+#   rd: "3:4"
+#   remote_route_filtering:
+#     disable: "true"
+# - name: VRF7
 #   description: VRF7 description
 #   evpn_route_sync: 398
 #   fallback_vrf: "replaced-vrf"
@@ -233,93 +365,20 @@ EXAMPLES = """
 #   vpn:
 #     id: "4:5"
 #
-# After state:
-# -------------
-# RP/0/RP0/CPU0:ios(config)#show running-config vrf
-# Sun Mar 10 16:48:53.204 UTC
-# vrf VRF4
-#  mhost ipv4 default-interface Loopback0
-#  evpn-route-sync 793
-#  description VRF4 Description
-#  vpn id 2:3
-#  fallback-vrf parsed-vrf
-#  remote-route-filtering disable
-#  rd 3:4
-# !
-# vrf VRF7
-#  mhost ipv4 default-interface Loopback0
-#  evpn-route-sync 398
-#  description VRF7 description
-#  vpn id 4:5
-#  fallback-vrf replaced-vrf
-#  remote-route-filtering disable
-#  rd 67:9
-#  !
-# !
-#
-# Using overridden
-# Before state:
-# -------------
-# RP/0/RP0/CPU0:ios(config)#show running-config vrf
-# Sun Mar 10 16:48:53.204 UTC
-# vrf VRF4
-#  mhost ipv4 default-interface Loopback0
-#  evpn-route-sync 793
-#  description VRF4 Description
-#  vpn id 2:3
-#  fallback-vrf parsed-vrf
-#  remote-route-filtering disable
-#  rd 3:4
-#  !
-# !
-# vrf VRF7
-#  mhost ipv4 default-interface Loopback0
-#  evpn-route-sync 398
-#  description VRF7 description
-#  vpn id 4:5
-#  fallback-vrf replaced-vrf
-#  remote-route-filtering disable
-#  rd 67:9
-#  !
-# !
-- name: Override the provided configuration with the existing running configuration
-  hosts: iosxr
-  gather_facts: false
-  tasks:
-    - name: Override the provided configuration with the existing running configuration
-      cisco.iosxr.iosxr_vrf_global:
-        state: overridden
-        config:
-          - name: VRF6
-            description: VRF6 Description
-            evpn_route_sync: 101
-            fallback_vrf: "overridden-vrf"
-            remote_route_filtering:
-              disable: "true"
-            rd: "9:8"
-            mhost:
-              afi: "ipv4"
-              default_interface: "Loopback0"
-            vpn:
-              id: "23:3"
-
-# Task output
-# -------------
 # commands:
 # - vrf VRF4
 # - no description VRF4 Description
 # - no evpn-route-sync 793
-# - no fallback-vrf merged-vrf
+# - no fallback-vrf test-vrf
 # - no mhost ipv4 default-interface Loopback0
 # - no rd 3:4
 # - no remote-route-filtering disable
-# - no vpn id 2:3
 # - vrf VRF7
 # - no description VRF7 description
 # - no evpn-route-sync 398
 # - no fallback-vrf replaced-vrf
 # - no mhost ipv4 default-interface Loopback0
-# - no rd 6:9
+# - no rd 67:9
 # - no remote-route-filtering disable
 # - no vpn id 4:5
 # - vrf VRF6
@@ -331,20 +390,21 @@ EXAMPLES = """
 # - remote-route-filtering disable
 # - vpn id 23:3
 #
-#
 # after:
-# name: VRF6
-# description: VRF6 Description
-# evpn_route_sync: 101
-# fallback_vrf: "overridden-vrf"
-# remote_route_filtering:
-#   disable: "true"
-# rd: "9:8"
-# mhost:
-#   afi: "ipv4"
-#   default_interface: "Loopback0"
-# vpn:
-#   id: "23:3"
+# - name: VRF4
+# - name: VRF6
+#   description: VRF6 Description
+#   evpn_route_sync: 101
+#   fallback_vrf: "overridden-vrf"
+#   remote_route_filtering:
+#     disable: "true"
+#   rd: "9:8"
+#   mhost:
+#     afi: "ipv4"
+#     default_interface: "Loopback0"
+#   vpn:
+#     id: "23:3"
+# - name: VRF7
 #
 # After state:
 # -------------
@@ -355,15 +415,17 @@ EXAMPLES = """
 #  mhost ipv4 default-interface Loopback0
 #  evpn-route-sync 101
 #  description VRF6 Description
-#  vpn id 4:5
+#  vpn id 23:3
 #  fallback-vrf overridden-vrf
 #  remote-route-filtering disable
-#  rd 67:9
+#  rd 9:8
 # vrf VRF7
-#
+
 # Using deleted
+#
 # Before state:
 # -------------
+#
 # RP/0/RP0/CPU0:ios(config)#show running-config vrf
 # Sun Mar 10 16:54:53.007 UTC
 # vrf VRF4
@@ -371,23 +433,38 @@ EXAMPLES = """
 #  mhost ipv4 default-interface Loopback0
 #  evpn-route-sync 101
 #  description VRF6 Description
-#  vpn id 4:5
+#  vpn id 23:3
 #  fallback-vrf overridden-vrf
 #  remote-route-filtering disable
-#  rd 67:9
+#  rd 9:8
 # vrf VRF7
-#
+
 - name: Delete the provided configuration
-  hosts: iosxr
-  gather_facts: false
-  tasks:
-    - name: Delete the provided configuration
-      cisco.iosxr.iosxr_vrf_global:
-        config:
-        state: deleted
-# Task output
-# -------------
+  cisco.iosxr.iosxr_vrf_global:
+    config:
+    state: deleted
+
+# Task Output:
+# ------------
+#
+# before:
+# - name: VRF4
+# - name: VRF6
+#   description: VRF6 Description
+#   evpn_route_sync: 101
+#   fallback_vrf: "overridden-vrf"
+#   remote_route_filtering:
+#     disable: "true"
+#   rd: "9:8"
+#   mhost:
+#     afi: "ipv4"
+#     default_interface: "Loopback0"
+#   vpn:
+#     id: "23:3"
+# - name: VRF7
+
 # commands:
+# - vrf VRF4
 # - vrf VRF6
 # - no description VRF6 Description
 # - no evpn-route-sync 101
@@ -396,113 +473,136 @@ EXAMPLES = """
 # - no rd 9:8
 # - no remote-route-filtering disable
 # - no vpn id 23:3
+# - vrf VRF7
+#
+# after:
+# - name: VRF4
+# - name: VRF6
+# - name: VRF7
 #
 # After state:
-# -------------
+# ------------
+#
 # RP/0/RP0/CPU0:ios(config)#show running-config vrf
 # Sun Mar 10 17:02:38.981 UTC
 # vrf VRF4
 # vrf VRF6
 # vrf VRF7
-#
+
 # Using purged
+#
 # Before state:
 # -------------
+#
 # RP/0/RP0/CPU0:ios(config)#show running-config vrf
 # vrf VRF4
 # vrf VRF6
 # vrf VRF7
-#
+
 - name: Purge all the configuration from the device
-  hosts: iosxr
-  gather_facts: false
-  tasks:
-    - name: Purge all the configuration from the device
-      cisco.iosxr.iosxr_vrf_global:
-        state: purged
-# Task output
-# -------------
+  cisco.iosxr.iosxr_vrf_global:
+    state: purged
+
+# Task Output:
+# ------------
+#
+# before:
+# - name: VRF4
+# - name: VRF6
+# - name: VRF7
+#
 # commands:
 # - no vrf VRF4
 # - no vrf VRF6
 # - no vrf VRF7
+#
+# after: []
 #
 # After state:
 # -------------
 # RP/0/RP0/CPU0:ios(config)#show running-config vrf
 # Sun Mar 10 17:02:38.981 UTC
 # -
-#
-# Using rendered
-# ----------------
-- name: Render provided configuration with device configuration
-  hosts: iosxr
-  gather_facts: false
-  tasks:
-    - name: Render provided configuration with device configuration
-      cisco.iosxr.iosxr_vrf_global:
-        config:
-          - name: VRF4
-            description: VRF4 Description
-            evpn_route_sync: 793
-            fallback_vrf: "parsed-vrf"
-            remote_route_filtering:
-              disable: "true"
-            rd: "3:4"
-            mhost:
-              afi: "ipv4"
-              default_interface: "Loopback0"
-            vpn:
-              id: "2:3"
-        state: rendered
-      register: result
 
-# Task output
-# -------------
-# commands:
+# Using rendered
+#
+- name: Render provided configuration with device configuration
+  cisco.iosxr.iosxr_vrf_global:
+    config:
+      - name: VRF4
+        description: VRF4 Description
+        evpn_route_sync: 793
+        fallback_vrf: "test-vrf"
+        remote_route_filtering:
+          disable: "true"
+        rd: "3:4"
+        mhost:
+          afi: "ipv4"
+          default_interface: "Loopback0"
+        vpn:
+          id: "2:3"
+    state: rendered
+
+# Task Output:
+# ------------
+#
+# rendered:
 # - vrf VRF4
 # - description VRF4 Description
 # - evpn-route-sync 793
-# - fallback-vrf parsed-vrf
+# - fallback-vrf test-vrf
 # - mhost ipv4 default-interface Loopback0
 # - rd 3:4
 # - remote-route-filtering disable
 # - vpn id 2:3
-#
-# Using gathered
-# -------------
-- name: Display existing running configuration
-  hosts: iosxr
-  gather_facts: false
-  tasks:
-    - name: Gather existing running configuration
-      cisco.iosxr.iosxr_vrf_global:
-        state: gathered
 
+# Using gathered
+#
+# Before state:
+# -------------
+#
+# RP/0/RP0/CPU0:ios(config)#show running-config vrf
+# Sun Mar 10 17:02:38.981 UTC
+# vrf VRF4
+#  description "VRF4 Description"
+#  mhost ipv4 default-interface Loopback0
+#  evpn-route-sync 793
+#  vpn id 2:3
+#  fallback-vrf "test-vrf"
+#  remote-route-filtering disable
+#  rd "3:4"
+
+- name: Gather existing running configuration
+  cisco.iosxr.iosxr_vrf_global:
+    state: gathered
+
+# Task Output:
+# ------------
+#
 # gathered:
-#
-# name: VRF7
-# description: VRF7 description
-# evpn_route_sync: 398
-# fallback_vrf: "replaced-vrf"
-# remote_route_filtering:
-#   disable: "true"
-# rd: "67:9"
-# mhost:
-#   afi: "ipv4"
-#   default_interface: "Loopback0"
-# vpn:
-#   id: "4:5"
-#
+# - name: VRF4
+#   description: VRF4 Description
+#   evpn_route_sync: 793
+#   fallback_vrf: "test-vrf"
+#   mhost:
+#     afi: "ipv4"
+#     default_interface: "Loopback0"
+#   rd: "3:4"
+#   remote_route_filtering:
+#     disable: "true"
+#   vpn:
+#     id: "2:3"
+
 # Using parsed
 #
-# parsed.cfg
-# ------------
+# File: parsed.cfg
+# ----------------
+#
 # vrf test
 #  description "This is test VRF"
 #  mhost ipv4 default-interface Loopback0
 #  evpn-route-sync 456
-#  vpn 56
+#  vpn id 56
 #  fallback-vrf "test-vrf"
 #  remote-route-filtering disable
 #  rd "testing"
@@ -515,7 +615,43 @@ EXAMPLES = """
 #  fallback-vrf "parsed-vrf"
 #  rd "2:3"
 #  remote-route-filtering disable
-#  vpn 23
+#  vpn id 23
+#  !
+# !
+
+- name: Parse the provided configuration
+  cisco.iosxr.iosxr_vrf_global:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
+
+# Task Output:
+# ------------
+#
+# parsed:
+# - description: This is test VRF
+#   evpn_route_sync: 456
+#   fallback_vrf: test-vrf
+#   mhost:
+#     afi: ipv4
+#     default_interface: Loopback0
+#   name: test
+#   rd: testing
+#   remote_route_filtering:
+#     disable: true
+#   vpn:
+#     id: '56'
+# - description: this is sample vrf for feature testing
+#   evpn_route_sync: 235
+#   fallback_vrf: parsed-vrf
+#   mhost:
+#     afi: ipv4
+#     default_interface: Loopback0
+#   name: my_vrf
+#   rd: '2:3'
+#   remote_route_filtering:
+#     disable: true
+#   vpn:
+#     id: '23'
 """
 
 RETURN = """
