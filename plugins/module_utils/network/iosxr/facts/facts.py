@@ -98,6 +98,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vr
     Vrf_globalFacts,
 )
 
+
 FACT_LEGACY_SUBSETS = dict(
     default=Default,
     hardware=Hardware,
