@@ -25,8 +25,7 @@ notes:
   - Tested against Cisco IOS-XR Version 9.0.0
   - This module works with connection C(network_cli).
   - See L(the IOS_XR Platform Options, https://github.com/ansible-collections/cisco.iosxr/blob/main/platform_guide.rst).
-  - The module examples uses callback plugin (stdout_callback = yaml) to generate task
-    output in yaml format.
+  - The module examples uses callback plugin (stdout_callback = yaml) to generate task output in yaml format.
 options:
   config:
     description: A dictionary of options for VRF configurations.
