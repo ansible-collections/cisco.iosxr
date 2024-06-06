@@ -465,9 +465,9 @@ class Cliconf(CliconfBase):
                         self.get_option("commit_confirmed_timeout"),
                     )
 
-            cmd_obj[
-                "prompt"
-            ] = "This commit will replace or remove the entire running configuration"
+            cmd_obj["prompt"] = (
+                "This commit will replace or remove the entire running configuration"
+            )
             cmd_obj["answer"] = "yes"
 
         elif self.get_option("commit_confirmed"):
