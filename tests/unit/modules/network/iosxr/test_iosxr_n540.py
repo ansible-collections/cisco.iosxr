@@ -25,7 +25,7 @@ from os import path
 from unittest import TestCase
 
 from ansible.module_utils._text import to_bytes, to_text
-from mock import MagicMock
+from unittest.mock import MagicMock
 
 from ansible_collections.cisco.iosxr.plugins.cliconf import iosxr
 
