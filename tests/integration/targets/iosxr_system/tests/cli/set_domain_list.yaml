@@ -1,0 +1,111 @@
+---
+- ansible.builtin.debug: msg="START cli/set_domain_search.yaml on connection={{ ansible_connection }}"
+
+- name: Setup
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no domain list ansible.com
+      - no domain list redhat.com
+    match: none
+
+- name: Configure domain_search
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+      - redhat.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'domain list ansible.com' in result.commands"
+      - "'domain list redhat.com' in result.commands"
+
+- name: Verify domain_search
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+      - redhat.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Remove one entry
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'no domain list redhat.com' in result.commands"
+
+- name: Verify remove one entry
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Add one entry
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+      - redhat.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'domain list redhat.com' in result.commands"
+
+- name: Verify add one entry
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+      - redhat.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Add and remove one entry
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+      - eng.ansible.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'no domain list redhat.com' in result.commands"
+      - "'domain list eng.ansible.com' in result.commands"
+      - result.commands|length == 2
+
+- name: Verify add and remove one entry
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+      - eng.ansible.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Teardown
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no domain list ansible.com
+      - no domain list eng.ansible.com
+    match: none
+
+- ansible.builtin.debug: msg="END cli/set_domain_search.yaml on connection={{ ansible_connection }}"

@@ -1,0 +1,168 @@
+---
+merged:
+  before: []
+  commands:
+    - interface Bundle-Ether10
+    - bundle minimum-active links 2
+    - bundle maximum-active links 10
+    - lacp mode active
+    - interface GigabitEthernet0/0/0/1
+    - bundle id 10 mode passive
+    - interface GigabitEthernet0/0/0/0
+    - bundle id 10 mode inherit
+    - interface Bundle-Ether11
+    - lacp mode active
+    - interface GigabitEthernet0/0/0/8
+    - bundle id 11 mode passive
+    - interface GigabitEthernet0/0/0/9
+    - bundle id 11 mode passive
+  after:
+    - name: Bundle-Ether10
+      links:
+        max_active: 10
+        min_active: 2
+      members:
+        - member: GigabitEthernet0/0/0/0
+          mode: inherit
+        - member: GigabitEthernet0/0/0/1
+          mode: passive
+      mode: active
+    - name: Bundle-Ether11
+      mode: active
+      members:
+        - member: GigabitEthernet0/0/0/8
+          mode: passive
+        - member: GigabitEthernet0/0/0/9
+          mode: passive
+replaced:
+  commands:
+    - interface Bundle-Ether10
+    - no bundle maximum-active links 10
+    - no bundle minimum-active links 2
+    - lacp mode passive
+    - interface GigabitEthernet0/0/0/1
+    - no bundle id
+    - interface GigabitEthernet0/0/0/0
+    - bundle id 10 mode passive
+    - interface Bundle-Ether12
+    - lacp mode active
+  after:
+    - members:
+        - member: GigabitEthernet0/0/0/0
+          mode: passive
+      mode: passive
+      name: Bundle-Ether10
+    - members:
+        - member: GigabitEthernet0/0/0/8
+          mode: passive
+        - member: GigabitEthernet0/0/0/9
+          mode: passive
+      mode: active
+      name: Bundle-Ether11
+    - mode: active
+      name: Bundle-Ether12
+overridden:
+  commands:
+    - interface Bundle-Ether10
+    - no bundle maximum-active links 10
+    - no bundle minimum-active links 2
+    - no lacp mode active
+    - interface GigabitEthernet0/0/0/0
+    - no bundle id
+    - interface GigabitEthernet0/0/0/1
+    - no bundle id
+    - interface Bundle-Ether11
+    - bundle minimum-active links 5
+    - bundle maximum-active links 10
+    - interface GigabitEthernet0/0/0/8
+    - no bundle id
+    - interface GigabitEthernet0/0/0/9
+    - no bundle id
+    - interface GigabitEthernet0/0/0/0
+    - bundle id 11 mode active
+    - interface GigabitEthernet0/0/0/1
+    - bundle id 11 mode active
+  after:
+    - name: Bundle-Ether10
+    - links:
+        max_active: 10
+        min_active: 5
+      members:
+        - member: GigabitEthernet0/0/0/0
+          mode: active
+        - member: GigabitEthernet0/0/0/1
+          mode: active
+      mode: active
+      name: Bundle-Ether11
+deleted:
+  commands:
+    - interface Bundle-Ether10
+    - no bundle maximum-active links 10
+    - no bundle minimum-active links 2
+    - no lacp mode active
+    - interface GigabitEthernet0/0/0/0
+    - no bundle id
+    - interface GigabitEthernet0/0/0/1
+    - no bundle id
+    - interface Bundle-Ether11
+    - no lacp mode active
+    - interface GigabitEthernet0/0/0/8
+    - no bundle id
+    - interface GigabitEthernet0/0/0/9
+    - no bundle id
+  after:
+    - name: Bundle-Ether10
+    - name: Bundle-Ether11
+round_trip:
+  after:
+    - members:
+        - member: GigabitEthernet0/0/0/8
+          mode: passive
+        - member: GigabitEthernet0/0/0/9
+          mode: active
+      name: Bundle-Ether10
+    - mode: active
+      name: Bundle-Ether11
+rendered:
+  commands:
+    - "interface Bundle-Ether10"
+    - "lacp mode active"
+    - "bundle maximum-active links 5"
+    - "bundle minimum-active links 2"
+    - "interface Bundle-Ether12"
+    - "interface Loopback888"
+    - "description test for ansible"
+    - "shutdown"
+    - "interface MgmtEth0/RP0/CPU0/0"
+    - "ipv4 address 192.0.2.11 255.255.255.0"
+    - "interface GigabitEthernet0/0/0/1"
+    - "description 'GigabitEthernet - 1'"
+    - "bundle id 10 mode inherit"
+    - "interface GigabitEthernet0/0/0/2"
+    - "description 'GigabitEthernet - 2'"
+    - "bundle id 12 mode passive"
+    - "interface GigabitEthernet0/0/0/3"
+    - "description 'GigabitEthernet - 3'"
+    - "bundle id 10 mode inherit"
+    - "interface GigabitEthernet0/0/0/4"
+    - "description 'GigabitEthernet - 4'"
+    - "bundle id 12 mode passive"
+parsed:
+  after:
+    - name: Bundle-Ether10
+      members:
+        - member: GigabitEthernet0/0/0/1
+          mode: inherit
+        - member: GigabitEthernet0/0/0/3
+          mode: inherit
+      mode: active
+      links:
+        max_active: 5
+        min_active: 2
+
+    - name: Bundle-Ether12
+      members:
+        - member: GigabitEthernet0/0/0/2
+          mode: passive
+        - member: GigabitEthernet0/0/0/4
+          mode: passive

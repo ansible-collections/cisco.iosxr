@@ -1,0 +1,12 @@
+black==23.3.0
+flake8
+mock
+pexpect
+yamllint
+coverage==4.5.4
+google-api-python-client
+grpcio
+protobuf
+pytest-ansible
+pytest-xdist
+pytest-cov

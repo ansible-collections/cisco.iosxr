@@ -1,0 +1,26 @@
+---
+- ansible.builtin.debug:
+    msg: START cli/prompt.yaml on connection={{ ansible_connection }}
+
+- name: Delete configuration file on disk to prevent failure of copy task for duplicate
+  ignore_errors: true
+  cisco.iosxr.iosxr_command:
+    commands:
+      - command: delete harddisk:ansible_tmp.txt
+        prompt: Delete harddisk\:/?ansible_tmp\.txt\[confirm\]
+        answer: ""
+
+- name: Copy
+  register: result
+  cisco.iosxr.iosxr_command:
+    commands:
+      - command: copy running-config harddisk:ansible_tmp.txt
+        prompt: "Destination file name \\(control-c to abort\\)\\: \\[\\/ansible_tmp.txt\\]\\?"
+        answer: ansible_tmp.txt
+
+- ansible.builtin.assert:
+    that:
+      - result.stdout is defined
+      - "'ansible_tmp' in result.stdout[0]"
+
+- ansible.builtin.debug: msg="END cli/prompt.yaml on connection={{ ansible_connection }}"

@@ -1,0 +1,21 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_lldp_global rendered integration tests on connection={{ ansible_connection }}
+
+- name: Render platform specific commands from task input using rendered stateion
+  register: result
+  cisco.iosxr.iosxr_lldp_global:
+    config:
+      holdtime: 100
+      reinit: 2
+      timer: 3000
+      subinterfaces: true
+      tlv_select:
+        management_address: false
+        system_description: false
+    state: rendered
+
+- name: Assert that correct set of commands were rendered
+  ansible.builtin.assert:
+    that:
+      - "{{ rendered['commands'] | symmetric_difference(result['rendered']) |length == 0 }}"

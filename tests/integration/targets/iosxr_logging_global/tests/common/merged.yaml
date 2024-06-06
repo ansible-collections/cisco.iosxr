@@ -1,0 +1,63 @@
+---
+- ansible.builtin.debug:
+    msg: Start iosxr_logging_global merged integration tests connection={{ ansible_connection}}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- block:
+    - name: Merge the provided configuration with the existing running configuration
+      cisco.iosxr.iosxr_logging_global:
+        config:
+          buffered:
+            size: 2097152
+            severity: warnings
+          correlator:
+            buffer_size: 1024
+          events:
+            display_location: true
+          files:
+            - maxfilesize: 1024
+              name: test
+              path: test
+              severity: info
+          hostnameprefix: test
+          hosts:
+            - host: 1.1.1.1
+              port: default
+              severity: critical
+              vrf: default
+          ipv4:
+            dscp: af11
+          localfilesize: 1024
+          monitor:
+            severity: errors
+          source_interfaces:
+            - interface: GigabitEthernet0/0/0/0
+              vrf: test
+          tls_servers:
+            - name: test
+              tls_hostname: test2
+              trustpoint: test2
+              vrf: test
+          trap:
+            severity: informational
+        state: merged
+
+      register: result
+
+    - name: Assert that before dicts were correctly generated
+      ansible.builtin.assert:
+        that: "{{ result['before'] == {} }}"
+
+    - name: Assert that correct set of commands were generated
+      ansible.builtin.assert:
+        that:
+          - "{{ merged['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
+
+    - name: Assert that after dicts were correctly generated
+      ansible.builtin.assert:
+        that:
+          - merged['after'] == result['after']
+
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

@@ -1,0 +1,26 @@
+---
+- ansible.builtin.debug: msg="START iosxr netconf/common_netconf.yaml on connection={{ ansible_connection }}"
+
+# hit general code
+- name: Setup - remove login
+  cisco.iosxr.iosxr_banner:
+    banner: login
+    state: absent
+
+- name: Set login
+  cisco.iosxr.iosxr_banner:
+    banner: login
+    text: "@this is my login banner\nthat has a multiline\nstring\n@"
+    state: present
+  register: result
+
+- ansible.builtin.debug:
+    msg: "{{ result }}"
+
+- ansible.builtin.assert:
+    that:
+      - "result.changed == true"
+      - "'this is my login banner' in result.xml"
+      - "'that has a multiline' in result.xml"
+
+- ansible.builtin.debug: msg="END iosxr netconf/common_netconf.yaml on connection={{ ansible_connection }}"

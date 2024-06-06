@@ -1,0 +1,44 @@
+---
+- ansible.builtin.debug: msg="START cli/toplevel_before.yaml on connection={{ ansible_connection }}"
+
+- name: Setup
+  cisco.iosxr.iosxr_config:
+    commands:
+      - no cdp
+      - hostname {{ inventory_hostname_short }}
+    match: none
+
+- name: Configure top level command with before
+  register: result
+  cisco.iosxr.iosxr_config:
+    commands:
+      - hostname foo
+    before:
+      - cdp
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'hostname foo' in result.commands"
+      - "'cdp' in result.commands"
+
+- name: Configure top level command with before idempotent check
+  register: result
+  cisco.iosxr.iosxr_config:
+    commands:
+      - hostname foo
+    before:
+      - cdp
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Teardown
+  cisco.iosxr.iosxr_config:
+    commands:
+      - no cdp
+      - hostname {{ inventory_hostname_short }}
+    match: none
+
+- ansible.builtin.debug: msg="END cli/toplevel_before.yaml on connection={{ ansible_connection }}"

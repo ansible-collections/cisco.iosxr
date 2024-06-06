@@ -1,0 +1,65 @@
+---
+- ansible.builtin.debug: msg="START iosxr_netconf cli/basic.yaml on connection={{ ansible_connection }}"
+
+- name: Disable netconf service
+  cisco.iosxr.iosxr_netconf: &id003
+    state: absent
+
+- block:
+    - name: Enable netconf service
+      register: result
+      cisco.iosxr.iosxr_netconf:
+        netconf_port: 830
+        netconf_vrf: default
+        state: present
+
+    - ansible.builtin.assert: &id001
+        that:
+          - result.changed == true
+
+    - name: Check idempotence of enable netconf service
+      register: result
+      cisco.iosxr.iosxr_netconf:
+        netconf_port: 830
+        netconf_vrf: default
+        state: present
+
+    - ansible.builtin.assert: &id002
+        that:
+          - result.changed == false
+
+    - name: Change netconf port
+      register: result
+      cisco.iosxr.iosxr_netconf:
+        netconf_port: 9000
+        state: present
+
+    - ansible.builtin.assert: *id001
+    - name: Check idempotent of change netconf port
+      register: result
+      cisco.iosxr.iosxr_netconf:
+        netconf_port: 9000
+        state: present
+
+    - ansible.builtin.assert: *id002
+    - name: Add netconf VRF
+      register: result
+      cisco.iosxr.iosxr_netconf:
+        netconf_port: 9000
+        netconf_vrf: new_default
+        state: present
+
+    - ansible.builtin.assert: *id001
+    - name: Check idempotent of add netconf VRF
+      register: result
+      cisco.iosxr.iosxr_netconf:
+        netconf_port: 9000
+        netconf_vrf: new_default
+        state: present
+
+    - ansible.builtin.assert: *id002
+  always:
+    - name: Disable netconf service
+      cisco.iosxr.iosxr_netconf: *id003
+
+- ansible.builtin.debug: msg="END iosxr_netconf cli/basic.yaml on connection={{ ansible_connection }}"

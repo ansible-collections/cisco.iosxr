@@ -1,0 +1,31 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_lldp_global gathered integration tests on connection={{ ansible_connection }}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- block:
+    - name: Merge the provided configuration with the existing running configuration
+      register: result
+      cisco.iosxr.iosxr_lldp_global:
+        config:
+          holdtime: 100
+          reinit: 2
+          timer: 3000
+          subinterfaces: true
+          tlv_select:
+            management_address: false
+            system_description: false
+        state: merged
+
+    - name: Gather interfaces facts using gathered state
+      register: result
+      cisco.iosxr.iosxr_lldp_global:
+        state: gathered
+
+    - name: Assert that facts were correctly generated
+      ansible.builtin.assert:
+        that: merged['after'] == result['gathered']
+
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

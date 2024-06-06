@@ -1,0 +1,9 @@
+---
+- name: Remove acls
+  vars:
+    lines:
+      "no ipv4 access-list acl_1\nno ipv4 access-list acl_2\nno ipv4 access-list acl_3\nno ipv4 access-list acl_3\nno ipv6 access-list acl6_1\nno ipv6 access-list\
+      \ acl6_2\nno ipv6 access-list acl6_3\n"
+  ignore_errors: true
+  ansible.netcommon.cli_config:
+    config: "{{ lines }}"

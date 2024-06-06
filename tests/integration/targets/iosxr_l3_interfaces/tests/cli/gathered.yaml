@@ -1,0 +1,44 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_l3_interfaces gathered integration tests on connection={{ ansible_connection }}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- block:
+    - name: Gather management_interface facts using gathered state
+      register: management_interface
+      cisco.iosxr.iosxr_l3_interfaces:
+        state: gathered
+
+    - name: Gather the provided configuration with the existing running configuration
+      register: result
+      cisco.iosxr.iosxr_l3_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/0
+            ipv4:
+              - address: 198.51.100.1/24
+
+          - name: GigabitEthernet0/0/0/1
+            ipv6:
+              - address: 2001:db8:0:3::/64
+            ipv4:
+              - address: 192.0.2.1/24
+
+              - address: 192.0.2.2/24
+                secondary: true
+        state: merged
+
+    - name: Combine all the dictionaries based on match_keys
+      ansible.builtin.set_fact:
+        combined_after: "{{ merged['after']  | ansible.builtin.union(management_interface['gathered']) }}"
+
+    - name: Gather layer 3 interfaces facts using gathered state
+      register: result
+      cisco.iosxr.iosxr_l3_interfaces:
+        state: gathered
+
+    - name: Assert that facts were correctly generated
+      ansible.builtin.assert:
+        that: "{{ combined_after | symmetric_difference(result['gathered']) |length == 0 }}"
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

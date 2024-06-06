@@ -1,0 +1,6 @@
+---
+- name: "Remove SNMP server configuration"
+  cisco.iosxr.iosxr_snmp_server:
+    state: deleted
+  vars:
+    ansible_connection: ansible.netcommon.network_cli

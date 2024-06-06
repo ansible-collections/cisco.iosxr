@@ -1,0 +1,35 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_l2_interfaces gathered integration tests on connection={{ ansible_connection }}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- block:
+    - name: Merge the provided configuration with the existing running configuration
+      register: result
+      cisco.iosxr.iosxr_l2_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/1
+            l2transport: true
+            l2protocol:
+              - cpsv: tunnel
+            propagate: true
+
+          - name: GigabitEthernet0/0/0/3.900
+            encapsulation:
+              dot1q: 20
+              second_dot1q: 40
+
+          - name: GigabitEthernet0/0/0/4
+        state: merged
+
+    - name: Gather layer 2 interfaces facts using gathered state
+      register: result
+      cisco.iosxr.iosxr_l2_interfaces:
+        state: gathered
+
+    - name: Assert that facts were correctly generated
+      ansible.builtin.assert:
+        that: "{{ merged['after'] | symmetric_difference(result['gathered']) |length == 0 }}"
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

@@ -1,0 +1,63 @@
+---
+- ansible.builtin.debug:
+    msg: START isoxr_lag_interfaces round trip integration tests on connection={{ ansible_connection }}
+
+- block:
+    - ansible.builtin.include_tasks: _remove_config.yaml
+
+    - name: Apply the provided configuration (base config)
+      register: base_config
+      cisco.iosxr.iosxr_lag_interfaces:
+        config:
+          - name: Bundle-Ether10
+            mode: active
+            members:
+              - member: GigabitEthernet0/0/0/1
+                mode: passive
+            links:
+              max_active: 10
+              min_active: 2
+
+          - name: Bundle-Ether11
+            mode: passive
+        state: merged
+
+    - name: Gather interfaces facts
+      cisco.iosxr.iosxr_facts:
+        gather_subset:
+          - "!all"
+          - "!min"
+        gather_network_resources:
+          - lag_interfaces
+
+    - name: Apply the provided configuration (config to be reverted)
+      register: result
+      cisco.iosxr.iosxr_lag_interfaces:
+        config:
+          - name: Bundle-Ether10
+            members:
+              - member: GigabitEthernet0/0/0/9
+                mode: active
+
+              - member: GigabitEthernet0/0/0/8
+                mode: passive
+
+          - name: Bundle-Ether11
+            mode: active
+        state: overridden
+
+    - name: Assert that changes were applied
+      ansible.builtin.assert:
+        that: "{{ round_trip['after'] | symmetric_difference(result['after']) |length == 0  }}"
+
+    - name: Revert back to base configuration using facts round trip
+      register: revert
+      cisco.iosxr.iosxr_lag_interfaces:
+        config: "{{ ansible_facts['network_resources']['lag_interfaces'] }}"
+        state: overridden
+
+    - name: Assert that configuration was reverted
+      ansible.builtin.assert:
+        that: "{{ base_config['after'] | symmetric_difference(revert['after']) |length == 0 }}"
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

@@ -1,0 +1,38 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_interfaces gathered integration tests on connection={{ ansible_connection }}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- ansible.builtin.include_tasks: _populate_config.yaml
+
+- block:
+    - name: Merge provided configuration with device configuration
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/0
+            description: This interface is Configured and Merged by Ansible-Network
+            mtu: 110
+            enabled: true
+            duplex: half
+
+          - name: GigabitEthernet0/0/0/1
+            description: Configured and Merged by Ansible-Network
+            mtu: 2800
+            enabled: false
+            speed: 100
+            duplex: full
+        state: merged
+
+    - name: Gather interfaces facts using gathered state
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        state: gathered
+
+    - name: Assert that facts were correctly generated
+      ansible.builtin.assert:
+        that: "{{ gathered['after'] | symmetric_difference(result['gathered']) |length == 0 }}"
+
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

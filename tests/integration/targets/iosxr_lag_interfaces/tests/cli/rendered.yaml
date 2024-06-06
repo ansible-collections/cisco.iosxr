@@ -1,0 +1,31 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_lag_interfaces rendered integration tests on connection={{ ansible_connection }}
+
+- name: Render platform specific commands from task input using rendered state
+  register: result
+  cisco.iosxr.iosxr_lag_interfaces:
+    config:
+      - name: Bundle-Ether10
+        members:
+          - member: GigabitEthernet0/0/0/1
+            mode: inherit
+          - member: GigabitEthernet0/0/0/3
+            mode: inherit
+        mode: active
+        links:
+          max_active: 5
+          min_active: 2
+
+      - name: Bundle-Ether12
+        members:
+          - member: GigabitEthernet0/0/0/2
+            mode: passive
+          - member: GigabitEthernet0/0/0/4
+            mode: passive
+    state: rendered
+
+- name: Assert that correct set of commands were rendered
+  ansible.builtin.assert:
+    that:
+      - rendered['commands'].sort() == result['rendered'].sort()

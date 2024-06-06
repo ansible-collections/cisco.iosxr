@@ -1,0 +1,145 @@
+---
+merged:
+  commands:
+    - router bgp 65536
+    - neighbor 192.0.2.2
+    - address-family ipv4 unicast
+    - allowas-in 4
+    - as-override
+    - bestpath origin-as allow invalid
+    - capability orf prefix both
+    - default-originate
+    - maximum-prefix 10 20 restart 10
+    - multipath
+    - next-hop-self
+    - origin-as validation disable
+    - send-community-ebgp
+    - send-community-gshut-ebgp
+    - send-extended-community-ebgp
+    - route-policy test1 in
+    - route-policy test1 out
+    - send-multicast-attributes
+    - soft-reconfiguration inbound always
+    - weight 5
+  vrf:
+    commands:
+      - router bgp 65536
+      - neighbor 192.0.2.2
+      - address-family ipv4 unicast
+      - default-originate
+      - multipath
+      - weight 5
+      - neighbor 192.0.2.3
+      - address-family ipv4 unicast
+      - default-originate
+      - multipath
+      - weight 4
+      - vrf vrf1
+      - neighbor 192.0.2.4
+      - address-family ipv4 unicast
+      - capability orf prefix both
+      - default-originate
+      - multipath
+      - vrf vrf2
+      - neighbor 192.0.2.5
+      - address-family ipv4 unicast
+      - capability orf prefix both
+      - default-originate
+      - multipath
+
+  after:
+    as_number: "65536"
+    neighbors:
+      - neighbor_address: "192.0.2.2"
+        address_family:
+          - afi: "ipv4"
+            safi: "unicast"
+            multipath: true
+            default_originate:
+              set: true
+            weight: 5
+            capability_orf_prefix: "both"
+            send_multicast_attributes:
+              set: true
+            soft_reconfiguration:
+              inbound:
+                always: true
+            send_community_gshut_ebgp:
+              set: true
+            send_extended_community_ebgp:
+              set: true
+            send_community_ebgp:
+              set: true
+            origin_as:
+              validation:
+                disable: true
+            route_policy:
+              inbound: "test1"
+              outbound: "test1"
+            maximum_prefix:
+              max_limit: 10
+              threshold_value: 20
+              restart: 10
+            next_hop_self:
+              set: true
+            as_override:
+              set: true
+            allowas_in:
+              value: 4
+            bestpath_origin_as_allow_invalid: true
+
+deleted:
+  after:
+    as_number: "65536"
+
+overridden:
+  commands:
+    - router bgp 65536
+    - neighbor 192.0.2.2
+    - address-family ipv6 unicast
+    - default-originate
+    - multipath
+    - weight 5
+    - route-policy test2 in
+    - route-policy test2 out
+    - no address-family ipv4 unicast
+
+replaced:
+  commands:
+    - router bgp 65536
+    - neighbor 192.0.2.2
+    - address-family ipv4 unicast
+    - no origin-as validation disable
+    - weight 4
+    - no route-policy test1 in
+    - no route-policy test1 out
+
+  vrf:
+    commands:
+      - router bgp 65536
+      - vrf vrf1
+      - neighbor 192.0.2.4
+      - address-family ipv4 unicast
+      - no multipath
+      - weight 4
+
+rendered:
+  commands:
+    - router bgp 65536
+    - neighbor 192.0.2.2
+    - address-family ipv4 unicast
+    - allowas-in 4
+    - as-override
+    - bestpath origin-as allow invalid
+    - capability orf prefix both
+    - default-originate
+    - maximum-prefix 10 20 restart 10
+    - multipath
+    - next-hop-self
+    - origin-as validation disable
+    - send-community-ebgp
+    - send-community-gshut-ebgp
+    - send-extended-community-ebgp
+    - send-multicast-attributes
+    - soft-reconfiguration inbound always
+    - weight 5
