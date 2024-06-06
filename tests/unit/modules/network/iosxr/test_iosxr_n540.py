@@ -23,9 +23,9 @@ __metaclass__ = type
 
 from os import path
 from unittest import TestCase
+from unittest.mock import MagicMock
 
 from ansible.module_utils._text import to_bytes, to_text
-from unittest.mock import MagicMock
 
 from ansible_collections.cisco.iosxr.plugins.cliconf import iosxr
 
