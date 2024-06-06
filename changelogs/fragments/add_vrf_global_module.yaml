@@ -1,4 +1,0 @@
----
-minor_changes:
-  - Adds a new module `iosxr_vrf_global` to manage VRF global configurations on Cisco IOS-XR devices.
-  - https://github.com/ansible-collections/cisco.iosxr/pull/467
