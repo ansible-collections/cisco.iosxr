@@ -1,4 +1,3 @@
-mock
 google-api-python-client
 grpcio
 protobuf
