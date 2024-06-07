@@ -4,6 +4,23 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v10.0.0
+=======
+
+Release Summary
+---------------
+
+Starting from this release, the minimum `ansible-core` version this collection requires is `2.15.0`. The last known version compatible with ansible-core<2.14 is `v9.0.0`. A new resource module `iosxr_vrf_global` is added to manage VRF global configurations.
+
+Major Changes
+-------------
+
+- Bumping `requires_ansible` to `>=2.15.0`, since previous ansible-core versions are EoL now.
+
+Minor Changes
+-------------
+
+- Adds a new module `iosxr_vrf_global` to manage VRF global configurations on Cisco IOS-XR devices (https://github.com/ansible-collections/cisco.iosxr/pull/467).
 
 v9.0.0
 ======
