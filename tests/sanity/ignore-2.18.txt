@@ -1,1 +1,7 @@
-plugins/action/iosxr.py action-plugin-docs # base class for deprecated network platform modules using `connection: local`
+# Base class for deprecated network platform modules using `connection: local`
+plugins/action/iosxr.py action-plugin-docs
+
+# Ignore import-3.10, import-3.11, and import-3.12 checks for generated grpc files
+import-3.10: plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py
+import-3.11: plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py
+import-3.12: plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py
