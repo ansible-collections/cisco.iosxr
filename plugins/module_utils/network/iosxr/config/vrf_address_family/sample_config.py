@@ -1,3 +1,4 @@
+#
 # -*- coding: utf-8 -*-
 # Copyright 2024 Red Hat
 # GNU General Public License v3.0+
@@ -10,12 +11,13 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 """
-The iosxr_vrf config file.
+The iosxr_vrf_address_family config file.
 It is in this file where the current configuration (as dict)
 is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to its desired end-state is
 created.
 """
+import q
 
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
@@ -26,43 +28,36 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 )
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.vrfs import (
-    VrfTemplate,
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.vrf_address_family import (
+    Vrf_address_familyTemplate,
 )
 
 
-class Vrf(ResourceModule):
+class Vrf_address_family(ResourceModule):
     """
-    The iosxr_vrf config class
+    The iosxr_vrf_address_family config class
     """
 
     def __init__(self, module):
-        super(Vrf, self).__init__(
-            empty_fact_val=[],
+        super(Vrf_address_family, self).__init__(
+            empty_fact_val={},
             facts_module=Facts(module),
             module=module,
-            resource="vrf",
-            tmplt=VrfTemplate(),
+            resource="vrf_address_family",
+            tmplt=Vrf_address_familyTemplate(),
         )
         self.parsers = [
-            "description",
             "address_family",
-            "export_route_policy",
-            "export_route_target",
-            "export_to_default_vrf_route_policy",
-            "export_to_vrf_allow_imported_vpn",
-            "import_config_route_target",
-            "import_config_route_policy",
-            "import_config_from_config_bridge_domain_advertise_as_vpn",
-            "import_config_from_config_default_vrf_route_policy",
-            "import_config_from_config_vrf_advertise_as_vpn",
-            "maximum_prefix",
-            "evpn_route_sync",
-            "fallback_vrf",
-            "mhost_default_interface",
-            "rd",
-            "remote_route_filtering_disable",
-            "vpn_id",
+            "export.route_policy",
+            "export.route_target",
+            "export.to.default_vrf.route_policy",
+            "export.to.vrf.allow_imported_vpn",
+            "import_config.route_target",
+            "import_config.route_policy",
+            "import_config.from_config.bridge_domain.advertise_as_vpn",
+            "import_config.from_config.default_vrf.route_policy",
+            "import_config.from_config.vrf.advertise_as_vpn",
+            "maximum.prefix",
         ]
 
     def execute_module(self):
@@ -80,14 +75,13 @@ class Vrf(ResourceModule):
         """Generate configuration commands to send based on
         want, have and desired state.
         """
-
         wantd = self.want
         haved = self.have
 
         wantd = self._vrf_list_to_dict(wantd)
         haved = self._vrf_list_to_dict(haved)
 
-        # if state is merged, merge want into have and then compare
+        # if state is merged, merge want onto have and then compare
         if self.state == "merged":
             wantd = dict_merge(haved, wantd)
 
@@ -173,9 +167,7 @@ class Vrf(ResourceModule):
                 vrf["address_families"] = {
                     (x["afi"], x.get("safi")): x for x in vrf["address_families"]
                 }
-
+        # q(entry)
         entry = {x["name"]: x for x in entry}
+        # q(entry)
         return entry
-
-    def _get_config(self):
-        return self._connection.get("show running-config vrf")
