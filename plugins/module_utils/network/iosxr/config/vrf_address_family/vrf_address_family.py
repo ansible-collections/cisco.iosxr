@@ -17,8 +17,6 @@ is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to its desired end-state is
 created.
 """
-import q
-
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
@@ -81,75 +79,91 @@ class Vrf_address_family(ResourceModule):
         wantd = self._vrf_list_to_dict(wantd)
         haved = self._vrf_list_to_dict(haved)
 
-        # if state is merged, merge want onto have and then compare
+        # if state is merged, merge want into have and then compare
         if self.state == "merged":
             wantd = dict_merge(haved, wantd)
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            haved = {k: v for k, v in iteritems(haved) if k in wantd or not wantd}
-            wantd = {}
+            for vrfk, vrfv in iteritems(haved):
+                for afk, afv in iteritems(vrfv.get("address_families", {})):
+                    adrf = wantd.get(vrfk, {}).get("address_families", {})
+                    if afk in adrf or not adrf:
+                        self.addcmd(
+                            {"name" : vrfk},
+                            "name",
+                            False,
+                        )
+                        self.addcmd(
+                            {"afi": afv.get("afi"), "safi": afv.get("safi")},
+                            "address_family",
+                            True,
+                        )
 
-        if self.state in ["overridden", "deleted"]:
-            for k, have in haved.items():
-                if k not in wantd:
-                    self._compare(want={}, have=have)
+        if self.state in ["overridden"]:
+            for vrfk, vrfv in iteritems(haved):
+                for k, have in iteritems(vrfv.get("address_families", {})):
+                    wantx = wantd.get(vrfk, {}).get("address_families", {})
+                    if k not in wantx:
+                        self.addcmd(
+                            {"name" : vrfk},
+                            "name",
+                            False,
+                        )
+                        self.addcmd(
+                            {"afi": have.get("afi"), "safi": have.get("safi")},
+                            "address_family",
+                            False,
+                        )
+                        self.compare(parsers=self.parsers, want={}, have=have)
 
-        self._compare(want=wantd, have=haved)
+        if self.state != "deleted":
+            self._compare(want=wantd, have=haved)
 
     def _compare(self, want, have):
+        """Leverages the base class `compare()` method and
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Vrf network resource.
+        """
+        for name, entry in iteritems(want):
+            begin = len(self.commands)
+            vrf_want = entry
+            vrf_have = have.pop(name, {})
+            self._compare_afs(vrf_want, vrf_have)
+            if len(self.commands) != begin:
+                self.commands.insert(begin, "vrf {0}".format(name))
+
+    def _compare_afs(self, want, have):
         """Custom handling of afs option
         :params want: the want VRF dictionary
         :params have: the have VRF dictionary
         """
-        wafs = want.get("address_families", {})
-        hafs = have.get("address_families", {})
-        for name, entry in iteritems(wafs):
+        waafs = want.get("address_families", {})
+        haafs = have.get("address_families", {})
+        for afk, afv in iteritems(waafs):
             begin = len(self.commands)
-            af_have = hafs.pop(name, {})
-
-            self.compare(parsers=self.parsers, want=entry, have=af_have)
+            self._compare_single_af(want=afv, have=haafs.get(afk, {}))
             if len(self.commands) != begin:
-                self.commands.insert(
-                    begin,
-                    self._tmplt.render(
-                        {
-                            "afi": entry.get("afi"),
-                            "safi": entry.get("safi"),
-                        },
-                        "address_families",
-                        False,
-                    ),
-                )
+                self.commands.insert(begin, f"address-family {afv.get('afi')} {afv.get('safi')}")
 
-        # for deleted and overridden state
-        if self.state in ["overridden", "deleted"]:
-            begin = len(self.commands)
-            for name, entry in iteritems(hafs):
-                for af_key, af in entry.get("address_families", {}).items():
-                    self.addcmd(
-                        {
-                            "afi": af.get("afi"),
-                            "safi": af.get("safi"),
-                        },
-                        "address_family",
-                        True,
-                    )
-                    if len(self.commands) != begin:
-                        self.commands.insert(begin, self._tmplt.render({"name": name}, "name", False))
+    def _compare_single_af(self, want, have):
+        """Custom handling of single af option
+        :params want: the want VRF dictionary
+        :params have: the have VRF dictionary
+        """
+        self.compare(parsers=self.parsers[1:], want=want, have=have)
 
     def _vrf_list_to_dict(self, entry):
         """Convert list of items to dict of items
-           for efficient diff calculation.
+        for efficient diff calculation.
         :params entry: data dictionary
         """
 
         for vrf in entry:
             if "address_families" in vrf:
                 vrf["address_families"] = {
-                    (x["afi"], x.get("safi")): x for x in vrf["address_families"]
+                    f"{x['afi']}_{x.get('safi')}": x for x in vrf["address_families"]
                 }
-        # q(entry)
         entry = {x["name"]: x for x in entry}
-        # q(entry)
         return entry

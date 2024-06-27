@@ -55,7 +55,7 @@ class Vrf_address_familyTemplate(NetworkTemplate):
                 (?P<address_families>\s+address-family\s(?P<afi>\S+)\s(?P<safi>\S+))
                 $""", re.VERBOSE,
             ),
-            "setval": "address-family {{ afi}} {{safi}}",
+            "setval": "address-family {{ afi }} {{ safi }}",
             "result": {
                 '{{ name }}': {
                     'name': '{{ name }}',
