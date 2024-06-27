@@ -10,7 +10,7 @@ This collection has been tested against Cisco IOS-XR version 7.0.2
 <!--start requires_ansible-->
 ## Ansible version compatibility
 
-This collection has been tested against following Ansible versions: **>=2.14.0**.
+This collection has been tested against following Ansible versions: **>=2.15.0**.
 
 For collections that support Ansible 2.9, please ensure you update your `network_os` to use the
 fully qualified collection name (for example, `cisco.ios.ios`).
@@ -69,8 +69,7 @@ Name | Description
 [cisco.iosxr.iosxr_static_routes](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_static_routes_module.rst)|Resource module to configure static routes.
 [cisco.iosxr.iosxr_system](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_system_module.rst)|Module to manage the system attributes.
 [cisco.iosxr.iosxr_user](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_user_module.rst)|Module to manage the aggregates of local users.
-[cisco.iosxr.iosxr_vrf_address_family](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_vrf_address_family_module.rst)|Resource module to configure VRF Address family.
-[cisco.iosxr.iosxr_vrfs](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_vrfs_module.rst)|Manages global VRF configuration.
+[cisco.iosxr.iosxr_vrf_global](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_vrf_global_module.rst)|Manages global VRF configuration.
 
 <!--end collection content-->
 
