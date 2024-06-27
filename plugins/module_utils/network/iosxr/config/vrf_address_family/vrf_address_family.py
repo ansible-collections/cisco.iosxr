@@ -90,7 +90,7 @@ class Vrf_address_family(ResourceModule):
                     adrf = wantd.get(vrfk, {}).get("address_families", {})
                     if afk in adrf or not adrf:
                         self.addcmd(
-                            {"name" : vrfk},
+                            {"name": vrfk},
                             "name",
                             False,
                         )
@@ -106,7 +106,7 @@ class Vrf_address_family(ResourceModule):
                     wantx = wantd.get(vrfk, {}).get("address_families", {})
                     if k not in wantx:
                         self.addcmd(
-                            {"name" : vrfk},
+                            {"name": vrfk},
                             "name",
                             False,
                         )
