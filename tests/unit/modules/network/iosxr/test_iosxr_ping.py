@@ -135,7 +135,7 @@ class TestIosxrPingModule(TestIosxrModule):
         }
         self.assertEqual(result, mock_res)
 
-    def test_iosxr_ping_state_absent_pass(self):
+    def test_iosxr_ping_state_absent_pass_1(self):
         self.execute_show_command.return_value = dedent(
             """\
             Type escape sequence to abort.
