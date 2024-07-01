@@ -18,17 +18,18 @@ module: iosxr_vrf_address_family
 short_description: Resource module to configure VRF Address family.
 description:
   - This module configures and manages the attributes of VRF address family on Cisco IOS-XR devices.
-version_added: 9.0.0
+version_added: 10.0.0
 author: Ruchi Pakhle (@Ruchip16)
 notes:
-  - Tested against Cisco IOSXR Version 9.0.0
+  - Tested against Cisco IOSXR Version 10.0.0
   - This module works with connection C(network_cli). See L(the IOS_XR Platform Options,../network/user_guide/platform_iosxr.html)
   - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
   - For more information on using Ansible to manage Cisco devices see the `Cisco integration page <https://www.ansible.com/integrations/networks/cisco>`_.
 options:
   config:
     description: VRF address family configuration.
-    type: dict
+    type: list
+    elements: dict
     suboptions:
       name:
         description: Name of the VRF.
