@@ -1,9 +1,0 @@
----
-- ansible.builtin.debug:
-    msg: START iosxr_vrfs parsed integration tests on connection={{ ansible_connection }}
-
-- name: Parse externally provided VRF configuration
-  register: result
-  cisco.iosxr.iosxr_vrfs:
-    running_config: "{{ lookup('file', './_parsed.cfg') }}"
-    state: parsed

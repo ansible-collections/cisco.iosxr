@@ -25,20 +25,20 @@ __metaclass__ = type
 from textwrap import dedent
 from unittest.mock import patch
 
-from ansible_collections.cisco.iosxr.plugins.modules import iosxr_vrfs
+from ansible_collections.cisco.iosxr.plugins.modules import iosxr_vrf_address_family
 from ansible_collections.cisco.iosxr.tests.unit.modules.utils import set_module_args
 
 from .iosxr_module import TestIosxrModule
 
 
-class TestIosxrVrfsModule(TestIosxrModule):
-    """Tests the iosxr_vrfs module."""
+class TestIosxrVrfAddressFamilyModule(TestIosxrModule):
+    """Tests the iosxr_vrf_address_family module."""
 
-    module = iosxr_vrfs
+    module = iosxr_vrf_address_family
 
     def setUp(self):
-        """Setup for iosxr_vrfs module tests."""
-        super(TestIosxrVrfsModule, self).setUp()
+        """Setup for iosxr_vrf_address_family module tests."""
+        super(TestIosxrVrfAddressFamilyModule, self).setUp()
 
         self.mock_get_resource_connection = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base."
@@ -47,33 +47,35 @@ class TestIosxrVrfsModule(TestIosxrModule):
         self.get_resource_connection = self.mock_get_resource_connection.start()
 
         self.mock_get_config = patch(
-            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vrfs.vrfs."
-            "VrfFacts.get_config",
+            "ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vrf_address_family.vrf_address_family."
+            "Vrf_address_familyFacts.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
     def tearDown(self):
-        """Tear down for iosxr_vrfs module tests."""
-        super(TestIosxrVrfsModule, self).tearDown()
+        """Tear down for iosxr_vrf_address_family module tests."""
+        super(TestIosxrVrfAddressFamilyModule, self).tearDown()
         self.get_resource_connection.stop()
         self.get_config.stop()
 
-    def test_iosxr_vrfs_merged_idempotent(self):
-        """Test the idempotent nature of the iosxr_vrfs module in merged state."""
+    def test_iosxr_vrf_address_family_merged_idempotent(self):
+        """Test the idempotent nature of the iosxr_vrf_address_family module in merged state."""
         run_cfg = dedent(
             """\
             vrf test
-             mhost ipv4 default-interface Loopback0
-             evpn-route-sync 235
-             description "this is sample vrf for feature testing"
-             fallback-vrf "parsed-vrf"
-             rd "2:3"
-             remote-route-filtering disable
-             vpn id 23
-             address-family ipv4 flowspec
-              import route-policy rm-policy
+             address-family ipv4 unicast
+              export to default-vrf route-policy "rm-policy"
+              export to vrf allow-imported-vpn
+              export route-policy "export-policy"
+              export route-target
+               192.0.2.1:400
               import route-target
-               10.1.2.3:300
+               192.0.2.2:200
+              import route-policy "test-policy"
+              import from bridge-domain advertise-as-vpn
+              import from default-vrf route-policy "new-policy"
+              import from vrf advertise-as-vpn
+              maximum prefix 23
             """,
         )
         self.get_config.return_value = run_cfg
@@ -82,24 +84,28 @@ class TestIosxrVrfsModule(TestIosxrModule):
                 config=[
                     dict(
                         name="test",
-                        mhost=dict(
-                            afi="ipv4",
-                            default_interface="Loopback0",
-                        ),
-                        evpn_route_sync=235,
-                        description="this is sample vrf for feature testing",
-                        fallback_vrf="parsed-vrf",
-                        rd="2:3",
-                        remote_route_filtering=dict(disable=True),
-                        vpn=dict(id="23"),
                         address_families=[
                             dict(
                                 afi="ipv4",
-                                safi="flowspec",
-                                import_config=dict(
-                                    route_policy="rm-policy",
-                                    route_target="10.1.2.3:300",
+                                safi="unicast",
+                                export=dict(
+                                    route_policy="export-policy",
+                                    route_target="192.0.2.1:400",
+                                    to=dict(
+                                        default_vrf=dict(route_policy="rm-policy"),
+                                        vrf=dict(allow_imported_vpn=True),
+                                    ),
                                 ),
+                                import_config=dict(
+                                    route_policy="test-policy",
+                                    route_target="192.0.2.2:200",
+                                    from_config=dict(
+                                        bridge_domain=dict(advertise_as_vpn=True),
+                                        default_vrf=dict(route_policy="new-policy"),
+                                        vrf=dict(advertise_as_vpn=True),
+                                    ),
+                                ),
+                                maximum=dict(prefix=23),
                             ),
                         ],
                     ),
@@ -109,30 +115,20 @@ class TestIosxrVrfsModule(TestIosxrModule):
         )
         self.execute_module(changed=False, commands=[])
 
-    def test_iosxr_vrfs_merged(self):
-        """Test the merged state of the iosxr_vrfs module."""
+    def test_iosxr_vrf_address_family_merged(self):
+        """Test the merged state of the iosxr_vrf_address_family module."""
         set_module_args(
             dict(
                 config=[
                     dict(
                         name="VRF4",
-                        description="VRF4 Description",
-                        evpn_route_sync=793,
-                        fallback_vrf="parsed-vrf",
-                        mhost=dict(
-                            afi="ipv4",
-                            default_interface="Loopback0",
-                        ),
-                        rd="3:4",
-                        remote_route_filtering=dict(disable=True),
-                        vpn=dict(id="23"),
                         address_families=[
                             dict(
                                 afi="ipv4",
                                 safi="unicast",
                                 export=dict(
                                     route_policy="rm-policy",
-                                    route_target="10.0.0.1:300",
+                                    route_target="192.0.2.1:400",
                                     to=dict(
                                         default_vrf=dict(route_policy="rm-policy"),
                                         vrf=dict(allow_imported_vpn=True),
@@ -145,7 +141,7 @@ class TestIosxrVrfsModule(TestIosxrModule):
                                         vrf=dict(advertise_as_vpn=True),
                                     ),
                                     route_policy="test-policy",
-                                    route_target="10.1.3.4:400",
+                                    route_target="192.0.2.6:200",
                                 ),
                                 maximum=dict(prefix=100),
                             ),
@@ -157,19 +153,12 @@ class TestIosxrVrfsModule(TestIosxrModule):
         )
         commands = [
             "vrf VRF4",
-            "description VRF4 Description",
-            "evpn-route-sync 793",
-            "fallback-vrf parsed-vrf",
-            "mhost ipv4 default-interface Loopback0",
-            "rd 3:4",
-            "remote-route-filtering disable",
-            "vpn id 23",
             "address-family ipv4 unicast",
             "export route-policy rm-policy",
-            "export route-target 10.0.0.1:300",
+            "export route-target 192.0.2.1:400",
             "export to default-vrf route-policy rm-policy",
             "export to vrf allow-imported-vpn",
-            "import route-target 10.1.3.4:400",
+            "import route-target 192.0.2.6:200",
             "import route-policy test-policy",
             "import from bridge-domain advertise-as-vpn",
             "import from default-vrf route-policy test-policy",
@@ -179,31 +168,24 @@ class TestIosxrVrfsModule(TestIosxrModule):
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
-    def test_iosxr_vrfs_replaced(self):
-        """Test the replaced state of the iosxr_vrfs module."""
+    def test_iosxr_vrf_address_family_replaced(self):
+        """Test the replaced state of the iosxr_vrf_address_family module."""
         run_cfg = dedent(
             """\
             vrf VRF4
-             mhost ipv4 default-interface Loopback0
-             evpn-route-sync 793
-             description VRF4 description
-             vpn id 23
-             fallback-vrf parsed-vrf
-             remote-route-filtering disable
-             rd 3:4
              address-family ipv4 unicast
               import route-policy test-policy
               import from bridge-domain advertise-as-vpn
               import from default-vrf route-policy test-policy
               import from vrf advertise-as-vpn
               import route-target
-               10.1.3.4:400
+               192.0.2.6:200
               !
               export route-policy rm-policy
               export to vrf allow-imported-vpn
               export to default-vrf route-policy rm-policy
               export route-target
-               10.0.0.1:300
+               192.0.2.1:400
               !
               maximum prefix 100
             """,
@@ -215,23 +197,13 @@ class TestIosxrVrfsModule(TestIosxrModule):
                 config=[
                     dict(
                         name="VRF7",
-                        description="VRF7 description",
-                        evpn_route_sync=398,
-                        fallback_vrf="replaced-vrf",
-                        mhost=dict(
-                            afi="ipv4",
-                            default_interface="Loopback0",
-                        ),
-                        rd="67:9",
-                        remote_route_filtering=dict(disable=True),
-                        vpn=dict(id="4:5"),
                         address_families=[
                             dict(
                                 afi="ipv4",
                                 safi="unicast",
                                 export=dict(
                                     route_policy="rm-policy",
-                                    route_target="192.12.3.2:300",
+                                    route_target="192.0.2.2:400",
                                     to=dict(
                                         default_vrf=dict(route_policy="rm-policy"),
                                         vrf=dict(allow_imported_vpn=True),
@@ -244,7 +216,7 @@ class TestIosxrVrfsModule(TestIosxrModule):
                                         vrf=dict(advertise_as_vpn=True),
                                     ),
                                     route_policy="test-policy",
-                                    route_target="12.2.3.4:900",
+                                    route_target="192.0.2.4:400",
                                 ),
                                 maximum=dict(prefix=200),
                             ),
@@ -256,19 +228,12 @@ class TestIosxrVrfsModule(TestIosxrModule):
         )
         commands = [
             "vrf VRF7",
-            "description VRF7 description",
-            "evpn-route-sync 398",
-            "fallback-vrf replaced-vrf",
-            "mhost ipv4 default-interface Loopback0",
-            "rd 67:9",
-            "remote-route-filtering disable",
-            "vpn id 4:5",
             "address-family ipv4 unicast",
             "export route-policy rm-policy",
-            "export route-target 192.12.3.2:300",
+            "export route-target 192.0.2.2:400",
             "export to default-vrf route-policy rm-policy",
             "export to vrf allow-imported-vpn",
-            "import route-target 12.2.3.4:900",
+            "import route-target 192.0.2.4:400",
             "import route-policy test-policy",
             "import from bridge-domain advertise-as-vpn",
             "import from default-vrf route-policy test-policy",
@@ -278,31 +243,24 @@ class TestIosxrVrfsModule(TestIosxrModule):
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
-    def test_iosxr_vrfs_replaced_idempotent(self):
-        """Test the idempotent nature of the iosxr_vrfs module in replaced state."""
+    def test_iosxr_vrf_address_family_replaced_idempotent(self):
+        """Test the idempotent nature of the iosxr_vrf_address_family module in replaced state."""
         run_cfg = dedent(
             """\
             vrf VRF7
-             mhost ipv4 default-interface Loopback0
-             evpn-route-sync 398
-             description VRF7 description
-             vpn id 4:5
-             fallback-vrf replaced-vrf
-             remote-route-filtering disable
-             rd 67:9
              address-family ipv4 unicast
               import route-policy test-policy
               import from bridge-domain advertise-as-vpn
               import from default-vrf route-policy test-policy
               import from vrf advertise-as-vpn
               import route-target
-               12.2.3.4:900
+               192.0.2.4:400
               !
               export route-policy rm-policy
               export to vrf allow-imported-vpn
               export to default-vrf route-policy rm-policy
               export route-target
-               192.12.3.2:300
+               192.0.2.2:400
               !
               maximum prefix 200
             """,
@@ -314,23 +272,13 @@ class TestIosxrVrfsModule(TestIosxrModule):
                 config=[
                     dict(
                         name="VRF7",
-                        description="VRF7 description",
-                        evpn_route_sync=398,
-                        fallback_vrf="replaced-vrf",
-                        mhost=dict(
-                            afi="ipv4",
-                            default_interface="Loopback0",
-                        ),
-                        rd="67:9",
-                        remote_route_filtering=dict(disable=True),
-                        vpn=dict(id="4:5"),
                         address_families=[
                             dict(
                                 afi="ipv4",
                                 safi="unicast",
                                 export=dict(
                                     route_policy="rm-policy",
-                                    route_target="192.12.3.2:300",
+                                    route_target="192.0.2.2:400",
                                     to=dict(
                                         default_vrf=dict(route_policy="rm-policy"),
                                         vrf=dict(allow_imported_vpn=True),
@@ -343,7 +291,7 @@ class TestIosxrVrfsModule(TestIosxrModule):
                                         vrf=dict(advertise_as_vpn=True),
                                     ),
                                     route_policy="test-policy",
-                                    route_target="12.2.3.4:900",
+                                    route_target="192.0.2.4:400",
                                 ),
                                 maximum=dict(prefix=200),
                             ),
@@ -355,31 +303,24 @@ class TestIosxrVrfsModule(TestIosxrModule):
         )
         self.execute_module(changed=False, commands=[])
 
-    def test_iosxr_vrfs_overridden(self):
-        """Test the overridden state of the iosxr_vrfs module."""
+    def test_iosxr_vrf_address_family_overridden(self):
+        """Test the overridden state of the iosxr_vrf_address_family module."""
         run_cfg = dedent(
             """\
             vrf VRF7
-             mhost ipv4 default-interface Loopback0
-             evpn-route-sync 398
-             description VRF7 description
-             vpn id 4:5
-             fallback-vrf replaced-vrf
-             remote-route-filtering disable
-             rd 67:9
              address-family ipv4 unicast
               import route-policy test-policy
               import from bridge-domain advertise-as-vpn
               import from default-vrf route-policy test-policy
               import from vrf advertise-as-vpn
               import route-target
-               12.2.3.4:900
+               192.0.2.4:400
               !
               export route-policy rm-policy
               export to vrf allow-imported-vpn
               export to default-vrf route-policy rm-policy
               export route-target
-               192.12.3.2:300
+               192.0.2.2:400
               !
               maximum prefix 200
             """,
@@ -391,23 +332,13 @@ class TestIosxrVrfsModule(TestIosxrModule):
                 config=[
                     dict(
                         name="VRF6",
-                        description="VRF6 description",
-                        evpn_route_sync=101,
-                        fallback_vrf="overridden-vrf",
-                        mhost=dict(
-                            afi="ipv4",
-                            default_interface="Loopback0",
-                        ),
-                        rd="67:9",
-                        remote_route_filtering=dict(disable=True),
-                        vpn=dict(id="4:5"),
                         address_families=[
                             dict(
                                 afi="ipv4",
                                 safi="unicast",
                                 export=dict(
                                     route_policy="rm-policy1",
-                                    route_target="10.0.0.1:300",
+                                    route_target="192.0.2.8:200",
                                     to=dict(
                                         default_vrf=dict(route_policy="rm-policy"),
                                         vrf=dict(allow_imported_vpn=True),
@@ -420,7 +351,7 @@ class TestIosxrVrfsModule(TestIosxrModule):
                                         vrf=dict(advertise_as_vpn=True),
                                     ),
                                     route_policy="test-policy",
-                                    route_target="10.1.3.4:900",
+                                    route_target="192.0.2.2:200",
                                 ),
                                 maximum=dict(prefix=500),
                             ),
@@ -431,55 +362,52 @@ class TestIosxrVrfsModule(TestIosxrModule):
             ),
         )
         commands = [
+            "vrf VRF7",
+            "address-family ipv4 unicast",
+            "no import route-policy test-policy",
+            "no import from bridge-domain advertise-as-vpn",
+            "no import from default-vrf route-policy test-policy",
+            "no import from vrf advertise-as-vpn",
+            "no import route-target 192.0.2.4:400",
+            "no export route-policy rm-policy",
+            "no export route-target 192.0.2.2:400",
+            "no export to default-vrf route-policy rm-policy",
+            "no export to vrf allow-imported-vpn",
+            "no maximum prefix 200",
             "vrf VRF6",
-            "description VRF6 description",
-            "evpn-route-sync 101",
-            "fallback-vrf overridden-vrf",
-            "mhost ipv4 default-interface Loopback0",
-            "rd 67:9",
-            "remote-route-filtering disable",
-            "vpn id 4:5",
             "address-family ipv4 unicast",
             "export route-policy rm-policy1",
-            "export route-target 10.0.0.1:300",
+            "export route-target 192.0.2.8:200",
             "export to default-vrf route-policy rm-policy",
             "export to vrf allow-imported-vpn",
-            "import route-target 10.1.3.4:900",
+            "import route-target 192.0.2.2:200",
             "import route-policy test-policy",
             "import from bridge-domain advertise-as-vpn",
             "import from default-vrf route-policy test-policy",
             "import from vrf advertise-as-vpn",
             "maximum prefix 500",
-            "no vrf VRF7",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
-    def test_iosxr_vrfs_overridden_idempotent(self):
-        """Test the idempotent nature of the iosxr_vrfs module in overridden state."""
+    def test_iosxr_vrf_address_family_overridden_idempotent(self):
+        """Test the idempotent nature of the iosxr_vrf_address_family module in overridden state."""
         run_cfg = dedent(
             """\
             vrf VRF6
-             mhost ipv4 default-interface Loopback0
-             evpn-route-sync 101
-             description VRF6 description
-             vpn id 4:5
-             fallback-vrf overridden-vrf
-             remote-route-filtering disable
-             rd 67:9
              address-family ipv4 unicast
               import route-policy test-policy
               import from bridge-domain advertise-as-vpn
               import from default-vrf route-policy test-policy
               import from vrf advertise-as-vpn
               import route-target
-               10.1.3.4:900
+               192.0.2.2:200
               !
               export route-policy rm-policy1
               export to vrf allow-imported-vpn
               export to default-vrf route-policy rm-policy
               export route-target
-               10.0.0.1:300
+               192.0.2.8:200
               !
               maximum prefix 500
             """,
@@ -491,23 +419,13 @@ class TestIosxrVrfsModule(TestIosxrModule):
                 config=[
                     dict(
                         name="VRF6",
-                        description="VRF6 description",
-                        evpn_route_sync=101,
-                        fallback_vrf="overridden-vrf",
-                        mhost=dict(
-                            afi="ipv4",
-                            default_interface="Loopback0",
-                        ),
-                        rd="67:9",
-                        remote_route_filtering=dict(disable=True),
-                        vpn=dict(id="4:5"),
                         address_families=[
                             dict(
                                 afi="ipv4",
                                 safi="unicast",
                                 export=dict(
                                     route_policy="rm-policy1",
-                                    route_target="10.0.0.1:300",
+                                    route_target="192.0.2.8:200",
                                     to=dict(
                                         default_vrf=dict(route_policy="rm-policy"),
                                         vrf=dict(allow_imported_vpn=True),
@@ -520,7 +438,7 @@ class TestIosxrVrfsModule(TestIosxrModule):
                                         vrf=dict(advertise_as_vpn=True),
                                     ),
                                     route_policy="test-policy",
-                                    route_target="10.1.3.4:900",
+                                    route_target="192.0.2.2:200",
                                 ),
                                 maximum=dict(prefix=500),
                             ),
@@ -532,25 +450,18 @@ class TestIosxrVrfsModule(TestIosxrModule):
         )
         self.execute_module(changed=False, commands=[])
 
-    def test_iosxr_vrfs_deleted(self):
-        """Test the deleted state of the iosxr_vrfs module."""
+    def test_iosxr_vrf_address_family_deleted(self):
+        """Test the deleted state of the iosxr_vrf_address_family module."""
         run_cfg = dedent(
             """\
             vrf VRF7
-             mhost ipv4 default-interface Loopback0
-             evpn-route-sync 398
-             description VRF7 description
-             vpn id 4:5
-             fallback-vrf replaced-vrf
-             remote-route-filtering disable
-             rd 67:9
              address-family ipv4 unicast
               import route-policy test-policy
               import from bridge-domain advertise-as-vpn
               import from default-vrf route-policy test-policy
               import from vrf advertise-as-vpn
               import route-target
-               12.2.3.4:900
+               192.0.2.2:200
               !
               export route-policy rm-policy
               export to vrf allow-imported-vpn
@@ -562,14 +473,26 @@ class TestIosxrVrfsModule(TestIosxrModule):
             """,
         )
         self.get_config.return_value = run_cfg
-        set_module_args(dict(state="deleted"))
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="VRF7",
+                    ),
+                ],
+                state="deleted",
+            ),
+        )
 
-        commands = ["no vrf VRF7"]
+        commands = [
+            "vrf VRF7",
+            "no address-family ipv4 unicast",
+        ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
-    def test_iosxr_vrfs_deleted_idempotent(self):
-        """Test the idempotent nature of the iosxr_vrfs module in deleted state."""
+    def test_iosxr_vrf_address_family_deleted_idempotent(self):
+        """Test the idempotent nature of the iosxr_vrf_address_family module in deleted state."""
         run_cfg = dedent(
             """\
             """,
@@ -580,30 +503,20 @@ class TestIosxrVrfsModule(TestIosxrModule):
         result = self.execute_module(changed=False)
         self.assertEqual(result["commands"], [])
 
-    def test_iosxr_vrfs_rendered(self):
-        """Test the rendered state of the iosxr_vrfs module."""
+    def test_iosxr_vrf_address_family_rendered(self):
+        """Test the rendered state of the iosxr_vrf_address_family module."""
         set_module_args(
             dict(
                 config=[
                     dict(
                         name="VRF4",
-                        description="VRF4 Description",
-                        evpn_route_sync=793,
-                        fallback_vrf="rendered-vrf",
-                        mhost=dict(
-                            afi="ipv4",
-                            default_interface="Loopback0",
-                        ),
-                        rd="3:4",
-                        remote_route_filtering=dict(disable=True),
-                        vpn=dict(id="2:3"),
                         address_families=[
                             dict(
                                 afi="ipv4",
                                 safi="unicast",
                                 export=dict(
                                     route_policy="rm-policy",
-                                    route_target="10.0.0.1:300",
+                                    route_target="192.0.2.1:400",
                                     to=dict(
                                         default_vrf=dict(route_policy="rm-policy"),
                                         vrf=dict(allow_imported_vpn=True),
@@ -616,7 +529,7 @@ class TestIosxrVrfsModule(TestIosxrModule):
                                         vrf=dict(advertise_as_vpn=True),
                                     ),
                                     route_policy="test-policy",
-                                    route_target="10.1.3.4:400",
+                                    route_target="192.0.2.6:200",
                                 ),
                                 maximum=dict(prefix=100),
                             ),
@@ -628,19 +541,12 @@ class TestIosxrVrfsModule(TestIosxrModule):
         )
         commands = [
             "vrf VRF4",
-            "description VRF4 Description",
-            "evpn-route-sync 793",
-            "fallback-vrf rendered-vrf",
-            "mhost ipv4 default-interface Loopback0",
-            "rd 3:4",
-            "remote-route-filtering disable",
-            "vpn id 2:3",
             "address-family ipv4 unicast",
             "export route-policy rm-policy",
-            "export route-target 10.0.0.1:300",
+            "export route-target 192.0.2.1:400",
             "export to default-vrf route-policy rm-policy",
             "export to vrf allow-imported-vpn",
-            "import route-target 10.1.3.4:400",
+            "import route-target 192.0.2.6:200",
             "import route-policy test-policy",
             "import from bridge-domain advertise-as-vpn",
             "import from default-vrf route-policy test-policy",
@@ -650,47 +556,53 @@ class TestIosxrVrfsModule(TestIosxrModule):
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
 
-    def test_iosxr_vrfs_parsed(self):
-        """Test the parsed state of the iosxr_vrfs module."""
+    def test_iosxr_vrf_address_family_parsed(self):
+        """Test the parsed state of the iosxr_vrf_address_family module."""
         run_cfg = dedent(
             """\
-            vrf my_vrf
-             mhost ipv4 default-interface Loopback0
-             evpn-route-sync 235
-             description "this is sample vrf for feature testing"
-             fallback-vrf "parsed-vrf"
-             rd "2:3"
-             remote-route-filtering disable
-             address-family ipv4 flowspec
-              import route-policy rm-policy
+            vrf test
+             address-family ipv4 unicast
+              export to default-vrf route-policy "rm-policy"
+              export to vrf allow-imported-vpn
+              export route-policy "export-policy"
+              export route-target
+               192.0.2.1:400
               import route-target
-               10.1.2.3:300
+               192.0.2.2:200
+              import route-policy "test-policy"
+              import from bridge-domain advertise-as-vpn
+              import from default-vrf route-policy "new-policy"
+              import from vrf advertise-as-vpn
+              maximum prefix 23
             """,
         )
         set_module_args(dict(running_config=run_cfg, state="parsed"))
         result = self.execute_module(changed=False)
         parsed_list = [
             {
-                "name": "my_vrf",
-                "mhost": {
-                    "afi": "ipv4",
-                    "default_interface": "Loopback0",
-                },
-                "evpn_route_sync": 235,
-                "description": "this is sample vrf for feature testing",
-                "fallback_vrf": "parsed-vrf",
-                "rd": "2:3",
-                "remote_route_filtering": {
-                    "disable": True,
-                },
+                "name": "test",
                 "address_families": [
                     {
                         "afi": "ipv4",
-                        "safi": "flowspec",
+                        "safi": "unicast",
                         "import_config": {
-                            "route_policy": "rm-policy",
-                            "route_target": "10.1.2.3:300",
+                            "route_policy": "test-policy",
+                            "route_target": "192.0.2.2:200",
+                            "from_config": {
+                                "bridge_domain": {"advertise_as_vpn": True},
+                                "default_vrf": {"route_policy": "new-policy"},
+                                "vrf": {"advertise_as_vpn": True},
+                            },
                         },
+                        "export": {
+                            "route_policy": "export-policy",
+                            "route_target": "192.0.2.1:400",
+                            "to": {
+                                "default_vrf": {"route_policy": "rm-policy"},
+                                "vrf": {"allow_imported_vpn": True},
+                            },
+                        },
+                        "maximum": {"prefix": 23},
                     },
                 ],
             },
