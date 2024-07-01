@@ -177,6 +177,29 @@ overridden:
               vrf:
                 advertise_as_vpn: true
   commands:
+    - vrf VRF4
+    - address-family ipv4 unicast
+    - no export route-policy rm-policy
+    - no export route-target 192.0.2.1:400
+    - no export to default-vrf route-policy rm-policy
+    - no export to vrf allow-imported-vpn
+    - no import route-target 192.0.2.6:200
+    - no import route-policy test-policy
+    - no import from bridge-domain advertise-as-vpn
+    - no import from default-vrf route-policy test-policy
+    - no import from vrf advertise-as-vpn
+    - no maximum prefix 100
+    - vrf VRF6
+    - address-family ipv4 unicast
+    - no export route-policy rm-policy
+    - no export route-target 192.0.2.0:400
+    - no export to default-vrf route-policy rm-policy
+    - no export to vrf allow-imported-vpn
+    - no import route-target 192.0.2.3:200
+    - no import route-policy test-policy
+    - no import from bridge-domain advertise-as-vpn
+    - no import from default-vrf route-policy test-policy
+    - no import from vrf advertise-as-vpn
     - vrf VRF7
     - address-family ipv4 unicast
     - export route-policy rm-policy1
