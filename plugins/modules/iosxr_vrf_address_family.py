@@ -24,7 +24,7 @@ notes:
   - Tested against Cisco IOSXR Version 10.0.0
   - This module works with connection C(network_cli). See L(the IOS_XR Platform Options,../network/user_guide/platform_iosxr.html)
   - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
-  - For more information on using Ansible to manage Cisco devices see the `Cisco integration page <https://www.ansible.com/integrations/networks/cisco>`_.
+  - For more information on using Ansible to manage Cisco devices see the `Cisco integration page <https://www.ansible.com/integrations/networks/cisco>`.
 options:
   config:
     description: VRF address family configuration.
