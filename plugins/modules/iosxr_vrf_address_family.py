@@ -180,7 +180,7 @@ EXAMPLES = """
 # Task Output:
 # ------------
 #
-# before: {}
+# before: []
 #
 # commands:
 # - vrf VRF4
