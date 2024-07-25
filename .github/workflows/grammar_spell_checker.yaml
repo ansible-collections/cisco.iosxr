@@ -1,6 +1,6 @@
 name: Grammar and Spell Check
 
-on: [pull_request]
+on: [workflow_dispatch]
 
 jobs:
   check:
