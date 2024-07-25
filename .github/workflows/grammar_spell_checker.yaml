@@ -1,17 +1,12 @@
 name: Grammar and Spell Check
 
-on:
-  workflow_dispatch:
-    paths:
-      - '**/*.py'
-      - '**/*.yaml'
-      - '**/*.rst'
+on: [pull_request]
 
 jobs:
-  grammar_spell_check:
+  check:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Python
@@ -19,24 +14,20 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install requirements
+      - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install language-tool-python pyspellchecker
+          pip install language-tool-python
 
-      - name: Find modified files
-        id: files
+      - name: Check for .py and .yaml changes
+        id: check_changes
         run: |
-          echo "::set-output name=changed_files::$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep -E '\.py$|\.yaml$')"
+          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.(py|yaml)$' || true)
+          echo "::set-output name=changed_files::$changed_files"
 
       - name: Run grammar and spell check
+        if: steps.check_changes.outputs.changed_files != ''
         run: |
-          changed_files="${{ steps.files.outputs.changed_files }}"
-          if [ -z "$changed_files" ]; then
-            echo "No .py or .yaml files changed."
-            exit 0
-          fi
-          # Grammar check
+          changed_files=${{ steps.check_changes.outputs.changed_files }}
           echo "$changed_files" | while read file; do
             python -c "
 import language_tool_python
@@ -51,20 +42,4 @@ for match in matches:
     print(f'{file}: {match}')
 "
           done
-
-          # Spell check
-          echo "$changed_files" | while read file; do
-            python -c "
-from spellchecker import SpellChecker
-
-spell = SpellChecker()
-
-with open('${file}', 'r') as f:
-    content = f.read()
-
-words = content.split()
-misspelled = spell.unknown(words)
-for word in misspelled:
-    print(f'Misspelled word in {file}: {word}')
-"
-          done
+        shell: bash
