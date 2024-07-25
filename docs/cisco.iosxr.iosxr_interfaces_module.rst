@@ -17,7 +17,7 @@ Version added: 1.0.0
 
 Synopsis
 --------
-- This module manages the interface attributes on Cisco IOS-XR network devices.
+- This module mages the inteface attriutes on Cisco IOS-XR network devices.
 
 
 

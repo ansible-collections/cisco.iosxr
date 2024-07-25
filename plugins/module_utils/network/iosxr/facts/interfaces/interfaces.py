@@ -50,8 +50,8 @@ class InterfacesFacts(object):
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """Populate the facts for interfaces
-        :param module: the module instance
-        :param connection: the device connection
+        :param module: the modle instance
+        :param connection: th device connection
         :param data: previously collected conf
         :rtype: dictionary
         :returns: facts
