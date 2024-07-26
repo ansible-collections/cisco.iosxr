@@ -1,0 +1,17 @@
+---
+- name: Merge provided configuration with device configuration
+  register: result
+  cisco.iosxr.iosxr_config:
+    lines:
+      - vrf VRF4
+      - address-family ipv4 unicast
+      - export route-policy rm-policy
+      - export route-target 192.0.2.1:400
+      - export to default-vrf route-policy rm-policy
+      - export to vrf allow-imported-vpn
+      - import route-target 192.0.2.6:200
+      - import route-policy test-policy
+      - import from bridge-domain advertise-as-vpn
+      - import from default-vrf route-policy test-policy
+      - import from vrf advertise-as-vpn
+      - maximum prefix 100

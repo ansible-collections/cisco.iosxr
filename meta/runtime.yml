@@ -62,3 +62,5 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr_hostname
     vrf_global:
       redirect: cisco.iosxr.iosxr_vrf_global
+    vrf_address_family:
+      redirect: cisco.iosxr.iosxr_vrf_address_family

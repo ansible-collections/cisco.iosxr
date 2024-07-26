@@ -1,0 +1,3 @@
+---
+minor_changes:
+  - Adds a new module `iosxr_vrf_address_family` to manage VRFs address families on Cisco IOS-XR devices (https://github.com/ansible-collections/cisco.iosxr/pull/489).
