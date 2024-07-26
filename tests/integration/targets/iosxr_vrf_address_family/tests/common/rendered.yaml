@@ -20,7 +20,7 @@
                 vrf:
                   allow_imported_vpn: "true"
             import_config:
-              route_target: "192.0.2.6:400"
+              route_target: "192.0.2.6:200"
               route_policy: "test-policy"
               from_config:
                 bridge_domain:
