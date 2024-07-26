@@ -142,9 +142,7 @@ EXAMPLES = """
 # Before state:
 # -------------
 #
-# RP/0/0/CPU0:iosxr-02#show running-config vrf
-# Fri Feb  9 07:02:35.789 UTC
-# !
+# RP/0/0/CPU0:iosxr#show running-config vrf
 # vrf test
 #
 
@@ -225,8 +223,7 @@ EXAMPLES = """
 # After state:
 # ------------
 #
-# RP/0/0/CPU0:iosxr-02#show running-config vrf
-# Sat Feb 20 03:49:43.618 UTC
+# RP/0/0/CPU0:iosxr#show running-config vrf
 # vrf VRF4
 #  address-family ipv4 unicast
 #   export route-policy rm-policy
@@ -245,8 +242,7 @@ EXAMPLES = """
 # Before state:
 # -------------
 #
-# RP/0/0/CPU0:iosxr-02#show running-config vrf
-# Sat Feb 20 03:49:43.618 UTC
+# RP/0/0/CPU0:iosxr#show running-config vrf
 # vrf VRF4
 #  address-family ipv4 unicast
 #   export route-policy rm-policy
@@ -360,8 +356,7 @@ EXAMPLES = """
 # After state:
 # ------------
 #
-# RP/0/RP0/CPU0:ios(config)#show running-config vrf
-# Sun Mar 10 16:48:53.204 UTC
+# RP/0/RP0/CPU0:iosxr(config)#show running-config vrf
 # vrf VRF7
 #  address-family ipv4 unicast
 #   import route-policy test-policy
@@ -384,8 +379,7 @@ EXAMPLES = """
 # Before state:
 # -------------
 #
-# RP/0/RP0/CPU0:ios(config)#show running-config vrf
-# Sun Mar 10 16:48:53.204 UTC
+# RP/0/RP0/CPU0:iosxr(config)#show running-config vrf
 # vrf VRF7
 #  address-family ipv4 unicast
 #   import route-policy test-policy
@@ -516,8 +510,7 @@ EXAMPLES = """
 #
 # After state:
 # -------------
-# RP/0/RP0/CPU0:ios(config)#show running-config vrf
-# Sun Mar 10 16:54:53.007 UTC
+# RP/0/RP0/CPU0:iosxr(config)#show running-config vrf
 # vrf VRF4
 # vrf VRF6
 #  address-family ipv4 unicast
@@ -540,8 +533,7 @@ EXAMPLES = """
 # Before state:
 # -------------
 #
-# RP/0/RP0/CPU0:ios(config)#show running-config vrf
-# Sun Mar 10 16:54:53.007 UTC
+# RP/0/RP0/CPU0:iosxr(config)#show running-config vrf
 # vrf VRF4
 # vrf VRF6
 #  address-family ipv4 unicast
@@ -609,8 +601,7 @@ EXAMPLES = """
 # After state:
 # ------------
 #
-# RP/0/RP0/CPU0:ios(config)#show running-config vrf
-# Sun Mar 10 17:02:38.981 UTC
+# RP/0/RP0/CPU0:iosxr(config)#show running-config vrf
 # vrf VRF4
 # vrf VRF6
 # vrf VRF7
@@ -668,8 +659,7 @@ EXAMPLES = """
 # Before state:
 # -------------
 #
-# RP/0/RP0/CPU0:ios(config)#show running-config vrf
-# Sun Mar 10 17:02:38.981 UTC
+# RP/0/RP0/CPU0:iosxr(config)#show running-config vrf
 # vrf VRF4
 #  address-family ipv4 unicast
 #   export route-policy rm-policy
