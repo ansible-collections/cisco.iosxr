@@ -27,7 +27,7 @@
 - name: Overridden with empty configuration should give appropriate error message
   register: result
   ignore_errors: true
-  cisco.ios.ios_vrf_address_family:
+  cisco.iosxr.iosxr_vrf_address_family:
     config:
     state: overridden
 
