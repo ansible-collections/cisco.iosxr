@@ -1,0 +1,56 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_ospfv3 replaced integration tests on connection={{ ansible_connection }}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- ansible.builtin.include_tasks: _populate_config.yaml
+
+- block:
+    - name: Replace device configurations of ospfv3 routes with provided configurations
+      register: result
+      cisco.iosxr.iosxr_ospfv3: &id001
+        config:
+          processes:
+            - process_id: 27
+              areas:
+                - area_id: 10
+                  hello_interval: 2
+                - area_id: 20
+                  cost: 2
+                  default_cost: 2
+            - process_id: 26
+              authentication:
+                disable: true
+        state: replaced
+
+    - name: Assert that correct set of commands were generated
+      ansible.builtin.assert:
+        that:
+          - "{{ replaced['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
+
+    - name: Assert that before dicts are correctly generated
+      ansible.builtin.assert:
+        that:
+          - "{{ replaced['before'] == result['before'] }}"
+
+    - name: Assert that after dict is correctly generated
+      ansible.builtin.assert:
+        that:
+          - "{{ replaced['after'] == result['after'] }}"
+
+    - name: Replace device configurations of listed vrfs/global entry with provided configuration (idempotent)
+      register: result
+      cisco.iosxr.iosxr_ospfv3: *id001
+    - name: Assert that task was idempotent
+      ansible.builtin.assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
+
+    - name: Assert that before dict is correctly generated
+      ansible.builtin.assert:
+        that:
+          - "{{ replaced['after'] == result['before'] }}"
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

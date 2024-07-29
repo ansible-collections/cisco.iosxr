@@ -1,0 +1,8 @@
+---
+- name: Populate configuration
+  vars:
+    lines:
+      "interface GigabitEthernet 0/0/0/0\nipv4 address 198.51.100.1 255.255.255.0\nipv6 address 2001:db8::/32\ninterface GigabitEthernet 0/0/0/1\nipv4 address\
+      \ 192.0.2.1 255.255.255.0\nipv4 address 192.0.2.2 255.255.255.0 secondary\n"
+  ansible.netcommon.cli_config:
+    config: "{{ lines }}"

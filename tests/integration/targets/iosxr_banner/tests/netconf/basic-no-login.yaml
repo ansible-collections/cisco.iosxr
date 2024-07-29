@@ -1,0 +1,30 @@
+---
+- name: Setup
+  cisco.iosxr.iosxr_banner:
+    banner: login
+    text: "@Junk login banner\nover multiple lines\n@"
+    state: present
+
+- name: Remove login
+  register: result
+  cisco.iosxr.iosxr_banner:
+    banner: login
+    state: absent
+- ansible.builtin.debug:
+    msg: "{{ result }}"
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - '''xc:operation="delete"'' in result.xml'
+
+- name: Remove login (idempotent)
+  register: result
+  cisco.iosxr.iosxr_banner:
+    banner: login
+    state: absent
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+      - result.xml | length == 0

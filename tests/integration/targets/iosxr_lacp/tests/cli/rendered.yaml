@@ -1,0 +1,18 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_lacp rendered integration tests on connection={{ ansible_connection }}
+
+- name: Render platform specific commands from task input using rendered state
+  register: result
+  cisco.iosxr.iosxr_lacp:
+    config:
+      system:
+        priority: 11
+        mac:
+          address: 00c1.4c00.bd15
+    state: rendered
+
+- name: Assert that correct set of commands were rendered
+  ansible.builtin.assert:
+    that:
+      - "{{ rendered['commands'] | symmetric_difference(result['rendered']) |length == 0 }}"

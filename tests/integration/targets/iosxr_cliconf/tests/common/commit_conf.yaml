@@ -1,0 +1,46 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_cliconf integration tests on connection={{ ansible_connection }}
+
+- block:
+    - name: Remove interfaces from configuration before actual testing
+      ignore_errors: true
+      cisco.iosxr.iosxr_config:
+        lines:
+          - no interface loopback 777
+
+    - name: Apply interface description
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        state: merged
+        config:
+          - name: loopback 777
+            description: TestCommitConfirmed
+
+    - name: Do commit confirmed
+      cisco.iosxr.iosxr_command:
+        commands:
+          - commit confirmed
+      when: result["changed"] == true
+
+    - name: Sleep for 35 sec.
+      ansible.builtin.wait_for:
+        timeout: 35
+      when: result["changed"] == true
+
+    - name: Get interface description
+      register: get_desc
+      iosxr_command:
+        commands:
+          - show running-config interface loopback 777 description
+      ignore_errors: true
+
+    - ansible.builtin.assert:
+        that:
+          - "'TestCommitConfirmed' in get_desc.stdout[0]"
+  always:
+    - name: Remove interfaces from configuration before actual testing
+      ignore_errors: true
+      cisco.iosxr.iosxr_config:
+        lines:
+          - no interface loopback 777

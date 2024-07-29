@@ -1,0 +1,27 @@
+---
+- name: Remove bundles
+  vars:
+    lines: "no interface Bundle-Ether10\nno interface Bundle-Ether11\nno interface Bundle-Ether12\n"
+  ansible.netcommon.cli_config:
+    config: "{{ lines }}"
+
+- name: Remove lacp interface configuration
+  loop:
+    - 0/0/0/0
+    - 0/0/0/1
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no lacp period
+      - shutdown
+    parents: interface GigabitEthernet{{ item }}
+
+- name: Remove unwanted interfaces from configuration
+  loop:
+    - 0/0/0/2
+    - 0/0/0/3
+    - 0/0/0/4
+    - 0/0/0/5
+  ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no interface GigabitEthernet{{ item }}

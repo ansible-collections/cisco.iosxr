@@ -1,0 +1,74 @@
+---
+- ansible.builtin.debug:
+    msg: Start iosxr_ntp_global merged integration tests connection={{ ansible_connection}}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- block:
+    - name: Merge the provided configuration with the existing running configuration
+      cisco.iosxr.iosxr_ntp_global:
+        config:
+          access_group:
+            ipv4:
+              peer: PeerAcl1
+              query_only: QueryOnlyAcl1
+              serve: ServeAcl1
+              serve_only: ServeOnlyAcl1
+            vrfs:
+              - ipv4:
+                  peer: PeerAcl3
+                  serve: ServeAcl2
+                name: siteA
+          authenticate: true
+          broadcastdelay: 1
+          drift:
+            aging_time: 0
+            file: apphost
+          interfaces:
+            - name: GigabitEthernet0/0/0/0
+              multicast_client: 224.0.0.8
+              multicast_destination: 224.0.0.8
+              broadcast_client: true
+          ipv4:
+            dscp: af11
+          ipv6:
+            precedence: routine
+          log_internal_sync: true
+          master:
+            stratum: 1
+          max_associations: 10
+          passive: true
+          peers:
+            - iburst: true
+              peer: 192.0.2.1
+              vrf: siteC
+          servers:
+            - burst: true
+              server: 192.0.2.2
+              vrf: siteD
+          source_interface: GigabitEthernet0/0/0/0
+          source_vrfs:
+            - name: GigabitEthernet0/0/0/0
+              vrf: siteE
+          trusted_keys:
+            - key_id: 1
+          update_calendar: true
+
+      register: result
+
+    - name: Assert that before dicts were correctly generated
+      ansible.builtin.assert:
+        that: "{{ result['before'] == {} }}"
+
+    - name: Assert that correct set of commands were generated
+      ansible.builtin.assert:
+        that:
+          - "{{ merged['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
+
+    - name: Assert that after dicts were correctly generated
+      ansible.builtin.assert:
+        that:
+          - merged['after'] == result['after']
+
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

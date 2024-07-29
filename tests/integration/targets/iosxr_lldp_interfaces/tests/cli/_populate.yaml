@@ -1,0 +1,12 @@
+---
+- name: Setup gige1
+  cisco.iosxr.iosxr_config:
+    lines:
+      - lldp receive disable
+    parents: interface GigabitEthernet0/0/0/1
+
+- name: Setup gige0
+  cisco.iosxr.iosxr_config:
+    lines:
+      - lldp transmit disable
+    parents: interface GigabitEthernet0/0/0/0

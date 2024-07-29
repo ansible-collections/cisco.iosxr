@@ -1,0 +1,142 @@
+---
+parsed:
+  - name: Loopback888
+  - name: MgmtEth0/RP0/CPU0/0
+  - l2protocol:
+      - cpsv: tunnel
+    l2transport: true
+    name: GigabitEthernet0/0/0/1
+    propagate: true
+  - name: GigabitEthernet0/0/0/3.900
+    encapsulation:
+      dot1q: 20
+      second_dot1q: 40
+merged:
+  before:
+    - name: Loopback888
+    - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
+  commands:
+    - interface GigabitEthernet0/0/0/1
+    - l2transport l2protocol cpsv tunnel
+    - l2transport propagate remote-status
+    - interface GigabitEthernet0/0/0/3.900
+    - encapsulation dot1q 20 second-dot1q 40
+  after:
+    - name: Loopback888
+    - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
+    - l2protocol:
+        - cpsv: tunnel
+      l2transport: true
+      name: GigabitEthernet0/0/0/1
+      propagate: true
+    - name: GigabitEthernet0/0/0/3.900
+      encapsulation:
+        dot1q: 20
+        second_dot1q: 40
+
+replaced:
+  before:
+    - name: Loopback888
+    - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
+    - l2protocol:
+        - cpsv: tunnel
+      l2transport: true
+      name: GigabitEthernet0/0/0/1
+      propagate: true
+    - name: GigabitEthernet0/0/0/3.900
+      encapsulation:
+        dot1q: 40
+        second_dot1q: 60
+    - l2protocol:
+        - cpsv: tunnel
+      l2transport: true
+      name: GigabitEthernet0/0/0/4
+  commands:
+    - interface GigabitEthernet0/0/0/1
+    - no l2transport
+    - l2transport l2protocol cpsv drop
+  after:
+    - name: Loopback888
+    - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
+    - l2protocol:
+        - cpsv: drop
+      l2transport: true
+      name: GigabitEthernet0/0/0/1
+    - name: GigabitEthernet0/0/0/3.900
+      encapsulation:
+        dot1q: 40
+        second_dot1q: 60
+    - l2protocol:
+        - cpsv: tunnel
+      l2transport: true
+      name: GigabitEthernet0/0/0/4
+
+overridden:
+  before:
+    - name: Loopback888
+    - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
+    - l2protocol:
+        - cpsv: tunnel
+      l2transport: true
+      name: GigabitEthernet0/0/0/1
+      propagate: true
+    - name: GigabitEthernet0/0/0/3.900
+      encapsulation:
+        dot1q: 40
+        second_dot1q: 60
+    - l2protocol:
+        - cpsv: tunnel
+      l2transport: true
+      name: GigabitEthernet0/0/0/4
+  commands:
+    - interface GigabitEthernet0/0/0/1
+    - no l2transport
+    - interface GigabitEthernet0/0/0/3.900
+    - encapsulation dot1q 20 second-dot1q 40
+  after:
+    - name: Loopback888
+    - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
+    - name: GigabitEthernet0/0/0/3.900
+      encapsulation:
+        dot1q: 20
+        second_dot1q: 40
+    - l2protocol:
+        - cpsv: tunnel
+      l2transport: true
+      name: GigabitEthernet0/0/0/4
+deleted:
+  before:
+    - name: Loopback888
+    - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
+    - l2protocol:
+        - cpsv: tunnel
+      l2transport: true
+      name: GigabitEthernet0/0/0/1
+      propagate: true
+    - name: GigabitEthernet0/0/0/3.900
+      encapsulation:
+        dot1q: 40
+        second_dot1q: 60
+    - l2protocol:
+        - cpsv: tunnel
+      l2transport: true
+      name: GigabitEthernet0/0/0/4
+  commands:
+    - interface GigabitEthernet0/0/0/1
+    - no l2transport
+    - interface GigabitEthernet0/0/0/3.900
+    - no encapsulation dot1q
+    - interface GigabitEthernet0/0/0/4
+    - no l2transport
+  after:
+    - name: Loopback888
+    - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
+    - name: GigabitEthernet0/0/0/3.900

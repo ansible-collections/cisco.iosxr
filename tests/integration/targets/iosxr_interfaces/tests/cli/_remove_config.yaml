@@ -1,0 +1,18 @@
+---
+- name: Remove configuration
+  vars:
+    lines: "interface loopback888\nno description\nno shutdown\ninterface loopback999\nno description\nno shutdown\n"
+  ansible.netcommon.cli_config:
+    config: "{{ lines }}"
+
+- name: Remove interfaces from configuration before actual testing
+  loop:
+    - GigabitEthernet 0/0/0/0
+    - GigabitEthernet 0/0/0/1
+    - GigabitEthernet 0/0/0/2
+    - GigabitEthernet 0/0/0/3
+    - loopback 777
+  ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no interface {{ item }}

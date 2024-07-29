@@ -1,0 +1,40 @@
+---
+- ansible.builtin.debug: msg="START cli/replace_config.yaml on connection={{ ansible_connection }}"
+
+- name: Setup
+  cisco.iosxr.iosxr_config:
+    commands:
+      - no interface GigabitEthernet0/0/0/3
+
+- name: Replace configuration (add preconfigured interface)
+  register: result
+  cisco.iosxr.iosxr_config: &id001
+    src: "{{ role_path }}/fixtures/config_add_interface.txt"
+    replace: config
+
+- ansible.builtin.assert:
+    that:
+      - '"load harddisk:/ansible_config.txt" in result.commands'
+
+- name: Replace configuration (add preconfigured interface)(idempotence)
+  register: result
+  cisco.iosxr.iosxr_config: *id001
+- ansible.builtin.assert: &id003
+    that:
+      - result.changed == false
+
+- name: Replace configuration (del preconfigured interface)
+  register: result
+  cisco.iosxr.iosxr_config: &id002
+    src: "{{ role_path }}/fixtures/config_del_interface.txt"
+    replace: config
+
+- ansible.builtin.assert:
+    that:
+      - '"load harddisk:/ansible_config.txt" in result.commands'
+
+- name: Replace configuration (del preconfigured interface)(idempotence)
+  register: result
+  cisco.iosxr.iosxr_config: *id002
+- ansible.builtin.assert: *id003
+- ansible.builtin.debug: msg="END cli/replace_config.yaml on connection={{ ansible_connection }}"

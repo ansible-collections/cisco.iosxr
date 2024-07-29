@@ -1,0 +1,255 @@
+---
+merged:
+  before:
+    - enabled: true
+      name: Loopback888
+    - enabled: true
+      name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
+    - description: this is interface0
+      enabled: true
+      mtu: 65
+      name: GigabitEthernet0/0/0/0
+      speed: 10
+    - description: this is interface1
+      enabled: true
+      mtu: 65
+      name: GigabitEthernet0/0/0/1
+      speed: 10
+  commands:
+    - interface GigabitEthernet0/0/0/0
+    - description Configured and Merged by Ansible-Network
+    - mtu 110
+    - duplex half
+    - interface GigabitEthernet0/0/0/1
+    - description Configured and Merged by Ansible-Network
+    - mtu 2800
+    - speed 100
+    - duplex full
+    - shutdown
+  after:
+    - enabled: true
+      name: Loopback888
+    - enabled: true
+      name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
+    - description: Configured and Merged by Ansible-Network
+      duplex: half
+      enabled: true
+      mtu: 110
+      name: GigabitEthernet0/0/0/0
+      speed: 10
+    - description: Configured and Merged by Ansible-Network
+      duplex: full
+      enabled: false
+      mtu: 2800
+      name: GigabitEthernet0/0/0/1
+      speed: 100
+  preconfigure:
+    before:
+      - enabled: true
+        name: Loopback888
+      - enabled: true
+        name: Loopback999
+      - enabled: true
+        name: MgmtEth0/RP0/CPU0/0
+    commands:
+      - interface GigabitEthernet0/0/0/2
+      - description Configured and Merged by Ansible-Network
+      - mtu 110
+      - duplex half
+      - no shutdown
+      - interface GigabitEthernet0/0/0/3
+      - description Configured and Merged by Ansible-Network
+      - mtu 2800
+      - speed 100
+      - duplex full
+      - shutdown
+    after:
+      - enabled: true
+        name: Loopback888
+      - enabled: true
+        name: Loopback999
+      - enabled: true
+        name: MgmtEth0/RP0/CPU0/0
+      - description: Configured and Merged by Ansible-Network
+        duplex: half
+        enabled: true
+        mtu: 110
+        name: GigabitEthernet0/0/0/2
+      - description: Configured and Merged by Ansible-Network
+        duplex: full
+        enabled: false
+        mtu: 2800
+        speed: 100
+        name: GigabitEthernet0/0/0/3
+
+parsed:
+  after:
+    - description: test for ansible
+      enabled: false
+      name: Loopback888
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
+    - description: Configured and Merged by Ansible-Network
+      duplex: half
+      enabled: true
+      mtu: 110
+      name: GigabitEthernet0/0/0/0
+    - enabled: false
+      name: GigabitEthernet0/0/0/3
+    - enabled: false
+      name: GigabitEthernet0/0/0/4
+replaced:
+  before:
+    - enabled: true
+      name: Loopback888
+    - enabled: true
+      name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
+    - description: this is interface0
+      enabled: true
+      mtu: 65
+      name: GigabitEthernet0/0/0/0
+      speed: 10
+    - description: this is interface1
+      enabled: true
+      mtu: 65
+      name: GigabitEthernet0/0/0/1
+      speed: 10
+  commands:
+    - interface GigabitEthernet0/0/0/0
+    - no speed
+    - description Configured and Replaced by Ansible-Network
+    - mtu 110
+    - interface GigabitEthernet0/0/0/1
+    - no mtu
+    - description Configured and Replaced by Ansible-Network
+    - speed 100
+  after:
+    - enabled: true
+      name: Loopback888
+    - enabled: true
+      name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
+    - description: Configured and Replaced by Ansible-Network
+      enabled: true
+      mtu: 110
+      name: GigabitEthernet0/0/0/0
+    - description: Configured and Replaced by Ansible-Network
+      enabled: true
+      name: GigabitEthernet0/0/0/1
+      speed: 100
+rendered:
+  commands:
+    - interface GigabitEthernet0/0/0/0
+    - description Configured and Merged by Ansible-Network
+    - mtu 110
+    - duplex half
+    - no shutdown
+    - interface GigabitEthernet0/0/0/1
+    - description Configured and Merged by Ansible-Network
+    - mtu 2800
+    - speed 100
+    - duplex full
+    - shutdown
+overridden:
+  before:
+    - enabled: true
+      name: Loopback888
+    - enabled: true
+      name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
+    - description: this is interface0
+      enabled: true
+      mtu: 65
+      name: GigabitEthernet0/0/0/0
+      speed: 10
+    - description: this is interface1
+      enabled: true
+      mtu: 65
+      name: GigabitEthernet0/0/0/1
+      speed: 10
+  commands:
+    - interface GigabitEthernet0/0/0/0
+    - no description
+    - no speed
+    - no mtu
+    - interface GigabitEthernet0/0/0/1
+    - description Configured and Overridden by Ansible-Network
+    - mtu 2000
+    - duplex full
+    - speed 100
+    - shutdown
+  after:
+    - enabled: true
+      name: Loopback888
+    - enabled: true
+      name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
+    - description: Configured and Overridden by Ansible-Network
+      duplex: full
+      enabled: false
+      mtu: 2000
+      name: GigabitEthernet0/0/0/1
+      speed: 100
+gathered:
+  after:
+    - enabled: true
+      name: Loopback888
+    - enabled: true
+      name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
+    - description: This interface is Configured and Merged by Ansible-Network
+      duplex: half
+      enabled: true
+      mtu: 110
+      name: GigabitEthernet0/0/0/0
+      speed: 10
+    - description: Configured and Merged by Ansible-Network
+      duplex: full
+      enabled: false
+      mtu: 2800
+      name: GigabitEthernet0/0/0/1
+      speed: 100
+deleted:
+  before:
+    - enabled: true
+      name: Loopback888
+    - enabled: true
+      name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0
+    - description: this is interface0
+      enabled: true
+      mtu: 65
+      name: GigabitEthernet0/0/0/0
+      speed: 10
+    - description: this is interface1
+      enabled: true
+      mtu: 65
+      name: GigabitEthernet0/0/0/1
+      speed: 10
+  commands:
+    - interface GigabitEthernet0/0/0/0
+    - no description
+    - no speed
+    - no mtu
+    - interface GigabitEthernet0/0/0/1
+    - no description
+    - no speed
+    - no mtu
+  after:
+    - enabled: true
+      name: Loopback888
+    - enabled: true
+      name: Loopback999
+    - enabled: true
+      name: MgmtEth0/RP0/CPU0/0

@@ -1,0 +1,8 @@
+---
+- name: Populate configuration
+  vars:
+    lines:
+      "interface GigabitEthernet 0/0/0/1\nl2transport l2protocol cpsv tunnel\nl2transport propagate remote-status\ninterface GigabitEthernet 0/0/0/4\nl2transport\
+      \ l2protocol cpsv tunnel\ninterface GigabitEthernet 0/0/0/3.900\nencapsulation dot1q 40 second-dot1q 60\n"
+  ansible.netcommon.cli_config:
+    config: "{{ lines }}"

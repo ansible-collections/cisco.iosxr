@@ -1,0 +1,138 @@
+---
+merged:
+  before: []
+  commands:
+    - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 cost 20
+    - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest
+    - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest keychain cisco
+    - router ospfv3 LAB3 area 0.0.0.2 interface GigabitEthernet 0/0/0/0 cost 30
+
+  update_commands:
+    - router ospf LAB3 area 0.0.0.1 interface GigabitEthernet 0/0/0/1 cost 10
+    - router ospf LAB3 area 0.0.0.1 interface GigabitEthernet 0/0/0/1 authentication message-digest
+    - router ospf LAB3 area 0.0.0.1 interface GigabitEthernet 0/0/0/1 authentication message-digest keychain lab1
+    - router ospfv3 LAB3 area 0.0.0.4 interface GigabitEthernet 0/0/0/1 cost 40
+  after:
+    - address_family:
+        - afi: ipv4
+          authentication:
+            message_digest:
+              keychain: cisco
+          cost: 20
+          processes:
+            - area:
+                area_id: 0.0.0.3
+              process_id: "LAB3"
+        - afi: ipv6
+          cost: 30
+          processes:
+            - area:
+                area_id: 0.0.0.2
+              process_id: "LAB3"
+      name: GigabitEthernet0/0/0/0
+      type: gigabitethernet
+
+  update_after:
+    - address_family:
+        - afi: ipv4
+          authentication:
+            message_digest:
+              keychain: lab1
+          cost: 10
+          processes:
+            - area:
+                area_id: 0.0.0.1
+              process_id: "LAB3"
+        - afi: ipv6
+          cost: 40
+          processes:
+            - area:
+                area_id: 0.0.0.4
+              process_id: "LAB3"
+      name: GigabitEthernet0/0/0/1
+      type: gigabitethernet
+    - address_family:
+        - afi: ipv4
+          authentication:
+            message_digest:
+              keychain: cisco
+          cost: 20
+          processes:
+            - area:
+                area_id: 0.0.0.3
+              process_id: "LAB3"
+        - afi: ipv6
+          cost: 30
+          processes:
+            - area:
+                area_id: 0.0.0.2
+              process_id: "LAB3"
+      name: GigabitEthernet0/0/0/0
+      type: gigabitethernet
+replaced:
+  commands:
+    - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 cost 30
+    - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest
+    - router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0 authentication message-digest keychain ciscoiosxr
+
+  after:
+    - address_family:
+        - afi: ipv4
+          authentication:
+            message_digest:
+              keychain: ciscoiosxr
+          cost: 30
+          processes:
+            - area:
+                area_id: 0.0.0.3
+              process_id: "LAB3"
+        - afi: ipv6
+          cost: 30
+          processes:
+            - area:
+                area_id: 0.0.0.2
+              process_id: "LAB3"
+      name: GigabitEthernet0/0/0/0
+      type: gigabitethernet
+
+overridden:
+  commands:
+    - no router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0
+    - no router ospfv3 LAB3 area 0.0.0.2 interface GigabitEthernet 0/0/0/0
+    - router ospf LAB1 area 0.0.0.3 interface GigabitEthernet 0/0/0/1 cost 10
+    - router ospf LAB1 area 0.0.0.3 interface GigabitEthernet 0/0/0/1 authentication message-digest
+    - router ospf LAB1 area 0.0.0.3 interface GigabitEthernet 0/0/0/1 authentication message-digest keychain iosxr
+
+  after:
+    - address_family:
+        - afi: ipv4
+          authentication:
+            message_digest:
+              keychain: iosxr
+          cost: 10
+          processes:
+            - area:
+                area_id: 0.0.0.3
+              process_id: "LAB1"
+      name: GigabitEthernet0/0/0/1
+      type: gigabitethernet
+deleted:
+  commands:
+    - no router ospf LAB3 area 0.0.0.3 interface GigabitEthernet 0/0/0/0
+    - no router ospfv3 LAB3 area 0.0.0.2 interface GigabitEthernet 0/0/0/0
+
+  after: []
+round_trip:
+  after:
+    - name: GigabitEthernet0/0/0/1
+      type: gigabitethernet
+      address_family:
+        - afi: ipv4
+          processes:
+            - process_id: "LAB1"
+              area:
+                area_id: 0.0.0.3
+          cost: 10
+          authentication:
+            message_digest:
+              keychain: iosxr

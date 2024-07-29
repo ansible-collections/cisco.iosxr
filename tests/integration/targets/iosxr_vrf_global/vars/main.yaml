@@ -1,0 +1,178 @@
+---
+merged:
+  before: []
+
+  commands:
+    - vrf VRF4
+    - description VRF4 Description
+    - evpn-route-sync 793
+    - fallback-vrf merged-vrf
+    - mhost ipv4 default-interface Loopback0
+    - rd 3:4
+    - remote-route-filtering disable
+    - vpn id 2:3
+  after:
+    - name: VRF4
+      description: VRF4 Description
+      evpn_route_sync: 793
+      fallback_vrf: merged-vrf
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      rd: "3:4"
+      remote_route_filtering:
+        disable: true
+      vpn:
+        id: "2:3"
+
+replaced:
+  before:
+    - name: VRF4
+      description: VRF4 Description
+      evpn_route_sync: 793
+      fallback_vrf: merged-vrf
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      rd: "3:4"
+      remote_route_filtering:
+        disable: true
+      vpn:
+        id: "2:3"
+  commands:
+    - vrf VRF7
+    - description VRF7 description
+    - evpn-route-sync 398
+    - fallback-vrf replaced-vrf
+    - mhost ipv4 default-interface Loopback0
+    - rd 6:9
+    - remote-route-filtering disable
+    - vpn id 4:5
+  after:
+    - name: VRF4
+      description: VRF4 Description
+      evpn_route_sync: 793
+      fallback_vrf: merged-vrf
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      rd: "3:4"
+      remote_route_filtering:
+        disable: true
+      vpn:
+        id: "2:3"
+    - name: VRF7
+      description: VRF7 description
+      evpn_route_sync: 398
+      fallback_vrf: "replaced-vrf"
+      remote_route_filtering:
+        disable: true
+      rd: "6:9"
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      vpn:
+        id: "4:5"
+
+overridden:
+  before:
+    - name: VRF4
+      description: VRF4 Description
+      evpn_route_sync: 793
+      fallback_vrf: merged-vrf
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      rd: "3:4"
+      remote_route_filtering:
+        disable: true
+      vpn:
+        id: "2:3"
+
+  commands:
+    - vrf VRF4
+    - no description VRF4 Description
+    - no evpn-route-sync 793
+    - no fallback-vrf merged-vrf
+    - no mhost ipv4 default-interface Loopback0
+    - no rd 3:4
+    - no remote-route-filtering disable
+    - no vpn id 2:3
+    - vrf VRF6
+    - description VRF6 Description
+    - evpn-route-sync 101
+    - fallback-vrf overridden-vrf
+    - mhost ipv4 default-interface Loopback0
+    - rd 9:8
+    - remote-route-filtering disable
+    - vpn id 23:3
+  after:
+    - name: VRF4
+    - name: VRF6
+      description: VRF6 Description
+      evpn_route_sync: 101
+      fallback_vrf: overridden-vrf
+      remote_route_filtering:
+        disable: true
+      rd: "9:8"
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      vpn:
+        id: "23:3"
+
+deleted:
+  before:
+    - name: VRF4
+      description: VRF4 Description
+      evpn_route_sync: 793
+      fallback_vrf: merged-vrf
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      rd: "3:4"
+      remote_route_filtering:
+        disable: true
+      vpn:
+        id: "2:3"
+  commands:
+    - vrf VRF4
+    - no description VRF4 Description
+    - no evpn-route-sync 793
+    - no fallback-vrf merged-vrf
+    - no mhost ipv4 default-interface Loopback0
+    - no rd 3:4
+    - no remote-route-filtering disable
+    - no vpn id 2:3
+  after:
+    - name: VRF4
+
+gathered:
+  after:
+    - name: VRF4
+      description: VRF4 Description
+      evpn_route_sync: 793
+      fallback_vrf: merged-vrf
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      rd: "3:4"
+      remote_route_filtering:
+        disable: true
+      vpn:
+        id: "2:3"
+
+parsed:
+  after:
+    - name: test
+      description: "This is test VRF"
+      evpn_route_sync: 456
+      fallback_vrf: test-vrf
+      mhost:
+        afi: "ipv4"
+        default_interface: "Loopback0"
+      rd: "testing"
+      remote_route_filtering:
+        disable: true
+      vpn:
+        id: "56"

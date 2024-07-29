@@ -1,0 +1,25 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_lacp_interfaces rendered integration tests on connection={{ ansible_connection }}
+
+- name: Render platform specific commands from task input using rendered state
+  register: result
+  cisco.iosxr.iosxr_lacp_interfaces:
+    config:
+      - name: Bundle-Ether10
+        churn_logging: actor
+        collector_max_delay: 100
+        switchover_suppress_flaps: 500
+
+      - name: Bundle-Ether11
+        system:
+          mac: 00c2.4c00.bd15
+
+      - name: GigabitEthernet0/0/0/1
+        period: 200
+    state: rendered
+
+- name: Assert that correct set of commands were rendered
+  ansible.builtin.assert:
+    that:
+      - "{{ rendered['commands'] | symmetric_difference(result['rendered']) |length == 0 }}"

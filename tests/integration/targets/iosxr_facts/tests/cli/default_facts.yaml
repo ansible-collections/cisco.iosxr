@@ -1,0 +1,21 @@
+---
+- ansible.builtin.debug: msg="START cli/default_facts.yaml on connection={{ ansible_connection }}"
+
+- name: Test getting default facts
+  register: result
+  cisco.iosxr.iosxr_facts:
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+      - "'default' in result.ansible_facts.ansible_net_gather_subset"
+      - "'config' not in result.ansible_facts.ansible_net_gather_subset"
+      - result.ansible_facts.ansible_net_hostname is defined
+      - result.ansible_facts.ansible_net_model is defined
+      - result.ansible_facts.ansible_net_python_version is defined
+      - result.ansible_facts.ansible_net_system is defined
+      - result.ansible_facts.ansible_net_version is defined
+      - result.ansible_facts.ansible_net_serialnum is defined
+      - result.ansible_facts.ansible_network_resources == {}
+
+- ansible.builtin.debug: msg="END cli/default.yaml on connection={{ ansible_connection }}"

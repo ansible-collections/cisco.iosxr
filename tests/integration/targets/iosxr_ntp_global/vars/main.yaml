@@ -1,0 +1,136 @@
+---
+merged:
+  commands:
+    - ntp peer vrf siteC 192.0.2.1 iburst
+    - ntp server vrf siteD 192.0.2.2 burst
+    - ntp trusted-key 1
+    - ntp interface GigabitEthernet0/0/0/0 broadcast client
+    - ntp interface GigabitEthernet0/0/0/0 multicast destination 224.0.0.8
+    - ntp interface GigabitEthernet0/0/0/0 multicast client 224.0.0.8
+    - ntp vrf siteE source GigabitEthernet0/0/0/0
+    - ntp access-group vrf siteA ipv4 serve ServeAcl2
+    - ntp access-group vrf siteA ipv4 peer PeerAcl3
+    - ntp access-group ipv4 peer PeerAcl1
+    - ntp access-group ipv4 serve ServeAcl1
+    - ntp access-group ipv4 serve-only ServeOnlyAcl1
+    - ntp access-group ipv4 query-only QueryOnlyAcl1
+    - ntp authenticate
+    - ntp log-internal-sync
+    - ntp broadcastdelay 1
+    - ntp drift aging time 0
+    - ntp drift file apphost
+    - ntp ipv4 dscp af11
+    - ntp ipv6 precedence routine
+    - ntp max-associations 10
+    - ntp master 1
+    - ntp passive
+    - ntp update-calendar
+    - ntp source GigabitEthernet0/0/0/0
+
+  after:
+    access_group:
+      ipv4:
+        peer: PeerAcl1
+        query_only: QueryOnlyAcl1
+        serve: ServeAcl1
+        serve_only: ServeOnlyAcl1
+      vrfs:
+        - ipv4:
+            peer: PeerAcl3
+            serve: ServeAcl2
+          name: siteA
+    authenticate: true
+    broadcastdelay: 1
+    drift:
+      aging_time: 0
+      file: apphost
+    interfaces:
+      - name: GigabitEthernet0/0/0/0
+        multicast_client: 224.0.0.8
+        multicast_destination: 224.0.0.8
+        broadcast_client: true
+    ipv4:
+      dscp: af11
+    ipv6:
+      precedence: routine
+    log_internal_sync: true
+    master:
+      stratum: 1
+    max_associations: 10
+    passive: true
+    peers:
+      - iburst: true
+        peer: 192.0.2.1
+        vrf: siteC
+    servers:
+      - burst: true
+        server: 192.0.2.2
+        vrf: siteD
+    source_interface: GigabitEthernet0/0/0/0
+    source_vrfs:
+      - name: GigabitEthernet0/0/0/0
+        vrf: siteE
+    trusted_keys:
+      - key_id: 1
+    update_calendar: true
+
+deleted:
+  after: {}
+
+replaced:
+  commands:
+    - no ntp peer vrf siteC 192.0.2.1 iburst
+    - no ntp interface GigabitEthernet0/0/0/0
+    - ntp peer vrf siteC 192.0.2.3 iburst
+    - ntp interface GigabitEthernet0/0/0/1 broadcast client
+    - ntp interface GigabitEthernet0/0/0/1 multicast destination 224.0.0.8
+    - ntp interface GigabitEthernet0/0/0/1 multicast client 224.0.0.8
+    - ntp access-group ipv4 serve ServeAcl4
+    - ntp ipv4 dscp af12
+    - ntp source GigabitEthernet0/0/0/1
+  after:
+    access_group:
+      ipv4:
+        peer: PeerAcl1
+        query_only: QueryOnlyAcl1
+        serve: ServeAcl4
+        serve_only: ServeOnlyAcl1
+      vrfs:
+        - ipv4:
+            peer: PeerAcl3
+            serve: ServeAcl2
+          name: siteA
+    authenticate: true
+    broadcastdelay: 1
+    drift:
+      aging_time: 0
+      file: apphost
+    interfaces:
+      - name: GigabitEthernet0/0/0/1
+        multicast_client: 224.0.0.8
+        multicast_destination: 224.0.0.8
+        broadcast_client: true
+    ipv4:
+      dscp: af12
+    ipv6:
+      precedence: routine
+    log_internal_sync: true
+    master:
+      stratum: 1
+    max_associations: 10
+    passive: true
+    peers:
+      - iburst: true
+        peer: 192.0.2.3
+        vrf: siteC
+    servers:
+      - burst: true
+        server: 192.0.2.2
+        vrf: siteD
+    source_interface: GigabitEthernet0/0/0/1
+    source_vrfs:
+      - name: GigabitEthernet0/0/0/0
+        vrf: siteE
+    trusted_keys:
+      - key_id: 1
+    update_calendar: true
