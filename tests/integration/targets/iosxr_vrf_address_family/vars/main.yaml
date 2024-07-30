@@ -39,7 +39,6 @@ merged:
                 advertise_as_vpn: true
           maximum:
             prefix: 100
-    - name: VRF5
 
 replaced:
   before:
@@ -67,7 +66,6 @@ replaced:
                 advertise_as_vpn: true
           maximum:
             prefix: 100
-    - name: VRF5
 
   commands:
     - vrf VRF6
@@ -107,7 +105,6 @@ replaced:
                 advertise_as_vpn: true
           maximum:
             prefix: 100
-    - name: VRF5
     - name: VRF6
       address_families:
         - afi: "ipv4"
@@ -132,8 +129,7 @@ replaced:
                 advertise_as_vpn: true
 
 overridden:
-  before:
-    - name: VRF5
+  before: {}
   commands:
     - vrf VRF7
     - address-family ipv4 unicast
@@ -148,7 +144,6 @@ overridden:
     - import from vrf advertise-as-vpn
     - maximum prefix 500
   after:
-    - name: VRF5
     - name: VRF7
       address_families:
         - afi: "ipv4"
@@ -177,7 +172,6 @@ overridden:
 gathered:
   after:
     - name: VRF4
-    - name: VRF5
       address_families:
         - afi: "ipv4"
           safi: "unicast"
@@ -260,4 +254,3 @@ deleted:
     - no address-family ipv4 unicast
   after:
     - name: VRF4
-    - name: VRF5
