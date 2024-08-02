@@ -753,4 +753,4 @@ releases:
         on Cisco IOS-XR devices (https://github.com/ansible-collections/cisco.iosxr/pull/489).
     fragments:
     - add_vrfs_module.yaml
-    release_date: '2024-07-30'
+    release_date: '2024-08-05'
