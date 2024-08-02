@@ -4,13 +4,21 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v10.1.0
+=======
+
+Minor Changes
+-------------
+
+- Adds a new module `iosxr_vrf_address_family` to manage VRFs address families on Cisco IOS-XR devices (https://github.com/ansible-collections/cisco.iosxr/pull/489).
+
 v10.0.0
 =======
 
 Release Summary
 ---------------
 
-Starting from this release, the minimum `ansible-core` version this collection requires is `2.15.0`. The last known version compatible with ansible-core<2.14 is `v9.0.0`. A new resource module `iosxr_vrf_global` is added to manage VRF global configurations.
+Starting from this release, the minimum `ansible-core` version this collection requires is `2.15.0`. The last known version compatible with ansible-core<2.15 is `v9.0.0`. A new resource module `iosxr_vrf_global` is added to manage VRF global configurations.
 
 Major Changes
 -------------
