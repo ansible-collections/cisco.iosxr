@@ -34,6 +34,7 @@ def _tmplt_confederation_peers(config_data):
 
 def _templ_local_as(config_data):
     conf = config_data.get("local_as", {})
+    command = ""
     if conf.get("value"):
         command = "local-as " + str(conf.get("value", {}))
     if "no_prepend" in conf:
