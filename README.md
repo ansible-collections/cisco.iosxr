@@ -11,12 +11,12 @@ This collection has been tested against Cisco IOS-XR version 7.0.2
 
 * Join the Ansible forum:
   * [Get Help](https://forum.ansible.com/c/help/6): get help or help others.
-  * [Posts tagged with 'your tag'](https://forum.ansible.com/tag/YOUR_TAG): subscribe to participate in collection-related conversations.
-  * [Refer to your forum group here if exists](https://forum.ansible.com/g/): by joining the team you will automatically get subscribed to the posts tagged with [your group forum tag here](https://forum.ansible.com/tags).
+  * [Posts tagged with 'cisco'](https://forum.ansible.com/tag/cisco): subscribe to participate in collection-related conversations.
+  * [Refer to our forum group here](https://forum.ansible.com/g/network-wg): by joining the team you will automatically get subscribed to the posts tagged with [network-wg](https://forum.ansible.com/tags).
   * [Social Spaces](https://forum.ansible.com/c/chat/4): gather and interact with fellow enthusiasts.
   * [News & Announcements](https://forum.ansible.com/c/news/5): track project-wide announcements including social events.
 
-* The Ansible [Bullhorn newsletter](https://docs.ansible.com/ansible/devel/community/communication.html#the-bullhorn): used to announce releases and important changes.
+* The Ansible [Bullhorn newsletter](https://docs.ansible.com/ansible/devel/community/communication.html#the-bullhorn): is used to announce releases and important changes.
 
 For more information about communication, see the [Ansible communication guide](https://docs.ansible.com/ansible/devel/community/communication.html).
 
