@@ -7,12 +7,22 @@ The Ansible Cisco IOSXR collection includes a variety of Ansible content to help
 
 This collection has been tested against Cisco IOS-XR version 7.0.2
 
+## Support
+
+As a Red Hat Ansible [Certified Content](https://catalog.redhat.com/software/search?target_platforms=Red%20Hat%20Ansible%20Automation%20Platform), this collection is entitled to [support](https://access.redhat.com/support/) through [Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible) (AAP).
+
+If a support case cannot be opened with Red Hat and the collection has been obtained either from [Galaxy](https://galaxy.ansible.com/ui/) or [GitHub](https://github.com/ansible-collections/cisco.iosxr), there is community support available at no charge.
+
+You can join us on [#network:ansible.com](https://matrix.to/#/#network:ansible.com) room or the [Ansible Forum Network Working Group](https://forum.ansible.com/g/network-wg).
+
+For more information you can check the communication section below.
+
 ## Communication
 
 * Join the Ansible forum:
   * [Get Help](https://forum.ansible.com/c/help/6): get help or help others.
-  * [Posts tagged with 'your tag'](https://forum.ansible.com/tag/YOUR_TAG): subscribe to participate in collection-related conversations.
-  * [Refer to your forum group here if exists](https://forum.ansible.com/g/): by joining the team you will automatically get subscribed to the posts tagged with [your group forum tag here](https://forum.ansible.com/tags).
+  * [Posts tagged with 'network'](https://forum.ansible.com/tag/network): subscribe to participate in collection-related conversations.
+  * [Ansible Network Automation Working Group](https://forum.ansible.com/g/network-wg): by joining the team you will automatically get subscribed to the posts tagged with [network](https://forum.ansible.com/tags/network).
   * [Social Spaces](https://forum.ansible.com/c/chat/4): gather and interact with fellow enthusiasts.
   * [News & Announcements](https://forum.ansible.com/c/news/5): track project-wide announcements including social events.
 
