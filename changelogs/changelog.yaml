@@ -2,69 +2,61 @@ ancestor: null
 releases:
   1.0.0:
     modules:
-      - description: ACL interfaces resource module
+      - description: Resource module to configure ACL interfaces.
         name: iosxr_acl_interfaces
         namespace: ""
-      - description: ACLs resource module
+      - description: Resource module to configure ACLs.
         name: iosxr_acls
         namespace: ""
-      - description: Manage multiline banners on Cisco IOS XR devices
+      - description: Module to configure multiline banners.
         name: iosxr_banner
         namespace: ""
-      - description: Configure global BGP protocol settings on Cisco IOS-XR
-        name: iosxr_bgp
-        namespace: ""
-      - description: Run commands on remote devices running Cisco IOS XR
+      - description: Module to run commands on remote devices.
         name: iosxr_command
         namespace: ""
-      - description: Manage Cisco IOS XR configuration sections
+      - description: Module to manage configuration sections.
         name: iosxr_config
         namespace: ""
-      - description: Get facts about iosxr devices.
+      - description: Module to collect facts from remote devices.
         name: iosxr_facts
         namespace: ""
-      - description:
-          (deprecated, removed after 2022-06-01) Manage Interface on Cisco
-          IOS XR network devices
-        name: iosxr_interface
-        namespace: ""
-      - description: Interfaces resource module
+      - description: Resource module to configure interfaces.
         name: iosxr_interfaces
         namespace: ""
-      - description: L2 interfaces resource module
+      - description: Resource Module to configure L2 interfaces.
         name: iosxr_l2_interfaces
         namespace: ""
-      - description: L3 interfaces resource module
+      - description: Resource module to configure L3 interfaces.
         name: iosxr_l3_interfaces
         namespace: ""
-      - description: LACP resource module
+      - description: Resource module to configure LACP.
         name: iosxr_lacp
         namespace: ""
-      - description: LACP interfaces resource module
+      - description: Resource module to configure LACP interfaces.
         name: iosxr_lacp_interfaces
         namespace: ""
-      - description: LAG interfaces resource module
+      - description: Resource module to configure LAG interfaces.
         name: iosxr_lag_interfaces
         namespace: ""
-      - description: LLDP resource module
+      - description: Resource module to configure LLDP.
         name: iosxr_lldp_global
         namespace: ""
-      - description: LLDP interfaces resource module
+      - description: Resource module to configure LLDP interfaces.
         name: iosxr_lldp_interfaces
         namespace: ""
       - description: Configures NetConf sub-system service on Cisco IOS-XR devices
         name: iosxr_netconf
         namespace: ""
-      - description: OSPFv2 resource module
+      - description: Resource module to configure OSPFv2.
         name: iosxr_ospfv2
         namespace: ""
-      - description: Static routes resource module
+      - description: Resource module to configure static routes.
         name: iosxr_static_routes
         namespace: ""
-      - description: Manage the system attributes on Cisco IOS XR devices
+      - description: Module to manage the system attributes.
         name: iosxr_system
         namespace: ""
-      - description: Manage the aggregate of local users on Cisco IOS XR device
+      - description: Module to manage the aggregates of local users.
         name: iosxr_user
         namespace: ""
     plugins:
@@ -130,7 +122,7 @@ releases:
       - 54_iosxr_ospfv3_module_added.yaml
       - provide_fuctionality_to_utilize_remarks.yaml
     modules:
-      - description: ospfv3 resource module
+      - description: Resource module to configure OSPFv3.
         name: iosxr_ospfv3
         namespace: ""
     release_date: "2020-10-01"
@@ -149,7 +141,7 @@ releases:
       - galaxy-version.yaml
       - ospf_interfaces_resource_module_added.yaml
     modules:
-      - description: OSPF Interfaces Resource Module.
+      - description: Resource module to configure OSPF interfaces.
         name: iosxr_ospf_interfaces
         namespace: ""
     release_date: "2020-11-26"
@@ -196,13 +188,13 @@ releases:
       - single_user_mode.yaml
       - unittest-fix-for-resource-module-base.yaml
     modules:
-      - description: Manages BGP Address Family resource module.
+      - description: Resource module to configure BGP Address family.
         name: iosxr_bgp_address_family
         namespace: ""
-      - description: Manages BGP global resource module.
+      - description: Resource module to configure BGP.
         name: iosxr_bgp_global
         namespace: ""
-      - description: Manages BGP neighbor address family resource module.
+      - description: Resource module to configure BGP Neighbor Address family.
         name: iosxr_bgp_neighbor_address_family
         namespace: ""
     release_date: "2021-02-24"
@@ -283,7 +275,7 @@ releases:
       - update_bgp_nbr_af_route_policy.yaml
       - update_readme_freenode_to_libera.yml
     modules:
-      - description: Prefix-Lists resource module.
+      - description: Resource module to configure prefix lists.
         name: iosxr_prefix_lists
         namespace: ""
     release_date: "2021-06-22"
@@ -301,7 +293,7 @@ releases:
       - 162-fix-prefix-list-facts.yaml
       - add-iosxr-logging-global-module.yaml
     modules:
-      - description: Manages logging attributes of Cisco IOSXR network devices
+      - description: Resource module to configure logging.
         name: iosxr_logging_global
         namespace: ""
     release_date: "2021-07-26"
@@ -344,7 +336,7 @@ releases:
       - fix_sanity.yml
       - iosxr_snmp_server.yaml
     modules:
-      - description: Manages snmp-server resource module
+      - description: Resource module to configure snmp server.
         name: iosxr_snmp_server
         namespace: ""
     release_date: "2021-12-07"
@@ -356,7 +348,7 @@ releases:
       - add_hostname_rm.yaml
       - add_redirects_hostname.yaml
     modules:
-      - description: Manages hostname resource module
+      - description: Resource module to configure hostname.
         name: iosxr_hostname
         namespace: ""
     release_date: "2022-01-31"
@@ -727,3 +719,41 @@ releases:
       - remove_deprecated.yaml
       - trivial_tests_updates.yaml
     release_date: "2024-03-27"
+  9.0.0:
+    changes:
+      major_changes:
+        - Update the netcommon base version to support cli_restore plugin.
+      minor_changes:
+        - Add support for cli_restore functionality.
+        - Please refer the PR to know more about core changes (https://github.com/ansible-collections/ansible.netcommon/pull/618).
+        - cli_restore module is part of netcommon.
+    fragments:
+      - add_2.18.yaml
+      - add_cli_restore_supprt.yaml
+      - remove_tests.yaml
+    release_date: "2024-04-12"
+  10.0.0:
+    changes:
+      major_changes:
+        - Bumping `requires_ansible` to `>=2.15.0`, since previous ansible-core versions
+          are EoL now.
+      minor_changes:
+        - Adds a new module `iosxr_vrf_global` to manage VRF global configurations on
+          Cisco IOS-XR devices (https://github.com/ansible-collections/cisco.iosxr/pull/467).
+      release_summary:
+        Starting from this release, the minimum `ansible-core` version
+        this collection requires is `2.15.0`. The last known version compatible with
+        ansible-core<2.15 is `v9.0.0`. A new resource module `iosxr_vrf_global` is
+        added to manage VRF global configurations.
+    fragments:
+      - add_vrf_global_module.yaml
+      - bump_215.yaml
+    release_date: "2024-06-06"
+  10.1.0:
+    changes:
+      minor_changes:
+        - Adds a new module `iosxr_vrf_address_family` to manage VRFs address families
+          on Cisco IOS-XR devices (https://github.com/ansible-collections/cisco.iosxr/pull/489).
+    fragments:
+      - add_vrfs_module.yaml
+    release_date: "2024-08-05"

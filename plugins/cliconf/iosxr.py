@@ -358,6 +358,15 @@ class Cliconf(CliconfBase):
         resp["response"] = results
         return resp
 
+    def restore(self, filename=None, path=""):
+        if not filename:
+            raise ValueError("'file_name' value is required for restore")
+        self.configure()
+        cmd = f"load {path}{filename}"
+        resp = self.send_command(cmd)
+        self.commit()
+        return resp
+
     def get_diff(
         self,
         candidate=None,
@@ -452,21 +461,29 @@ class Cliconf(CliconfBase):
             if self.get_option("commit_confirmed"):
                 cmd_obj["command"] = "commit replace confirmed"
                 if self.get_option("commit_confirmed_timeout"):
-                    cmd_obj["command"] += " {0}".format(self.get_option("commit_confirmed_timeout"))
+                    cmd_obj["command"] += " {0}".format(
+                        self.get_option("commit_confirmed_timeout"),
+                    )
 
-            cmd_obj[
-                "prompt"
-            ] = "This commit will replace or remove the entire running configuration"
+            cmd_obj["prompt"] = (
+                "This commit will replace or remove the entire running configuration"
+            )
             cmd_obj["answer"] = "yes"
 
         elif self.get_option("commit_confirmed"):
             cmd_obj["command"] = "commit confirmed"
             if self.get_option("commit_confirmed_timeout"):
-                cmd_obj["command"] += " {0}".format(self.get_option("commit_confirmed_timeout"))
+                cmd_obj["command"] += " {0}".format(
+                    self.get_option("commit_confirmed_timeout"),
+                )
             if self.get_option("commit_label"):
-                cmd_obj["command"] += " label {0}".format(self.get_option("commit_label"))
+                cmd_obj["command"] += " label {0}".format(
+                    self.get_option("commit_label"),
+                )
             if self.get_option("commit_comment"):
-                cmd_obj["command"] += " comment {0}".format(self.get_option("commit_comment"))
+                cmd_obj["command"] += " comment {0}".format(
+                    self.get_option("commit_comment"),
+                )
 
         else:
             label = label or self.get_option("commit_label")
@@ -498,7 +515,9 @@ class Cliconf(CliconfBase):
 
             output = cmd.pop("output", None)
             if output:
-                raise ValueError("'output' value %s is not supported for run_commands" % output)
+                raise ValueError(
+                    "'output' value %s is not supported for run_commands" % output,
+                )
 
             try:
                 out = self.send_command(**cmd)

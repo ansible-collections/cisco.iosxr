@@ -1,0 +1,256 @@
+---
+merged:
+  before: {}
+  commands:
+    - vrf VRF4
+    - address-family ipv4 unicast
+    - export route-policy rm-policy
+    - export route-target 192.0.2.1:400
+    - export to default-vrf route-policy rm-policy
+    - export to vrf allow-imported-vpn
+    - import route-target 192.0.2.6:200
+    - import route-policy test-policy
+    - import from bridge-domain advertise-as-vpn
+    - import from default-vrf route-policy test-policy
+    - import from vrf advertise-as-vpn
+    - maximum prefix 100
+  after:
+    - name: VRF4
+      address_families:
+        - afi: "ipv4"
+          safi: "unicast"
+          export:
+            route_target: "192.0.2.1:400"
+            route_policy: "rm-policy"
+            to:
+              default_vrf:
+                route_policy: "rm-policy"
+              vrf:
+                allow_imported_vpn: true
+          import_config:
+            route_target: "192.0.2.6:200"
+            route_policy: "test-policy"
+            from_config:
+              bridge_domain:
+                advertise_as_vpn: true
+              default_vrf:
+                route_policy: "test-policy"
+              vrf:
+                advertise_as_vpn: true
+          maximum:
+            prefix: 100
+
+replaced:
+  before:
+    - name: VRF4
+      address_families:
+        - afi: "ipv4"
+          safi: "unicast"
+          export:
+            route_target: "192.0.2.1:400"
+            route_policy: "rm-policy"
+            to:
+              default_vrf:
+                route_policy: "rm-policy"
+              vrf:
+                allow_imported_vpn: true
+          import_config:
+            route_target: "192.0.2.6:200"
+            route_policy: "test-policy"
+            from_config:
+              bridge_domain:
+                advertise_as_vpn: true
+              default_vrf:
+                route_policy: "test-policy"
+              vrf:
+                advertise_as_vpn: true
+          maximum:
+            prefix: 100
+
+  commands:
+    - vrf VRF6
+    - address-family ipv4 unicast
+    - export route-policy rm-policy
+    - export route-target 192.0.2.0:400
+    - export to default-vrf route-policy rm-policy
+    - export to vrf allow-imported-vpn
+    - import route-target 192.0.2.3:200
+    - import route-policy test-policy
+    - import from bridge-domain advertise-as-vpn
+    - import from default-vrf route-policy test-policy
+    - import from vrf advertise-as-vpn
+
+  after:
+    - name: VRF4
+      address_families:
+        - afi: "ipv4"
+          safi: "unicast"
+          export:
+            route_target: "192.0.2.1:400"
+            route_policy: "rm-policy"
+            to:
+              default_vrf:
+                route_policy: "rm-policy"
+              vrf:
+                allow_imported_vpn: true
+          import_config:
+            route_target: "192.0.2.6:200"
+            route_policy: "test-policy"
+            from_config:
+              bridge_domain:
+                advertise_as_vpn: true
+              default_vrf:
+                route_policy: "test-policy"
+              vrf:
+                advertise_as_vpn: true
+          maximum:
+            prefix: 100
+    - name: VRF6
+      address_families:
+        - afi: "ipv4"
+          safi: "unicast"
+          export:
+            route_target: "192.0.2.0:400"
+            route_policy: "rm-policy"
+            to:
+              default_vrf:
+                route_policy: "rm-policy"
+              vrf:
+                allow_imported_vpn: true
+          import_config:
+            route_target: "192.0.2.3:200"
+            route_policy: "test-policy"
+            from_config:
+              bridge_domain:
+                advertise_as_vpn: true
+              default_vrf:
+                route_policy: "test-policy"
+              vrf:
+                advertise_as_vpn: true
+
+overridden:
+  before: {}
+  commands:
+    - vrf VRF7
+    - address-family ipv4 unicast
+    - export route-policy rm-policy1
+    - export route-target 192.0.2.8:200
+    - export to default-vrf route-policy rm-policy
+    - export to vrf allow-imported-vpn
+    - import route-target 192.0.2.2:200
+    - import route-policy test-policy
+    - import from bridge-domain advertise-as-vpn
+    - import from default-vrf route-policy test-policy
+    - import from vrf advertise-as-vpn
+    - maximum prefix 500
+  after:
+    - name: VRF7
+      address_families:
+        - afi: "ipv4"
+          safi: "unicast"
+          export:
+            route_target: "192.0.2.8:200"
+            route_policy: "rm-policy1"
+            to:
+              default_vrf:
+                route_policy: "rm-policy"
+              vrf:
+                allow_imported_vpn: true
+          import_config:
+            route_target: "192.0.2.2:200"
+            route_policy: "test-policy"
+            from_config:
+              bridge_domain:
+                advertise_as_vpn: true
+              default_vrf:
+                route_policy: "test-policy"
+              vrf:
+                advertise_as_vpn: true
+          maximum:
+            prefix: 500
+
+gathered:
+  after:
+    - name: VRF4
+      address_families:
+        - afi: "ipv4"
+          safi: "unicast"
+          export:
+            route_target: "192.0.2.1:400"
+            route_policy: "rm-policy"
+            to:
+              default_vrf:
+                route_policy: "rm-policy"
+              vrf:
+                allow_imported_vpn: true
+          import_config:
+            route_target: "192.0.2.6:200"
+            route_policy: "test-policy"
+            from_config:
+              bridge_domain:
+                advertise_as_vpn: true
+              default_vrf:
+                route_policy: "test-policy"
+              vrf:
+                advertise_as_vpn: true
+          maximum:
+            prefix: 100
+parsed:
+  after:
+    - name: test
+      address_families:
+        - afi: ipv4
+          export:
+            route_policy: export-policy
+            route_target: 192.0.2.1:400
+            to:
+              default_vrf:
+                route_policy: rm-policy
+              vrf:
+                allow_imported_vpn: true
+          import_config:
+            from_config:
+              bridge_domain:
+                advertise_as_vpn: true
+              default_vrf:
+                route_policy: new-policy
+              vrf:
+                advertise_as_vpn: true
+            route_policy: test-policy
+            route_target: 192.0.2.2:200
+          maximum:
+            prefix: 23
+          safi: unicast
+
+deleted:
+  before:
+    - name: VRF4
+    - name: VRF7
+      address_families:
+        - afi: ipv4
+          export:
+            route_policy: rm-policy1
+            route_target: 192.0.2.8:200
+            to:
+              default_vrf:
+                route_policy: rm-policy
+              vrf:
+                allow_imported_vpn: true
+          import_config:
+            from_config:
+              bridge_domain:
+                advertise_as_vpn: true
+              default_vrf:
+                route_policy: test-policy
+              vrf:
+                advertise_as_vpn: true
+            route_policy: test-policy
+            route_target: 192.0.2.2:200
+          maximum:
+            prefix: 500
+          safi: unicast
+  commands:
+    - vrf VRF4
+    - no address-family ipv4 unicast
+  after:
+    - name: VRF4

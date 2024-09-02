@@ -399,7 +399,7 @@ class Acls(ConfigBase):
 
             return cmd
 
-        def _compute_protocol_options(protocol_dict):
+        def _compute_protocol_options(protocol_options):
             cmd = ""
             for value in protocol_options.values():
                 for subkey, subvalue in iteritems(value):

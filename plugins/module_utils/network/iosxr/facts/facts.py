@@ -94,6 +94,12 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.sn
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.static_routes.static_routes import (
     Static_routesFacts,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vrf_address_family.vrf_address_family import (
+    Vrf_address_familyFacts,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vrf_global.vrf_global import (
+    Vrf_globalFacts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -126,6 +132,8 @@ FACT_RESOURCE_SUBSETS = dict(
     snmp_server=Snmp_serverFacts,
     hostname=HostnameFacts,
     bgp_templates=Bgp_templatesFacts,
+    vrf_address_family=Vrf_address_familyFacts,
+    vrf_global=Vrf_globalFacts,
 )
 
 

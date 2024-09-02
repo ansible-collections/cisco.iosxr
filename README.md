@@ -7,10 +7,23 @@ The Ansible Cisco IOSXR collection includes a variety of Ansible content to help
 
 This collection has been tested against Cisco IOS-XR version 7.0.2
 
+## Communication
+
+* Join the Ansible forum:
+  * [Get Help](https://forum.ansible.com/c/help/6): get help or help others.
+  * [Posts tagged with 'cisco'](https://forum.ansible.com/tag/cisco): subscribe to participate in collection-related conversations.
+  * [Refer to our forum group here](https://forum.ansible.com/g/network-wg): by joining the team you will automatically get subscribed to the posts tagged with [network-wg](https://forum.ansible.com/tags).
+  * [Social Spaces](https://forum.ansible.com/c/chat/4): gather and interact with fellow enthusiasts.
+  * [News & Announcements](https://forum.ansible.com/c/news/5): track project-wide announcements including social events.
+
+* The Ansible [Bullhorn newsletter](https://docs.ansible.com/ansible/devel/community/communication.html#the-bullhorn): is used to announce releases and important changes.
+
+For more information about communication, see the [Ansible communication guide](https://docs.ansible.com/ansible/devel/community/communication.html).
+
 <!--start requires_ansible-->
 ## Ansible version compatibility
 
-This collection has been tested against following Ansible versions: **>=2.14.0**.
+This collection has been tested against following Ansible versions: **>=2.15.0**.
 
 For collections that support Ansible 2.9, please ensure you update your `network_os` to use the
 fully qualified collection name (for example, `cisco.ios.ios`).
@@ -69,6 +82,8 @@ Name | Description
 [cisco.iosxr.iosxr_static_routes](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_static_routes_module.rst)|Resource module to configure static routes.
 [cisco.iosxr.iosxr_system](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_system_module.rst)|Module to manage the system attributes.
 [cisco.iosxr.iosxr_user](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_user_module.rst)|Module to manage the aggregates of local users.
+[cisco.iosxr.iosxr_vrf_address_family](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_vrf_address_family_module.rst)|Resource module to configure VRF Address family.
+[cisco.iosxr.iosxr_vrf_global](https://github.com/ansible-collections/cisco.iosxr/blob/main/docs/cisco.iosxr.iosxr_vrf_global_module.rst)|Manages global VRF configuration.
 
 <!--end collection content-->
 

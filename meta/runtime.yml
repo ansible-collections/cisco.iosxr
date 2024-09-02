@@ -1,5 +1,5 @@
 ---
-requires_ansible: ">=2.14.0"
+requires_ansible: ">=2.15.0"
 plugin_routing:
   modules:
     acl_interfaces:
@@ -60,3 +60,7 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr_snmp_server
     hostname:
       redirect: cisco.iosxr.iosxr_hostname
+    vrf_global:
+      redirect: cisco.iosxr.iosxr_vrf_global
+    vrf_address_family:
+      redirect: cisco.iosxr.iosxr_vrf_address_family
