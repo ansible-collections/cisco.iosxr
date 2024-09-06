@@ -154,6 +154,7 @@ class Static_routesFacts(object):
 
     def parse_intf(self, item):
         inf_search_strs = [
+            r" ((\w+)((?:\d)/(?:\d)/(?:\d)/(?:\d+))\.(?:\d+))",
             r" ((\w+)((?:\d)/(?:\d)/(?:\d)/(?:\d+)))",
             r" (([a-zA-Z]+)(?:\d+))",
         ]

@@ -262,6 +262,35 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
         )
         self.execute_module(changed=False, commands=[])
 
+    def test_iosxr_static_routes_replaced_idempotent_encap_intf(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        address_families=[
+                            dict(
+                                afi="ipv4",
+                                safi="unicast",
+                                routes=[
+                                    dict(
+                                        dest="192.0.2.48/28",
+                                        next_hops=[
+                                            dict(
+                                                interface="TenGigE0/0/0/23.2500",
+                                                forward_router_address="192.0.2.10",
+                                            ),
+                                        ],
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        self.execute_module(changed=False, commands=[])
+
     def test_iosxr_static_routes_overridden(self):
         set_module_args(
             dict(
