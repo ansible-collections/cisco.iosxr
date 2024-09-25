@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -17,14 +18,13 @@ based on the configuration.
 from copy import deepcopy
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.route_maps.route_maps import (
+    Route_mapsArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.route_maps import (
     Route_mapsTemplate,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.route_maps.route_maps import (
-    Route_mapsArgs,
 )
 
 
@@ -61,7 +61,7 @@ class Route_mapsFacts(object):
         ansible_facts["ansible_network_resources"].pop("route_maps", None)
 
         params = utils.remove_empties(
-            route_maps_parser.validate_config(self.argument_spec, {"config": objs}, redact=True)
+            route_maps_parser.validate_config(self.argument_spec, {"config": objs}, redact=True),
         )
 
         facts["route_maps"] = params["config"]
