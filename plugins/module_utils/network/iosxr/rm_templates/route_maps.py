@@ -86,7 +86,7 @@ class Route_mapsTemplate(NetworkTemplate):
                         "delay": "{{ delay }}",
                         "reliability": "{{ reliability }}",
                         "effective_bandwith": "{{ effective_bandwith }}",
-                        "max_transmission": "{{ max_transmission }}"
+                        "max_transmission": "{{ max_transmission }}",
                     },
                 },
             },
@@ -117,10 +117,12 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "apply": [{
-                    "route_policy": "{{ route_policy }}",
-                    "route_policy_input": "{{ route_policy_input }}",
-                },],
+                "apply": [
+                    {
+                        "route_policy": "{{ route_policy }}",
+                        "route_policy_input": "{{ route_policy_input }}",
+                    },
+                ],
             },
         },
         {
@@ -164,7 +166,7 @@ class Route_mapsTemplate(NetworkTemplate):
                     "as_path": "{{ as_path }}",
                     "most_recent": "{{ not not most_recent }}",
                     "own_as": "{{ not not own_as }}",
-                    "number_of_times": "{{ number_of_times }}"
+                    "number_of_times": "{{ number_of_times }}",
                 },
             },
         },

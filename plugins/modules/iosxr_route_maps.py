@@ -1001,6 +1001,8 @@ parsed:
     module argspec.
 """
 
+import debugpy
+
 from ansible.module_utils.basic import AnsibleModule
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.route_maps.route_maps import (
@@ -1010,7 +1012,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.r
     Route_maps,
 )
 
-import debugpy
 
 debugpy.listen(3000)
 debugpy.wait_for_client()

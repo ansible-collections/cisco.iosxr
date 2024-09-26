@@ -24,8 +24,8 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
     Route_mapsArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.route_maps import (
-    Route_mapsTemplate,
     Route_mapsName,
+    Route_mapsTemplate,
 )
 
 
