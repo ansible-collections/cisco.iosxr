@@ -135,7 +135,7 @@ options:
                   igp_cost:
                     description: Internal routing protocol cost
                     type: bool
-              attribute_set: # set attribute-set name-string 2232
+              attribute_set:
                 description: TE attribute-set name <0-4294967295> 32-bit decimal number
                 type: str
               c_multicast_routing:
@@ -1009,6 +1009,11 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.route_maps.route_maps import (
     Route_maps,
 )
+
+import debugpy
+
+debugpy.listen(3000)
+debugpy.wait_for_client()
 
 
 def main():

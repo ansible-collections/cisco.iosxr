@@ -25,6 +25,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.route_maps import (
     Route_mapsTemplate,
+    Route_mapsName,
 )
 
 
@@ -35,8 +36,14 @@ class Route_mapsFacts(object):
         self._module = module
         self.argument_spec = Route_mapsArgs.argument_spec
 
-    def get_config(self, connection):
-        return connection.get("show running-config route-policy")
+    def get_policynames(self, connection):
+        return connection.get("show running-config | include route-policy")
+
+    def get_policy_config(self, connection, name):
+        policy_data = connection.get(f"show running-config route-policy {name}")
+        route_maps_parser = Route_mapsTemplate(lines=policy_data.splitlines(), module=self._module)
+        objs = list(route_maps_parser.parse().values())
+        return objs
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """Populate the facts for Route_maps network resource
@@ -50,13 +57,17 @@ class Route_mapsFacts(object):
         """
         facts = {}
         objs = []
+        policy_list = []
 
         if not data:
-            data = connection.get()
+            data = self.get_policynames(connection=connection)
 
         # parse native config using the Route_maps template
-        route_maps_parser = Route_mapsTemplate(lines=data.splitlines(), module=self._module)
+        route_maps_parser = Route_mapsName(lines=data.splitlines(), module=self._module)
         objs = list(route_maps_parser.parse().values())
+
+        for policies in objs:
+            policy_list.append(self.get_policy_config(connection=connection, name=policies))
 
         ansible_facts["ansible_network_resources"].pop("route_maps", None)
 
