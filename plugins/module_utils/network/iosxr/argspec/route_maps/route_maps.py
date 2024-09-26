@@ -257,7 +257,8 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                     "type": "dict",
                     "options": {
                         "conditions": {
-                            "type": "dict",
+                            "type": "list",
+                            "elements": "dict",
                             "options": {
                                 "aigp_metric": {
                                     "type": "dict",
@@ -267,9 +268,22 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
-                                "as_path": {"type": "str"},
+                                "as_path": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "community": {
                                     "type": "dict",
                                     "options": {
@@ -282,7 +296,11 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             ],
                                             "type": "str",
                                         },
-                                        "community_name": {"type": "str"},
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "community_length": {
@@ -293,6 +311,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "destination": {
@@ -311,14 +333,72 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "destination_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
-                                "destination_prefix": {"type": "str"},
-                                "esi": {"type": "str"},
-                                "etag": {"type": "str"},
-                                "evpn_gateway": {"type": "str"},
-                                "evpn_originator": {"type": "str"},
-                                "evpn_route_type": {"type": "int"},
+                                "destination_prefix": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "esi": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "etag": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "evpn_gateway": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "evpn_originator": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "evpn_route_type": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "extcommunity_color": {
                                     "type": "dict",
                                     "options": {
@@ -332,6 +412,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "community_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "extcommunity_rt": {
@@ -347,6 +431,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "community_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "extcommunity_seg_nh": {
@@ -362,6 +450,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "community_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "extcommunity_soo": {
@@ -377,9 +469,22 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "community_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
-                                "i_pmsi_present": {"type": "bool"},
+                                "i_pmsi_present": {
+                                    "type": "dict",
+                                    "options": {
+                                        "set": {"type": "bool"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "large_community": {
                                     "type": "dict",
                                     "options": {
@@ -393,6 +498,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "community_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "local_preference": {
@@ -403,9 +512,22 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
-                                "mac": {"type": "str"},
+                                "mac": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "med": {
                                     "type": "dict",
                                     "options": {
@@ -414,33 +536,104 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
-                                "next_hop": {"type": "str"},
-                                "orf_prefix": {"type": "str"},
+                                "next_hop": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "orf_prefix": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "origin": {
-                                    "choices": ["ebgp", "ibgp", "incomplete"],
-                                    "type": "str",
+                                    "type": "dict",
+                                    "options": {
+                                        "input_choice": {
+                                            "choices": [
+                                                "ebgp",
+                                                "ibgp",
+                                                "incomplete",
+                                            ],
+                                            "type": "str",
+                                        },
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
                                 },
                                 "path_type": {
-                                    "choices": ["ebgp", "ibgp"],
-                                    "type": "str",
+                                    "type": "dict",
+                                    "options": {
+                                        "input_choice": {
+                                            "choices": ["ebgp", "ibgp"],
+                                            "type": "str",
+                                        },
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
                                 },
                                 "protocol": {
-                                    "choices": [
-                                        "bgp",
-                                        "connected",
-                                        "eigrp",
-                                        "isis",
-                                        "ospf",
-                                        "ospfv3",
-                                        "rip",
-                                        "static",
-                                    ],
-                                    "type": "str",
+                                    "type": "dict",
+                                    "options": {
+                                        "input_choice": {
+                                            "choices": [
+                                                "bgp",
+                                                "connected",
+                                                "eigrp",
+                                                "isis",
+                                                "ospf",
+                                                "ospfv3",
+                                                "rip",
+                                                "static",
+                                            ],
+                                            "type": "str",
+                                        },
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
                                 },
-                                "rd": {"type": "str"},
-                                "rib_has_route": {"type": "str"},
+                                "rd": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "rib_has_route": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "rib_metric": {
                                     "type": "dict",
                                     "options": {
@@ -449,32 +642,90 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
-                                "route_aggregated": {"type": "bool"},
-                                "route_has_label": {"type": "bool"},
-                                "route_has_vrf_ri": {"type": "bool"},
-                                "route_type": {
-                                    "choices": [
-                                        "interarea",
-                                        "internal",
-                                        "level-1",
-                                        "level-1-2",
-                                        "level-2",
-                                        "local",
-                                        "ospf-external-type-1",
-                                        "ospf-external-type-2",
-                                        "ospf-inter-area",
-                                        "ospf-intra-area",
-                                        "ospf-nssa-type-1",
-                                        "ospf-nssa-type-2",
-                                        "type-1",
-                                        "type-2",
-                                    ],
-                                    "type": "str",
+                                "route_aggregated": {
+                                    "type": "dict",
+                                    "options": {
+                                        "set": {"type": "bool"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
                                 },
-                                "source": {"type": "str"},
-                                "source_prefix": {"type": "str"},
+                                "route_has_label": {
+                                    "type": "dict",
+                                    "options": {
+                                        "set": {"type": "bool"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "route_has_vrf_ri": {
+                                    "type": "dict",
+                                    "options": {
+                                        "set": {"type": "bool"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "route_type": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_choice": {
+                                            "choices": [
+                                                "interarea",
+                                                "internal",
+                                                "level-1",
+                                                "level-1-2",
+                                                "level-2",
+                                                "local",
+                                                "ospf-external-type-1",
+                                                "ospf-external-type-2",
+                                                "ospf-inter-area",
+                                                "ospf-intra-area",
+                                                "ospf-nssa-type-1",
+                                                "ospf-nssa-type-2",
+                                                "type-1",
+                                                "type-2",
+                                            ],
+                                            "type": "str",
+                                        },
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "source": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "source_prefix": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "tag": {
                                     "type": "dict",
                                     "options": {
@@ -489,13 +740,39 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "validation_state": {
-                                    "choices": ["invalid", "not-found", "valid"],
-                                    "type": "str",
+                                    "type": "dict",
+                                    "options": {
+                                        "input_choice": {
+                                            "choices": [
+                                                "invalid",
+                                                "not-found",
+                                                "valid",
+                                            ],
+                                            "type": "str",
+                                        },
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
                                 },
-                                "vpn_distinguisher": {"type": "int"},
+                                "vpn_distinguisher": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                             },
                         },
                         "add": {
@@ -714,7 +991,8 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                     "type": "dict",
                     "options": {
                         "conditions": {
-                            "type": "dict",
+                            "type": "list",
+                            "elements": "dict",
                             "options": {
                                 "aigp_metric": {
                                     "type": "dict",
@@ -724,9 +1002,22 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
-                                "as_path": {"type": "str"},
+                                "as_path": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "community": {
                                     "type": "dict",
                                     "options": {
@@ -739,7 +1030,11 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             ],
                                             "type": "str",
                                         },
-                                        "community_name": {"type": "str"},
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "community_length": {
@@ -750,6 +1045,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "destination": {
@@ -768,14 +1067,72 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "destination_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
-                                "destination_prefix": {"type": "str"},
-                                "esi": {"type": "str"},
-                                "etag": {"type": "str"},
-                                "evpn_gateway": {"type": "str"},
-                                "evpn_originator": {"type": "str"},
-                                "evpn_route_type": {"type": "int"},
+                                "destination_prefix": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "esi": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "etag": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "evpn_gateway": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "evpn_originator": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "evpn_route_type": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "extcommunity_color": {
                                     "type": "dict",
                                     "options": {
@@ -789,6 +1146,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "community_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "extcommunity_rt": {
@@ -804,6 +1165,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "community_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "extcommunity_seg_nh": {
@@ -819,6 +1184,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "community_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "extcommunity_soo": {
@@ -834,9 +1203,22 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "community_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
-                                "i_pmsi_present": {"type": "bool"},
+                                "i_pmsi_present": {
+                                    "type": "dict",
+                                    "options": {
+                                        "set": {"type": "bool"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "large_community": {
                                     "type": "dict",
                                     "options": {
@@ -850,6 +1232,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "community_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "local_preference": {
@@ -860,9 +1246,22 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
-                                "mac": {"type": "str"},
+                                "mac": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "med": {
                                     "type": "dict",
                                     "options": {
@@ -871,33 +1270,104 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
-                                "next_hop": {"type": "str"},
-                                "orf_prefix": {"type": "str"},
+                                "next_hop": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "orf_prefix": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "origin": {
-                                    "choices": ["ebgp", "ibgp", "incomplete"],
-                                    "type": "str",
+                                    "type": "dict",
+                                    "options": {
+                                        "input_choice": {
+                                            "choices": [
+                                                "ebgp",
+                                                "ibgp",
+                                                "incomplete",
+                                            ],
+                                            "type": "str",
+                                        },
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
                                 },
                                 "path_type": {
-                                    "choices": ["ebgp", "ibgp"],
-                                    "type": "str",
+                                    "type": "dict",
+                                    "options": {
+                                        "input_choice": {
+                                            "choices": ["ebgp", "ibgp"],
+                                            "type": "str",
+                                        },
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
                                 },
                                 "protocol": {
-                                    "choices": [
-                                        "bgp",
-                                        "connected",
-                                        "eigrp",
-                                        "isis",
-                                        "ospf",
-                                        "ospfv3",
-                                        "rip",
-                                        "static",
-                                    ],
-                                    "type": "str",
+                                    "type": "dict",
+                                    "options": {
+                                        "input_choice": {
+                                            "choices": [
+                                                "bgp",
+                                                "connected",
+                                                "eigrp",
+                                                "isis",
+                                                "ospf",
+                                                "ospfv3",
+                                                "rip",
+                                                "static",
+                                            ],
+                                            "type": "str",
+                                        },
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
                                 },
-                                "rd": {"type": "str"},
-                                "rib_has_route": {"type": "str"},
+                                "rd": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "rib_has_route": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "rib_metric": {
                                     "type": "dict",
                                     "options": {
@@ -906,32 +1376,90 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
-                                "route_aggregated": {"type": "bool"},
-                                "route_has_label": {"type": "bool"},
-                                "route_has_vrf_ri": {"type": "bool"},
-                                "route_type": {
-                                    "choices": [
-                                        "interarea",
-                                        "internal",
-                                        "level-1",
-                                        "level-1-2",
-                                        "level-2",
-                                        "local",
-                                        "ospf-external-type-1",
-                                        "ospf-external-type-2",
-                                        "ospf-inter-area",
-                                        "ospf-intra-area",
-                                        "ospf-nssa-type-1",
-                                        "ospf-nssa-type-2",
-                                        "type-1",
-                                        "type-2",
-                                    ],
-                                    "type": "str",
+                                "route_aggregated": {
+                                    "type": "dict",
+                                    "options": {
+                                        "set": {"type": "bool"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
                                 },
-                                "source": {"type": "str"},
-                                "source_prefix": {"type": "str"},
+                                "route_has_label": {
+                                    "type": "dict",
+                                    "options": {
+                                        "set": {"type": "bool"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "route_has_vrf_ri": {
+                                    "type": "dict",
+                                    "options": {
+                                        "set": {"type": "bool"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "route_type": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_choice": {
+                                            "choices": [
+                                                "interarea",
+                                                "internal",
+                                                "level-1",
+                                                "level-1-2",
+                                                "level-2",
+                                                "local",
+                                                "ospf-external-type-1",
+                                                "ospf-external-type-2",
+                                                "ospf-inter-area",
+                                                "ospf-intra-area",
+                                                "ospf-nssa-type-1",
+                                                "ospf-nssa-type-2",
+                                                "type-1",
+                                                "type-2",
+                                            ],
+                                            "type": "str",
+                                        },
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "source": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
+                                "source_prefix": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_name": {"type": "str"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                                 "tag": {
                                     "type": "dict",
                                     "options": {
@@ -946,13 +1474,39 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                         },
                                         "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
                                     },
                                 },
                                 "validation_state": {
-                                    "choices": ["invalid", "not-found", "valid"],
-                                    "type": "str",
+                                    "type": "dict",
+                                    "options": {
+                                        "input_choice": {
+                                            "choices": [
+                                                "invalid",
+                                                "not-found",
+                                                "valid",
+                                            ],
+                                            "type": "str",
+                                        },
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
                                 },
-                                "vpn_distinguisher": {"type": "int"},
+                                "vpn_distinguisher": {
+                                    "type": "dict",
+                                    "options": {
+                                        "input_number": {"type": "int"},
+                                        "combine_condition": {
+                                            "choices": ["and", "or"],
+                                            "type": "str",
+                                        },
+                                    },
+                                },
                             },
                         },
                         "add": {
@@ -1417,7 +1971,8 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "options": {
                                 "conditions": {
-                                    "type": "dict",
+                                    "type": "list",
+                                    "elements": "dict",
                                     "options": {
                                         "aigp_metric": {
                                             "type": "dict",
@@ -1432,9 +1987,22 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "str",
                                                 },
                                                 "input_number": {"type": "int"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
                                             },
                                         },
-                                        "as_path": {"type": "str"},
+                                        "as_path": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
                                         "community": {
                                             "type": "dict",
                                             "options": {
@@ -1447,7 +2015,11 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     ],
                                                     "type": "str",
                                                 },
-                                                "community_name": {"type": "str"},
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
                                             },
                                         },
                                         "community_length": {
@@ -1463,6 +2035,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "str",
                                                 },
                                                 "input_number": {"type": "int"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
                                             },
                                         },
                                         "destination": {
@@ -1483,14 +2059,72 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "destination_name": {
                                                     "type": "str",
                                                 },
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
                                             },
                                         },
-                                        "destination_prefix": {"type": "str"},
-                                        "esi": {"type": "str"},
-                                        "etag": {"type": "str"},
-                                        "evpn_gateway": {"type": "str"},
-                                        "evpn_originator": {"type": "str"},
-                                        "evpn_route_type": {"type": "int"},
+                                        "destination_prefix": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
+                                        "esi": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
+                                        "etag": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
+                                        "evpn_gateway": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
+                                        "evpn_originator": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
+                                        "evpn_route_type": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_number": {"type": "int"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
                                         "extcommunity_color": {
                                             "type": "dict",
                                             "options": {
@@ -1504,6 +2138,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "str",
                                                 },
                                                 "community_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
                                             },
                                         },
                                         "extcommunity_rt": {
@@ -1519,6 +2157,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "str",
                                                 },
                                                 "community_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
                                             },
                                         },
                                         "extcommunity_seg_nh": {
@@ -1534,6 +2176,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "str",
                                                 },
                                                 "community_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
                                             },
                                         },
                                         "extcommunity_soo": {
@@ -1549,9 +2195,22 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "str",
                                                 },
                                                 "community_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
                                             },
                                         },
-                                        "i_pmsi_present": {"type": "bool"},
+                                        "i_pmsi_present": {
+                                            "type": "dict",
+                                            "options": {
+                                                "set": {"type": "bool"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
                                         "large_community": {
                                             "type": "dict",
                                             "options": {
@@ -1565,6 +2224,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "str",
                                                 },
                                                 "community_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
                                             },
                                         },
                                         "local_preference": {
@@ -1580,9 +2243,22 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "str",
                                                 },
                                                 "input_number": {"type": "int"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
                                             },
                                         },
-                                        "mac": {"type": "str"},
+                                        "mac": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
                                         "med": {
                                             "type": "dict",
                                             "options": {
@@ -1596,37 +2272,104 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "str",
                                                 },
                                                 "input_number": {"type": "int"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
                                             },
                                         },
-                                        "next_hop": {"type": "str"},
-                                        "orf_prefix": {"type": "str"},
+                                        "next_hop": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
+                                        "orf_prefix": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
                                         "origin": {
-                                            "choices": [
-                                                "ebgp",
-                                                "ibgp",
-                                                "incomplete",
-                                            ],
-                                            "type": "str",
+                                            "type": "dict",
+                                            "options": {
+                                                "input_choice": {
+                                                    "choices": [
+                                                        "ebgp",
+                                                        "ibgp",
+                                                        "incomplete",
+                                                    ],
+                                                    "type": "str",
+                                                },
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
                                         },
                                         "path_type": {
-                                            "choices": ["ebgp", "ibgp"],
-                                            "type": "str",
+                                            "type": "dict",
+                                            "options": {
+                                                "input_choice": {
+                                                    "choices": ["ebgp", "ibgp"],
+                                                    "type": "str",
+                                                },
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
                                         },
                                         "protocol": {
-                                            "choices": [
-                                                "bgp",
-                                                "connected",
-                                                "eigrp",
-                                                "isis",
-                                                "ospf",
-                                                "ospfv3",
-                                                "rip",
-                                                "static",
-                                            ],
-                                            "type": "str",
+                                            "type": "dict",
+                                            "options": {
+                                                "input_choice": {
+                                                    "choices": [
+                                                        "bgp",
+                                                        "connected",
+                                                        "eigrp",
+                                                        "isis",
+                                                        "ospf",
+                                                        "ospfv3",
+                                                        "rip",
+                                                        "static",
+                                                    ],
+                                                    "type": "str",
+                                                },
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
                                         },
-                                        "rd": {"type": "str"},
-                                        "rib_has_route": {"type": "str"},
+                                        "rd": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
+                                        "rib_has_route": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
                                         "rib_metric": {
                                             "type": "dict",
                                             "options": {
@@ -1640,32 +2383,90 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "str",
                                                 },
                                                 "input_number": {"type": "int"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
                                             },
                                         },
-                                        "route_aggregated": {"type": "bool"},
-                                        "route_has_label": {"type": "bool"},
-                                        "route_has_vrf_ri": {"type": "bool"},
-                                        "route_type": {
-                                            "choices": [
-                                                "interarea",
-                                                "internal",
-                                                "level-1",
-                                                "level-1-2",
-                                                "level-2",
-                                                "local",
-                                                "ospf-external-type-1",
-                                                "ospf-external-type-2",
-                                                "ospf-inter-area",
-                                                "ospf-intra-area",
-                                                "ospf-nssa-type-1",
-                                                "ospf-nssa-type-2",
-                                                "type-1",
-                                                "type-2",
-                                            ],
-                                            "type": "str",
+                                        "route_aggregated": {
+                                            "type": "dict",
+                                            "options": {
+                                                "set": {"type": "bool"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
                                         },
-                                        "source": {"type": "str"},
-                                        "source_prefix": {"type": "str"},
+                                        "route_has_label": {
+                                            "type": "dict",
+                                            "options": {
+                                                "set": {"type": "bool"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
+                                        "route_has_vrf_ri": {
+                                            "type": "dict",
+                                            "options": {
+                                                "set": {"type": "bool"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
+                                        "route_type": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_choice": {
+                                                    "choices": [
+                                                        "interarea",
+                                                        "internal",
+                                                        "level-1",
+                                                        "level-1-2",
+                                                        "level-2",
+                                                        "local",
+                                                        "ospf-external-type-1",
+                                                        "ospf-external-type-2",
+                                                        "ospf-inter-area",
+                                                        "ospf-intra-area",
+                                                        "ospf-nssa-type-1",
+                                                        "ospf-nssa-type-2",
+                                                        "type-1",
+                                                        "type-2",
+                                                    ],
+                                                    "type": "str",
+                                                },
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
+                                        "source": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
+                                        "source_prefix": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_name": {"type": "str"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
                                         "tag": {
                                             "type": "dict",
                                             "options": {
@@ -1680,17 +2481,39 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "str",
                                                 },
                                                 "input_number": {"type": "int"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
                                             },
                                         },
                                         "validation_state": {
-                                            "choices": [
-                                                "invalid",
-                                                "not-found",
-                                                "valid",
-                                            ],
-                                            "type": "str",
+                                            "type": "dict",
+                                            "options": {
+                                                "input_choice": {
+                                                    "choices": [
+                                                        "invalid",
+                                                        "not-found",
+                                                        "valid",
+                                                    ],
+                                                    "type": "str",
+                                                },
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
                                         },
-                                        "vpn_distinguisher": {"type": "int"},
+                                        "vpn_distinguisher": {
+                                            "type": "dict",
+                                            "options": {
+                                                "input_number": {"type": "int"},
+                                                "combine_condition": {
+                                                    "choices": ["and", "or"],
+                                                    "type": "str",
+                                                },
+                                            },
+                                        },
                                     },
                                 },
                                 "add": {
