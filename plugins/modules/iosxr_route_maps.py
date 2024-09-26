@@ -41,7 +41,7 @@ options:
             description: Add offset to the existing value
             type: dict
             suboptions:
-              eigrp-metric:
+              eigrp_metric:
                 description: EIGRP metric attribute
                 type: dict
                 suboptions:
@@ -60,7 +60,7 @@ options:
                   max_transmission:
                     description: <0-65535> Maximum Transmission Unit metric of the path
                     type: int
-              rip-metric:
+              rip_metric:
                 description: <0-16> RIP metric attribute
                 type: int
           apply: &apply
@@ -90,10 +90,10 @@ options:
               as_path:
                 type: int
                 description: <1-4294967295> 32-bit decimal number/ 16-bit decimal number as-path
-              most-recent:
+              most_recent:
                 type: bool
                 description: Most recent Autonomous System Number
-              own-as:
+              own_as:
                 type: bool
                 description: Local Autonomous System Number
           suppress_route: &suppess
@@ -435,7 +435,7 @@ options:
           conditions:
             type: dict
             suboptions:
-              aigp-metric:
+              aigp_metric:
                 description: AIGP metric attribute
                 type: dict
                 suboptions:
@@ -501,7 +501,7 @@ options:
                   destination_name:
                     description: destination input and requires a match input (supports in/longer-than/or-longer member or set)
                     type: str
-              destination-prefix:
+              destination_prefix:
                 description: destination address of flowspec NLRI (supports in member or set)
                 type: str
               esi:

@@ -44,7 +44,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                         "add": {
                             "type": "dict",
                             "options": {
-                                "eigrp-metric": {
+                                "eigrp_metric": {
                                     "type": "dict",
                                     "options": {
                                         "bandwidth": {"type": "int"},
@@ -54,7 +54,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "max_transmission": {"type": "int"},
                                     },
                                 },
-                                "rip-metric": {"type": "int"},
+                                "rip_metric": {"type": "int"},
                             },
                         },
                         "apply": {
@@ -72,8 +72,8 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "number_of_times": {"type": "int"},
                                 "as_path": {"type": "int"},
-                                "most-recent": {"type": "bool"},
-                                "own-as": {"type": "bool"},
+                                "most_recent": {"type": "bool"},
+                                "own_as": {"type": "bool"},
                             },
                         },
                         "suppress_route": {"type": "bool"},
@@ -259,7 +259,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                         "conditions": {
                             "type": "dict",
                             "options": {
-                                "aigp-metric": {
+                                "aigp_metric": {
                                     "type": "dict",
                                     "options": {
                                         "match": {
@@ -313,7 +313,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "destination_name": {"type": "str"},
                                     },
                                 },
-                                "destination-prefix": {"type": "str"},
+                                "destination_prefix": {"type": "str"},
                                 "esi": {"type": "str"},
                                 "etag": {"type": "str"},
                                 "evpn_gateway": {"type": "str"},
@@ -501,7 +501,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                         "add": {
                             "type": "dict",
                             "options": {
-                                "eigrp-metric": {
+                                "eigrp_metric": {
                                     "type": "dict",
                                     "options": {
                                         "bandwidth": {"type": "int"},
@@ -511,7 +511,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "max_transmission": {"type": "int"},
                                     },
                                 },
-                                "rip-metric": {"type": "int"},
+                                "rip_metric": {"type": "int"},
                             },
                         },
                         "apply": {
@@ -529,8 +529,8 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "number_of_times": {"type": "int"},
                                 "as_path": {"type": "int"},
-                                "most-recent": {"type": "bool"},
-                                "own-as": {"type": "bool"},
+                                "most_recent": {"type": "bool"},
+                                "own_as": {"type": "bool"},
                             },
                         },
                         "suppress_route": {"type": "bool"},
@@ -716,7 +716,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                         "conditions": {
                             "type": "dict",
                             "options": {
-                                "aigp-metric": {
+                                "aigp_metric": {
                                     "type": "dict",
                                     "options": {
                                         "match": {
@@ -770,7 +770,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "destination_name": {"type": "str"},
                                     },
                                 },
-                                "destination-prefix": {"type": "str"},
+                                "destination_prefix": {"type": "str"},
                                 "esi": {"type": "str"},
                                 "etag": {"type": "str"},
                                 "evpn_gateway": {"type": "str"},
@@ -958,7 +958,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                         "add": {
                             "type": "dict",
                             "options": {
-                                "eigrp-metric": {
+                                "eigrp_metric": {
                                     "type": "dict",
                                     "options": {
                                         "bandwidth": {"type": "int"},
@@ -968,7 +968,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "max_transmission": {"type": "int"},
                                     },
                                 },
-                                "rip-metric": {"type": "int"},
+                                "rip_metric": {"type": "int"},
                             },
                         },
                         "apply": {
@@ -986,8 +986,8 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "number_of_times": {"type": "int"},
                                 "as_path": {"type": "int"},
-                                "most-recent": {"type": "bool"},
-                                "own-as": {"type": "bool"},
+                                "most_recent": {"type": "bool"},
+                                "own_as": {"type": "bool"},
                             },
                         },
                         "suppress_route": {"type": "bool"},
@@ -1176,7 +1176,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                 "add": {
                                     "type": "dict",
                                     "options": {
-                                        "eigrp-metric": {
+                                        "eigrp_metric": {
                                             "type": "dict",
                                             "options": {
                                                 "bandwidth": {"type": "int"},
@@ -1190,7 +1190,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 },
                                             },
                                         },
-                                        "rip-metric": {"type": "int"},
+                                        "rip_metric": {"type": "int"},
                                     },
                                 },
                                 "apply": {
@@ -1208,8 +1208,8 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "number_of_times": {"type": "int"},
                                         "as_path": {"type": "int"},
-                                        "most-recent": {"type": "bool"},
-                                        "own-as": {"type": "bool"},
+                                        "most_recent": {"type": "bool"},
+                                        "own_as": {"type": "bool"},
                                     },
                                 },
                                 "suppress_route": {"type": "bool"},
@@ -1419,7 +1419,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                 "conditions": {
                                     "type": "dict",
                                     "options": {
-                                        "aigp-metric": {
+                                        "aigp_metric": {
                                             "type": "dict",
                                             "options": {
                                                 "match": {
@@ -1485,7 +1485,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 },
                                             },
                                         },
-                                        "destination-prefix": {"type": "str"},
+                                        "destination_prefix": {"type": "str"},
                                         "esi": {"type": "str"},
                                         "etag": {"type": "str"},
                                         "evpn_gateway": {"type": "str"},
@@ -1696,7 +1696,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                 "add": {
                                     "type": "dict",
                                     "options": {
-                                        "eigrp-metric": {
+                                        "eigrp_metric": {
                                             "type": "dict",
                                             "options": {
                                                 "bandwidth": {"type": "int"},
@@ -1710,7 +1710,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 },
                                             },
                                         },
-                                        "rip-metric": {"type": "int"},
+                                        "rip_metric": {"type": "int"},
                                     },
                                 },
                                 "apply": {
@@ -1728,8 +1728,8 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "number_of_times": {"type": "int"},
                                         "as_path": {"type": "int"},
-                                        "most-recent": {"type": "bool"},
-                                        "own-as": {"type": "bool"},
+                                        "most_recent": {"type": "bool"},
+                                        "own_as": {"type": "bool"},
                                     },
                                 },
                                 "suppress_route": {"type": "bool"},
@@ -1939,7 +1939,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                 "add": {
                                     "type": "dict",
                                     "options": {
-                                        "eigrp-metric": {
+                                        "eigrp_metric": {
                                             "type": "dict",
                                             "options": {
                                                 "bandwidth": {"type": "int"},
@@ -1953,7 +1953,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 },
                                             },
                                         },
-                                        "rip-metric": {"type": "int"},
+                                        "rip_metric": {"type": "int"},
                                     },
                                 },
                                 "apply": {
@@ -1971,8 +1971,8 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "number_of_times": {"type": "int"},
                                         "as_path": {"type": "int"},
-                                        "most-recent": {"type": "bool"},
-                                        "own-as": {"type": "bool"},
+                                        "most_recent": {"type": "bool"},
+                                        "own_as": {"type": "bool"},
                                     },
                                 },
                                 "suppress_route": {"type": "bool"},
