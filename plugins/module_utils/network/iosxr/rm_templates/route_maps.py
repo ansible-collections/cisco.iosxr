@@ -80,13 +80,15 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "add": {
-                    "eigrp_metric": {
-                        "bandwidth": "{{ bandwidth }}",
-                        "delay": "{{ delay }}",
-                        "reliability": "{{ reliability }}",
-                        "effective_bandwith": "{{ effective_bandwith }}",
-                        "max_transmission": "{{ max_transmission }}",
+                '{{ name }}': {
+                    "add": {
+                        "eigrp_metric": {
+                            "bandwidth": "{{ bandwidth }}",
+                            "delay": "{{ delay }}",
+                            "reliability": "{{ reliability }}",
+                            "effective_bandwith": "{{ effective_bandwith }}",
+                            "max_transmission": "{{ max_transmission }}"
+                        },
                     },
                 },
             },
@@ -101,8 +103,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "add": {
-                    "rip_metric": "{{ bandwidth }}",
+                '{{ name }}': {
+                    "add": {
+                        "rip_metric": "{{ bandwidth }}",
+                    },
                 },
             },
         },
@@ -117,12 +121,12 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "apply": [
-                    {
+                '{{ name }}': {
+                    "apply": [{
                         "route_policy": "{{ route_policy }}",
                         "route_policy_input": "{{ route_policy_input }}",
-                    },
-                ],
+                    },],
+                },
             },
         },
         {
@@ -134,7 +138,9 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "drop": True,
+                "{{ name }}": {
+                    "drop": True,
+                },
             },
         },
         {
@@ -146,7 +152,9 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "pass": True,
+                "{{ name }}": {
+                    "pass": True,
+                },
             },
         },
         {
@@ -162,11 +170,13 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "prepend": {
-                    "as_path": "{{ as_path }}",
-                    "most_recent": "{{ not not most_recent }}",
-                    "own_as": "{{ not not own_as }}",
-                    "number_of_times": "{{ number_of_times }}",
+                "{{ name }}": {
+                    "prepend": {
+                        "as_path": "{{ as_path }}",
+                        "most_recent": "{{ not not most_recent }}",
+                        "own_as": "{{ not not own_as }}",
+                        "number_of_times": "{{ number_of_times }}"
+                    },
                 },
             },
         },
@@ -179,7 +189,9 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "suppress_route": True,
+                "{{ name }}": {
+                    "suppress_route": True,
+                },
             },
         },
         {
@@ -191,7 +203,9 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "unsuppress_route": True,
+                "{{ name }}": {
+                    "unsuppress_route": True,
+                },
             },
         },
         {
@@ -205,13 +219,15 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "remove": {
-                    "set": True,
-                    "as_path": "{{ as_path }}",
+                "{{ name }}": {
+                    "remove": {
+                        "set": True,
+                        "as_path": "{{ as_path }}",
+                    },
                 },
             },
         },
-        {
+        { # set starts
             "name": "set.administrative_distance",
             "getval": re.compile(
                 r"""
@@ -221,30 +237,34 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "administrative_distance": "{{ administrative_distance }}",
+                "{{ name }}": {
+                    "set": {
+                        "administrative_distance": "{{ administrative_distance }}",
+                    },
                 },
             },
         },
-        { #check
+        {
             "name": "set.aigp_metric",
             "getval": re.compile(
                 r"""
                 \s+set\saigp-metric
-                (\s(?P<icrement>+))?
-                (\s(?P<decrement>-))?
+                (\s(?P<icrement>\+))?
+                (\s(?P<decrement>\-))?
                 (\s(?P<metric_number>\d+))?
                 (\s(?P<igp_cost>igp-cost))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "aigp_metric": {
-                        "icrement": "{{ not not icrement }}",
-                        "decrement": "{{ not not decrement }}",
-                        "metric_number": "{{ metric_number }}",
-                        "igp_cost": "{{ not not igp_cost }}",
+                "{{ name }}": {
+                    "set": {
+                        "aigp_metric": {
+                            "icrement": "{{ not not icrement }}",
+                            "decrement": "{{ not not decrement }}",
+                            "metric_number": "{{ metric_number }}",
+                            "igp_cost": "{{ not not igp_cost }}",
+                        },
                     },
                 },
             },
@@ -259,8 +279,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "attribute_set": "{{ attribute_set }}",
+                "{{ name }}": {
+                    "set": {
+                        "attribute_set": "{{ attribute_set }}",
+                    },
                 },
             },
         },
@@ -275,10 +297,12 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "c_multicast_routing": {
-                        "bgp": "{{ not not bgp }}",
-                        "pim": "{{ not not pim }}",
+                "{{ name }}": {
+                    "set": {
+                        "c_multicast_routing": {
+                            "bgp": "{{ not not bgp }}",
+                            "pim": "{{ not not pim }}",
+                        },
                     },
                 },
             },
@@ -294,10 +318,12 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "community": {
-                        "community_name": "{{ community_name }}",
-                        "additive": "{{ not not additive }}",
+                "{{ name }}": {
+                    "set": {
+                        "community": {
+                            "community_name": "{{ community_name }}",
+                            "additive": "{{ not not additive }}",
+                        },
                     },
                 },
             },
@@ -324,26 +350,28 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "core_tree": {
-                        "ingress_replication": "{{ not not ingress_replication }}",
-                        "ingress_replication_default": "{{ not not ingress_replication_default }}",
-                        "ingress_replication_partitioned": "{{ not not ingress_replication_partitioned }}",
-                        "mldp": "{{ not not mldp }}",
-                        "mldp_default": "{{ not not mldp_default }}",
-                        "mldp_inband": "{{ not not mldp_inband }}",
-                        "mldp_partitioned_mp2mp": "{{ not not mldp_partitioned_mp2mp }}",
-                        "mldp_partitioned_p2mp": "{{ not not mldp_partitioned_p2mp }}",
-                        "p2mp_te": "{{ not not p2mp_te }}",
-                        "p2mp_te_default": "{{ not not p2mp_te_default }}",
-                        "p2mp_te_partitioned": "{{ not not p2mp_te_partitioned }}",
-                        "pim_default": "{{ not not pim_default }}",
-                        "sr_p2mp": "{{ not not sr_p2mp }}",
+                "{{ name }}": {
+                    "set": {
+                        "core_tree": {
+                            "ingress_replication": "{{ not not ingress_replication }}",
+                            "ingress_replication_default": "{{ not not ingress_replication_default }}",
+                            "ingress_replication_partitioned": "{{ not not ingress_replication_partitioned }}",
+                            "mldp": "{{ not not mldp }}",
+                            "mldp_default": "{{ not not mldp_default }}",
+                            "mldp_inband": "{{ not not mldp_inband }}",
+                            "mldp_partitioned_mp2mp": "{{ not not mldp_partitioned_mp2mp }}",
+                            "mldp_partitioned_p2mp": "{{ not not mldp_partitioned_p2mp }}",
+                            "p2mp_te": "{{ not not p2mp_te }}",
+                            "p2mp_te_default": "{{ not not p2mp_te_default }}",
+                            "p2mp_te_partitioned": "{{ not not p2mp_te_partitioned }}",
+                            "pim_default": "{{ not not pim_default }}",
+                            "sr_p2mp": "{{ not not sr_p2mp }}",
+                        },
                     },
                 },
             },
         },
-        { #check
+        {
             "name": "set.dampening",
             "getval": re.compile(
                 r"""
@@ -356,12 +384,14 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "dampening": {
-                        "halflife": "{{ halflife }}",
-                        "max_suppress": "{{ max_suppress }}",
-                        "reuse": "{{ reuse }}",
-                        "suppress": "{{ suppress }}",
+                "{{ name }}": {
+                    "set": {
+                        "dampening": {
+                            "halflife": "{{ halflife }}",
+                            "max_suppress": "{{ max_suppress }}",
+                            "reuse": "{{ reuse }}",
+                            "suppress": "{{ suppress }}",
+                        },
                     },
                 },
             },
@@ -373,18 +403,20 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s+set\sdownstream-core-tree
                 (\s(?P<ingress_replication>ingress-replication))?
                 (\s(?P<mldp>mldp))?
-                (\s(?P<p2mp_te>p2mp-te)?
+                (\s(?P<p2mp_te>p2mp-te))?
                 (\s(?P<sr_p2mp>sr-p2mp))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "downstream_core_tree": {
-                        "ingress_replication": "{{ not not ingress_replication }}",
-                        "mldp": "{{ not not mldp }}",
-                        "p2mp_te": "{{ not not p2mp_te }}",
-                        "sr_p2mp": "{{ not not sr_p2mp }}",
+                "{{ name }}": {
+                    "set": {
+                        "downstream_core_tree": {
+                            "ingress_replication": "{{ not not ingress_replication }}",
+                            "mldp": "{{ not not mldp }}",
+                            "p2mp_te": "{{ not not p2mp_te }}",
+                            "sr_p2mp": "{{ not not sr_p2mp }}",
+                        },
                     },
                 },
             },
@@ -402,13 +434,15 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "eigrp_metric": {
-                        "bandwidth": "{{ bandwidth }}",
-                        "delay": "{{ delay }}",
-                        "reliability": "{{ reliability }}",
-                        "effective_bandwith": "{{ effective_bandwith }}",
-                        "max_transmission": "{{ max_transmission }}",
+                "{{ name }}": {
+                    "set": {
+                        "eigrp_metric": {
+                            "bandwidth": "{{ bandwidth }}",
+                            "delay": "{{ delay }}",
+                            "reliability": "{{ reliability }}",
+                            "effective_bandwith": "{{ effective_bandwith }}",
+                            "max_transmission": "{{ max_transmission }}",
+                        },
                     },
                 },
             },
@@ -422,8 +456,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "fallback_vrf_lookup": True,
+                "{{ name }}": {
+                    "set": {
+                        "fallback_vrf_lookup": True,
+                    },
                 },
             },
         },
@@ -437,8 +473,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "flow_tag": "{{ flow_tag }}",
+                "{{ name }}": {
+                    "set": {
+                        "flow_tag": "{{ flow_tag }}",
+                    },
                 },
             },
         },
@@ -452,8 +490,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "forward_class": "{{ forward_class }}",
+                "{{ name }}": {
+                    "set": {
+                        "forward_class": "{{ forward_class }}",
+                    },
                 },
             },
         },
@@ -467,8 +507,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "ip_precedence": "{{ ip_precedence }}",
+                "{{ name }}": {
+                    "set": {
+                        "ip_precedence": "{{ ip_precedence }}",
+                    },
                 },
             },
         },
@@ -482,8 +524,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "isis_metric": "{{ isis_metric }}",
+                "{{ name }}": {
+                    "set": {
+                        "isis_metric": "{{ isis_metric }}",
+                    },
                 },
             },
         },
@@ -497,8 +541,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "label": "{{ label }}",
+                "{{ name }}": {
+                    "set": {
+                        "label": "{{ label }}",
+                    },
                 },
             },
         },
@@ -512,8 +558,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "label_index": "{{ label_index }}",
+                "{{ name }}": {
+                    "set": {
+                        "label_index": "{{ label_index }}",
+                    },
                 },
             },
         },
@@ -524,16 +572,18 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s+set\slabel-mode
                 (\s(?P<per_ce>per-ce))?
                 (\s(?P<per_prefix>per-prefix))?
-                (\s(?P<per_vrf>per-vrf)?
+                (\s(?P<per_vrf>per-vrf))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "label_mode": {
-                        "per_ce": "{{ not not per_ce }}",
-                        "per_prefix": "{{ not not per_prefix }}",
-                        "per_vrf": "{{ not not per_vrf }}",
+                "{{ name }}": {
+                    "set": {
+                        "label_mode": {
+                            "per_ce": "{{ not not per_ce }}",
+                            "per_prefix": "{{ not not per_prefix }}",
+                            "per_vrf": "{{ not not per_vrf }}",
+                        },
                     },
                 },
             },
@@ -548,8 +598,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "large_community": "{{ large_community }}",
+                "{{ name }}": {
+                    "set": {
+                        "large_community": "{{ large_community }}",
+                    },
                 },
             },
         },
@@ -560,16 +612,18 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s+set\slevel
                 (\s(?P<level_1>level-1))?
                 (\s(?P<level_1_2>level-1-2))?
-                (\s(?P<level_2>level-2)?
+                (\s(?P<level_2>level-2))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "level": {
-                        "level_1": "{{ not not level_1 }}",
-                        "level_1_2": "{{ not not level_1_2 }}",
-                        "level_2": "{{ not not level_2 }}",
+                "{{ name }}": {
+                    "set": {
+                        "level": {
+                            "level_1": "{{ not not level_1 }}",
+                            "level_1_2": "{{ not not level_1_2 }}",
+                            "level_2": "{{ not not level_2 }}",
+                        },
                     },
                 },
             },
@@ -583,8 +637,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "load_balance": True,
+                "{{ name }}": {
+                    "set": {
+                        "load_balance": True,
+                    },
                 },
             },
         },
@@ -598,8 +654,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "lsm_root": "{{ lsm_root }}",
+                "{{ name }}": {
+                    "set": {
+                        "lsm_root": "{{ lsm_root }}",
+                    },
                 },
             },
         },
@@ -610,7 +668,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s+set\smetric_type
                 (\s(?P<external>external))?
                 (\s(?P<internal>internal))?
-                (\s(?P<rib_metric_as_external>rib-metric-as-external)?
+                (\s(?P<rib_metric_as_external>rib-metric-as-external))?
                 (\s(?P<rib_metric_as_internal>rib-metric-as-internal))?
                 (\s(?P<type_1>type-1))?
                 (\s(?P<type_2>type-2))?
@@ -618,14 +676,16 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "metric_type": {
-                        "external": "{{ not not external }}",
-                        "internal": "{{ not not internal }}",
-                        "rib_metric_as_external": "{{ not not rib_metric_as_external }}",
-                        "rib_metric_as_internal": "{{ not not rib_metric_as_internal }}",
-                        "type_1": "{{ not not type_1 }}",
-                        "type_2": "{{ not not type_2 }}",
+                "{{ name }}": {
+                    "set": {
+                        "metric_type": {
+                            "external": "{{ not not external }}",
+                            "internal": "{{ not not internal }}",
+                            "rib_metric_as_external": "{{ not not rib_metric_as_external }}",
+                            "rib_metric_as_internal": "{{ not not rib_metric_as_internal }}",
+                            "type_1": "{{ not not type_1 }}",
+                            "type_2": "{{ not not type_2 }}",
+                        },
                     },
                 },
             },
@@ -640,8 +700,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "mpls": "{{ mpls }}",
+                "{{ name }}": {
+                    "set": {
+                        "mpls": "{{ mpls }}",
+                    },
                 },
             },
         },
@@ -655,9 +717,11 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "next_hop":{
-                        "address": "{{ next_hop }}",
+                "{{ name }}": {
+                    "set": {
+                        "next_hop":{
+                            "address": "{{ next_hop }}",
+                        },
                     },
                 },
             },
@@ -669,16 +733,18 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s+set\sorigin
                 (\s(?P<egp>egp))?
                 (\s(?P<igp>igp))?
-                (\s(?P<rincomplete>incomplete)?
+                (\s(?P<rincomplete>incomplete))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "origin": {
-                        "egp": "{{ not not egp }}",
-                        "igp": "{{ not not igp }}",
-                        "rincomplete": "{{ not not rincomplete }}",
+                "{{ name }}": {
+                    "set": {
+                        "origin": {
+                            "egp": "{{ not not egp }}",
+                            "igp": "{{ not not igp }}",
+                            "rincomplete": "{{ not not rincomplete }}",
+                        },
                     },
                 },
             },
@@ -693,8 +759,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "ospf_metric": "{{ ospf_metric }}",
+                "{{ name }}": {
+                    "set": {
+                        "ospf_metric": "{{ ospf_metric }}",
+                    },
                 },
             },
         },
@@ -707,8 +775,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "path_color": True,
+                "{{ name }}": {
+                    "set": {
+                        "path_color": True,
+                    },
                 },
             },
         },
@@ -722,8 +792,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "qos_group": "{{ qos_group }}",
+                "{{ name }}": {
+                    "set": {
+                        "qos_group": "{{ qos_group }}",
+                    },
                 },
             },
         },
@@ -737,8 +809,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "rib_metric": "{{ rib_metric }}",
+                "{{ name }}": {
+                    "set": {
+                        "rib_metric": "{{ rib_metric }}",
+                    },
                 },
             },
         },
@@ -752,8 +826,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "rip_metric": "{{ rip_metric }}",
+                "{{ name }}": {
+                    "set": {
+                        "rip_metric": "{{ rip_metric }}",
+                    },
                 },
             },
         },
@@ -767,8 +843,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "rip_tag": "{{ rip_tag }}",
+                "{{ name }}": {
+                    "set": {
+                        "rip_tag": "{{ rip_tag }}",
+                    },
                 },
             },
         },
@@ -782,8 +860,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "rt_set": "{{ rt_set }}",
+                "{{ name }}": {
+                    "set": {
+                        "rt_set": "{{ rt_set }}",
+                    },
                 },
             },
         },
@@ -796,8 +876,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "s_pmsi": True,
+                "{{ name }}": {
+                    "set": {
+                        "s_pmsi": True,
+                    },
                 },
             },
         },
@@ -808,16 +890,18 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s+set\sspf-priority
                 (\s(?P<critical>critical))?
                 (\s(?P<high>high))?
-                (\s(?P<medium>medium)?
+                (\s(?P<medium>medium))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "spf_priority": {
-                        "critical": "{{ not not critical }}",
-                        "high": "{{ not not high }}",
-                        "medium": "{{ not not medium }}",
+                "{{ name }}": {
+                    "set": {
+                        "spf_priority": {
+                            "critical": "{{ not not critical }}",
+                            "high": "{{ not not high }}",
+                            "medium": "{{ not not medium }}",
+                        },
                     },
                 },
             },
@@ -832,8 +916,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "static_p2mp_te": "{{ static_p2mp_te }}",
+                "{{ name }}": {
+                    "set": {
+                        "static_p2mp_te": "{{ static_p2mp_te }}",
+                    },
                 },
             },
         },
@@ -847,8 +933,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "tag": "{{ tag }}",
+                "{{ name }}": {
+                    "set": {
+                        "tag": "{{ tag }}",
+                    },
                 },
             },
         },
@@ -863,10 +951,12 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "traffic_index": {
-                        "index_number": "{{ index_number }}",
-                        "ignore": "{{ not not ignore }}",
+                "{{ name }}": {
+                    "set": {
+                        "traffic_index": {
+                            "index_number": "{{ index_number }}",
+                            "ignore": "{{ not not ignore }}",
+                        },
                     },
                 },
             },
@@ -878,18 +968,20 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s+set\supstream-core-tree
                 (\s(?P<ingress_replication>ingress-replication))?
                 (\s(?P<mldp>mldp))?
-                (\s(?P<p2mp_te>p2mp-te)?
-                (\s(?P<sr_p2mp>sr-p2mp)?
+                (\s(?P<p2mp_te>p2mp-te))?
+                (\s(?P<sr_p2mp>sr-p2mp))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "upstream_core_tree": {
-                        "ingress_replication": "{{ not not ingress_replication }}",
-                        "mldp": "{{ not not mldp }}",
-                        "p2mp_te": "{{ not not p2mp_te }}",
-                        "sr_p2mp": "{{ not not sr_p2mp }}",
+                "{{ name }}": {
+                    "set": {
+                        "upstream_core_tree": {
+                            "ingress_replication": "{{ not not ingress_replication }}",
+                            "mldp": "{{ not not mldp }}",
+                            "p2mp_te": "{{ not not p2mp_te }}",
+                            "sr_p2mp": "{{ not not sr_p2mp }}",
+                        },
                     },
                 },
             },
@@ -904,8 +996,10 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "vpn_distinguisher": "{{ vpn_distinguisher }}",
+                "{{ name }}": {
+                    "set": {
+                        "vpn_distinguisher": "{{ vpn_distinguisher }}",
+                    },
                 },
             },
         },
@@ -919,10 +1013,12 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "set": {
-                    "weight": "{{ weight }}",
+                "{{ name }}": {
+                    "set": {
+                        "weight": "{{ weight }}",
+                    },
                 },
             },
-        },
+        }, # set ends
     ]
     # fmt: on
