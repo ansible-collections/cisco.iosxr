@@ -83,7 +83,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.as_path",
@@ -102,7 +102,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.community",
@@ -123,7 +123,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.destination",
@@ -144,7 +144,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.destination_prefix",
@@ -163,7 +163,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.esi",
@@ -182,7 +182,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.etag",
@@ -201,7 +201,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.evpn_gateway",
@@ -220,7 +220,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.evpn_originator",
@@ -239,7 +239,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.evpn_route_type",
@@ -258,7 +258,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.extcommunity_color",
@@ -279,7 +279,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.extcommunity_rt",
@@ -300,7 +300,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.extcommunity_seg_nh",
@@ -321,7 +321,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.extcommunity_soo",
@@ -342,7 +342,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.i_pmsi_present",
@@ -360,7 +360,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.large_community",
@@ -381,7 +381,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.local_preference",
@@ -402,7 +402,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.mac",
@@ -421,7 +421,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.med",
@@ -442,7 +442,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.next_hop",
@@ -461,7 +461,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.orf_prefix",
@@ -480,7 +480,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.origin",
@@ -499,7 +499,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.path_type",
@@ -518,7 +518,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.protocol",
@@ -537,7 +537,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.rd",
@@ -556,7 +556,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.rib_has_route",
@@ -575,7 +575,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.rib_metric",
@@ -596,7 +596,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.route_aggregated",
@@ -613,7 +613,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.route_has_label",
@@ -630,7 +630,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.route_has_vrf_ri",
@@ -647,7 +647,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.route_type",
@@ -666,7 +666,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.source",
@@ -685,7 +685,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.source_prefix",
@@ -704,7 +704,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.tag",
@@ -725,7 +725,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.validation_state",
@@ -744,7 +744,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
         {
             "name": "conditions.vpn_distinguisher",
@@ -763,7 +763,7 @@ class Route_mapsConditionals(NetworkTemplate):
                         "combine_condition": "{{ combine_condition }}",
                     },
                 },
-            }
+            },
         },
     ]
     # fmt: on
