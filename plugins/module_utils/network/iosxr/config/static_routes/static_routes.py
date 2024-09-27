@@ -30,10 +30,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 
-# import debugpy
-# debugpy.listen(3000)
-# debugpy.wait_for_client()
-
 
 class Static_routes(ConfigBase):
     """
@@ -597,10 +593,7 @@ class Static_routes(ConfigBase):
         command = dest
 
         for x in next_hop:
-            if "." in x or ":" in x or "/" in x:
-                command += " {0}".format(x)
-            else:
-                command += " {0}".format(x)
+            command += " {0}".format(x)
 
         for key in sorted(updates):
             if key == "admin_distance":
