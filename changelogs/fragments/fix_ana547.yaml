@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fixes incorrect handling of the vrf keyword in static_route configurations.
