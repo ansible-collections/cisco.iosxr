@@ -45,6 +45,730 @@ class Route_mapsName(NetworkTemplate):
     # fmt: on
 
 
+class Route_mapsConditionals(NetworkTemplate):
+    def __init__(self, lines=None, module=None):
+        super(Route_mapsConditionals, self).__init__(lines=lines, tmplt=self, module=module)
+
+    # fmt: off
+    PARSERS = [
+        {
+            "name": "name",
+            "getval": re.compile(
+                r"""
+                ^route-policy\s(?P<name>\S+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                '{{ name }}': '{{ name }}',
+            },
+            "shared": True,
+        },
+        {
+            "name": "conditions.aigp_metric",
+            "getval": re.compile(
+                r"""
+                ^aigrp-metric
+                (\s(?P<match>eq|ge|is|le))?
+                (\s(?P<input_number>\d+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "aigp_metric": {
+                        "match": "{{ match }}",
+                        "input_number": "{{ input_number }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.as_path",
+            "getval": re.compile(
+                r"""
+                ^as-path\sin
+                (\s(?P<input_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "aigp_metric": {
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.community",
+            "getval": re.compile(
+                r"""
+                ^community
+                (\s(?P<match>is-empty|matches-any|matches-every|matches-within))?
+                (\s(?P<input_number>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "aigp_metric": {
+                        "match": "{{ match }}",
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.destination",
+            "getval": re.compile(
+                r"""
+                ^destination
+                (\s(?P<match>in|is-backup-path|is-best-external|is-best-path|is-multi-path|longer-than|or-longer))?
+                (\s(?P<destination_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "destination": {
+                        "match": "{{ match }}",
+                        "destination_name": "{{ destination_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.destination_prefix",
+            "getval": re.compile(
+                r"""
+                ^destination-prefix\sin
+                (\s(?P<input_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "destination_prefix": {
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.esi",
+            "getval": re.compile(
+                r"""
+                ^esi\sin
+                (\s(?P<input_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "esi": {
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.etag",
+            "getval": re.compile(
+                r"""
+                ^etag\sin
+                (\s(?P<input_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "etag": {
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.evpn_gateway",
+            "getval": re.compile(
+                r"""
+                ^evpn-gateway\sin
+                (\s(?P<input_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "evpn_gateway": {
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.evpn_originator",
+            "getval": re.compile(
+                r"""
+                ^evpn-originator\sin
+                (\s(?P<input_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "evpn_originator": {
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.evpn_route_type",
+            "getval": re.compile(
+                r"""
+                ^evpn-route-type\sis
+                (\s(?P<input_name>\d+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "evpn_route_type": {
+                        "input_number": "{{ input_number }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.extcommunity_color",
+            "getval": re.compile(
+                r"""
+                ^extcommunity\scolor
+                (\s(?P<match>is-empty|matches-any|matches-every|matches-within))?
+                (\s(?P<community_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "extcommunity_color": {
+                        "match": "{{ match }}",
+                        "community_name": "{{ community_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.extcommunity_rt",
+            "getval": re.compile(
+                r"""
+                ^extcommunity\srt
+                (\s(?P<match>is-empty|matches-any|matches-every|matches-within))?
+                (\s(?P<community_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "extcommunity_rt": {
+                        "match": "{{ match }}",
+                        "community_name": "{{ community_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.extcommunity_seg_nh",
+            "getval": re.compile(
+                r"""
+                ^extcommunity\sseg-nh
+                (\s(?P<match>is-empty|matches-any|matches-every|matches-within))?
+                (\s(?P<community_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "extcommunity_seg_nh": {
+                        "match": "{{ match }}",
+                        "community_name": "{{ community_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.extcommunity_soo",
+            "getval": re.compile(
+                r"""
+                ^extcommunity\ssoo
+                (\s(?P<match>is-empty|matches-any|matches-every|matches-within))?
+                (\s(?P<community_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "extcommunity_soo": {
+                        "match": "{{ match }}",
+                        "community_name": "{{ community_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.i_pmsi_present",
+            "getval": re.compile(
+                r"""
+                ^i-pmsi-present
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "i_pmsi_present": {
+                        "set": True,
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.large_community",
+            "getval": re.compile(
+                r"""
+                ^large-community
+                (\s(?P<match>is-empty|matches-any|matches-every|matches-within))?
+                (\s(?P<community_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "large_community": {
+                        "match": "{{ match }}",
+                        "community_name": "{{ community_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.local_preference",
+            "getval": re.compile(
+                r"""
+                ^local-preference
+                (\s(?P<match>eq|ge|is|le))?
+                (\s(?P<input_number>\d+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "local_preference": {
+                        "match": "{{ match }}",
+                        "input_number": "{{ input_number }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.mac",
+            "getval": re.compile(
+                r"""
+                ^mac
+                (\s(?P<input_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "mac": {
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.med",
+            "getval": re.compile(
+                r"""
+                ^med
+                (\s(?P<match>eq|ge|is|le))
+                (\s(?P<input_number>\d+))
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "med": {
+                        "match": "{{ match }}",
+                        "input_number": "{{ input_number }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.next_hop",
+            "getval": re.compile(
+                r"""
+                ^next-hop
+                (\s(?P<input_name>\([^)]*\)|\S+))
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "next_hop": {
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.orf_prefix",
+            "getval": re.compile(
+                r"""
+                ^orf\sprefix\sin
+                (\s(?P<input_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "orf_prefix": {
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.origin",
+            "getval": re.compile(
+                r"""
+                ^origin\sis
+                (\s(?P<input_choice>ebgp|ibgp|incomplete))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "origin": {
+                        "input_choice": "{{ input_choice }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.path_type",
+            "getval": re.compile(
+                r"""
+                ^path-type\sis
+                (\s(?P<input_choice>ebgp|ibgp))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "path_type": {
+                        "input_choice": "{{ input_choice }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.protocol",
+            "getval": re.compile(
+                r"""
+                ^protocol\sis
+                (\s(?P<input_choice>bgp|connected|eigrp|isis|ospf|ospfv3|rip|static))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "protocol": {
+                        "input_choice": "{{ input_choice }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.rd",
+            "getval": re.compile(
+                r"""
+                ^rd\sin
+                (\s(?P<input_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "rd": {
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.rib_has_route",
+            "getval": re.compile(
+                r"""
+                ^rib-has-route\sin
+                (\s(?P<input_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "rib_has_route": {
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.rib_metric",
+            "getval": re.compile(
+                r"""
+                ^rib-metric
+                (\s(?P<match>eq|ge|is|le))
+                (\s(?P<input_number>\d+))
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "rib_metric": {
+                        "match": "{{ match }}",
+                        "input_number": "{{ input_number }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.route_aggregated",
+            "getval": re.compile(
+                r"""
+                ^route-aggregated
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "route_aggregated": {
+                        "set": True,
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.route_has_label",
+            "getval": re.compile(
+                r"""
+                ^route-has-label
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "route_has_label": {
+                        "set": True,
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.route_has_vrf_ri",
+            "getval": re.compile(
+                r"""
+                ^route-has-vrf-ri
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "route_has_vrf_ri": {
+                        "set": True,
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.route_type",
+            "getval": re.compile(
+                r"""
+                ^route-type\sis
+                (\s(?P<input_choice>interarea|internal|level-1|level-1-2|level-2|local|ospf-external-type-1|ospf-external-type-2|ospf-inter-area|ospf-intra-area|ospf-nssa-type-1|ospf-nssa-type-2|type-1|type-2))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "route_type": {
+                        "input_choice": "{{ input_choice }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.source",
+            "getval": re.compile(
+                r"""
+                ^source\sin
+                (\s(?P<input_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "source": {
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.source_prefix",
+            "getval": re.compile(
+                r"""
+                ^source-prefix\sin
+                (\s(?P<input_name>\([^)]*\)|\S+))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "source": {
+                        "input_name": "{{ input_name }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.tag",
+            "getval": re.compile(
+                r"""
+                ^tag
+                (\s(?P<match>eq|ge|is|le))
+                (\s(?P<input_number>\d+))
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "tag": {
+                        "match": "{{ match }}",
+                        "input_number": "{{ input_number }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.validation_state",
+            "getval": re.compile(
+                r"""
+                ^validation-state\sis
+                (\s(?P<input_choice>invalid|not-found|valid))?
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "validation_state": {
+                        "input_choice": "{{ input_choice }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+        {
+            "name": "conditions.vpn_distinguisher",
+            "getval": re.compile(
+                r"""
+                ^vpn-distinguisher\sis
+                (\s(?P<input_number>\d+))
+                (\s(?P<combine_condition>and|or|then))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "",
+            "result": {
+                "conditions": {
+                    "vpn_distinguisher": {
+                        "input_number": "{{ input_number }}",
+                        "combine_condition": "{{ combine_condition }}",
+                    },
+                },
+            }
+        },
+    ]
+    # fmt: on
+
+
 class Route_mapsTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         super(Route_mapsTemplate, self).__init__(lines=lines, tmplt=self, module=module)
