@@ -91,7 +91,7 @@ class Route_mapsFacts(object):
                 current_value.append(line)
 
             if not (line.startswith("if ") or line.startswith("elseif ")) and line.startswith(
-                "else"
+                "else",
             ):
                 else_data = process_else(lines[idx + 1 : :])
                 break
