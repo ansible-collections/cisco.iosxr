@@ -256,525 +256,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                 "if": {
                     "type": "dict",
                     "options": {
-                        "conditions": {
-                            "type": "list",
-                            "elements": "dict",
-                            "options": {
-                                "aigp_metric": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": ["eq", "ge", "is", "le"],
-                                            "type": "str",
-                                        },
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "as_path": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "community": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "is-empty",
-                                                "matches-any",
-                                                "matches-every",
-                                                "matches-within",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "community_length": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": ["eq", "ge", "is", "le"],
-                                            "type": "str",
-                                        },
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "destination": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "in",
-                                                "is-backup-path",
-                                                "is-best-external",
-                                                "is-best-path",
-                                                "is-multi-path",
-                                                "longer-than",
-                                                "or-longer",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "destination_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "destination_prefix": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "esi": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "etag": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "evpn_gateway": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "evpn_originator": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "evpn_route_type": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "extcommunity_color": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "is-empty",
-                                                "matches-any",
-                                                "matches-every",
-                                                "matches-within",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "community_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "extcommunity_rt": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "is-empty",
-                                                "matches-any",
-                                                "matches-every",
-                                                "matches-within",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "community_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "extcommunity_seg_nh": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "is-empty",
-                                                "matches-any",
-                                                "matches-every",
-                                                "matches-within",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "community_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "extcommunity_soo": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "is-empty",
-                                                "matches-any",
-                                                "matches-every",
-                                                "matches-within",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "community_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "i_pmsi_present": {
-                                    "type": "dict",
-                                    "options": {
-                                        "set": {"type": "bool"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "large_community": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "is-empty",
-                                                "matches-any",
-                                                "matches-every",
-                                                "matches-within",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "community_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "local_preference": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": ["eq", "ge", "is", "le"],
-                                            "type": "str",
-                                        },
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "mac": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "med": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": ["eq", "ge", "is", "le"],
-                                            "type": "str",
-                                        },
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "next_hop": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "orf_prefix": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "origin": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_choice": {
-                                            "choices": [
-                                                "ebgp",
-                                                "ibgp",
-                                                "incomplete",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "path_type": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_choice": {
-                                            "choices": ["ebgp", "ibgp"],
-                                            "type": "str",
-                                        },
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "protocol": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_choice": {
-                                            "choices": [
-                                                "bgp",
-                                                "connected",
-                                                "eigrp",
-                                                "isis",
-                                                "ospf",
-                                                "ospfv3",
-                                                "rip",
-                                                "static",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "rd": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "rib_has_route": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "rib_metric": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": ["eq", "ge", "is", "le"],
-                                            "type": "str",
-                                        },
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "route_aggregated": {
-                                    "type": "dict",
-                                    "options": {
-                                        "set": {"type": "bool"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "route_has_label": {
-                                    "type": "dict",
-                                    "options": {
-                                        "set": {"type": "bool"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "route_has_vrf_ri": {
-                                    "type": "dict",
-                                    "options": {
-                                        "set": {"type": "bool"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "route_type": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_choice": {
-                                            "choices": [
-                                                "interarea",
-                                                "internal",
-                                                "level-1",
-                                                "level-1-2",
-                                                "level-2",
-                                                "local",
-                                                "ospf-external-type-1",
-                                                "ospf-external-type-2",
-                                                "ospf-inter-area",
-                                                "ospf-intra-area",
-                                                "ospf-nssa-type-1",
-                                                "ospf-nssa-type-2",
-                                                "type-1",
-                                                "type-2",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "source": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "source_prefix": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "tag": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "eq",
-                                                "ge",
-                                                "in",
-                                                "is",
-                                                "le",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "validation_state": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_choice": {
-                                            "choices": [
-                                                "invalid",
-                                                "not-found",
-                                                "valid",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "vpn_distinguisher": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                            },
-                        },
+                        "condition": {"type": "str"},
                         "add": {
                             "type": "dict",
                             "options": {
@@ -987,528 +469,11 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                         },
                     },
                 },
-                "elif": {
-                    "type": "dict",
+                "elseif": {
+                    "type": "list",
+                    "elements": "dict",
                     "options": {
-                        "conditions": {
-                            "type": "list",
-                            "elements": "dict",
-                            "options": {
-                                "aigp_metric": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": ["eq", "ge", "is", "le"],
-                                            "type": "str",
-                                        },
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "as_path": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "community": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "is-empty",
-                                                "matches-any",
-                                                "matches-every",
-                                                "matches-within",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "community_length": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": ["eq", "ge", "is", "le"],
-                                            "type": "str",
-                                        },
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "destination": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "in",
-                                                "is-backup-path",
-                                                "is-best-external",
-                                                "is-best-path",
-                                                "is-multi-path",
-                                                "longer-than",
-                                                "or-longer",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "destination_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "destination_prefix": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "esi": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "etag": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "evpn_gateway": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "evpn_originator": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "evpn_route_type": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "extcommunity_color": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "is-empty",
-                                                "matches-any",
-                                                "matches-every",
-                                                "matches-within",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "community_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "extcommunity_rt": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "is-empty",
-                                                "matches-any",
-                                                "matches-every",
-                                                "matches-within",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "community_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "extcommunity_seg_nh": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "is-empty",
-                                                "matches-any",
-                                                "matches-every",
-                                                "matches-within",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "community_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "extcommunity_soo": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "is-empty",
-                                                "matches-any",
-                                                "matches-every",
-                                                "matches-within",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "community_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "i_pmsi_present": {
-                                    "type": "dict",
-                                    "options": {
-                                        "set": {"type": "bool"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "large_community": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "is-empty",
-                                                "matches-any",
-                                                "matches-every",
-                                                "matches-within",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "community_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "local_preference": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": ["eq", "ge", "is", "le"],
-                                            "type": "str",
-                                        },
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "mac": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "med": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": ["eq", "ge", "is", "le"],
-                                            "type": "str",
-                                        },
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "next_hop": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "orf_prefix": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "origin": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_choice": {
-                                            "choices": [
-                                                "ebgp",
-                                                "ibgp",
-                                                "incomplete",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "path_type": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_choice": {
-                                            "choices": ["ebgp", "ibgp"],
-                                            "type": "str",
-                                        },
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "protocol": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_choice": {
-                                            "choices": [
-                                                "bgp",
-                                                "connected",
-                                                "eigrp",
-                                                "isis",
-                                                "ospf",
-                                                "ospfv3",
-                                                "rip",
-                                                "static",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "rd": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "rib_has_route": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "rib_metric": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": ["eq", "ge", "is", "le"],
-                                            "type": "str",
-                                        },
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "route_aggregated": {
-                                    "type": "dict",
-                                    "options": {
-                                        "set": {"type": "bool"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "route_has_label": {
-                                    "type": "dict",
-                                    "options": {
-                                        "set": {"type": "bool"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "route_has_vrf_ri": {
-                                    "type": "dict",
-                                    "options": {
-                                        "set": {"type": "bool"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "route_type": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_choice": {
-                                            "choices": [
-                                                "interarea",
-                                                "internal",
-                                                "level-1",
-                                                "level-1-2",
-                                                "level-2",
-                                                "local",
-                                                "ospf-external-type-1",
-                                                "ospf-external-type-2",
-                                                "ospf-inter-area",
-                                                "ospf-intra-area",
-                                                "ospf-nssa-type-1",
-                                                "ospf-nssa-type-2",
-                                                "type-1",
-                                                "type-2",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "source": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "source_prefix": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_name": {"type": "str"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "tag": {
-                                    "type": "dict",
-                                    "options": {
-                                        "match": {
-                                            "choices": [
-                                                "eq",
-                                                "ge",
-                                                "in",
-                                                "is",
-                                                "le",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "validation_state": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_choice": {
-                                            "choices": [
-                                                "invalid",
-                                                "not-found",
-                                                "valid",
-                                            ],
-                                            "type": "str",
-                                        },
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                                "vpn_distinguisher": {
-                                    "type": "dict",
-                                    "options": {
-                                        "input_number": {"type": "int"},
-                                        "combine_condition": {
-                                            "choices": ["and", "or"],
-                                            "type": "str",
-                                        },
-                                    },
-                                },
-                            },
-                        },
+                        "condition": {"type": "str"},
                         "add": {
                             "type": "dict",
                             "options": {
@@ -1967,555 +932,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                 },
                             },
                         },
-                        "if_of_else": {
+                        "if": {
                             "type": "dict",
                             "options": {
-                                "conditions": {
-                                    "type": "list",
-                                    "elements": "dict",
-                                    "options": {
-                                        "aigp_metric": {
-                                            "type": "dict",
-                                            "options": {
-                                                "match": {
-                                                    "choices": [
-                                                        "eq",
-                                                        "ge",
-                                                        "is",
-                                                        "le",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "input_number": {"type": "int"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "as_path": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "community": {
-                                            "type": "dict",
-                                            "options": {
-                                                "match": {
-                                                    "choices": [
-                                                        "is-empty",
-                                                        "matches-any",
-                                                        "matches-every",
-                                                        "matches-within",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "community_length": {
-                                            "type": "dict",
-                                            "options": {
-                                                "match": {
-                                                    "choices": [
-                                                        "eq",
-                                                        "ge",
-                                                        "is",
-                                                        "le",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "input_number": {"type": "int"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "destination": {
-                                            "type": "dict",
-                                            "options": {
-                                                "match": {
-                                                    "choices": [
-                                                        "in",
-                                                        "is-backup-path",
-                                                        "is-best-external",
-                                                        "is-best-path",
-                                                        "is-multi-path",
-                                                        "longer-than",
-                                                        "or-longer",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "destination_name": {
-                                                    "type": "str",
-                                                },
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "destination_prefix": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "esi": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "etag": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "evpn_gateway": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "evpn_originator": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "evpn_route_type": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_number": {"type": "int"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "extcommunity_color": {
-                                            "type": "dict",
-                                            "options": {
-                                                "match": {
-                                                    "choices": [
-                                                        "is-empty",
-                                                        "matches-any",
-                                                        "matches-every",
-                                                        "matches-within",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "community_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "extcommunity_rt": {
-                                            "type": "dict",
-                                            "options": {
-                                                "match": {
-                                                    "choices": [
-                                                        "is-empty",
-                                                        "matches-any",
-                                                        "matches-every",
-                                                        "matches-within",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "community_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "extcommunity_seg_nh": {
-                                            "type": "dict",
-                                            "options": {
-                                                "match": {
-                                                    "choices": [
-                                                        "is-empty",
-                                                        "matches-any",
-                                                        "matches-every",
-                                                        "matches-within",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "community_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "extcommunity_soo": {
-                                            "type": "dict",
-                                            "options": {
-                                                "match": {
-                                                    "choices": [
-                                                        "is-empty",
-                                                        "matches-any",
-                                                        "matches-every",
-                                                        "matches-within",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "community_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "i_pmsi_present": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "large_community": {
-                                            "type": "dict",
-                                            "options": {
-                                                "match": {
-                                                    "choices": [
-                                                        "is-empty",
-                                                        "matches-any",
-                                                        "matches-every",
-                                                        "matches-within",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "community_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "local_preference": {
-                                            "type": "dict",
-                                            "options": {
-                                                "match": {
-                                                    "choices": [
-                                                        "eq",
-                                                        "ge",
-                                                        "is",
-                                                        "le",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "input_number": {"type": "int"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "mac": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "med": {
-                                            "type": "dict",
-                                            "options": {
-                                                "match": {
-                                                    "choices": [
-                                                        "eq",
-                                                        "ge",
-                                                        "is",
-                                                        "le",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "input_number": {"type": "int"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "next_hop": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "orf_prefix": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "origin": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_choice": {
-                                                    "choices": [
-                                                        "ebgp",
-                                                        "ibgp",
-                                                        "incomplete",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "path_type": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_choice": {
-                                                    "choices": ["ebgp", "ibgp"],
-                                                    "type": "str",
-                                                },
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "protocol": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_choice": {
-                                                    "choices": [
-                                                        "bgp",
-                                                        "connected",
-                                                        "eigrp",
-                                                        "isis",
-                                                        "ospf",
-                                                        "ospfv3",
-                                                        "rip",
-                                                        "static",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "rd": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "rib_has_route": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "rib_metric": {
-                                            "type": "dict",
-                                            "options": {
-                                                "match": {
-                                                    "choices": [
-                                                        "eq",
-                                                        "ge",
-                                                        "is",
-                                                        "le",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "input_number": {"type": "int"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "route_aggregated": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "route_has_label": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "route_has_vrf_ri": {
-                                            "type": "dict",
-                                            "options": {
-                                                "set": {"type": "bool"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "route_type": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_choice": {
-                                                    "choices": [
-                                                        "interarea",
-                                                        "internal",
-                                                        "level-1",
-                                                        "level-1-2",
-                                                        "level-2",
-                                                        "local",
-                                                        "ospf-external-type-1",
-                                                        "ospf-external-type-2",
-                                                        "ospf-inter-area",
-                                                        "ospf-intra-area",
-                                                        "ospf-nssa-type-1",
-                                                        "ospf-nssa-type-2",
-                                                        "type-1",
-                                                        "type-2",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "source": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "source_prefix": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_name": {"type": "str"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "tag": {
-                                            "type": "dict",
-                                            "options": {
-                                                "match": {
-                                                    "choices": [
-                                                        "eq",
-                                                        "ge",
-                                                        "in",
-                                                        "is",
-                                                        "le",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "input_number": {"type": "int"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "validation_state": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_choice": {
-                                                    "choices": [
-                                                        "invalid",
-                                                        "not-found",
-                                                        "valid",
-                                                    ],
-                                                    "type": "str",
-                                                },
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                        "vpn_distinguisher": {
-                                            "type": "dict",
-                                            "options": {
-                                                "input_number": {"type": "int"},
-                                                "combine_condition": {
-                                                    "choices": ["and", "or"],
-                                                    "type": "str",
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
+                                "condition": {"type": "str"},
                                 "add": {
                                     "type": "dict",
                                     "options": {
@@ -2756,7 +1176,252 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                 },
                             },
                         },
-                        "else_of_else": {
+                        "elseif": {
+                            "type": "list",
+                            "elements": "dict",
+                            "options": {
+                                "condition": {"type": "str"},
+                                "add": {
+                                    "type": "dict",
+                                    "options": {
+                                        "eigrp_metric": {
+                                            "type": "dict",
+                                            "options": {
+                                                "bandwidth": {"type": "int"},
+                                                "delay": {"type": "int"},
+                                                "reliability": {"type": "int"},
+                                                "effective_bandwith": {
+                                                    "type": "int",
+                                                },
+                                                "max_transmission": {
+                                                    "type": "int",
+                                                },
+                                            },
+                                        },
+                                        "rip_metric": {"type": "int"},
+                                    },
+                                },
+                                "apply": {
+                                    "type": "list",
+                                    "elements": "dict",
+                                    "options": {
+                                        "route_policy": {"type": "str"},
+                                        "route_policy_input": {"type": "str"},
+                                    },
+                                },
+                                "drop": {"type": "bool"},
+                                "pass": {"type": "bool"},
+                                "prepend": {
+                                    "type": "dict",
+                                    "options": {
+                                        "number_of_times": {"type": "int"},
+                                        "as_path": {"type": "int"},
+                                        "most_recent": {"type": "bool"},
+                                        "own_as": {"type": "bool"},
+                                    },
+                                },
+                                "suppress_route": {"type": "bool"},
+                                "unsuppress_route": {"type": "bool"},
+                                "remove": {
+                                    "type": "dict",
+                                    "options": {
+                                        "set": {"type": "bool"},
+                                        "entire_aspath": {"type": "bool"},
+                                    },
+                                },
+                                "set": {
+                                    "type": "dict",
+                                    "options": {
+                                        "administrative_distance": {"type": "int"},
+                                        "aigp_metric": {
+                                            "type": "dict",
+                                            "options": {
+                                                "icrement": {"type": "bool"},
+                                                "decrement": {"type": "bool"},
+                                                "metric_number": {"type": "int"},
+                                                "igp_cost": {"type": "bool"},
+                                            },
+                                        },
+                                        "attribute_set": {"type": "str"},
+                                        "c_multicast_routing": {
+                                            "type": "dict",
+                                            "options": {
+                                                "bgp": {"type": "bool"},
+                                                "pim": {"type": "bool"},
+                                            },
+                                        },
+                                        "community": {
+                                            "type": "dict",
+                                            "options": {
+                                                "community_name": {"type": "str"},
+                                                "additive": {"type": "bool"},
+                                            },
+                                        },
+                                        "core_tree": {
+                                            "type": "dict",
+                                            "options": {
+                                                "ingress_replication": {
+                                                    "type": "bool",
+                                                },
+                                                "ingress_replication_default": {
+                                                    "type": "bool",
+                                                },
+                                                "ingress_replication_partitioned": {
+                                                    "type": "bool",
+                                                },
+                                                "mldp": {"type": "bool"},
+                                                "mldp_default": {"type": "bool"},
+                                                "mldp_inband": {"type": "bool"},
+                                                "mldp_partitioned_mp2mp": {
+                                                    "type": "bool",
+                                                },
+                                                "mldp_partitioned_p2mp": {
+                                                    "type": "bool",
+                                                },
+                                                "p2mp_te": {"type": "bool"},
+                                                "p2mp_te_default": {
+                                                    "type": "bool",
+                                                },
+                                                "p2mp_te_partitioned": {
+                                                    "type": "bool",
+                                                },
+                                                "pim_default": {"type": "bool"},
+                                                "sr_p2mp": {"type": "bool"},
+                                            },
+                                        },
+                                        "dampening": {
+                                            "type": "dict",
+                                            "options": {
+                                                "halflife": {"type": "int"},
+                                                "max_suppress": {"type": "int"},
+                                                "reuse": {"type": "int"},
+                                                "suppress": {"type": "int"},
+                                            },
+                                        },
+                                        "downstream_core_tree": {
+                                            "type": "dict",
+                                            "options": {
+                                                "ingress_replication": {
+                                                    "type": "bool",
+                                                },
+                                                "mldp": {"type": "bool"},
+                                                "p2mp_te": {"type": "bool"},
+                                                "sr_p2mp": {"type": "bool"},
+                                            },
+                                        },
+                                        "eigrp_metric": {
+                                            "type": "dict",
+                                            "options": {
+                                                "bandwidth": {"type": "int"},
+                                                "delay": {"type": "int"},
+                                                "reliability": {"type": "int"},
+                                                "effective_bandwith": {
+                                                    "type": "int",
+                                                },
+                                                "max_transmission": {
+                                                    "type": "int",
+                                                },
+                                            },
+                                        },
+                                        "fallback_vrf_lookup": {"type": "bool"},
+                                        "flow_tag": {"type": "int"},
+                                        "forward_class": {"type": "int"},
+                                        "ip_precedence": {"type": "int"},
+                                        "isis_metric": {"type": "int"},
+                                        "label": {"type": "int"},
+                                        "label_index": {"type": "int"},
+                                        "label_mode": {
+                                            "type": "dict",
+                                            "options": {
+                                                "per_ce": {"type": "bool"},
+                                                "per_prefix": {"type": "bool"},
+                                                "per_vrf": {"type": "bool"},
+                                            },
+                                        },
+                                        "large_community": {"type": "str"},
+                                        "level": {
+                                            "type": "dict",
+                                            "options": {
+                                                "level_1": {"type": "bool"},
+                                                "level_1_2": {"type": "bool"},
+                                                "level_2": {"type": "bool"},
+                                            },
+                                        },
+                                        "load_balance": {"type": "bool"},
+                                        "lsm_root": {"type": "str"},
+                                        "metric_type": {
+                                            "type": "dict",
+                                            "options": {
+                                                "external": {"type": "bool"},
+                                                "internal": {"type": "bool"},
+                                                "rib_metric_as_external": {
+                                                    "type": "bool",
+                                                },
+                                                "rib_metric_as_internal": {
+                                                    "type": "bool",
+                                                },
+                                                "type_1": {"type": "bool"},
+                                                "type_2": {"type": "bool"},
+                                            },
+                                        },
+                                        "mpls": {"type": "str"},
+                                        "next_hop": {
+                                            "type": "dict",
+                                            "options": {
+                                                "address": {"type": "str"},
+                                            },
+                                        },
+                                        "origin": {
+                                            "type": "dict",
+                                            "options": {
+                                                "egp": {"type": "bool"},
+                                                "igp": {"type": "bool"},
+                                                "rincomplete": {"type": "bool"},
+                                            },
+                                        },
+                                        "ospf_metric": {"type": "int"},
+                                        "path_color": {"type": "bool"},
+                                        "qos_group": {"type": "int"},
+                                        "rib_metric": {"type": "int"},
+                                        "rip_metric": {"type": "int"},
+                                        "rip_tag": {"type": "int"},
+                                        "rt_set": {"type": "int"},
+                                        "s_pmsi": {"type": "bool"},
+                                        "spf_priority": {
+                                            "type": "dict",
+                                            "options": {
+                                                "critical": {"type": "bool"},
+                                                "high": {"type": "bool"},
+                                                "medium": {"type": "bool"},
+                                            },
+                                        },
+                                        "static_p2mp_te": {"type": "str"},
+                                        "tag": {"type": "int"},
+                                        "traffic_index": {
+                                            "type": "dict",
+                                            "options": {
+                                                "index_number": {"type": "int"},
+                                                "ignore": {"type": "bool"},
+                                            },
+                                        },
+                                        "upstream_core_tree": {
+                                            "type": "dict",
+                                            "options": {
+                                                "ingress_replication": {
+                                                    "type": "bool",
+                                                },
+                                                "mldp": {"type": "bool"},
+                                                "p2mp_te": {"type": "bool"},
+                                                "sr_p2mp": {"type": "bool"},
+                                            },
+                                        },
+                                        "vpn_distinguisher": {"type": "int"},
+                                        "weight": {"type": "int"},
+                                    },
+                                },
+                            },
+                        },
+                        "else": {
                             "type": "dict",
                             "options": {
                                 "add": {

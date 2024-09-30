@@ -14,7 +14,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = """
----
 module: iosxr_route_maps
 short_description: Resource module to configure route maps.
 description:
@@ -34,7 +33,7 @@ options:
         description: Name of the route policy.
         type: str
       global: &global
-        description: A list of global configurations for route policy.
+        description: A dictionary of configurations for route policy without any conditions
         type: dict
         suboptions:
           add: &add
@@ -428,458 +427,13 @@ options:
               weight:
                 description: Weight attribute for route selection
                 type: int
-      if: &ifcondition
-        description: A list of configurations for route policy. Automatically considers then at last
+      if:
+        description: A dictionary of configurations for route policy for the top level if condition for the policy
         type: dict
-        suboptions:
-          conditions:
-            type: list
-            elements: dict
-            suboptions:
-              aigp_metric:
-                description: AIGP metric attribute
-                type: dict
-                suboptions:
-                  match:
-                    description: Match criteria
-                    choices:
-                      - eq
-                      - ge
-                      - is
-                      - le
-                    type: str
-                  input_number:
-                    type: int
-                    description: <0-4294967295> 32-bit decimal number
-                  combine_condition: &combine_condition
-                    description: Combine conditions with Boolean AND / OR
-                    choices:
-                      - and
-                      - or
-                    type: str
-              as_path:
-                description: BGP AS-path attribute
-                type: dict
-                suboptions:
-                  input_name:
-                    description: AS-path attribute (supports in member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              community:
-                description: BGP community attribute
-                type: dict
-                suboptions:
-                  match:
-                    description: community match options
-                    choices:
-                      - is-empty
-                      - matches-any
-                      - matches-every
-                      - matches-within
-                    type: str
-                  input_name:
-                    description: community input and requires a match input (supports matches-any/matches-every/matches-within member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              community_length:
-                description: BGP community length attribute
-                type: dict
-                suboptions:
-                  match:
-                    description: Match criteria
-                    choices:
-                      - eq
-                      - ge
-                      - is
-                      - le
-                    type: str
-                  input_number:
-                    type: int
-                    description: <0-65535> 16-bit decimal number
-                  combine_condition: *combine_condition
-              destination:
-                description: Destination address in the route
-                type: dict
-                suboptions:
-                  match:
-                    description: BGP extended community attribute, BGP Route Target (RT) extended community
-                    choices:
-                      - in
-                      - is-backup-path
-                      - is-best-external
-                      - is-best-path
-                      - is-multi-path
-                      - longer-than
-                      - or-longer
-                    type: str
-                  destination_name:
-                    description: destination input and requires a match input (supports in/longer-than/or-longer member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              destination_prefix:
-                description: destination address of flowspec NLRI
-                type: dict
-                suboptions:
-                  input_name:
-                    description: destination address of flowspec NLRI (supports in member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              esi:
-                description: Ethernet Segment Identifier
-                type: dict
-                suboptions:
-                  input_name:
-                    description: Ethernet Segment Identifier (supports in member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              etag:
-                description: Ethernet tag attribute
-                type: dict
-                suboptions:
-                  input_name:
-                    description: Ethernet tag attribute (supports in member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              evpn_gateway:
-                description: Router's Gateway IP address
-                type: dict
-                suboptions:
-                  input_name:
-                    description: Router's Gateway IP address (supports in member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              evpn_originator:
-                description: Originating Router's IP address
-                type: dict
-                suboptions:
-                  input_name:
-                    description: Originating Router's IP address (supports in member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              evpn_route_type:
-                description: specifies EVPN route type
-                type: dict
-                suboptions:
-                  input_number:
-                    description: specifies EVPN route type, <1-5> 3 bit decimal number starting from 1 (supports is Exact Match)
-                    type: int
-                  combine_condition: *combine_condition
-              extcommunity_color:
-                description: BGP extended community attribute, BGP Color extended community
-                type: dict
-                suboptions:
-                  match:
-                    description: extcommunity color match options
-                    choices:
-                      - is-empty
-                      - matches-any
-                      - matches-every
-                      - matches-within
-                    type: str
-                  community_name:
-                    description: extcommunity input and requires a match input (supports matches-any/matches-every/matches-within member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              extcommunity_rt:
-                description: BGP extended community attribute, BGP Route Target (RT) extended community
-                type: dict
-                suboptions:
-                  match:
-                    description: extcommunity rt match options
-                    choices:
-                      - is-empty
-                      - matches-any
-                      - matches-every
-                      - matches-within
-                    type: str
-                  community_name:
-                    description: extcommunity input and requires a match input (supports matches-any/matches-every/matches-within member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              extcommunity_seg_nh:
-                description: BGP extended community attribute, P2MP Segmented Nexthop extended community
-                type: dict
-                suboptions:
-                  match:
-                    description: extcommunity seg nh match options
-                    choices:
-                      - is-empty
-                      - matches-any
-                      - matches-every
-                      - matches-within
-                    type: str
-                  community_name:
-                    description: extcommunity input and requires a match input (supports matches-any/matches-every/matches-within member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              extcommunity_soo:
-                description: BGP extended community attribute, BGP Site of Origin (SoO) extended community
-                type: dict
-                suboptions:
-                  match:
-                    description: extcommunity soo match options
-                    choices:
-                      - is-empty
-                      - matches-any
-                      - matches-every
-                      - matches-within
-                    type: str
-                  community_name:
-                    description: extcommunity input and requires a match input (supports matches-any/matches-every/matches-within member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              i_pmsi_present:
-                description: BGP I-PMSI Route present
-                type: dict
-                suboptions:
-                  set:
-                    description: Enable BGP I-PMSI Route present
-                    type: bool
-                  combine_condition: *combine_condition
-              large_community:
-                description: BGP large community attribute (supports is Exact Match)
-                type: dict
-                suboptions:
-                  match:
-                    description: large-community color match options
-                    choices:
-                      - is-empty
-                      - matches-any
-                      - matches-every
-                      - matches-within
-                    type: str
-                  community_name:
-                    description: large-community input and requires a match input (supports matches-any/matches-every/matches-within member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              local_preference:
-                description: BGP local-preference attribute
-                type: dict
-                suboptions:
-                  match:
-                    description: Match criteria
-                    choices:
-                      - eq
-                      - ge
-                      - is
-                      - le
-                    type: str
-                  input_number:
-                    type: int
-                    description: <0-4294967295> 32-bit decimal number
-                  combine_condition: *combine_condition
-              mac:
-                description: MAC Address in the route
-                type: dict
-                suboptions:
-                  input_name:
-                    description: MAC Address in the route (supports in member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              med:
-                description: BGP Multi-Exit-Discriminator attribute
-                type: dict
-                suboptions:
-                  match:
-                    description: Match criteria
-                    choices:
-                      - eq
-                      - ge
-                      - is
-                      - le
-                    type: str
-                  input_number:
-                    type: int
-                    description: <0-4294967295> 32-bit decimal number
-                  combine_condition: *combine_condition
-              next_hop:
-                description: Next hop address specified in this route
-                type: dict
-                suboptions:
-                  input_name:
-                    description: Next hop address specified in this route (supports in member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              orf_prefix:
-                description: Specify BGP outbound route filter
-                type: dict
-                suboptions:
-                  input_name:
-                    description: Specify BGP outbound route filter (ORF) (supports in member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              origin:
-                description: Specify BGP outbound route filter
-                type: dict
-                suboptions:
-                  input_choice:
-                    description: BGP origin code (supports is Exact Match)
-                    choices:
-                      - ebgp
-                      - ibgp
-                      - incomplete
-                    type: str
-                  combine_condition: *combine_condition
-              path_type:
-                description: BGP path type
-                type: dict
-                suboptions:
-                  input_choice:
-                    description: BGP path type (supports is Exact Match)
-                    choices:
-                      - ebgp
-                      - ibgp
-                    type: str
-                  combine_condition: *combine_condition
-              protocol:
-                description: Protocol installing the route
-                type: dict
-                suboptions:
-                  input_choice:
-                    description: Protocol installing the route (supports is Exact Match)
-                    choices:
-                      - bgp
-                      - connected
-                      - eigrp
-                      - isis
-                      - ospf
-                      - ospfv3
-                      - rip
-                      - static
-                    type: str
-                  combine_condition: *combine_condition
-              rd:
-                description: BGP VPN route-distinguisher (RD) attribute
-                type: dict
-                suboptions:
-                  input_name:
-                    description: BGP VPN route-distinguisher (RD) attribute (supports in member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              rib_has_route:
-                description: Look in the rib for a route
-                type: dict
-                suboptions:
-                  input_name:
-                    description: Look in the rib for a route (supports in member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              rib_metric:
-                description: RIB metric for table-policy
-                type: dict
-                suboptions:
-                  match:
-                    description: Match criteria
-                    choices:
-                      - eq
-                      - ge
-                      - is
-                      - le
-                    type: str
-                  input_number:
-                    type: int
-                    description: <0-4294967295> 32-bit decimal number
-                  combine_condition: *combine_condition
-              route_aggregated:
-                description: Check whether route is aggregated
-                type: dict
-                suboptions:
-                  set:
-                    description: Enable whether route is aggregated
-                    type: bool
-                  combine_condition: *combine_condition
-              route_has_label:
-                description: MPLS label set in the route
-                type: dict
-                suboptions:
-                  set:
-                    description: Enable MPLS label set in the route
-                    type: bool
-                  combine_condition: *combine_condition
-              route_has_vrf_ri:
-                description: RIB route has VRF Route-Import Extended Community
-                type: dict
-                suboptions:
-                  set:
-                    description: Enable MPLS label set in the route
-                    type: bool
-                  combine_condition: *combine_condition
-              route_type:
-                description: Type of route (support is Exact Match)
-                type: dict
-                suboptions:
-                  input_choice:
-                    description: Choose type of route
-                    choices:
-                      - interarea
-                      - internal
-                      - level-1
-                      - level-1-2
-                      - level-2
-                      - local
-                      - ospf-external-type-1
-                      - ospf-external-type-2
-                      - ospf-inter-area
-                      - ospf-intra-area
-                      - ospf-nssa-type-1
-                      - ospf-nssa-type-2
-                      - type-1
-                      - type-2
-                    type: str
-                  combine_condition: *combine_condition
-              source:
-                description: Advertising source address of route
-                type: dict
-                suboptions:
-                  input_name:
-                    description: Advertising source address of route (supports in member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              source_prefix:
-                description: Advertising source address of flowspec NLRI
-                type: dict
-                suboptions:
-                  input_name:
-                    description: Advertising source address of flowspec NLRI (supports in member or set)
-                    type: str
-                  combine_condition: *combine_condition
-              tag:
-                description: Route tag attribute
-                type: dict
-                suboptions:
-                  match:
-                    description: Match criteria
-                    choices:
-                      - eq
-                      - ge
-                      - in
-                      - is
-                      - le
-                    type: str
-                  input_number:
-                    type: int
-                    description: <0-4294967295> 32-bit decimal number
-                  combine_condition: *combine_condition
-              validation_state:
-                description: Validation-State (supports is Exact Match)
-                type: dict
-                suboptions:
-                  input_choice:
-                    description: Choose Validation-State
-                    choices:
-                      - invalid
-                      - not-found
-                      - valid
-                    type: str
-                  combine_condition: *combine_condition
-              vpn_distinguisher:
-                description: BGP VPN distinguisher (VD) attribute
-                type: dict
-                suboptions:
-                  input_number:
-                    description: BGP VPN distinguisher (VD) attribute (supports is Exact Match)
-                    type: int
-                  combine_condition: *combine_condition
+        suboptions: &ifcondition
+          condition:
+            type: str
+            description: the condition string, eg - aigp-metric eq 23 and as-path in tmp1 and community is-empty and community matches-any test1 (don't add then at end)
           add: *add
           apply: *apply
           drop: *drop
@@ -889,15 +443,23 @@ options:
           unsuppress_route: *unsuppess
           remove: *remove
           set: *set
-      elif: *ifcondition
+      elseif: &elifmodel
+        description: A list of elif configurations that would follow along with the top level if
+        type: list
+        elements: dict
+        suboptions: *ifcondition
       else:
-        description: A list of configurations for route policy. Automatically considers then at last
+        description: A dictionary of configurations that would be considered in the else block
         type: dict
         suboptions:
           global: *global
-          if_of_else: *ifcondition
-          else_of_else:
-            description: A list of configurations for route policy. Automatically considers then at last
+          if:
+            description: A dictionary of configurations for route policy for the nested if condition, under top level else
+            type: dict
+            suboptions: *ifcondition
+          elseif: *elifmodel
+          else:
+            description: A dictionary of configurations for nested else, does not support if/ elseif
             type: dict
             suboptions:
               add: *add

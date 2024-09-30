@@ -22,753 +22,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.r
 )
 
 
-class Route_mapsName(NetworkTemplate):
-    def __init__(self, lines=None, module=None):
-        super(Route_mapsName, self).__init__(lines=lines, tmplt=self, module=module)
-
-    # fmt: off
-    PARSERS = [
-        {
-            "name": "name",
-            "getval": re.compile(
-                r"""
-                ^route-policy\s(?P<name>\S+)
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                '{{ name }}': '{{ name }}',
-            },
-            "shared": True,
-        },
-    ]
-    # fmt: on
-
-
-class Route_mapsConditionals(NetworkTemplate):
-    def __init__(self, lines=None, module=None):
-        super(Route_mapsConditionals, self).__init__(lines=lines, tmplt=self, module=module)
-
-    # fmt: off
-    PARSERS = [
-        {
-            "name": "name",
-            "getval": re.compile(
-                r"""
-                ^route-policy\s(?P<name>\S+)
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                '{{ name }}': '{{ name }}',
-            },
-            "shared": True,
-        },
-        {
-            "name": "conditions.aigp_metric",
-            "getval": re.compile(
-                r"""
-                ^aigrp-metric
-                (\s(?P<match>eq|ge|is|le))?
-                (\s(?P<input_number>\d+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "aigp_metric": {
-                        "match": "{{ match }}",
-                        "input_number": "{{ input_number }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.as_path",
-            "getval": re.compile(
-                r"""
-                ^as-path\sin
-                (\s(?P<input_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "aigp_metric": {
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.community",
-            "getval": re.compile(
-                r"""
-                ^community
-                (\s(?P<match>is-empty|matches-any|matches-every|matches-within))?
-                (\s(?P<input_number>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "aigp_metric": {
-                        "match": "{{ match }}",
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.destination",
-            "getval": re.compile(
-                r"""
-                ^destination
-                (\s(?P<match>in|is-backup-path|is-best-external|is-best-path|is-multi-path|longer-than|or-longer))?
-                (\s(?P<destination_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "destination": {
-                        "match": "{{ match }}",
-                        "destination_name": "{{ destination_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.destination_prefix",
-            "getval": re.compile(
-                r"""
-                ^destination-prefix\sin
-                (\s(?P<input_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "destination_prefix": {
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.esi",
-            "getval": re.compile(
-                r"""
-                ^esi\sin
-                (\s(?P<input_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "esi": {
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.etag",
-            "getval": re.compile(
-                r"""
-                ^etag\sin
-                (\s(?P<input_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "etag": {
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.evpn_gateway",
-            "getval": re.compile(
-                r"""
-                ^evpn-gateway\sin
-                (\s(?P<input_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "evpn_gateway": {
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.evpn_originator",
-            "getval": re.compile(
-                r"""
-                ^evpn-originator\sin
-                (\s(?P<input_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "evpn_originator": {
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.evpn_route_type",
-            "getval": re.compile(
-                r"""
-                ^evpn-route-type\sis
-                (\s(?P<input_name>\d+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "evpn_route_type": {
-                        "input_number": "{{ input_number }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.extcommunity_color",
-            "getval": re.compile(
-                r"""
-                ^extcommunity\scolor
-                (\s(?P<match>is-empty|matches-any|matches-every|matches-within))?
-                (\s(?P<community_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "extcommunity_color": {
-                        "match": "{{ match }}",
-                        "community_name": "{{ community_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.extcommunity_rt",
-            "getval": re.compile(
-                r"""
-                ^extcommunity\srt
-                (\s(?P<match>is-empty|matches-any|matches-every|matches-within))?
-                (\s(?P<community_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "extcommunity_rt": {
-                        "match": "{{ match }}",
-                        "community_name": "{{ community_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.extcommunity_seg_nh",
-            "getval": re.compile(
-                r"""
-                ^extcommunity\sseg-nh
-                (\s(?P<match>is-empty|matches-any|matches-every|matches-within))?
-                (\s(?P<community_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "extcommunity_seg_nh": {
-                        "match": "{{ match }}",
-                        "community_name": "{{ community_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.extcommunity_soo",
-            "getval": re.compile(
-                r"""
-                ^extcommunity\ssoo
-                (\s(?P<match>is-empty|matches-any|matches-every|matches-within))?
-                (\s(?P<community_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "extcommunity_soo": {
-                        "match": "{{ match }}",
-                        "community_name": "{{ community_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.i_pmsi_present",
-            "getval": re.compile(
-                r"""
-                ^i-pmsi-present
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "i_pmsi_present": {
-                        "set": True,
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.large_community",
-            "getval": re.compile(
-                r"""
-                ^large-community
-                (\s(?P<match>is-empty|matches-any|matches-every|matches-within))?
-                (\s(?P<community_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "large_community": {
-                        "match": "{{ match }}",
-                        "community_name": "{{ community_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.local_preference",
-            "getval": re.compile(
-                r"""
-                ^local-preference
-                (\s(?P<match>eq|ge|is|le))?
-                (\s(?P<input_number>\d+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "local_preference": {
-                        "match": "{{ match }}",
-                        "input_number": "{{ input_number }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.mac",
-            "getval": re.compile(
-                r"""
-                ^mac
-                (\s(?P<input_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "mac": {
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.med",
-            "getval": re.compile(
-                r"""
-                ^med
-                (\s(?P<match>eq|ge|is|le))
-                (\s(?P<input_number>\d+))
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "med": {
-                        "match": "{{ match }}",
-                        "input_number": "{{ input_number }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.next_hop",
-            "getval": re.compile(
-                r"""
-                ^next-hop
-                (\s(?P<input_name>\([^)]*\)|\S+))
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "next_hop": {
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.orf_prefix",
-            "getval": re.compile(
-                r"""
-                ^orf\sprefix\sin
-                (\s(?P<input_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "orf_prefix": {
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.origin",
-            "getval": re.compile(
-                r"""
-                ^origin\sis
-                (\s(?P<input_choice>ebgp|ibgp|incomplete))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "origin": {
-                        "input_choice": "{{ input_choice }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.path_type",
-            "getval": re.compile(
-                r"""
-                ^path-type\sis
-                (\s(?P<input_choice>ebgp|ibgp))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "path_type": {
-                        "input_choice": "{{ input_choice }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.protocol",
-            "getval": re.compile(
-                r"""
-                ^protocol\sis
-                (\s(?P<input_choice>bgp|connected|eigrp|isis|ospf|ospfv3|rip|static))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "protocol": {
-                        "input_choice": "{{ input_choice }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.rd",
-            "getval": re.compile(
-                r"""
-                ^rd\sin
-                (\s(?P<input_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "rd": {
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.rib_has_route",
-            "getval": re.compile(
-                r"""
-                ^rib-has-route\sin
-                (\s(?P<input_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "rib_has_route": {
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.rib_metric",
-            "getval": re.compile(
-                r"""
-                ^rib-metric
-                (\s(?P<match>eq|ge|is|le))
-                (\s(?P<input_number>\d+))
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "rib_metric": {
-                        "match": "{{ match }}",
-                        "input_number": "{{ input_number }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.route_aggregated",
-            "getval": re.compile(
-                r"""
-                ^route-aggregated
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "route_aggregated": {
-                        "set": True,
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.route_has_label",
-            "getval": re.compile(
-                r"""
-                ^route-has-label
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "route_has_label": {
-                        "set": True,
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.route_has_vrf_ri",
-            "getval": re.compile(
-                r"""
-                ^route-has-vrf-ri
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "route_has_vrf_ri": {
-                        "set": True,
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.route_type",
-            "getval": re.compile(
-                r"""
-                ^route-type\sis
-                (\s(?P<input_choice>interarea|internal|level-1|level-1-2|level-2|local|ospf-external-type-1|ospf-external-type-2|ospf-inter-area|ospf-intra-area|ospf-nssa-type-1|ospf-nssa-type-2|type-1|type-2))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "route_type": {
-                        "input_choice": "{{ input_choice }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.source",
-            "getval": re.compile(
-                r"""
-                ^source\sin
-                (\s(?P<input_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "source": {
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.source_prefix",
-            "getval": re.compile(
-                r"""
-                ^source-prefix\sin
-                (\s(?P<input_name>\([^)]*\)|\S+))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "source": {
-                        "input_name": "{{ input_name }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.tag",
-            "getval": re.compile(
-                r"""
-                ^tag
-                (\s(?P<match>eq|ge|is|le))
-                (\s(?P<input_number>\d+))
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "tag": {
-                        "match": "{{ match }}",
-                        "input_number": "{{ input_number }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.validation_state",
-            "getval": re.compile(
-                r"""
-                ^validation-state\sis
-                (\s(?P<input_choice>invalid|not-found|valid))?
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "validation_state": {
-                        "input_choice": "{{ input_choice }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-        {
-            "name": "conditions.vpn_distinguisher",
-            "getval": re.compile(
-                r"""
-                ^vpn-distinguisher\sis
-                (\s(?P<input_number>\d+))
-                (\s(?P<combine_condition>and|or|then))?
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                "conditions": {
-                    "vpn_distinguisher": {
-                        "input_number": "{{ input_number }}",
-                        "combine_condition": "{{ combine_condition }}",
-                    },
-                },
-            },
-        },
-    ]
-    # fmt: on
-
-
 class Route_mapsTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         super(Route_mapsTemplate, self).__init__(lines=lines, tmplt=self, module=module)
@@ -776,25 +29,10 @@ class Route_mapsTemplate(NetworkTemplate):
     # fmt: off
     PARSERS = [
         {
-            "name": "name",
-            "getval": re.compile(
-                r"""
-                ^route-policy\s(?P<name>\S+)
-                $""", re.VERBOSE,
-            ),
-            "setval": "",
-            "result": {
-                '{{ name }}': {
-                    'name': '{{ name }}',
-                },
-            },
-            "shared": True,
-        },
-        {
             "name": "add.eigrp_metric",
             "getval": re.compile(
                 r"""
-                \s+add\seigrp-metric
+                \s*add\seigrp-metric
                 (\s(?P<bandwidth>\d+))?
                 (\s(?P<delay>\d+))?
                 (\s(?P<reliability>\d+))?
@@ -804,7 +42,7 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                '{{ name }}': {
+                "policies": {
                     "add": {
                         "eigrp_metric": {
                             "bandwidth": "{{ bandwidth }}",
@@ -821,13 +59,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "add.rip_metric",
             "getval": re.compile(
                 r"""
-                \s+add\srip_metric
+                \s*add\srip_metric
                 (\s(?P<rip_metric>\d+))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                '{{ name }}': {
+                "policies": {
                     "add": {
                         "rip_metric": "{{ bandwidth }}",
                     },
@@ -838,14 +76,14 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "apply",
             "getval": re.compile(
                 r"""
-                \s+apply
+                \s*apply
                 (\s(?P<route_policy>\S+))
                 (\s(?P<route_policy_input>.+))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                '{{ name }}': {
+                "policies": {
                     "apply": [
                         {
                             "route_policy": "{{ route_policy }}",
@@ -859,12 +97,12 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "drop",
             "getval": re.compile(
                 r"""
-                \s+drop
+                \s*drop
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "drop": True,
                 },
             },
@@ -873,12 +111,12 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "pass",
             "getval": re.compile(
                 r"""
-                \s+pass
+                \s*pass
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "pass": True,
                 },
             },
@@ -887,7 +125,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "prepend",
             "getval": re.compile(
                 r"""
-                \s+prepend
+                \s*prepend
                 (\sas-path\s(?P<as_path>\d+))?
                 (\s(?P<most_recent>most-recent))?
                 (\s(?P<own_as>own-as))?
@@ -896,7 +134,7 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "prepend": {
                         "as_path": "{{ as_path }}",
                         "most_recent": "{{ not not most_recent }}",
@@ -910,12 +148,12 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "suppress_route",
             "getval": re.compile(
                 r"""
-                \s+suppress-route
+                \s*suppress-route
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "suppress_route": True,
                 },
             },
@@ -924,12 +162,12 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "unsuppress_route",
             "getval": re.compile(
                 r"""
-                \s+unsuppress-route
+                \s*unsuppress-route
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "unsuppress_route": True,
                 },
             },
@@ -938,14 +176,14 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "remove",
             "getval": re.compile(
                 r"""
-                \s+remove\sas-path
+                \s*remove\sas-path
                 (\s(?P<set>private-as))
                 (\s(?P<entire_aspath>entire-aspath))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "remove": {
                         "set": True,
                         "as_path": "{{ as_path }}",
@@ -953,17 +191,17 @@ class Route_mapsTemplate(NetworkTemplate):
                 },
             },
         },
-        { # set starts
+        {
             "name": "set.administrative_distance",
             "getval": re.compile(
                 r"""
-                \s+set\sadministrative-distance
+                \s*set\sadministrative-distance
                 (\s(?P<administrative_distance>\d+))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "administrative_distance": "{{ administrative_distance }}",
                     },
@@ -974,7 +212,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.aigp_metric",
             "getval": re.compile(
                 r"""
-                \s+set\saigp-metric
+                \s*set\saigp-metric
                 (\s(?P<icrement>\+))?
                 (\s(?P<decrement>\-))?
                 (\s(?P<metric_number>\d+))?
@@ -983,7 +221,7 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "aigp_metric": {
                             "icrement": "{{ not not icrement }}",
@@ -999,13 +237,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.attribute_set",
             "getval": re.compile(
                 r"""
-                \s+set\sattribute-set\sname-string
+                \s*set\sattribute-set\sname-string
                 (\s(?P<attribute_set>\d+))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "attribute_set": "{{ attribute_set }}",
                     },
@@ -1016,14 +254,14 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.c_multicast_routing",
             "getval": re.compile(
                 r"""
-                \s+set\sc-multicast-routing
+                \s*set\sc-multicast-routing
                 (\s(?P<bgp>bgp))?
                 (\s(?P<pim>pim))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "c_multicast_routing": {
                             "bgp": "{{ not not bgp }}",
@@ -1037,14 +275,14 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.community",
             "getval": re.compile(
                 r"""
-                \s+set\scommunity
+                \s*set\scommunity
                 (\s(?P<community_name>\S+))?
                 (\s(?P<additive>additive))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "community": {
                             "community_name": "{{ community_name }}",
@@ -1058,7 +296,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.core_tree",
             "getval": re.compile(
                 r"""
-                \s+set\score-tree
+                \s*set\score-tree
                 (\s(?P<ingress_replication>ingress-replication))?
                 (\s(?P<ingress_replication_default>ingress-replication-default))?
                 (\s(?P<ingress_replication_partitioned>ingress-replication-partitioned))?
@@ -1076,7 +314,7 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "core_tree": {
                             "ingress_replication": "{{ not not ingress_replication }}",
@@ -1101,7 +339,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.dampening",
             "getval": re.compile(
                 r"""
-                \s+set\sdampening
+                \s*set\sdampening
                 (\s(?P<halflife>\d+))?
                 (\s(?P<suppress>\d+))?
                 (\s(?P<reuse>\d+))?
@@ -1110,7 +348,7 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "dampening": {
                             "halflife": "{{ halflife }}",
@@ -1126,7 +364,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.downstream_core_tree",
             "getval": re.compile(
                 r"""
-                \s+set\sdownstream-core-tree
+                \s*set\sdownstream-core-tree
                 (\s(?P<ingress_replication>ingress-replication))?
                 (\s(?P<mldp>mldp))?
                 (\s(?P<p2mp_te>p2mp-te))?
@@ -1135,7 +373,7 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "downstream_core_tree": {
                             "ingress_replication": "{{ not not ingress_replication }}",
@@ -1151,7 +389,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.eigrp_metric",
             "getval": re.compile(
                 r"""
-                \s+set\seigrp-metric
+                \s*set\seigrp-metric
                 (\s(?P<bandwidth>\d+))?
                 (\s(?P<delay>\d+))?
                 (\s(?P<reliability>\d+))?
@@ -1160,7 +398,7 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "eigrp_metric": {
                             "bandwidth": "{{ bandwidth }}",
@@ -1177,12 +415,12 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.fallback_vrf_lookup",
             "getval": re.compile(
                 r"""
-                \s+set\sfallback-vrf-lookup
+                \s*set\sfallback-vrf-lookup
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "fallback_vrf_lookup": True,
                     },
@@ -1193,13 +431,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.flow_tag",
             "getval": re.compile(
                 r"""
-                \s+set\sflow-tag
+                \s*set\sflow-tag
                 (\s(?P<flow_tag>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "flow_tag": "{{ flow_tag }}",
                     },
@@ -1210,13 +448,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.forward_class",
             "getval": re.compile(
                 r"""
-                \s+set\sforward-class
+                \s*set\sforward-class
                 (\s(?P<flow_tag>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "forward_class": "{{ forward_class }}",
                     },
@@ -1227,13 +465,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.ip_precedence",
             "getval": re.compile(
                 r"""
-                \s+set\sip-precedence
+                \s*set\sip-precedence
                 (\s(?P<ip_precedence>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "ip_precedence": "{{ ip_precedence }}",
                     },
@@ -1244,13 +482,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.isis_metric",
             "getval": re.compile(
                 r"""
-                \s+set\sisis-metric
+                \s*set\sisis-metric
                 (\s(?P<isis_metric>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "isis_metric": "{{ isis_metric }}",
                     },
@@ -1261,13 +499,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.label",
             "getval": re.compile(
                 r"""
-                \s+set\slabel
+                \s*set\slabel
                 (\s(?P<label>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "label": "{{ label }}",
                     },
@@ -1278,13 +516,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.label_index",
             "getval": re.compile(
                 r"""
-                \s+set\slabel-index
+                \s*set\slabel-index
                 (\s(?P<label_index>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "label_index": "{{ label_index }}",
                     },
@@ -1295,7 +533,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.label_mode",
             "getval": re.compile(
                 r"""
-                \s+set\slabel-mode
+                \s*set\slabel-mode
                 (\s(?P<per_ce>per-ce))?
                 (\s(?P<per_prefix>per-prefix))?
                 (\s(?P<per_vrf>per-vrf))?
@@ -1303,7 +541,7 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "label_mode": {
                             "per_ce": "{{ not not per_ce }}",
@@ -1318,13 +556,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.large_community",
             "getval": re.compile(
                 r"""
-                \s+set\slarge-community
+                \s*set\slarge-community
                 (\s(?P<large_community>.+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "large_community": "{{ large_community }}",
                     },
@@ -1335,7 +573,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.level",
             "getval": re.compile(
                 r"""
-                \s+set\slevel
+                \s*set\slevel
                 (\s(?P<level_1>level-1))?
                 (\s(?P<level_1_2>level-1-2))?
                 (\s(?P<level_2>level-2))?
@@ -1343,7 +581,7 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "level": {
                             "level_1": "{{ not not level_1 }}",
@@ -1358,12 +596,12 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.load_balance",
             "getval": re.compile(
                 r"""
-                \s+set\sload-balance\secmp-consistent
+                \s*set\sload-balance\secmp-consistent
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "load_balance": True,
                     },
@@ -1374,13 +612,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.lsm_root",
             "getval": re.compile(
                 r"""
-                \s+set\slsm-root
+                \s*set\slsm-root
                 (\s(?P<lsm_root>\S+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "lsm_root": "{{ lsm_root }}",
                     },
@@ -1391,7 +629,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.metric_type",
             "getval": re.compile(
                 r"""
-                \s+set\smetric_type
+                \s*set\smetric_type
                 (\s(?P<external>external))?
                 (\s(?P<internal>internal))?
                 (\s(?P<rib_metric_as_external>rib-metric-as-external))?
@@ -1402,7 +640,7 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "metric_type": {
                             "external": "{{ not not external }}",
@@ -1420,13 +658,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.mpls",
             "getval": re.compile(
                 r"""
-                \s+set\smpls\straffic-eng\sattributeset
+                \s*set\smpls\straffic-eng\sattributeset
                 (\s(?P<mpls>\S+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "mpls": "{{ mpls }}",
                     },
@@ -1437,15 +675,15 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.next_hop",
             "getval": re.compile(
                 r"""
-                \s+set\snext-hop
+                \s*set\snext-hop
                 (\s(?P<next_hop>\S+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
-                        "next_hop":{
+                        "next_hop": {
                             "address": "{{ next_hop }}",
                         },
                     },
@@ -1456,7 +694,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.origin",
             "getval": re.compile(
                 r"""
-                \s+set\sorigin
+                \s*set\sorigin
                 (\s(?P<egp>egp))?
                 (\s(?P<igp>igp))?
                 (\s(?P<rincomplete>incomplete))?
@@ -1464,7 +702,7 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "origin": {
                             "egp": "{{ not not egp }}",
@@ -1479,13 +717,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.ospf_metric",
             "getval": re.compile(
                 r"""
-                \s+set\sospf-metric
+                \s*set\sospf-metric
                 (\s(?P<ospf_metric>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "ospf_metric": "{{ ospf_metric }}",
                     },
@@ -1496,12 +734,12 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.path_color",
             "getval": re.compile(
                 r"""
-                \s+set\spath-color\sexternal-reach
+                \s*set\spath-color\sexternal-reach
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "path_color": True,
                     },
@@ -1512,13 +750,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.qos_group",
             "getval": re.compile(
                 r"""
-                \s+set\sqos-group
+                \s*set\sqos-group
                 (\s(?P<qos_group>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "qos_group": "{{ qos_group }}",
                     },
@@ -1529,13 +767,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.rib_metric",
             "getval": re.compile(
                 r"""
-                \s+set\srib-metric
+                \s*set\srib-metric
                 (\s(?P<rib_metric>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "rib_metric": "{{ rib_metric }}",
                     },
@@ -1546,13 +784,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.rip_metric",
             "getval": re.compile(
                 r"""
-                \s+set\srip-metric
+                \s*set\srip-metric
                 (\s(?P<rip_metric>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "rip_metric": "{{ rip_metric }}",
                     },
@@ -1563,13 +801,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.rip_tag",
             "getval": re.compile(
                 r"""
-                \s+set\srip-tag
+                \s*set\srip-tag
                 (\s(?P<rip_tag>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "rip_tag": "{{ rip_tag }}",
                     },
@@ -1580,13 +818,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.rt_set",
             "getval": re.compile(
                 r"""
-                \s+set\srt-set
+                \s*set\srt-set\sroute-limit
                 (\s(?P<rt_set>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "rt_set": "{{ rt_set }}",
                     },
@@ -1597,12 +835,12 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.s_pmsi",
             "getval": re.compile(
                 r"""
-                \s+set\ss-pmsi\sstart-g
+                \s*set\ss-pmsi\sstar-g
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "s_pmsi": True,
                     },
@@ -1613,7 +851,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.spf_priority",
             "getval": re.compile(
                 r"""
-                \s+set\sspf-priority
+                \s*set\sspf-priority
                 (\s(?P<critical>critical))?
                 (\s(?P<high>high))?
                 (\s(?P<medium>medium))?
@@ -1621,7 +859,7 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "spf_priority": {
                             "critical": "{{ not not critical }}",
@@ -1636,13 +874,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.static_p2mp_te",
             "getval": re.compile(
                 r"""
-                \s+set\sstatic-p2mp-te
+                \s*set\sstatic-p2mp-te
                 (\s(?P<static_p2mp_te>\S+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "static_p2mp_te": "{{ static_p2mp_te }}",
                     },
@@ -1653,13 +891,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.tag",
             "getval": re.compile(
                 r"""
-                \s+set\stag
+                \s*set\stag
                 (\s(?P<tag>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "tag": "{{ tag }}",
                     },
@@ -1670,14 +908,14 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.traffic_index",
             "getval": re.compile(
                 r"""
-                \s+set\straffic-index
+                \s*set\straffic-index
                 (\s(?P<index_number>\d+))?
                 (\s(?P<ignore>ignore))?
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "traffic_index": {
                             "index_number": "{{ index_number }}",
@@ -1691,7 +929,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.upstream_core_tree",
             "getval": re.compile(
                 r"""
-                \s+set\supstream-core-tree
+                \s*set\supstream-core-tree
                 (\s(?P<ingress_replication>ingress-replication))?
                 (\s(?P<mldp>mldp))?
                 (\s(?P<p2mp_te>p2mp-te))?
@@ -1700,7 +938,7 @@ class Route_mapsTemplate(NetworkTemplate):
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "upstream_core_tree": {
                             "ingress_replication": "{{ not not ingress_replication }}",
@@ -1716,13 +954,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.vpn_distinguisher",
             "getval": re.compile(
                 r"""
-                \s+set\svpn-distinguisher
+                \s*set\svpn-distinguisher
                 (\s(?P<vpn_distinguisher>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "vpn_distinguisher": "{{ vpn_distinguisher }}",
                     },
@@ -1733,18 +971,18 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.weight",
             "getval": re.compile(
                 r"""
-                \s+set\sweight
+                \s*set\sweight
                 (\s(?P<weight>\d+))
                 $""", re.VERBOSE,
             ),
             "setval": "",
             "result": {
-                "{{ name }}": {
+                "policies": {
                     "set": {
                         "weight": "{{ weight }}",
                     },
                 },
             },
-        }, # set ends
+        },
     ]
     # fmt: on

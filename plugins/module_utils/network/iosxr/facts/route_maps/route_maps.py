@@ -26,7 +26,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
     Route_mapsArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.route_maps import (
-    Route_mapsName,
     Route_mapsTemplate,
 )
 
@@ -41,6 +40,17 @@ class Route_mapsFacts(object):
     def get_policynames(self, connection):
         return connection.get("show running-config | include route-policy")
 
+    def parse_condition(self, condition):
+        if condition.startswith("if "):
+            condition_type, cond = "if", (condition.lstrip("if ")).rstrip(" then")
+        elif condition.startswith("elseif "):
+            condition_type, cond = "elseif", (condition.lstrip("elseif ")).rstrip(" then")
+        elif condition.startswith("else"):
+            condition_type, cond = "else", ""
+        elif condition.startswith("global"):
+            condition_type, cond = "global", ""
+        return condition_type, cond
+
     def parse_route_policy(self, route_policy):
         result = {}
         lines = route_policy.splitlines()
@@ -48,6 +58,7 @@ class Route_mapsFacts(object):
         current_value = []
         store_global = True
         global_value = []
+        else_data = {}
 
         def process_else(else_line):
             else_result = {}
@@ -114,11 +125,71 @@ class Route_mapsFacts(object):
     def get_policy_config(self, connection, name):
         policy_data = connection.get(f"show running-config route-policy {name}")
 
-        policy_map = self.parse_route_policy(policy_data)
+        policy_map_structured = self.parse_route_policy(policy_data)
 
-        route_maps_parser = Route_mapsTemplate(lines=policy_data.splitlines(), module=self._module)
-        objs = list(route_maps_parser.parse().values())
-        return objs
+        def else_resolve_policy_data(else_policy_map):
+            else_policy_route = {}
+            if_elif = []
+
+            for condition, policy in else_policy_map.items():
+                if_elif_data = {}
+                cond_type, actual_cond = self.parse_condition(condition)
+
+                route_maps_parser = Route_mapsTemplate(lines=policy, module=self._module)
+                objs = list(route_maps_parser.parse().values())
+                if cond_type in ["if", "global"]:
+                    if objs:
+                        else_policy_route[cond_type] = objs[0]
+                        if cond_type != "global":
+                            else_policy_route[cond_type]["condition"] = actual_cond
+                elif cond_type == "elseif":
+                    if_elif_data.update(objs[0])
+                    if_elif_data["condition"] = actual_cond
+                    if_elif.append(if_elif_data)
+                elif cond_type == "else":
+                    if objs:
+                        else_policy_route[cond_type] = objs[0]
+
+            if if_elif:
+                else_policy_route["elseif"] = if_elif
+
+            return else_policy_route
+
+        def rec_resolve_policy_data(policy_map):
+            policy_route = {
+                "name": name,
+            }
+            if_elif = []
+            else_data = {}
+
+            for condition, policy in policy_map.items():
+                if_elif_data = {}
+                cond_type, actual_cond = self.parse_condition(condition)
+
+                route_maps_parser = Route_mapsTemplate(lines=policy, module=self._module)
+                objs = list(route_maps_parser.parse().values())
+                if cond_type in ["if", "global"]:
+                    if objs:
+                        policy_route[cond_type] = objs[0]
+                        if cond_type != "global":
+                            policy_route[cond_type]["condition"] = actual_cond
+                elif cond_type == "elseif":
+                    if_elif_data.update(objs[0])
+                    if_elif_data["condition"] = actual_cond
+                    if_elif.append(if_elif_data)
+                elif cond_type == "else":
+                    else_data = else_resolve_policy_data(policy)
+
+            if if_elif:
+                policy_route["elseif"] = if_elif
+            if else_data:
+                policy_route["else"] = else_data
+
+            return policy_route
+
+        rec_policy_route = rec_resolve_policy_data(policy_map_structured)
+
+        return rec_policy_route
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """Populate the facts for Route_maps network resource
@@ -132,17 +203,20 @@ class Route_mapsFacts(object):
         """
         facts = {}
         objs = []
-        policy_list = []
+        policy_names = []
 
         if not data:
             data = self.get_policynames(connection=connection)
 
         # parse native config using the Route_maps template
-        route_maps_parser = Route_mapsName(lines=data.splitlines(), module=self._module)
-        objs = list(route_maps_parser.parse().values())
+        route_maps_parser = Route_mapsTemplate(lines=[], module=self._module)
 
-        for policies in objs:
-            policy_list.append(self.get_policy_config(connection=connection, name=policies))
+        for name in data.splitlines():
+            if name.startswith("route-policy"):
+                policy_names.append(name.split()[1])
+
+        for policies in policy_names:
+            objs.append(self.get_policy_config(connection=connection, name=policies))
 
         ansible_facts["ansible_network_resources"].pop("route_maps", None)
 
