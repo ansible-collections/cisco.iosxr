@@ -194,7 +194,7 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
             "router static",
             "vrf TEST_VRF",
             "address-family ipv4 unicast",
-            "192.1.0.0/24 GigabitEthernet0/0/0/1"
+            "192.1.0.0/24 GigabitEthernet0/0/0/1",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -229,7 +229,7 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
             "router static",
             "vrf TEST_VRF",
             "address-family ipv6 unicast",
-            "2002:db5::/64 GigabitEthernet0/0/0/2"
+            "2002:db5::/64 GigabitEthernet0/0/0/2",
         ]
         self.execute_module(changed=True, commands=commands)
 
