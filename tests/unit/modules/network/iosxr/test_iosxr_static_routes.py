@@ -108,10 +108,10 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
                                 safi="multicast",
                                 routes=[
                                     dict(
-                                        dest="192.168.17.0/24",
+                                        dest="192.165.17.0/24",
                                         next_hops=[
                                             dict(
-                                                interface="Loopback0",
+                                                interface="GigabitEthernet0/0/0/0",
                                             ),
                                         ],
                                     ),
@@ -126,7 +126,7 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
         commands = [
             "router static",
             "address-family ipv4 multicast",
-            "192.168.17.0/24 Loopback0",
+            "192.165.17.0/24 GigabitEthernet0/0/0/0",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -141,10 +141,10 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
                                 safi="unicast",
                                 routes=[
                                     dict(
-                                        dest="2001:db8::/64",
+                                        dest="2001:db6::/64",
                                         next_hops=[
                                             dict(
-                                                interface="Loopback0",
+                                                interface="GigabitEthernet0/0/0/2",
                                             ),
                                         ],
                                     ),
@@ -159,7 +159,7 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
         commands = [
             "router static",
             "address-family ipv6 unicast",
-            "2001:db8::/64 Loopback0",
+            "2001:db6::/64 GigabitEthernet0/0/0/2",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -178,7 +178,7 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
                                         dest="192.1.0.0/24",
                                         next_hops=[
                                             dict(
-                                                interface="Loopback1",
+                                                interface="GigabitEthernet0/0/0/1",
                                             ),
                                         ],
                                     ),
@@ -194,7 +194,7 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
             "router static",
             "vrf TEST_VRF",
             "address-family ipv4 unicast",
-            "192.1.0.0/24 Loopback1"
+            "192.1.0.0/24 GigabitEthernet0/0/0/1"
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -210,10 +210,10 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
                                 safi="unicast",
                                 routes=[
                                     dict(
-                                        dest="2002:db8::/64",
+                                        dest="2002:db5::/64",
                                         next_hops=[
                                             dict(
-                                                interface="Loopback1",
+                                                interface="GigabitEthernet0/0/0/2",
                                             ),
                                         ],
                                     ),
@@ -229,7 +229,7 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
             "router static",
             "vrf TEST_VRF",
             "address-family ipv6 unicast",
-            "2002:db8::/64 Loopback1"
+            "2002:db5::/64 GigabitEthernet0/0/0/2"
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -437,7 +437,9 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
             "router static",
             "no address-family ipv4 unicast",
             "no address-family ipv6 unicast",
+            "no address-family ipv4 multicast",
             "no vrf DEV_SITE",
+            "no vrf TEST_VRF",
             "vrf DEV_SITE_NEW",
             "address-family ipv4 unicast",
             "192.0.4.16/28 192.0.2.10 FastEthernet0/0/0/1 description LAB metric 120 tag 10",
