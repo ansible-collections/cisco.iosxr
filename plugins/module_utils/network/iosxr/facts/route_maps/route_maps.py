@@ -41,67 +41,81 @@ class Route_mapsFacts(object):
     def get_policynames(self, connection):
         return connection.get("show running-config | include route-policy")
 
-    def process_conditions(self, line):
-        """
-        Checks if a line starts with 'if', then splits it based on 'and', 'or', 'then' delimiters.
-
-        Args:
-            line: The line to process.
-
-        Returns:
-            A list of conditions and the 'then' part if the line starts with 'if', otherwise an empty list.
-        """
-        line = line.strip()
-        if line.startswith("if "):
-            line = line[3:]  # Remove the leading "if "
-            conditions = re.split(r"\s+(and|or|then)\s+", line)
-            # Recombine the split parts, adding back the delimiters
-            result = []
-            for i in range(0, len(conditions), 2):
-                condition = conditions[i]
-                if i + 1 < len(conditions):
-                    condition += " " + conditions[i + 1] + " "
-                result.append(condition)
-            return result
-        else:
-            return []
-
-    def parse_route_policy(policy_text):
-        """Parses route policy text and stores lines under if/else/elif statements in a dictionary.
-
-        Args:
-            policy_text (str): The route policy text.
-
-        Returns:
-            dict: A dictionary where keys are 'if', 'elif', or 'else' and values are lists of lines.
-        """
-
+    def parse_route_policy(self, route_policy):
         result = {}
-        current_block = None
-        indent_level = 0
+        lines = route_policy.splitlines()
+        current_key = None
+        current_value = []
+        store_global = True
+        global_value = []
 
-        for line in policy_text.splitlines():
-            line = line.strip()
-            if not line:
-                continue
+        def process_else(else_line):
+            else_result = {}
+            else_current_key = None
+            else_current_value = []
+            else_store_global = True
+            else_global_value = []
 
-            # Check for if/elif/else blocks
-            match = re.match(r"(if|elif|else)(.*)", line)
-            if match:
-                current_block = match.group(1)
-                result[current_block] = []
-                indent_level = line.index(current_block)  # Get indentation level
-            elif current_block:
-                # Check if line is indented under the current block
-                if line.startswith(" " * indent_level):
-                    result[current_block].append(line.strip())
+            for line in else_line:
+                line = line.strip()
+                if line.startswith("if ") or line.startswith("elseif ") or line.startswith("else"):
+                    else_store_global = False
+                    if else_current_key:
+                        else_result[else_current_key] = else_current_value
+                    else_current_key = line
+                    else_current_value = []
                 else:
-                    current_block = None  # Reset block if indentation doesn't match
+                    else_current_value.append(line)
+
+                if else_store_global:
+                    else_global_value.append(line)
+
+                if else_global_value:
+                    else_result["global"] = else_global_value
+
+            if else_current_key:
+                else_result[else_current_key] = else_current_value
+
+            return else_result
+
+        for idx, line in enumerate(lines):
+            line = line.strip()
+
+            if line.startswith("if ") or line.startswith("elseif "):
+                store_global = False
+                if current_key:
+                    result[current_key] = current_value
+                current_key = line
+                current_value = []
+            else:
+                current_value.append(line)
+
+            if not (line.startswith("if ") or line.startswith("elseif ")) and line.startswith(
+                "else"
+            ):
+                else_data = process_else(lines[idx + 1 : :])
+                break
+
+            if store_global:
+                global_value.append(line)
+
+        # Add the last block
+        if current_key:
+            result[current_key] = current_value
+
+        if else_data:
+            result["else"] = else_data
+
+        if global_value:
+            result["global"] = global_value
 
         return result
 
     def get_policy_config(self, connection, name):
         policy_data = connection.get(f"show running-config route-policy {name}")
+
+        policy_map = self.parse_route_policy(policy_data)
+
         route_maps_parser = Route_mapsTemplate(lines=policy_data.splitlines(), module=self._module)
         objs = list(route_maps_parser.parse().values())
         return objs
