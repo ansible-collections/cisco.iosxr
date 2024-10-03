@@ -90,7 +90,9 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<route_policy_input>.+))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "apply"
+            "{{ (' ' + apply.route_policy) if apply.route_policy is defined else '' }}"
+            "{{ (' ' + apply.route_policy_input) if apply.route_policy_input is defined else '' }}",
             "result": {
                 "policies": {
                     "apply": [
@@ -141,7 +143,11 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<number_of_times>\d+))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "prepend"
+            "{{ (' as-path ' + prepend.as_path|string) if prepend.as_path is defined else '' }}"
+            "{{ (' most-recent') if prepend.most_recent is defined else '' }}"
+            "{{ (' own-as') if prepend.own_as|d(False) is defined else '' }}"
+            "{{ (' ' + prepend.number_of_times|string) if prepend.number_of_times is defined else '' }}",
             "result": {
                 "policies": {
                     "prepend": {
@@ -190,12 +196,14 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<entire_aspath>entire-aspath))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "remove as-path"
+            "{{ (' private-as' ) if remove.set|d(False) is defined else '' }}"
+            "{{ (' entire-aspath' ) if remove.entire_aspath|d(False) is defined else '' }}",
             "result": {
                 "policies": {
                     "remove": {
                         "set": True,
-                        "as_path": "{{ as_path }}",
+                        "entire_aspath": "{{ not not entire_aspath }}",
                     },
                 },
             },
@@ -208,7 +216,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<administrative_distance>\d+))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set administrative-distance {{ set.administrative_distance|string }}",
             "result": {
                 "policies": {
                     "set": {
@@ -228,7 +236,11 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<igp_cost>igp-cost))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set aigp-metric"
+            "{{ (' +' ) if set.aigp_metric.icrement is defined else '' }}"
+            "{{ (' -' ) if set.aigp_metric.decrement is defined else '' }}"
+            "{{ (' ' +  set.aigp_metric.metric_number|string) if set.aigp_metric.metric_number is defined else '' }}"
+            "{{ (' igp-cost' ) if set.aigp_metric.igp_cost is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -250,7 +262,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<attribute_set>\d+))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set attribute-set name-string {{ set.attribute_set|string }}",
             "result": {
                 "policies": {
                     "set": {
@@ -268,7 +280,9 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<pim>pim))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set c-multicast-routing"
+            "{{ (' bgp' ) if set.c_multicast_routing.bgp is defined else '' }}"
+            "{{ (' pim' ) if set.c_multicast_routing.pim is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -289,7 +303,9 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<additive>additive))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set community"
+            "{{ (' ' + set.community.community_name ) if set.community.community_name is defined else '' }}"
+            "{{ (' additive' ) if set.community.additive is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -321,7 +337,20 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<sr_p2mp>sr-p2mp))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set core-tree"
+            "{{ (' ingress-replication' ) if set.core_tree.ingress_replication|d(False) is defined else '' }}"
+            "{{ (' ingress-replication-default' ) if set.core_tree.ingress_replication_default|d(False) is defined else '' }}"
+            "{{ (' ingress-replication-partitioned' ) if set.core_tree.ingress_replication_partitioned|d(False) is defined else '' }}"
+            "{{ (' mldp' ) if set.core_tree.mldp|d(False) is defined else '' }}"
+            "{{ (' mldp-default' ) if set.core_tree.mldp_default|d(False) is defined else '' }}"
+            "{{ (' mldp-inband' ) if set.core_tree.mldp_inband|d(False) is defined else '' }}"
+            "{{ (' mldp-partitioned-mp2mp' ) if set.core_tree.mldp_partitioned_mp2mp|d(False) is defined else '' }}"
+            "{{ (' mldp-partitioned-p2mp' ) if set.core_tree.mldp_partitioned_p2mp|d(False) is defined else '' }}"
+            "{{ (' p2mp-te' ) if set.core_tree.p2mp_te|d(False) is defined else '' }}"
+            "{{ (' p2mp-te-default' ) if set.core_tree.p2mp_te_default|d(False) is defined else '' }}"
+            "{{ (' p2mp-te-partitioned' ) if set.core_tree.p2mp_te_partitioned|d(False) is defined else '' }}"
+            "{{ (' pim-default' ) if set.core_tree.pim_default|d(False) is defined else '' }}"
+            "{{ (' sr-p2mp' ) if set.core_tree.sr_p2mp|d(False) is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -355,7 +384,11 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<max_suppress>\d+))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set dampening"
+            "{{ (' ' + set.dampening.halflife|string) if set.dampening.halflife is defined else '' }}"
+            "{{ (' ' + set.dampening.max_suppress|string) if set.dampening.max_suppress is defined else '' }}"
+            "{{ (' ' + set.dampening.reuse|string) if set.dampening.reuse is defined else '' }}"
+            "{{ (' ' + set.dampening.suppress|string) if set.dampening.suppress is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -380,7 +413,11 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<sr_p2mp>sr-p2mp))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set downstream-core-tree"
+            "{{ (' ingress-replication' ) if set.downstream_core_tree.ingress_replication|d(False) is defined else '' }}"
+            "{{ (' mldp' ) if set.downstream_core_tree.mldp|d(False) is defined else '' }}"
+            "{{ (' p2mp-te' ) if set.downstream_core_tree.p2mp_te|d(False) is defined else '' }}"
+            "{{ (' sr-p2mp' ) if set.downstream_core_tree.sr_p2mp|d(False) is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -405,7 +442,11 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<effective_bandwith>\d+))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set eigrp-metric"
+            "{{ (' ' + set.eigrp_metric.bandwidth|string) if set.eigrp_metric.bandwidth is defined else '' }}"
+            "{{ (' ' + set.eigrp_metric.delay|string) if set.eigrp_metric.delay is defined else '' }}"
+            "{{ (' ' + set.eigrp_metric.reliability|string) if set.eigrp_metric.reliability is defined else '' }}"
+            "{{ (' ' + set.eigrp_metric.effective_bandwith|string) if set.eigrp_metric.effective_bandwith is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -427,7 +468,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s*set\sfallback-vrf-lookup
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set fallback-vrf-lookup",
             "result": {
                 "policies": {
                     "set": {
@@ -444,7 +485,8 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<flow_tag>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set flow-tag"
+            "{{ (' ' + set.flow_tag|string) if set.flow_tag is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -461,7 +503,8 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<flow_tag>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set forward-class"
+            "{{ (' ' + set.forward_class|string) if set.forward_class is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -478,7 +521,8 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<ip_precedence>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set ip-precedence"
+            "{{ (' ' + set.ip_precedence|string) if set.ip_precedence is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -495,7 +539,8 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<isis_metric>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set isis-metric"
+            "{{ (' ' + set.isis_metric|string) if set.isis_metric is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -512,7 +557,8 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<label>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set label"
+            "{{ (' ' + set.label|string) if set.label is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -529,7 +575,8 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<label_index>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set label-index"
+            "{{ (' ' + set.label_index|string) if set.label_index is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -548,7 +595,10 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<per_vrf>per-vrf))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set label-mode"
+            "{{ (' per-ce' ) if set.label_mode.per_ce|d(False) is defined else '' }}"
+            "{{ (' per-prefix' ) if set.label_mode.per_prefix|d(False) is defined else '' }}"
+            "{{ (' per-vrf' ) if set.label_mode.per_vrf|d(False) is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -569,7 +619,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<large_community>.+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set large-community {{ set.large_community }}",
             "result": {
                 "policies": {
                     "set": {
@@ -588,7 +638,10 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<level_2>level-2))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set level"
+            "{{ (' level-1' ) if set.level.level_1|d(False) is defined else '' }}"
+            "{{ (' level-1-2' ) if set.level.level_1_2|d(False) is defined else '' }}"
+            "{{ (' level-2' ) if set.level.level_2|d(False) is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -608,7 +661,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s*set\sload-balance\secmp-consistent
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set load-balance ecmp-consistent",
             "result": {
                 "policies": {
                     "set": {
@@ -625,7 +678,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<lsm_root>\S+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set lsm-root {{ set.lsm_root }}",
             "result": {
                 "policies": {
                     "set": {
@@ -638,7 +691,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.metric_type",
             "getval": re.compile(
                 r"""
-                \s*set\smetric_type
+                \s*set\smetric-type
                 (\s(?P<external>external))?
                 (\s(?P<internal>internal))?
                 (\s(?P<rib_metric_as_external>rib-metric-as-external))?
@@ -647,7 +700,13 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<type_2>type-2))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set metric-type"
+            "{{ (' external' ) if set.metric_type.external|d(False) is defined else '' }}"
+            "{{ (' internal' ) if set.metric_type.internal|d(False) is defined else '' }}"
+            "{{ (' rib-metric-as-external' ) if set.metric_type.rib_metric_as_external|d(False) is defined else '' }}"
+            "{{ (' rib-metric-as-internal' ) if set.metric_type.rib_metric_as_internal|d(False) is defined else '' }}"
+            "{{ (' type-1' ) if set.metric_type.type_1|d(False) is defined else '' }}"
+            "{{ (' type-2' ) if set.metric_type.type_2|d(False) is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -671,7 +730,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<mpls>\S+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set mpls traffic-eng attributeset {{ set.mpls }}",
             "result": {
                 "policies": {
                     "set": {
@@ -688,7 +747,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<next_hop>\S+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set next-hop {{ set.next_hop.address }}",
             "result": {
                 "policies": {
                     "set": {
@@ -709,7 +768,10 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<rincomplete>incomplete))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set origin"
+            "{{ (' egp' ) if set.origin.egp|d(False) is defined else '' }}"
+            "{{ (' igp' ) if set.origin.igp|d(False) is defined else '' }}"
+            "{{ (' incomplete' ) if set.origin.incomplete|d(False) is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -730,7 +792,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<ospf_metric>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set ospf-metric {{ ospf_metric|string }}",
             "result": {
                 "policies": {
                     "set": {
@@ -746,7 +808,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s*set\spath-color\sexternal-reach
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set path-color external-reach",
             "result": {
                 "policies": {
                     "set": {
@@ -763,7 +825,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<qos_group>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set qos-group {{ qos_group|string }}",
             "result": {
                 "policies": {
                     "set": {
@@ -780,7 +842,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<rib_metric>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set rib-metric {{ rib_metric|string }}",
             "result": {
                 "policies": {
                     "set": {
@@ -797,7 +859,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<rip_metric>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set rip-metric {{ rip_metric|string }}",
             "result": {
                 "policies": {
                     "set": {
@@ -814,7 +876,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<rip_tag>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set rip-tag {{ rip_tag|string }}",
             "result": {
                 "policies": {
                     "set": {
@@ -831,7 +893,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<rt_set>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set rt-set route-limit {{ rt_set|string }}",
             "result": {
                 "policies": {
                     "set": {
@@ -847,7 +909,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s*set\ss-pmsi\sstar-g
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set s-pmsi star-g",
             "result": {
                 "policies": {
                     "set": {
@@ -866,7 +928,10 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<medium>medium))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set spf-priority"
+            "{{ (' critical' ) if set.spf_priority.critical|d(False) is defined else '' }}"
+            "{{ (' high' ) if set.spf_priority.high|d(False) is defined else '' }}"
+            "{{ (' medium' ) if set.spf_priority.medium|d(False) is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -887,7 +952,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<static_p2mp_te>\S+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set static-p2mp-te {{ set.static_p2mp_te }}",
             "result": {
                 "policies": {
                     "set": {
@@ -904,7 +969,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<tag>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set tag {{ set.tag|string }}",
             "result": {
                 "policies": {
                     "set": {
@@ -922,7 +987,9 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<ignore>ignore))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set traffic-index"
+            "{{ (' ' + set.traffic_index.index_number|string) if set.traffic_index.index_number is defined else '' }}"
+            "{{ (' ignore') if set.traffic_index.ignore is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -945,7 +1012,11 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<sr_p2mp>sr-p2mp))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set upstream-core-tree"
+            "{{ (' ingress-replication' ) if set.upstream_core_tree.ingress_replication|d(False) is defined else '' }}"
+            "{{ (' mldp' ) if set.upstream_core_tree.mldp|d(False) is defined else '' }}"
+            "{{ (' p2mp-te' ) if set.upstream_core_tree.p2mp_te|d(False) is defined else '' }}"
+            "{{ (' sr-p2mp' ) if set.upstream_core_tree.sr_p2mp|d(False) is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
@@ -967,7 +1038,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<vpn_distinguisher>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set vpn-distinguisher {{ set.vpn_distinguisher|string }}",
             "result": {
                 "policies": {
                     "set": {
@@ -984,7 +1055,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<weight>\d+))
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "set weight {{ set.weight|string }}",
             "result": {
                 "policies": {
                     "set": {
