@@ -29,6 +29,15 @@ class Route_mapsTemplate(NetworkTemplate):
     # fmt: off
     PARSERS = [
         {
+            "name": "condition",
+            "getval": re.compile(
+                r"""^dummy-regex
+                $""", re.VERBOSE,
+            ),
+            "setval": "{{ condition_type }} {{ condition }} then",
+            "result": {},
+        },
+        {
             "name": "add.eigrp_metric",
             "getval": re.compile(
                 r"""
@@ -40,7 +49,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<max_transmission>\d+))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "add eigrp-metric {{ add.eigrp_metric.bandwidth|string }} {{ add.eigrp_metric.delay|string }} {{ add.eigrp_metric.reliability|string }} {{ add.eigrp_metric.effective_bandwith|string }} {{ add.eigrp_metric.max_transmission|string }}",
             "result": {
                 "policies": {
                     "add": {
@@ -63,7 +72,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<rip_metric>\d+))?
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "add rip-metric {{ add.rip_metric|string }}",
             "result": {
                 "policies": {
                     "add": {
@@ -100,7 +109,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s*drop
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "drop",
             "result": {
                 "policies": {
                     "drop": True,
@@ -114,7 +123,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s*pass
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "pass",
             "result": {
                 "policies": {
                     "pass": True,
@@ -151,7 +160,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s*suppress-route
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "suppress-route",
             "result": {
                 "policies": {
                     "suppress_route": True,
@@ -165,7 +174,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s*unsuppress-route
                 $""", re.VERBOSE,
             ),
-            "setval": "",
+            "setval": "unsuppress-route",
             "result": {
                 "policies": {
                     "unsuppress_route": True,

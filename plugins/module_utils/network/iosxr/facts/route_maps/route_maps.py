@@ -40,6 +40,9 @@ class Route_mapsFacts(object):
     def get_policynames(self, connection):
         return connection.get("show running-config | include route-policy")
 
+    def get_policydata(self, connection, name):
+        return connection.get(f"show running-config route-policy {name}")
+
     def parse_condition(self, condition):
         if condition.startswith("if "):
             condition_type, cond = "if", (condition.lstrip("if ")).rstrip(" then")
@@ -122,9 +125,7 @@ class Route_mapsFacts(object):
 
         return result
 
-    def get_policy_config(self, connection, name):
-        policy_data = connection.get(f"show running-config route-policy {name}")
-
+    def get_policy_config(self, policy_data, name):
         policy_map_structured = self.parse_route_policy(policy_data)
 
         def else_resolve_policy_data(else_policy_map):
@@ -204,19 +205,29 @@ class Route_mapsFacts(object):
         facts = {}
         objs = []
         policy_names = []
+        mock_data = False
 
         if not data:
             data = self.get_policynames(connection=connection)
+        else:
+            mock_data = True  # for states like parsed to work
 
         # parse native config using the Route_maps template
         route_maps_parser = Route_mapsTemplate(lines=[], module=self._module)
 
         for name in data.splitlines():
-            if name.startswith("route-policy"):
+            if name.startswith("route-policy "):
                 policy_names.append(name.split()[1])
 
-        for policies in policy_names:
-            objs.append(self.get_policy_config(connection=connection, name=policies))
+        if mock_data:
+            data_for_parsed = data.split("end-policy\n!")
+
+        for idx, policy in enumerate(policy_names):
+            if mock_data:
+                policy_data = data_for_parsed[idx]
+            else:
+                policy_data = self.get_policydata(connection=connection, name=policy)
+            objs.append(self.get_policy_config(policy_data=policy_data, name=policy))
 
         ansible_facts["ansible_network_resources"].pop("route_maps", None)
 
