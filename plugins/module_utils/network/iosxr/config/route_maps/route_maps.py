@@ -125,6 +125,11 @@ class Route_maps(ResourceModule):
             else:  # for all other states
                 self._compare(want=want, have=haved.pop(k, {}), policy_name=k)
 
+        # clean anything that is surplus
+        if self.state == "overridden":
+            for h, haved in iteritems(haved):
+                self._handle_purged(h)
+
     def _handle_purged(self, policy_name):
         self.commands.append(f"no route-policy {policy_name}")
 
@@ -220,17 +225,17 @@ class Route_maps(ResourceModule):
                     if cond == "global":
                         temp_rmap[cond] = rm_conf
                     else:
-                        temp_rmap[cond + "_" + (rm_conf.get("condition").replace(" ", "_"))] = (
-                            rm_conf
-                        )
+                        temp_rmap[
+                            cond + "_" + (rm_conf.get("condition").replace(" ", "_"))
+                        ] = rm_conf
                 elif cond == "elseif":
                     for elif_config in rm_conf:
                         if elif_config.get("apply"):
                             elif_config["apply"] = process_apply(elif_config.get("apply"))
                         elif_config["conf_type"] = cond
-                        temp_rmap[cond + "_" + (elif_config.get("condition").replace(" ", "_"))] = (
-                            elif_config
-                        )
+                        temp_rmap[
+                            cond + "_" + (elif_config.get("condition").replace(" ", "_"))
+                        ] = elif_config
                 elif (
                     cond == "else"
                 ):  # wanted to do recursion but the overall performance is better this way

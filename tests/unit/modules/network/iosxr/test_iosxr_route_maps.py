@@ -209,7 +209,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             ),
         )
         result = self.execute_module(changed=True)
-        print(result["commands"])
+
         commands = [
             "route-policy TEST_ROUTE_POLICY_SUPER_SIMPLE",
             "if destination in ILOVEROUTEPOLICY then",
@@ -379,7 +379,6 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             ),
         )
         result = self.execute_module(changed=True)
-        print(result["commands"])
 
         commands = [
             "route-policy APPLY_TEST_ROUTE_POLICY_COMPLEX",
@@ -576,7 +575,6 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             ),
         )
         result = self.execute_module(changed=True)
-        print(result["commands"])
 
         commands = [
             "route-policy APPLY_TEST_ROUTE_POLICY_COMPLEX",
@@ -622,6 +620,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             "set community (24680:1) additive",
             "endif",
             "end-policy",
+            "no route-policy TEST_ROUTE_POLICY_COMPLEX",
         ]
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
@@ -773,7 +772,6 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             ),
         )
         result = self.execute_module(changed=True)
-        print(result["commands"])
 
         commands = [
             "route-policy APPLY_TEST_ROUTE_POLICY_COMPLEX",
@@ -1119,7 +1117,6 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             ),
         )
         result = self.execute_module(changed=True)
-        print(result["commands"])
 
         commands = [
             "no route-policy APPLY_TEST_ROUTE_POLICY_COMPLEX",
