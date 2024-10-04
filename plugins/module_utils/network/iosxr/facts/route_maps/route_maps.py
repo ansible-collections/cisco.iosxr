@@ -103,7 +103,7 @@ class Route_mapsFacts(object):
             if not (line.startswith("if ") or line.startswith("elseif ")) and line.startswith(
                 "else",
             ):
-                else_data = process_else(lines[idx + 1 : :])
+                else_data = process_else(lines[idx + 1 : :])  # noqa: E203
                 break
 
             if store_global:
