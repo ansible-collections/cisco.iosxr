@@ -34,7 +34,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 r"""^dummy-regex
                 $""", re.VERBOSE,
             ),
-            "setval": "{{ condition_type }} {{ condition }} then",
+            "setval": "{{ condition_type }}{{ ' ' + condition if condition_type!='else' }}{{ ' then' if condition_type!='else' }}",
             "result": {},
         },
         {

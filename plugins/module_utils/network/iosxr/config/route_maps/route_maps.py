@@ -18,8 +18,6 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from copy import deepcopy
-
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
@@ -50,7 +48,6 @@ class Route_maps(ResourceModule):
         self.parsers = [
             "add.eigrp_metric",
             "add.rip_metric",
-            "apply",
             "drop",
             "pass",
             "prepend",
@@ -116,23 +113,20 @@ class Route_maps(ResourceModule):
         """
         wantd = self._route_maps_list_to_dict(self.want)
         haved = self._route_maps_list_to_dict(self.have)
+
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
             wantd = dict_merge(haved, wantd)
 
-        # if state is deleted, empty out wantd and set haved to wantd
-        if self.state == "deleted":
-            haved = {k: v for k, v in iteritems(haved) if k in wantd or not wantd}
-            wantd = {}
-
-        # remove superfluous config for overridden and deleted
-        if self.state in ["overridden", "deleted"]:
-            for k, have in iteritems(haved):
-                if k not in wantd:
-                    self._compare(want={}, have=have, policy_name=k)
-
         for k, want in iteritems(wantd):
-            self._compare(want=want, have=haved.pop(k, {}), policy_name=k)
+            if self.state == "purged":  # for purged state
+                if haved.get(k):
+                    self._handle_purged(k)
+            else:  # for all other states
+                self._compare(want=want, have=haved.pop(k, {}), policy_name=k)
+
+    def _handle_purged(self, policy_name):
+        self.commands.append(f"no route-policy {policy_name}")
 
     def _compare(self, want, have, policy_name):
         """Leverages the base class `compare()` method and
@@ -140,6 +134,8 @@ class Route_maps(ResourceModule):
         the `want` and `have` data with the `parsers` defined
         for the Route_maps network resource.
         """
+        append_endif = False
+        append_nested_endif = False
         order_list = [
             "global",
             "if_",
@@ -151,22 +147,55 @@ class Route_maps(ResourceModule):
         ]  # to maintain the sanity of how commands are generated
         begin = len(self.commands)
 
-        for check_cond in order_list:
+        for check_cond in order_list:  # iterate on the list to preserve sequence
             w_res = {key: val for key, val in want.items() if key.startswith(check_cond)}
 
-            for w_condition, w_policy_config in w_res.items():
+            for w_condition, w_policy_config in w_res.items():  # loop over want's condition section
                 h_policy_config = have.pop(w_condition, {})
+
+                # if want clauses and have clauses are not same
                 if w_policy_config != h_policy_config:
+                    if self.state in ["replaced", "overridden"]:
+                        # cannot add commands on a adhoc manner it replaces the whole config
+                        h_policy_config = {}
                     render_condition = {
                         "condition": w_policy_config.pop("condition", ""),
                         "condition_type": w_policy_config.pop("conf_type"),
                     }
+
+                    begin_endif = len(self.commands)
                     if render_condition.get("condition_type") != "global":
                         self.addcmd(render_condition, "condition", negate=False)
+                    if w_policy_config.get("apply"):  # as apply is a list
+                        w_apply_config = w_policy_config.pop("apply", {})
+                        h_apply_config = h_policy_config.pop("apply", {})
+                        for w_name, w_apply in w_apply_config.items():
+                            h_apply = h_apply_config.pop(w_name, {})
+                            self.compare(
+                                parsers=[
+                                    "apply",
+                                ],
+                                want={"apply": w_apply},
+                                have={"apply": h_apply},
+                            )
+
                     self.compare(parsers=self.parsers, want=w_policy_config, have=h_policy_config)
+                    if len(self.commands) != begin_endif and w_condition.startswith("if_"):
+                        # if we want to add any condition we have to start with if
+                        append_endif = True
+                    if len(self.commands) != begin_endif and w_condition.startswith("elseHas_if_"):
+                        append_nested_endif = True  # same as above
 
         if len(self.commands) != begin:
-            self.commands.insert(begin, f"route-policy {policy_name}")
+            if append_nested_endif:  # add endif if there was a nested else
+                self.commands.append("endif")
+            if append_endif:  # add endif if there was a condition in the top level config
+                self.commands.append("endif")
+            self.commands.append("end-policy")  # if route-policy then end-policy
+            self.commands.insert(
+                begin,
+                f"route-policy {policy_name}",
+            )  # the name of the route-policy
 
     def _route_maps_list_to_dict(self, data):
         temp_rmap_list = dict()

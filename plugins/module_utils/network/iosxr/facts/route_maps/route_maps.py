@@ -15,11 +15,7 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-import re
 
-from copy import deepcopy
-
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.route_maps.route_maps import (
@@ -38,7 +34,7 @@ class Route_mapsFacts(object):
         self.argument_spec = Route_mapsArgs.argument_spec
 
     def get_policynames(self, connection):
-        return connection.get("show running-config | include route-policy")
+        return connection.get("show running-config | include route-policyx")
 
     def get_policydata(self, connection, name):
         return connection.get(f"show running-config route-policy {name}")

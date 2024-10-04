@@ -505,7 +505,7 @@ options:
       - merged
       - replaced
       - overridden
-      - deleted
+      - purged
       - rendered
       - gathered
       - parsed
@@ -519,7 +519,7 @@ EXAMPLES = """
 RETURN = """
 before:
   description: The configuration prior to the module execution.
-  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(purged) or C(purged)
   type: dict
   sample: >
     This output will always be in the same format as the
@@ -533,20 +533,20 @@ after:
     module argspec.
 commands:
   description: The set of commands pushed to the remote device.
-  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(purged) or C(purged)
   type: list
   sample:
-    - sample command 1
-    - sample command 2
-    - sample command 3
+    - route-policy APPLY_TEST_ROUTE_POLICY_COMPLEX
+    - if destination in DEFAULT then
+    - pass
 rendered:
   description: The provided configuration in the task rendered in device-native format (offline).
   returned: when I(state) is C(rendered)
   type: list
   sample:
-    - sample command 1
-    - sample command 2
-    - sample command 3
+    - route-policy APPLY_TEST_ROUTE_POLICY_COMPLEX
+    - if destination in DEFAULT then
+    - pass
 gathered:
   description: Facts about the network resource gathered from the remote device as structured data.
   returned: when I(state) is C(gathered)
@@ -563,8 +563,6 @@ parsed:
     module argspec.
 """
 
-import debugpy
-
 from ansible.module_utils.basic import AnsibleModule
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.route_maps.route_maps import (
@@ -573,10 +571,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.route_maps.route_maps import (
     Route_maps,
 )
-
-
-debugpy.listen(3000)
-debugpy.wait_for_client()
 
 
 def main():

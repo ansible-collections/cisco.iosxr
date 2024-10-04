@@ -1675,7 +1675,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                 "merged",
                 "replaced",
                 "overridden",
-                "deleted",
+                "purged",
                 "rendered",
                 "gathered",
                 "parsed",

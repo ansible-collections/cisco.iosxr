@@ -18462,7 +18462,7 @@ Parameters
                                     <li><div style="color: blue"><b>merged</b>&nbsp;&larr;</div></li>
                                     <li>replaced</li>
                                     <li>overridden</li>
-                                    <li>deleted</li>
+                                    <li>purged</li>
                                     <li>rendered</li>
                                     <li>gathered</li>
                                     <li>parsed</li>
@@ -18530,7 +18530,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                       <span style="color: purple">dictionary</span>
                     </div>
                 </td>
-                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
+                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>purged</code> or <code>purged</code></td>
                 <td>
                             <div>The configuration prior to the module execution.</div>
                     <br/>
@@ -18547,12 +18547,12 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                       <span style="color: purple">list</span>
                     </div>
                 </td>
-                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
+                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>purged</code> or <code>purged</code></td>
                 <td>
                             <div>The set of commands pushed to the remote device.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;sample command 1&#x27;, &#x27;sample command 2&#x27;, &#x27;sample command 3&#x27;]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;route-policy APPLY_TEST_ROUTE_POLICY_COMPLEX&#x27;, &#x27;if destination in DEFAULT then&#x27;, &#x27;pass&#x27;]</div>
                 </td>
             </tr>
             <tr>
@@ -18603,7 +18603,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>The provided configuration in the task rendered in device-native format (offline).</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;sample command 1&#x27;, &#x27;sample command 2&#x27;, &#x27;sample command 3&#x27;]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;route-policy APPLY_TEST_ROUTE_POLICY_COMPLEX&#x27;, &#x27;if destination in DEFAULT then&#x27;, &#x27;pass&#x27;]</div>
                 </td>
             </tr>
     </table>
