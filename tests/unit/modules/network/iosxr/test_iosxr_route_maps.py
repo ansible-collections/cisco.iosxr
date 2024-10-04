@@ -122,7 +122,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "rip_tag": 2,
                                     "rt_set": 22,
                                     "s_pmsi": True,
-                                }
+                                },
                             },
                             "elseif": [
                                 {
@@ -142,7 +142,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "qos_group": 2,
                                     "rip_tag": 2,
                                     "rt_set": 22,
-                                }
+                                },
                             },
                             "if": {
                                 "condition": "destination in TEST-INTERNAL-IFCONDITION",
@@ -158,7 +158,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                         "effective_bandwith": 223,
                                         "max_transmission": 232,
                                         "reliability": 23,
-                                    }
+                                    },
                                 },
                                 "condition": "destination in TEST-EXTERNAL-CONDITION0",
                                 "remove": {"entire_aspath": True, "set": True},
@@ -197,9 +197,9 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             "global": {
                                 "pass": True,
                                 "set": {
-                                    "community": {"additive": True, "community_name": "(24680:1)"}
+                                    "community": {"additive": True, "community_name": "(24680:1)"},
                                 },
-                            }
+                            },
                         },
                         "if": {"condition": "destination in ILOVEROUTEPOLICY", "drop": True},
                         "name": "TEST_ROUTE_POLICY_SUPER_SIMPLE",
@@ -292,7 +292,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "rip_tag": 2,
                                     "rt_set": 22,
                                     "s_pmsi": True,
-                                }
+                                },
                             },
                             "elseif": [
                                 {
@@ -312,7 +312,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "qos_group": 2,
                                     "rip_tag": 2,
                                     "rt_set": 22,
-                                }
+                                },
                             },
                             "if": {
                                 "condition": "destination in TEST-INTERNAL-IFCONDITION",
@@ -328,7 +328,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                         "effective_bandwith": 223,
                                         "max_transmission": 232,
                                         "reliability": 23,
-                                    }
+                                    },
                                 },
                                 "condition": "destination in TEST-EXTERNAL-CONDITION0",
                                 "remove": {"entire_aspath": True, "set": True},
@@ -367,9 +367,9 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             "global": {
                                 "pass": True,
                                 "set": {
-                                    "community": {"additive": True, "community_name": "(24680:1)"}
+                                    "community": {"additive": True, "community_name": "(24680:1)"},
                                 },
-                            }
+                            },
                         },
                         "if": {"condition": "destination in ILOVEROUTEPOLICY", "drop": True},
                         "name": "TEST_ROUTE_POLICY_SUPER_SIMPLE",
@@ -489,7 +489,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "rip_tag": 2,
                                     "rt_set": 22,
                                     "s_pmsi": True,
-                                }
+                                },
                             },
                             "elseif": [
                                 {
@@ -509,7 +509,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "qos_group": 2,
                                     "rip_tag": 2,
                                     "rt_set": 22,
-                                }
+                                },
                             },
                             "if": {
                                 "condition": "destination in TEST-INTERNAL-IFCONDITION",
@@ -525,7 +525,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                         "effective_bandwith": 223,
                                         "max_transmission": 232,
                                         "reliability": 23,
-                                    }
+                                    },
                                 },
                                 "condition": "destination in TEST-EXTERNAL-CONDITION0",
                                 "remove": {"entire_aspath": True, "set": True},
@@ -564,9 +564,9 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             "global": {
                                 "pass": True,
                                 "set": {
-                                    "community": {"additive": True, "community_name": "(24680:1)"}
+                                    "community": {"additive": True, "community_name": "(24680:1)"},
                                 },
-                            }
+                            },
                         },
                         "if": {"condition": "destination in ILOVEROUTEPOLICY", "drop": True},
                         "name": "TEST_ROUTE_POLICY_SUPER_SIMPLE",
@@ -686,7 +686,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "rip_tag": 2,
                                     "rt_set": 22,
                                     "s_pmsi": True,
-                                }
+                                },
                             },
                             "elseif": [
                                 {
@@ -706,7 +706,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "qos_group": 2,
                                     "rip_tag": 2,
                                     "rt_set": 22,
-                                }
+                                },
                             },
                             "if": {
                                 "condition": "destination in TEST-INTERNAL-IFCONDITION",
@@ -722,7 +722,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                         "effective_bandwith": 223,
                                         "max_transmission": 232,
                                         "reliability": 23,
-                                    }
+                                    },
                                 },
                                 "condition": "destination in TEST-EXTERNAL-CONDITION0",
                                 "remove": {"entire_aspath": True, "set": True},
@@ -761,9 +761,9 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             "global": {
                                 "pass": True,
                                 "set": {
-                                    "community": {"additive": True, "community_name": "(24680:1)"}
+                                    "community": {"additive": True, "community_name": "(24680:1)"},
                                 },
-                            }
+                            },
                         },
                         "if": {"condition": "destination in ILOVEROUTEPOLICY", "drop": True},
                         "name": "TEST_ROUTE_POLICY_SUPER_SIMPLE",
@@ -883,7 +883,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "rip_tag": 2,
                                     "rt_set": 22,
                                     "s_pmsi": True,
-                                }
+                                },
                             },
                             "elseif": [
                                 {
@@ -903,7 +903,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "qos_group": 2,
                                     "rip_tag": 2,
                                     "rt_set": 22,
-                                }
+                                },
                             },
                             "if": {
                                 "condition": "destination in TEST-INTERNAL-IFCONDITION",
@@ -919,7 +919,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                         "effective_bandwith": 223,
                                         "max_transmission": 232,
                                         "reliability": 23,
-                                    }
+                                    },
                                 },
                                 "condition": "destination in TEST-EXTERNAL-CONDITION0",
                                 "remove": {"entire_aspath": True, "set": True},
@@ -958,9 +958,9 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             "global": {
                                 "pass": True,
                                 "set": {
-                                    "community": {"additive": True, "community_name": "(24680:1)"}
+                                    "community": {"additive": True, "community_name": "(24680:1)"},
                                 },
-                            }
+                            },
                         },
                         "if": {"condition": "destination in ILOVEROUTEPOLICY", "drop": True},
                         "name": "TEST_ROUTE_POLICY_SUPER_SIMPLE",
@@ -1032,7 +1032,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "rip_tag": 2,
                                     "rt_set": 22,
                                     "s_pmsi": True,
-                                }
+                                },
                             },
                             "elseif": [
                                 {
@@ -1052,7 +1052,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "qos_group": 2,
                                     "rip_tag": 2,
                                     "rt_set": 22,
-                                }
+                                },
                             },
                             "if": {
                                 "condition": "destination in TEST-INTERNAL-IFCONDITION",
@@ -1068,7 +1068,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                         "effective_bandwith": 223,
                                         "max_transmission": 232,
                                         "reliability": 23,
-                                    }
+                                    },
                                 },
                                 "condition": "destination in TEST-EXTERNAL-CONDITION0",
                                 "remove": {"entire_aspath": True, "set": True},
@@ -1107,9 +1107,9 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             "global": {
                                 "pass": True,
                                 "set": {
-                                    "community": {"additive": True, "community_name": "(24680:1)"}
+                                    "community": {"additive": True, "community_name": "(24680:1)"},
                                 },
-                            }
+                            },
                         },
                         "if": {"condition": "destination in ILOVEROUTEPOLICY", "drop": True},
                         "name": "TEST_ROUTE_POLICY_SUPER_SIMPLE",
@@ -1196,7 +1196,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                 "reliability": 23,
                                 "effective_bandwith": 223,
                                 "max_transmission": 232,
-                            }
+                            },
                         },
                         "remove": {"set": True, "entire_aspath": True},
                         "condition": "destination in TEST-EXTERNAL-CONDITION0",
@@ -1213,7 +1213,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                 ],
                 "else": {
                     "global": {
-                        "set": {"ospf_metric": 232, "qos_group": 2, "rip_tag": 2, "rt_set": 22}
+                        "set": {"ospf_metric": 232, "qos_group": 2, "rip_tag": 2, "rt_set": 22},
                     },
                     "if": {
                         "unsuppress_route": True,
@@ -1226,7 +1226,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             "rip_tag": 2,
                             "rt_set": 22,
                             "s_pmsi": True,
-                        }
+                        },
                     },
                     "elseif": [
                         {
@@ -1241,6 +1241,6 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                         },
                     ],
                 },
-            }
+            },
         ]
         self.assertEqual(parsed_list, result["parsed"])
