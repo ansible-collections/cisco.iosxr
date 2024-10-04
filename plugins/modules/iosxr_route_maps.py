@@ -513,7 +513,7 @@ options:
 """
 
 EXAMPLES = """
-
+#testExamples
 """
 
 RETURN = """
