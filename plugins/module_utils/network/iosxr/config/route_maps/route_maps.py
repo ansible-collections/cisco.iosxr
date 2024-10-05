@@ -179,7 +179,9 @@ class Route_maps(ResourceModule):
 
                     if render_condition.get("condition_type") != "global":
                         self.addcmd(
-                            render_condition, "condition", negate=False
+                            render_condition,
+                            "condition",
+                            negate=False,
                         )  # condition commands added here
                     if w_policy_config.get("apply"):  # as apply is a list
                         w_apply_config = w_policy_config.pop("apply", {})
@@ -236,17 +238,17 @@ class Route_maps(ResourceModule):
                     if cond == "global":
                         temp_rmap[cond] = rm_conf
                     else:
-                        temp_rmap[
-                            cond + "_" + (rm_conf.get("condition").replace(" ", "_"))
-                        ] = rm_conf
+                        temp_rmap[cond + "_" + (rm_conf.get("condition").replace(" ", "_"))] = (
+                            rm_conf
+                        )
                 elif cond == "elseif":
                     for elif_config in rm_conf:
                         if elif_config.get("apply"):
                             elif_config["apply"] = process_apply(elif_config.get("apply"))
                         elif_config["conf_type"] = cond
-                        temp_rmap[
-                            cond + "_" + (elif_config.get("condition").replace(" ", "_"))
-                        ] = elif_config
+                        temp_rmap[cond + "_" + (elif_config.get("condition").replace(" ", "_"))] = (
+                            elif_config
+                        )
                 elif (
                     cond == "else"
                 ):  # wanted to do recursion but the overall performance is better this way
