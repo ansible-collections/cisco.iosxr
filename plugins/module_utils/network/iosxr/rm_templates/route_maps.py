@@ -50,8 +50,8 @@ class Route_mapsTemplate(NetworkTemplate):
                 $""", re.VERBOSE,
             ),
             "setval": "add eigrp-metric {{ add.eigrp_metric.bandwidth|string }}"
-                " {{ add.eigrp_metric.delay|string }} {{ add.eigrp_metric.reliability|string }}"
-                " {{ add.eigrp_metric.effective_bandwith|string }} {{ add.eigrp_metric.max_transmission|string }}",
+            " {{ add.eigrp_metric.delay|string }} {{ add.eigrp_metric.reliability|string }}"
+            " {{ add.eigrp_metric.effective_bandwith|string }} {{ add.eigrp_metric.max_transmission|string }}",
             "result": {
                 "policies": {
                     "add": {
