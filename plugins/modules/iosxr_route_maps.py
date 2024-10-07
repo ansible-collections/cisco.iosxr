@@ -433,7 +433,9 @@ options:
         suboptions: &ifcondition
           condition:
             type: str
-            description: the condition string, eg - aigp-metric eq 23 and as-path in tmp1 and community is-empty and community matches-any test1 (don't add then at end)
+            description:
+              - the condition string, eg - aigp-metric eq 23 and as-path in tmp1 and
+                community is-empty and community matches-any test1 (don't add then at end)
           add: *add
           apply: *apply
           drop: *drop

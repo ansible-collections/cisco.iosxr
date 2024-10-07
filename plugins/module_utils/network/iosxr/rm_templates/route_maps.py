@@ -49,7 +49,9 @@ class Route_mapsTemplate(NetworkTemplate):
                 (\s(?P<max_transmission>\d+))?
                 $""", re.VERBOSE,
             ),
-            "setval": "add eigrp-metric {{ add.eigrp_metric.bandwidth|string }} {{ add.eigrp_metric.delay|string }} {{ add.eigrp_metric.reliability|string }} {{ add.eigrp_metric.effective_bandwith|string }} {{ add.eigrp_metric.max_transmission|string }}",
+            "setval": "add eigrp-metric {{ add.eigrp_metric.bandwidth|string }}"
+                " {{ add.eigrp_metric.delay|string }} {{ add.eigrp_metric.reliability|string }}"
+                " {{ add.eigrp_metric.effective_bandwith|string }} {{ add.eigrp_metric.max_transmission|string }}",
             "result": {
                 "policies": {
                     "add": {
