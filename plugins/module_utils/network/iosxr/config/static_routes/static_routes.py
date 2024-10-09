@@ -593,10 +593,7 @@ class Static_routes(ConfigBase):
         command = dest
 
         for x in next_hop:
-            if "." in x or ":" in x or "/" in x:
-                command += " {0}".format(x)
-            else:
-                command += " vrf {0}".format(x)
+            command += " {0}".format(x)
 
         for key in sorted(updates):
             if key == "admin_distance":
