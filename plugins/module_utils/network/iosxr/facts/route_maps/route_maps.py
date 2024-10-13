@@ -34,7 +34,7 @@ class Route_mapsFacts(object):
         self.argument_spec = Route_mapsArgs.argument_spec
 
     def get_policynames(self, connection):
-        return connection.get("show running-config | include route-policyx")
+        return connection.get("show running-config | include route-policy")
 
     def get_policydata(self, connection, name):
         return connection.get(f"show running-config route-policy {name}")
@@ -231,7 +231,7 @@ class Route_mapsFacts(object):
             route_maps_parser.validate_config(self.argument_spec, {"config": objs}, redact=True),
         )
 
-        facts["route_maps"] = params["config"]
+        facts["route_maps"] = params.get("config", [])
         ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts

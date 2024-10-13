@@ -804,6 +804,106 @@ class Route_mapsTemplate(NetworkTemplate):
             },
         },
         {
+            "name": "set.path_selection.all",
+            "getval": re.compile(
+                r"""
+                \s*set\spath-selection\sall\sadvertise
+                $""", re.VERBOSE,
+            ),
+            "setval": "set path-selection all advertise",
+            "result": {
+                "policies": {
+                    "set": {
+                        "path_selection": {
+                            "all": True,
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "set.path_selection.backup",
+            "getval": re.compile(
+                r"""
+                \s*set\spath-selection\sbackup
+                (\s(?P<backup_decimal>\d+))?
+                (\s(?P<advertise>advertise))?
+                (\s(?P<install>install))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "set path-selection backup"
+            "{{ (' ' + rib-metric-as-external|string ) if set.path_selection.backup.backup_decimal is defined else '' }}"
+            "{{ (' advertise' ) if set.path_selection.backup.advertise|d(False) is defined else '' }}"
+            "{{ (' install' ) if set.path_selection.backup.install|d(False) is defined else '' }}",
+            "result": {
+                "policies": {
+                    "set": {
+                        "path_selection": {
+                            "backup": {
+                                "backup_decimal": "{{ backup_decimal }}",
+                                "advertise": "{{ not not advertise }}",
+                                "install": "{{ not not install }}",
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "set.path_selection.best_path",
+            "getval": re.compile(
+                r"""
+                \s*set\spath-selection\sbest-path
+                $""", re.VERBOSE,
+            ),
+            "setval": "set path-selection best_path",
+            "result": {
+                "policies": {
+                    "set": {
+                        "path_selection": {
+                            "best_path": True,
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "set.path_selection.group_best",
+            "getval": re.compile(
+                r"""
+                \s*set\spath-selection\sbest-path\sadvertise
+                $""", re.VERBOSE,
+            ),
+            "setval": "set path-selection group-best advertise",
+            "result": {
+                "policies": {
+                    "set": {
+                        "path_selection": {
+                            "group_best": True,
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "set.path_selection.multiplath",
+            "getval": re.compile(
+                r"""
+                \s*set\spath-selection\smultiplath\sadvertise
+                $""", re.VERBOSE,
+            ),
+            "setval": "set path-selection multiplath advertise",
+            "result": {
+                "policies": {
+                    "set": {
+                        "path_selection": {
+                            "multiplath": True,
+                        },
+                    },
+                },
+            },
+        },
+        {
             "name": "set.path_color",
             "getval": re.compile(
                 r"""

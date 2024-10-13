@@ -2,12 +2,10 @@
 - ansible.builtin.debug:
     msg: Start iosxr_route_maps overridden integration tests connection={{ ansible_connection}}
 
-- ansible.builtin.include_tasks: _remove_config.yaml
-
 - ansible.builtin.include_tasks: _populate_config.yaml
 
 - block:
-    - name: Merge route-policy configuration
+    - name: Override the route-policy configuration
       cisco.iosxr.iosxr_route_maps:
         state: overridden
         config:
@@ -16,17 +14,9 @@
                 - route_policy: A_NEW_ROUTE_POLICY
               set:
                 community:
-                  additive: true
-                  community_name: (11011:1001)
+                  community_name: test_comm_name
                 weight: 20000
-            name: SIMPLE_GLOBAL_ROUTE_POLICY
-          - else:
-              global:
-                drop: true
-            if:
-              condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
-              pass: true
-            name: SIMPLE_CONDITION_ROUTE_POLICY
+            name: SIMPLE_GLOBAL_ROUTE_POLICY_overridden
           - else:
               else:
                 drop: true
@@ -35,34 +25,26 @@
                 pass: true
                 set:
                   community:
-                    additive: true
-                    community_name: (101010:1)
+                    community_name: test_comm_name
             if:
               condition: as-path in (ios-regex '_3117_', ios-regex '_600_')
               drop: true
-            name: COMPLEX_ROUTE_POLICY
-          - else:
-              global:
-                pass: true
-            if:
-              condition: community matches-any (9119:1001) or community matches-any (11100:1001)
-              drop: true
-            name: COMPLEX_CONDITION_ROUTE_POLICY
+            name: COMPLEX_ROUTE_POLICY_overridden
       register: result
 
     - name: Assert that correct set of commands were generated
       ansible.builtin.assert:
         that:
-          - "{{ replaced['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
+          - "{{ overridden['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
 
     - name: Assert that after dict is correctly generated
       ansible.builtin.assert:
         that:
-          - replaced['after'] == result['after']
+          - overridden['after'] == result['after']
 
     - name: Assert that before dicts are correctly generated
       ansible.builtin.assert:
         that:
-          - merged['after'] == result['before']
+          - overridden['before'] == result['before']
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml

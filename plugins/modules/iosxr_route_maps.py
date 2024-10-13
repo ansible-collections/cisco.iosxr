@@ -10,7 +10,6 @@ The module file for iosxr_route_maps
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -355,6 +354,35 @@ options:
               ospf_metric:
                 description: OSPF metric attribute
                 type: int
+              path_selection:
+                description: BGP path selection
+                type: dict
+                suboptions:
+                  all:
+                    type: bool
+                    description: BGP all advertise
+                  backup:
+                    description: BGP backup
+                    type: dict
+                    suboptions:
+                      backup_decimal:
+                        type: int
+                        description: <1>, decimal number 1
+                      advertise:
+                        type: bool
+                        description: Advertise the path
+                      install:
+                        type: bool
+                        description: Install the path
+                  best_path:
+                    type: bool
+                    description: BGP best path
+                  group_best:
+                    type: bool
+                    description: BGP group-best advertise
+                  multiplath:
+                    type: bool
+                    description: BGP multipath advertise
               path_color:
                 description: BGP Path Color for RIB (path-color external-reach)
                 type: bool
@@ -1422,7 +1450,6 @@ parsed:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.route_maps.route_maps import (
     Route_mapsArgs,
 )

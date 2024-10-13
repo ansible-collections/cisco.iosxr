@@ -1,10 +1,7 @@
 ---
-- name: "Remove iosxr_route_maps configuration"
-  cisco.iosxr.iosxr_config:
-    lines:
-      - "no route-policy SIMPLE_GLOBAL_ROUTE_POLICY"
-      - "no route-policy COMPLEX_ROUTE_POLICY"
-      - "no route-policy SIMPLE_CONDITION_ROUTE_POLICY"
-      - "no route-policy COMPLEX_CONDITION_ROUTE_POLICY"
+- name: Purge all ( risky )
+  cisco.iosxr.iosxr_route_maps:
+    config: []
+    state: purged
   vars:
     ansible_connection: ansible.netcommon.network_cli

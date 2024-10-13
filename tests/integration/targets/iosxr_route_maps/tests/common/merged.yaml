@@ -5,10 +5,20 @@
 - ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-    - name: Merge route-policy configuration
+    - name: Simple merge selective
       cisco.iosxr.iosxr_route_maps:
         state: merged
         config:
+          - else:
+              else:
+                drop: true
+              if:
+                condition: destination in A_RANDOM_POLICY
+                pass: true
+            if:
+              condition: destination in A_RANDOM_POLICY_DUMMY
+              drop: true
+            name: COMPLEX_ROUTE_POLICY
           - global:
               apply:
                 - route_policy: A_NEW_ROUTE_POLICY
@@ -25,20 +35,6 @@
               condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
               pass: true
             name: SIMPLE_CONDITION_ROUTE_POLICY
-          - else:
-              else:
-                drop: true
-              if:
-                condition: destination in A_RANDOM_POLICY
-                pass: true
-                set:
-                  community:
-                    additive: true
-                    community_name: (101010:1)
-            if:
-              condition: as-path in (ios-regex '_3117_', ios-regex '_600_')
-              drop: true
-            name: COMPLEX_ROUTE_POLICY
           - else:
               global:
                 pass: true

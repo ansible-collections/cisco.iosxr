@@ -80,6 +80,11 @@ class Route_maps(ResourceModule):
             "set.next_hop",
             "set.origin",
             "set.ospf_metric",
+            "set.path_selection.all",
+            "set.path_selection.backup",
+            "set.path_selection.best_path",
+            "set.path_selection.group_best",
+            "set.path_selection.multiplath",
             "set.path_color",
             "set.qos_group",
             "set.rib_metric",
@@ -120,13 +125,13 @@ class Route_maps(ResourceModule):
 
         for k, want in iteritems(wantd):
             if self.state == "purged":  # for purged state
-                if haved.get(k):
+                if haved.pop(k, {}):
                     self._handle_purged(k)
             else:  # for all other states
                 self._compare(want=want, have=haved.pop(k, {}), policy_name=k)
 
-        # clean anything that is surplus
-        if self.state == "overridden":
+        # clean anything that is surplus, if state purged clean all have if want is empty
+        if self.state == "overridden" or (self.state == "purged" and not wantd):
             for h, haved in iteritems(haved):
                 self._handle_purged(h)
 
@@ -238,17 +243,17 @@ class Route_maps(ResourceModule):
                     if cond == "global":
                         temp_rmap[cond] = rm_conf
                     else:
-                        temp_rmap[cond + "_" + (rm_conf.get("condition").replace(" ", "_"))] = (
-                            rm_conf
-                        )
+                        temp_rmap[
+                            cond + "_" + (rm_conf.get("condition").replace(" ", "_"))
+                        ] = rm_conf
                 elif cond == "elseif":
                     for elif_config in rm_conf:
                         if elif_config.get("apply"):
                             elif_config["apply"] = process_apply(elif_config.get("apply"))
                         elif_config["conf_type"] = cond
-                        temp_rmap[cond + "_" + (elif_config.get("condition").replace(" ", "_"))] = (
-                            elif_config
-                        )
+                        temp_rmap[
+                            cond + "_" + (elif_config.get("condition").replace(" ", "_"))
+                        ] = elif_config
                 elif (
                     cond == "else"
                 ):  # wanted to do recursion but the overall performance is better this way
