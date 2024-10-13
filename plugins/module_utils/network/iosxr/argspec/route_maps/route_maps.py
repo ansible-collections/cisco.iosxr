@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 #############################################
@@ -18,10 +19,10 @@ __metaclass__ = type
 #
 # To update the argspec make the desired changes
 # in the documentation in the module file and re-run
-# ansible.content_builder commenting out 
+# ansible.content_builder commenting out
 # the path to external 'docstring' in build.yaml.
 #
-############################################## 
+##############################################
 
 """
 The arg spec for the iosxr_route_maps module
@@ -29,8 +30,7 @@ The arg spec for the iosxr_route_maps module
 
 
 class Route_mapsArgs(object):  # pylint: disable=R0903
-    """The arg spec for the iosxr_route_maps module
-    """
+    """The arg spec for the iosxr_route_maps module"""
 
     argument_spec = {
         "config": {
@@ -118,10 +118,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "ingress_replication": {"type": "bool"},
                                         "ingress_replication_default": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "ingress_replication_partitioned": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "mldp": {"type": "bool"},
                                         "mldp_default": {"type": "bool"},
@@ -351,10 +351,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "ingress_replication": {"type": "bool"},
                                         "ingress_replication_default": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "ingress_replication_partitioned": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "mldp": {"type": "bool"},
                                         "mldp_default": {"type": "bool"},
@@ -585,10 +585,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                     "options": {
                                         "ingress_replication": {"type": "bool"},
                                         "ingress_replication_default": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "ingress_replication_partitioned": {
-                                            "type": "bool"
+                                            "type": "bool",
                                         },
                                         "mldp": {"type": "bool"},
                                         "mldp_default": {"type": "bool"},
@@ -753,10 +753,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "delay": {"type": "int"},
                                                 "reliability": {"type": "int"},
                                                 "effective_bandwith": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "max_transmission": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                             },
                                         },
@@ -823,29 +823,29 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "ingress_replication": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "ingress_replication_default": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "ingress_replication_partitioned": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp": {"type": "bool"},
                                                 "mldp_default": {"type": "bool"},
                                                 "mldp_inband": {"type": "bool"},
                                                 "mldp_partitioned_mp2mp": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp_partitioned_p2mp": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "p2mp_te": {"type": "bool"},
                                                 "p2mp_te_default": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "p2mp_te_partitioned": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "pim_default": {"type": "bool"},
                                                 "sr_p2mp": {"type": "bool"},
@@ -864,7 +864,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "ingress_replication": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp": {"type": "bool"},
                                                 "p2mp_te": {"type": "bool"},
@@ -878,10 +878,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "delay": {"type": "int"},
                                                 "reliability": {"type": "int"},
                                                 "effective_bandwith": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "max_transmission": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                             },
                                         },
@@ -917,10 +917,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "external": {"type": "bool"},
                                                 "internal": {"type": "bool"},
                                                 "rib_metric_as_external": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "rib_metric_as_internal": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "type_1": {"type": "bool"},
                                                 "type_2": {"type": "bool"},
@@ -930,7 +930,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "next_hop": {
                                             "type": "dict",
                                             "options": {
-                                                "address": {"type": "str"}
+                                                "address": {"type": "str"},
                                             },
                                         },
                                         "origin": {
@@ -950,13 +950,13 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "backup_decimal": {
-                                                            "type": "int"
+                                                            "type": "int",
                                                         },
                                                         "advertise": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "install": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                     },
                                                 },
@@ -993,7 +993,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "ingress_replication": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp": {"type": "bool"},
                                                 "p2mp_te": {"type": "bool"},
@@ -1020,10 +1020,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "delay": {"type": "int"},
                                                 "reliability": {"type": "int"},
                                                 "effective_bandwith": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "max_transmission": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                             },
                                         },
@@ -1090,29 +1090,29 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "ingress_replication": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "ingress_replication_default": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "ingress_replication_partitioned": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp": {"type": "bool"},
                                                 "mldp_default": {"type": "bool"},
                                                 "mldp_inband": {"type": "bool"},
                                                 "mldp_partitioned_mp2mp": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp_partitioned_p2mp": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "p2mp_te": {"type": "bool"},
                                                 "p2mp_te_default": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "p2mp_te_partitioned": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "pim_default": {"type": "bool"},
                                                 "sr_p2mp": {"type": "bool"},
@@ -1131,7 +1131,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "ingress_replication": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp": {"type": "bool"},
                                                 "p2mp_te": {"type": "bool"},
@@ -1145,10 +1145,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "delay": {"type": "int"},
                                                 "reliability": {"type": "int"},
                                                 "effective_bandwith": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "max_transmission": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                             },
                                         },
@@ -1184,10 +1184,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "external": {"type": "bool"},
                                                 "internal": {"type": "bool"},
                                                 "rib_metric_as_external": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "rib_metric_as_internal": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "type_1": {"type": "bool"},
                                                 "type_2": {"type": "bool"},
@@ -1197,7 +1197,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "next_hop": {
                                             "type": "dict",
                                             "options": {
-                                                "address": {"type": "str"}
+                                                "address": {"type": "str"},
                                             },
                                         },
                                         "origin": {
@@ -1217,13 +1217,13 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "backup_decimal": {
-                                                            "type": "int"
+                                                            "type": "int",
                                                         },
                                                         "advertise": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "install": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                     },
                                                 },
@@ -1260,7 +1260,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "ingress_replication": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp": {"type": "bool"},
                                                 "p2mp_te": {"type": "bool"},
@@ -1288,10 +1288,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "delay": {"type": "int"},
                                                 "reliability": {"type": "int"},
                                                 "effective_bandwith": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "max_transmission": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                             },
                                         },
@@ -1358,29 +1358,29 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "ingress_replication": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "ingress_replication_default": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "ingress_replication_partitioned": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp": {"type": "bool"},
                                                 "mldp_default": {"type": "bool"},
                                                 "mldp_inband": {"type": "bool"},
                                                 "mldp_partitioned_mp2mp": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp_partitioned_p2mp": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "p2mp_te": {"type": "bool"},
                                                 "p2mp_te_default": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "p2mp_te_partitioned": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "pim_default": {"type": "bool"},
                                                 "sr_p2mp": {"type": "bool"},
@@ -1399,7 +1399,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "ingress_replication": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp": {"type": "bool"},
                                                 "p2mp_te": {"type": "bool"},
@@ -1413,10 +1413,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "delay": {"type": "int"},
                                                 "reliability": {"type": "int"},
                                                 "effective_bandwith": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "max_transmission": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                             },
                                         },
@@ -1452,10 +1452,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "external": {"type": "bool"},
                                                 "internal": {"type": "bool"},
                                                 "rib_metric_as_external": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "rib_metric_as_internal": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "type_1": {"type": "bool"},
                                                 "type_2": {"type": "bool"},
@@ -1465,7 +1465,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "next_hop": {
                                             "type": "dict",
                                             "options": {
-                                                "address": {"type": "str"}
+                                                "address": {"type": "str"},
                                             },
                                         },
                                         "origin": {
@@ -1485,13 +1485,13 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "backup_decimal": {
-                                                            "type": "int"
+                                                            "type": "int",
                                                         },
                                                         "advertise": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "install": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                     },
                                                 },
@@ -1528,7 +1528,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "ingress_replication": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp": {"type": "bool"},
                                                 "p2mp_te": {"type": "bool"},
@@ -1554,10 +1554,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "delay": {"type": "int"},
                                                 "reliability": {"type": "int"},
                                                 "effective_bandwith": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "max_transmission": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                             },
                                         },
@@ -1624,29 +1624,29 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "ingress_replication": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "ingress_replication_default": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "ingress_replication_partitioned": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp": {"type": "bool"},
                                                 "mldp_default": {"type": "bool"},
                                                 "mldp_inband": {"type": "bool"},
                                                 "mldp_partitioned_mp2mp": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp_partitioned_p2mp": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "p2mp_te": {"type": "bool"},
                                                 "p2mp_te_default": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "p2mp_te_partitioned": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "pim_default": {"type": "bool"},
                                                 "sr_p2mp": {"type": "bool"},
@@ -1665,7 +1665,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "ingress_replication": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp": {"type": "bool"},
                                                 "p2mp_te": {"type": "bool"},
@@ -1679,10 +1679,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "delay": {"type": "int"},
                                                 "reliability": {"type": "int"},
                                                 "effective_bandwith": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "max_transmission": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                             },
                                         },
@@ -1718,10 +1718,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "external": {"type": "bool"},
                                                 "internal": {"type": "bool"},
                                                 "rib_metric_as_external": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "rib_metric_as_internal": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "type_1": {"type": "bool"},
                                                 "type_2": {"type": "bool"},
@@ -1731,7 +1731,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "next_hop": {
                                             "type": "dict",
                                             "options": {
-                                                "address": {"type": "str"}
+                                                "address": {"type": "str"},
                                             },
                                         },
                                         "origin": {
@@ -1751,13 +1751,13 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "backup_decimal": {
-                                                            "type": "int"
+                                                            "type": "int",
                                                         },
                                                         "advertise": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                         "install": {
-                                                            "type": "bool"
+                                                            "type": "bool",
                                                         },
                                                     },
                                                 },
@@ -1794,7 +1794,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "ingress_replication": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "mldp": {"type": "bool"},
                                                 "p2mp_te": {"type": "bool"},
