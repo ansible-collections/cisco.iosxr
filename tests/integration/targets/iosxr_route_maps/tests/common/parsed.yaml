@@ -1,6 +1,6 @@
 ---
 - ansible.builtin.debug:
-    msg: START iosxr_ntp_global parsed integration tests on connection={{ ansible_connection }}
+    msg: START iosxr_route_maps parsed integration tests on connection={{ ansible_connection }}
 
 - name: Parse externally provided route-policy configuration
   register: result
