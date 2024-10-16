@@ -17,16 +17,16 @@
                   community_name: test_comm_name
                 weight: 20000
             name: SIMPLE_GLOBAL_ROUTE_POLICY_overridden
-          - else:
-              else:
+          - else_section:
+              else_section:
                 drop: true
-              if:
+              if_section:
                 condition: destination in A_RANDOM_POLICY
                 pass: true
                 set:
                   community:
                     community_name: test_comm_name
-            if:
+            if_section:
               condition: as-path in (ios-regex '_3117_', ios-regex '_600_')
               drop: true
             name: COMPLEX_ROUTE_POLICY_overridden

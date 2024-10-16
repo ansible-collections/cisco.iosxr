@@ -41,16 +41,28 @@ class Route_mapsFacts(object):
 
     def parse_condition(self, condition):
         if condition.startswith("if "):
-            condition_type, cond = "if", (condition.lstrip("if ")).rstrip(" then")
+            condition_type, cond = "if_section", (condition.lstrip("if ")).rstrip(" then")
         elif condition.startswith("elseif "):
-            condition_type, cond = "elseif", (condition.lstrip("elseif ")).rstrip(" then")
+            condition_type, cond = "elseif_section", (condition.lstrip("elseif ")).rstrip(" then")
         elif condition.startswith("else"):
-            condition_type, cond = "else", ""
+            condition_type, cond = "else_section", ""
         elif condition.startswith("global"):
             condition_type, cond = "global", ""
         return condition_type, cond
 
     def parse_route_policy(self, route_policy):
+        """This would take one route policy as input and process the configurations
+        and group them by the conditions, the sections that don't have a condition
+        are grouped into global and the configuration with condition are grouped into
+        the condition iteslf. This does not invoke the parsers it just groups the
+        condition with the config lines for the condition under route-policy
+
+
+        :param route_policy: raw single route-policy configuration
+
+        :rtype: dictionary
+        :returns: processed route policy
+        """
         result = {}
         lines = route_policy.splitlines()
         current_key = None
@@ -60,6 +72,7 @@ class Route_mapsFacts(object):
         else_data = {}
 
         def process_else(else_line):
+            """this is a separate implementation as else deals with a few parts of config differently"""
             else_result = {}
             else_current_key = None
             else_current_value = []
@@ -122,9 +135,11 @@ class Route_mapsFacts(object):
         return result
 
     def get_policy_config(self, policy_data, name):
+        """Facts for individual policy is generated here, and extends the route_maps facts"""
         policy_map_structured = self.parse_route_policy(policy_data)
 
         def else_resolve_policy_data(else_policy_map):
+            """Handles else segment, quite similar but different as else in else behaves differently"""
             else_policy_route = {}
             if_elif = []
 
@@ -134,25 +149,26 @@ class Route_mapsFacts(object):
 
                 route_maps_parser = Route_mapsTemplate(lines=policy, module=self._module)
                 objs = list(route_maps_parser.parse().values())
-                if cond_type in ["if", "global"]:
+                if cond_type in ["if_section", "global"]:
                     if objs:
                         else_policy_route[cond_type] = objs[0]
                         if cond_type != "global":
                             else_policy_route[cond_type]["condition"] = actual_cond
-                elif cond_type == "elseif":
+                elif cond_type == "elseif_section":
                     if_elif_data.update(objs[0])
                     if_elif_data["condition"] = actual_cond
                     if_elif.append(if_elif_data)
-                elif cond_type == "else":
+                elif cond_type == "else_section":
                     if objs:
                         else_policy_route[cond_type] = objs[0]
 
             if if_elif:
-                else_policy_route["elseif"] = if_elif
+                else_policy_route["elseif_section"] = if_elif
 
             return else_policy_route
 
         def rec_resolve_policy_data(policy_map):
+            """resolved each policy condition and data and parses policy configuration and sieves out condition data"""
             policy_route = {
                 "name": name,
             }
@@ -165,22 +181,22 @@ class Route_mapsFacts(object):
 
                 route_maps_parser = Route_mapsTemplate(lines=policy, module=self._module)
                 objs = list(route_maps_parser.parse().values())
-                if cond_type in ["if", "global"]:
+                if cond_type in ["if_section", "global"]:
                     if objs:
                         policy_route[cond_type] = objs[0]
                         if cond_type != "global":
                             policy_route[cond_type]["condition"] = actual_cond
-                elif cond_type == "elseif":
+                elif cond_type == "elseif_section":
                     if_elif_data.update(objs[0])
                     if_elif_data["condition"] = actual_cond
                     if_elif.append(if_elif_data)
-                elif cond_type == "else":
+                elif cond_type == "else_section":
                     else_data = else_resolve_policy_data(policy)
 
             if if_elif:
-                policy_route["elseif"] = if_elif
+                policy_route["elseif_section"] = if_elif
             if else_data:
-                policy_route["else"] = else_data
+                policy_route["else_section"] = else_data
 
             return policy_route
 
@@ -204,6 +220,8 @@ class Route_mapsFacts(object):
         mock_data = False
 
         if not data:
+            # gets policy names as there is no good way to get all policy data at once,
+            # other than slicing running-config
             data = self.get_policynames(connection=connection)
         else:
             mock_data = True  # for states like parsed to work
@@ -211,18 +229,21 @@ class Route_mapsFacts(object):
         # parse native config using the Route_maps template
         route_maps_parser = Route_mapsTemplate(lines=[], module=self._module)
 
-        for name in data.splitlines():
+        for name in data.splitlines():  # generate a list of policy names
             if name.startswith("route-policy "):
                 policy_names.append(name.split()[1])
 
-        if mock_data:
+        if mock_data:  # only for states like parsed
             data_for_parsed = data.split("end-policy\n!")
 
         for idx, policy in enumerate(policy_names):
             if mock_data:
+                # we enumerate the split data as the name and policy details are on the same sequence
                 policy_data = data_for_parsed[idx]
             else:
+                # we send the name of the policy and the policy data is fetched for each name, one costly operation
                 policy_data = self.get_policydata(connection=connection, name=policy)
+            # the list of policy facts is created as individual route-policy information is converted to facts
             objs.append(self.get_policy_config(policy_data=policy_data, name=policy))
 
         ansible_facts["ansible_network_resources"].pop("route_maps", None)
@@ -231,7 +252,7 @@ class Route_mapsFacts(object):
             route_maps_parser.validate_config(self.argument_spec, {"config": objs}, redact=True),
         )
 
-        facts["route_maps"] = params.get("config", [])
+        facts["route_maps"] = params.get("config", [])  # handles empty config
         ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts

@@ -32,13 +32,13 @@ merged:
     - endif
     - end-policy
   after:
-    - else:
-        else:
+    - else_section:
+        else_section:
           drop: true
-        if:
+        if_section:
           condition: destination in A_RANDOM_POLICY
           pass: true
-      if:
+      if_section:
         condition: destination in A_RANDOM_POLICY_DUMMY
         drop: true
       name: COMPLEX_ROUTE_POLICY
@@ -51,17 +51,17 @@ merged:
             community_name: (11011:1001)
           weight: 20000
       name: SIMPLE_GLOBAL_ROUTE_POLICY
-    - else:
+    - else_section:
         global:
           drop: true
-      if:
+      if_section:
         condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
         pass: true
       name: SIMPLE_CONDITION_ROUTE_POLICY
-    - else:
+    - else_section:
         global:
           pass: true
-      if:
+      if_section:
         condition: community matches-any (9119:1001) or community matches-any (11100:1001)
         drop: true
       name: COMPLEX_CONDITION_ROUTE_POLICY
@@ -90,16 +90,16 @@ overridden:
     - no route-policy SIMPLE_CONDITION_ROUTE_POLICY
     - no route-policy COMPLEX_CONDITION_ROUTE_POLICY
   after:
-    - else:
-        else:
+    - else_section:
+        else_section:
           drop: true
-        if:
+        if_section:
           condition: destination in A_RANDOM_POLICY
           pass: true
           set:
             community:
               community_name: test_comm_name
-      if:
+      if_section:
         condition: as-path in (ios-regex '_3117_', ios-regex '_600_')
         drop: true
       name: COMPLEX_ROUTE_POLICY_overridden
@@ -112,13 +112,13 @@ overridden:
           weight: 20000
       name: SIMPLE_GLOBAL_ROUTE_POLICY_overridden
   before:
-    - else:
-        else:
+    - else_section:
+        else_section:
           drop: true
-        if:
+        if_section:
           condition: destination in A_RANDOM_POLICY
           pass: true
-      if:
+      if_section:
         condition: destination in A_RANDOM_POLICY_DUMMY
         drop: true
       name: COMPLEX_ROUTE_POLICY
@@ -131,17 +131,17 @@ overridden:
             community_name: (11011:1001)
           weight: 20000
       name: SIMPLE_GLOBAL_ROUTE_POLICY
-    - else:
+    - else_section:
         global:
           drop: true
-      if:
+      if_section:
         condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
         pass: true
       name: SIMPLE_CONDITION_ROUTE_POLICY
-    - else:
+    - else_section:
         global:
           pass: true
-      if:
+      if_section:
         condition: community matches-any (9119:1001) or community matches-any (11100:1001)
         drop: true
       name: COMPLEX_CONDITION_ROUTE_POLICY
@@ -191,17 +191,17 @@ deleted:
             community_name: (11011:1001)
           weight: 20000
       name: SIMPLE_GLOBAL_ROUTE_POLICY
-    - else:
+    - else_section:
         global:
           drop: true
-      if:
+      if_section:
         condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
         pass: true
       name: SIMPLE_CONDITION_ROUTE_POLICY
-    - else:
+    - else_section:
         global:
           pass: true
-      if:
+      if_section:
         condition: community matches-any (9119:1001) or community matches-any (11100:1001)
         drop: true
       name: COMPLEX_CONDITION_ROUTE_POLICY

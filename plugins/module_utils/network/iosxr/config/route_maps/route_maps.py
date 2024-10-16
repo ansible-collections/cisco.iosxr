@@ -149,12 +149,12 @@ class Route_maps(ResourceModule):
         append_else_once = True
         order_list = [
             "global",
-            "if_",
-            "elseif_",
+            "if_section_",
+            "elseif_section_",
             "elseHas_global_",
-            "elseHas_if_",
-            "elseHas_elseif_",
-            "elseHas_else_",
+            "elseHas_if_section_",
+            "elseHas_elseif_section_",
+            "elseHas_else_section_",
         ]  # to maintain the sanity of how commands are generated
         begin = len(self.commands)
 
@@ -172,12 +172,13 @@ class Route_maps(ResourceModule):
 
                     render_condition = {
                         "condition": w_policy_config.pop("condition", ""),
-                        "condition_type": w_policy_config.pop("conf_type"),
+                        "condition_type": w_policy_config.pop("conf_type").split("_section")[0],
                     }  # required to generate conditional statements
 
                     begin_endif = len(self.commands)  # handle elseif conditions
 
                     if check_cond.startswith("elseHas_"):
+                        # adds else only once if there is else block
                         if append_else_once:
                             self.commands.append("else")
                             append_else_once = False
@@ -203,10 +204,12 @@ class Route_maps(ResourceModule):
                             )
                     # route-policy configs added here
                     self.compare(parsers=self.parsers, want=w_policy_config, have=h_policy_config)
-                    if len(self.commands) != begin_endif and w_condition.startswith("if_"):
+                    if len(self.commands) != begin_endif and w_condition.startswith("if_section_"):
                         # if we want to add any condition we have to start with if
                         append_endif = True
-                    if len(self.commands) != begin_endif and w_condition.startswith("elseHas_if_"):
+                    if len(self.commands) != begin_endif and w_condition.startswith(
+                        "elseHas_if_section_"
+                    ):
                         append_nested_endif = True  # same as above
 
         if len(self.commands) != begin:
@@ -236,33 +239,33 @@ class Route_maps(ResourceModule):
                 if cond == "name":
                     rmap_name = rm_conf
                     temp_rmap["name"] = rmap_name
-                elif cond in ["if", "global"]:
+                elif cond in ["if_section", "global"]:
                     if rm_conf.get("apply"):
                         rm_conf["apply"] = process_apply(rm_conf.get("apply"))
                     rm_conf["conf_type"] = cond
                     if cond == "global":
                         temp_rmap[cond] = rm_conf
                     else:
-                        temp_rmap[cond + "_" + (rm_conf.get("condition").replace(" ", "_"))] = (
-                            rm_conf
-                        )
-                elif cond == "elseif":
+                        temp_rmap[
+                            cond + "_" + (rm_conf.get("condition").replace(" ", "_"))
+                        ] = rm_conf
+                elif cond == "elseif_section":
                     for elif_config in rm_conf:
                         if elif_config.get("apply"):
                             elif_config["apply"] = process_apply(elif_config.get("apply"))
                         elif_config["conf_type"] = cond
-                        temp_rmap[cond + "_" + (elif_config.get("condition").replace(" ", "_"))] = (
-                            elif_config
-                        )
+                        temp_rmap[
+                            cond + "_" + (elif_config.get("condition").replace(" ", "_"))
+                        ] = elif_config
                 elif (
-                    cond == "else"
+                    cond == "else_section"
                 ):  # wanted to do recursion but the overall performance is better this way
                     for else_cond, else_rm_conf in rm_conf.items():
-                        if else_cond in ["if", "global", "else"]:
+                        if else_cond in ["if_section", "global", "else_section"]:
                             if else_rm_conf.get("apply"):
                                 else_rm_conf["apply"] = process_apply(else_rm_conf.get("apply"))
                             else_rm_conf["conf_type"] = else_cond
-                            if else_cond in ["global", "else"]:
+                            if else_cond in ["global", "else_section"]:
                                 temp_rmap["elseHas_" + else_cond + "_"] = else_rm_conf
                             else:
                                 temp_rmap[
@@ -271,11 +274,11 @@ class Route_maps(ResourceModule):
                                     + "_"
                                     + (else_rm_conf.get("condition").replace(" ", "_"))
                                 ] = else_rm_conf
-                        elif else_cond == "elseif":
+                        elif else_cond == "elseif_section":
                             for elif_config in else_rm_conf:
                                 if elif_config.get("apply"):
                                     elif_config["apply"] = process_apply(elif_config.get("apply"))
-                                elif_config["conf_type"] = "elseif"
+                                elif_config["conf_type"] = "elseif_section"
                                 temp_rmap[
                                     "elseHas_"
                                     + else_cond

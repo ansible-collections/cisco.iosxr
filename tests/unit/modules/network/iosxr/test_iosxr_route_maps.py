@@ -114,8 +114,8 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             dict(
                 config=[
                     {
-                        "else": {
-                            "else": {
+                        "else_section": {
+                            "else_section": {
                                 "set": {
                                     "ospf_metric": 232,
                                     "qos_group": 2,
@@ -124,7 +124,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "s_pmsi": True,
                                 },
                             },
-                            "elseif": [
+                            "elseif_section": [
                                 {
                                     "apply": [{"route_policy": "DUMMY-RMP-4"}],
                                     "condition": "destination in TEST-INTERNAL_ELIFCONDITION",
@@ -144,12 +144,12 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "rt_set": 22,
                                 },
                             },
-                            "if": {
+                            "if_section": {
                                 "condition": "destination in TEST-INTERNAL-IFCONDITION",
                                 "unsuppress_route": True,
                             },
                         },
-                        "elseif": [
+                        "elseif_section": [
                             {
                                 "add": {
                                     "eigrp_metric": {
@@ -174,7 +174,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             },
                         ],
                         "global": {"set": {"ospf_metric": 232}},
-                        "if": {
+                        "if_section": {
                             "condition": "destination in DEFAULT",
                             "set": {
                                 "qos_group": 2,
@@ -185,15 +185,18 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                         "name": "TEST_ROUTE_POLICY_COMPLEX",
                     },
                     {
-                        "else": {
-                            "else": {"drop": True},
-                            "if": {"condition": "as-path in (ios-regex '_8888_')", "pass": True},
+                        "else_section": {
+                            "else_section": {"drop": True},
+                            "if_section": {
+                                "condition": "as-path in (ios-regex '_8888_')",
+                                "pass": True,
+                            },
                         },
-                        "if": {"condition": "destination in TESTROUTES", "drop": True},
+                        "if_section": {"condition": "destination in TESTROUTES", "drop": True},
                         "name": "TEST_ROUTE_POLICY_BIT_SIMPLE",
                     },
                     {
-                        "else": {
+                        "else_section": {
                             "global": {
                                 "pass": True,
                                 "set": {
@@ -201,7 +204,10 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                 },
                             },
                         },
-                        "if": {"condition": "destination in ILOVEROUTEPOLICY", "drop": True},
+                        "if_section": {
+                            "condition": "destination in ILOVEROUTEPOLICY",
+                            "drop": True,
+                        },
                         "name": "TEST_ROUTE_POLICY_SUPER_SIMPLE",
                     },
                 ],
@@ -286,8 +292,8 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             dict(
                 config=[
                     {
-                        "else": {
-                            "else": {
+                        "else_section": {
+                            "else_section": {
                                 "set": {
                                     "ospf_metric": 232,
                                     "qos_group": 2,
@@ -296,7 +302,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "s_pmsi": True,
                                 },
                             },
-                            "elseif": [
+                            "elseif_section": [
                                 {
                                     "apply": [{"route_policy": "DUMMY-RMP-4"}],
                                     "condition": "destination in TEST-INTERNAL_ELIFCONDITION",
@@ -316,12 +322,12 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "rt_set": 22,
                                 },
                             },
-                            "if": {
+                            "if_section": {
                                 "condition": "destination in TEST-INTERNAL-IFCONDITION",
                                 "unsuppress_route": True,
                             },
                         },
-                        "elseif": [
+                        "elseif_section": [
                             {
                                 "add": {
                                     "eigrp_metric": {
@@ -346,7 +352,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             },
                         ],
                         "global": {"set": {"ospf_metric": 232}},
-                        "if": {
+                        "if_section": {
                             "condition": "destination in DEFAULT",
                             "set": {
                                 "qos_group": 2,
@@ -357,15 +363,18 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                         "name": "APPLY_TEST_ROUTE_POLICY_COMPLEX",
                     },
                     {
-                        "else": {
-                            "else": {"drop": True},
-                            "if": {"condition": "as-path in (ios-regex '_8888_')", "pass": True},
+                        "else_section": {
+                            "else_section": {"drop": True},
+                            "if_section": {
+                                "condition": "as-path in (ios-regex '_8888_')",
+                                "pass": True,
+                            },
                         },
-                        "if": {"condition": "destination in TESTROUTES", "drop": True},
+                        "if_section": {"condition": "destination in TESTROUTES", "drop": True},
                         "name": "TEST_ROUTE_POLICY_BIT_SIMPLE",
                     },
                     {
-                        "else": {
+                        "else_section": {
                             "global": {
                                 "pass": True,
                                 "set": {
@@ -373,7 +382,10 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                 },
                             },
                         },
-                        "if": {"condition": "destination in ILOVEROUTEPOLICY", "drop": True},
+                        "if_section": {
+                            "condition": "destination in ILOVEROUTEPOLICY",
+                            "drop": True,
+                        },
                         "name": "TEST_ROUTE_POLICY_SUPER_SIMPLE",
                     },
                 ],
@@ -485,8 +497,8 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             dict(
                 config=[
                     {
-                        "else": {
-                            "else": {
+                        "else_section": {
+                            "else_section": {
                                 "set": {
                                     "ospf_metric": 232,
                                     "qos_group": 2,
@@ -495,7 +507,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "s_pmsi": True,
                                 },
                             },
-                            "elseif": [
+                            "elseif_section": [
                                 {
                                     "apply": [{"route_policy": "DUMMY-RMP-4"}],
                                     "condition": "destination in TEST-INTERNAL_ELIFCONDITION",
@@ -515,12 +527,12 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "rt_set": 22,
                                 },
                             },
-                            "if": {
+                            "if_section": {
                                 "condition": "destination in TEST-INTERNAL-IFCONDITION",
                                 "unsuppress_route": True,
                             },
                         },
-                        "elseif": [
+                        "elseif_section": [
                             {
                                 "add": {
                                     "eigrp_metric": {
@@ -545,7 +557,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             },
                         ],
                         "global": {"set": {"ospf_metric": 232}},
-                        "if": {
+                        "if_section": {
                             "condition": "destination in DEFAULT",
                             "set": {
                                 "qos_group": 2,
@@ -556,15 +568,15 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                         "name": "APPLY_TEST_ROUTE_POLICY_COMPLEX",
                     },
                     {
-                        "else": {
-                            "else": {"drop": True},
-                            "if": {"condition": "as-path in 15446", "pass": True},
+                        "else_section": {
+                            "else_section": {"drop": True},
+                            "if_section": {"condition": "as-path in 15446", "pass": True},
                         },
-                        "if": {"condition": "destination in TESTROUTES", "drop": True},
+                        "if_section": {"condition": "destination in TESTROUTES", "drop": True},
                         "name": "TEST_ROUTE_POLICY_BIT_SIMPLE",
                     },
                     {
-                        "else": {
+                        "else_section": {
                             "global": {
                                 "pass": True,
                                 "set": {
@@ -572,7 +584,10 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                 },
                             },
                         },
-                        "if": {"condition": "destination in ILOVEROUTEPOLICY", "drop": True},
+                        "if_section": {
+                            "condition": "destination in ILOVEROUTEPOLICY",
+                            "drop": True,
+                        },
                         "name": "TEST_ROUTE_POLICY_SUPER_SIMPLE",
                     },
                 ],
@@ -685,8 +700,8 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             dict(
                 config=[
                     {
-                        "else": {
-                            "else": {
+                        "else_section": {
+                            "else_section": {
                                 "set": {
                                     "ospf_metric": 232,
                                     "qos_group": 2,
@@ -695,7 +710,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "s_pmsi": True,
                                 },
                             },
-                            "elseif": [
+                            "elseif_section": [
                                 {
                                     "apply": [{"route_policy": "DUMMY-RMP-4"}],
                                     "condition": "destination in TEST-INTERNAL_ELIFCONDITION",
@@ -715,12 +730,12 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "rt_set": 22,
                                 },
                             },
-                            "if": {
+                            "if_section": {
                                 "condition": "destination in TEST-INTERNAL-IFCONDITION",
                                 "unsuppress_route": True,
                             },
                         },
-                        "elseif": [
+                        "elseif_section": [
                             {
                                 "add": {
                                     "eigrp_metric": {
@@ -745,7 +760,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             },
                         ],
                         "global": {"set": {"ospf_metric": 232}},
-                        "if": {
+                        "if_section": {
                             "condition": "destination in DEFAULT",
                             "set": {
                                 "qos_group": 2,
@@ -756,15 +771,15 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                         "name": "APPLY_TEST_ROUTE_POLICY_COMPLEX",
                     },
                     {
-                        "else": {
-                            "else": {"drop": True},
-                            "if": {"condition": "as-path in 15446", "pass": True},
+                        "else_section": {
+                            "else_section": {"drop": True},
+                            "if_section": {"condition": "as-path in 15446", "pass": True},
                         },
-                        "if": {"condition": "destination in TESTROUTES", "drop": True},
+                        "if_section": {"condition": "destination in TESTROUTES", "drop": True},
                         "name": "TEST_ROUTE_POLICY_BIT_SIMPLE",
                     },
                     {
-                        "else": {
+                        "else_section": {
                             "global": {
                                 "pass": True,
                                 "set": {
@@ -772,7 +787,10 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                 },
                             },
                         },
-                        "if": {"condition": "destination in ILOVEROUTEPOLICY", "drop": True},
+                        "if_section": {
+                            "condition": "destination in ILOVEROUTEPOLICY",
+                            "drop": True,
+                        },
                         "name": "TEST_ROUTE_POLICY_SUPER_SIMPLE",
                     },
                 ],
@@ -884,8 +902,8 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             dict(
                 config=[
                     {
-                        "else": {
-                            "else": {
+                        "else_section": {
+                            "else_section": {
                                 "set": {
                                     "ospf_metric": 232,
                                     "qos_group": 2,
@@ -894,7 +912,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "s_pmsi": True,
                                 },
                             },
-                            "elseif": [
+                            "elseif_section": [
                                 {
                                     "apply": [{"route_policy": "DUMMY-RMP-4"}],
                                     "condition": "destination in TEST-INTERNAL_ELIFCONDITION",
@@ -914,12 +932,12 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "rt_set": 22,
                                 },
                             },
-                            "if": {
+                            "if_section": {
                                 "condition": "destination in TEST-INTERNAL-IFCONDITION",
                                 "unsuppress_route": True,
                             },
                         },
-                        "elseif": [
+                        "elseif_section": [
                             {
                                 "add": {
                                     "eigrp_metric": {
@@ -944,7 +962,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             },
                         ],
                         "global": {"set": {"ospf_metric": 232}},
-                        "if": {
+                        "if_section": {
                             "condition": "destination in DEFAULT",
                             "set": {
                                 "qos_group": 2,
@@ -955,15 +973,15 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                         "name": "APPLY_TEST_ROUTE_POLICY_COMPLEX",
                     },
                     {
-                        "else": {
-                            "else": {"drop": True},
-                            "if": {"condition": "as-path in 15446", "pass": True},
+                        "else_section": {
+                            "else_section": {"drop": True},
+                            "if_section": {"condition": "as-path in 15446", "pass": True},
                         },
-                        "if": {"condition": "destination in TESTROUTES", "drop": True},
+                        "if_section": {"condition": "destination in TESTROUTES", "drop": True},
                         "name": "TEST_ROUTE_POLICY_BIT_SIMPLE",
                     },
                     {
-                        "else": {
+                        "else_section": {
                             "global": {
                                 "pass": True,
                                 "set": {
@@ -971,7 +989,10 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                 },
                             },
                         },
-                        "if": {"condition": "destination in ILOVEROUTEPOLICY", "drop": True},
+                        "if_section": {
+                            "condition": "destination in ILOVEROUTEPOLICY",
+                            "drop": True,
+                        },
                         "name": "TEST_ROUTE_POLICY_SUPER_SIMPLE",
                     },
                 ],
@@ -1033,8 +1054,8 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             dict(
                 config=[
                     {
-                        "else": {
-                            "else": {
+                        "else_section": {
+                            "else_section": {
                                 "set": {
                                     "ospf_metric": 232,
                                     "qos_group": 2,
@@ -1043,7 +1064,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "s_pmsi": True,
                                 },
                             },
-                            "elseif": [
+                            "elseif_section": [
                                 {
                                     "apply": [{"route_policy": "DUMMY-RMP-4"}],
                                     "condition": "destination in TEST-INTERNAL_ELIFCONDITION",
@@ -1063,12 +1084,12 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                     "rt_set": 22,
                                 },
                             },
-                            "if": {
+                            "if_section": {
                                 "condition": "destination in TEST-INTERNAL-IFCONDITION",
                                 "unsuppress_route": True,
                             },
                         },
-                        "elseif": [
+                        "elseif_section": [
                             {
                                 "add": {
                                     "eigrp_metric": {
@@ -1093,7 +1114,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             },
                         ],
                         "global": {"set": {"ospf_metric": 232}},
-                        "if": {
+                        "if_section": {
                             "condition": "destination in DEFAULT",
                             "set": {
                                 "qos_group": 2,
@@ -1104,15 +1125,15 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                         "name": "APPLY_TEST_ROUTE_POLICY_COMPLEX",
                     },
                     {
-                        "else": {
-                            "else": {"drop": True},
-                            "if": {"condition": "as-path in 15446", "pass": True},
+                        "else_section": {
+                            "else_section": {"drop": True},
+                            "if_section": {"condition": "as-path in 15446", "pass": True},
                         },
-                        "if": {"condition": "destination in TESTROUTES", "drop": True},
+                        "if_section": {"condition": "destination in TESTROUTES", "drop": True},
                         "name": "TEST_ROUTE_POLICY_BIT_SIMPLE",
                     },
                     {
-                        "else": {
+                        "else_section": {
                             "global": {
                                 "pass": True,
                                 "set": {
@@ -1120,7 +1141,10 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                                 },
                             },
                         },
-                        "if": {"condition": "destination in ILOVEROUTEPOLICY", "drop": True},
+                        "if_section": {
+                            "condition": "destination in ILOVEROUTEPOLICY",
+                            "drop": True,
+                        },
                         "name": "TEST_ROUTE_POLICY_SUPER_SIMPLE",
                     },
                 ],
@@ -1186,7 +1210,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
         parsed_list = [
             {
                 "name": "APPLY_TEST_ROUTE_POLICY_COMPLEX",
-                "if": {
+                "if_section": {
                     "set": {
                         "qos_group": 2,
                         "spf_priority": {"critical": True},
@@ -1195,7 +1219,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                     "condition": "destination in DEFAULT",
                 },
                 "global": {"set": {"ospf_metric": 232}},
-                "elseif": [
+                "elseif_section": [
                     {
                         "add": {
                             "eigrp_metric": {
@@ -1219,15 +1243,15 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                         "condition": "destination in TEST-EXTERNAL-CONDITION1",
                     },
                 ],
-                "else": {
+                "else_section": {
                     "global": {
                         "set": {"ospf_metric": 232, "qos_group": 2, "rip_tag": 2, "rt_set": 22},
                     },
-                    "if": {
+                    "if_section": {
                         "unsuppress_route": True,
                         "condition": "destination in TEST-INTERNAL-IFCONDITION",
                     },
-                    "else": {
+                    "else_section": {
                         "set": {
                             "ospf_metric": 232,
                             "qos_group": 2,
@@ -1236,7 +1260,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             "s_pmsi": True,
                         },
                     },
-                    "elseif": [
+                    "elseif_section": [
                         {
                             "pass": True,
                             "apply": [{"route_policy": "DUMMY-RMP-4"}],

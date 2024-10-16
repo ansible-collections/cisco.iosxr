@@ -270,7 +270,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                         },
                     },
                 },
-                "if": {
+                "if_section": {
                     "type": "dict",
                     "options": {
                         "condition": {"type": "str"},
@@ -503,7 +503,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                         },
                     },
                 },
-                "elseif": {
+                "elseif_section": {
                     "type": "list",
                     "elements": "dict",
                     "options": {
@@ -737,7 +737,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                         },
                     },
                 },
-                "else": {
+                "else_section": {
                     "type": "dict",
                     "options": {
                         "global": {
@@ -1006,7 +1006,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                 },
                             },
                         },
-                        "if": {
+                        "if_section": {
                             "type": "dict",
                             "options": {
                                 "condition": {"type": "str"},
@@ -1273,7 +1273,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                 },
                             },
                         },
-                        "elseif": {
+                        "elseif_section": {
                             "type": "list",
                             "elements": "dict",
                             "options": {
@@ -1541,7 +1541,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                 },
                             },
                         },
-                        "else": {
+                        "else_section": {
                             "type": "dict",
                             "options": {
                                 "add": {
