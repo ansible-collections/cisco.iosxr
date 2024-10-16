@@ -53,7 +53,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="6">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>else</b>
+                    <b>else_section</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">dictionary</span>
@@ -70,7 +70,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="5">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>else</b>
+                    <b>else_section</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">dictionary</span>
@@ -2942,7 +2942,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="5">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>elseif</b>
+                    <b>elseif_section</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
@@ -8705,7 +8705,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="5">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>if</b>
+                    <b>if_section</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">dictionary</span>
@@ -11595,7 +11595,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="6">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>elseif</b>
+                    <b>elseif_section</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
@@ -17091,7 +17091,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="6">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>if</b>
+                    <b>if_section</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">dictionary</span>
@@ -19944,31 +19944,31 @@ Examples
                   community_name: (11011:1001)
                 weight: 20000
             name: SIMPLE_GLOBAL_ROUTE_POLICY
-          - else:
+          - else_section:
               global:
                 drop: true
-            if:
+            if_section:
               condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
               pass: true
             name: SIMPLE_CONDITION_ROUTE_POLICY
-          - else:
-              else:
+          - else_section:
+              else_section:
                 drop: true
-              if:
+              if_section:
                 condition: destination in A_RANDOM_POLICY
                 pass: true
                 set:
                   community:
                     additive: true
                     community_name: (101010:1)
-            if:
+            if_section:
               condition: as-path in (ios-regex '_3117_', ios-regex '_600_')
               drop: true
             name: COMPLEX_ROUTE_POLICY
-          - else:
+          - else_section:
               global:
                 pass: true
-            if:
+            if_section:
               condition: community matches-any (9119:1001) or community matches-any (11100:1001)
               drop: true
             name: COMPLEX_CONDITION_ROUTE_POLICY
@@ -20020,31 +20020,31 @@ Examples
     #         community_name: (11011:1001)
     #       weight: 20000
     #   name: SIMPLE_GLOBAL_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       drop: true
-    #   if:
+    #   if_section:
     #     condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
     #     pass: true
     #   name: SIMPLE_CONDITION_ROUTE_POLICY
-    # - else:
-    #     else:
+    # - else_section:
+    #     else_section:
     #       drop: true
-    #     if:
+    #     if_section:
     #       condition: destination in A_RANDOM_POLICY
     #       pass: true
     #       set:
     #         community:
     #           additive: true
     #           community_name: (101010:1)
-    #   if:
+    #   if_section:
     #     condition: as-path in (ios-regex '_3117_', ios-regex '_600_')
     #     drop: true
     #   name: COMPLEX_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       pass: true
-    #   if:
+    #   if_section:
     #     condition: community matches-any (9119:1001) or community matches-any (11100:1001)
     #     drop: true
     #   name: COMPLEX_CONDITION_ROUTE_POLICY
@@ -20158,10 +20158,10 @@ Examples
                   community_name: (11011:1001)
                 weight: 20000
             name: SIMPLE_GLOBAL_ROUTE_POLICY
-          - else:
+          - else_section:
               global:
                 drop: true
-            if:
+            if_section:
               condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
               pass: true
             name: VERY_SIMPLE_CONDITION_ROUTE_POLICY
@@ -20179,31 +20179,31 @@ Examples
     #         community_name: (11011:1001)
     #       weight: 20000
     #   name: SIMPLE_GLOBAL_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       drop: true
-    #   if:
+    #   if_section:
     #     condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
     #     pass: true
     #   name: SIMPLE_CONDITION_ROUTE_POLICY
-    # - else:
-    #     else:
+    # - else_section:
+    #     else_section:
     #       drop: true
-    #     if:
+    #     if_section:
     #       condition: destination in A_RANDOM_POLICY
     #       pass: true
     #       set:
     #         community:
     #           additive: true
     #           community_name: (101010:1)
-    #   if:
+    #   if_section:
     #     condition: as-path in (ios-regex '_3117_', ios-regex '_600_')
     #     drop: true
     #   name: COMPLEX_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       pass: true
-    #   if:
+    #   if_section:
     #     condition: community matches-any (9119:1001) or community matches-any (11100:1001)
     #     drop: true
     #   name: COMPLEX_CONDITION_ROUTE_POLICY
@@ -20225,38 +20225,38 @@ Examples
     #         community_name: (11011:1001)
     #       weight: 20000
     #   name: SIMPLE_GLOBAL_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       drop: true
-    #   if:
+    #   if_section:
     #     condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
     #     pass: true
     #   name: SIMPLE_CONDITION_ROUTE_POLICY
-    # - else:
-    #     else:
+    # - else_section:
+    #     else_section:
     #       drop: true
-    #     if:
+    #     if_section:
     #       condition: destination in A_RANDOM_POLICY
     #       pass: true
     #       set:
     #         community:
     #           additive: true
     #           community_name: (101010:1)
-    #   if:
+    #   if_section:
     #     condition: as-path in (ios-regex '_3117_', ios-regex '_600_')
     #     drop: true
     #   name: COMPLEX_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       pass: true
-    #   if:
+    #   if_section:
     #     condition: community matches-any (9119:1001) or community matches-any (11100:1001)
     #     drop: true
     #   name: COMPLEX_CONDITION_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       drop: true
-    #   if:
+    #   if_section:
     #     condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
     #     pass: true
     #   name: VERY_SIMPLE_CONDITION_ROUTE_POLICY
@@ -20387,10 +20387,10 @@ Examples
                   community_name: (11011:1001)
                 weight: 20000
             name: SIMPLE_GLOBAL_ROUTE_POLICY
-          - else:
+          - else_section:
               global:
                 drop: true
-            if:
+            if_section:
               condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
               pass: true
             name: VERY_SIMPLE_CONDITION_ROUTE_POLICY
@@ -20408,31 +20408,31 @@ Examples
     #         community_name: (11011:1001)
     #       weight: 20000
     #   name: SIMPLE_GLOBAL_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       drop: true
-    #   if:
+    #   if_section:
     #     condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
     #     pass: true
     #   name: SIMPLE_CONDITION_ROUTE_POLICY
-    # - else:
-    #     else:
+    # - else_section:
+    #     else_section:
     #       drop: true
-    #     if:
+    #     if_section:
     #       condition: destination in A_RANDOM_POLICY
     #       pass: true
     #       set:
     #         community:
     #           additive: true
     #           community_name: (101010:1)
-    #   if:
+    #   if_section:
     #     condition: as-path in (ios-regex '_3117_', ios-regex '_600_')
     #     drop: true
     #   name: COMPLEX_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       pass: true
-    #   if:
+    #   if_section:
     #     condition: community matches-any (9119:1001) or community matches-any (11100:1001)
     #     drop: true
     #   name: COMPLEX_CONDITION_ROUTE_POLICY
@@ -20457,10 +20457,10 @@ Examples
     #         community_name: (11011:1001)
     #       weight: 20000
     #   name: SIMPLE_GLOBAL_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       drop: true
-    #   if:
+    #   if_section:
     #     condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
     #     pass: true
     #   name: VERY_SIMPLE_CONDITION_ROUTE_POLICY
@@ -20548,24 +20548,24 @@ Examples
     #         community_name: (11011:1001)
     #       weight: 20000
     #   name: SIMPLE_GLOBAL_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       drop: true
-    #   if:
+    #   if_section:
     #     condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
     #     pass: true
     #   name: SIMPLE_CONDITION_ROUTE_POLICY
-    # - else:
-    #     else:
+    # - else_section:
+    #     else_section:
     #       drop: true
-    #     if:
+    #     if_section:
     #       condition: destination in A_RANDOM_POLICY
     #       pass: true
     #       set:
     #         community:
     #           additive: true
     #           community_name: (101010:1)
-    #   if:
+    #   if_section:
     #     condition: as-path in (ios-regex '_3117_', ios-regex '_600_')
     #     drop: true
     #   name: COMPLEX_ROUTE_POLICY
@@ -20581,10 +20581,10 @@ Examples
     #         community_name: (11011:1001)
     #       weight: 20000
     #   name: SIMPLE_GLOBAL_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       drop: true
-    #   if:
+    #   if_section:
     #     condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
     #     pass: true
     #   name: SIMPLE_CONDITION_ROUTE_POLICY
@@ -20627,31 +20627,31 @@ Examples
                   community_name: (11011:1001)
                 weight: 20000
             name: SIMPLE_GLOBAL_ROUTE_POLICY
-          - else:
+          - else_section:
               global:
                 drop: true
-            if:
+            if_section:
               condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
               pass: true
             name: SIMPLE_CONDITION_ROUTE_POLICY
-          - else:
-              else:
+          - else_section:
+              else_section:
                 drop: true
-              if:
+              if_section:
                 condition: destination in A_RANDOM_POLICY
                 pass: true
                 set:
                   community:
                     additive: true
                     community_name: (101010:1)
-            if:
+            if_section:
               condition: as-path in (ios-regex '_3117_', ios-regex '_600_')
               drop: true
             name: COMPLEX_ROUTE_POLICY
-          - else:
+          - else_section:
               global:
                 pass: true
-            if:
+            if_section:
               condition: community matches-any (9119:1001) or community matches-any (11100:1001)
               drop: true
             name: COMPLEX_CONDITION_ROUTE_POLICY
@@ -20752,31 +20752,31 @@ Examples
     #         community_name: (11011:1001)
     #       weight: 20000
     #   name: SIMPLE_GLOBAL_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       drop: true
-    #   if:
+    #   if_section:
     #     condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
     #     pass: true
     #   name: SIMPLE_CONDITION_ROUTE_POLICY
-    # - else:
-    #     else:
+    # - else_section:
+    #     else_section:
     #       drop: true
-    #     if:
+    #     if_section:
     #       condition: destination in A_RANDOM_POLICY
     #       pass: true
     #       set:
     #         community:
     #           additive: true
     #           community_name: (101010:1)
-    #   if:
+    #   if_section:
     #     condition: as-path in (ios-regex '_3117_', ios-regex '_600_')
     #     drop: true
     #   name: COMPLEX_ROUTE_POLICY
-    # - else:
+    # - else_section:
     #     global:
     #       pass: true
-    #   if:
+    #   if_section:
     #     condition: community matches-any (9119:1001) or community matches-any (11100:1001)
     #     drop: true
     #   name: COMPLEX_CONDITION_ROUTE_POLICY

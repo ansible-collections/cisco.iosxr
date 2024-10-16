@@ -208,7 +208,7 @@ class Route_maps(ResourceModule):
                         # if we want to add any condition we have to start with if
                         append_endif = True
                     if len(self.commands) != begin_endif and w_condition.startswith(
-                        "elseHas_if_section_"
+                        "elseHas_if_section_",
                     ):
                         append_nested_endif = True  # same as above
 
@@ -246,17 +246,17 @@ class Route_maps(ResourceModule):
                     if cond == "global":
                         temp_rmap[cond] = rm_conf
                     else:
-                        temp_rmap[
-                            cond + "_" + (rm_conf.get("condition").replace(" ", "_"))
-                        ] = rm_conf
+                        temp_rmap[cond + "_" + (rm_conf.get("condition").replace(" ", "_"))] = (
+                            rm_conf
+                        )
                 elif cond == "elseif_section":
                     for elif_config in rm_conf:
                         if elif_config.get("apply"):
                             elif_config["apply"] = process_apply(elif_config.get("apply"))
                         elif_config["conf_type"] = cond
-                        temp_rmap[
-                            cond + "_" + (elif_config.get("condition").replace(" ", "_"))
-                        ] = elif_config
+                        temp_rmap[cond + "_" + (elif_config.get("condition").replace(" ", "_"))] = (
+                            elif_config
+                        )
                 elif (
                     cond == "else_section"
                 ):  # wanted to do recursion but the overall performance is better this way
