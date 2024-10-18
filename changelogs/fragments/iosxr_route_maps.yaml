@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Added iosxr_route_maps resource module, that helps with configuration of route-policy.

@@ -4,6 +4,24 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v10.2.0
+=======
+
+Minor Changes
+-------------
+
+- Added iosxr_route_maps resource module, that helps with configuration of route-policy.
+
+Documentation Changes
+---------------------
+
+- Includes a new support related section in the README.
+
+New Modules
+-----------
+
+- iosxr_route_maps - Resource module to configure route maps.
+
 v10.1.0
 =======
 
