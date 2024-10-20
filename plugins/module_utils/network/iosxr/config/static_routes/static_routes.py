@@ -231,7 +231,10 @@ class Static_routes(ConfigBase):
                             if "." in item or ":" in item or "/" in item:
                                 cmd += " {0}".format(item)
                             else:
-                                cmd += " vrf {0}".format(item)
+                                if "vrf" in want:
+                                    cmd += " vrf {0}".format(item)
+                                else:
+                                    cmd += " {0}".format(item)
                         update_commands.append(cmd)
 
                 for key, value in iteritems(rotated_want_next_hops):
@@ -251,6 +254,7 @@ class Static_routes(ConfigBase):
                                 dest=want_route["dest"],
                                 next_hop=key,
                                 updates=updates,
+                                in_vrf="vrf" in want,
                             ),
                         )
 
@@ -421,6 +425,7 @@ class Static_routes(ConfigBase):
                                     rotated_have_next_hops.get(key, {}),
                                     updates,
                                 ),
+                                in_vrf="vrf" in want,
                             ),
                         )
 
@@ -476,7 +481,10 @@ class Static_routes(ConfigBase):
                             if "." in item or ":" in item or "/" in item:
                                 cmd += " {0}".format(item)
                             else:
-                                cmd += " vrf {0}".format(item)
+                                if "vrf" in want_afi:
+                                    cmd += " vrf {0}".format(item)
+                                else:
+                                    cmd += " {0}".format(item)
                         update_commands.append(cmd)
             if update_commands:
                 update_commands.insert(
@@ -580,7 +588,7 @@ class Static_routes(ConfigBase):
 
         return next_hops_dict
 
-    def _compute_commands(self, dest, next_hop, updates=None):
+    def _compute_commands(self, dest, next_hop, updates=None, in_vrf=False):
         """This method computes a static route entry command
             from the specified `dest`, `next_hop` and `updates`
 
@@ -593,7 +601,14 @@ class Static_routes(ConfigBase):
         command = dest
 
         for x in next_hop:
-            command += " {0}".format(x)
+            if "." in x or ":" in x or "/" in x:
+                command += " {0}".format(x)
+            else:
+                # Only add 'vrf' if in VRF context and not in normal context
+                if in_vrf:
+                    command += " vrf {0}".format(x)
+                else:
+                    command += " {0}".format(x)
 
         for key in sorted(updates):
             if key == "admin_distance":
