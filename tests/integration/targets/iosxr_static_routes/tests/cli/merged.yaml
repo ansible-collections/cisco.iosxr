@@ -29,6 +29,10 @@
                       - forward_router_address: 192.0.2.11
                         admin_distance: 100
 
+                  - dest: 192.168.17.0/24
+                    next_hops:
+                      - interface: Loopback0
+
               - afi: ipv6
                 safi: unicast
                 routes:
@@ -39,6 +43,9 @@
 
                       - interface: FastEthernet0/0/0/8
                         forward_router_address: 2001:db8:2000:2::1
+                  - dest: 2001:db8::/64
+                    next_hops:
+                      - interface: Loopback0
 
           - vrf: DEV_SITE
             address_families:
@@ -58,6 +65,14 @@
                         dest_vrf: test_1
                         track: ip_sla_2
                         vrflabel: 124
+          - vrf: TEST_VRF
+            address_families:
+              - afi: ipv4
+                safi: unicast
+                routes:
+                  - dest: 192.1.0.0/24
+                    next_hops:
+                      - interface: Loopback1
         state: merged
 
     - name: Assert that before dicts were correctly generated
