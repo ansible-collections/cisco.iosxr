@@ -282,9 +282,6 @@ class Static_routes(ConfigBase):
         """
         commands = []
 
-        # Iterate through all the entries, i.e., VRFs and Global entry in have
-        # and fully remove the ones that are not present in want and then call
-        # replaced
         for h_item in have:
             w_item = self._find_vrf(h_item, want)
             # Delete all the top-level keys (VRFs/Global Route Entry) that are
@@ -292,18 +289,11 @@ class Static_routes(ConfigBase):
             if not w_item:
                 if "vrf" in h_item:
                     commands.append("no vrf {0}".format(h_item["vrf"]))
-                # If there's no VRF but it's the global entry, remove any global configurations as needed
-                # You can add logic here if needed to handle global configuration removal
-
-            # For VRFs present in both want and have, proceed to _state_replaced for adding or updating
             else:
-                # Call _state_replaced to handle VRF configuration (add/update routes)
                 commands.extend(
                     self._state_replaced(remove_empties(w_item), h_item),
                 )
 
-        # We finally call `_state_replaced` to replace existing `dest` entries
-        # or add new ones as specified in want.
         for w_item in want:
             h_item = self._find_vrf(w_item, have)
             commands.extend(
