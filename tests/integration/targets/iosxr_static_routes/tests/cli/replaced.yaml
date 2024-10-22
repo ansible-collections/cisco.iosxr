@@ -54,4 +54,3 @@
           - "{{ replaced['after'] | symmetric_difference(result['before']) |length == 0 }}"
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml
-
