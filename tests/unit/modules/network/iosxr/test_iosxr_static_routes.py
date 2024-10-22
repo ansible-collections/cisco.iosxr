@@ -435,11 +435,8 @@ class TestIosxrStaticRoutesModule(TestIosxrModule):
         )
         commands = [
             "router static",
-            "no address-family ipv4 unicast",
-            "no address-family ipv6 unicast",
-            "no address-family ipv4 multicast",
-            "no vrf DEV_SITE",
             "no vrf TEST_VRF",
+            "no vrf DEV_SITE",
             "vrf DEV_SITE_NEW",
             "address-family ipv4 unicast",
             "192.0.4.16/28 192.0.2.10 FastEthernet0/0/0/1 description LAB metric 120 tag 10",

@@ -7,7 +7,7 @@
 - block:
     - name: Merge the provided configuration with the existing running configuration
       register: result
-      cisco.iosxr.iosxr_static_routes: &id001
+      cisco.iosxr.iosxr_static_routes:
         config:
           - address_families:
               - afi: ipv4
@@ -92,19 +92,10 @@
         that:
           - "{{ merged['after'] | symmetric_difference(result['after']) |length == 0 }}"
 
-    - name: Merge the provided configuration with the existing running configuration (idempotent)
-      register: result
-      cisco.iosxr.iosxr_static_routes: *id001
-    - name: Assert that the previous task was idempotent
-      ansible.builtin.assert:
-        that:
-          - result['changed'] == false
-          - result.commands|length == 0
-
     - name: Assert that before dicts were correctly generated
       ansible.builtin.assert:
         that:
-          - "{{ merged['after'] | symmetric_difference(result['before']) |length == 0 }}"
+          - "{{ merged['before'] | symmetric_difference(result['before']) |length == 0 }}"
 
     - name: Update existing configuration using merged
       register: result

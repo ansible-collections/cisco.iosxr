@@ -23,11 +23,10 @@ merged:
     - vrf DEV_SITE
     - address-family ipv4 unicast
     - 192.0.2.48/28 vrf test_1 192.0.2.12 description DEV
-    - 192.0.2.80/28 vrf test_1 192.0.2.14 FastEthernet0/0/0/2 track ip_sla_2 vrflabel
-      124
+    - 192.0.2.80/28 vrf test_1 192.0.2.14 FastEthernet0/0/0/2 track ip_sla_2 vrflabel 124
     - vrf TEST_VRF
     - address-family ipv4 unicast
-    - 192.1.0.0/24 Loopback1
+    - 192.1.0.0/24 vrf Loopback1
   update_commands:
     - router static
     - vrf DEV_SITE
@@ -97,11 +96,17 @@ merged:
             - dest: 192.1.0.0/24
               next_hops:
                 - dest_vrf: Loopback1
-                - interface: Loopback1
+                  interface: Loopback1
           safi: unicast
       vrf: TEST_VRF
   update_after:
     - address_families:
+        - afi: ipv4
+          routes:
+            - dest: 0.0.0.0/0
+              next_hops:
+                - forward_router_address: 10.0.151.254
+          safi: unicast
         - afi: ipv4
           routes:
             - dest: 192.0.2.16/28
@@ -117,6 +122,9 @@ merged:
               next_hops:
                 - admin_distance: 100
                   forward_router_address: 192.0.2.11
+            - dest: 192.168.17.0/24
+              next_hops:
+                - interface: Loopback0
           safi: multicast
         - afi: ipv6
           routes:
@@ -126,6 +134,9 @@ merged:
                   interface: FastEthernet0/0/0/7
                 - forward_router_address: 2001:db8:2000:2::1
                   interface: FastEthernet0/0/0/8
+            - dest: 2001:db8::/64
+              next_hops:
+                - interface: Loopback0
           safi: unicast
     - address_families:
         - afi: ipv4
@@ -146,6 +157,15 @@ merged:
                   description: rt_test_1
           safi: unicast
       vrf: DEV_SITE
+    - address_families:
+        - afi: ipv4
+          routes:
+            - dest: 192.1.0.0/24
+              next_hops:
+                - dest_vrf: Loopback1
+                  interface: Loopback1
+          safi: unicast
+      vrf: TEST_VRF
 replaced:
   before:
     - address_families:
