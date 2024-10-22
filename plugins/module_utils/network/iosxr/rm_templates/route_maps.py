@@ -1166,5 +1166,25 @@ class Route_mapsTemplate(NetworkTemplate):
                 },
             },
         },
+
+        {
+            "name": "set.local_preference",
+            "getval": re.compile(
+                r"""
+                \s*set\slocal-preference
+                (\s(?P<value>\d+))
+                $""", re.VERBOSE,
+            ),
+            "setval": "set local-prefernce {{ set.local_preference|string }}",
+            "result": {
+                "policies": {
+                    "set": {
+                        "local-preference": "{{ value }}",
+                    },
+                },
+            },
+        },
+
+
     ]
     # fmt: on
