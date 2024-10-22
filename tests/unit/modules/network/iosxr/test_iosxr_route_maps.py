@@ -1276,3 +1276,28 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             },
         ]
         self.assertEqual(parsed_list, result["parsed"])
+
+
+
+    def test_aayush_iosxr_route_maps_parsed(self):
+            set_module_args(
+                dict(
+                    running_config=dedent(
+                        """\
+                        route-policy APPLY_TEST_ROUTE_POLICY_COMPLEX
+                        set ospf-metric 232
+                        set local-preference 100
+                        prepend as-path most-recent 22
+                        """,
+                    ),
+                    state="parsed",
+                ),
+            )
+            result = self.execute_module(changed=False)
+            parsed_list = [
+                {
+                    "name": "APPLY_TEST_ROUTE_POLICY_COMPLEX",
+                    "global": {"set": {"ospf_metric": 232,"local_preference":"100"}},
+                },
+            ]
+            self.assertEqual(parsed_list, result["parsed"])

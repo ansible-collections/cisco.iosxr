@@ -98,6 +98,9 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "igp_cost": {"type": "bool"},
                                     },
                                 },
+                                "local_preference": {
+                                    "type": "str",
+                                },
                                 "attribute_set": {"type": "str"},
                                 "c_multicast_routing": {
                                     "type": "dict",
