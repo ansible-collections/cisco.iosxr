@@ -228,6 +228,23 @@ class Route_mapsTemplate(NetworkTemplate):
             },
         },
         {
+    "name": "set.local_preference",
+    "getval": re.compile(
+        r"""
+        \s*set\s+local[-]?preference
+        \s+(?P<local_preference>[\*\+\-]?\d+)  # Capture value with optional *, +, or - prefix
+        \s*$""",re.VERBOSE,
+    ),
+    "setval": "set local-preference {{ local_preference }}",
+    "result": {
+                "policies": {
+                    "set": {
+                        "local_preference": "{{ local_preference }}",
+                    },
+                },
+            }
+},
+        {
             "name": "set.aigp_metric",
             "getval": re.compile(
                 r"""

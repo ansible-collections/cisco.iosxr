@@ -55,6 +55,7 @@ class Route_maps(ResourceModule):
             "unsuppress_route",
             "remove",
             "set.administrative_distance",
+            "set.local_preference",
             "set.aigp_metric",
             "set.attribute_set",
             "set.c_multicast_routing",
