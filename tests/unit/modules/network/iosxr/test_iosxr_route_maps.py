@@ -1286,7 +1286,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                       set ospf-metric 232
                       set local-preference 200
                       prepend as-path most-recent 22
-                      
+
                     end-policy
                     """,
                 ),
@@ -1297,16 +1297,12 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
         parsed_list = [
             {
                 "name": "APPLY_TEST_ROUTE_POLICY_COMPLEX",
-                
                 "global": {
-                                "set": {
-                                    "ospf_metric": 232,
-                                    "local-preference": 200,
-                                    
-                                    
-                                },
-                            }
-                
+                    "set": {
+                        "ospf_metric": 232,
+                        "local-preference": 200,
+                    },
+                },
             },
         ]
         self.assertEqual(parsed_list, result["parsed"])

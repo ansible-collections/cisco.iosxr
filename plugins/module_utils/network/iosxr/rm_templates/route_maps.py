@@ -1166,7 +1166,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 },
             },
         },
-        
+
         {
             "name": "set.local_preference",
             "getval": re.compile(
@@ -1184,7 +1184,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 },
             },
         },
-        
-        
+
+
     ]
     # fmt: on
