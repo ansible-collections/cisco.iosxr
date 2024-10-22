@@ -11,7 +11,7 @@
         config:
           - address_families:
               - afi: ipv4
-                safi: unicast
+                safi: multicast
                 routes:
                   - dest: 192.0.2.16/28
                     next_hops:

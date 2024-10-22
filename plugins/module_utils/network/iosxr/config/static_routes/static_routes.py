@@ -285,68 +285,24 @@ class Static_routes(ConfigBase):
         # Iterate through all the entries, i.e., VRFs and Global entry in have
         # and fully remove the ones that are not present in want and then call
         # replaced
-
         for h_item in have:
             w_item = self._find_vrf(h_item, want)
-
             # Delete all the top-level keys (VRFs/Global Route Entry) that are
             # not specified in want.
             if not w_item:
                 if "vrf" in h_item:
                     commands.append("no vrf {0}".format(h_item["vrf"]))
-                else:
-                    for have_afi in h_item.get("address_families", []):
-                        commands.append(
-                            "no address-family {0} {1}".format(
-                                have_afi["afi"],
-                                have_afi["safi"],
-                            ),
-                        )
+                # If there's no VRF but it's the global entry, remove any global configurations as needed
+                # You can add logic here if needed to handle global configuration removal
 
-            # For VRFs/Global Entry present in want, we also need to delete extraneous routes
-            # from them. We cannot reuse `_state_replaced` for this purpose since its scope is
-            # limited to replacing a single `dest`.
+            # For VRFs present in both want and have, proceed to _state_replaced for adding or updating
             else:
-                del_cmds = []
-                for have_afi in h_item.get("address_families", []):
-                    want_afi = (
-                        self.find_af_context(
-                            have_afi,
-                            w_item.get("address_families", []),
-                        )
-                        or {}
-                    )
-                    update_commands = []
-                    for h_route in have_afi.get("routes", []):
-                        w_route = (
-                            search_obj_in_list(
-                                h_route["dest"],
-                                want_afi.get("routes", []),
-                                key="dest",
-                            )
-                            or {}
-                        )
-                        if not w_route:
-                            update_commands.append(
-                                "no {0}".format(h_route["dest"]),
-                            )
+                # Call _state_replaced to handle VRF configuration (add/update routes)
+                commands.extend(
+                    self._state_replaced(remove_empties(w_item), h_item),
+                )
 
-                    if update_commands:
-                        update_commands.insert(
-                            0,
-                            "address-family {0} {1}".format(
-                                want_afi["afi"],
-                                want_afi["safi"],
-                            ),
-                        )
-                        del_cmds.extend(update_commands)
-
-                if "vrf" in want and update_commands:
-                    del_cmds.insert(0, "vrf {0}".format(want["vrf"]))
-
-                commands.extend(del_cmds)
-
-        # We finally call `_state_replaced` to replace exiting `dest` entries
+        # We finally call `_state_replaced` to replace existing `dest` entries
         # or add new ones as specified in want.
         for w_item in want:
             h_item = self._find_vrf(w_item, have)
