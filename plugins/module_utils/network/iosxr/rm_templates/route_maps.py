@@ -242,7 +242,7 @@ class Route_mapsTemplate(NetworkTemplate):
                         "local_preference": "{{ local_preference }}",
                     },
                 },
-            }
+    },
 },
         {
             "name": "set.aigp_metric",
