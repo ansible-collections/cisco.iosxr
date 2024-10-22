@@ -89,6 +89,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "options": {
                                 "administrative_distance": {"type": "int"},
+                                "local-preference":{"type":"int"},
                                 "aigp_metric": {
                                     "type": "dict",
                                     "options": {
@@ -556,6 +557,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "options": {
                                 "administrative_distance": {"type": "int"},
+                                
                                 "aigp_metric": {
                                     "type": "dict",
                                     "options": {
