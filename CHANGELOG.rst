@@ -4,6 +4,14 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v10.2.1
+=======
+
+Bugfixes
+--------
+
+- iosxr_static_routes - Fix incorrect handling of the vrf keyword between the destination address and next-hop interface in both global and VRF contexts for IPv4 and IPv6 static_route configurations.
+
 v10.2.0
 =======
 
