@@ -94,7 +94,6 @@ replaced:
     - no 10
     - 11 permit igmp host 198.51.100.130 any ttl eq 100
     - 12 deny icmp any any
-    - ipv4 access-list test_acl
     - 40 remark Deny MARTIANS
     - 60 deny ipv4 10.0.0.0 0.255.255.255 any
   after:
@@ -148,8 +147,6 @@ replaced:
               sequence: 12
               source:
                 any: true
-          name: acl_2
-        - aces:
             - remark: Deny MARTIANS
               sequence: 40
             - destination:
@@ -160,7 +157,7 @@ replaced:
               source:
                 address: 10.0.0.0
                 wildcard_bits: 0.255.255.255
-          name: test_acl
+          name: acl_2
       afi: ipv4
     - acls:
         - aces:

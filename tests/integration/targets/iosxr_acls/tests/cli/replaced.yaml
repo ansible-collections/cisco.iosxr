@@ -32,12 +32,19 @@
                     destination:
                       any: true
                     protocol: icmp
-              - name: test_acl
-                aces:
+
                   - sequence: 40
                     remark: "Deny MARTIANS"
+
                   - sequence: 60
-                    line: "deny ipv4 10.0.0.0 0.255.255.255 any"
+                    grant: deny
+                    protocol: ipv4
+                    source:
+                      address: 10.0.0.0
+                      wildcard_bits: 0.255.255.255
+                    destination:
+                      any: true
+
         state: replaced
 
     - name: Assert that correct set of commands were generated
@@ -61,7 +68,8 @@
     - name: Assert that task was idempotent
       ansible.builtin.assert:
         that:
-          - result.commands|length == 2
+          - result['changed'] == false
+          - result.commands|length == 0
 
     - name: Assert that before dict is correctly generated
       ansible.builtin.assert:
