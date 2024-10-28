@@ -1,3 +1,0 @@
----
-bugfixes:
-  - iosxr_acls facts - Fix incorrect rendering of some acl facts causing errors.

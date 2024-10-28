@@ -4,6 +4,14 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v10.2.2
+=======
+
+Bugfixes
+--------
+
+- iosxr_acls_facts - Fix incorrect rendering of some acl facts causing errors.
+
 v10.2.1
 =======
 
