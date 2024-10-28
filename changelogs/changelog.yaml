@@ -203,6 +203,13 @@ releases:
     fragments:
       - iosxr_static_routes.yaml
     release_date: "2024-10-24"
+  10.2.2:
+    changes:
+      bugfixes:
+        - iosxr_acls facts - Fix incorrect rendering of some acl facts causing errors.
+    fragments:
+      - acl_facts.yaml
+    release_date: "2024-10-28"
   2.0.0:
     changes:
       bugfixes:
