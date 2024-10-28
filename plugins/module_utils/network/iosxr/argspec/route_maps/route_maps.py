@@ -99,8 +99,9 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                     },
                                 },
                                 "local_preference": {
-                                    "type": "str",
-                                },
+                                                    "type": "list",
+                                                    "elements":"str"
+                                                    },
                                 "attribute_set": {"type": "str"},
                                 "c_multicast_routing": {
                                     "type": "dict",
