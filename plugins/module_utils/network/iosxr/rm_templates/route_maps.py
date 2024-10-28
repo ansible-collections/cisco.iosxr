@@ -240,11 +240,11 @@ class Route_mapsTemplate(NetworkTemplate):
                 "policies": {
                     "set": {
                         "local_preference": [
-                            "{{ local_preference }}"
-                        ]
-                    }
-                }
-            }
+                            "{{ local_preference }}",
+                        ],
+                    },
+                },
+            },
         },
         {
             "name": "set.aigp_metric",

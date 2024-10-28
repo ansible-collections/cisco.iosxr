@@ -1277,7 +1277,6 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
         ]
         self.assertEqual(parsed_list, result["parsed"])
 
-
     def test_iosxr_route_maps_parsed_local_pref_variants(self):
         set_module_args(
             dict(
@@ -1301,13 +1300,13 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                 "name": "APPLY_TEST_ROUTE_POLICY_COMPLEX",
                 "global": {
                     "set": {
-                        "ospf_metric":232,
-                        "local_preference": ["+100","-100","*700","-800","+600"],
+                        "ospf_metric": 232,
+                        "local_preference": ["+100", "-100", "*700", "-800", "+600"],
                     },
-                }
-            }
+                },
+            },
         ]
-        res=sorted(result["parsed"][0]["global"]["set"].pop("local_preference"))
-        parsd_lst=sorted(parsed_list[0]["global"]["set"].pop("local_preference"))
+        res = sorted(result["parsed"][0]["global"]["set"].pop("local_preference"))
+        parsd_lst = sorted(parsed_list[0]["global"]["set"].pop("local_preference"))
 
         self.assertEqual(parsd_lst, res)
