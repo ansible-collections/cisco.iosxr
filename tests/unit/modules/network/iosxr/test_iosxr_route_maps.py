@@ -1301,9 +1301,9 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                 "global": {
                     "set": {
                         "ospf_metric": 232,
-                        "local_preference":{
+                        "local_preference": {
                             "increment": True,
-                            "metric_number":100,
+                            "metric_number": 100,
                             "decrement": True,
                             "metric_number": 100,
                             "multiply": True,
@@ -1311,8 +1311,8 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                             "decrement": True,
                             "metric_number": 800,
                             "increment": True,
-                            "metric_number":600,
-                        }
+                            "metric_number": 600,
+                        },
                     },
                 },
             },
