@@ -228,32 +228,37 @@ class Route_mapsTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "set.local_preference",
-            "getval": re.compile(
-                r"""
-                \s*set\slocal-preference\s(?P<increment>\+)?
+    "name": "set.local_preference",
+    "getval": re.compile(
+        r"""
+        \s*set\slocal-preference\s(?P<increment>\+)?
                 (?P<decrement>\-)?
                 (?P<multiply>\*)?
-                (?P<metric_number>\d+) $""", re.VERBOSE,
-            ),
-            "setval": "set local-preference"
-            "{{ (' +' ) if set.local_preference.icrement is defined else '' }}"
-            "{{ (' -' ) if set.local_preference.decrement is defined else '' }}"
-            "{{ (' ' +  set.local_preference.metric_number|string) if set.local_preference.metric_number is defined else '' }}"
-            "{{ (' *' ) if set.local_preference.multiply is defined else '' }}",
-            "result": {
-                "policies": {
-                    "set": {
-                        "local_preference": {
-                            "increment": "{{ not not increment }}",
-                            "decrement": "{{ not not decrement }}",
-                            "metric_number": "{{ metric_number }}",
-                            "multiply": "{{ not not multiply }}",
-                        },
-                    },
-                },
-            },
-        },
+                (?P<local_preference_number>\d+)
+        $""", re.VERBOSE,
+    ),
+    "setval": "{% for pref in set.local_preference %}"
+             "set local-preference"
+             "{{ ' *' if pref.multiply|d(False) else '' }}"
+             "{{ ' +' if pref.increment|d(False) else '' }}"
+             "{{ ' -' if pref.decrement|d(False) else '' }}"
+             "{{ ' ' + pref.local_preference_number|string }}\n"
+             "{% endfor %}",
+    "result": {
+        "policies": {
+            "set": {
+                "local_preference": [
+                    {
+                        "increment":"{{ not not increment }}",
+                        "local_preference_number": "{{ local_preference_number}}",
+                        "decrement":"{{ not not decrement }}",
+                        "multiply":"{{ not not multiply }}",
+                    }
+                ]
+            }
+        }
+    }
+},
         {
             "name": "set.aigp_metric",
             "getval": re.compile(

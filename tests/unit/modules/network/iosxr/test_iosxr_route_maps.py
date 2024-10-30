@@ -1285,10 +1285,9 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                     route-policy APPLY_TEST_ROUTE_POLICY_COMPLEX
                       set ospf-metric 232
                       set local-preference +100
-                      set local-preference -100
-                      set local-preference *700
-                      set local-preference -800
-                      set local-preference +600
+                      set local-preference -200
+                      set local-preference *600
+                      set local-preference +900
                    """,
                 ),
                 state="parsed",
@@ -1301,18 +1300,10 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                 "global": {
                     "set": {
                         "ospf_metric": 232,
-                        "local_preference": {
-                            "increment": True,
-                            "metric_number": 100,
-                            "decrement": True,
-                            "metric_number": 100,
-                            "multiply": True,
-                            "metric_number": 700,
-                            "decrement": True,
-                            "metric_number": 800,
-                            "increment": True,
-                            "metric_number": 600,
-                        },
+                        "local_preference":[{'increment': True,                                 'local_preference_number': 100},
+                        {'decrement': True,'local_preference_number': 200},
+                        {"multiply": True , "local_preference_number": 600},
+                        {"increment": True ,"local_preference_number": 900}],                        
                     },
                 },
             },
