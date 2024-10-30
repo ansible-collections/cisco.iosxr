@@ -118,6 +118,21 @@ options:
               administrative_distance:
                 description: Administrative Distance of the prefix, <1-255> 8 bit decimal numbe
                 type: int
+              local_preference:
+                type: dict
+                suboptions:
+                  increment:
+                    type: bool
+                    description: "+ Increment the attribute with specified value"
+                  decrement:
+                    description: "- Decrement the attribute by specified value"
+                    type: bool
+                  metric_number:
+                    description: <0-4294967295>  32-bit decimal number
+                    type: int
+                  multiply:
+                    description: "* multiply the attribute by specified value"
+                    type: bool
               aigp_metric:
                 description: AIGP metric attribute
                 type: dict

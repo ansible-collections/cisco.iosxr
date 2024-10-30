@@ -231,17 +231,25 @@ class Route_mapsTemplate(NetworkTemplate):
             "name": "set.local_preference",
             "getval": re.compile(
                 r"""
-                \s*set\slocal-preference
-                (\s(?P<local_preference>.+))
-                $""", re.VERBOSE,
+                \s*set\slocal-preference\s(?P<increment>\+)?
+                (?P<decrement>\-)?
+                (?P<multiply>\*)?
+                (?P<metric_number>\d+) $""", re.VERBOSE,
             ),
-            "setval": "set local-preference {{ set.local_preference }}",
+            "setval": "set local-preference"
+            "{{ (' +' ) if set.local_preference.icrement is defined else '' }}"
+            "{{ (' -' ) if set.local_preference.decrement is defined else '' }}"
+            "{{ (' ' +  set.local_preference.metric_number|string) if set.local_preference.metric_number is defined else '' }}"
+            "{{ (' *' ) if set.local_preference.multiply is defined else '' }}",
             "result": {
                 "policies": {
                     "set": {
-                        "local_preference": [
-                            "{{ local_preference }}",
-                        ],
+                        "local_preference": {
+                            "increment": "{{ not not increment }}",
+                            "decrement": "{{ not not decrement }}",
+                            "metric_number": "{{ metric_number }}",
+                            "multiply": "{{ not not multiply }}",
+                        },
                     },
                 },
             },

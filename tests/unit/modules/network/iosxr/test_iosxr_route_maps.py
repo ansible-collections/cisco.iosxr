@@ -1301,12 +1301,20 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                 "global": {
                     "set": {
                         "ospf_metric": 232,
-                        "local_preference": ["+100", "-100", "*700", "-800", "+600"],
+                        "local_preference":{
+                            "increment": True,
+                            "metric_number":100,
+                            "decrement": True,
+                            "metric_number": 100,
+                            "multiply": True,
+                            "metric_number": 700,
+                            "decrement": True,
+                            "metric_number": 800,
+                            "increment": True,
+                            "metric_number":600,
+                        }
                     },
                 },
             },
         ]
-        res = sorted(result["parsed"][0]["global"]["set"].pop("local_preference"))
-        parsd_lst = sorted(parsed_list[0]["global"]["set"].pop("local_preference"))
-
-        self.assertEqual(parsd_lst, res)
+        self.assertEqual(parsed_list, result["parsed"])
