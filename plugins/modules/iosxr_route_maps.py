@@ -119,7 +119,9 @@ options:
                 description: Administrative Distance of the prefix, <1-255> 8 bit decimal numbe
                 type: int
               local_preference:
-                type: dict
+                description: List of local preference configurations
+                type: list
+                elements: dict
                 suboptions:
                   increment:
                     type: bool
@@ -127,9 +129,10 @@ options:
                   decrement:
                     description: "- Decrement the attribute by specified value"
                     type: bool
-                  metric_number:
-                    description: <0-4294967295>  32-bit decimal number
+                  local_preference_number:
+                    description: "<0-4294967295> 32-bit decimal number"
                     type: int
+                    required: true
                   multiply:
                     description: "* multiply the attribute by specified value"
                     type: bool
