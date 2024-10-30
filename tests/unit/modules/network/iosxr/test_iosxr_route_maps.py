@@ -1300,10 +1300,12 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                 "global": {
                     "set": {
                         "ospf_metric": 232,
-                        "local_preference":[{'increment': True,                                 'local_preference_number': 100},
-                        {'decrement': True,'local_preference_number': 200},
-                        {"multiply": True , "local_preference_number": 600},
-                        {"increment": True ,"local_preference_number": 900}],                        
+                        "local_preference": [
+                            {"increment": True, "local_preference_number": 100},
+                            {"decrement": True, "local_preference_number": 200},
+                            {"multiply": True, "local_preference_number": 600},
+                            {"increment": True, "local_preference_number": 900},
+                        ],
                     },
                 },
             },

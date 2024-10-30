@@ -253,11 +253,11 @@ class Route_mapsTemplate(NetworkTemplate):
                         "local_preference_number": "{{ local_preference_number}}",
                         "decrement":"{{ not not decrement }}",
                         "multiply":"{{ not not multiply }}",
-                    }
-                ]
-            }
-        }
-    }
+                    },
+                ],
+            },
+        },
+    },
 },
         {
             "name": "set.aigp_metric",

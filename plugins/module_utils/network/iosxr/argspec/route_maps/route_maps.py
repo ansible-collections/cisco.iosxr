@@ -99,13 +99,13 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                     },
                                 },
                                 "local_preference": {
-                                "type": "list",
-                                "elements": "dict",
-                                "options": {
-                                    "multiply": {"type": "bool"},
-                                    "increment": {"type": "bool"},
-                                    "decrement": {"type": "bool"},
-                                    "local_preference_number": {"type": "int"}
+                                    "type": "list",
+                                    "elements": "dict",
+                                    "options": {
+                                        "multiply": {"type": "bool"},
+                                        "increment": {"type": "bool"},
+                                        "decrement": {"type": "bool"},
+                                        "local_preference_number": {"type": "int"},
                                     },
                                 },
                                 "attribute_set": {"type": "str"},

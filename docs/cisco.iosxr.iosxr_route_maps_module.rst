@@ -1851,12 +1851,14 @@ Parameters
                     <b>local_preference</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
+                        <div>List of local preference configurations</div>
                 </td>
             </tr>
                                 <tr>
@@ -1915,16 +1917,17 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>metric_number</b>
+                    <b>local_preference_number</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>&lt;0-4294967295&gt;  32-bit decimal number</div>
+                        <div>&lt;0-4294967295&gt; 32-bit decimal number</div>
                 </td>
             </tr>
             <tr>
@@ -4853,12 +4856,14 @@ Parameters
                     <b>local_preference</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
+                        <div>List of local preference configurations</div>
                 </td>
             </tr>
                                 <tr>
@@ -4917,16 +4922,17 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>metric_number</b>
+                    <b>local_preference_number</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>&lt;0-4294967295&gt;  32-bit decimal number</div>
+                        <div>&lt;0-4294967295&gt; 32-bit decimal number</div>
                 </td>
             </tr>
             <tr>
@@ -7836,12 +7842,14 @@ Parameters
                     <b>local_preference</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
+                        <div>List of local preference configurations</div>
                 </td>
             </tr>
                                 <tr>
@@ -7900,16 +7908,17 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>metric_number</b>
+                    <b>local_preference_number</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>&lt;0-4294967295&gt;  32-bit decimal number</div>
+                        <div>&lt;0-4294967295&gt; 32-bit decimal number</div>
                 </td>
             </tr>
             <tr>
@@ -10837,12 +10846,14 @@ Parameters
                     <b>local_preference</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
+                        <div>List of local preference configurations</div>
                 </td>
             </tr>
                                 <tr>
@@ -10901,16 +10912,17 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>metric_number</b>
+                    <b>local_preference_number</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>&lt;0-4294967295&gt;  32-bit decimal number</div>
+                        <div>&lt;0-4294967295&gt; 32-bit decimal number</div>
                 </td>
             </tr>
             <tr>
@@ -13755,12 +13767,14 @@ Parameters
                     <b>local_preference</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
+                        <div>List of local preference configurations</div>
                 </td>
             </tr>
                                 <tr>
@@ -13816,16 +13830,17 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>metric_number</b>
+                    <b>local_preference_number</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>&lt;0-4294967295&gt;  32-bit decimal number</div>
+                        <div>&lt;0-4294967295&gt; 32-bit decimal number</div>
                 </td>
             </tr>
             <tr>
@@ -16600,12 +16615,14 @@ Parameters
                     <b>local_preference</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
+                        <div>List of local preference configurations</div>
                 </td>
             </tr>
                                 <tr>
@@ -16661,16 +16678,17 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>metric_number</b>
+                    <b>local_preference_number</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>&lt;0-4294967295&gt;  32-bit decimal number</div>
+                        <div>&lt;0-4294967295&gt; 32-bit decimal number</div>
                 </td>
             </tr>
             <tr>
@@ -19462,12 +19480,14 @@ Parameters
                     <b>local_preference</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
+                        <div>List of local preference configurations</div>
                 </td>
             </tr>
                                 <tr>
@@ -19523,16 +19543,17 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>metric_number</b>
+                    <b>local_preference_number</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>&lt;0-4294967295&gt;  32-bit decimal number</div>
+                        <div>&lt;0-4294967295&gt; 32-bit decimal number</div>
                 </td>
             </tr>
             <tr>
