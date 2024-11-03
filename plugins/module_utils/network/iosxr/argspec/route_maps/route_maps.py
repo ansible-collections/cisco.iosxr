@@ -105,7 +105,8 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "multiply": {"type": "bool"},
                                         "increment": {"type": "bool"},
                                         "decrement": {"type": "bool"},
-                                        "local_preference_number": {"type": "int"},
+                                        "local_preference_number": {"type": "int",
+                                                                    "required": True},
                                     },
                                 },
                                 "attribute_set": {"type": "str"},
@@ -332,6 +333,28 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "options": {
                                 "administrative_distance": {"type": "int"},
+                                "local_preference": {
+                                    "type": "list",
+                                    "elements": "dict",
+                                    "options": {
+                                        "multiply": {"type": "bool"},
+                                        "increment": {"type": "bool"},
+                                        "decrement": {"type": "bool"},
+                                        "local_preference_number": {"type": "int",
+                                                                    "required": True},
+                                    },
+                                },
+                                "local_preference": {
+                                    "type": "list",
+                                    "elements": "dict",
+                                    "options": {
+                                        "multiply": {"type": "bool"},
+                                        "increment": {"type": "bool"},
+                                        "decrement": {"type": "bool"},
+                                        "local_preference_number": {"type": "int",
+                                                                    "required": True},
+                                    },
+                                },
                                 "aigp_metric": {
                                     "type": "dict",
                                     "options": {
@@ -566,6 +589,17 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "options": {
                                 "administrative_distance": {"type": "int"},
+                                "local_preference": {
+                                    "type": "list",
+                                    "elements": "dict",
+                                    "options": {
+                                        "multiply": {"type": "bool"},
+                                        "increment": {"type": "bool"},
+                                        "decrement": {"type": "bool"},
+                                        "local_preference_number": {"type": "int",
+                                                                    "required": True},
+                                    },
+                                },
                                 "aigp_metric": {
                                     "type": "dict",
                                     "options": {
@@ -805,6 +839,28 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "administrative_distance": {"type": "int"},
+                                        "local_preference": {
+                                            "type": "list",
+                                            "elements": "dict",
+                                            "options": {
+                                                "multiply": {"type": "bool"},
+                                                "increment": {"type": "bool"},
+                                                "decrement": {"type": "bool"},
+                                                "local_preference_number": {"type": "int",
+                                                                            "required": True},
+                                            },
+                                        },
+                                        "local_preference": {
+                                            "type": "list",
+                                            "elements": "dict",
+                                            "options": {
+                                                "multiply": {"type": "bool"},
+                                                "increment": {"type": "bool"},
+                                                "decrement": {"type": "bool"},
+                                                "local_preference_number": {"type": "int",
+                                                                            "required": True},
+                                            },
+                                        },
                                         "aigp_metric": {
                                             "type": "dict",
                                             "options": {
@@ -1072,6 +1128,17 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "administrative_distance": {"type": "int"},
+                                        "local_preference": {
+                                            "type": "list",
+                                            "elements": "dict",
+                                            "options": {
+                                                "multiply": {"type": "bool"},
+                                                "increment": {"type": "bool"},
+                                                "decrement": {"type": "bool"},
+                                                "local_preference_number": {"type": "int",
+                                                                            "required": True},
+                                            },
+                                        },
                                         "aigp_metric": {
                                             "type": "dict",
                                             "options": {
@@ -1340,6 +1407,17 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "administrative_distance": {"type": "int"},
+                                        "local_preference": {
+                                            "type": "list",
+                                            "elements": "dict",
+                                            "options": {
+                                                "multiply": {"type": "bool"},
+                                                "increment": {"type": "bool"},
+                                                "decrement": {"type": "bool"},
+                                                "local_preference_number": {"type": "int",
+                                                                            "required": True},
+                                            },
+                                        },
                                         "aigp_metric": {
                                             "type": "dict",
                                             "options": {
@@ -1606,6 +1684,17 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "administrative_distance": {"type": "int"},
+                                        "local_preference": {
+                                            "type": "list",
+                                            "elements": "dict",
+                                            "options": {
+                                                "multiply": {"type": "bool"},
+                                                "increment": {"type": "bool"},
+                                                "decrement": {"type": "bool"},
+                                                "local_preference_number": {"type": "int",
+                                                                            "required": True},
+                                            },
+                                        },
                                         "aigp_metric": {
                                             "type": "dict",
                                             "options": {
