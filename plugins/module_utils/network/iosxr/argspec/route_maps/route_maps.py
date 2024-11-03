@@ -105,8 +105,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "multiply": {"type": "bool"},
                                         "increment": {"type": "bool"},
                                         "decrement": {"type": "bool"},
-                                        "local_preference_number": {"type": "int",
-                                                                    "required": True},
+                                        "local_preference_number": {
+                                            "type": "int",
+                                            "required": True,
+                                        },
                                     },
                                 },
                                 "attribute_set": {"type": "str"},
@@ -340,8 +342,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "multiply": {"type": "bool"},
                                         "increment": {"type": "bool"},
                                         "decrement": {"type": "bool"},
-                                        "local_preference_number": {"type": "int",
-                                                                    "required": True},
+                                        "local_preference_number": {
+                                            "type": "int",
+                                            "required": True,
+                                        },
                                     },
                                 },
                                 "local_preference": {
@@ -351,8 +355,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "multiply": {"type": "bool"},
                                         "increment": {"type": "bool"},
                                         "decrement": {"type": "bool"},
-                                        "local_preference_number": {"type": "int",
-                                                                    "required": True},
+                                        "local_preference_number": {
+                                            "type": "int",
+                                            "required": True,
+                                        },
                                     },
                                 },
                                 "aigp_metric": {
@@ -596,8 +602,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "multiply": {"type": "bool"},
                                         "increment": {"type": "bool"},
                                         "decrement": {"type": "bool"},
-                                        "local_preference_number": {"type": "int",
-                                                                    "required": True},
+                                        "local_preference_number": {
+                                            "type": "int",
+                                            "required": True,
+                                        },
                                     },
                                 },
                                 "aigp_metric": {
@@ -846,8 +854,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "multiply": {"type": "bool"},
                                                 "increment": {"type": "bool"},
                                                 "decrement": {"type": "bool"},
-                                                "local_preference_number": {"type": "int",
-                                                                            "required": True},
+                                                "local_preference_number": {
+                                                    "type": "int",
+                                                    "required": True,
+                                                },
                                             },
                                         },
                                         "local_preference": {
@@ -857,8 +867,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "multiply": {"type": "bool"},
                                                 "increment": {"type": "bool"},
                                                 "decrement": {"type": "bool"},
-                                                "local_preference_number": {"type": "int",
-                                                                            "required": True},
+                                                "local_preference_number": {
+                                                    "type": "int",
+                                                    "required": True,
+                                                },
                                             },
                                         },
                                         "aigp_metric": {
@@ -1135,8 +1147,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "multiply": {"type": "bool"},
                                                 "increment": {"type": "bool"},
                                                 "decrement": {"type": "bool"},
-                                                "local_preference_number": {"type": "int",
-                                                                            "required": True},
+                                                "local_preference_number": {
+                                                    "type": "int",
+                                                    "required": True,
+                                                },
                                             },
                                         },
                                         "aigp_metric": {
@@ -1414,8 +1428,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "multiply": {"type": "bool"},
                                                 "increment": {"type": "bool"},
                                                 "decrement": {"type": "bool"},
-                                                "local_preference_number": {"type": "int",
-                                                                            "required": True},
+                                                "local_preference_number": {
+                                                    "type": "int",
+                                                    "required": True,
+                                                },
                                             },
                                         },
                                         "aigp_metric": {
@@ -1691,8 +1707,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "multiply": {"type": "bool"},
                                                 "increment": {"type": "bool"},
                                                 "decrement": {"type": "bool"},
-                                                "local_preference_number": {"type": "int",
-                                                                            "required": True},
+                                                "local_preference_number": {
+                                                    "type": "int",
+                                                    "required": True,
+                                                },
                                             },
                                         },
                                         "aigp_metric": {
