@@ -234,7 +234,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s*set\slocal-preference\s(?P<increment>\+)?
                         (?P<decrement>\-)?
                         (?P<multiply>\*)?
-                        (?P<local_preference_number>\d+)
+                        (?P<metric_number>\d+)
                 $""", re.VERBOSE,
             ),
             "setval": "{% for pref in set.local_preference %}"
@@ -242,7 +242,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "{{ ' *' if pref.multiply|d(False) else '' }}"
             "{{ ' +' if pref.increment|d(False) else '' }}"
             "{{ ' -' if pref.decrement|d(False) else '' }}"
-            "{{ ' ' + pref.local_preference_number|string }}\n"
+            "{{ pref.metric_number|string }}\n"
             "{% endfor %}",
             "result": {
                 "policies": {
@@ -250,7 +250,7 @@ class Route_mapsTemplate(NetworkTemplate):
                         "local_preference": [
                             {
                                 "increment": "{{ not not increment }}",
-                                "local_preference_number": "{{ local_preference_number}}",
+                                "metric_number": "{{ metric_number}}",
                                 "decrement": "{{ not not decrement }}",
                                 "multiply": "{{ not not multiply }}",
                             },

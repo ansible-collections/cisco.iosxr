@@ -105,7 +105,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "multiply": {"type": "bool"},
                                         "increment": {"type": "bool"},
                                         "decrement": {"type": "bool"},
-                                        "local_preference_number": {
+                                        "metric_number": {
                                             "type": "int",
                                             "required": True,
                                         },
@@ -342,7 +342,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "multiply": {"type": "bool"},
                                         "increment": {"type": "bool"},
                                         "decrement": {"type": "bool"},
-                                        "local_preference_number": {
+                                        "metric_number": {
                                             "type": "int",
                                             "required": True,
                                         },
@@ -589,7 +589,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "multiply": {"type": "bool"},
                                         "increment": {"type": "bool"},
                                         "decrement": {"type": "bool"},
-                                        "local_preference_number": {
+                                        "metric_number": {
                                             "type": "int",
                                             "required": True,
                                         },
@@ -841,7 +841,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "multiply": {"type": "bool"},
                                                 "increment": {"type": "bool"},
                                                 "decrement": {"type": "bool"},
-                                                "local_preference_number": {
+                                                "metric_number": {
                                                     "type": "int",
                                                     "required": True,
                                                 },
@@ -1121,7 +1121,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "multiply": {"type": "bool"},
                                                 "increment": {"type": "bool"},
                                                 "decrement": {"type": "bool"},
-                                                "local_preference_number": {
+                                                "metric_number": {
                                                     "type": "int",
                                                     "required": True,
                                                 },
@@ -1402,7 +1402,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "multiply": {"type": "bool"},
                                                 "increment": {"type": "bool"},
                                                 "decrement": {"type": "bool"},
-                                                "local_preference_number": {
+                                                "metric_number": {
                                                     "type": "int",
                                                     "required": True,
                                                 },
@@ -1681,7 +1681,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "multiply": {"type": "bool"},
                                                 "increment": {"type": "bool"},
                                                 "decrement": {"type": "bool"},
-                                                "local_preference_number": {
+                                                "metric_number": {
                                                     "type": "int",
                                                     "required": True,
                                                 },

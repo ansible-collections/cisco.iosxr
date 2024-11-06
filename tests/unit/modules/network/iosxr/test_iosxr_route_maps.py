@@ -1277,7 +1277,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
         ]
         self.assertEqual(parsed_list, result["parsed"])
 
-    def test_iosxr_route_maps_parsed_local_pref_variants(self):
+    def test_iosxr_route_maps_parsed_local_pref(self):
         set_module_args(
             dict(
                 running_config=dedent(
@@ -1301,10 +1301,10 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                     "set": {
                         "ospf_metric": 232,
                         "local_preference": [
-                            {"increment": True, "local_preference_number": 100},
-                            {"decrement": True, "local_preference_number": 200},
-                            {"multiply": True, "local_preference_number": 600},
-                            {"increment": True, "local_preference_number": 900},
+                            {"increment": True, "metric_number": 100},
+                            {"decrement": True, "metric_number": 200},
+                            {"multiply": True, "metric_number": 600},
+                            {"increment": True, "metric_number": 900},
                         ],
                     },
                 },
