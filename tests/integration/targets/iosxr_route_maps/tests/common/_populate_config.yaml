@@ -24,7 +24,7 @@
             local_preference:
               - increment: true
                 metric_number: 100
-              - decrement: True
+              - decrement: true
                 metric_number: 200
               - multiply: true
                 metric_number: 300
