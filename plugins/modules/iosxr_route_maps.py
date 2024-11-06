@@ -129,7 +129,7 @@ options:
                   decrement:
                     description: "- Decrement the attribute by specified value"
                     type: bool
-                  local_preference_number:
+                  metric_number:
                     description: "<0-4294967295> 32-bit decimal number"
                     type: int
                     required: true
