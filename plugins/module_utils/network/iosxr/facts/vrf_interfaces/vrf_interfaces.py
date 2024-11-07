@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -17,14 +18,13 @@ based on the configuration.
 from copy import deepcopy
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.vrf_interfaces.vrf_interfaces import (
+    Vrf_interfacesArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.rm_templates.vrf_interfaces import (
     Vrf_interfacesTemplate,
-)
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.vrf_interfaces.vrf_interfaces import (
-    Vrf_interfacesArgs,
 )
 
 
@@ -61,7 +61,9 @@ class Vrf_interfacesFacts(object):
         ansible_facts["ansible_network_resources"].pop("vrf_interfaces", None)
 
         params = utils.remove_empties(
-            vrf_interfaces_parser.validate_config(self.argument_spec, {"config": objs}, redact=True)
+            vrf_interfaces_parser.validate_config(
+                self.argument_spec, {"config": objs}, redact=True
+            ),
         )
 
         facts["vrf_interfaces"] = params["config"]
