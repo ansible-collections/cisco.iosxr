@@ -123,7 +123,6 @@ class Route_maps(ResourceModule):
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
             wantd = dict_merge(haved, wantd)
-        sorted_keys = sorted(wantd.keys())
         for k, want in iteritems(wantd):
             if self.state == "purged":  # for purged state
                 if haved.pop(k, {}):
