@@ -15,9 +15,6 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-from copy import deepcopy
-
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.vrf_interfaces.vrf_interfaces import (
@@ -62,7 +59,9 @@ class Vrf_interfacesFacts(object):
 
         params = utils.remove_empties(
             vrf_interfaces_parser.validate_config(
-                self.argument_spec, {"config": objs}, redact=True
+                self.argument_spec,
+                {"config": objs},
+                redact=True,
             ),
         )
 

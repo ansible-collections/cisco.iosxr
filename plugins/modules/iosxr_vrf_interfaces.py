@@ -81,6 +81,39 @@ options:
 """
 
 EXAMPLES = """
+gathered
+--------
+
+"gathered": [
+        {
+            "name": "Loopback888"
+        },
+        {
+            "name": "Loopback999"
+        },
+        {
+            "name": "MgmtEth0/RP0/CPU0/0"
+        },
+        {
+            "name": "GigabitEthernet0/0/0/0"
+        },
+        {
+            "name": "GigabitEthernet0/0/0/1",
+            "vrf_name": "vrf_A"
+        },
+        {
+            "name": "GigabitEthernet0/0/0/2",
+            "vrf_name": "vrf_B"
+        },
+        {
+            "name": "GigabitEthernet0/0/0/7"
+        },
+        {
+            "name": "TenGigE0/0/0/0"
+        }
+    ],
+
+
 
 """
 
