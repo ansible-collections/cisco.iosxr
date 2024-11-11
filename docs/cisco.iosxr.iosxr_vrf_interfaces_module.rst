@@ -146,37 +146,363 @@ Examples
 
 .. code-block:: yaml
 
-    gathered
-    --------
+    # Using merged
 
-    "gathered": [
-            {
-                "name": "Loopback888"
-            },
-            {
-                "name": "Loopback999"
-            },
-            {
-                "name": "MgmtEth0/RP0/CPU0/0"
-            },
-            {
-                "name": "GigabitEthernet0/0/0/0"
-            },
-            {
-                "name": "GigabitEthernet0/0/0/1",
-                "vrf_name": "vrf_A"
-            },
-            {
-                "name": "GigabitEthernet0/0/0/2",
-                "vrf_name": "vrf_B"
-            },
-            {
-                "name": "GigabitEthernet0/0/0/7"
-            },
-            {
-                "name": "TenGigE0/0/0/0"
-            }
-        ],
+    # Before state:
+    # -------------
+    #
+    # viosxr#show running-config interfaces
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface GigabitEthernet0/0/0/0
+    #  description this is interface0
+    #  cdp
+    # !
+    # interface GigabitEthernet0/0/0/1
+    #  shutdown
+    # !
+    # interface GigabitEthernet0/0/0/2
+    #  shutdown
+    # !
+
+    - name: Simple merge selective
+      cisco.iosxr.iosxr_vrf_interfaces:
+        state: merged
+        config:
+          - name: MgmtEth0/RP0/CPU0/0
+          - name: GigabitEthernet0/0/0/0
+          - name: GigabitEthernet0/0/0/1
+            vrf_name: vrf_C
+          - name: GigabitEthernet0/0/0/2
+            vrf_name: vrf_D
+
+    # Task Output
+    # -----------
+    #
+    # before:
+    #   - name: MgmtEth0/RP0/CPU0/0
+    #   - name: GigabitEthernet0/0/0/0
+    #   - name: GigabitEthernet0/0/0/1
+    #   - name: GigabitEthernet0/0/0/2
+    # commands:
+    #   - interface GigabitEthernet0/0/0/1
+    #   - vrf vrf_C
+    #   - interface GigabitEthernet0/0/0/2
+    #   - vrf vrf_D
+    # after:
+    #   - name: MgmtEth0/RP0/CPU0/0
+    #   - name: GigabitEthernet0/0/0/0
+    #   - name: GigabitEthernet0/0/0/1
+    #     vrf_name: vrf_C
+    #   - name: GigabitEthernet0/0/0/2
+    #     vrf_name: vrf_D
+
+    # After state:
+    # -------------
+    #
+    # viosxr#show running-config interfaces
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface GigabitEthernet0/0/0/0
+    #  description this is interface0
+    #  cdp
+    # !
+    # interface GigabitEthernet0/0/0/1
+    #  vrf vrf_C
+    #  shutdown
+    # !
+    # interface GigabitEthernet0/0/0/2
+    #  vrf vrf_D
+    #  shutdown
+    # !
+
+    # Using replaced
+
+    # Before state:
+    # -------------
+    #
+    # viosxr#show running-config interfaces
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface GigabitEthernet0/0/0/0
+    #  description this is interface0
+    #  cdp
+    # !
+    # interface GigabitEthernet0/0/0/1
+    #  vrf vrf_C
+    #  shutdown
+    # !
+    # interface GigabitEthernet0/0/0/2
+    #  vrf vrf_D
+    #  shutdown
+    # !
+
+    - name: Simple replaced selective
+      cisco.iosxr.iosxr_vrf_interfaces:
+        state: replaced
+        config:
+          - name: MgmtEth0/RP0/CPU0/0
+          - name: GigabitEthernet0/0/0/0
+          - name: GigabitEthernet0/0/0/1
+            vrf_name: vrf_E
+          - name: GigabitEthernet0/0/0/2
+            vrf_name: vrf_D
+
+    # Task Output
+    # -----------
+    #
+    # before:
+    #   - name: MgmtEth0/RP0/CPU0/0
+    #   - name: GigabitEthernet0/0/0/0
+    #   - name: GigabitEthernet0/0/0/1
+    #     vrf_name: vrf_C
+    #   - name: GigabitEthernet0/0/0/2
+    #     vrf_name: vrf_D
+    # commands:
+    #   - interface GigabitEthernet0/0/0/1
+    #   - vrf vrf_E
+    # after:
+    #   - name: MgmtEth0/RP0/CPU0/0
+    #   - name: GigabitEthernet0/0/0/0
+    #   - name: GigabitEthernet0/0/0/1
+    #     vrf_name: vrf_E
+    #   - name: GigabitEthernet0/0/0/2
+    #     vrf_name: vrf_D
+
+    # After state:
+    # -------------
+    #
+    # viosxr#show running-config interfaces
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface GigabitEthernet0/0/0/0
+    #  description this is interface0
+    #  cdp
+    # !
+    # interface GigabitEthernet0/0/0/1
+    #  vrf vrf_E
+    #  shutdown
+    # !
+    # interface GigabitEthernet0/0/0/2
+    #  vrf vrf_D
+    #  shutdown
+    # !
+
+    # Using overridden
+
+    # Before state:
+    # -------------
+    #
+    # viosxr#show running-config interfaces
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface GigabitEthernet0/0/0/0
+    #  description this is interface0
+    #  cdp
+    # !
+    # interface GigabitEthernet0/0/0/1
+    #  vrf vrf_C
+    #  shutdown
+    # !
+    # interface GigabitEthernet0/0/0/2
+    #  vrf vrf_D
+    #  shutdown
+    # !
+
+    - name: Simple overridden selective
+      cisco.iosxr.iosxr_vrf_interfaces:
+        state: overridden
+        config:
+          - name: MgmtEth0/RP0/CPU0/0
+          - name: GigabitEthernet0/0/0/0
+          - name: GigabitEthernet0/0/0/1
+            vrf_name: vrf_E
+
+    # Task Output
+    # -----------
+    #
+    # before:
+    #   - name: MgmtEth0/RP0/CPU0/0
+    #   - name: GigabitEthernet0/0/0/0
+    #   - name: GigabitEthernet0/0/0/1
+    #     vrf_name: vrf_C
+    #   - name: GigabitEthernet0/0/0/2
+    #     vrf_name: vrf_D
+    # commands:
+    #   - interface GigabitEthernet0/0/0/1
+    #   - vrf vrf_E
+    #   - interface GigabitEthernet0/0/0/2
+    #   - no vrf vrf_E
+    # after:
+    #   - name: MgmtEth0/RP0/CPU0/0
+    #   - name: GigabitEthernet0/0/0/0
+    #   - name: GigabitEthernet0/0/0/1
+    #     vrf_name: vrf_E
+    #   - name: GigabitEthernet0/0/0/2
+
+    # After state:
+    # -------------
+    #
+    # viosxr#show running-config interfaces
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface GigabitEthernet0/0/0/0
+    #  description this is interface0
+    #  cdp
+    # !
+    # interface GigabitEthernet0/0/0/1
+    #  vrf vrf_E
+    #  shutdown
+    # !
+    # interface GigabitEthernet0/0/0/2
+    #  shutdown
+    # !
+
+    # Using deleted
+
+    # Before state:
+    # -------------
+    #
+    # viosxr#show running-config interfaces
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface GigabitEthernet0/0/0/0
+    #  description this is interface0
+    #  cdp
+    # !
+    # interface GigabitEthernet0/0/0/1
+    #  vrf vrf_E
+    #  shutdown
+    # !
+    # interface GigabitEthernet0/0/0/2
+    #  vrf vrf_D
+    #  shutdown
+    # !
+
+    - name: Simple deleted selective
+      cisco.iosxr.iosxr_vrf_interfaces:
+        state: deleted
+        config:
+          - name: GigabitEthernet0/0/0/1
+            vrf_name: vrf_E
+
+    # Task Output
+    # -----------
+    #
+    # before:
+    #   - name: MgmtEth0/RP0/CPU0/0
+    #   - name: GigabitEthernet0/0/0/0
+    #   - name: GigabitEthernet0/0/0/1
+    #     vrf_name: vrf_E
+    #   - name: GigabitEthernet0/0/0/2
+    #     vrf_name: vrf_D
+    # commands:
+    #   - interface GigabitEthernet0/0/0/1
+    #   - no vrf vrf_E
+    # after:
+    #   - name: MgmtEth0/RP0/CPU0/0
+    #   - name: GigabitEthernet0/0/0/0
+    #   - name: GigabitEthernet0/0/0/1
+    #   - name: GigabitEthernet0/0/0/2
+    #     vrf_name: vrf_D
+
+    # After state:
+    # -------------
+    #
+    # viosxr#show running-config interfaces
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface GigabitEthernet0/0/0/0
+    #  description this is interface0
+    #  cdp
+    # !
+    # interface GigabitEthernet0/0/0/1
+    #  shutdown
+    # !
+    # interface GigabitEthernet0/0/0/2
+    #  vrf vrf_D
+    #  shutdown
+    # !
+
+    # Using gathered
+
+    # Before state:
+    # -------------
+    #
+    # viosxr#show running-config interfaces
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface GigabitEthernet0/0/0/0
+    #  description this is interface0
+    #  cdp
+    # !
+    # interface GigabitEthernet0/0/0/1
+    #  vrf vrf_C
+    #  shutdown
+    # !
+    # interface GigabitEthernet0/0/0/2
+    #  vrf vrf_D
+    #  shutdown
+    # !
+
+    - name: Simple gathered selective
+      cisco.iosxr.iosxr_vrf_interfaces:
+        state: gathered
+
+    # Task Output
+    # -----------
+    #
+    # gathered:
+    #   - name: MgmtEth0/RP0/CPU0/0
+    #   - name: GigabitEthernet0/0/0/0
+    #   - name: GigabitEthernet0/0/0/1
+    #     vrf_name: vrf_C
+    #   - name: GigabitEthernet0/0/0/2
+    #     vrf_name: vrf_D
+
+    # Using rendered
+
+    # Before state:
+    # -------------
+    #
+    # viosxr#show running-config interfaces
+    # interface MgmtEth0/RP0/CPU0/0
+    #  ipv4 address dhcp
+    # !
+    # interface GigabitEthernet0/0/0/0
+    #  description this is interface0
+    #  cdp
+    # !
+    # interface GigabitEthernet0/0/0/1
+    #  vrf vrf_C
+    #  shutdown
+    # !
+    # interface GigabitEthernet0/0/0/2
+    #  vrf vrf_D
+    #  shutdown
+    # !
+
+    - name: Simple rendered selective
+      cisco.iosxr.iosxr_vrf_interfaces:
+        state: rendered
+
+    # Task Output
+    # -----------
+    #
+    # commands:
+    #   - interface GigabitEthernet0/0/0/1
+    #   - vrf vrf_C
+    #   - interface GigabitEthernet0/0/0/2
+    #   - vrf vrf_D
 
 
 
