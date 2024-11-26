@@ -2,4 +2,3 @@ plugins/action/iosxr.py action-plugin-docs # base class for deprecated network p
 plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.10!skip
 plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.11!skip
 plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.12!skip
-plugins/sub_plugins/grpc/pb/ems_grpc_pb2.py import-3.13!skip
