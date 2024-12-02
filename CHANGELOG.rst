@@ -4,6 +4,40 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v10.2.2
+=======
+
+Bugfixes
+--------
+
+- iosxr_acls_facts - Fix incorrect rendering of some acl facts causing errors.
+
+v10.2.1
+=======
+
+Bugfixes
+--------
+
+- iosxr_static_routes - Fix incorrect handling of the vrf keyword between the destination address and next-hop interface in both global and VRF contexts for IPv4 and IPv6 static_route configurations.
+
+v10.2.0
+=======
+
+Minor Changes
+-------------
+
+- Added iosxr_route_maps resource module, that helps with configuration of route-policy.
+
+Documentation Changes
+---------------------
+
+- Includes a new support related section in the README.
+
+New Modules
+-----------
+
+- iosxr_route_maps - Resource module to configure route maps.
+
 v10.1.0
 =======
 

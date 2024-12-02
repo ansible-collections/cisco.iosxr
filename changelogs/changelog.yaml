@@ -153,6 +153,63 @@ releases:
     fragments:
       - iosxr_config_diff_doc_update.yaml
     release_date: "2021-01-28"
+  10.0.0:
+    changes:
+      major_changes:
+        - Bumping `requires_ansible` to `>=2.15.0`, since previous ansible-core versions
+          are EoL now.
+      minor_changes:
+        - Adds a new module `iosxr_vrf_global` to manage VRF global configurations on
+          Cisco IOS-XR devices (https://github.com/ansible-collections/cisco.iosxr/pull/467).
+      release_summary:
+        Starting from this release, the minimum `ansible-core` version
+        this collection requires is `2.15.0`. The last known version compatible with
+        ansible-core<2.15 is `v9.0.0`. A new resource module `iosxr_vrf_global` is
+        added to manage VRF global configurations.
+    fragments:
+      - add_vrf_global_module.yaml
+      - bump_215.yaml
+    release_date: "2024-06-06"
+  10.1.0:
+    changes:
+      minor_changes:
+        - Adds a new module `iosxr_vrf_address_family` to manage VRFs address families
+          on Cisco IOS-XR devices (https://github.com/ansible-collections/cisco.iosxr/pull/489).
+    fragments:
+      - add_vrfs_module.yaml
+    release_date: "2024-08-05"
+  10.2.0:
+    changes:
+      doc_changes:
+        - Includes a new support related section in the README.
+      minor_changes:
+        - Added iosxr_route_maps resource module, that helps with configuration of route-policy.
+    fragments:
+      - add_ignore219.yaml
+      - iosxr_route_maps.yaml
+      - pylint_fix.yaml
+      - readme.yaml
+    modules:
+      - description: Resource module to configure route maps.
+        name: iosxr_route_maps
+        namespace: ""
+    release_date: "2024-10-18"
+  10.2.1:
+    changes:
+      bugfixes:
+        - iosxr_static_routes - Fix incorrect handling of the vrf keyword between the
+          destination address and next-hop interface in both global and VRF contexts
+          for IPv4 and IPv6 static_route configurations.
+    fragments:
+      - iosxr_static_routes.yaml
+    release_date: "2024-10-24"
+  10.2.2:
+    changes:
+      bugfixes:
+        - iosxr_acls facts - Fix incorrect rendering of some acl facts causing errors.
+    fragments:
+      - acl_facts.yaml
+    release_date: "2024-10-28"
   2.0.0:
     changes:
       bugfixes:
@@ -732,28 +789,3 @@ releases:
       - add_cli_restore_supprt.yaml
       - remove_tests.yaml
     release_date: "2024-04-12"
-  10.0.0:
-    changes:
-      major_changes:
-        - Bumping `requires_ansible` to `>=2.15.0`, since previous ansible-core versions
-          are EoL now.
-      minor_changes:
-        - Adds a new module `iosxr_vrf_global` to manage VRF global configurations on
-          Cisco IOS-XR devices (https://github.com/ansible-collections/cisco.iosxr/pull/467).
-      release_summary:
-        Starting from this release, the minimum `ansible-core` version
-        this collection requires is `2.15.0`. The last known version compatible with
-        ansible-core<2.15 is `v9.0.0`. A new resource module `iosxr_vrf_global` is
-        added to manage VRF global configurations.
-    fragments:
-      - add_vrf_global_module.yaml
-      - bump_215.yaml
-    release_date: "2024-06-06"
-  10.1.0:
-    changes:
-      minor_changes:
-        - Adds a new module `iosxr_vrf_address_family` to manage VRFs address families
-          on Cisco IOS-XR devices (https://github.com/ansible-collections/cisco.iosxr/pull/489).
-    fragments:
-      - add_vrfs_module.yaml
-    release_date: "2024-08-05"

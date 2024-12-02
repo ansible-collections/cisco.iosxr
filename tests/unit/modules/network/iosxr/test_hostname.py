@@ -100,7 +100,6 @@ class TestIosxrHostnameModule(TestIosxrModule):
             """,
         )
         self.get_config.return_value = run_cfg
-        print(self.get_config.return_value)
         set_module_args(dict(state="gathered"))
         gathered = {"hostname": "iosxr1"}
         result = self.execute_module(changed=False)

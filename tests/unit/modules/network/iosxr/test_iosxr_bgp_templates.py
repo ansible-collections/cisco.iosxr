@@ -397,7 +397,6 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
         ]
 
         result = self.execute_module(changed=True)
-        print(result["commands"])
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_bgp_tmpl_deleted(self):
