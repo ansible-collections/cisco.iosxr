@@ -28,6 +28,11 @@
                     next_hops:
                       - forward_router_address: 192.0.2.11
                         admin_distance: 100
+                  
+                  - dest: 192.0.2.48/28
+                    next_hops:
+                      - forward_outer_address: 192.0.2.10
+                        interface: TenGigE0/0/0/23.2500
 
               - afi: ipv6
                 safi: unicast
