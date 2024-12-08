@@ -1276,3 +1276,38 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             },
         ]
         self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_route_maps_parsed_local_pref(self):
+        set_module_args(
+            dict(
+                running_config=dedent(
+                    """\
+                    route-policy APPLY_TEST_ROUTE_POLICY_COMPLEX
+                      set ospf-metric 232
+                      set local-preference +100
+                      set local-preference -200
+                      set local-preference *600
+                      set local-preference +900
+                   """,
+                ),
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        parsed_list = [
+            {
+                "name": "APPLY_TEST_ROUTE_POLICY_COMPLEX",
+                "global": {
+                    "set": {
+                        "ospf_metric": 232,
+                        "local_preference": [
+                            {"increment": True, "metric_number": 100},
+                            {"decrement": True, "metric_number": 200},
+                            {"multiply": True, "metric_number": 600},
+                            {"increment": True, "metric_number": 900},
+                        ],
+                    },
+                },
+            },
+        ]
+        self.assertEqual(parsed_list, result["parsed"])

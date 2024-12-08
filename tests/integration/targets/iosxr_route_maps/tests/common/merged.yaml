@@ -27,6 +27,13 @@
                   additive: true
                   community_name: (11011:1001)
                 weight: 20000
+                local_preference:
+                  - increment: true
+                    metric_number: 100
+                  - decrement: true
+                    metric_number: 200
+                  - multiply: true
+                    metric_number: 300
             name: SIMPLE_GLOBAL_ROUTE_POLICY
           - else_section:
               global:

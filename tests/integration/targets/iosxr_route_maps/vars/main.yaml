@@ -1,36 +1,36 @@
 ---
 merged:
   commands:
-    - route-policy SIMPLE_GLOBAL_ROUTE_POLICY
-    - apply A_NEW_ROUTE_POLICY
-    - set community (11011:1001) additive
-    - set weight 20000
-    - end-policy
-    - route-policy COMPLEX_ROUTE_POLICY
-    - if destination in A_RANDOM_POLICY_DUMMY then
-    - drop
-    - else
-    - if destination in A_RANDOM_POLICY then
-    - pass
-    - else
-    - drop
-    - endif
-    - endif
-    - end-policy
-    - route-policy SIMPLE_CONDITION_ROUTE_POLICY
-    - if destination in SIMPLE_CONDITION_ROUTE_POLICY then
-    - pass
-    - else
-    - drop
-    - endif
-    - end-policy
-    - route-policy COMPLEX_CONDITION_ROUTE_POLICY
-    - if community matches-any (9119:1001) or community matches-any (11100:1001) then
-    - drop
-    - else
-    - pass
-    - endif
-    - end-policy
+    - "route-policy COMPLEX_ROUTE_POLICY"
+    - "if destination in A_RANDOM_POLICY_DUMMY then"
+    - "drop"
+    - "else"
+    - "if destination in A_RANDOM_POLICY then"
+    - "pass"
+    - "else"
+    - "drop"
+    - "endif"
+    - "endif"
+    - "end-policy"
+    - "route-policy SIMPLE_GLOBAL_ROUTE_POLICY"
+    - "apply A_NEW_ROUTE_POLICY"
+    - "set local-preference +100\nset local-preference -200\nset local-preference *300\n"
+    - "set community (11011:1001) additive"
+    - "set weight 20000"
+    - "end-policy"
+    - "route-policy COMPLEX_CONDITION_ROUTE_POLICY"
+    - "if community matches-any (9119:1001) or community matches-any (11100:1001) then"
+    - "drop"
+    - "pass"
+    - "endif"
+    - "end-policy"
+    - "route-policy SIMPLE_CONDITION_ROUTE_POLICY"
+    - "if destination in SIMPLE_CONDITION_ROUTE_POLICY then"
+    - "pass"
+    - "else"
+    - "drop"
+    - "endif"
+    - "end-policy"
   after:
     - else_section:
         else_section:
@@ -50,6 +50,13 @@ merged:
             additive: true
             community_name: (11011:1001)
           weight: 20000
+          local_preference:
+            - increment: true
+              metric_number: 100
+            - decrement: true
+              metric_number: 200
+            - multiply: true
+              metric_number: 300
       name: SIMPLE_GLOBAL_ROUTE_POLICY
     - else_section:
         global:
@@ -72,6 +79,7 @@ overridden:
     - apply A_NEW_ROUTE_POLICY
     - set community test_comm_name
     - set weight 20000
+    - "set local-preference +100\nset local-preference -200\nset local-preference *300\n"
     - end-policy
     - route-policy COMPLEX_ROUTE_POLICY_overridden
     - if as-path in (ios-regex '_3117_', ios-regex '_600_') then
@@ -110,6 +118,13 @@ overridden:
           community:
             community_name: test_comm_name
           weight: 20000
+          local_preference:
+            - increment: true
+              metric_number: 100
+            - decrement: true
+              metric_number: 200
+            - multiply: true
+              metric_number: 300
       name: SIMPLE_GLOBAL_ROUTE_POLICY_overridden
   before:
     - else_section:
@@ -130,6 +145,13 @@ overridden:
             additive: true
             community_name: (11011:1001)
           weight: 20000
+          local_preference:
+            - increment: true
+              metric_number: 100
+            - decrement: true
+              metric_number: 200
+            - multiply: true
+              metric_number: 300
       name: SIMPLE_GLOBAL_ROUTE_POLICY
     - else_section:
         global:
@@ -190,6 +212,13 @@ deleted:
             additive: true
             community_name: (11011:1001)
           weight: 20000
+          local_preference:
+            - increment: true
+              metric_number: 100
+            - decrement: true
+              metric_number: 200
+            - multiply: true
+              metric_number: 300
       name: SIMPLE_GLOBAL_ROUTE_POLICY
     - else_section:
         global:
