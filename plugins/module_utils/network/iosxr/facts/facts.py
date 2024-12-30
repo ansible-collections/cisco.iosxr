@@ -103,6 +103,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vr
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vrf_global.vrf_global import (
     Vrf_globalFacts,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vrf_interfaces.vrf_interfaces import (
+    Vrf_interfacesFacts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -138,6 +141,7 @@ FACT_RESOURCE_SUBSETS = dict(
     vrf_address_family=Vrf_address_familyFacts,
     vrf_global=Vrf_globalFacts,
     route_maps=Route_mapsFacts,
+    vrf_interfaces=Vrf_interfacesFacts,
 )
 
 
