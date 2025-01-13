@@ -12,7 +12,6 @@
           - name: GigabitEthernet0/0/0/0
           - name: GigabitEthernet0/0/0/1
             vrf_name: vrf_C
-          - name: GigabitEthernet0/0/0/2
       register: result
 
     - name: Run show show running-config interface
