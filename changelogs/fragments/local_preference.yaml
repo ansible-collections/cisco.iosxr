@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Adds support for setting local-preference with plus/minus values in route policies
