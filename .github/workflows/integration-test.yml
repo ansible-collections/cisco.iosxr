@@ -37,4 +37,3 @@ jobs:
       cml_ssh_password: ${{ secrets.CML_SSH_PASSWORD }}
       virl_host: ${{ secrets.VIRL_HOST }}
       virl_password: ${{ secrets.VIRL_PASSWORD }}
-
