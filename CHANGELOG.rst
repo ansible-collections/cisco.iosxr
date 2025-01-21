@@ -4,6 +4,20 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v10.3.0
+=======
+
+Minor Changes
+-------------
+
+- Added iosxr_vrf_interfaces resource module, that helps with configuration of vrfs within interface.
+- Adds support for setting local-preference with plus/minus values in route policies
+
+New Modules
+-----------
+
+- iosxr_vrf_interfaces - Resource module to configure VRF interfaces.
+
 v10.2.2
 =======
 

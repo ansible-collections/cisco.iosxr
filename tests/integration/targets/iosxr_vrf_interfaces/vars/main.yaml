@@ -9,8 +9,6 @@ gathered:
       vrf_name: vrf_A
     - name: GigabitEthernet0/0/0/2
       vrf_name: vrf_B
-    - name: GigabitEthernet0/0/0/7
-    - name: TenGigE0/0/0/0
 
 merged:
   commands:
@@ -27,8 +25,6 @@ merged:
       vrf_name: vrf_C
     - name: GigabitEthernet0/0/0/2
       vrf_name: vrf_D
-    - name: GigabitEthernet0/0/0/7
-    - name: TenGigE0/0/0/0
 
 overridden:
   commands:
@@ -43,9 +39,6 @@ overridden:
     - name: GigabitEthernet0/0/0/0
     - name: GigabitEthernet0/0/0/1
       vrf_name: vrf_C
-    - name: GigabitEthernet0/0/0/2
-    - name: GigabitEthernet0/0/0/7
-    - name: TenGigE0/0/0/0
   before:
     - name: Loopback888
     - name: Loopback999
@@ -55,5 +48,15 @@ overridden:
       vrf_name: vrf_A
     - name: GigabitEthernet0/0/0/2
       vrf_name: vrf_B
+parsed:
+  result:
+    - name: Loopback888
+    - name: Loopback999
+    - name: MgmtEth0/RP0/CPU0/0
+    - name: GigabitEthernet0/0/0/0
+    - name: GigabitEthernet0/0/0/1
+      vrf_name: vrf_C
+    - name: GigabitEthernet0/0/0/2
+      vrf_name: vrf_D
     - name: GigabitEthernet0/0/0/7
     - name: TenGigE0/0/0/0
