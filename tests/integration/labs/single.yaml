@@ -17,10 +17,9 @@ nodes:
     configuration: |2-
       hostname iosxr
       domain name ansible.com
-      username cisco
+      username ansible
        group root-lr
        group sysadmin
-       group cisco-support
        secret 10 $6$r9zWl1mjMw94Dl1.$V7Xh1CuqtHHEbfRjHqFjZlMnFrjCivkjbSYPoH/S6MjQBR.r/G3sFk3PQre.TsnSpfy.hKf.35Tclt8KkRzaQ.
        password 7 05080F1C2243
       !
@@ -54,8 +53,14 @@ nodes:
        ipv4 address dhcp
       !
       interface GigabitEthernet0/0/0/0
-       cdp
-       ipv4 address 192.168.1.1 255.255.255.0
+       shutdown
+      !
+      interface preconfigure GigabitEthernet0/0/0/1
+       negotiation auto
+       shutdown
+      !
+      interface preconfigure GigabitEthernet0/0/0/2
+       shutdown
       !
       router static
        address-family ipv4 unicast
@@ -68,6 +73,7 @@ nodes:
        |
       ssh timeout 60
       ssh server v2
+      end
     cpu_limit: null
     cpus: null
     data_volume: null
