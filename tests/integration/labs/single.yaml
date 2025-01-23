@@ -6,12 +6,12 @@ lab:
   version: 0.2.2
 links:
   - id: l0
-    n1: n0
-    n2: n1
+    n1: n1
+    n2: n0
     i1: i1
     i2: i0
     conditioning: {}
-    label: xr9kv-0-Mgmt/0<->ext-conn-0-port
+    label: xr9kv-0-MgmtEth0/RP0/CPU0/0<->ext-conn-0-port
 nodes:
   - boot_disk_size: null
     configuration: |2-
@@ -21,7 +21,7 @@ nodes:
        group root-lr
        group sysadmin
        secret 10 $6$r9zWl1mjMw94Dl1.$V7Xh1CuqtHHEbfRjHqFjZlMnFrjCivkjbSYPoH/S6MjQBR.r/G3sFk3PQre.TsnSpfy.hKf.35Tclt8KkRzaQ.
-       password 7 05080F1C2243
+       password 7 13041901020E082F7A767B
       !
       aaa authentication login default local
       cdp
@@ -51,15 +51,9 @@ nodes:
       interface MgmtEth0/RP0/CPU0/0
        cdp
        ipv4 address dhcp
+       no shutdown
       !
       interface GigabitEthernet0/0/0/0
-       shutdown
-      !
-      interface preconfigure GigabitEthernet0/0/0/1
-       negotiation auto
-       shutdown
-      !
-      interface preconfigure GigabitEthernet0/0/0/2
        shutdown
       !
       router static
@@ -78,10 +72,10 @@ nodes:
     cpus: null
     data_volume: null
     hide_links: false
-    id: n0
+    id: n1
     image_definition: null
-    label: 7.7.1-0
-    node_definition: xr9kv
+    label: xr9kv-0
+    node_definition: iosxrv9000
     parameters: {}
     ram: null
     tags: []
@@ -96,15 +90,15 @@ nodes:
         slot: 0
         type: physical
       - id: i2
-        label: GigabitEthernet0/0/0/0
+        label: donotuse1
         slot: 1
         type: physical
       - id: i3
-        label: GigabitEthernet0/0/0/1
+        label: donotuse2
         slot: 2
         type: physical
       - id: i4
-        label: GigabitEthernet0/0/0/2
+        label: GigabitEthernet0/0/0/0
         slot: 3
         type: physical
   - boot_disk_size: null
@@ -113,14 +107,14 @@ nodes:
     cpus: null
     data_volume: null
     hide_links: false
-    id: n1
+    id: n0
     image_definition: null
     label: ext-conn-0
     node_definition: external_connector
     parameters: {}
     ram: null
     tags: []
-    x: 160
+    x: -440
     y: 0
     interfaces:
       - id: i0
