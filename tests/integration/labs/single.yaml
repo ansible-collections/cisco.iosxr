@@ -1,3 +1,4 @@
+---
 lab:
   description: ""
   notes: ""
@@ -105,11 +106,11 @@ nodes:
         slot: 0
         type: physical
       - id: i2
-        label: donotuse1
+        label: GigabitEthernet0/0/0/2
         slot: 1
         type: physical
       - id: i3
-        label: donotuse2
+        label: GigabitEthernet0/0/0/1
         slot: 2
         type: physical
       - id: i4
