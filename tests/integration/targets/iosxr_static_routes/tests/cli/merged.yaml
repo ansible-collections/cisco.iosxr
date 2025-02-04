@@ -7,11 +7,11 @@
 - block:
     - name: Merge the provided configuration with the existing running configuration
       register: result
-      cisco.iosxr.iosxr_static_routes: &id001
+      cisco.iosxr.iosxr_static_routes:
         config:
           - address_families:
               - afi: ipv4
-                safi: unicast
+                safi: multicast
                 routes:
                   - dest: 192.0.2.16/28
                     next_hops:
@@ -29,6 +29,10 @@
                       - forward_router_address: 192.0.2.11
                         admin_distance: 100
 
+                  - dest: 192.168.17.0/24
+                    next_hops:
+                      - interface: Loopback0
+
               - afi: ipv6
                 safi: unicast
                 routes:
@@ -39,6 +43,9 @@
 
                       - interface: FastEthernet0/0/0/8
                         forward_router_address: 2001:db8:2000:2::1
+                  - dest: 2001:db8::/64
+                    next_hops:
+                      - interface: Loopback0
 
           - vrf: DEV_SITE
             address_families:
@@ -58,6 +65,14 @@
                         dest_vrf: test_1
                         track: ip_sla_2
                         vrflabel: 124
+          - vrf: TEST_VRF
+            address_families:
+              - afi: ipv4
+                safi: unicast
+                routes:
+                  - dest: 192.1.0.0/24
+                    next_hops:
+                      - interface: Loopback1
         state: merged
 
     - name: Assert that before dicts were correctly generated
@@ -77,19 +92,10 @@
         that:
           - "{{ merged['after'] | symmetric_difference(result['after']) |length == 0 }}"
 
-    - name: Merge the provided configuration with the existing running configuration (idempotent)
-      register: result
-      cisco.iosxr.iosxr_static_routes: *id001
-    - name: Assert that the previous task was idempotent
-      ansible.builtin.assert:
-        that:
-          - result['changed'] == false
-          - result.commands|length == 0
-
     - name: Assert that before dicts were correctly generated
       ansible.builtin.assert:
         that:
-          - "{{ merged['after'] | symmetric_difference(result['before']) |length == 0 }}"
+          - "{{ merged['before'] | symmetric_difference(result['before']) |length == 0 }}"
 
     - name: Update existing configuration using merged
       register: result

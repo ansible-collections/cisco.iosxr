@@ -204,7 +204,6 @@ class TestIosxrL2InterfacesModule(TestIosxrModule):
             ),
         )
         result = self.execute_module(changed=False)
-        print(result["parsed"])
         parsed_list = [
             {
                 "name": "GigabitEthernet0/0/0/1",
@@ -313,7 +312,6 @@ class TestIosxrL2InterfacesModule1(TestIosxrModule):
             ),
         )
         result = self.execute_module(changed=False)
-        print(result["parsed"])
         parsed_list = [
             {
                 "name": "Bundle-Ether399.2900",

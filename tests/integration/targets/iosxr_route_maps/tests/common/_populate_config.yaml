@@ -1,0 +1,48 @@
+---
+- name: Populate with simple overridden
+  cisco.iosxr.iosxr_route_maps:
+    state: overridden
+    config:
+      - else_section:
+          else_section:
+            drop: true
+          if_section:
+            condition: destination in A_RANDOM_POLICY
+            pass: true
+        if_section:
+          condition: destination in A_RANDOM_POLICY_DUMMY
+          drop: true
+        name: COMPLEX_ROUTE_POLICY
+      - global:
+          apply:
+            - route_policy: A_NEW_ROUTE_POLICY
+          set:
+            community:
+              additive: true
+              community_name: (11011:1001)
+            weight: 20000
+            local_preference:
+              - increment: true
+                metric_number: 100
+              - decrement: true
+                metric_number: 200
+              - multiply: true
+                metric_number: 300
+        name: SIMPLE_GLOBAL_ROUTE_POLICY
+      - else_section:
+          global:
+            drop: true
+        if_section:
+          condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
+          pass: true
+        name: SIMPLE_CONDITION_ROUTE_POLICY
+      - else_section:
+          global:
+            pass: true
+        if_section:
+          condition: community matches-any (9119:1001) or community matches-any (11100:1001)
+          drop: true
+        name: COMPLEX_CONDITION_ROUTE_POLICY
+
+  vars:
+    ansible_connection: ansible.netcommon.network_cli

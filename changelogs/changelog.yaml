@@ -757,3 +757,50 @@ releases:
     fragments:
       - add_vrfs_module.yaml
     release_date: "2024-08-05"
+  10.2.0:
+    changes:
+      doc_changes:
+        - Includes a new support related section in the README.
+      minor_changes:
+        - Added iosxr_route_maps resource module, that helps with configuration of route-policy.
+    fragments:
+      - add_ignore219.yaml
+      - iosxr_route_maps.yaml
+      - pylint_fix.yaml
+      - readme.yaml
+    modules:
+      - description: Resource module to configure route maps.
+        name: iosxr_route_maps
+        namespace: ""
+    release_date: "2024-10-18"
+  10.2.1:
+    changes:
+      bugfixes:
+        - iosxr_static_routes - Fix incorrect handling of the vrf keyword between the
+          destination address and next-hop interface in both global and VRF contexts
+          for IPv4 and IPv6 static_route configurations.
+    fragments:
+      - iosxr_static_routes.yaml
+    release_date: "2024-10-24"
+  10.2.2:
+    changes:
+      bugfixes:
+        - iosxr_acls_facts - Fix incorrect rendering of some acl facts causing errors.
+    fragments:
+      - acl_facts.yaml
+    release_date: "2024-10-28"
+  10.3.0:
+    changes:
+      minor_changes:
+        - Added iosxr_vrf_interfaces resource module, that helps with configuration
+          of vrfs within interface.
+        - Adds support for setting local-preference with plus/minus values in route
+          policies
+    fragments:
+      - local_preference.yaml
+      - rm_vrf_interfaces.yaml
+    modules:
+      - description: Resource module to configure VRF interfaces.
+        name: iosxr_vrf_interfaces
+        namespace: ""
+    release_date: "2025-01-16"

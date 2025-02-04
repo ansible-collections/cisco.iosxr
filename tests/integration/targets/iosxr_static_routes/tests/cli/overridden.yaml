@@ -14,7 +14,7 @@
           - vrf: DEV_NEW
             address_families:
               - afi: ipv4
-                safi: unicast
+                safi: multicast
                 routes:
                   - dest: 192.0.2.48/28
                     next_hops:

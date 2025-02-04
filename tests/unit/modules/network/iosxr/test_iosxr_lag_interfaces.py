@@ -303,7 +303,6 @@ class TestIosxrLagInterfacesModule(TestIosxrModule):
             ),
         )
         result = self.execute_module(changed=False)
-        print(result["parsed"])
         parsed_list = [
             {
                 "links": {"max_active": 10, "min_active": 2},

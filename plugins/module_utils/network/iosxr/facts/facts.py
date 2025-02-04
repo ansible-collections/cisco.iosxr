@@ -88,6 +88,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.os
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.prefix_lists.prefix_lists import (
     Prefix_listsFacts,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.route_maps.route_maps import (
+    Route_mapsFacts,
+)
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.snmp_server.snmp_server import (
     Snmp_serverFacts,
 )
@@ -99,6 +102,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vr
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vrf_global.vrf_global import (
     Vrf_globalFacts,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vrf_interfaces.vrf_interfaces import (
+    Vrf_interfacesFacts,
 )
 
 
@@ -134,6 +140,8 @@ FACT_RESOURCE_SUBSETS = dict(
     bgp_templates=Bgp_templatesFacts,
     vrf_address_family=Vrf_address_familyFacts,
     vrf_global=Vrf_globalFacts,
+    route_maps=Route_mapsFacts,
+    vrf_interfaces=Vrf_interfacesFacts,
 )
 
 
