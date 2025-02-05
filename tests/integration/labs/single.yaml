@@ -41,8 +41,7 @@ nodes:
       username ansible
        group root-lr
        group cisco-support
-       secret 10 $6$Z9Luu1mZiydfDu1.$bG2UOKkX0dWR3C//DW3YMYeF3VktNkQIxvEV5ndAyBi4bDUZImvEPK.alEoccyv5N7yui2NmgBrzkI4EM1rx9/
-       password 7 14161C180506262E
+       secret 10 $6$9Px5C0KzVXTs6C0.$gB3T3oClVgZZ/4yp.QL1cFDGk8pSxyKMkf.JtuTr0R9QKxmkLkWG2jfAEd3k6QF8kWpOCDlZ.ybarYdXAMnxL/
       !
       aaa authentication login default local
       cdp
@@ -71,6 +70,7 @@ nodes:
       !
       interface MgmtEth0/RP0/CPU0/0
        ipv4 address dhcp
+       no shutdown
       !
       interface GigabitEthernet0/0/0/0
        shutdown
@@ -106,11 +106,11 @@ nodes:
         slot: 0
         type: physical
       - id: i2
-        label: GigabitEthernet0/0/0/2
+        label: donotuse1
         slot: 1
         type: physical
       - id: i3
-        label: GigabitEthernet0/0/0/1
+        label: donotuse2
         slot: 2
         type: physical
       - id: i4

@@ -90,3 +90,6 @@ tests/units/.coverage.*
 changelogs/.plugin-cache.yaml
 .ansible-test-timeout.json
 .env
+.pytest_cache
+.virl
+pytest-network.log
