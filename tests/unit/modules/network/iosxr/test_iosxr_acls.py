@@ -101,7 +101,22 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             wildcard_bits="0.0.255.255",
                                         ),
                                         destination=dict(
-                                            port_group="portgroup1",
+                                            prefix="192.168.0.0/24",
+                                        ),
+                                    ),
+                                    dict(
+                                        sequence="60",
+                                        grant="deny",
+                                        protocol="ipv4",
+                                        source=dict(
+                                            address="10.233.0.0",
+                                            wildcard_bits="0.0.255.255",
+                                        ),
+                                        destination=dict(
+                                            host="1.1.1.1",
+                                            port_protocol=dict(
+                                                port_group="portgroup1",
+                                            ),
                                         ),
                                     ),
                                 ],
@@ -116,7 +131,8 @@ class TestIosxrAclsModule(TestIosxrModule):
             "ipv4 access-list acl_1",
             "30 permit ospf 192.168.1.0 0.0.0.255 any log",
             "40 deny ipv4 10.233.0.0 0.0.255.255 net-group netgroup1",
-            "50 deny ipv4 10.233.0.0 0.0.255.255 port-group portgroup1",
+            "50 deny ipv4 10.233.0.0 0.0.255.255 192.168.0.0 0.0.0.255",
+            "60 deny ipv4 10.233.0.0 0.0.255.255 net-group netgroup1 port-group portgroup1",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -188,7 +204,10 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             wildcard_bits="0.0.255.255",
                                         ),
                                         destination=dict(
-                                            port_group="portgroup1",
+                                            host="1.1.1.1",
+                                            port_protocol=dict(
+                                                port_group="portgroup1",
+                                            ),
                                         ),
                                     ),
                                 ],
@@ -205,7 +224,7 @@ class TestIosxrAclsModule(TestIosxrModule):
             "no 20",
             "30 permit ospf 10.0.0.0 0.255.255.255 any log",
             "40 deny ipv4 10.233.0.0 0.0.255.255 net-group netgroup1",
-            "50 deny ipv4 10.233.0.0 0.0.255.255 port-group portgroup1",
+            "50 deny ipv4 10.233.0.0 0.0.255.255 host 1.1.1.1 port-group portgroup1",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -284,7 +303,10 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             wildcard_bits="0.0.255.255",
                                         ),
                                         destination=dict(
-                                            port_group="portgroup1",
+                                            host="1.1.1.1",
+                                            port_protocol=dict(
+                                                port_group="portgroup1",
+                                            ),
                                         ),
                                     ),
                                 ],
@@ -303,7 +325,7 @@ class TestIosxrAclsModule(TestIosxrModule):
             "no 20",
             "40 permit ospf any any log",
             "50 deny ipv4 10.233.0.0 0.0.255.255 net-group netgroup1",
-            "60 deny ipv4 10.233.0.0 0.0.255.255 port-group portgroup1",
+            "60 deny ipv4 10.233.0.0 0.0.255.255 host 1.1.1.1 port-group portgroup1",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -339,7 +361,7 @@ class TestIosxrAclsModule(TestIosxrModule):
                                             wildcard_bits="0.0.255.255",
                                         ),
                                         destination=dict(
-                                            port_group="portgroup1",
+                                            any="true",
                                         ),
                                     ),
                                 ],
