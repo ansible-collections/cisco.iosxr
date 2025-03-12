@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fixes idempotency for static routes with encap interfaces
