@@ -36,54 +36,57 @@ nodes:
         type: physical
   - boot_disk_size: null
     configuration: |2-
-      hostname iosxr
-      domain name ansible.com
-      username ansible
-       group root-lr
-       group cisco-support
-       secret 10 $6$9Px5C0KzVXTs6C0.$gB3T3oClVgZZ/4yp.QL1cFDGk8pSxyKMkf.JtuTr0R9QKxmkLkWG2jfAEd3k6QF8kWpOCDlZ.ybarYdXAMnxL/
-      !
-      aaa authentication login default local
-      cdp
-      line default
-       login authentication default
-       transport input ssh
-      !
-      call-home
-       service active
-       contact smart-licensing
-       profile CiscoTAC-1
-        active
-        destination transport-method email disable
-        destination transport-method http
-       !
-      !
-      control-plane
-       management-plane
-        inband
-         interface all
-          allow all
-          allow SSH
+        !! IOS XR Admin Configuration
+        username cisco
+          group root-system
+          secret 0 cisco1
+        !
+        hostname iosxr
+        username ansible
+          group root-lr
+          group sysadmin
+          group cisco-support
+          secret 10 $6$Z9Luu1mZiydfDu1.$bG2UOKkX0dWR3C//DW3YMYeF3VktNkQIxvEV5ndAyBi4bDUZImvEPK.alEoccyv5N7yui2NmgBrzkI4EM1rx9/
+        !
+        domain name ansible.com
+        aaa authentication login default local
+        line default
+         login authentication default
+         transport input ssh
+        !
+        call-home
+         service active
+         contact smart-licensing
+         profile CiscoTAC-1
+          active
+          destination transport-method email disable
+          destination transport-method http
          !
         !
-       !
-      !
-      interface MgmtEth0/RP0/CPU0/0
-       ipv4 address dhcp
-       no shutdown
-      !
-      interface GigabitEthernet0/0/0/0
-       shutdown
-      !
-      router static
-       address-family ipv4 unicast
-        0.0.0.0/0 192.168.255.1
-       !
-      !
-      ssh timeout 60
-      ssh server v2
-      commit
-      end
+        control-plane
+         management-plane
+          inband
+           interface all
+            allow all
+            allow SSH
+           !
+          !
+         !
+        !
+        interface MgmtEth0/RP0/CPU0/0
+         ipv4 address dhcp
+         no shutdown
+        !
+        interface GigabitEthernet0/0/0/0
+         shutdown
+        !
+        router static
+         address-family ipv4 unicast
+          0.0.0.0/0 192.168.255.1
+         !
+        !
+        ssh timeout 100
+        ssh server v2
     cpu_limit: null
     cpus: null
     data_volume: null
