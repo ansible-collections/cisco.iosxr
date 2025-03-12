@@ -21,6 +21,9 @@ def run(ansible_project, environment):
         "debug",
         "--lf",
         str(ansible_project.log_file),
+        "--skip-tags",
+        "netconf",
+        "-vvv",
     ]
     process = subprocess.run(
         args=args,
