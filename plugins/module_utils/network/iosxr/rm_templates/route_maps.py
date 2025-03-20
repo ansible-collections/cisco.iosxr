@@ -228,6 +228,38 @@ class Route_mapsTemplate(NetworkTemplate):
             },
         },
         {
+            "name": "set.local_preference",
+            "getval": re.compile(
+                r"""
+                \s*set\slocal-preference\s(?P<increment>\+)?
+                        (?P<decrement>\-)?
+                        (?P<multiply>\*)?
+                        (?P<metric_number>\d+)
+                $""", re.VERBOSE,
+            ),
+            "setval": "{% for pref in set.local_preference %}"
+            "set local-preference"
+            "{{ ' *' if pref.multiply|d(False) else '' }}"
+            "{{ ' +' if pref.increment|d(False) else '' }}"
+            "{{ ' -' if pref.decrement|d(False) else '' }}"
+            "{{ pref.metric_number|string }}\n"
+            "{% endfor %}",
+            "result": {
+                "policies": {
+                    "set": {
+                        "local_preference": [
+                            {
+                                "increment": "{{ not not increment }}",
+                                "metric_number": "{{ metric_number}}",
+                                "decrement": "{{ not not decrement }}",
+                                "multiply": "{{ not not multiply }}",
+                            },
+                        ],
+                    },
+                },
+            },
+        },
+        {
             "name": "set.aigp_metric",
             "getval": re.compile(
                 r"""
