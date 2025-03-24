@@ -187,9 +187,10 @@ class Route_mapsFacts(object):
                         if cond_type != "global":
                             policy_route[cond_type]["condition"] = actual_cond
                 elif cond_type == "elseif_section":
-                    if_elif_data.update(objs[0])
-                    if_elif_data["condition"] = actual_cond
-                    if_elif.append(if_elif_data)
+                    if objs:
+                        if_elif_data.update(objs[0])
+                        if_elif_data["condition"] = actual_cond
+                        if_elif.append(if_elif_data)
                 elif cond_type == "else_section":
                     else_data = else_resolve_policy_data(policy)
 
