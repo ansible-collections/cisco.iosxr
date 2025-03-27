@@ -4,6 +4,15 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v10.3.1
+=======
+
+Bugfixes
+--------
+
+- Fixes a bug to allow connections to IOS XRd with cliconf.
+- Fixes idempotency for static routes with encap interfaces
+
 v10.3.0
 =======
 
