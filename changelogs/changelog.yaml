@@ -804,3 +804,24 @@ releases:
         name: iosxr_vrf_interfaces
         namespace: ""
     release_date: "2025-01-16"
+  10.3.1:
+    changes:
+      bugfixes:
+        - Fixes a bug to allow connections to IOS XRd with cliconf.
+        - Fixes idempotency for static routes with encap interfaces
+    fragments:
+      - fix_cliconf.yaml
+      - static_route_encap_intf.yaml
+    release_date: "2025-03-27"
+  11.0.0:
+    changes:
+      major_changes:
+        - Bumping `requires_ansible` to `>=2.16.0`, since previous ansible-core versions
+          are EoL now.
+      release_summary:
+        "With this release, the minimum required version of `ansible-core`
+        for this collection is `2.16.0`. The last version known to be compatible with
+        `ansible-core` versions below `2.16` is v10.3.1."
+    fragments:
+      - bump216.yaml
+    release_date: "2025-04-11"
