@@ -570,7 +570,10 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                     {
                         "else_section": {
                             "else_section": {"drop": True},
-                            "if_section": {"condition": "as-path in 15446", "pass": True},
+                            "if_section": {
+                                "condition": "as-path in (ios-regex '_8888_')",
+                                "pass": True,
+                            },
                         },
                         "if_section": {"condition": "destination in TESTROUTES", "drop": True},
                         "name": "TEST_ROUTE_POLICY_BIT_SIMPLE",
@@ -628,7 +631,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             "if destination in TESTROUTES then",
             "drop",
             "else",
-            "if as-path in 15446 then",
+            "if as-path in (ios-regex '_8888_') then",
             "pass",
             "else",
             "drop",
@@ -1311,3 +1314,58 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             },
         ]
         self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_route_maps_empty_elseif_section(self):
+        """Test that route maps with empty elseif sections are handled correctly"""
+        self.maxDiff = None
+        self.get_config.return_value = dedent(
+            """\
+            route-policy TEST_EMPTY_ELSEIF
+            """,
+        )
+        self.get_config_data.return_value = dedent(
+            """\
+            route-policy TEST_EMPTY_ELSEIF
+              if destination in DEFAULT then
+                set qos-group 2
+              elseif destination in TEST-EMPTY then
+              else
+                set ospf-metric 232
+              endif
+            end-policy
+            """,
+        )
+        set_module_args(
+            dict(
+                config=[
+                    {
+                        "name": "TEST_EMPTY_ELSEIF",
+                        "if_section": {
+                            "condition": "destination in DEFAULT",
+                            "set": {"qos_group": 2},
+                        },
+                        "elseif_section": [
+                            {
+                                "condition": "destination in TEST-EMPTY",
+                            },
+                        ],
+                        "else_section": {
+                            "set": {"ospf_metric": 232},
+                        },
+                    },
+                ],
+                state="merged",
+            ),
+        )
+        result = self.execute_module(changed=True)
+        commands = [
+            "route-policy TEST_EMPTY_ELSEIF",
+            "if destination in DEFAULT then",
+            "set qos-group 2",
+            "elseif destination in TEST-EMPTY then",
+            "else",
+            "set ospf-metric 232",
+            "endif",
+            "end-policy",
+        ]
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
