@@ -1322,7 +1322,6 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
         self.get_config_data.return_value = dedent(
             """\
             route-policy TEST_ROUTE_POLICY_COMPLEX
-
             """,
         )
         set_module_args(
@@ -1331,8 +1330,13 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                     {
                         "global": {
                             "set": {
-                                "path_selection": {"backup": {"backup_decimal": 1, "install": True}}
-                            }
+                                "path_selection": {
+                                    "backup": {
+                                        "backup_decimal": 1,
+                                        "install": True,
+                                    },
+                                },
+                            },
                         },
                         "if_section": {
                             "condition": "destination in DEFAULT",
