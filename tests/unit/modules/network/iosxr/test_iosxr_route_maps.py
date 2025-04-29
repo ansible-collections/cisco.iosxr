@@ -1390,4 +1390,4 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             "endif",
             "end-policy",
         ]
-        self.assertEqual(sorted(result["commands"]), sorted(commands))
+        self.assertEqual(result["commands"], commands)
