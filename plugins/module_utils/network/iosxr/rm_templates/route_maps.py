@@ -148,7 +148,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "setval": "prepend"
             "{{ (' as-path ' + prepend.as_path|string) if prepend.as_path is defined else '' }}"
             "{{ (' most-recent') if prepend.most_recent is defined else '' }}"
-            "{{ (' own-as') if prepend.own_as|d(False) is defined else '' }}"
+            "{{ (' own-as') if prepend.own_as|d(False) else '' }}"
             "{{ (' ' + prepend.number_of_times|string) if prepend.number_of_times is defined else '' }}",
             "result": {
                 "policies": {
@@ -199,8 +199,8 @@ class Route_mapsTemplate(NetworkTemplate):
                 $""", re.VERBOSE,
             ),
             "setval": "remove as-path"
-            "{{ (' private-as' ) if remove.set|d(False) is defined else '' }}"
-            "{{ (' entire-aspath' ) if remove.entire_aspath|d(False) is defined else '' }}",
+            "{{ (' private-as' ) if remove.set|d(False) else '' }}"
+            "{{ (' entire-aspath' ) if remove.entire_aspath|d(False) else '' }}",
             "result": {
                 "policies": {
                     "remove": {
@@ -242,7 +242,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "{{ ' *' if pref.multiply|d(False) else '' }}"
             "{{ ' +' if pref.increment|d(False) else '' }}"
             "{{ ' -' if pref.decrement|d(False) else '' }}"
-            "{{ pref.metric_number|string }}\n"
+            "{{ ' ' ~ pref.metric_number|string }}\n"
             "{% endfor %}",
             "result": {
                 "policies": {
@@ -864,9 +864,9 @@ class Route_mapsTemplate(NetworkTemplate):
                 $""", re.VERBOSE,
             ),
             "setval": "set path-selection backup"
-            "{{ (' ' + rib-metric-as-external|string ) if set.path_selection.backup.backup_decimal is defined else '' }}"
-            "{{ (' advertise' ) if set.path_selection.backup.advertise|d(False) is defined else '' }}"
-            "{{ (' install' ) if set.path_selection.backup.install|d(False) is defined else '' }}",
+            "{{ (' ' + set.path_selection.backup.backup_decimal|string ) if set.path_selection.backup.backup_decimal is defined else '' }}"
+            "{{ (' advertise') if set.path_selection.backup.advertise|d(False) else '' }}"
+            "{{ (' install') if set.path_selection.backup.install|d(False) else '' }}",
             "result": {
                 "policies": {
                     "set": {
