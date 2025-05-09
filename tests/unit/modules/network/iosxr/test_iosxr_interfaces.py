@@ -320,7 +320,6 @@ class TestIosxrInterfacesModule(TestIosxrModule):
         ]
         self.assertEqual(gathered, result["gathered"])
 
-
     def test_iosxr_interfaces_merged_no_shutdown(self):
         self._prepare("iosxr_interface_merged_shutdown.cfg")
         set_module_args(
