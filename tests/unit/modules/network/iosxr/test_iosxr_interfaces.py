@@ -339,3 +339,23 @@ class TestIosxrInterfacesModule(TestIosxrModule):
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
+    
+    def test_iosxr_interfaces_replaced_no_shutdown(self):
+        self._prepare("iosxr_interface_merged_shutdown.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        description="No shutdown check",
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "description No shutdown check",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))

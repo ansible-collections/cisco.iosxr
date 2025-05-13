@@ -14,7 +14,6 @@
           - name: GigabitEthernet0/0/0/0
             description: Configured and Merged by Ansible-Network
             mtu: 110
-            enabled: true
             duplex: half
 
           - name: GigabitEthernet0/0/0/1
