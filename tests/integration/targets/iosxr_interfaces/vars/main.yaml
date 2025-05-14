@@ -8,7 +8,7 @@ merged:
     - enabled: true
       name: MgmtEth0/RP0/CPU0/0
     - description: this is interface0
-      enabled: true
+      enabled: false
       mtu: 65
       name: GigabitEthernet0/0/0/0
       speed: 10
@@ -37,7 +37,7 @@ merged:
       name: MgmtEth0/RP0/CPU0/0
     - description: Configured and Merged by Ansible-Network
       duplex: half
-      enabled: true
+      enabled: false
       mtu: 110
       name: GigabitEthernet0/0/0/0
       speed: 10
@@ -111,7 +111,7 @@ replaced:
     - enabled: true
       name: MgmtEth0/RP0/CPU0/0
     - description: this is interface0
-      enabled: true
+      enabled: false
       mtu: 65
       name: GigabitEthernet0/0/0/0
       speed: 10
@@ -137,7 +137,7 @@ replaced:
     - enabled: true
       name: MgmtEth0/RP0/CPU0/0
     - description: Configured and Replaced by Ansible-Network
-      enabled: true
+      enabled: false
       mtu: 110
       name: GigabitEthernet0/0/0/0
     - description: Configured and Replaced by Ansible-Network
@@ -166,7 +166,7 @@ overridden:
     - enabled: true
       name: MgmtEth0/RP0/CPU0/0
     - description: this is interface0
-      enabled: true
+      enabled: false
       mtu: 65
       name: GigabitEthernet0/0/0/0
       speed: 10
@@ -191,7 +191,7 @@ overridden:
       name: Loopback888
     - enabled: true
       name: Loopback999
-    - enabled: true
+    - enabled: false
       name: MgmtEth0/RP0/CPU0/0
     - description: Configured and Overridden by Ansible-Network
       duplex: full
@@ -228,7 +228,7 @@ deleted:
     - enabled: true
       name: MgmtEth0/RP0/CPU0/0
     - description: this is interface0
-      enabled: true
+      enabled: false
       mtu: 65
       name: GigabitEthernet0/0/0/0
       speed: 10

@@ -298,11 +298,6 @@ class Interfaces(ConfigBase):
             "description",
         ):
             remove_command_from_config_list(interface, "description", commands)
-        if not have.get("enabled") and want.get("enabled") != have.get(
-            "enabled",
-        ):
-            # if enable is False set enable as True which is the default behavior
-            remove_command_from_config_list(interface, "shutdown", commands)
 
         if interface_type.lower() == "gigabitethernet":
             if (

@@ -54,7 +54,6 @@ options:
         - Interface description.
         type: str
       enabled:
-        default: true
         description:
         - Administrative state of the interface.
         - Set the value to C(True) to administratively enable the interface or C(False)
