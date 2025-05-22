@@ -17,7 +17,6 @@
 
           - name: GigabitEthernet0/0/0/1
             description: Configured and Replaced by Ansible-Network
-            speed: 100
         state: replaced
 
     - name: Assert that correct set of commands were generated

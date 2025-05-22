@@ -31,7 +31,7 @@
 
                   - dest: 192.0.2.48/28
                     next_hops:
-                      - forward_outer_address: 192.0.2.10
+                      - forward_router_address: 192.0.2.10
                         interface: TenGigE0/0/0/23.2500
 
                   - dest: 192.168.17.0/24

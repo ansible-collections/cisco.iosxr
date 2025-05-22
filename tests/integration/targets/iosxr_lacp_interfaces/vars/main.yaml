@@ -32,7 +32,7 @@ populate:
     system:
       mac: 00c2.4c00.bd15
   - name: GigabitEthernet0/0/0/0
-    period: 100
+    period: 300
   - name: GigabitEthernet0/0/0/1
     period: 200
 replaced:
@@ -50,7 +50,7 @@ replaced:
       system:
         mac: 00c2.4c00.bd15
     - name: GigabitEthernet0/0/0/0
-      period: 100
+      period: 300
     - name: GigabitEthernet0/0/0/1
       period: 300
 overridden:
@@ -62,7 +62,7 @@ overridden:
     - interface Bundle-Ether11
     - no lacp system mac 00c2.4c00.bd15
     - interface GigabitEthernet0/0/0/0
-    - no lacp period 100
+    - no lacp period 300
     - interface Bundle-Ether12
     - lacp churn logging both
     - lacp collector-max-delay 100
@@ -88,7 +88,7 @@ deleted:
     - interface Bundle-Ether11
     - no lacp system mac 00c2.4c00.bd15
     - interface GigabitEthernet0/0/0/0
-    - no lacp period 100
+    - no lacp period 300
     - interface GigabitEthernet0/0/0/1
     - no lacp period 200
   after:

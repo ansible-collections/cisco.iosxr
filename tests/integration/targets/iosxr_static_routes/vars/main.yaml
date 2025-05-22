@@ -6,15 +6,15 @@ merged:
           routes:
             - dest: 0.0.0.0/0
               next_hops:
-                - forward_router_address: 10.0.151.254
+                - forward_router_address: 192.168.255.1
           safi: unicast
   commands:
     - router static
     - address-family ipv4 multicast
-    - 192.0.2.16/28 192.0.2.10 FastEthernet0/0/0/1 description LAB metric 120 tag
-      10
+    - 192.0.2.16/28 192.0.2.10 FastEthernet0/0/0/1 description LAB metric 120 tag 10
     - 192.0.2.16/28 FastEthernet0/0/0/5 track ip_sla_1
     - 192.0.2.32/28 192.0.2.11 100
+    - 192.0.2.48/28 192.0.2.10 TenGigE0/0/0/23.2500
     - 192.168.17.0/24 Loopback0
     - address-family ipv6 unicast
     - 2001:db8:1000::/36 FastEthernet0/0/0/7 description DC
@@ -40,7 +40,7 @@ merged:
           routes:
             - dest: 0.0.0.0/0
               next_hops:
-                - forward_router_address: 10.0.151.254
+                - forward_router_address: 192.168.255.1
           safi: unicast
         - afi: ipv4
           routes:
@@ -57,19 +57,23 @@ merged:
               next_hops:
                 - admin_distance: 100
                   forward_router_address: 192.0.2.11
+            - dest: 192.0.2.48/28
+              next_hops:
+                - forward_router_address: 192.0.2.10
+                  interface: TenGigE0/0/0/23.2500
             - dest: 192.168.17.0/24
               next_hops:
                 - interface: Loopback0
           safi: multicast
         - afi: ipv6
           routes:
-            - dest: 2001:db8:1000::/36
+            - dest: "2001:db8:1000::/36"
               next_hops:
                 - description: DC
                   interface: FastEthernet0/0/0/7
-                - forward_router_address: 2001:db8:2000:2::1
+                - forward_router_address: "2001:db8:2000:2::1"
                   interface: FastEthernet0/0/0/8
-            - dest: 2001:db8::/64
+            - dest: "2001:db8::/64"
               next_hops:
                 - interface: Loopback0
           safi: unicast
@@ -105,7 +109,7 @@ merged:
           routes:
             - dest: 0.0.0.0/0
               next_hops:
-                - forward_router_address: 10.0.151.254
+                - forward_router_address: 192.168.255.1
           safi: unicast
         - afi: ipv4
           routes:
@@ -122,19 +126,23 @@ merged:
               next_hops:
                 - admin_distance: 100
                   forward_router_address: 192.0.2.11
+            - dest: 192.0.2.48/28
+              next_hops:
+                - forward_router_address: 192.0.2.10
+                  interface: TenGigE0/0/0/23.2500
             - dest: 192.168.17.0/24
               next_hops:
                 - interface: Loopback0
           safi: multicast
         - afi: ipv6
           routes:
-            - dest: 2001:db8:1000::/36
+            - dest: "2001:db8:1000::/36"
               next_hops:
                 - description: DC
                   interface: FastEthernet0/0/0/7
-                - forward_router_address: 2001:db8:2000:2::1
+                - forward_router_address: "2001:db8:2000:2::1"
                   interface: FastEthernet0/0/0/8
-            - dest: 2001:db8::/64
+            - dest: "2001:db8::/64"
               next_hops:
                 - interface: Loopback0
           safi: unicast
@@ -149,12 +157,12 @@ merged:
                   vrflabel: 2301
             - dest: 192.0.2.80/28
               next_hops:
-                - dest_vrf: test_1
+                - description: rt_test_1
+                  dest_vrf: test_1
                   forward_router_address: 192.0.2.14
                   interface: FastEthernet0/0/0/2
                   track: ip_sla_2
                   vrflabel: 124
-                  description: rt_test_1
           safi: unicast
       vrf: DEV_SITE
     - address_families:
@@ -166,6 +174,7 @@ merged:
                   interface: Loopback1
           safi: unicast
       vrf: TEST_VRF
+
 replaced:
   before:
     - address_families:
@@ -173,7 +182,7 @@ replaced:
           routes:
             - dest: 0.0.0.0/0
               next_hops:
-                - forward_router_address: 10.0.151.254
+                - forward_router_address: 192.168.255.1
           safi: unicast
         - afi: ipv4
           routes:
@@ -233,7 +242,7 @@ replaced:
           routes:
             - dest: 0.0.0.0/0
               next_hops:
-                - forward_router_address: 10.0.151.254
+                - forward_router_address: 192.168.255.1
           safi: unicast
         - afi: ipv4
           routes:
@@ -294,7 +303,7 @@ overridden:
           routes:
             - dest: 0.0.0.0/0
               next_hops:
-                - forward_router_address: 10.0.151.254
+                - forward_router_address: 192.168.255.1
           safi: unicast
         - afi: ipv4
           routes:
@@ -351,7 +360,7 @@ round_trip:
           routes:
             - dest: 0.0.0.0/0
               next_hops:
-                - forward_router_address: 10.0.151.254
+                - forward_router_address: 192.168.255.1
           safi: unicast
         - afi: ipv4
           routes:

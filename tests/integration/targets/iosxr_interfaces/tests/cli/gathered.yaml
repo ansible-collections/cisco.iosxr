@@ -15,14 +15,11 @@
             description: This interface is Configured and Merged by Ansible-Network
             mtu: 110
             enabled: true
-            duplex: half
 
           - name: GigabitEthernet0/0/0/1
             description: Configured and Merged by Ansible-Network
             mtu: 2800
             enabled: false
-            speed: 100
-            duplex: full
         state: merged
 
     - name: Gather interfaces facts using gathered state
