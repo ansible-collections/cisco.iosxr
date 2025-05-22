@@ -176,6 +176,19 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                         "max_transmission": {"type": "int"},
                                     },
                                 },
+                                "extcommunity": {
+                                    "type": "dict",
+                                    "options": {
+                                        "soo": {"type": "str"},
+                                        "rt": {"type": "str"},
+                                        "additive": {"type": "bool"},
+                                        "bandwidth": {"type": "str"},
+                                        "color": {"type": "str"},
+                                        "cost": {"type": "str"},
+                                        "redirect_to_rt": {"type": "str"},
+                                        "seg_nh": {"type": "str"},
+                                    },
+                                },
                                 "fallback_vrf_lookup": {"type": "bool"},
                                 "flow_tag": {"type": "int"},
                                 "forward_class": {"type": "int"},
@@ -202,6 +215,17 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                 },
                                 "load_balance": {"type": "bool"},
                                 "lsm_root": {"type": "str"},
+                                "med": {
+                                    "type": "dict",
+                                    "options": {
+                                        "value": {"type": "int"},
+                                        "increment": {"type": "int"},
+                                        "decrement": {"type": "int"},
+                                        "igp_cost": {"type": "bool"},
+                                        "max_reachable": {"type": "bool"},
+                                        "parameter": {"type": "str"},  # like "$param1"
+                                    },
+                                },
                                 "metric_type": {
                                     "type": "dict",
                                     "options": {
