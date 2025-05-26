@@ -444,6 +444,37 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
         ]
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
+    def test_set_med_and_extcommunity(self):
+        self.get_config.return_value = "route-policy TEST-MED-EXTCOMM"
+        self.get_config_data.return_value = ""
+        set_module_args(
+            dict(
+                config=[
+                    {
+                        "name": "TEST-MED-EXTCOMM",
+                        "global": {
+                            "set": {
+                                "med": {"value": 100},
+                                "extcommunity": {
+                                    "rt": "65000:100",
+                                    "additive": True,
+                                },
+                            },
+                        },
+                    },
+                ],
+                state="merged",
+            )
+        )
+        result = self.execute_module(changed=True)
+        commands = [
+            "route-policy TEST-MED-EXTCOMM",
+            "set med 100",
+            "set extcommunity rt 65000:100 additive",
+            "end-policy",
+        ]
+        self.assertEqual(result["commands"], commands)
+
     def test_iosxr_route_maps_overridden(self):
         self.maxDiff = None
         self.get_config.return_value = dedent(

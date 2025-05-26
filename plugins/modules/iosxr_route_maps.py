@@ -269,6 +269,34 @@ options:
                   max_transmission:
                     description: <0-65535> Maximum Transmission Unit metric of the path
                     type: int
+              extcommunity:
+                description: BGP extended community attribute
+                type: dict
+                suboptions:
+                  soo:
+                    description: Sub-OR-Organization
+                    type: str
+                  rt:
+                    description: Route Target
+                    type: str
+                  bandwidth:
+                    description: Bandwidth
+                    type: str
+                  color:
+                    description: Color
+                    type: str
+                  cost:
+                    description: Cost
+                    type: str
+                  redirect_to_rt:
+                    description: Redirect to Route Target
+                    type: str
+                  seg_nh:
+                    description: Segment Next Hop
+                    type: str
+                  additive:
+                    description: Additive
+                    type: bool
               fallback_vrf_lookup:
                 description: fallback vrf look-up
                 type: bool
@@ -350,6 +378,28 @@ options:
               mpls:
                 description: MPLS traffic-eng attributeset name-string
                 type: str
+              med:
+                description: Metric for Equal-Cost Multi-Path
+                type: dict
+                suboptions:
+                  value:
+                    description: Metric value
+                    type: int
+                  increment:
+                    description: Increment the metric value
+                    type: int
+                  decrement:
+                    description: Decrement the metric value
+                    type: int
+                  igp_cost:
+                    description: Use IGP metric
+                    type: bool
+                  max_reachable:
+                    description: Use maximum reachable metric
+                    type: bool
+                  parameter:
+                    description: Parameter
+                    type: str
               next_hop:
                 description: Next hop address specified in this route
                 type: dict
