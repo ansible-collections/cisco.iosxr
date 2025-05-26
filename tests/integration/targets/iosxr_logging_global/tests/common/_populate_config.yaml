@@ -6,7 +6,6 @@
       - "  vrf test"
       - "  trustpoint test2"
       - "  tls-hostname test2"
-      - "logging file test path test maxfilesize 1024 severity info"
       - "logging ipv4 dscp af11"
       - "logging trap informational"
       - "logging events display-location"

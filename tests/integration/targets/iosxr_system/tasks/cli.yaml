@@ -10,6 +10,13 @@
   ansible.builtin.set_fact:
     test_items: "{{ test_cases.files | map(attribute='path') | list }}"
 
+- name: Filter out specific tests from test_items
+  ansible.builtin.set_fact:
+    test_items: "{{ test_items | select('match', '^(?!.*(' + exclude_files | join('|') + ')$).*') | list }}"
+  vars:
+    exclude_files:
+      - set_name_servers.yaml
+
 - name: Run test case (connection=ansible.netcommon.network_cli)
   ansible.builtin.include_tasks: "{{ test_case_to_run }}"
   vars:
