@@ -464,7 +464,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                     },
                 ],
                 state="merged",
-            )
+            ),
         )
         result = self.execute_module(changed=True)
         commands = [
