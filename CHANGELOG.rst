@@ -4,6 +4,76 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v11.0.0
+=======
+
+Release Summary
+---------------
+
+With this release, the minimum required version of `ansible-core` for this collection is `2.16.0`. The last version known to be compatible with `ansible-core` versions below `2.16` is v10.3.1.
+
+Major Changes
+-------------
+
+- Bumping `requires_ansible` to `>=2.16.0`, since previous ansible-core versions are EoL now.
+
+v10.3.1
+=======
+
+Bugfixes
+--------
+
+- Fixes a bug to allow connections to IOS XRd with cliconf.
+- Fixes idempotency for static routes with encap interfaces
+
+v10.3.0
+=======
+
+Minor Changes
+-------------
+
+- Added iosxr_vrf_interfaces resource module, that helps with configuration of vrfs within interface.
+- Adds support for setting local-preference with plus/minus values in route policies
+
+New Modules
+-----------
+
+- iosxr_vrf_interfaces - Resource module to configure VRF interfaces.
+
+v10.2.2
+=======
+
+Bugfixes
+--------
+
+- iosxr_acls_facts - Fix incorrect rendering of some acl facts causing errors.
+
+v10.2.1
+=======
+
+Bugfixes
+--------
+
+- iosxr_static_routes - Fix incorrect handling of the vrf keyword between the destination address and next-hop interface in both global and VRF contexts for IPv4 and IPv6 static_route configurations.
+
+v10.2.0
+=======
+
+Minor Changes
+-------------
+
+- Added iosxr_route_maps resource module, that helps with configuration of route-policy.
+
+Documentation Changes
+---------------------
+
+- Includes a new support related section in the README.
+
+New Modules
+-----------
+
+- iosxr_route_maps - Resource module to configure route maps.
+
 v10.1.0
 =======
 

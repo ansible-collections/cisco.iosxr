@@ -11,7 +11,7 @@
         config:
           - address_families:
               - afi: ipv4
-                safi: unicast
+                safi: multicast
                 routes:
                   - dest: 192.0.2.48/28
                     next_hops:
@@ -46,7 +46,7 @@
           - vrf: TEST_SITE
             address_families:
               - afi: ipv4
-                safi: unicast
+                safi: multicast
                 routes:
                   - dest: 192.0.2.80/28
                     next_hops:

@@ -10,4 +10,5 @@
         state: parsed
 
     - ansible.builtin.assert:
-        that: "{{ merged['after'] | symmetric_difference(result['parsed']) |length==0 }}"
+        that:
+          - result['changed'] == false

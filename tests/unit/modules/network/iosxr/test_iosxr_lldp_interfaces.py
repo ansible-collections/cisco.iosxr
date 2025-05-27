@@ -170,7 +170,6 @@ class TestIosxrLldpInterfacesModule(TestIosxrModule):
             ),
         )
         result = self.execute_module(changed=False)
-        print(result["parsed"])
         parsed_list = [
             {"name": "TenGigE0/0/0/0"},
             {

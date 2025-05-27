@@ -146,7 +146,6 @@ class TestIosxrPingModule(TestIosxrModule):
         )
         set_module_args(dict(count=2, dest="192.0.2.1", state="absent"))
         result = self.execute_module(failed=False)
-        print(result)
         mock_res = {
             "commands": "ping ipv4 192.0.2.1 count 2",
             "packet_loss": "100%",
