@@ -308,7 +308,7 @@ class Interfaces(FactsBase):
             return match.group(1)
 
     def parse_cdp_intf_port(self, data):
-        match = re.search(r"^Interface: (.+),  Port ID \(outgoing port\): (.+)$", data, re.M)
+        match = re.search(r"^Interface: (.+)[,\n]\s*Port ID \(outgoing port\): (.+)$", data, re.M)
         if match:
             return match.group(1), match.group(2)
 
@@ -323,6 +323,6 @@ class Interfaces(FactsBase):
             return match.group(1)
 
     def parse_cdp_ip(self, data):
-        match = re.search(r"^  IP address: (.+)$", data, re.M)
+        match = re.search(r"^  IP(?:v4)? address: (.+)$", data, re.M)
         if match:
             return match.group(1)
