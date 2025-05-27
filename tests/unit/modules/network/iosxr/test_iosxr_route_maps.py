@@ -444,6 +444,37 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
         ]
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
+    def test_set_med_and_extcommunity(self):
+        self.get_config.return_value = "route-policy TEST-MED-EXTCOMM"
+        self.get_config_data.return_value = ""
+        set_module_args(
+            dict(
+                config=[
+                    {
+                        "name": "TEST-MED-EXTCOMM",
+                        "global": {
+                            "set": {
+                                "med": {"value": 100},
+                                "extcommunity": {
+                                    "rt": "65000:100",
+                                    "additive": True,
+                                },
+                            },
+                        },
+                    },
+                ],
+                state="merged",
+            ),
+        )
+        result = self.execute_module(changed=True)
+        commands = [
+            "route-policy TEST-MED-EXTCOMM",
+            "set med 100",
+            "set extcommunity rt 65000:100 additive",
+            "end-policy",
+        ]
+        self.assertEqual(result["commands"], commands)
+
     def test_iosxr_route_maps_overridden(self):
         self.maxDiff = None
         self.get_config.return_value = dedent(
@@ -1314,3 +1345,83 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             },
         ]
         self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_route_maps_merged_attributes_1(self):
+        self.maxDiff = None
+        self.get_config.return_value = dedent(
+            """\
+            route-policy TEST_ROUTE_POLICY_COMPLEX
+            """,
+        )
+        self.get_config_data.return_value = dedent(
+            """\
+            route-policy TEST_ROUTE_POLICY_COMPLEX
+            """,
+        )
+        set_module_args(
+            dict(
+                config=[
+                    {
+                        "global": {
+                            "set": {
+                                "path_selection": {
+                                    "backup": {
+                                        "backup_decimal": 1,
+                                        "install": True,
+                                    },
+                                },
+                            },
+                        },
+                        "if_section": {
+                            "condition": "destination in DEFAULT",
+                            "set": {
+                                "weight": 100,
+                            },
+                        },
+                        "elseif_section": [
+                            {
+                                "condition": "destination in ALL-UE-POOLS-V6 and med le 100",
+                                "set": {
+                                    "weight": 100,
+                                },
+                                "prepend": {
+                                    "as_path": 10728,
+                                },
+                            },
+                            {
+                                "condition": "as-path in COLO-PEER",
+                                "pass": True,
+                                "remove": {
+                                    "set": True,
+                                },
+                            },
+                        ],
+                        "else_section": {
+                            "global": {
+                                "drop": True,
+                            },
+                        },
+                        "name": "APPLY_TEST_ROUTE_POLICY_COMPLEX",
+                    },
+                ],
+                state="merged",
+            ),
+        )
+        result = self.execute_module(changed=True)
+        commands = [
+            "route-policy APPLY_TEST_ROUTE_POLICY_COMPLEX",
+            "set path-selection backup 1 install",
+            "if destination in DEFAULT then",
+            "set weight 100",
+            "elseif destination in ALL-UE-POOLS-V6 and med le 100 then",
+            "prepend as-path 10728",
+            "set weight 100",
+            "elseif as-path in COLO-PEER then",
+            "pass",
+            "remove as-path private-as",
+            "else",
+            "drop",
+            "endif",
+            "end-policy",
+        ]
+        self.assertEqual(result["commands"], commands)

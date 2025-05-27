@@ -78,6 +78,8 @@ class Route_maps(ResourceModule):
             "set.lsm_root",
             "set.metric_type",
             "set.mpls",
+            "set.med",
+            "set.extcommunity",
             "set.next_hop",
             "set.origin",
             "set.ospf_metric",

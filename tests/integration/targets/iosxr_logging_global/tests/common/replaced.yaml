@@ -14,11 +14,6 @@
             severity: errors
           correlator:
             buffer_size: 1024
-          files:
-            - maxfilesize: 1024
-              name: test
-              path: test1
-              severity: info
           hostnameprefix: test1
           hosts:
             - host: 1.1.1.3
