@@ -496,6 +496,47 @@ class Route_mapsTemplate(NetworkTemplate):
             },
         },
         {
+            "name": "set.extcommunity",
+            "getval": re.compile(
+                r"""
+                \s*set\sextcommunity
+                (\ssoo\s(?P<soo>\S+))?
+                (\srt\s(?P<rt>\S+))?
+                (\sbandwidth\s(?P<bandwidth>\S+))?
+                (\scolor\s(?P<color>\S+))?
+                (\scost\s(?P<cost>\S+))?
+                (\sredirect-to-rt\s(?P<redirect_to_rt>\([^\)]+\)))?
+                (\sseg-nh\s(?P<seg_nh>\S+))?
+                (\s(?P<additive>additive))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "set extcommunity"
+            "{{ (' soo ' + set.extcommunity.soo ) if set.extcommunity.soo is defined else '' }}"
+            "{{ (' rt ' + set.extcommunity.rt ) if set.extcommunity.rt is defined else '' }}"
+            "{{ (' bandwidth ' + set.extcommunity.bandwidth ) if set.extcommunity.bandwidth is defined else '' }}"
+            "{{ (' color ' + set.extcommunity.color ) if set.extcommunity.color is defined else '' }}"
+            "{{ (' cost ' + set.extcommunity.cost ) if set.extcommunity.cost is defined else '' }}"
+            "{{ (' redirect-to-rt ' + set.extcommunity.redirect_to_rt ) if set.extcommunity.redirect_to_rt is defined else '' }}"
+            "{{ (' seg-nh ' + set.extcommunity.seg_nh ) if set.extcommunity.seg_nh is defined else '' }}"
+            "{{ (' additive') if set.extcommunity.additive|d(False) else '' }}",
+            "result": {
+                "policies": {
+                    "set": {
+                        "extcommunity": {
+                            "soo": "{{ soo }}",
+                            "rt": "{{ rt }}",
+                            "bandwidth": "{{ bandwidth }}",
+                            "color": "{{ color }}",
+                            "cost": "{{ cost }}",
+                            "redirect_to_rt": "{{ redirect_to_rt }}",
+                            "seg_nh": "{{ seg_nh }}",
+                            "additive": "{{ not not additive }}",
+                        },
+                    },
+                },
+            },
+        },
+        {
             "name": "set.fallback_vrf_lookup",
             "getval": re.compile(
                 r"""
@@ -769,6 +810,41 @@ class Route_mapsTemplate(NetworkTemplate):
                 "policies": {
                     "set": {
                         "mpls": "{{ mpls }}",
+                    },
+                },
+            },
+        },
+        {
+            "name": "set.med",
+            "getval": re.compile(
+                r"""
+                \s*set\smed
+                (\s(?P<increment>\+))?
+                (\s(?P<decrement>\-))?
+                (\s(?P<value>\d+))?
+                (\s(?P<igp_cost>igp-cost))?
+                (\s(?P<max_reachable>max-reachable))?
+                (\s(?P<parameter>\$\w+))?
+                $""", re.VERBOSE,
+            ),
+            "setval": "set med"
+            "{{ (' +' ) if set.med.increment is defined else '' }}"
+            "{{ (' -' ) if set.med.decrement is defined else '' }}"
+            "{{ (' ' + set.med.value|string ) if set.med.value is defined else '' }}"
+            "{{ (' igp-cost') if set.med.igp_cost|d(False) else '' }}"
+            "{{ (' max-reachable') if set.med.max_reachable|d(False) else '' }}"
+            "{{ (' ' + set.med.parameter ) if set.med.parameter is defined else '' }}",
+            "result": {
+                "policies": {
+                    "set": {
+                        "med": {
+                            "increment": "{{ not not increment }}",
+                            "decrement": "{{ not not decrement }}",
+                            "value": "{{ value }}",
+                            "igp_cost": "{{ not not igp_cost }}",
+                            "max_reachable": "{{ not not max_reachable }}",
+                            "parameter": "{{ parameter }}",
+                        },
                     },
                 },
             },

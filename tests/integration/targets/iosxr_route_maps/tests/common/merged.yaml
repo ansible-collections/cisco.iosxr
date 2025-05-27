@@ -26,6 +26,11 @@
                 community:
                   additive: true
                   community_name: (11011:1001)
+                med:
+                  value: 100
+                extcommunity:
+                  rt: 65000:100
+                  additive: true
                 weight: 20000
                 local_preference:
                   - increment: true
