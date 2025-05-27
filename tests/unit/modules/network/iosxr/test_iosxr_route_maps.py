@@ -601,7 +601,10 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                     {
                         "else_section": {
                             "else_section": {"drop": True},
-                            "if_section": {"condition": "as-path in 15446", "pass": True},
+                            "if_section": {
+                                "condition": "as-path in (ios-regex '_8888_')",
+                                "pass": True,
+                            },
                         },
                         "if_section": {"condition": "destination in TESTROUTES", "drop": True},
                         "name": "TEST_ROUTE_POLICY_BIT_SIMPLE",
@@ -659,7 +662,7 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             "if destination in TESTROUTES then",
             "drop",
             "else",
-            "if as-path in 15446 then",
+            "if as-path in (ios-regex '_8888_') then",
             "pass",
             "else",
             "drop",
