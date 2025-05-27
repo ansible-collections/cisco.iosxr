@@ -16,7 +16,7 @@
         description: Configured and Merged by Ansible-Network
         mtu: 2800
         enabled: false
-        speed: 100
+        # speed: 100 # Not supported in CML Version of XR
         duplex: full
     state: rendered
 

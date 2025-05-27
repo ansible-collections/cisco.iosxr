@@ -215,7 +215,6 @@ class TestIosxrLacpInterfacesModule(TestIosxrModule):
             ),
         )
         result = self.execute_module(changed=False)
-        print(result["parsed"])
         parsed_list = [
             {
                 "churn_logging": "actor",

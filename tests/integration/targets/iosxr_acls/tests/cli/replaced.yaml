@@ -32,6 +32,19 @@
                     destination:
                       any: true
                     protocol: icmp
+
+                  - sequence: 40
+                    remark: "Deny MARTIANS"
+
+                  - sequence: 60
+                    grant: deny
+                    protocol: ipv4
+                    source:
+                      address: 10.0.0.0
+                      wildcard_bits: 0.255.255.255
+                    destination:
+                      any: true
+
         state: replaced
 
     - name: Assert that correct set of commands were generated

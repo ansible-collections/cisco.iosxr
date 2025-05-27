@@ -231,7 +231,10 @@ class Static_routes(ConfigBase):
                             if "." in item or ":" in item or "/" in item:
                                 cmd += " {0}".format(item)
                             else:
-                                cmd += " vrf {0}".format(item)
+                                if "vrf" in want:
+                                    cmd += " vrf {0}".format(item)
+                                else:
+                                    cmd += " {0}".format(item)
                         update_commands.append(cmd)
 
                 for key, value in iteritems(rotated_want_next_hops):
@@ -251,6 +254,7 @@ class Static_routes(ConfigBase):
                                 dest=want_route["dest"],
                                 next_hop=key,
                                 updates=updates,
+                                in_vrf="vrf" in want,
                             ),
                         )
 
@@ -278,72 +282,18 @@ class Static_routes(ConfigBase):
         """
         commands = []
 
-        # Iterate through all the entries, i.e., VRFs and Global entry in have
-        # and fully remove the ones that are not present in want and then call
-        # replaced
-
         for h_item in have:
             w_item = self._find_vrf(h_item, want)
-
             # Delete all the top-level keys (VRFs/Global Route Entry) that are
             # not specified in want.
             if not w_item:
                 if "vrf" in h_item:
                     commands.append("no vrf {0}".format(h_item["vrf"]))
-                else:
-                    for have_afi in h_item.get("address_families", []):
-                        commands.append(
-                            "no address-family {0} {1}".format(
-                                have_afi["afi"],
-                                have_afi["safi"],
-                            ),
-                        )
-
-            # For VRFs/Global Entry present in want, we also need to delete extraneous routes
-            # from them. We cannot reuse `_state_replaced` for this purpose since its scope is
-            # limited to replacing a single `dest`.
             else:
-                del_cmds = []
-                for have_afi in h_item.get("address_families", []):
-                    want_afi = (
-                        self.find_af_context(
-                            have_afi,
-                            w_item.get("address_families", []),
-                        )
-                        or {}
-                    )
-                    update_commands = []
-                    for h_route in have_afi.get("routes", []):
-                        w_route = (
-                            search_obj_in_list(
-                                h_route["dest"],
-                                want_afi.get("routes", []),
-                                key="dest",
-                            )
-                            or {}
-                        )
-                        if not w_route:
-                            update_commands.append(
-                                "no {0}".format(h_route["dest"]),
-                            )
+                commands.extend(
+                    self._state_replaced(remove_empties(w_item), h_item),
+                )
 
-                    if update_commands:
-                        update_commands.insert(
-                            0,
-                            "address-family {0} {1}".format(
-                                want_afi["afi"],
-                                want_afi["safi"],
-                            ),
-                        )
-                        del_cmds.extend(update_commands)
-
-                if "vrf" in want and update_commands:
-                    del_cmds.insert(0, "vrf {0}".format(want["vrf"]))
-
-                commands.extend(del_cmds)
-
-        # We finally call `_state_replaced` to replace exiting `dest` entries
-        # or add new ones as specified in want.
         for w_item in want:
             h_item = self._find_vrf(w_item, have)
             commands.extend(
@@ -421,6 +371,7 @@ class Static_routes(ConfigBase):
                                     rotated_have_next_hops.get(key, {}),
                                     updates,
                                 ),
+                                in_vrf="vrf" in want,
                             ),
                         )
 
@@ -476,7 +427,10 @@ class Static_routes(ConfigBase):
                             if "." in item or ":" in item or "/" in item:
                                 cmd += " {0}".format(item)
                             else:
-                                cmd += " vrf {0}".format(item)
+                                if "vrf" in want_afi:
+                                    cmd += " vrf {0}".format(item)
+                                else:
+                                    cmd += " {0}".format(item)
                         update_commands.append(cmd)
             if update_commands:
                 update_commands.insert(
@@ -580,7 +534,7 @@ class Static_routes(ConfigBase):
 
         return next_hops_dict
 
-    def _compute_commands(self, dest, next_hop, updates=None):
+    def _compute_commands(self, dest, next_hop, updates=None, in_vrf=False):
         """This method computes a static route entry command
             from the specified `dest`, `next_hop` and `updates`
 
@@ -596,7 +550,11 @@ class Static_routes(ConfigBase):
             if "." in x or ":" in x or "/" in x:
                 command += " {0}".format(x)
             else:
-                command += " vrf {0}".format(x)
+                # Only add 'vrf' if in VRF context and not in normal context
+                if in_vrf:
+                    command += " vrf {0}".format(x)
+                else:
+                    command += " {0}".format(x)
 
         for key in sorted(updates):
             if key == "admin_distance":

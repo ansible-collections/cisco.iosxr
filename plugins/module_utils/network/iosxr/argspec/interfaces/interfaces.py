@@ -41,7 +41,7 @@ class InterfacesArgs(object):
             "options": {
                 "name": {"type": "str", "required": True},
                 "description": {"type": "str"},
-                "enabled": {"default": True, "type": "bool"},
+                "enabled": {"type": "bool"},
                 "speed": {"type": "int"},
                 "mtu": {"type": "int"},
                 "duplex": {"type": "str", "choices": ["full", "half"]},

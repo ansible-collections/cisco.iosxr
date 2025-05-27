@@ -463,9 +463,13 @@ class AclsFacts(object):
             # In this case, we add the whole unprocessed ACE
             # to a key called `line` and send it back
             if len(ace_queue) > 0:
+                for x in split_ace[1:]:
+                    m1 = re.match(r"\(\d", x)
+                    m2 = re.match(r"\w+\)", x)
+                    if m1 or m2:
+                        split_ace.remove(x)
                 rendered_ace = {
                     "sequence": sequence,
                     "line": " ".join(split_ace[1:]),
                 }
-
         return utils.remove_empties(rendered_ace)

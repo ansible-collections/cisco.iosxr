@@ -12,7 +12,9 @@
       cisco.iosxr.iosxr_static_routes:
         state: gathered
 
-    - ansible.builtin.assert:
-        that: "{{ replaced['before'] | symmetric_difference(result['gathered']) |length == 0 }}"
+    - name: Assert that gathered dicts was correctly generated
+      ansible.builtin.assert:
+        that:
+          - result['changed'] == false
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml

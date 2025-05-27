@@ -793,7 +793,6 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "host 1.1.1.1 traps test1",
         ]
         result = self.execute_module(changed=True)
-        print(result["commands"])
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_snmp_server_deleted(self):
