@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - The show command filter was unaware of admin class commands which are invoked by admin show. This patch fixes the problem to allow these commands in check mode.
