@@ -1,3 +1,0 @@
----
-bugfixes:
-  - iosxr_route_maps - Fix issue where wrong commands were being generated for several attributes.
