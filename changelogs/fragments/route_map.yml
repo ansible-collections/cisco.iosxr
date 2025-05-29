@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Fixes route map fact gathering to correctly gather facts with a elif condition.

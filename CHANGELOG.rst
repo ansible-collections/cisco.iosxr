@@ -4,6 +4,24 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v11.1.0
+=======
+
+Minor Changes
+-------------
+
+- Adds support for missing set route map attributes med and extcommunity
+- Enhanced CDP neighbor parsing to support updated output formats in IOS-XR 7.7.21 and 7.4.1
+- Modified `parse_cdp_ip` to recognize "IPv4 address" in place of "IP address"
+- Updated `parse_cdp_intf_port` to handle newline-separated "Interface" and "Port ID" fields
+
+Bugfixes
+--------
+
+- Fixes route map fact gathering to correctly gather facts with a elif condition.
+- cisco.iosxr.iosxr_interfaces - Improved handling of the `enabled` state to prevent incorrect `shutdown` or `no shutdown` commands during configuration changes.
+- iosxr_route_maps - Fix issue where wrong commands were being generated for several attributes.
+
 v11.0.0
 =======
 
