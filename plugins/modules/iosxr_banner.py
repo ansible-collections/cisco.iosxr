@@ -255,7 +255,7 @@ class NCConfiguration(ConfigBase):
 def main():
     """main entry point for module execution"""
     argument_spec = dict(
-        banner=dict(required=True, choices=["login", "motd"]),
+        banner=dict(required=True, choices=["login", "motd", "exec"]),
         text=dict(),
         state=dict(default="present", choices=["present", "absent"]),
     )
