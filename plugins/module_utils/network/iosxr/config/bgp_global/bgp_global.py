@@ -137,13 +137,13 @@ class Bgp_global(ResourceModule):
         for entry in self.want, self.have:
             self._bgp_list_to_dict(entry)
 
-        # if state is deleted, clean up global params
         if self.state == "deleted":
             if not self.want or (self.have.get("as_number") == self.want.get("as_number")):
                 self._compare(
-                    want={"as_number": self.want.get("as_number")},
+                    want=self.want,
                     have=self.have,
                 )
+
         elif self.state == "purged":
             if not self.want or (self.have.get("as_number") == self.want.get("as_number")):
                 self.addcmd(self.have or {}, "router", True)
@@ -319,27 +319,41 @@ class Bgp_global(ResourceModule):
 
         want_nbr = want.get("neighbors", {})
         have_nbr = have.get("neighbors", {})
-        for name, entry in iteritems(want_nbr):
-            have = have_nbr.pop(name, {})
-            begin = len(self.commands)
-            self.compare(parsers=neighbor_parsers, want=entry, have=have)
-            neighbor_address = entry.get("neighbor_address", "")
-            if len(self.commands) != begin:
-                self.commands.insert(
-                    begin,
-                    self._tmplt.render(
-                        {"neighbor_address": neighbor_address},
-                        "neighbor_address",
-                        False,
-                    ),
-                )
+
+        if self.state == "deleted":
+            # For each explicitly given neighbor in 'want', always delete it
+            for name, entry in iteritems(want_nbr):
+                if self._check_af("neighbor_address", name):
+                    self._module.fail_json(
+                        msg="Neighbor {0} has address-family configurations. "
+                        "Please use the iosxr_bgp_neighbor_address_family module to remove those first.".format(name),
+                    )
+                else:
+                    self.addcmd(entry, "neighbor_address", True)
+            return
+
+        else:
+            # Existing logic for merged, replaced, etc.
+            for name, entry in iteritems(want_nbr):
+                have_entry = have_nbr.pop(name, {})
+                begin = len(self.commands)
+                self.compare(parsers=neighbor_parsers, want=entry, have=have_entry)
+                neighbor_address = entry.get("neighbor_address", "")
+                if len(self.commands) != begin:
+                    self.commands.insert(
+                        begin,
+                        self._tmplt.render(
+                            {"neighbor_address": neighbor_address},
+                            "neighbor_address",
+                            False,
+                        ),
+                    )
+
         for name, entry in iteritems(have_nbr):
             if self._check_af("neighbor_address", name):
                 self._module.fail_json(
                     msg="Neighbor {0} has address-family configurations. "
-                    "Please use the iosxr_bgp_neighbor_address_family module to remove those first.".format(
-                        name,
-                    ),
+                    "Please use the iosxr_bgp_neighbor_address_family module to remove those first.".format(name),
                 )
             else:
                 self.addcmd(entry, "neighbor_address", True)
