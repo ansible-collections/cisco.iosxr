@@ -327,7 +327,7 @@ class Bgp_global(ResourceModule):
                     self._module.fail_json(
                         msg="Neighbor {0} has address-family configurations. "
                         "Please use the iosxr_bgp_neighbor_address_family module to remove those first.".format(
-                            name
+                            name,
                         ),
                     )
                 else:
@@ -356,7 +356,7 @@ class Bgp_global(ResourceModule):
                 self._module.fail_json(
                     msg="Neighbor {0} has address-family configurations. "
                     "Please use the iosxr_bgp_neighbor_address_family module to remove those first.".format(
-                        name
+                        name,
                     ),
                 )
             else:
