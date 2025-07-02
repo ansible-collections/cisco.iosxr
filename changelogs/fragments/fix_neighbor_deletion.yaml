@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fixed deletion of all neighbors unintentionally getting deleted instead of only the specified ones in iosxr_bgp_global module.
