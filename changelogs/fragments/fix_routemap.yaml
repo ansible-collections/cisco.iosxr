@@ -1,3 +1,3 @@
 ---
 bugfixes:
-  - Fixed route policy populate_facts fucntion for iosxr_route_map , where facts gathering was failing when route policy has more than one parameter
+  - iosxr_route_map - Fixes route-policy attribute facts gathering.
