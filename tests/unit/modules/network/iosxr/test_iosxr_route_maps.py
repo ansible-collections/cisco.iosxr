@@ -1443,6 +1443,6 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             """,
         )        
         set_module_args(dict(state="gathered"))
-        gathered = "{''name'': ''TEST_POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)'', ''global'': {''set'': {''local_preference'': [{''metric_number'': 150}]}}}"
+        gathered = "[{''name'': ''TEST_POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)'', ''global'': {''set'': {''local_preference'': [{''metric_number'': 150}]}}}]"
         result = self.execute_module(changed=False)
         self.assertEqual(gathered, result["gathered"])    

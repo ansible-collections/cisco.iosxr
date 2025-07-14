@@ -333,7 +333,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*set\scommunity
-                (\s(?P<community_name>\S+))?
+                (\s(?P<community_name>.*+))?
                 (\s(?P<additive>additive))?
                 $""", re.VERBOSE,
             ),
