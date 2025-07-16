@@ -50,11 +50,10 @@
         name: COMPLEX_CONDITION_ROUTE_POLICY
       - global:
           set:
-            community: 
+            community:
               community_name: (64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)
             local_preference:
-              - increment: true
-                metric_number: 150
-        name: TEST_POLICY_TWO_PARAMS($SPECIFICITY,$GEO_LOCATION)
+            - metric_number: 150
+        name: POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)
   vars:
     ansible_connection: ansible.netcommon.network_cli
