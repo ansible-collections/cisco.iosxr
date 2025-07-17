@@ -1448,12 +1448,12 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
                 "global": {
                     "set": {
                         "community": {
-                            "community_name": "(64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)"
+                            "community_name": "(64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)",
                         },
                         "local_preference": [{"metric_number": 150}],
-                    }
+                    },
                 },
-            }
+            },
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(gathered, result["gathered"])
