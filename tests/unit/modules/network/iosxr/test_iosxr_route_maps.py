@@ -1426,7 +1426,6 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
         ]
         self.assertEqual(result["commands"], commands)
 
-
     def test_iosxr_routemap_multiple_params_gathered(self):
         self.maxDiff = None
         self.get_config.return_value = dedent(
@@ -1443,6 +1442,18 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             """,
         )
         set_module_args(dict(state="gathered"))
-        gathered = [{'name': 'TEST_POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)', 'global': {'set': {'community': {'community_name': '(64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)'}, 'local_preference': [{'metric_number': 150}]}}}]
+        gathered = [
+            {
+                "name": "TEST_POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)",
+                "global": {
+                    "set": {
+                        "community": {
+                            "community_name": "(64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)"
+                        },
+                        "local_preference": [{"metric_number": 150}],
+                    }
+                },
+            }
+        ]
         result = self.execute_module(changed=False)
-        self.assertEqual(gathered, result["gathered"]) 
+        self.assertEqual(gathered, result["gathered"])
