@@ -232,7 +232,7 @@ class Route_mapsFacts(object):
 
         for name in data.splitlines():  # generate a list of policy names
             if name.startswith("route-policy "):
-                policy_names.append(name.split()[1])
+                policy_names.append(name.split(" ", 1)[1])
 
         if mock_data:  # only for states like parsed
             data_for_parsed = data.split("end-policy\n!")

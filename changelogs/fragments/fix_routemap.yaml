@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - iosxr_route_map - Fixes route-policy attribute facts gathering.
