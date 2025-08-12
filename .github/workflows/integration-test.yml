@@ -29,7 +29,7 @@ jobs:
     with:
       lab_title: cisco_iosxr
       network_os: cisco.iosxr.iosxr
-      pytest_addopts: "--color=yes --wait-extra 1000 -n 2 --log-level WARNING -vvv"
+      pytest_addopts: "--color=yes --wait-extra 1000 -n 1 --log-level WARNING -vvv"
       collection_pre_install: >-
         git+https://github.com/ansible-collections/ansible.utils.git
         git+https://github.com/ansible-collections/ansible.netcommon.git
