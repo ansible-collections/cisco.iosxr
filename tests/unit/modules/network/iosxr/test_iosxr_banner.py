@@ -94,7 +94,7 @@ class TestIosxrBannerModule(TestIosxrModule):
         result = self.execute_module(failed=True, changed=True)
         self.assertEqual(
             result["msg"],
-            "value of banner must be one of: login, motd, got: exec1",
+            "value of banner must be one of: login, motd, exec got: exec1",
         )
 
     def test_iosxr_banner_exec1_fail_remove(self):
@@ -102,7 +102,7 @@ class TestIosxrBannerModule(TestIosxrModule):
         result = self.execute_module(failed=True, changed=True)
         self.assertIn(
             result["msg"],
-            "value of banner must be one of: login, motd, got: exec1",
+            "value of banner must be one of: login, motd, exec got: exec1",
         )
 
     def test_iosxr_banner_motd_create(self):
@@ -113,4 +113,14 @@ class TestIosxrBannerModule(TestIosxrModule):
     def test_iosxr_banner_motd_remove(self):
         set_module_args(dict(banner="motd", state="absent"))
         commands = ["no banner motd"]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_iosxr_banner_exec_create(self):
+        set_module_args(dict(banner="exec", text="test\nbanner\nstring"))
+        commands = ["banner exec test\nbanner\nstring"]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_iosxr_banner_exec_remove(self):
+        set_module_args(dict(banner="exec", state="absent"))
+        commands = ["no banner exec"]
         self.execute_module(changed=True, commands=commands)
