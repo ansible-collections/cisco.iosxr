@@ -285,7 +285,7 @@ releases:
     fragments:
       - fix_routemap.yaml
       - fix_sanity.yaml
-    release_date: "2025-08-14"
+    release_date: "2025-08-19"
   2.0.0:
     changes:
       bugfixes:
