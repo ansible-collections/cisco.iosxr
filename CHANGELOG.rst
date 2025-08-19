@@ -10,7 +10,7 @@ v12.0.0
 Release Summary
 ---------------
 
-With this release, the minimum required version of `ansible.netcommon` for this collection is `>=8.1.0`. The last version known to be compatible with `ansible-core<=2.18.x` is ansible.netcommon `v8.0.1` and cisco.ios `v11.1.0`.
+With this release, the minimum required version of `ansible.netcommon` for this collection is `>=8.1.0`. The last version known to be compatible with `ansible-core<=2.18.x` is ansible.netcommon `v8.0.1` and cisco.iosxr `v11.1.0`.
 
 Major Changes
 -------------
