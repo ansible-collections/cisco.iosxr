@@ -331,6 +331,35 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
 
         self.execute_module(changed=False, commands=[])
 
+    def test_iosxr_bgp_global_delete_single_neighbor(self):
+        run_cfg = dedent(
+            """\
+            router bgp 65137
+              neighbor 192.168.253.1
+              neighbor 192.168.253.2
+              neighbor 192.168.253.3
+              neighbor 192.168.253.4
+            """,
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="65137",
+                    neighbors=[
+                        dict(neighbor_address="192.168.253.4"),
+                    ],
+                ),
+                state="deleted",
+            ),
+        )
+        commands = [
+            "router bgp 65137",
+            "no neighbor 192.168.253.4",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
     def test_iosxr_bgp_global_deleted(self):
         run_cfg = dedent(
             """\
@@ -366,8 +395,6 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "no default-metric 4",
             "no socket receive-buffer-size 514",
             "no socket send-buffer-size 4098",
-            "no neighbor 192.0.2.11",
-            "no neighbor 192.0.2.14",
             "no vrf vrf1",
         ]
         result = self.execute_module(changed=True)
