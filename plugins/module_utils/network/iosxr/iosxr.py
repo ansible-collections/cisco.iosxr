@@ -494,7 +494,7 @@ def run_commands(module, commands, check_rc=True):
         module.fail_json(msg=to_text(exc))
 
 
-def copy_file(module, src, dst, proto="scp"):
+def copy_file(module, src, dst, proto="sftp"):
     conn = get_connection(module)
     try:
         conn.copy_file(source=src, destination=dst, proto=proto)
@@ -502,7 +502,7 @@ def copy_file(module, src, dst, proto="scp"):
         module.fail_json(msg=to_text(exc, errors="surrogate_then_replace"))
 
 
-def get_file(module, src, dst, proto="scp"):
+def get_file(module, src, dst, proto="sftp"):
     conn = get_connection(module)
     try:
         conn.get_file(source=src, destination=dst, proto=proto)
