@@ -130,6 +130,40 @@ class L3_InterfacesFacts(object):
                 each_ipv6["address"] = each
                 ipv6.append(each_ipv6)
                 config["ipv6"] = ipv6
+
+            up_delay = re.search(r"carrier-delay up (\d+)", conf)
+            if up_delay:
+                config["carrier_delay"]["up"] = int(up_delay.group(1))
+
+            down_delay = re.search(r"carrier-delay down (\d+)", conf)
+            if down_delay:
+                config["carrier_delay"]["down"] = int(down_delay.group(1))
+
+            dampening_line = re.search(r"^\s*dampening(.*)$", conf, re.M)
+            if dampening_line:
+                config["dampening"]["enabled"] = True
+
+                params = dampening_line.group(1).strip().split()
+
+                param_keys = [
+                    'half_life',
+                    'reuse_threshold',
+                    'suppress_threshold',
+                    'max_suppress_time',
+                    'restart_penalty'
+                ]
+                for i, value in enumerate(params):
+                    key_name = param_keys[i]
+                    config["dampening"][key_name] = int(value)
+
+            load_interval = re.search(r"load-interval (\d+)", conf)
+            if load_interval:
+                config["load_interval"] = int(load_interval.group(1))
+
+            flow_control = re.search(r"flow(?:-control)? (ingress|egress|bidirectional)", conf)
+            if flow_control:
+                config["flow_control"] = flow_control.group(1)
+
             return utils.remove_empties(config)
 
     def format_ipv4(self, address):
