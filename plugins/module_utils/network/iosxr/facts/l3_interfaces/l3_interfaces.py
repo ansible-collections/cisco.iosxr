@@ -146,11 +146,11 @@ class L3_InterfacesFacts(object):
                 params = dampening_line.group(1).strip().split()
 
                 param_keys = [
-                    'half_life',
-                    'reuse_threshold',
-                    'suppress_threshold',
-                    'max_suppress_time',
-                    'restart_penalty'
+                    "half_life",
+                    "reuse_threshold",
+                    "suppress_threshold",
+                    "max_suppress_time",
+                    "restart_penalty",
                 ]
                 for i, value in enumerate(params):
                     key_name = param_keys[i]

@@ -188,7 +188,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "carrier-delay down 100",
             "dampening 20 800 3500 120 1000",
             "load-interval 60",
-            "flow-control egress"
+            "flow-control egress",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))

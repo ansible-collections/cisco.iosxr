@@ -386,11 +386,11 @@ class L3_Interfaces(ConfigBase):
                 else:
                     cmd_parts = ["dampening"]
                     params_order = [
-                        'half_life',
-                        'reuse_threshold',
-                        'suppress_threshold',
-                        'max_suppress_time',
-                        'restart_penalty'
+                        "half_life",
+                        "reuse_threshold",
+                        "suppress_threshold",
+                        "max_suppress_time",
+                        "restart_penalty",
                     ]
                     for param in params_order:
                         value = dampening_want.get(param)
