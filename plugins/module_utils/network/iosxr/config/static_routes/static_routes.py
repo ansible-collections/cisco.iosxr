@@ -16,7 +16,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
@@ -237,7 +237,7 @@ class Static_routes(ConfigBase):
                                     cmd += " {0}".format(item)
                         update_commands.append(cmd)
 
-                for key, value in iteritems(rotated_want_next_hops):
+                for key, value in .items(rotated_want_next_hops):
                     if key in rotated_have_next_hops:
                         existing = True
                         have_exit_point_attribs = rotated_have_next_hops[key]
@@ -349,7 +349,7 @@ class Static_routes(ConfigBase):
                 # which means the the given want exit point exists and we run dict_diff
                 # on `value` which is basically all the other attributes of the exit point
                 # if the key is not present, it means that this is a new exit point
-                for key, value in iteritems(rotated_want_next_hops):
+                for key, value in .items(rotated_want_next_hops):
                     if key in rotated_have_next_hops:
                         existing = True
                         have_exit_point_attribs = rotated_have_next_hops[key]

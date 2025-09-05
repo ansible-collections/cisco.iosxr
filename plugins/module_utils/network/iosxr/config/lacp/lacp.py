@@ -18,7 +18,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
@@ -182,9 +182,7 @@ class Lacp(ConfigBase):
         if self.state == "rendered":
             updates = want
         if updates:
-            for key, value in iteritems(
-                flatten_dict(remove_empties(updates["system"])),
-            ):
+            for key, value in flatten_dict(remove_empties(updates["system"])).items():
                 commands.append(
                     "lacp system {0} {1}".format(
                         key.replace("address", "mac"),

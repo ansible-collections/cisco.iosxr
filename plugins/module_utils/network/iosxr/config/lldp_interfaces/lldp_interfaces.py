@@ -17,7 +17,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
@@ -232,9 +232,7 @@ class Lldp_interfaces(ConfigBase):
         if not have:
             have = {"name": want["name"]}
 
-        for key, value in iteritems(
-            flatten_dict(remove_empties(dict_diff(have, want))),
-        ):
+        for key, value in flatten_dict(remove_empties(dict_diff(have, want))).items():
             commands.append(self._compute_commands(key, value))
 
         if commands:
@@ -251,7 +249,7 @@ class Lldp_interfaces(ConfigBase):
         """
         commands = []
 
-        for key, value in iteritems(
+        for key, value in 
             flatten_dict(dict_delete(have, remove_empties(want))),
         ):
             commands.append(self._compute_commands(key, value, remove=True))

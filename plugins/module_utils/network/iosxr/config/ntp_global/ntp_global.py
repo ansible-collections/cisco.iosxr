@@ -20,7 +20,7 @@ created.
 
 from copy import deepcopy
 
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -134,7 +134,7 @@ class Ntp_global(ResourceModule):
                 wantx = want.get(x, {})
                 havex = have.get(x, {})
 
-            for wkey, wentry in iteritems(wantx):
+            for wkey, wentry in .items(wantx):
                 hentry = havex.pop(wkey, {})
                 if wentry != hentry:
                     if x == "interfaces":
@@ -146,7 +146,7 @@ class Ntp_global(ResourceModule):
                         self.addcmd(wentry, x)
 
             # remove superfluos config
-            for _hkey, hentry in iteritems(havex):
+            for _hkey, hentry in .items(havex):
                 if x == "interfaces":
                     if "vrf" in hentry:
                         self.commands.append(

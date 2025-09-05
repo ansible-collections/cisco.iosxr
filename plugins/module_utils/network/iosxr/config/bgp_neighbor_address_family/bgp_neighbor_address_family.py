@@ -19,7 +19,7 @@ created.
 """
 
 
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -109,7 +109,7 @@ class Bgp_neighbor_address_family(ResourceModule):
                     "vrfs": {},
                 }
 
-                for k, hvrf in iteritems(haved.get("vrfs", {})):
+                for k, hvrf in haved.get("vrfs", {}).items():
                     wvrf = wantd.get("vrfs", {}).get(k, {})
                     to_del["vrfs"][k] = {
                         "neighbors": self._set_to_delete(hvrf, wvrf),
@@ -148,7 +148,7 @@ class Bgp_neighbor_address_family(ResourceModule):
         """
         want_nbr = want.get("neighbors", {})
         have_nbr = have.get("neighbors", {})
-        for name, entry in iteritems(want_nbr):
+        for name, entry in want_nbr.items():
             have = have_nbr.pop(name, {})
             begin = len(self.commands)
             self._compare_af(want=entry, have=have)
@@ -157,7 +157,7 @@ class Bgp_neighbor_address_family(ResourceModule):
 
         # for deleted and overridden state
         if self.state != "replaced":
-            for name, entry in iteritems(have_nbr):
+            for name, entry in have_nbr.items():
                 begin = len(self.commands)
                 self._compare_af(want={}, have=entry)
                 if len(self.commands) != begin:
@@ -170,7 +170,7 @@ class Bgp_neighbor_address_family(ResourceModule):
         """
         wafs = want.get("address_family", {})
         hafs = have.get("address_family", {})
-        for name, entry in iteritems(wafs):
+        for name, entry in wafs.items():
             begin = len(self.commands)
             af_have = hafs.pop(name, {})
             self.compare(parsers=self.parsers, want=entry, have=af_have)
@@ -184,7 +184,7 @@ class Bgp_neighbor_address_family(ResourceModule):
                     ),
                 )
 
-        for name, entry in iteritems(hafs):
+        for name, entry in hafs.items():
             self.addcmd(
                 {"afi": entry.get("afi"), "safi": entry.get("safi")},
                 "address_family",
@@ -198,14 +198,14 @@ class Bgp_neighbor_address_family(ResourceModule):
         """
         wvrfs = want.get("vrfs", {})
         hvrfs = have.get("vrfs", {})
-        for name, entry in iteritems(wvrfs):
+        for name, entry in wvrfs.items():
             begin = len(self.commands)
             vrf_have = hvrfs.pop(name, {})
             self._compare_neighbors(want=entry, have=vrf_have)
             if len(self.commands) != begin:
                 self.commands.insert(begin, "vrf {0}".format(name))
         # for deleted and replaced state
-        for name, entry in iteritems(hvrfs):
+        for name, entry in hvrfs.items():
             begin = len(self.commands)
             self._compare_neighbors(want={}, have=entry)
             if len(self.commands) != begin:
@@ -230,14 +230,14 @@ class Bgp_neighbor_address_family(ResourceModule):
         h_nbrs = haved.get("neighbors", {})
         w_nbrs = wantd.get("neighbors", {})
 
-        for k, h_nbr in iteritems(h_nbrs):
+        for k, h_nbr in h_nbrs.items():
             w_nbr = w_nbrs.pop(k, {})
             if w_nbr:
                 neighbors[k] = h_nbr
                 afs_to_del = {}
                 h_addrs = h_nbr.get("address_family", {})
                 w_addrs = w_nbr.get("address_family", {})
-                for af, h_addr in iteritems(h_addrs):
+                for af, h_addr in h_addrs.items():
                     if af in w_addrs:
                         afs_to_del[af] = h_addr
                 neighbors[k]["address_family"] = afs_to_del

@@ -15,7 +15,7 @@ from functools import total_ordering
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import missing_required_lib
 from ansible.module_utils.common.network import is_masklen, to_netmask
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_diff,
     search_obj_in_list,
@@ -49,28 +49,28 @@ def dict_to_set(sample_dict):
     # Generate a set with passed dictionary for comparison
     test_dict = {}
     if isinstance(sample_dict, dict):
-        for k, v in iteritems(sample_dict):
+        for k, v in .items(sample_dict):
             if v is not None:
                 if isinstance(v, list):
                     if isinstance(v[0], dict):
                         li = []
                         for each in v:
-                            for key, value in iteritems(each):
+                            for key, value in .items(each):
                                 if isinstance(value, list):
                                     each[key] = tuple(value)
-                            li.append(tuple(iteritems(each)))
+                            li.append(tuple(.items(each)))
                         v = tuple(li)
                     else:
                         v = tuple(v)
                 elif isinstance(v, dict):
                     li = []
-                    for key, value in iteritems(v):
+                    for key, value in .items(v):
                         if isinstance(value, list):
                             v[key] = tuple(value)
-                    li.extend(tuple(iteritems(v)))
+                    li.extend(tuple(.items(v)))
                     v = tuple(li)
                 test_dict.update({k: v})
-        return_set = set(tuple(iteritems(test_dict)))
+        return_set = set(tuple(.items(test_dict)))
     else:
         return_set = set(sample_dict)
     return return_set
@@ -85,15 +85,15 @@ def filter_dict_having_none_value(want, have):
         test_dict["name"] = name
     diff_ip = False
     want_ip = ""
-    for k, v in iteritems(want):
+    for k, v in .items(want):
         if isinstance(v, dict):
-            for key, value in iteritems(v):
+            for key, value in .items(v):
                 if value is None and k in have and key in have.get(k):
                     dict_val = have.get(k).get(key)
                     test_key_dict.update({key: dict_val})
                 test_dict.update({k: test_key_dict})
         if isinstance(v, list) and isinstance(v[0], dict):
-            for key, value in iteritems(v[0]):
+            for key, value in .items(v[0]):
                 if value is None and k in have and key in have.get(k):
                     dict_val = have.get(k).get(key)
                     test_key_dict.update({key: dict_val})
@@ -158,7 +158,7 @@ def flatten_dict(x):
     if not isinstance(x, dict):
         return result
 
-    for key, value in iteritems(x):
+    for key, value in .items(x):
         if isinstance(value, dict):
             result.update(flatten_dict(value))
         else:

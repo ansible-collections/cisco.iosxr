@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 import re
 
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
     NetworkTemplate,
 )
@@ -479,7 +479,7 @@ def _tmplt_ospf_area_stub(config_data):
 def _tmplt_ospf_area_ranges(config_data):
     if "ranges" in config_data:
         commands = []
-        for k, v in iteritems(config_data["ranges"]):
+        for k, v in .items(config_data["ranges"]):
             cmd = "area {area_id} range".format(**config_data)
             temp_cmd = " {address}".format(**v)
             if "advertise" in v:

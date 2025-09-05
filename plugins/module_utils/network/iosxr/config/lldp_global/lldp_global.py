@@ -17,7 +17,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
@@ -178,7 +178,7 @@ class Lldp_global(ConfigBase):
         commands = []
         updates = dict_diff(have, want)
         if updates:
-            for key, value in iteritems(flatten_dict(remove_empties(updates))):
+            for key, value in flatten_dict(remove_empties(updates)).items():
                 commands.append(self._compute_commands(key, value))
 
         return commands
@@ -191,9 +191,7 @@ class Lldp_global(ConfigBase):
                   of the provided objects
         """
         commands = []
-        for key, value in iteritems(
-            flatten_dict(dict_delete(have, remove_empties(want))),
-        ):
+        for key, value in flatten_dict(dict_delete(have, remove_empties(want))).items():
             cmd = self._compute_commands(key, value, remove=True)
             if cmd:
                 commands.append(cmd)

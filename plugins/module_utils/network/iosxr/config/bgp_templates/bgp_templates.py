@@ -20,7 +20,7 @@ created.
 
 from copy import deepcopy
 
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -118,12 +118,12 @@ class Bgp_templates(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            haved = {k: v for k, v in iteritems(haved) if k in wantd or not wantd}
+            haved = {k: v for k, v in haved.items() if k in wantd or not wantd}
             wantd = {}
 
         if self.state in ["overridden", "deleted"]:
             cmds = []
-            for k, have in iteritems(haved.get("neighbor", {})):
+            for k, have in haved.get("neighbor", {}).items():
                 if k not in wantd.get("neighbor", {}):
                     cmds.append("no neighbor-group {0}".format(have["name"]))
             self.commands.extend(cmds)
@@ -236,7 +236,7 @@ class Bgp_templates(ResourceModule):
 
         want_nbr = want.get("neighbor", {})
         have_nbr = have.get("neighbor", {})
-        for name, entry in iteritems(want_nbr):
+        for name, entry in want_nbr.items():
             have = have_nbr.pop(name, {})
             begin = len(self.commands)
             self.compare(parsers=neighbor_parsers, want=entry, have=have)
@@ -261,7 +261,7 @@ class Bgp_templates(ResourceModule):
         """
         wafs = want.get("address_family", {})
         hafs = have.get("address_family", {})
-        for name, entry in iteritems(wafs):
+        for name, entry in wafs.items():
             begin = len(self.commands)
             af_have = hafs.pop(name, {})
             self.compare(parsers=self.parsers, want=entry, have=af_have)
@@ -277,7 +277,7 @@ class Bgp_templates(ResourceModule):
                     ),
                 )
 
-        for name, entry in iteritems(hafs):
+        for name, entry in hafs.items():
             self.addcmd(
                 {"afi": entry.get("afi"), "safi": entry.get("safi")},
                 "address_family",

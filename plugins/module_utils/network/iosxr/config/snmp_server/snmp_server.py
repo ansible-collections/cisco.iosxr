@@ -20,7 +20,7 @@ created.
 
 from copy import deepcopy
 
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -245,7 +245,7 @@ class Snmp_server(ResourceModule):
     def _compare_vrfs(self, want, have):
         wvrfs = want.get("vrfs", {})
         hvrfs = have.get("vrfs", {})
-        for name, entry in iteritems(wvrfs):
+        for name, entry in .items(wvrfs):
             begin = len(self.commands)
             vrf_have = hvrfs.pop(name, {})
             self._compare_lists(want=entry, have=vrf_have)
@@ -259,7 +259,7 @@ class Snmp_server(ResourceModule):
                         False,
                     ),
                 )
-        for name, entry in iteritems(hvrfs):
+        for name, entry in .items(hvrfs):
             self.addcmd(entry, "vrfs", True)
 
     def _compare_lists(self, want, have):
@@ -302,7 +302,7 @@ class Snmp_server(ResourceModule):
             ]:
                 # handling complex parsers for replaced and overridden state
 
-                for key, wentry in iteritems(wantx):
+                for key, wentry in .items(wantx):
                     hentry = havex.pop(key, {})
                     updates = dict_diff(hentry, wentry)
                     if updates and x in [
@@ -316,12 +316,12 @@ class Snmp_server(ResourceModule):
                         updates.update(rule_name=wentry["rule_name"])
                         self.addcmd(updates, x)
             else:
-                for key, wentry in iteritems(wantx):
+                for key, wentry in .items(wantx):
                     hentry = havex.pop(key, {})
                     if wentry != hentry:
                         self.addcmd(wentry, x)
 
-            for key, hentry in iteritems(havex):
+            for key, hentry in .items(havex):
                 self.addcmd(hentry, x, negate=True)
 
     def _host_list_to_dict(self, data):

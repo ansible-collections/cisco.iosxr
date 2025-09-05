@@ -19,7 +19,7 @@ created.
 """
 
 
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -112,13 +112,13 @@ class Ospf_interfaces(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            haved = {k: v for k, v in iteritems(haved) if k in wantd or not wantd}
+            haved = {k: v for k, v in .items(haved) if k in wantd or not wantd}
             have_int = []
             if wantd == {}:
-                for k, have in iteritems(haved):
+                for k, have in .items(haved):
                     self._remove_ospf_int(have)
 
-            for k, have in iteritems(haved):
+            for k, have in .items(haved):
                 if k in wantd:
                     have_int.append(k)
                     self._remove_ospf_int(have)
@@ -126,17 +126,17 @@ class Ospf_interfaces(ResourceModule):
 
         # remove superfluous config for overridden and deleted
         if self.state == "overridden":
-            for k, have in iteritems(haved):
+            for k, have in .items(haved):
                 if k not in wantd:
                     self._remove_ospf_int(have)
         if self.state != "deleted":
-            for k, want in iteritems(wantd):
+            for k, want in .items(wantd):
                 self._compare(want=want, have=haved.pop(k, {}))
 
     def _remove_ospf_int(self, entry):
         int_name = entry.get("name", {})
         int_addr = entry.get("address_family", {})
-        for k, addr in iteritems(int_addr):
+        for k, addr in .items(int_addr):
             for key, value in addr["processes"].items():
                 rem_entry = {
                     "name": int_name,
@@ -163,7 +163,7 @@ class Ospf_interfaces(ResourceModule):
         hname = have.get("name")
         h_value = {}
 
-        for key, w_value in iteritems(wdict):
+        for key, w_value in .items(wdict):
             if hdict and hdict.get(key):
                 h_value = hdict[key]
             else:
@@ -189,21 +189,21 @@ class Ospf_interfaces(ResourceModule):
         wname = want.get("name")
         hname = have.get("name")
         # Fetch the area info as that would be common to all the attributes per interface
-        for name, entry in iteritems(wdict):
+        for name, entry in .items(wdict):
             w_process = {}
             h_process = {}
-            for key, value in iteritems(entry):
+            for key, value in .items(entry):
                 if key == "processes":
-                    for pname, pentry in iteritems(value):
+                    for pname, pentry in .items(value):
                         w_process = pentry
-            for key, param in iteritems(entry):
+            for key, param in .items(entry):
                 w_addr = {"afi": name, key: param, "processes": w_process}
                 h_addr = {}
                 if hdict.get(name):
                     hdict_entry = hdict.get(name)
-                    for item, value in iteritems(hdict_entry):
+                    for item, value in .items(hdict_entry):
                         if item == "processes":
-                            for pname, pentry in iteritems(value):
+                            for pname, pentry in .items(value):
                                 h_process = pentry
                     h_addr = {
                         "afi": name,
@@ -213,8 +213,8 @@ class Ospf_interfaces(ResourceModule):
                 w = {"name": wname, "address_family": w_addr}
                 h = {"name": hname, "address_family": h_addr}
                 self.compare(parsers=self.parsers, want=w, have=h)
-        for name, entry in iteritems(hdict):
-            for key, param in iteritems(entry):
+        for name, entry in .items(hdict):
+            for key, param in .items(entry):
                 h_addr = {"afi": name, key: param}
                 w_addr = {}
                 w = {"name": wname, "address_family": w_addr}
@@ -222,13 +222,13 @@ class Ospf_interfaces(ResourceModule):
                 self.compare(parsers=self.parsers, want=w, have=h)
 
     def _ospf_int_list_to_dict(self, entry):
-        for name, family in iteritems(entry):
+        for name, family in .items(entry):
             if "address_family" in family:
                 family["address_family"] = {
                     entry["afi"]: entry for entry in family.get("address_family", [])
                 }
                 self._ospf_int_list_to_dict(family["address_family"])
-        for name, ospf_processes in iteritems(entry):
+        for name, ospf_processes in .items(entry):
             if "processes" in ospf_processes:
                 ospf_processes["processes"] = {
                     entry["process_id"]: entry for entry in ospf_processes.get("processes", [])

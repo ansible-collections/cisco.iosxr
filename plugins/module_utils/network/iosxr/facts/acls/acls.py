@@ -21,7 +21,7 @@ from collections import deque
 from copy import deepcopy
 
 from ansible.module_utils._text import to_text
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.acls.acls import (
@@ -203,7 +203,7 @@ class AclsFacts(object):
 
             # Now that we have the ACLs in a fairly structured format,
             # we pass it on to render_config to convert it to model spec
-            for key, value in iteritems(grouped_acls):
+            for key, value in .items(grouped_acls):
                 obj = self.render_config(self.generated_spec, value)
                 if obj:
                     obj["afi"] = key
