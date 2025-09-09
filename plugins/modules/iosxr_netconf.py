@@ -164,7 +164,7 @@ def map_params_to_obj(module):
         "state": module.params["state"],
     }
 
-    for key, value in .items(obj):
+    for key, value in obj.items():
         # validate the param value (if validator func exists)
         validator = globals().get("validate_%s" % key)
         if callable(validator):

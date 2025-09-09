@@ -479,7 +479,7 @@ def _tmplt_ospf_area_stub(config_data):
 def _tmplt_ospf_area_ranges(config_data):
     if "ranges" in config_data:
         commands = []
-        for k, v in .items(config_data["ranges"]):
+        for k, v in config_data["ranges"].items():
             cmd = "area {area_id} range".format(**config_data)
             temp_cmd = " {address}".format(**v)
             if "advertise" in v:

@@ -108,7 +108,7 @@ class Lacp_interfacesFacts(object):
                 "period": "lacp period",
             }
 
-            for key, value in .items(temp):
+            for key, value in temp.items():
                 config[key] = utils.parse_conf_arg(conf, value)
 
             for key in config["system"].keys():

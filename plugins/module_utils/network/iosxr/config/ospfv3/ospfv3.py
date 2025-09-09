@@ -76,7 +76,7 @@ class Ospfv3(ResourceModule):
 
         # turn all lists of dicts into dicts prior to merge
         for thing in wantd, haved:
-            for _pid, proc in .items(thing):
+            for _pid, proc in thing.items():
                 for area in proc.get("areas", []):
                     virtual_link = {entry["id"]: entry for entry in area.get("virtual_link", [])}
                     if bool(virtual_link):
@@ -103,16 +103,16 @@ class Ospfv3(ResourceModule):
         # if state is deleted, limit the have to anything in want
         # set want to nothing
         if self.state == "deleted":
-            haved = {k: v for k, v in .items(haved) if k in wantd or not wantd}
+            haved = {k: v for k, v in haved.items() if k in wantd or not wantd}
             wantd = {}
 
         # if state is overridden, first remove processes that are in have but not in want
         if self.state in ["overridden", "deleted"]:
-            for k, have in .items(haved):
+            for k, have in haved.items():
                 if k not in wantd:
                     self.addcmd(have, "pid", True)
 
-        for k, want in .items(wantd):
+        for k, want in wantd.items():
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
@@ -176,9 +176,9 @@ class Ospfv3(ResourceModule):
     def _areas_compare(self, want, have):
         wareas = want.get("areas", {})
         hareas = have.get("areas", {})
-        for name, entry in .items(wareas):
+        for name, entry in wareas.items():
             self._area_compare(want=entry, have=hareas.pop(name, {}))
-        for name, entry in .items(hareas):
+        for name, entry in hareas.items():
             self._area_compare(want={}, have=entry)
 
     def _area_compare(self, want, have):
@@ -215,12 +215,12 @@ class Ospfv3(ResourceModule):
     def _areas_compare_virtual_link(self, want, have):
         wvlinks = want.get("virtual_link", {})
         hvlinks = have.get("virtual_link", {})
-        for name, entry in .items(wvlinks):
+        for name, entry in wvlinks.items():
             self._area_compare_virtual_link(
                 want=entry,
                 have=hvlinks.pop(name, {}),
             )
-        for name, entry in .items(hvlinks):
+        for name, entry in hvlinks.items():
             self._area_compare_virtual_link(want={}, have=entry)
 
     def _area_compare_virtual_link(self, want, have):

@@ -98,7 +98,7 @@ class Bgp_globalFacts(object):
         # this is only needed for keys that are common between both global
         # and VRF contexts
         global_vals = vrfs.pop("vrf_", {})
-        for key, value in .items(global_vals):
+        for key, value in global_vals.items():
             if objs.get(key):
                 objs[key].update(value)
             else:

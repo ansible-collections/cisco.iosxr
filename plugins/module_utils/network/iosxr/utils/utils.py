@@ -49,28 +49,28 @@ def dict_to_set(sample_dict):
     # Generate a set with passed dictionary for comparison
     test_dict = {}
     if isinstance(sample_dict, dict):
-        for k, v in .items(sample_dict):
+        for k, v in sample_dict.items():
             if v is not None:
                 if isinstance(v, list):
                     if isinstance(v[0], dict):
                         li = []
                         for each in v:
-                            for key, value in .items(each):
+                            for key, value in each.items():
                                 if isinstance(value, list):
                                     each[key] = tuple(value)
-                            li.append(tuple(.items(each)))
+                            li.append(tuple(each.items()))
                         v = tuple(li)
                     else:
                         v = tuple(v)
                 elif isinstance(v, dict):
                     li = []
-                    for key, value in .items(v):
+                    for key, value in v.items():
                         if isinstance(value, list):
                             v[key] = tuple(value)
-                    li.extend(tuple(.items(v)))
+                    li.extend(tuple(v.items()))
                     v = tuple(li)
                 test_dict.update({k: v})
-        return_set = set(tuple(.items(test_dict)))
+        return_set = set(tuple(test_dict.items()))
     else:
         return_set = set(sample_dict)
     return return_set
@@ -85,9 +85,9 @@ def filter_dict_having_none_value(want, have):
         test_dict["name"] = name
     diff_ip = False
     want_ip = ""
-    for k, v in .items(want):
+    for k, v in want.items():
         if isinstance(v, dict):
-            for key, value in .items(v):
+            for key, value in v.items():
                 if value is None and k in have and key in have.get(k):
                     dict_val = have.get(k).get(key)
                     test_key_dict.update({key: dict_val})
@@ -158,7 +158,7 @@ def flatten_dict(x):
     if not isinstance(x, dict):
         return result
 
-    for key, value in .items(x):
+    for key, value in x.items():
         if isinstance(value, dict):
             result.update(flatten_dict(value))
         else:

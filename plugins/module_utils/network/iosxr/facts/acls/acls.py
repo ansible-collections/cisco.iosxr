@@ -203,7 +203,7 @@ class AclsFacts(object):
 
             # Now that we have the ACLs in a fairly structured format,
             # we pass it on to render_config to convert it to model spec
-            for key, value in .items(grouped_acls):
+            for key, value in grouped_acls.items():
                 obj = self.render_config(self.generated_spec, value)
                 if obj:
                     obj["afi"] = key

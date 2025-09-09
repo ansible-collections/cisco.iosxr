@@ -125,7 +125,7 @@ class Route_maps(ResourceModule):
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
             wantd = dict_merge(haved, wantd)
-        for k, want in .items(wantd):
+        for k, want in wantd.items():
             if self.state == "purged":  # for purged state
                 if haved.pop(k, {}):
                     self._handle_purged(k)
@@ -134,7 +134,7 @@ class Route_maps(ResourceModule):
 
         # clean anything that is surplus, if state purged clean all have if want is empty
         if self.state == "overridden" or (self.state == "purged" and not wantd):
-            for h, haved in .items(haved):
+            for h, haved in haved.items():
                 self._handle_purged(h)
 
     def _handle_purged(self, policy_name):

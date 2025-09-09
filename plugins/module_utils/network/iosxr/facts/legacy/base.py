@@ -21,7 +21,7 @@ import platform
 import re
 
 
-from ansible.module_utils.six.moves import zip
+# Python 3 has zip built-in, no need to import
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     get_capabilities,
@@ -150,7 +150,7 @@ class Interfaces(FactsBase):
 
     def populate_interfaces(self, interfaces):
         facts = dict()
-        for key, value in .items(interfaces):
+        for key, value in interfaces.items():
             intf = dict()
             intf["description"] = self.parse_description(value)
             intf["macaddress"] = self.parse_macaddress(value)
@@ -171,7 +171,7 @@ class Interfaces(FactsBase):
         return facts
 
     def populate_ipv6_interfaces(self, data):
-        for key, value in .items(data):
+        for key, value in data.items():
             if key in ["No", "RPF"] or key.startswith("IP"):
                 continue
             self.facts["interfaces"][key]["ipv6"] = list()
