@@ -93,7 +93,7 @@ def filter_dict_having_none_value(want, have):
                     test_key_dict.update({key: dict_val})
                 test_dict.update({k: test_key_dict})
         if isinstance(v, list) and isinstance(v[0], dict):
-            for key, value in .items(v[0]):
+            for key, value in v[0].items():
                 if value is None and k in have and key in have.get(k):
                     dict_val = have.get(k).get(key)
                     test_key_dict.update({key: dict_val})

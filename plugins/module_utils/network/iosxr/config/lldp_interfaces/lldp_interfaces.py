@@ -249,9 +249,7 @@ class Lldp_interfaces(ConfigBase):
         """
         commands = []
 
-        for key, value in 
-            flatten_dict(dict_delete(have, remove_empties(want))),
-        ):
+        for key, value in flatten_dict(dict_delete(have, remove_empties(want))).items():
             commands.append(self._compute_commands(key, value, remove=True))
 
         if commands:

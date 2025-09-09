@@ -245,7 +245,7 @@ class Snmp_server(ResourceModule):
     def _compare_vrfs(self, want, have):
         wvrfs = want.get("vrfs", {})
         hvrfs = have.get("vrfs", {})
-        for name, entry in .items(wvrfs):
+        for name, entry in wvrfs.items():
             begin = len(self.commands)
             vrf_have = hvrfs.pop(name, {})
             self._compare_lists(want=entry, have=vrf_have)

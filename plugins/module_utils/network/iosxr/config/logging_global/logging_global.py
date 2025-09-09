@@ -158,7 +158,7 @@ class Logging_global(ResourceModule):
             if x in ["tls_servers", "correlator.rules"]:
                 # handling complex parsers for replaced and overridden state
 
-                for key, wentry in wantx):
+                for key, wentry in wantx.items():
                     hentry = havex.pop(key, {})
                     updates = dict_diff(hentry, wentry)
                     if updates and x == "tls_servers":
