@@ -125,7 +125,7 @@ def interfaces_tmplt(config_data):
         )
         cmds.append(command)
     if config_data.get("index_persistent"):
-        command = "snmp-server snmp-server interface {interface} index persistence".format(
+        command = "snmp-server interface {interface} index persistence".format(
             interface=interface,
         )
         cmds.append(command)
@@ -717,7 +717,7 @@ class Snmp_serverTemplate(NetworkTemplate):
                 r"""
                 ^snmp-server(\sinterface\s(?P<interface>\S+))
                 (\snotification\slinkupdown\sdisable(?P<notification_linkupdown_disable>))?
-                (\sndex\spersistence(?P<index_persistent>))?
+                (\sindex\spersistence(?P<index_persistent>))?
                 $""", re.VERBOSE,
             ),
             "setval": interfaces_tmplt,

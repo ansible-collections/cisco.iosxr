@@ -7,12 +7,12 @@ ci:
 
 repos:
   - repo: https://github.com/ansible-network/collection_prep
-    rev: 1.1.2
+    rev: da78082ea59b03ad16cd7dbee267f53e8ff50bb5
     hooks:
       - id: update-docs
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-merge-conflict
       - id: check-symlinks

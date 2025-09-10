@@ -17,7 +17,7 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -91,7 +91,7 @@ class Vrf_global(ResourceModule):
                     self._compare(want={}, have=have, vrf=k)
 
         if self.state == "purged":
-            for k, have in iteritems(haved):
+            for k, have in haved.items():
                 self.purge(have)
 
         for k, want in wantd.items():

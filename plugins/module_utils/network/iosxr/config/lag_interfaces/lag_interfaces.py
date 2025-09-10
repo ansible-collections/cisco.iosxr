@@ -18,7 +18,6 @@ __metaclass__ = type
 
 from copy import deepcopy
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
@@ -288,9 +287,7 @@ class Lag_interfaces(ConfigBase):
         bundle_updates = dict_diff(have_copy, want_copy)
 
         if bundle_updates:
-            for key, value in iteritems(
-                flatten_dict(remove_empties(bundle_updates)),
-            ):
+            for key, value in flatten_dict(remove_empties(bundle_updates)).items():
                 commands.append(self._compute_commands(key=key, value=value))
 
         return commands
@@ -343,9 +340,7 @@ class Lag_interfaces(ConfigBase):
 
         to_delete = dict_delete(have_copy, remove_empties(want_copy))
         if to_delete:
-            for key, value in iteritems(
-                flatten_dict(remove_empties(to_delete)),
-            ):
+            for key, value in flatten_dict(remove_empties(to_delete)).items():
                 commands.append(
                     self._compute_commands(key=key, value=value, remove=True),
                 )
@@ -396,9 +391,7 @@ class Lag_interfaces(ConfigBase):
             remove_empties({"name": have_copy["name"]}),
         )
         if to_delete:
-            for key, value in iteritems(
-                flatten_dict(remove_empties(to_delete)),
-            ):
+            for key, value in flatten_dict(remove_empties(to_delete)).items():
                 commands.append(
                     self._compute_commands(key=key, value=value, remove=True),
                 )

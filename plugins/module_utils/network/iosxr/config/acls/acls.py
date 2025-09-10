@@ -17,7 +17,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
@@ -392,7 +391,7 @@ class Acls(ConfigBase):
                         protocol_range["end"],
                     )
                 else:
-                    for key, value in iteritems(dir_dict["port_protocol"]):
+                    for key, value in dir_dict["port_protocol"].items():
                         cmd += "{0} {1} ".format(key, value)
 
             return cmd
@@ -400,7 +399,7 @@ class Acls(ConfigBase):
         def _compute_protocol_options(protocol_options):
             cmd = ""
             for value in protocol_options.values():
-                for subkey, subvalue in iteritems(value):
+                for subkey, subvalue in value.items():
                     if subvalue:
                         cmd += "{0} ".format(subkey.replace("_", "-"))
             return cmd
@@ -421,7 +420,7 @@ class Acls(ConfigBase):
                             opt_range["end"],
                         )
                     else:
-                        for key, value in iteritems(want_ace[x]):
+                        for key, value in want_ace[x].items():
                             cmd += "{0} {1} {2} ".format(
                                 x.replace("_", "-"),
                                 key,
