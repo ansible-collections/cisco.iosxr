@@ -1,39 +1,41 @@
 ---
-name: Integration
+name: integration-simple
 on:
-  pull_request_target:
-    branches: [main]
-    types:
-      - labeled
-      - opened
-      - reopened
-      - synchronize
-    paths:
-      - "plugins/**"
-      - "tests/integration/**"
-  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
-  safe-to-test:
-    if: >-
-      github.event.label.name == 'safe to test' ||
-      github.event.action != 'labeled'
-    uses: ansible-network/github_actions/.github/workflows/safe-to-test.yml@main
-    secrets:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  integration:
-    uses: ansible/ansible-content-actions/.github/workflows/network_integration.yaml@main
-    needs:
-      - safe-to-test
+  create_lab:
+    uses: ansible/ansible-content-actions/.github/workflows/cml_lab_create.yaml@main
     with:
-      lab_title: cisco_iosxr
-      network_os: cisco.iosxr.iosxr
-      pytest_addopts: "--color=yes --wait-extra 1000 -n 1 --log-level WARNING -vvv"
+      cml_user: ${{ secrets.CML_USER }}
+      cml_password: ${{ secrets.CML_PASSWORD }}
+      cml_server: ${{ secrets.CML_SERVER }}
+      cml_lab_name: "cisco.iosxr-ci"
+      cml_topology: "tests/integration/labs/multi.yaml"
+
+  run_tests:
+    needs: create_lab
+    uses: ansible/ansible-content-actions/.github/workflows/network_simple.yaml@main
+    with:
+      cml_user: ${{ secrets.CML_USER }}
+      cml_password: ${{ secrets.CML_PASSWORD }}
+      cml_server: ${{ secrets.CML_SERVER }}
+      cml_lab_name: "cisco.iosxr-ci"
+      inventory_template: "tests/integration/labs/inventory.j2"
+      ansible_extra_options: "-e ansible_network_os=cisco.iosxr.iosxr"
       collection_pre_install: >-
         git+https://github.com/ansible-collections/ansible.utils.git
         git+https://github.com/ansible-collections/ansible.netcommon.git
-    secrets:
-      cml_ssh_password: ${{ secrets.CML_SSH_PASSWORD }}
-      virl_host: ${{ secrets.VIRL_HOST }}
-      virl_password: ${{ secrets.VIRL_PASSWORD }}
+
+  destroy_lab:
+    if: always()
+    needs: [create_lab, run_tests]
+    uses: ansible/ansible-content-actions/.github/workflows/cml_lab_destroy.yaml@main
+    with:
+      cml_user: ${{ secrets.CML_USER }}
+      cml_password: ${{ secrets.CML_PASSWORD }}
+      cml_server: ${{ secrets.CML_SERVER }}
+      cml_lab_name: "cisco.iosxr-ci"
