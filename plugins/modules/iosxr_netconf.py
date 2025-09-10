@@ -78,7 +78,6 @@ import re
 
 from ansible.module_utils.basic import AnsibleModule
 
-
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     get_config,
     load_config,

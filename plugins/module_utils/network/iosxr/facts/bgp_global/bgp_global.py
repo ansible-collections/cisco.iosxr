@@ -17,7 +17,6 @@ based on the configuration.
 
 from copy import deepcopy
 
-
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.bgp_global.bgp_global import (

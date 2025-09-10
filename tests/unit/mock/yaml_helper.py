@@ -6,7 +6,6 @@ import io
 
 import yaml
 
-
 from ansible.parsing.yaml.dumper import AnsibleDumper
 from ansible.parsing.yaml.loader import AnsibleLoader
 

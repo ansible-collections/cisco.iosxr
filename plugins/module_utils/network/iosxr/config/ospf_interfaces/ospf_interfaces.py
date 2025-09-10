@@ -19,7 +19,6 @@ created.
 """
 
 
-
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )

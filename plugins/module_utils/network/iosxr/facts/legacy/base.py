@@ -20,13 +20,13 @@ __metaclass__ = type
 import platform
 import re
 
-
-# Python 3 has zip built-in, no need to import
-
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     get_capabilities,
     run_commands,
 )
+
+
+# Python 3 has zip built-in, no need to import
 
 
 class FactsBase(object):

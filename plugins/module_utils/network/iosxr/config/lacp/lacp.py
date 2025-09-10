@@ -18,7 +18,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )

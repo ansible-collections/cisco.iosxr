@@ -15,7 +15,6 @@ from functools import total_ordering
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import missing_required_lib
 from ansible.module_utils.common.network import is_masklen, to_netmask
-
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_diff,
     search_obj_in_list,
