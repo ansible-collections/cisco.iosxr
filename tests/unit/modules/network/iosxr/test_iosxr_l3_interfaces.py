@@ -83,6 +83,15 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                         name="GigabitEthernet0/0/0/0",
                         ipv4=[dict(address="198.51.100.1/24")],
                         ipv6=[dict(address="2001:db8::/32")],
+                        carrier_delay={"up": 100},
+                        dampening={
+                            "enabled": True,
+                            "half_life": 10,
+                            "reuse_threshold": 750,
+                            "suppress_threshold": 3000,
+                            "max_suppress_time": 60,
+                            "restart_penalty": 1000,
+                        },
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/1",
@@ -104,6 +113,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/0",
                         ipv4=[dict(address="198.51.100.1/24")],
+                        carrier_delay={"down": 50},
+                        dampening={
+                            "enabled": True,
+                            "half_life": 10,
+                            "reuse_threshold": 750,
+                        },
+                        load_interval=30,
+                        flow_control="ingress",
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/1",
@@ -119,6 +136,10 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",
+            "carrier-delay down 50",
+            "dampening 10 750",
+            "load-interval 30",
+            "flow-control ingress",
             "ipv4 address 198.51.100.1 255.255.255.0",
             "interface GigabitEthernet0/0/0/1",
             "ipv4 address 192.0.2.2 255.255.255.0 secondary",
@@ -126,6 +147,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "ipv6 address 2001:db8:0:3::/64",
         ]
         result = self.execute_module(changed=True)
+        print(sorted(result["commands"]))
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_l3_interfaces_replaced(self):
@@ -139,6 +161,17 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                             dict(address="203.0.113.27/24"),
                             dict(address="203.0.114.1/24", secondary=True),
                         ],
+                        carrier_delay={"down": 100},
+                        dampening={
+                            "enabled": True,
+                            "half_life": 20,
+                            "reuse_threshold": 800,
+                            "suppress_threshold": 3500,
+                            "max_suppress_time": 120,
+                            "restart_penalty": 1000,
+                        },
+                        load_interval=60,
+                        flow_control="egress",
                     ),
                 ],
                 state="replaced",
@@ -147,8 +180,15 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         commands = [
             "interface GigabitEthernet0/0/0/0",
             "no ipv6 address",
+            "no ipv4 address",
+            "no carrier-delay",
+            "no dampening",
             "ipv4 address 203.0.113.27 255.255.255.0",
             "ipv4 address 203.0.114.1 255.255.255.0 secondary",
+            "carrier-delay down 100",
+            "dampening 20 800 3500 120 1000",
+            "load-interval 60",
+            "flow-control egress",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -161,10 +201,13 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/0",
             "no ipv4 address",
             "no ipv6 address",
+            "no carrier-delay",
+            "no dampening",
             "interface GigabitEthernet0/0/0/1",
             "no ipv4 address",
         ]
         result = self.execute_module(changed=True)
+        print(result["commands"])
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_l3_interfaces_rendered(self):
@@ -182,6 +225,17 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                             dict(address="192.0.2.2/24", secondary=True),
                         ],
                         ipv6=[dict(address="2001:db8:0:3::/64")],
+                        carrier_delay={"up": 100},
+                        dampening={
+                            "enabled": True,
+                            "half_life": 10,
+                            "reuse_threshold": 750,
+                            "suppress_threshold": 3000,
+                            "max_suppress_time": 60,
+                            "restart_penalty": 1000,
+                        },
+                        load_interval=30,
+                        flow_control="ingress",
                     ),
                 ],
                 state="rendered",
@@ -195,6 +249,10 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "ipv4 address 192.0.2.2 255.255.255.0 secondary",
             "ipv4 address 192.0.2.1 255.255.255.0",
             "ipv6 address 2001:db8:0:3::/64",
+            "carrier-delay up 100",
+            "dampening 10 750 3000 60 1000",
+            "load-interval 30",
+            "flow-control ingress",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
@@ -203,9 +261,9 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         self.maxDiff = None
         set_module_args(
             dict(
-                running_config="interface GigabitEthernet0/0/0/0\nipv4 address 198.51.100.1 255.255.255.0\n"
+                running_config="interface GigabitEthernet0/0/0/0\nipv4 address 198.51.100.1 255.255.255.0\ncarrier-delay up 2\ndampening 3\nload-interval 4\n"
                 "ipv6 address 2001:db8::/32\ninterface GigabitEthernet0/0/0/1\nipv4 address"
-                " 192.0.2.1 255.255.255.0\nipv4 address 192.0.2.2 255.255.255.0 secondary\n",
+                " 192.0.2.1 255.255.255.0\nipv4 address 192.0.2.2 255.255.255.0 secondary\nflow-control bidirectional\n",
                 state="parsed",
             ),
         )
@@ -215,6 +273,12 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                 "name": "GigabitEthernet0/0/0/0",
                 "ipv4": [{"address": "198.51.100.1/24"}],
                 "ipv6": [{"address": "2001:db8::/32"}],
+                "carrier_delay": {"up": 2},
+                "dampening": {
+                    "enabled": True,
+                    "half_life": 3,
+                },
+                "load_interval": 4,
             },
             {
                 "name": "GigabitEthernet0/0/0/1",
@@ -222,6 +286,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     {"address": "192.0.2.1/24"},
                     {"address": "192.0.2.2/24", "secondary": True},
                 ],
+                "flow_control": "bidirectional",
             },
         ]
         self.assertEqual(parsed_list, result["parsed"])
@@ -236,6 +301,8 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                         name="GigabitEthernet0/0/0/1",
                         ipv4=[dict(address="198.51.102.1/24")],
                         ipv6=[dict(address="2001:db8:1::/64")],
+                        flow_control="bidirectional",
+                        load_interval=120,
                     ),
                 ],
                 state="overridden",
@@ -245,10 +312,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/0",
             "no ipv4 address",
             "no ipv6 address",
+            "no carrier-delay",
+            "no dampening",
             "interface GigabitEthernet0/0/0/1",
             "no ipv4 address",
             "ipv4 address 198.51.102.1 255.255.255.0",
             "ipv6 address 2001:db8:1::/64",
+            "flow-control bidirectional",
+            "load-interval 120",
         ]
 
         result = self.execute_module(changed=True)
