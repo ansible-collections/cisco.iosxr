@@ -20,7 +20,6 @@ import re
 
 from copy import deepcopy
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lacp_interfaces.lacp_interfaces import (
@@ -108,7 +107,7 @@ class Lacp_interfacesFacts(object):
                 "period": "lacp period",
             }
 
-            for key, value in iteritems(temp):
+            for key, value in temp.items():
                 config[key] = utils.parse_conf_arg(conf, value)
 
             for key in config["system"].keys():

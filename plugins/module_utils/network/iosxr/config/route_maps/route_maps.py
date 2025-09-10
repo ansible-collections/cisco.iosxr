@@ -18,7 +18,7 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -125,7 +125,7 @@ class Route_maps(ResourceModule):
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
             wantd = dict_merge(haved, wantd)
-        for k, want in iteritems(wantd):
+        for k, want in wantd.items():
             if self.state == "purged":  # for purged state
                 if haved.pop(k, {}):
                     self._handle_purged(k)
@@ -134,7 +134,7 @@ class Route_maps(ResourceModule):
 
         # clean anything that is surplus, if state purged clean all have if want is empty
         if self.state == "overridden" or (self.state == "purged" and not wantd):
-            for h, haved in iteritems(haved):
+            for h, haved in haved.items():
                 self._handle_purged(h)
 
     def _handle_purged(self, policy_name):

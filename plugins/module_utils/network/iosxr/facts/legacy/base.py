@@ -20,13 +20,13 @@ __metaclass__ = type
 import platform
 import re
 
-from ansible.module_utils.six import iteritems
-from ansible.module_utils.six.moves import zip
-
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import (
     get_capabilities,
     run_commands,
 )
+
+
+# Python 3 has zip built-in, no need to import
 
 
 class FactsBase(object):
@@ -150,7 +150,7 @@ class Interfaces(FactsBase):
 
     def populate_interfaces(self, interfaces):
         facts = dict()
-        for key, value in iteritems(interfaces):
+        for key, value in interfaces.items():
             intf = dict()
             intf["description"] = self.parse_description(value)
             intf["macaddress"] = self.parse_macaddress(value)
@@ -171,7 +171,7 @@ class Interfaces(FactsBase):
         return facts
 
     def populate_ipv6_interfaces(self, data):
-        for key, value in iteritems(data):
+        for key, value in data.items():
             if key in ["No", "RPF"] or key.startswith("IP"):
                 continue
             self.facts["interfaces"][key]["ipv6"] = list()

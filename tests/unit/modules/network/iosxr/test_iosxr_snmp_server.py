@@ -948,6 +948,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "no snmp-server drop unknown-user",
             "no snmp-server ifmib internal cache max-duration 4",
             "no snmp-server inform retries 7",
+            "no snmp-server interface GigabitEthernet0/0/0/2",
             "no snmp-server notification-log-mib size 5",
             "no snmp-server notification-log-mib GlobalSize 5",
             "no snmp-server trap throttle-time 12",
@@ -1042,11 +1043,10 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
             "no snmp-server context c1",
             "no snmp-server context c2",
             "no snmp-server group g2 v1 read test1 write test2 context test3 IPv4 test IPv6 test1",
-            "no snmp-server interface GigabitEthernet0/0/0/2",
             "no snmp-server mib bulkstat object-list test1",
-            "no snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2 v4acl",
             "no snmp-server target list test host 1.1.1.2",
             "no snmp-server target list test2 vrf vrf2",
+            "no snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2 v4acl",
             "no snmp-server vrf vrf1",
         ]
         result = self.execute_module(changed=True)
@@ -3591,6 +3591,7 @@ class TestIosxrSnmpServerModule(TestIosxrModule):
                 {
                     "name": "GigabitEthernet0/0/0/0",
                     "notification_linkupdown_disable": True,
+                    "index_persistent": True,
                 },
             ],
             "ifmib": {

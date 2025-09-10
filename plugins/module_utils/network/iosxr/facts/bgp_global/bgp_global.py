@@ -17,7 +17,6 @@ based on the configuration.
 
 from copy import deepcopy
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.bgp_global.bgp_global import (
@@ -98,7 +97,7 @@ class Bgp_globalFacts(object):
         # this is only needed for keys that are common between both global
         # and VRF contexts
         global_vals = vrfs.pop("vrf_", {})
-        for key, value in iteritems(global_vals):
+        for key, value in global_vals.items():
             if objs.get(key):
                 objs[key].update(value)
             else:
