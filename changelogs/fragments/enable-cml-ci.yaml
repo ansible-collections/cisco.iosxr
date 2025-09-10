@@ -1,0 +1,3 @@
+---
+trivial:
+  - Enable GitHub Actions CI with a dynamic CML topology for cisco.iosxr.
