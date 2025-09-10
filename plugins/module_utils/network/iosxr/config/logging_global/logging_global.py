@@ -20,7 +20,6 @@ created.
 
 from copy import deepcopy
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -158,7 +157,7 @@ class Logging_global(ResourceModule):
             if x in ["tls_servers", "correlator.rules"]:
                 # handling complex parsers for replaced and overridden state
 
-                for key, wentry in iteritems(wantx):
+                for key, wentry in wantx.items():
                     hentry = havex.pop(key, {})
                     updates = dict_diff(hentry, wentry)
                     if updates and x == "tls_servers":
@@ -169,12 +168,12 @@ class Logging_global(ResourceModule):
                         updates.update(rule_name=wentry["rule_name"])
                         self.addcmd(updates, x)
             else:
-                for key, wentry in iteritems(wantx):
+                for key, wentry in wantx.items():
                     hentry = havex.pop(key, {})
                     if wentry != hentry:
                         self.addcmd(wentry, x)
 
-            for key, hentry in iteritems(havex):
+            for key, hentry in havex.items():
                 self.addcmd(hentry, x, negate=True)
 
     def list_to_dict(self, config):

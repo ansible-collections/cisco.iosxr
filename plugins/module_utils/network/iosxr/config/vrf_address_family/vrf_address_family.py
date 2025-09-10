@@ -17,7 +17,7 @@ is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to its desired end-state is
 created.
 """
-from ansible.module_utils.six import iteritems
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -85,8 +85,8 @@ class Vrf_address_family(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            for vrfk, vrfv in iteritems(haved):
-                for afk, afv in iteritems(vrfv.get("address_families", {})):
+            for vrfk, vrfv in haved.items():
+                for afk, afv in vrfv.get("address_families", {}).items():
                     adrf = wantd.get(vrfk, {}).get("address_families", {})
                     if afk in adrf or not adrf:
                         self.addcmd(
@@ -101,8 +101,8 @@ class Vrf_address_family(ResourceModule):
                         )
 
         if self.state in ["overridden"]:
-            for vrfk, vrfv in iteritems(haved):
-                for k, have in iteritems(vrfv.get("address_families", {})):
+            for vrfk, vrfv in haved.items():
+                for k, have in (vrfv.get("address_families", {}) or {}).items():
                     wantx = wantd.get(vrfk, {}).get("address_families", {})
                     if k not in wantx:
                         self.addcmd(
@@ -126,7 +126,7 @@ class Vrf_address_family(ResourceModule):
         the `want` and `have` data with the `parsers` defined
         for the Vrf network resource.
         """
-        for name, entry in iteritems(want):
+        for name, entry in want.items():
             begin = len(self.commands)
             vrf_want = entry
             vrf_have = have.pop(name, {})
@@ -141,7 +141,7 @@ class Vrf_address_family(ResourceModule):
         """
         waafs = want.get("address_families", {})
         haafs = have.get("address_families", {})
-        for afk, afv in iteritems(waafs):
+        for afk, afv in waafs.items():
             begin = len(self.commands)
             self._compare_single_af(want=afv, have=haafs.get(afk, {}))
             if len(self.commands) != begin:
