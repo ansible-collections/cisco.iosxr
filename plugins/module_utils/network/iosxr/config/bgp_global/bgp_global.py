@@ -19,7 +19,6 @@ created.
 """
 
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -196,7 +195,7 @@ class Bgp_global(ResourceModule):
         ]
         want = want.get("rpki", {}).get("servers", {})
         have = have.get("rpki", {}).get("servers", {})
-        for name, entry in iteritems(want):
+        for name, entry in want.items():
             new_have = have.pop(name, {})
             begin = len(self.commands)
             self.compare(
@@ -214,7 +213,7 @@ class Bgp_global(ResourceModule):
                         False,
                     ),
                 )
-        for name, entry in iteritems(have):
+        for name, entry in have.items():
             self.addcmd(entry, "rpki_server_name", True)
 
     def _compare_confederation_peers(self, want, have):
@@ -319,7 +318,7 @@ class Bgp_global(ResourceModule):
 
         want_nbr = want.get("neighbors", {})
         have_nbr = have.get("neighbors", {})
-        for name, entry in iteritems(want_nbr):
+        for name, entry in want_nbr.items():
             have = have_nbr.pop(name, {})
             begin = len(self.commands)
             self.compare(parsers=neighbor_parsers, want=entry, have=have)
@@ -333,7 +332,7 @@ class Bgp_global(ResourceModule):
                         False,
                     ),
                 )
-        for name, entry in iteritems(have_nbr):
+        for name, entry in have_nbr.items():
             if self._check_af("neighbor_address", name):
                 self._module.fail_json(
                     msg="Neighbor {0} has address-family configurations. "
@@ -351,7 +350,7 @@ class Bgp_global(ResourceModule):
         """
         wvrfs = want.get("vrfs", {})
         hvrfs = have.get("vrfs", {})
-        for name, entry in iteritems(wvrfs):
+        for name, entry in wvrfs.items():
             begin = len(self.commands)
             vrf_have = hvrfs.pop(name, {})
             self._compare_rpki_server(want=entry, have=vrf_have)
@@ -370,7 +369,7 @@ class Bgp_global(ResourceModule):
         # but do not negate it entirely
         # instead remove only those attributes
         # that this module manages
-        for name, entry in iteritems(hvrfs):
+        for name, entry in hvrfs.items():
             if self._check_af("vrf", name):
                 self._module.fail_json(
                     msg="VRF {0} has address-family configurations. "
@@ -409,7 +408,7 @@ class Bgp_global(ResourceModule):
 
         if "vrfs" in entry:
             entry["vrfs"] = {x["vrf"]: x for x in entry.get("vrfs", [])}
-            for _k, vrf in iteritems(entry["vrfs"]):
+            for _k, vrf in entry["vrfs"].items():
                 self._bgp_list_to_dict(vrf)
 
     def _get_config(self):

@@ -19,7 +19,6 @@ created.
 """
 
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -148,7 +147,7 @@ class Bgp_address_family(ResourceModule):
         wafs = want.get("address_family", {})
         hafs = have.get("address_family", {})
         vrf_want_have = []
-        for name, entry in iteritems(wafs):
+        for name, entry in wafs.items():
             begin = len(self.commands)
             af_have = hafs.pop(name, {})
             if "vrf" in entry:
@@ -191,7 +190,7 @@ class Bgp_address_family(ResourceModule):
 
         # for deleted and overridden state
         if self.state != "replaced":
-            for name, entry in iteritems(hafs):
+            for name, entry in hafs.items():
                 if "vrf" in entry:
                     self.addcmd({"vrf": entry.get("vrf")}, "vrf", False)
                 self.addcmd(
@@ -204,7 +203,7 @@ class Bgp_address_family(ResourceModule):
         for attrib in ["aggregate_address", "networks", "redistribute"]:
             wdict = want.get(attrib, {})
             hdict = have.get(attrib, {})
-            for key, entry in iteritems(wdict):
+            for key, entry in wdict.items():
                 if entry != hdict.pop(key, {}):
                     self.addcmd(entry, attrib.format(attrib), False)
 
@@ -237,7 +236,7 @@ class Bgp_address_family(ResourceModule):
         afs_to_del = {}
         h_addrs = haved.get("address_family", {})
         w_addrs = wantd.get("address_family", {})
-        for af, h_addr in iteritems(h_addrs):
+        for af, h_addr in h_addrs.items():
             if af in w_addrs:
                 afs_to_del[af] = h_addr
         return afs_to_del
