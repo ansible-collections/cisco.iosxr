@@ -259,7 +259,7 @@ class Snmp_server(ResourceModule):
                         False,
                     ),
                 )
-        for name, entry in .items(hvrfs):
+        for name, entry in hvrfs.items():
             self.addcmd(entry, "vrfs", True)
 
     def _compare_lists(self, want, have):
@@ -302,7 +302,7 @@ class Snmp_server(ResourceModule):
             ]:
                 # handling complex parsers for replaced and overridden state
 
-                for key, wentry in .items(wantx):
+                for key, wentry in wantx.items():
                     hentry = havex.pop(key, {})
                     updates = dict_diff(hentry, wentry)
                     if updates and x in [
@@ -316,13 +316,13 @@ class Snmp_server(ResourceModule):
                         updates.update(rule_name=wentry["rule_name"])
                         self.addcmd(updates, x)
             else:
-                for key, wentry in .items(wantx):
+                for key, wentry in wantx.items():
                     hentry = havex.pop(key, {})
                     if wentry != hentry:
                         self.addcmd(wentry, x)
 
-            for key, hentry in .items(havex):
-                self.addcmd(hentry, x, negate=True)
+                for key, hentry in havex.items():
+                    self.addcmd(hentry, x, negate=True)
 
     def _host_list_to_dict(self, data):
         host_dict = {}

@@ -169,12 +169,12 @@ class Logging_global(ResourceModule):
                         updates.update(rule_name=wentry["rule_name"])
                         self.addcmd(updates, x)
             else:
-                for key, wentry in wantx):
+                for key, wentry in wantx.items():
                     hentry = havex.pop(key, {})
                     if wentry != hentry:
                         self.addcmd(wentry, x)
 
-            for key, hentry in havex):
+            for key, hentry in havex.items():
                 self.addcmd(hentry, x, negate=True)
 
     def list_to_dict(self, config):
