@@ -39,9 +39,9 @@ replaced:
         - address: 192.0.2.1/24
         - address: 192.0.2.2/24
           secondary: true
-      carrier_delay: 
+      carrier_delay:
         up: 100
-      dampening: 
+      dampening:
         enabled: True
         half_life: 10
         reuse_threshold: 750
@@ -83,9 +83,9 @@ overridden:
         - address: 192.0.2.1/24
         - address: 192.0.2.2/24
           secondary: true
-      carrier_delay: 
+      carrier_delay:
         up: 100
-      dampening: 
+      dampening:
         enabled: True
         half_life: 10
         reuse_threshold: 750
@@ -150,9 +150,9 @@ deleted:
         - address: 192.0.2.1/24
         - address: 192.0.2.2/24
           secondary: true
-      carrier_delay: 
+      carrier_delay:
         up: 100
-      dampening: 
+      dampening:
         enabled: True
         half_life: 10
         reuse_threshold: 750
