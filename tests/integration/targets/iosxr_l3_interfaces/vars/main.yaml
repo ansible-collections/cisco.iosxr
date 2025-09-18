@@ -41,7 +41,7 @@ replaced:
           secondary: true
       carrier_delay:
         up: 100
-      dampening: 
+      dampening:
         enabled: true
         half_life: 10
         reuse_threshold: 750
@@ -85,7 +85,7 @@ overridden:
           secondary: true
       carrier_delay:
         up: 100
-      dampening: 
+      dampening:
         enabled: true
         half_life: 10
         reuse_threshold: 750
@@ -152,7 +152,7 @@ deleted:
           secondary: true
       carrier_delay:
         up: 100
-      dampening: 
+      dampening:
         enabled: true
         half_life: 10
         reuse_threshold: 750
