@@ -318,8 +318,8 @@ class L3_Interfaces(ConfigBase):
                     each["address"] = validate_n_expand_ipv4(module, each)
 
         # Temporarily remove 'flow' before comparison
-        want_flow = want.pop('flow', None)
-        have_flow = have.pop('flow', None)
+        want_flow = want.pop("flow", None)
+        have_flow = have.pop("flow", None)
 
         # Get the diff b/w want and have
         want_dict = dict_to_set(want)
@@ -414,7 +414,10 @@ class L3_Interfaces(ConfigBase):
                     if proto in have_flow and proto not in want_flow:
                         have_cfg = have_flow[proto]
                         cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
-                            proto, have_cfg["monitor"], have_cfg["sampler"], have_cfg["direction"]
+                            proto,
+                            have_cfg["monitor"],
+                            have_cfg["sampler"],
+                            have_cfg["direction"],
                         )
                         add_command_to_config_list(interface, cmd, commands)
 
@@ -426,18 +429,24 @@ class L3_Interfaces(ConfigBase):
                 if want_cfg != have_cfg:
                     if have_cfg:
                         cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
-                            proto, have_cfg["monitor"], have_cfg["sampler"], have_cfg["direction"]
+                            proto,
+                            have_cfg["monitor"],
+                            have_cfg["sampler"],
+                            have_cfg["direction"],
                         )
                         add_command_to_config_list(interface, cmd, commands)
                     cmd = "flow {0} monitor {1} sampler {2} {3}".format(
-                        proto, want_cfg["monitor"], want_cfg["sampler"], want_cfg["direction"]
+                        proto,
+                        want_cfg["monitor"],
+                        want_cfg["sampler"],
+                        want_cfg["direction"],
                     )
                     add_command_to_config_list(interface, cmd, commands)
 
         if want_flow is not None:
-            want['flow'] = want_flow
+            want["flow"] = want_flow
         if have_flow is not None:
-            have['flow'] = have_flow
+            have["flow"] = have_flow
 
         return commands
 
@@ -488,7 +497,10 @@ class L3_Interfaces(ConfigBase):
                 if have["flow"].get(proto):
                     have_proto_flow = have["flow"][proto]
                     cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
-                        proto, have_proto_flow["monitor"], have_proto_flow["sampler"], have_proto_flow["direction"]
+                        proto,
+                        have_proto_flow["monitor"],
+                        have_proto_flow["sampler"],
+                        have_proto_flow["direction"],
                     )
                     add_command_to_config_list(interface, cmd, commands)
 

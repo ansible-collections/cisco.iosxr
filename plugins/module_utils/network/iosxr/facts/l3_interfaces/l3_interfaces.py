@@ -168,7 +168,7 @@ class L3_InterfacesFacts(object):
             flow_monitor_lines = re.findall(
                 r"^\s*flow (ipv4|ipv6) monitor (\S+) sampler (\S+) (ingress|egress)",
                 conf,
-                re.M
+                re.M,
             )
             if flow_monitor_lines:
                 if "flow" not in config or not config["flow"]:

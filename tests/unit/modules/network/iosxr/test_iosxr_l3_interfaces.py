@@ -346,14 +346,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                             "ipv4": {
                                 "monitor": "MONITOR-A",
                                 "sampler": "SAMPLER-1",
-                                "direction": "ingress"
+                                "direction": "ingress",
                             },
                             "ipv6": {
                                 "monitor": "MONITOR-B",
                                 "sampler": "SAMPLER-2",
-                                "direction": "egress"
-                            }
-                        }
+                                "direction": "egress",
+                            },
+                        },
                     ),
                 ],
                 state="merged",
@@ -379,9 +379,9 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                             "ipv6": {
                                 "monitor": "MONITOR-NEW",
                                 "sampler": "SAMPLER-NEW",
-                                "direction": "ingress"
-                            }
-                        }
+                                "direction": "ingress",
+                            },
+                        },
                     ),
                 ],
                 state="merged",
@@ -407,9 +407,9 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                             "ipv4": {
                                 "monitor": "MONITOR-REPLACED",
                                 "sampler": "SAMPLER-REPLACED",
-                                "direction": "egress"
-                            }
-                        }
+                                "direction": "egress",
+                            },
+                        },
                     ),
                 ],
                 state="replaced",
@@ -459,9 +459,9 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                             "ipv4": {
                                 "monitor": "OVERRIDE-MONITOR",
                                 "sampler": "OVERRIDE-SAMPLER",
-                                "direction": "ingress"
-                            }
-                        }
+                                "direction": "ingress",
+                            },
+                        },
                     ),
                 ],
                 state="overridden",
@@ -491,14 +491,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                             "ipv4": {
                                 "monitor": "RENDER-MONITOR",
                                 "sampler": "RENDER-SAMPLER",
-                                "direction": "ingress"
+                                "direction": "ingress",
                             },
                             "ipv6": {
                                 "monitor": "RENDER-MONITOR-V6",
                                 "sampler": "RENDER-SAMPLER-V6",
-                                "direction": "egress"
-                            }
-                        }
+                                "direction": "egress",
+                            },
+                        },
                     ),
                 ],
                 state="rendered",
@@ -535,14 +535,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     "ipv4": {
                         "monitor": "PARSE-MONITOR",
                         "sampler": "PARSE-SAMPLER",
-                        "direction": "ingress"
+                        "direction": "ingress",
                     },
                     "ipv6": {
                         "monitor": "PARSE-MONITOR-V6",
                         "sampler": "PARSE-SAMPLER-V6",
-                        "direction": "egress"
-                    }
-                }
+                        "direction": "egress",
+                    },
+                },
             },
             {
                 "name": "GigabitEthernet0/0/0/1",
@@ -564,9 +564,9 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     "ipv4": {
                         "monitor": "GATHERED-MONITOR",
                         "sampler": "GATHERED-SAMPLER",
-                        "direction": "ingress"
-                    }
-                }
+                        "direction": "ingress",
+                    },
+                },
             },
             {
                 "name": "GigabitEthernet0/0/0/1",
@@ -575,9 +575,9 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     "ipv6": {
                         "monitor": "GATHERED-MONITOR-V6",
                         "sampler": "GATHERED-SAMPLER-V6",
-                        "direction": "egress"
-                    }
-                }
+                        "direction": "egress",
+                    },
+                },
             },
         ]
         self.assertEqual(gathered, result["gathered"])
@@ -594,14 +594,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                             "ipv4": {
                                 "monitor": "MONITOR-A",
                                 "sampler": "SAMPLER-1",
-                                "direction": "ingress"
+                                "direction": "ingress",
                             },
                             "ipv6": {
                                 "monitor": "MONITOR-B",
                                 "sampler": "SAMPLER-2",
-                                "direction": "egress"
-                            }
-                        }
+                                "direction": "egress",
+                            },
+                        },
                     ),
                 ],
                 state="merged",
