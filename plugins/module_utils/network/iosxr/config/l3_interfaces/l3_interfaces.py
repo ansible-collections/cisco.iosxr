@@ -317,6 +317,10 @@ class L3_Interfaces(ConfigBase):
                 if each.get("address") != "dhcp":
                     each["address"] = validate_n_expand_ipv4(module, each)
 
+        # Temporarily remove 'flow' before comparison
+        want_flow = want.pop('flow', None)
+        have_flow = have.pop('flow', None)
+
         # Get the diff b/w want and have
         want_dict = dict_to_set(want)
         have_dict = dict_to_set(have)
@@ -337,7 +341,7 @@ class L3_Interfaces(ConfigBase):
                     cmd = "ipv4 address {0}".format(ipv4_dict["address"])
                     if ipv4_dict.get("secondary"):
                         cmd += " secondary"
-                add_command_to_config_list(interface, cmd, commands)
+                    add_command_to_config_list(interface, cmd, commands)
 
         # To handle L3 IPV6 configuration
         want_ipv6 = dict(want_dict).get("ipv6")
@@ -352,6 +356,88 @@ class L3_Interfaces(ConfigBase):
                 validate_ipv6(ipv6_dict.get("address"), module)
                 cmd = "ipv6 address {0}".format(ipv6_dict.get("address"))
                 add_command_to_config_list(interface, cmd, commands)
+
+        if want.get("load_interval"):
+            if want["load_interval"] != have.get("load_interval"):
+                cmd = "load-interval {0}".format(want["load_interval"])
+                add_command_to_config_list(interface, cmd, commands)
+
+        if want.get("flow_control"):
+            if want["flow_control"] != have.get("flow_control"):
+                cmd = "flow-control {0}".format(want["flow_control"])
+                add_command_to_config_list(interface, cmd, commands)
+
+        want_cd = want.get("carrier_delay")
+        have_cd = have.get("carrier_delay", {})
+        if want_cd:
+            if want_cd.get("up") is not None:
+                if want_cd.get("up") != have_cd.get("up"):
+                    cmd = "carrier-delay up {0}".format(want_cd["up"])
+                    add_command_to_config_list(interface, cmd, commands)
+
+            if want_cd.get("down") is not None:
+                if want_cd.get("down") != have_cd.get("down"):
+                    cmd = "carrier-delay down {0}".format(want_cd["down"])
+                    add_command_to_config_list(interface, cmd, commands)
+
+        dampening_want = want.get("dampening")
+        dampening_have = have.get("dampening")
+
+        if dampening_want and dampening_want != dampening_have:
+            if dampening_want.get("enabled"):
+                if dampening_want.get("half_life") is None:
+                    cmd = "dampening"
+                else:
+                    cmd_parts = ["dampening"]
+                    params_order = [
+                        "half_life",
+                        "reuse_threshold",
+                        "suppress_threshold",
+                        "max_suppress_time",
+                        "restart_penalty",
+                    ]
+                    for param in params_order:
+                        value = dampening_want.get(param)
+                        if value is not None:
+                            cmd_parts.append(str(value))
+                        else:
+                            break
+                    cmd = " ".join(cmd_parts)
+                add_command_to_config_list(interface, cmd, commands)
+
+        if want_flow is not None or have_flow is not None:
+            have_flow = have_flow or {}
+            want_flow = want_flow or {}
+
+            if self.state == "replaced" and have_flow:
+                for proto in ["ipv4", "ipv6"]:
+                    if proto in have_flow and proto not in want_flow:
+                        have_cfg = have_flow[proto]
+                        cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
+                            proto, have_cfg["monitor"], have_cfg["sampler"], have_cfg["direction"]
+                        )
+                        add_command_to_config_list(interface, cmd, commands)
+
+            for proto, want_cfg in want_flow.items():
+                if want_cfg is None:
+                    continue
+
+                have_cfg = have_flow.get(proto, {})
+                if want_cfg != have_cfg:
+                    if have_cfg:
+                        cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
+                            proto, have_cfg["monitor"], have_cfg["sampler"], have_cfg["direction"]
+                        )
+                        add_command_to_config_list(interface, cmd, commands)
+                    cmd = "flow {0} monitor {1} sampler {2} {3}".format(
+                        proto, want_cfg["monitor"], want_cfg["sampler"], want_cfg["direction"]
+                    )
+                    add_command_to_config_list(interface, cmd, commands)
+
+        if want_flow is not None:
+            want['flow'] = want_flow
+        if have_flow is not None:
+            have['flow'] = have_flow
 
         return commands
 
@@ -384,5 +470,26 @@ class L3_Interfaces(ConfigBase):
                 "ipv6 address",
                 commands,
             )
+
+        if have.get("carrier_delay") and not (want.get("carrier_delay")):
+            remove_command_from_config_list(interface, "carrier-delay", commands)
+
+        if have.get("dampening") and not (want.get("dampening")):
+            remove_command_from_config_list(interface, "dampening", commands)
+
+        if have.get("load_interval") and not want.get("load_interval"):
+            remove_command_from_config_list(interface, "load-interval", commands)
+
+        if have.get("flow_control") and not want.get("flow_control"):
+            remove_command_from_config_list(interface, "flow-control", commands)
+
+        if have.get("flow") and not want.get("flow"):
+            for proto in ["ipv4", "ipv6"]:
+                if have["flow"].get(proto):
+                    have_proto_flow = have["flow"][proto]
+                    cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
+                        proto, have_proto_flow["monitor"], have_proto_flow["sampler"], have_proto_flow["direction"]
+                    )
+                    add_command_to_config_list(interface, cmd, commands)
 
         return commands
