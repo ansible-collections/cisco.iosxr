@@ -131,13 +131,16 @@ class L3_InterfacesFacts(object):
                 ipv6.append(each_ipv6)
                 config["ipv6"] = ipv6
 
-            up_delay = re.search(r"carrier-delay up (\d+)", conf)
-            if up_delay:
-                config["carrier_delay"]["up"] = int(up_delay.group(1))
+            carrier_delay_match = re.search(r"^\s*carrier-delay (.*)$", conf, re.M)
+            if carrier_delay_match:
+                args = carrier_delay_match.group(1).strip()
+                up_match = re.search(r"up (\d+)", args)
+                if up_match:
+                    config["carrier_delay"]["up"] = int(up_match.group(1))
 
-            down_delay = re.search(r"carrier-delay down (\d+)", conf)
-            if down_delay:
-                config["carrier_delay"]["down"] = int(down_delay.group(1))
+                down_match = re.search(r"down (\d+)", args)
+                if down_match:
+                    config["carrier_delay"]["down"] = int(down_match.group(1))
 
             dampening_line = re.search(r"^\s*dampening(.*)$", conf, re.M)
             if dampening_line:
@@ -186,6 +189,8 @@ class L3_InterfacesFacts(object):
             return utils.remove_empties(config)
 
     def format_ipv4(self, address):
-        if address.split(" ")[1]:
-            cidr_val = netmask_to_cidr(address.split(" ")[1])
-        return address.split(" ")[0] + "/" + cidr_val
+        parts = address.split(" ")
+        if len(parts) > 1 and parts[1]:
+            cidr_val = netmask_to_cidr(parts[1])
+            return "{0}/{1}".format(parts[0], cidr_val)
+        return parts[0]

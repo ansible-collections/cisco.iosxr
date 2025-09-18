@@ -261,8 +261,8 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         self.maxDiff = None
         set_module_args(
             dict(
-                running_config="interface GigabitEthernet0/0/0/0\nipv4 address 198.51.100.1 255.255.255.0\ncarrier-delay up 2\ndampening 3\nload-interval 4\n"
-                "ipv6 address 2001:db8::/32\ninterface GigabitEthernet0/0/0/1\nipv4 address"
+                running_config="interface GigabitEthernet0/0/0/0\nipv4 address 198.51.100.1 255.255.255.0\ncarrier-delay up 2 down 10\ndampening 3\n"
+                "\nload-interval 4\nipv6 address 2001:db8::/32\ninterface GigabitEthernet0/0/0/1\nipv4 address"
                 " 192.0.2.1 255.255.255.0\nipv4 address 192.0.2.2 255.255.255.0 secondary\nflow-control bidirectional\n",
                 state="parsed",
             ),
@@ -273,7 +273,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                 "name": "GigabitEthernet0/0/0/0",
                 "ipv4": [{"address": "198.51.100.1/24"}],
                 "ipv6": [{"address": "2001:db8::/32"}],
-                "carrier_delay": {"up": 2},
+                "carrier_delay": {"up": 2, "down": 10},
                 "dampening": {
                     "enabled": True,
                     "half_life": 3,

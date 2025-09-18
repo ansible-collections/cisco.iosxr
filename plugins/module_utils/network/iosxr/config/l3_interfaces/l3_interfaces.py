@@ -368,17 +368,23 @@ class L3_Interfaces(ConfigBase):
                 add_command_to_config_list(interface, cmd, commands)
 
         want_cd = want.get("carrier_delay")
-        have_cd = have.get("carrier_delay", {})
-        if want_cd:
-            if want_cd.get("up") is not None:
-                if want_cd.get("up") != have_cd.get("up"):
-                    cmd = "carrier-delay up {0}".format(want_cd["up"])
-                    add_command_to_config_list(interface, cmd, commands)
+        have_cd = have.get("carrier_delay")
 
-            if want_cd.get("down") is not None:
-                if want_cd.get("down") != have_cd.get("down"):
-                    cmd = "carrier-delay down {0}".format(want_cd["down"])
-                    add_command_to_config_list(interface, cmd, commands)
+        if want_cd and want_cd != have_cd:
+            cmd_parts = ["carrier-delay"]
+            want_up = want_cd.get("up")
+            want_down = want_cd.get("down")
+            have_up = have_cd.get("up") if have_cd else None
+            have_down = have_cd.get("down") if have_cd else None
+
+            if want_up is not None and want_up != have_up:
+                cmd_parts.append("up {}".format(want_up))
+            if want_down is not None and want_down != have_down:
+                cmd_parts.append("down {}".format(want_down))
+
+            if len(cmd_parts) > 1:
+                cmd = " ".join(cmd_parts)
+                add_command_to_config_list(interface, cmd, commands)
 
         dampening_want = want.get("dampening")
         dampening_have = have.get("dampening")
