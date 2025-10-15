@@ -1,4 +1,3 @@
----
 annotations:
   - border_color: "#0C0606"
     border_radius: 0
@@ -76,174 +75,59 @@ annotations:
     z_index: 5
 nodes:
   - boot_disk_size: null
-    configuration: &conf |2-
-      !! IOS XR Configuration
-      hostname R1
-      username ansible
-       group root-lr
-       group cisco-support
-       password 0 lab
-      !
-      interface MgmtEth0/RP0/CPU0/0
-       ipv4 address dhcp
-       no shutdown
-      !
-      interface Loopback888
-      !
-      interface Loopback999
-      !
-      interface GigabitEthernet0/0/0/0
-       shutdown
-      !
-      router static
-       address-family ipv4 unicast
-        0.0.0.0/0 192.168.255.1
-       !
-      !
-      ssh server v2
-      netconf-yang agent
-       ssh
-      !
-    cpu_limit: null
-    cpus: null
-    data_volume: null
-    hide_links: false
-    id: n0
-    image_definition: null
-    label: milestone
-    node_definition: iosxrv9000
-    parameters: {}
-    ram: null
-    tags: []
-    x: -400
-    y: 120
-    interfaces:
-      - id: i0
-        label: Loopback0
-        type: loopback
-      - id: i1
-        label: MgmtEth0/RP0/CPU0/0
-        slot: 0
-        type: physical
-      - id: i2
-        label: donotuse1
-        slot: 1
-        type: physical
-      - id: i3
-        label: donotuse2
-        slot: 2
-        type: physical
-      - id: i4
-        label: GigabitEthernet0/0/0/0
-        slot: 3
-        type: physical
-  - boot_disk_size: null
-    configuration: *conf
-    cpu_limit: null
-    cpus: null
-    data_volume: null
-    hide_links: false
-    id: n1
-    image_definition: null
-    label: devel
-    node_definition: iosxrv9000
-    parameters: {}
-    ram: null
-    tags: []
-    x: -240
-    y: 120
-    interfaces:
-      - id: i0
-        label: Loopback0
-        type: loopback
-      - id: i1
-        label: MgmtEth0/RP0/CPU0/0
-        slot: 0
-        type: physical
-      - id: i2
-        label: donotuse1
-        slot: 1
-        type: physical
-      - id: i3
-        label: donotuse2
-        slot: 2
-        type: physical
-      - id: i4
-        label: GigabitEthernet0/0/0/0
-        slot: 3
-        type: physical
-  - boot_disk_size: null
-    configuration: *conf
-    cpu_limit: null
-    cpus: null
-    data_volume: null
-    hide_links: false
-    id: n2
-    image_definition: null
-    label: stable-2.18
-    node_definition: iosxrv9000
-    parameters: {}
-    ram: null
-    tags: []
-    x: -80
-    y: 120
-    interfaces:
-      - id: i0
-        label: Loopback0
-        type: loopback
-      - id: i1
-        label: MgmtEth0/RP0/CPU0/0
-        slot: 0
-        type: physical
-      - id: i2
-        label: donotuse1
-        slot: 1
-        type: physical
-      - id: i3
-        label: donotuse2
-        slot: 2
-        type: physical
-      - id: i4
-        label: GigabitEthernet0/0/0/0
-        slot: 3
-        type: physical
-  - boot_disk_size: null
-    configuration: *conf
-    cpu_limit: null
-    cpus: null
-    data_volume: null
-    hide_links: false
-    id: n3
-    image_definition: null
-    label: stable-2.19
-    node_definition: iosxrv9000
-    parameters: {}
-    ram: null
-    tags: []
-    x: 80
-    y: 120
-    interfaces:
-      - id: i0
-        label: Loopback0
-        type: loopback
-      - id: i1
-        label: MgmtEth0/RP0/CPU0/0
-        slot: 0
-        type: physical
-      - id: i2
-        label: donotuse1
-        slot: 1
-        type: physical
-      - id: i3
-        label: donotuse2
-        slot: 2
-        type: physical
-      - id: i4
-        label: GigabitEthernet0/0/0/0
-        slot: 3
-        type: physical
-  - boot_disk_size: null
-    configuration: *conf
+    configuration: |2-
+        !! IOS XR Admin Configuration
+        username cisco
+          group root-system
+          secret 0 cisco1
+        !
+        hostname iosxr
+        username ansible
+          group root-lr
+          group sysadmin
+          group cisco-support
+          secret 10 $6$Z9Luu1mZiydfDu1.$bG2UOKkX0dWR3C//DW3YMYeF3VktNkQIxvEV5ndAyBi4bDUZImvEPK.alEoccyv5N7yui2NmgBrzkI4EM1rx9/
+        !
+        domain name ansible.com
+        aaa authentication login default local
+        line default
+         login authentication default
+         transport input ssh
+        !
+        call-home
+         service active
+         contact smart-licensing
+         profile CiscoTAC-1
+          active
+          destination transport-method email disable
+          destination transport-method http
+         !
+        !
+        control-plane
+         management-plane
+          inband
+           interface all
+            allow all
+            allow SSH
+           !
+          !
+         !
+        !
+        interface MgmtEth0/RP0/CPU0/0
+         ipv4 address dhcp
+         no shutdown
+        !
+        interface GigabitEthernet0/0/0/0
+         shutdown
+        !
+        router static
+         address-family ipv4 unicast
+          0.0.0.0/0 192.168.255.1
+         !
+        !
+        ssh timeout 100
+        ssh server v2
+
     cpu_limit: null
     cpus: null
     data_volume: null
@@ -266,15 +150,15 @@ nodes:
         slot: 0
         type: physical
       - id: i2
-        label: donotuse1
+        label: GigabitEthernet0/0/0/0
         slot: 1
         type: physical
       - id: i3
-        label: donotuse2
+        label: GigabitEthernet0/0/0/1
         slot: 2
         type: physical
       - id: i4
-        label: GigabitEthernet0/0/0/0
+        label: GigabitEthernet0/0/0/2
         slot: 3
         type: physical
   - boot_disk_size: null
@@ -353,41 +237,13 @@ links:
     i2: i0
     conditioning: {}
     label: ci-god-port<->slave-switch-port0
-  - id: l1
-    n1: n5
-    n2: n0
-    i1: i1
-    i2: i1
-    conditioning: {}
-    label: slave-switch-port1<->milestone-mgmt0
-  - id: l2
-    n1: n5
-    n2: n1
-    i1: i2
-    i2: i1
-    conditioning: {}
-    label: slave-switch-port2<->devel-mgmt0
-  - id: l3
-    n1: n5
-    n2: n2
-    i1: i3
-    i2: i1
-    conditioning: {}
-    label: slave-switch-port3<->stable-2.18-mgmt0
-  - id: l4
-    n1: n5
-    n2: n3
-    i1: i4
-    i2: i1
-    conditioning: {}
-    label: slave-switch-port4<->stable-2.19-mgmt0
   - id: l5
     n1: n5
     n2: n4
     i1: i5
     i2: i1
     conditioning: {}
-    label: slave-switch-port5<->stable-2.16-mgmt0
+    label: slave-switch-port5<->stable-2.16-MgmtEth0/RP0/CPU0/0
 lab:
   description: "Upstream test lab for cisco.iosxr"
   notes: "Upstream test lab for cisco.iosxr"
