@@ -21,6 +21,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.facts import Facts
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
@@ -120,7 +121,7 @@ class L3_Interfaces(ConfigBase):
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
         """
-        want = self._module.params["config"]
+        want = [utils.remove_empties(d) for d in self._module.params["config"]]
         have = copy.deepcopy(existing_l3_interfaces_facts)
         resp = self.set_state(want, have)
         return to_list(resp)
