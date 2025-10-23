@@ -34,7 +34,7 @@ import json
 import re
 
 from difflib import Differ
-from xml.etree import ElementTree as etree  # <-- THIS IS THE FIX
+from xml.etree import ElementTree as etree
 
 from ansible.module_utils._text import to_bytes, to_text
 from ansible.module_utils.connection import Connection, ConnectionError
