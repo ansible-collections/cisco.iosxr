@@ -38,9 +38,9 @@ merged:
     - "end-policy"
   after:
     - global:
-          set:
-            local_preference:
-              - metric_number: 150
+        set:
+          local_preference:
+            - metric_number: 150
       name: POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)
     - else_section:
         else_section:
