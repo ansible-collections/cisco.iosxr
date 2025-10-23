@@ -34,7 +34,6 @@ import json
 import re
 
 from difflib import Differ
-from xml.etree import ElementTree as etree
 
 from ansible.module_utils._text import to_bytes, to_text
 from ansible.module_utils.connection import Connection, ConnectionError
@@ -57,6 +56,7 @@ try:
     HAS_XML = True
 except ImportError:
     HAS_XML = False
+    from xml.etree import ElementTree as etree
 
 _EDIT_OPS = frozenset(["merge", "create", "replace", "delete"])
 
