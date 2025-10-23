@@ -56,8 +56,6 @@ try:
     HAS_XML = True
 except ImportError:
     HAS_XML = False
-    from xml.etree import ElementTree as etree
-
 _EDIT_OPS = frozenset(["merge", "create", "replace", "delete"])
 
 BASE_1_0 = "{urn:ietf:params:xml:ns:netconf:base:1.0}"
