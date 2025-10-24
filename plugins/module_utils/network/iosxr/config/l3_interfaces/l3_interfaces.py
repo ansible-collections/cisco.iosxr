@@ -17,7 +17,6 @@ import copy
 __metaclass__ = type
 
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
