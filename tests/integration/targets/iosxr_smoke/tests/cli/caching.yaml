@@ -30,7 +30,7 @@
       register: result
       cisco.iosxr.iosxr_interfaces: &merged
         config:
-          - name: GigabitEthernet0/0/0/1
+          - name: GigabitEthernet0/0/0/3
             description: Configured by Ansible
             mtu: 110
             enabled: true
@@ -46,7 +46,7 @@
 
     - ansible.builtin.assert:
         that:
-          - '"interface GigabitEthernet0/0/0/1" in result.commands'
+          - '"interface GigabitEthernet0/0/0/3" in result.commands'
           - '"description Configured by Ansible" in result.commands'
           - '"mtu 110" in result.commands'
           - '"duplex half" in result.commands'
@@ -70,7 +70,7 @@
       register: result
       cisco.iosxr.iosxr_l2_interfaces: &mergedl2
         config:
-          - name: GigabitEthernet0/0/0/1
+          - name: GigabitEthernet0/0/0/5
             l2transport: true
             l2protocol:
               - cpsv: drop
@@ -85,7 +85,7 @@
 
     - ansible.builtin.assert:
         that:
-          - '"interface GigabitEthernet0/0/0/1" in result.commands'
+          - '"interface GigabitEthernet0/0/0/5" in result.commands'
           - '"l2transport l2protocol cpsv drop" in result.commands'
           - '"l2transport propagate remote-status" in result.commands'
           - '"interface GigabitEthernet0/0/0/4.1" in result.commands'

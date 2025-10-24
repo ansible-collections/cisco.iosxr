@@ -11,7 +11,7 @@ merged:
     - interface Bundle-Ether11
     - lacp system mac 00c2.4c00.bd15
     - interface GigabitEthernet0/0/0/1
-    - lacp period 100
+    - lacp period 200
   after:
     - name: Bundle-Ether10
       churn_logging: actor
@@ -22,7 +22,7 @@ merged:
         mac: 00c2.4c00.bd15
     - name: GigabitEthernet0/0/0/0
     - name: GigabitEthernet0/0/0/1
-      period: 100
+      period: 200
 populate:
   - name: Bundle-Ether10
     churn_logging: actor
