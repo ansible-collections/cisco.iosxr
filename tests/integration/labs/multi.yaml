@@ -79,7 +79,7 @@ nodes:
     configuration: |2-
         !! IOS XR Configuration
         hostname R1
-        
+
         !! IOS XR Admin Configuration
         username cisco
           group root-system
