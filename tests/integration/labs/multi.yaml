@@ -252,7 +252,6 @@ links:
     i2: i1
     conditioning: {}
     label: slave-switch-port5<->stable-2.16-MgmtEth0/RP0/CPU0/0
-    label: slave-switch-port5<->stable-2.16-MgmtEth0/RP0/CPU0/0
 lab:
   description: "Upstream test lab for cisco.iosxr"
   notes: "Upstream test lab for cisco.iosxr"
