@@ -78,15 +78,15 @@ nodes:
     configuration: |2-
         !! IOS XR Admin Configuration
         username cisco
-          group root-system
-          secret 0 cisco1
+         group root-system
+         secret 0 cisco1
         !
         hostname iosxr
         username ansible
-          group root-lr
-          group sysadmin
-          group cisco-support
-          secret 10 $6$Z9Luu1mZiydfDu1.$bG2UOKkX0dWR3C//DW3YMYeF3VktNkQIxvEV5ndAyBi4bDUZImvEPK.alEoccyv5N7yui2NmgBrzkI4EM1rx9/
+         group root-lr
+         group sysadmin
+         group cisco-support
+         secret 10 $6$Z9Luu1mZiydfDu1.$bG2UOKkX0dWR3C//DW3YMYeF3VktNkQIxvEV5ndAyBi4bDUZImvEPK.alEoccyv5N7yui2NmgBrzkI4EM1rx9/
         !
         domain name ansible.com
         aaa authentication login default local
@@ -117,6 +117,10 @@ nodes:
          ipv4 address dhcp
          no shutdown
         !
+        interface Loopback888
+        !
+        interface Loopback999
+        !
         interface GigabitEthernet0/0/0/0
          shutdown
         !
@@ -127,6 +131,8 @@ nodes:
         !
         ssh timeout 100
         ssh server v2
+        netconf-yang agent
+         ssh
 
     cpu_limit: null
     cpus: null
@@ -160,10 +166,6 @@ nodes:
       - id: i4
         label: GigabitEthernet0/0/0/0
         slot: 3
-        type: physical
-      - id: i5
-        label: GigabitEthernet0/0/0/1
-        slot: 4
         type: physical
       - id: i5
         label: GigabitEthernet0/0/0/1
