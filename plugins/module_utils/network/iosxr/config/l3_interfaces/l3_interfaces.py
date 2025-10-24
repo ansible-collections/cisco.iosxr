@@ -121,7 +121,7 @@ class L3_Interfaces(ConfigBase):
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
         """
-        want = [utils.remove_empties(d) for d in self._module.params["config"]]
+        want = self._module.params["config"]
         have = copy.deepcopy(existing_l3_interfaces_facts)
         resp = self.set_state(want, have)
         return to_list(resp)
