@@ -28,6 +28,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 import json
 import re
@@ -43,10 +44,12 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
 
+
 # Import ncclient with error tracking
 NCCLIENT_IMP_ERR = None
 try:
     from ncclient.xml_ import to_xml
+
     HAS_NCCLIENT = True
 except ImportError:
     HAS_NCCLIENT = False
@@ -56,6 +59,7 @@ except ImportError:
 LXML_IMP_ERR = None
 try:
     from lxml import etree
+
     HAS_LXML = True
 except ImportError:
     HAS_LXML = False
@@ -307,12 +311,12 @@ def is_netconf(module):
         if not HAS_NCCLIENT:
             module.fail_json(
                 msg=missing_required_lib("ncclient"),
-                exception=NCCLIENT_IMP_ERR
+                exception=NCCLIENT_IMP_ERR,
             )
         if not HAS_LXML:
             module.fail_json(
                 msg=missing_required_lib("lxml"),
-                exception=LXML_IMP_ERR
+                exception=LXML_IMP_ERR,
             )
         return True
 
