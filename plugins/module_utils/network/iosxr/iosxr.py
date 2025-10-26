@@ -44,8 +44,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
 
-
-# Import ncclient with error tracking
 NCCLIENT_IMP_ERR = None
 try:
     from ncclient.xml_ import to_xml
@@ -55,7 +53,6 @@ except ImportError:
     HAS_NCCLIENT = False
     NCCLIENT_IMP_ERR = traceback.format_exc()
 
-# Import lxml with error tracking - lxml is preferred over stdlib xml.etree
 LXML_IMP_ERR = None
 try:
     from lxml import etree
