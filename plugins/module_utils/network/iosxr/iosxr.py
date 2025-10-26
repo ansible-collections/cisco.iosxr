@@ -44,6 +44,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
 
+
 NCCLIENT_IMP_ERR = None
 try:
     from ncclient.xml_ import to_xml
