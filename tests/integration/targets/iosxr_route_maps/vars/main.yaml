@@ -10,6 +10,7 @@ merged:
     - "set weight 20000"
     - "end-policy"
     - "route-policy POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)"
+    - "set community (64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)"
     - "set local-preference 150\n"
     - "end-policy"
     - "route-policy SIMPLE_CONDITION_ROUTE_POLICY"
@@ -39,6 +40,8 @@ merged:
   after:
     - global:
         set:
+          community:
+            community_name: "(64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)"
           local_preference:
             - metric_number: 150
       name: "POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)"
@@ -145,6 +148,8 @@ overridden:
   before:
     - global:
         set:
+          community:
+            community_name: (64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)
           local_preference:
             - metric_number: 150
       name: POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)
@@ -232,6 +237,8 @@ deleted:
   after:
     - global:
         set:
+          community:
+              community_name: "(64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)"
           local_preference:
             - metric_number: 150
       name: POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)
