@@ -1,0 +1,57 @@
+---
+- ansible.builtin.debug:
+    msg: Start iosxr_route_maps overridden integration tests connection={{ ansible_connection}}
+
+- ansible.builtin.include_tasks: _populate_config.yaml
+
+- block:
+    - name: Override the route-policy configuration
+      cisco.iosxr.iosxr_route_maps:
+        state: overridden
+        config:
+          - global:
+              apply:
+                - route_policy: A_NEW_ROUTE_POLICY
+              set:
+                community:
+                  community_name: test_comm_name
+                weight: 20000
+                local_preference:
+                  - increment: true
+                    metric_number: 100
+                  - decrement: true
+                    metric_number: 200
+                  - multiply: true
+                    metric_number: 300
+            name: SIMPLE_GLOBAL_ROUTE_POLICY_overridden
+          - else_section:
+              else_section:
+                drop: true
+              if_section:
+                condition: destination in A_RANDOM_POLICY
+                pass: true
+                set:
+                  community:
+                    community_name: test_comm_name
+            if_section:
+              condition: as-path in (ios-regex '_3117_', ios-regex '_600_')
+              drop: true
+            name: COMPLEX_ROUTE_POLICY_overridden
+      register: result
+
+    - name: Assert that correct set of commands were generated
+      ansible.builtin.assert:
+        that:
+          - "{{ overridden['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
+
+    - name: Assert that after dict is correctly generated
+      ansible.builtin.assert:
+        that:
+          - overridden['after'] == result['after']
+
+    - name: Assert that before dicts are correctly generated
+      ansible.builtin.assert:
+        that:
+          - overridden['before'] == result['before']
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml
