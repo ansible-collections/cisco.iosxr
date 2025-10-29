@@ -56,13 +56,6 @@ try:
     HAS_XML = True
 except ImportError:
     HAS_XML = False
-    # Fallback to stdlib xml.etree.ElementTree if lxml is not available
-    try:
-        from xml.etree import ElementTree as etree
-
-        HAS_XML = True
-    except ImportError:
-        HAS_XML = False
 
 _EDIT_OPS = frozenset(["merge", "create", "replace", "delete"])
 
@@ -305,7 +298,7 @@ def is_netconf(module):
         if not HAS_NCCLIENT:
             module.fail_json(msg="ncclient is not installed")
         if not HAS_XML:
-            module.fail_json(msg="lxml or xml.etree is not installed")
+            module.fail_json(msg="lxml is not installed")
         return True
 
     return False
