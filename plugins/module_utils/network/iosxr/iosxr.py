@@ -32,12 +32,10 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 import json
 import re
-import traceback
 
 from difflib import Differ
 
 from ansible.module_utils._text import to_bytes, to_text
-from ansible.module_utils.basic import missing_required_lib
 from ansible.module_utils.connection import Connection, ConnectionError
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.netconf import (
     NetconfConnection,
@@ -45,28 +43,19 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
 
 
-NCCLIENT_IMP_ERR = None
 try:
     from ncclient.xml_ import to_xml
 
     HAS_NCCLIENT = True
 except ImportError:
     HAS_NCCLIENT = False
-    NCCLIENT_IMP_ERR = traceback.format_exc()
 
-LXML_IMP_ERR = None
 try:
-    from lxml import etree
+    from xml.etree import ElementTree as etree
 
-    HAS_LXML = True
+    HAS_XML = True
 except ImportError:
-    HAS_LXML = False
-    LXML_IMP_ERR = traceback.format_exc()
-    # Fallback to stdlib xml.etree.ElementTree if lxml is not available
-    try:
-        from xml.etree import ElementTree as etree
-    except ImportError:
-        pass
+    HAS_XML = False
 
 _EDIT_OPS = frozenset(["merge", "create", "replace", "delete"])
 
@@ -307,15 +296,9 @@ def is_netconf(module):
     network_api = capabilities.get("network_api")
     if network_api == "netconf":
         if not HAS_NCCLIENT:
-            module.fail_json(
-                msg=missing_required_lib("ncclient"),
-                exception=NCCLIENT_IMP_ERR,
-            )
-        if not HAS_LXML:
-            module.fail_json(
-                msg=missing_required_lib("lxml"),
-                exception=LXML_IMP_ERR,
-            )
+            module.fail_json(msg="ncclient is not installed")
+        if not HAS_XML:
+            module.fail_json(msg="xml.etree is not installed")
         return True
 
     return False
