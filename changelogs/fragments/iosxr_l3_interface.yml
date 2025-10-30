@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Added few parameters to iosxr_l3_interface module to support new features.
