@@ -286,6 +286,15 @@ releases:
       - fix_routemap.yaml
       - fix_sanity.yaml
     release_date: "2025-08-19"
+  12.1.0:
+    changes:
+      minor_changes:
+        - Added few parameters to iosxr_l3_interface module to support new features.
+    fragments:
+      - add_ignore_2.21.yaml
+      - fix_sanity_errors.yaml
+      - iosxr_l3_interface.yml
+    release_date: "2025-10-30"
   2.0.0:
     changes:
       bugfixes:
