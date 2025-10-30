@@ -19,7 +19,7 @@
               mac: 00c2.4c00.bd15
 
           - name: GigabitEthernet0/0/0/1
-            period: 100
+            period: 200
         state: merged
 
     - name: Gather interfaces facts using gathered state
