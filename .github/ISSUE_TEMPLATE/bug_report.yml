@@ -57,4 +57,3 @@ body:
       placeholder: iosxr_xxx
     validations:
       required: false
-

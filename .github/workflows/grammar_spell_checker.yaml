@@ -1,3 +1,4 @@
+---
 name: Grammar and Spell Check
 
 on: [workflow_dispatch]
@@ -30,13 +31,13 @@ jobs:
           cat > /tmp/check_grammar.py << 'EOF'
           import language_tool_python
           import sys
-          
+
           tool = language_tool_python.LanguageTool('en-US')
-          
+
           file_path = sys.argv[1]
           with open(file_path, 'r') as f:
               content = f.read()
-          
+
           matches = tool.check(content)
           for match in matches:
               print(f'{file_path}: {match}')
