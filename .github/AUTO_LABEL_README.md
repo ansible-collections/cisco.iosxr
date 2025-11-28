@@ -6,6 +6,8 @@ This document describes the auto-labeling functionality implemented for the `cis
 
 The auto-label workflow automatically adds labels to Pull Requests and Issues based on the information provided in the PR and Issue templates. This helps with:
 
+**Note**: This workflow works alongside the existing `check_label.yml` workflow. See `WORKFLOW_COORDINATION.md` for details on how they work together.
+
 - **Better organization**: Issues and PRs are automatically categorized
 - **Faster triage**: Maintainers can quickly identify the type of change
 - **Workflow automation**: Labels can trigger other workflows or notifications

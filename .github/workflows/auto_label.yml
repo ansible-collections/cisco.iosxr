@@ -29,18 +29,21 @@ jobs:
             console.log(`PR body preview: ${prBody.substring(0, 200)}...`);
 
             // Map Type of Change checkboxes to labels
+            // Note: Primary labels (bug, feature, refactoring) match check_label validation
+            // Collection-specific labels (ci, workflow, release, etc.) are additional metadata
+            // check_label requires at least one primary label to pass validation
             const typeLabels = {
-              'Bug fix': 'bug',
-              'New feature': 'enhancement',
-              'New module': 'new-module',
-              'Breaking change': 'breaking-change',
-              'Documentation update': 'documentation',
-              'Test update': 'tests',
-              'Refactoring': 'refactor',
-              'Collection release': 'release',
-              'CI maintenance': 'ci',
-              'Workflow maintenance': 'workflow',
-              'Configuration change': 'config'
+              'Bug fix': 'bug',  // ✅ check_label-valid
+              'New feature': 'feature',  // ✅ check_label-valid
+              'Refactoring': 'refactoring',  // ✅ check_label-valid
+              'New module': 'new-module',  // Collection-specific (additional metadata)
+              'Breaking change': 'breaking-change',  // Collection-specific
+              'Documentation update': 'documentation',  // Collection-specific
+              'Test update': 'tests',  // Collection-specific
+              'Collection release': 'release',  // Collection-specific
+              'CI maintenance': 'ci',  // Collection-specific
+              'Workflow maintenance': 'workflow',  // Collection-specific
+              'Configuration change': 'config'  // Collection-specific
             };
 
             // Check for checked boxes in Type of Change section
@@ -145,17 +148,18 @@ jobs:
               }
             }
 
-            // Check if it's a bug report (has Bug Summary field)
-            if (issueBody.includes('### Bug Summary') || issueBody.includes('🐞')) {
+            // Check if it's a bug report (has Bug Summary field from template)
+            // GitHub Issue Forms convert field labels to markdown headers (### Label)
+            if (issueBody.includes('### Bug Summary')) {
               if (!labels.includes('bug')) {
                 labels.push('bug');
               }
             }
 
-            // Check for feature request
-            if (issueBody.includes('### Feature Summary') || issueBody.includes('✨')) {
-              if (!labels.includes('enhancement')) {
-                labels.push('enhancement');
+            // Check for feature request (has Feature Summary field from template)
+            if (issueBody.includes('### Feature Summary')) {
+              if (!labels.includes('feature')) {
+                labels.push('feature');  // Using 'feature' to match check_label validation
               }
             }
 
