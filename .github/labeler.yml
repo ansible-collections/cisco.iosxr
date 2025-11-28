@@ -1,0 +1,95 @@
+---
+# Auto-label configuration for PRs and Issues
+# This file works with actions/labeler@v4 to add labels based on content
+
+# PR Type of Change labels
+bug:
+  - '- \\[x\\] Bug fix'
+  - '- \\[X\\] Bug fix'
+  - '\\[x\\] Bug fix'
+  - '\\[X\\] Bug fix'
+  - 'Bug Summary'
+  - '🐞'
+
+enhancement:
+  - '- \\[x\\] New feature'
+  - '- \\[X\\] New feature'
+  - '\\[x\\] New feature'
+  - '\\[X\\] New feature'
+
+new-module:
+  - '- \\[x\\] New module'
+  - '- \\[X\\] New module'
+  - '\\[x\\] New module'
+  - '\\[X\\] New module'
+
+breaking-change:
+  - '- \\[x\\] Breaking change'
+  - '- \\[X\\] Breaking change'
+  - '\\[x\\] Breaking change'
+  - '\\[X\\] Breaking change'
+
+documentation:
+  - '- \\[x\\] Documentation update'
+  - '- \\[X\\] Documentation update'
+  - '\\[x\\] Documentation update'
+  - '\\[X\\] Documentation update'
+
+tests:
+  - '- \\[x\\] Test update'
+  - '- \\[X\\] Test update'
+  - '\\[x\\] Test update'
+  - '\\[X\\] Test update'
+
+refactor:
+  - '- \\[x\\] Refactoring'
+  - '- \\[X\\] Refactoring'
+  - '\\[x\\] Refactoring'
+  - '\\[X\\] Refactoring'
+
+release:
+  - '- \\[x\\] Collection release'
+  - '- \\[X\\] Collection release'
+  - '\\[x\\] Collection release'
+  - '\\[X\\] Collection release'
+  - 'Collection Release'
+
+ci:
+  - '- \\[x\\] CI maintenance'
+  - '- \\[X\\] CI maintenance'
+  - '\\[x\\] CI maintenance'
+  - '\\[X\\] CI maintenance'
+  - 'CI Maintenance'
+
+workflow:
+  - '- \\[x\\] Workflow maintenance'
+  - '- \\[X\\] Workflow maintenance'
+  - '\\[x\\] Workflow maintenance'
+  - '\\[X\\] Workflow maintenance'
+  - 'Workflow Maintenance'
+
+config:
+  - '- \\[x\\] Configuration change'
+  - '- \\[X\\] Configuration change'
+  - '\\[x\\] Configuration change'
+  - '\\[X\\] Configuration change'
+
+# Component-based labels
+module:
+  - 'iosxr_[a-z_]+'
+  - 'Module/Plugin Name.*iosxr_'
+  - 'Component Name.*iosxr_'
+
+plugin:
+  - 'cliconf'
+  - 'terminal plugin'
+  - 'netconf plugin'
+  - 'action plugin'
+  - 'Connection Plugin'
+  - 'Terminal Plugin'
+  - 'Netconf Plugin'
+  - 'Action Plugin'
+
+module-utils:
+  - 'Module Utils'
+  - 'module_utils'
