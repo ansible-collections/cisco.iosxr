@@ -27,19 +27,22 @@ jobs:
       - name: Run grammar and spell check
         if: steps.check_changes.outputs.changed_files != ''
         run: |
+          cat > /tmp/check_grammar.py << 'EOF'
+          import language_tool_python
+          import sys
+          
+          tool = language_tool_python.LanguageTool('en-US')
+          
+          file_path = sys.argv[1]
+          with open(file_path, 'r') as f:
+              content = f.read()
+          
+          matches = tool.check(content)
+          for match in matches:
+              print(f'{file_path}: {match}')
+          EOF
           changed_files=${{ steps.check_changes.outputs.changed_files }}
           echo "$changed_files" | while read file; do
-            python -c "
-import language_tool_python
-
-tool = language_tool_python.LanguageTool('en-US')
-
-with open('${file}', 'r') as f:
-    content = f.read()
-
-matches = tool.check(content)
-for match in matches:
-    print(f'{file}: {match}')
-"
+            python /tmp/check_grammar.py "$file"
           done
         shell: bash
