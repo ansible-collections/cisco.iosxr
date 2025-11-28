@@ -8,6 +8,8 @@ bug:
   - '- \\[X\\] Bug fix'
   - '\\[x\\] Bug fix'
   - '\\[X\\] Bug fix'
+  - 'Bug Summary'
+  - '🐞'
 
 enhancement:
   - '- \\[x\\] New feature'
@@ -91,9 +93,3 @@ plugin:
 module-utils:
   - 'Module Utils'
   - 'module_utils'
-
-# Issue-specific labels
-bug:
-  - 'Bug Summary'
-  - '🐞'
-

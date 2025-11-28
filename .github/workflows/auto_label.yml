@@ -2,30 +2,28 @@
 name: Auto Label
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, edited, synchronize]
   issues:
     types: [opened, edited]
 
 jobs:
-  auto-label:
+  auto-label-pr:
+    if: github.event_name == 'pull_request_target'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
-      issues: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Auto-label from PR template
-        if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const prNumber = context.payload.pull_request.number;
             const prBody = context.payload.pull_request.body || '';
             const labels = [];
-            
+
             // Map Type of Change checkboxes to labels
             const typeLabels = {
               'Bug fix': 'bug',
@@ -40,7 +38,7 @@ jobs:
               'Workflow maintenance': 'workflow',
               'Configuration change': 'config'
             };
-            
+
             // Check for checked boxes in Type of Change section
             const typeSection = prBody.match(/## Type of Change[\s\S]*?(?=##|$)/);
             if (typeSection) {
@@ -51,37 +49,51 @@ jobs:
                 }
               }
             }
-            
+
             // Extract Component Name for component-specific labels
-            const componentMatch = prBody.match(/## Component Name[\\s\\S]*?<!--[\\s\\S]*?Examples: ([^,]+)/);
+            const componentMatch = prBody.match(/## Component Name[\s\S]*?<!--[\s\S]*?Examples: ([^,]+)/);
             if (componentMatch) {
               const component = componentMatch[1].trim();
               if (component.includes('plugin')) {
                 labels.push('plugin');
-              } else if (component.startsWith('iosxr_')) {
+              } else if (component.includes('iosxr_')) {
                 labels.push('module');
               }
             }
-            
+
             // Add labels if any were found
             if (labels.length > 0) {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.payload.pull_request.number,
-                labels: labels
-              });
-              console.log(`Added labels: ${labels.join(', ')}`);
+              try {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  labels: labels
+                });
+                console.log(`Added labels: ${labels.join(', ')}`);
+              } catch (error) {
+                console.error(`Error adding labels: ${error.message}`);
+                // Don't fail the workflow if label addition fails
+              }
+            } else {
+              console.log('No labels to add based on template');
             }
 
+  auto-label-issue:
+    if: github.event_name == 'issues'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
       - name: Auto-label from Issue template
-        if: github.event_name == 'issues'
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const issueBody = context.payload.issue.body || '';
             const labels = [];
-            
+
             // GitHub issue forms store data in markdown format
             // Checkboxes appear as "- [x] Label" when checked
             // Extract components section
@@ -101,7 +113,7 @@ jobs:
                 'CI Maintenance': 'ci',
                 'Workflow Maintenance': 'workflow'
               };
-              
+
               // Check for checked components (format: - [x] Component Name)
               for (const [component, label] of Object.entries(componentLabels)) {
                 const regex = new RegExp(`- \\[x\\] ${component}`, 'i');
@@ -112,30 +124,35 @@ jobs:
                 }
               }
             }
-            
+
             // Check if it's a bug report (has Bug Summary field)
             if (issueBody.includes('### Bug Summary') || issueBody.includes('🐞')) {
               if (!labels.includes('bug')) {
                 labels.push('bug');
               }
             }
-            
+
             // Check for feature request
             if (issueBody.includes('### Feature Summary') || issueBody.includes('✨')) {
               if (!labels.includes('enhancement')) {
                 labels.push('enhancement');
               }
             }
-            
+
             // Add labels if any were found
             if (labels.length > 0) {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.payload.issue.number,
-                labels: labels
-              });
-              console.log(`Added labels: ${labels.join(', ')}`);
+              try {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.payload.issue.number,
+                  labels: labels
+                });
+                console.log(`Added labels: ${labels.join(', ')}`);
+              } catch (error) {
+                console.error(`Error adding labels: ${error.message}`);
+                // Don't fail the workflow if label addition fails
+              }
             } else {
               console.log('No labels to add based on template');
             }
