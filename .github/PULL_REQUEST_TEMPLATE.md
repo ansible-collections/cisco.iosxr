@@ -8,6 +8,7 @@
 <!-- Mandatory: Check one or more boxes that apply -->
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
+- [ ] New module (adding a new module to the collection)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] Documentation update
 - [ ] Test update
@@ -19,6 +20,10 @@
 <!-- Optional: Link to related issue(s) -->
 - Fixes #
 - Related to #
+
+## Component Name
+<!-- Mandatory: Specify the module, plugin, or component being changed -->
+<!-- Examples: iosxr_config, iosxr_bgp_global, cliconf plugin, terminal plugin, etc. -->
 
 ## Self-Review Checklist
 <!-- These items help ensure quality - they complement our automated CI checks -->
@@ -64,6 +69,14 @@
 
 ## Additional Context
 <!-- Optional but helpful information -->
+<!-- Include additional information to help people understand the change here -->
+<!-- A step-by-step reproduction of the problem is helpful if there is no related issue -->
+
+### Command Output / Logs
+<!-- Paste verbatim command output below, e.g. before and after your change -->
+```
+<!-- Paste below -->
+```
 
 ### Required Actions
 <!-- Check if changes require work in other areas -->
