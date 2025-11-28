@@ -29,7 +29,9 @@ body:
         - label: Documentation
         - label: Integration Tests
         - label: Unit Tests
-        - label: Other
+        - label: Collection Release
+        - label: CI Maintenance
+        - label: Workflow Maintenance
 
   - type: input
     id: iosxr_version
@@ -44,8 +46,8 @@ body:
     id: hardware_platform
     attributes:
       label: Hardware Platform
-      description: Hardware platform if applicable (e.g., ASR9K, NCS5500, XRv)
-      placeholder: ASR9K / NCS5500 / XRv
+      description: We develop and test this collection primarily with XRv platform
+      placeholder: XRv
     validations:
       required: false
 
