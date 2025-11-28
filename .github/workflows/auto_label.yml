@@ -24,6 +24,10 @@ jobs:
             const prBody = context.payload.pull_request.body || '';
             const labels = [];
 
+            console.log(`Processing PR #${prNumber}`);
+            console.log(`PR body length: ${prBody.length}`);
+            console.log(`PR body preview: ${prBody.substring(0, 200)}...`);
+
             // Map Type of Change checkboxes to labels
             const typeLabels = {
               'Bug fix': 'bug',
@@ -42,12 +46,16 @@ jobs:
             // Check for checked boxes in Type of Change section
             const typeSection = prBody.match(/## Type of Change[\s\S]*?(?=##|$)/);
             if (typeSection) {
+              console.log(`Found Type of Change section: ${typeSection[0].substring(0, 300)}...`);
               for (const [templateText, label] of Object.entries(typeLabels)) {
                 const regex = new RegExp(`- \\[x\\] ${templateText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'i');
                 if (regex.test(typeSection[0])) {
+                  console.log(`✓ Matched: "${templateText}" → "${label}"`);
                   labels.push(label);
                 }
               }
+            } else {
+              console.log('No Type of Change section found in PR body');
             }
 
             // Extract Component Name for component-specific labels
@@ -62,17 +70,30 @@ jobs:
             }
 
             // Add labels if any were found
+            console.log(`Labels to add: ${labels.length > 0 ? labels.join(', ') : 'none'}`);
             if (labels.length > 0) {
               try {
+                // Check if labels exist in the repository
+                const existingLabels = await github.rest.issues.listLabelsForRepo({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo
+                });
+                const existingLabelNames = existingLabels.data.map(l => l.name);
+                const missingLabels = labels.filter(l => !existingLabelNames.includes(l));
+                if (missingLabels.length > 0) {
+                  console.log(`Warning: Labels not found in repository: ${missingLabels.join(', ')}`);
+                }
+
                 await github.rest.issues.addLabels({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: prNumber,
                   labels: labels
                 });
-                console.log(`Added labels: ${labels.join(', ')}`);
+                console.log(`✓ Successfully added labels: ${labels.join(', ')}`);
               } catch (error) {
-                console.error(`Error adding labels: ${error.message}`);
+                console.error(`✗ Error adding labels: ${error.message}`);
+                console.error(`Error details: ${JSON.stringify(error, null, 2)}`);
                 // Don't fail the workflow if label addition fails
               }
             } else {
