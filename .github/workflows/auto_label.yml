@@ -78,7 +78,6 @@ jobs:
             } else {
               console.log('No labels to add based on template');
             }
-
   auto-label-issue:
     if: github.event_name == 'issues'
     runs-on: ubuntu-latest
@@ -156,4 +155,3 @@ jobs:
             } else {
               console.log('No labels to add based on template');
             }
-
