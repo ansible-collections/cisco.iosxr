@@ -8,6 +8,7 @@
     - GigabitEthernet 0/0/0/3.900
     - GigabitEthernet 0/0/0/4
     - GigabitEthernet0/0/0/4.1
+    - GigabitEthernet0/0/0/5
   ignore_errors: true
   cisco.iosxr.iosxr_config:
     lines:

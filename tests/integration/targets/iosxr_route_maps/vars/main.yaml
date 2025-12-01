@@ -9,6 +9,10 @@ merged:
     - "set extcommunity rt 65000:100 additive"
     - "set weight 20000"
     - "end-policy"
+    - "route-policy POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)"
+    - "set community (64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)"
+    - "set local-preference 150\n"
+    - "end-policy"
     - "route-policy SIMPLE_CONDITION_ROUTE_POLICY"
     - "if destination in SIMPLE_CONDITION_ROUTE_POLICY then"
     - "pass"
@@ -34,27 +38,34 @@ merged:
     - "endif"
     - "end-policy"
   after:
+    - global:
+        set:
+          community:
+            community_name: "(64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)"
+          local_preference:
+            - metric_number: 150
+      name: "POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)"
     - else_section:
         else_section:
           drop: true
         if_section:
-          condition: destination in A_RANDOM_POLICY
+          condition: "destination in A_RANDOM_POLICY"
           pass: true
       if_section:
-        condition: destination in A_RANDOM_POLICY_DUMMY
+        condition: "destination in A_RANDOM_POLICY_DUMMY"
         drop: true
-      name: COMPLEX_ROUTE_POLICY
+      name: "COMPLEX_ROUTE_POLICY"
     - global:
         apply:
-          - route_policy: A_NEW_ROUTE_POLICY
+          - route_policy: "A_NEW_ROUTE_POLICY"
         set:
           community:
             additive: true
-            community_name: (11011:1001)
+            community_name: "(11011:1001)"
           med:
             value: 100
           extcommunity:
-            rt: 65000:100
+            rt: "65000:100"
             additive: true
           weight: 20000
           local_preference:
@@ -64,21 +75,21 @@ merged:
               metric_number: 200
             - multiply: true
               metric_number: 300
-      name: SIMPLE_GLOBAL_ROUTE_POLICY
+      name: "SIMPLE_GLOBAL_ROUTE_POLICY"
     - else_section:
         global:
           drop: true
       if_section:
-        condition: destination in SIMPLE_CONDITION_ROUTE_POLICY
+        condition: "destination in SIMPLE_CONDITION_ROUTE_POLICY"
         pass: true
-      name: SIMPLE_CONDITION_ROUTE_POLICY
+      name: "SIMPLE_CONDITION_ROUTE_POLICY"
     - else_section:
         global:
           pass: true
       if_section:
-        condition: community matches-any (9119:1001) or community matches-any (11100:1001)
+        condition: "community matches-any (9119:1001) or community matches-any (11100:1001)"
         drop: true
-      name: COMPLEX_CONDITION_ROUTE_POLICY
+      name: "COMPLEX_CONDITION_ROUTE_POLICY"
 
 overridden:
   commands:
@@ -100,6 +111,7 @@ overridden:
     - endif
     - endif
     - end-policy
+    - no route-policy POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)
     - no route-policy COMPLEX_ROUTE_POLICY
     - no route-policy SIMPLE_GLOBAL_ROUTE_POLICY
     - no route-policy SIMPLE_CONDITION_ROUTE_POLICY
@@ -134,6 +146,13 @@ overridden:
               metric_number: 300
       name: SIMPLE_GLOBAL_ROUTE_POLICY_overridden
   before:
+    - global:
+        set:
+          community:
+            community_name: (64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)
+          local_preference:
+            - metric_number: 150
+      name: POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)
     - else_section:
         else_section:
           drop: true
@@ -216,6 +235,13 @@ rendered:
 
 deleted:
   after:
+    - global:
+        set:
+          community:
+            community_name: "(64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)"
+          local_preference:
+            - metric_number: 150
+      name: POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)
     - global:
         apply:
           - route_policy: A_NEW_ROUTE_POLICY
