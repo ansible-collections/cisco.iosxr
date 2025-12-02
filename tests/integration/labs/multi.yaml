@@ -111,7 +111,7 @@ nodes:
     hide_links: false
     id: n4
     image_definition: null
-    label: stable-2.16
+    label: stable-2.17
     node_definition: iosxrv9000
     parameters: {}
     ram: null
@@ -224,7 +224,7 @@ links:
     i1: i5
     i2: i1
     conditioning: {}
-    label: slave-switch-port5<->stable-2.16-MgmtEth0/RP0/CPU0/0
+    label: slave-switch-port5<->stable-2.17-MgmtEth0/RP0/CPU0/0
 lab:
   description: "Upstream test lab for cisco.iosxr"
   notes: "Upstream test lab for cisco.iosxr"
