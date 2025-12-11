@@ -1,3 +1,0 @@
----
-bugfixes:
-  - iosxr_bgp_address_family - Fixed label generation command handling under `address_family` configuration.
