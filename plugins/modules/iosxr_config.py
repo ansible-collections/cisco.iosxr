@@ -57,6 +57,11 @@ options:
       argument is mutually exclusive with I(lines), I(parents). The configuration lines in the
       source file should be similar to how it will appear if present in the running-configuration
       of the device to ensure idempotency and correct diff.
+    - Post ansible-core 2.18 templating option have changed, src is backported to render template files by
+      default. It is advised to use the ansible.builtin.template lookup plugin.
+    - The functionality of src rendering templates inherently would be deprecated on a release after
+      2028-01-01.
+    - See [2.19 Porting Guide](https://docs.ansible.com/projects/ansible-core/devel/porting_guides/porting_guide_core_2.19.html)
     type: path
   before:
     description:
@@ -204,6 +209,28 @@ EXAMPLES = """
     src: config.cfg
     replace: config
     backup: 'yes'
+
+# This functionality would be deprecated on a release after 2028-01-01
+# src attribute would still support handing configuration files (path)
+# rendering template as by the src template would be deprecated.
+
+- name: Apply configuration from file - not recommended tests backward compatibility
+  register: result
+  cisco.iosxr.iosxr_config:
+    src: basic/config_src_not_recommended.j2
+
+# This is the recommended way.
+
+- name: Template a file - recommended way
+  ansible.builtin.template:
+    src: basic/config_src_recommended.j2
+    dest: /tmp/config_src_recommended.j2
+    mode: "0644"
+
+- name: Apply configuration from file
+  register: result
+  cisco.iosxr.iosxr_config:
+    src: /tmp/config_src_recommended.j2
 
 - name: 'for idempotency, use full-form commands'
   cisco.iosxr.iosxr_config:
