@@ -562,21 +562,21 @@ class NCConfiguration(ConfigBase):
         self._locald_group_meta = collections.OrderedDict()
 
     def generate_md5_hash(self, arg):
-      """
-      Generate MD5 hash with randomly generated salt size of 3.
-      :param arg:
-      :return passwd:
-      """
-      cmd = "openssl passwd -salt `openssl rand -base64 3` -1 " + arg
-      rc, out, err = self._module.run_command(cmd, use_unsafe_shell=True)
-      if rc != 0:
-          self._module.fail_json(
-              msg="Failed to generate MD5 hash",
-              rc=rc,
-              stdout=out,
-              stderr=err
-          )
-      return out.strip()
+        """
+        Generate MD5 hash with randomly generated salt size of 3.
+        :param arg:
+        :return passwd:
+        """
+        cmd = "openssl passwd -salt `openssl rand -base64 3` -1 " + arg
+        rc, out, err = self._module.run_command(cmd, use_unsafe_shell=True)
+        if rc != 0:
+            self._module.fail_json(
+                msg="Failed to generate MD5 hash",
+                rc=rc,
+                stdout=out,
+                stderr=err,
+            )
+        return out.strip()
 
     def map_obj_to_xml_rpc(self, os_version):
         if os_version and Version(os_version) > Version("7.0"):
