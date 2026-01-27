@@ -568,7 +568,10 @@ class NCConfiguration(ConfigBase):
         :return passwd:
         """
         cmd = "openssl passwd -salt `openssl rand -base64 3` -1 "
-        return os.popen(cmd + arg).readlines()[0].strip()
+        rc, out, err = self._module.run_command(cmd + arg, use_unsafe_shell=True)
+        if rc != 0:
+            self._module.fail_json(msg="Failed to generate MD5 hash", stderr=err)
+        return out.strip()
 
     def map_obj_to_xml_rpc(self, os_version):
         if os_version and Version(os_version) > Version("7.0"):
