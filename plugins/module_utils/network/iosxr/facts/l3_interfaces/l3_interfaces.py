@@ -177,14 +177,18 @@ class L3_InterfacesFacts(object):
                 if "flow" not in config or not config["flow"]:
                     config["flow"] = {}
 
-                for line in flow_monitor_lines:
-                    protocol, monitor, sampler, direction = line
-                    if protocol not in config["flow"]:
-                        config["flow"][protocol] = {}
+                for protocol, monitor, sampler, direction in flow_monitor_lines:
+                    if protocol not in config["flow"] or not isinstance(config["flow"][protocol], list):
+                        config["flow"][protocol] = []
 
-                    config["flow"][protocol]["monitor"] = monitor
-                    config["flow"][protocol]["sampler"] = sampler
-                    config["flow"][protocol]["direction"] = direction
+                    flow_entry = {
+                        "monitor": monitor,
+                        "sampler": sampler,
+                        "direction": direction,
+                    }
+
+                    if flow_entry not in config["flow"][protocol]:
+                        config["flow"][protocol].append(flow_entry)
 
             return utils.remove_empties(config)
 

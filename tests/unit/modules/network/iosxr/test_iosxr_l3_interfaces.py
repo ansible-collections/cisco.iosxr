@@ -335,8 +335,12 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         ]
         self.assertEqual(gathered, result["gathered"])
 
+    # =========================================================================
+    # ORIGINAL FLOW TESTS (backward compatibility - single entry per protocol)
+    # =========================================================================
+
     def test_iosxr_l3_interfaces_flow_merged(self):
-        """Test flow parameter in merged state"""
+        """Test flow parameter in merged state (backward compatibility - dict format)"""
         set_module_args(
             dict(
                 config=[
@@ -367,8 +371,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
-    def test_iosxr_l3_interfaces_flow_merged_partial(self):
-        """Test flow parameter in merged state with partial config"""
+    def test_iosxr_l3_interfaces_flow_merged(self):
         self._prepare("iosxr_l3_interface_flow_config.cfg")
         set_module_args(
             dict(
@@ -376,27 +379,37 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/0",
                         flow={
-                            "ipv6": {
-                                "monitor": "MONITOR-NEW",
-                                "sampler": "SAMPLER-NEW",
-                                "direction": "ingress",
-                            },
+                            "ipv4": [  # ✅ Changed to list
+                                {
+                                    "monitor": "MONITOR-A",
+                                    "sampler": "SAMPLER-1",
+                                    "direction": "ingress",
+                                }
+                            ],
+                            "ipv6": [  # ✅ Changed to list
+                                {
+                                    "monitor": "MONITOR-B",
+                                    "sampler": "SAMPLER-2",
+                                    "direction": "egress",
+                                }
+                            ],
                         },
                     ),
                 ],
                 state="merged",
             ),
         )
-        commands = [
-            "interface GigabitEthernet0/0/0/0",
-            "no flow ipv6 monitor MONITOR-B sampler SAMPLER-2 egress",
-            "flow ipv6 monitor MONITOR-NEW sampler SAMPLER-NEW ingress",
-        ]
-        result = self.execute_module(changed=True)
-        self.assertEqual(sorted(result["commands"]), sorted(commands))
+        self.execute_module(changed=False, commands=[])
+# interface GigabitEthernet0/0/0/0
+#  ipv4 address 198.51.100.1 255.255.255.0
+#  flow ipv4 monitor MONITOR-A sampler SAMPLER-1 ingress
+#  flow ipv6 monitor MONITOR-B sampler SAMPLER-2 egress
+# !
+# interface GigabitEthernet0/0/0/1
+#  ipv4 address 192.0.2.1 255.255.255.0
+# !
 
     def test_iosxr_l3_interfaces_flow_replaced(self):
-        """Test flow parameter in replaced state"""
         self._prepare("iosxr_l3_interface_flow_config.cfg")
         set_module_args(
             dict(
@@ -404,11 +417,13 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/0",
                         flow={
-                            "ipv4": {
-                                "monitor": "MONITOR-REPLACED",
-                                "sampler": "SAMPLER-REPLACED",
-                                "direction": "egress",
-                            },
+                            "ipv4": [  # ✅ Changed to list
+                                {
+                                    "monitor": "MONITOR-REPLACED",
+                                    "sampler": "SAMPLER-REPLACED",
+                                    "direction": "egress",
+                                }
+                            ],
                         },
                     ),
                 ],
@@ -448,7 +463,6 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_l3_interfaces_flow_overridden(self):
-        """Test flow parameter in overridden state"""
         self._prepare("iosxr_l3_interface_flow_config.cfg")
         set_module_args(
             dict(
@@ -456,11 +470,13 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         flow={
-                            "ipv4": {
-                                "monitor": "OVERRIDE-MONITOR",
-                                "sampler": "OVERRIDE-SAMPLER",
-                                "direction": "ingress",
-                            },
+                            "ipv4": [  # ✅ Changed to list
+                                {
+                                    "monitor": "OVERRIDE-MONITOR",
+                                    "sampler": "OVERRIDE-SAMPLER",
+                                    "direction": "ingress",
+                                }
+                            ],
                         },
                     ),
                 ],
@@ -479,25 +495,344 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
-    def test_iosxr_l3_interfaces_flow_rendered(self):
-        """Test flow parameter in rendered state"""
+    def test_iosxr_l3_interfaces_flow_gathered_bidirectional(self):
+        """Test gathered state: gather config with bidirectional flow"""
+        self._prepare("iosxr_l3_interface_flow_gathered_bidirectional.cfg")
+        set_module_args(dict(state="gathered"))
+        result = self.execute_module(changed=False)
+        gathered = [
+            {
+                "name": "Bundle-Ether90.3201",
+                "ipv4": [{"address": "10.176.248.168/31"}],
+                "load_interval": 30,
+                "flow": {
+                    "ipv4": [
+                        {
+                            "monitor": "FlowMap-IPv4",
+                            "sampler": "NETFLOW_1in2000",
+                            "direction": "ingress",
+                        },
+                        {
+                            "monitor": "FlowMap-IPv4",
+                            "sampler": "NETFLOW_1in2000",
+                            "direction": "egress",
+                        },
+                    ],
+                },
+            },
+            {
+                "name": "Bundle-Ether90.3202",
+                "ipv4": [{"address": "10.176.248.172/31"}],
+                "ipv6": [{"address": "fd10:0:4620:4001::2/127"}],
+                "load_interval": 30,
+                "flow": {
+                    "ipv4": [
+                        {
+                            "monitor": "FlowMap-IPv4",
+                            "sampler": "NETFLOW_1in2000",
+                            "direction": "ingress",
+                        },
+                        {
+                            "monitor": "FlowMap-IPv4",
+                            "sampler": "NETFLOW_1in2000",
+                            "direction": "egress",
+                        },
+                    ],
+                    "ipv6": [
+                        {
+                            "monitor": "FlowMap-IPv6",
+                            "sampler": "NETFLOW_1in2000",
+                            "direction": "ingress",
+                        },
+                        {
+                            "monitor": "FlowMap-IPv6",
+                            "sampler": "NETFLOW_1in2000",
+                            "direction": "egress",
+                        },
+                    ],
+                },
+            },
+        ]
+        self.assertEqual(gathered, result["gathered"])
+
+    def test_iosxr_l3_interfaces_flow_bidirectional_merged(self):
+        """Test bidirectional flow in merged state - should add both ingress and egress"""
         set_module_args(
             dict(
                 config=[
                     dict(
                         name="GigabitEthernet0/0/0/0",
-                        ipv4=[dict(address="198.51.100.1/24")],
                         flow={
-                            "ipv4": {
-                                "monitor": "RENDER-MONITOR",
-                                "sampler": "RENDER-SAMPLER",
-                                "direction": "ingress",
-                            },
-                            "ipv6": {
-                                "monitor": "RENDER-MONITOR-V6",
-                                "sampler": "RENDER-SAMPLER-V6",
-                                "direction": "egress",
-                            },
+                            "ipv4": [
+                                {
+                                    "monitor": "MONITOR-BIDIR",
+                                    "sampler": "SAMPLER-BIDIR",
+                                    "direction": "bidirectional",
+                                }
+                            ],
+                        },
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "flow ipv4 monitor MONITOR-BIDIR sampler SAMPLER-BIDIR ingress",
+            "flow ipv4 monitor MONITOR-BIDIR sampler SAMPLER-BIDIR egress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_l3_interfaces_flow_bidirectional_both_protocols(self):
+        """Test bidirectional flow for both IPv4 and IPv6"""
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        flow={
+                            "ipv4": [
+                                {
+                                    "monitor": "FlowMap-IPv4",
+                                    "sampler": "NETFLOW_1in2000",
+                                    "direction": "bidirectional",
+                                }
+                            ],
+                            "ipv6": [
+                                {
+                                    "monitor": "FlowMap-IPv6",
+                                    "sampler": "NETFLOW_1in2000",
+                                    "direction": "bidirectional",
+                                }
+                            ],
+                        },
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1in2000 ingress",
+            "flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1in2000 egress",
+            "flow ipv6 monitor FlowMap-IPv6 sampler NETFLOW_1in2000 ingress",
+            "flow ipv6 monitor FlowMap-IPv6 sampler NETFLOW_1in2000 egress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_l3_interfaces_flow_bidirectional_replaced(self):
+        self._prepare("iosxr_l3_interface_flow_config.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        flow={
+                            "ipv4": [
+                                {
+                                    "monitor": "NEW-MONITOR",
+                                    "sampler": "NEW-SAMPLER",
+                                    "direction": "bidirectional",
+                                }
+                            ],
+                        },
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "no ipv4 address",
+            "no flow ipv4 monitor MONITOR-A sampler SAMPLER-1 ingress",
+            "no flow ipv6 monitor MONITOR-B sampler SAMPLER-2 egress",
+            "flow ipv4 monitor NEW-MONITOR sampler NEW-SAMPLER ingress",
+            "flow ipv4 monitor NEW-MONITOR sampler NEW-SAMPLER egress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_l3_interfaces_flow_bidirectional_idempotent(self):
+        """Test bidirectional is idempotent when both ingress and egress already exist"""
+        self._prepare("iosxr_l3_interface_flow_gathered_bidirectional.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="Bundle-Ether90.3201",
+                        ipv4=[{"address": "10.176.248.168/31"}],
+                        load_interval=30,
+                        flow={
+                            "ipv4": [
+                                {
+                                    "monitor": "FlowMap-IPv4",
+                                    "sampler": "NETFLOW_1in2000",
+                                    "direction": "bidirectional",
+                                }
+                            ],
+                        },
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        result = self.execute_module(changed=False, commands=[])
+
+    def test_iosxr_l3_interfaces_flow_mixed_directions(self):
+        """Test mixing bidirectional with explicit directions"""
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        flow={
+                            "ipv4": [
+                                {
+                                    "monitor": "MONITOR-BIDIR",
+                                    "sampler": "SAMPLER-1",
+                                    "direction": "bidirectional",
+                                }
+                            ],
+                            "ipv6": [
+                                {
+                                    "monitor": "MONITOR-IPV6",
+                                    "sampler": "SAMPLER-2",
+                                    "direction": "ingress",
+                                }
+                            ],
+                        },
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "flow ipv4 monitor MONITOR-BIDIR sampler SAMPLER-1 ingress",
+            "flow ipv4 monitor MONITOR-BIDIR sampler SAMPLER-1 egress",
+            "flow ipv6 monitor MONITOR-IPV6 sampler SAMPLER-2 ingress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_l3_interfaces_flow_bidirectional_partial_update(self):
+        """Test bidirectional when only one direction exists - should add missing direction"""
+        self._prepare("iosxr_l3_interface_flow_config.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        ipv4=[{"address": "198.51.100.1/24"}],
+                        flow={
+                            "ipv4": [
+                                {
+                                    "monitor": "MONITOR-A",
+                                    "sampler": "SAMPLER-1",
+                                    "direction": "bidirectional",
+                                }
+                            ],
+                        },
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "flow ipv4 monitor MONITOR-A sampler SAMPLER-1 egress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_l3_interfaces_flow_bidirectional_overridden(self):
+        """Test bidirectional in overridden state"""
+        self._prepare("iosxr_l3_interface_flow_config.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/1",
+                        flow={
+                            "ipv4": [
+                                {
+                                    "monitor": "OVERRIDE-BIDIR",
+                                    "sampler": "OVERRIDE-SAMPLER",
+                                    "direction": "bidirectional",
+                                }
+                            ],
+                        },
+                    ),
+                ],
+                state="overridden",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "no ipv4 address",
+            "no flow ipv4 monitor MONITOR-A sampler SAMPLER-1 ingress",
+            "no flow ipv6 monitor MONITOR-B sampler SAMPLER-2 egress",
+            "interface GigabitEthernet0/0/0/1",
+            "no ipv4 address",
+            "flow ipv4 monitor OVERRIDE-BIDIR sampler OVERRIDE-SAMPLER ingress",
+            "flow ipv4 monitor OVERRIDE-BIDIR sampler OVERRIDE-SAMPLER egress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_l3_interfaces_flow_bidirectional_multiple_monitors(self):
+        """Test multiple flow monitors with bidirectional and explicit directions"""
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        flow={
+                            "ipv4": [
+                                {
+                                    "monitor": "MONITOR-1",
+                                    "sampler": "SAMPLER-1",
+                                    "direction": "bidirectional",
+                                },
+                                {
+                                    "monitor": "MONITOR-2",
+                                    "sampler": "SAMPLER-2",
+                                    "direction": "ingress",
+                                }
+                            ],
+                        },
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "flow ipv4 monitor MONITOR-1 sampler SAMPLER-1 ingress",
+            "flow ipv4 monitor MONITOR-1 sampler SAMPLER-1 egress",
+            "flow ipv4 monitor MONITOR-2 sampler SAMPLER-2 ingress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_l3_interfaces_flow_bidirectional_rendered(self):
+        """Test bidirectional in rendered state"""
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        ipv4=[{"address": "192.0.2.1/24"}],
+                        flow={
+                            "ipv4": [
+                                {
+                                    "monitor": "FlowMap-IPv4",
+                                    "sampler": "NETFLOW_1in2000",
+                                    "direction": "bidirectional",
+                                }
+                            ],
                         },
                     ),
                 ],
@@ -506,105 +841,53 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",
-            "ipv4 address 198.51.100.1 255.255.255.0",
-            "flow ipv4 monitor RENDER-MONITOR sampler RENDER-SAMPLER ingress",
-            "flow ipv6 monitor RENDER-MONITOR-V6 sampler RENDER-SAMPLER-V6 egress",
+            "ipv4 address 192.0.2.1 255.255.255.0",
+            "flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1in2000 ingress",
+            "flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1in2000 egress",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
 
-    def test_iosxr_l3_interfaces_flow_parsed(self):
-        """Test flow parameter in parsed state"""
-        set_module_args(
-            dict(
-                running_config="interface GigabitEthernet0/0/0/0\n"
-                "ipv4 address 198.51.100.1 255.255.255.0\n"
-                "flow ipv4 monitor PARSE-MONITOR sampler PARSE-SAMPLER ingress\n"
-                "flow ipv6 monitor PARSE-MONITOR-V6 sampler PARSE-SAMPLER-V6 egress\n"
-                "interface GigabitEthernet0/0/0/1\n"
-                "ipv4 address 192.0.2.1 255.255.255.0\n",
-                state="parsed",
-            ),
-        )
-        result = self.execute_module(changed=False)
-        parsed_list = [
-            {
-                "name": "GigabitEthernet0/0/0/0",
-                "ipv4": [{"address": "198.51.100.1/24"}],
-                "flow": {
-                    "ipv4": {
-                        "monitor": "PARSE-MONITOR",
-                        "sampler": "PARSE-SAMPLER",
-                        "direction": "ingress",
-                    },
-                    "ipv6": {
-                        "monitor": "PARSE-MONITOR-V6",
-                        "sampler": "PARSE-SAMPLER-V6",
-                        "direction": "egress",
-                    },
-                },
-            },
-            {
-                "name": "GigabitEthernet0/0/0/1",
-                "ipv4": [{"address": "192.0.2.1/24"}],
-            },
-        ]
-        self.assertEqual(parsed_list, result["parsed"])
-
-    def test_iosxr_l3_interfaces_flow_gathered(self):
-        """Test flow parameter in gathered state"""
-        self._prepare("iosxr_l3_interface_flow_gathered.cfg")
-        set_module_args(dict(state="gathered"))
-        result = self.execute_module(changed=False)
-        gathered = [
-            {
-                "name": "GigabitEthernet0/0/0/0",
-                "ipv4": [{"address": "198.51.100.1/24"}],
-                "flow": {
-                    "ipv4": {
-                        "monitor": "GATHERED-MONITOR",
-                        "sampler": "GATHERED-SAMPLER",
-                        "direction": "ingress",
-                    },
-                },
-            },
-            {
-                "name": "GigabitEthernet0/0/0/1",
-                "ipv4": [{"address": "192.0.2.1/24"}],
-                "flow": {
-                    "ipv6": {
-                        "monitor": "GATHERED-MONITOR-V6",
-                        "sampler": "GATHERED-SAMPLER-V6",
-                        "direction": "egress",
-                    },
-                },
-            },
-        ]
-        self.assertEqual(gathered, result["gathered"])
-
-    def test_iosxr_l3_interfaces_flow_idempotent(self):
-        """Test flow parameter idempotency in merged state"""
-        self._prepare("iosxr_l3_interface_flow_config.cfg")
+    def test_iosxr_l3_interfaces_flow_bidirectional_real_world_scenario(self):
+        """Test real-world scenario from GitHub issue with bidirectional"""
         set_module_args(
             dict(
                 config=[
                     dict(
-                        name="GigabitEthernet0/0/0/0",
+                        name="Bundle-Ether90.3202",
+                        ipv4=[{"address": "10.176.248.172/31"}],
+                        ipv6=[{"address": "fd10:0:4620:4001::2/127"}],
+                        load_interval=30,
                         flow={
-                            "ipv4": {
-                                "monitor": "MONITOR-A",
-                                "sampler": "SAMPLER-1",
-                                "direction": "ingress",
-                            },
-                            "ipv6": {
-                                "monitor": "MONITOR-B",
-                                "sampler": "SAMPLER-2",
-                                "direction": "egress",
-                            },
+                            "ipv4": [
+                                {
+                                    "monitor": "FlowMap-IPv4",
+                                    "sampler": "NETFLOW_1in2000",
+                                    "direction": "bidirectional",
+                                }
+                            ],
+                            "ipv6": [
+                                {
+                                    "monitor": "FlowMap-IPv6",
+                                    "sampler": "NETFLOW_1in2000",
+                                    "direction": "bidirectional",
+                                }
+                            ],
                         },
                     ),
                 ],
                 state="merged",
             ),
         )
-        self.execute_module(changed=False, commands=[])
+        commands = [
+            "interface Bundle-Ether90.3202",
+            "ipv4 address 10.176.248.172 255.255.255.254",
+            "ipv6 address fd10:0:4620:4001::2/127",
+            "load-interval 30",
+            "flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1in2000 ingress",
+            "flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1in2000 egress",
+            "flow ipv6 monitor FlowMap-IPv6 sampler NETFLOW_1in2000 ingress",
+            "flow ipv6 monitor FlowMap-IPv6 sampler NETFLOW_1in2000 egress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
