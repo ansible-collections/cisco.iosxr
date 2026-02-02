@@ -430,12 +430,12 @@ class L3_Interfaces(ConfigBase):
                         ingress_entry = {
                             "monitor": entry.get("monitor"),
                             "sampler": entry.get("sampler"),
-                            "direction": "ingress"
+                            "direction": "ingress",
                         }
                         egress_entry = {
                             "monitor": entry.get("monitor"),
                             "sampler": entry.get("sampler"),
-                            "direction": "egress"
+                            "direction": "egress",
                         }
                         expanded_want_entries.append(ingress_entry)
                         expanded_want_entries.append(egress_entry)
@@ -443,23 +443,31 @@ class L3_Interfaces(ConfigBase):
                         expanded_want_entries.append(entry)
                 want_set = {
                     (e.get("monitor"), e.get("sampler"), e.get("direction"))
-                    for e in expanded_want_entries if e
+                    for e in expanded_want_entries
+                    if e
                 }
                 have_set = {
                     (e.get("monitor"), e.get("sampler"), e.get("direction"))
-                    for e in have_entries if e
+                    for e in have_entries
+                    if e
                 }
                 if self.state in ("replaced", "overridden"):
                     for entry_tuple in have_set - want_set:
                         monitor, sampler, direction = entry_tuple
                         cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
-                            proto, monitor, sampler, direction
+                            proto,
+                            monitor,
+                            sampler,
+                            direction,
                         )
                         add_command_to_config_list(interface, cmd, commands)
                 for entry_tuple in want_set - have_set:
                     monitor, sampler, direction = entry_tuple
                     cmd = "flow {0} monitor {1} sampler {2} {3}".format(
-                        proto, monitor, sampler, direction
+                        proto,
+                        monitor,
+                        sampler,
+                        direction,
                     )
                     add_command_to_config_list(interface, cmd, commands)
 

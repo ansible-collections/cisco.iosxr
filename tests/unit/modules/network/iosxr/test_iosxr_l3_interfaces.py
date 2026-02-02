@@ -384,14 +384,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "MONITOR-A",
                                     "sampler": "SAMPLER-1",
                                     "direction": "ingress",
-                                }
+                                },
                             ],
                             "ipv6": [  # ✅ Changed to list
                                 {
                                     "monitor": "MONITOR-B",
                                     "sampler": "SAMPLER-2",
                                     "direction": "egress",
-                                }
+                                },
                             ],
                         },
                     ),
@@ -400,14 +400,15 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             ),
         )
         self.execute_module(changed=False, commands=[])
-# interface GigabitEthernet0/0/0/0
-#  ipv4 address 198.51.100.1 255.255.255.0
-#  flow ipv4 monitor MONITOR-A sampler SAMPLER-1 ingress
-#  flow ipv6 monitor MONITOR-B sampler SAMPLER-2 egress
-# !
-# interface GigabitEthernet0/0/0/1
-#  ipv4 address 192.0.2.1 255.255.255.0
-# !
+
+    # interface GigabitEthernet0/0/0/0
+    #  ipv4 address 198.51.100.1 255.255.255.0
+    #  flow ipv4 monitor MONITOR-A sampler SAMPLER-1 ingress
+    #  flow ipv6 monitor MONITOR-B sampler SAMPLER-2 egress
+    # !
+    # interface GigabitEthernet0/0/0/1
+    #  ipv4 address 192.0.2.1 255.255.255.0
+    # !
 
     def test_iosxr_l3_interfaces_flow_replaced(self):
         self._prepare("iosxr_l3_interface_flow_config.cfg")
@@ -422,7 +423,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "MONITOR-REPLACED",
                                     "sampler": "SAMPLER-REPLACED",
                                     "direction": "egress",
-                                }
+                                },
                             ],
                         },
                     ),
@@ -475,7 +476,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "OVERRIDE-MONITOR",
                                     "sampler": "OVERRIDE-SAMPLER",
                                     "direction": "ingress",
-                                }
+                                },
                             ],
                         },
                     ),
@@ -568,7 +569,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "MONITOR-BIDIR",
                                     "sampler": "SAMPLER-BIDIR",
                                     "direction": "bidirectional",
-                                }
+                                },
                             ],
                         },
                     ),
@@ -597,14 +598,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "FlowMap-IPv4",
                                     "sampler": "NETFLOW_1in2000",
                                     "direction": "bidirectional",
-                                }
+                                },
                             ],
                             "ipv6": [
                                 {
                                     "monitor": "FlowMap-IPv6",
                                     "sampler": "NETFLOW_1in2000",
                                     "direction": "bidirectional",
-                                }
+                                },
                             ],
                         },
                     ),
@@ -635,7 +636,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "NEW-MONITOR",
                                     "sampler": "NEW-SAMPLER",
                                     "direction": "bidirectional",
-                                }
+                                },
                             ],
                         },
                     ),
@@ -670,7 +671,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "FlowMap-IPv4",
                                     "sampler": "NETFLOW_1in2000",
                                     "direction": "bidirectional",
-                                }
+                                },
                             ],
                         },
                     ),
@@ -693,14 +694,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "MONITOR-BIDIR",
                                     "sampler": "SAMPLER-1",
                                     "direction": "bidirectional",
-                                }
+                                },
                             ],
                             "ipv6": [
                                 {
                                     "monitor": "MONITOR-IPV6",
                                     "sampler": "SAMPLER-2",
                                     "direction": "ingress",
-                                }
+                                },
                             ],
                         },
                     ),
@@ -732,7 +733,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "MONITOR-A",
                                     "sampler": "SAMPLER-1",
                                     "direction": "bidirectional",
-                                }
+                                },
                             ],
                         },
                     ),
@@ -761,7 +762,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "OVERRIDE-BIDIR",
                                     "sampler": "OVERRIDE-SAMPLER",
                                     "direction": "bidirectional",
-                                }
+                                },
                             ],
                         },
                     ),
@@ -800,7 +801,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "MONITOR-2",
                                     "sampler": "SAMPLER-2",
                                     "direction": "ingress",
-                                }
+                                },
                             ],
                         },
                     ),
@@ -831,7 +832,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "FlowMap-IPv4",
                                     "sampler": "NETFLOW_1in2000",
                                     "direction": "bidirectional",
-                                }
+                                },
                             ],
                         },
                     ),
@@ -864,14 +865,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "FlowMap-IPv4",
                                     "sampler": "NETFLOW_1in2000",
                                     "direction": "bidirectional",
-                                }
+                                },
                             ],
                             "ipv6": [
                                 {
                                     "monitor": "FlowMap-IPv6",
                                     "sampler": "NETFLOW_1in2000",
                                     "direction": "bidirectional",
-                                }
+                                },
                             ],
                         },
                     ),
