@@ -19,7 +19,6 @@
 #
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -58,7 +57,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     build_xml,
     etree_find,
 )
-
 
 try:
     from ncclient import manager
