@@ -348,14 +348,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                                     "monitor": "MONITOR-A",
                                     "sampler": "SAMPLER-1",
                                     "direction": "ingress",
-                                }
+                                },
                             ],
                             "ipv6": [
                                 {
                                     "monitor": "MONITOR-B",
                                     "sampler": "SAMPLER-2",
                                     "direction": "egress",
-                                }
+                                },
                             ],
                         },
                     ),
