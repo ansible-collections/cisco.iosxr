@@ -335,10 +335,6 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         ]
         self.assertEqual(gathered, result["gathered"])
 
-    # =========================================================================
-    # ORIGINAL FLOW TESTS (backward compatibility - single entry per protocol)
-    # =========================================================================
-
     def test_iosxr_l3_interfaces_flow_merged(self):
         """Test flow parameter in merged state (backward compatibility - dict format)"""
         set_module_args(
