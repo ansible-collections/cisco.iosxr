@@ -336,38 +336,6 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         self.assertEqual(gathered, result["gathered"])
 
     def test_iosxr_l3_interfaces_flow_merged(self):
-        """Test flow parameter in merged state (backward compatibility - dict format)"""
-        set_module_args(
-            dict(
-                config=[
-                    dict(
-                        name="GigabitEthernet0/0/0/0",
-                        flow={
-                            "ipv4": {
-                                "monitor": "MONITOR-A",
-                                "sampler": "SAMPLER-1",
-                                "direction": "ingress",
-                            },
-                            "ipv6": {
-                                "monitor": "MONITOR-B",
-                                "sampler": "SAMPLER-2",
-                                "direction": "egress",
-                            },
-                        },
-                    ),
-                ],
-                state="merged",
-            ),
-        )
-        commands = [
-            "interface GigabitEthernet0/0/0/0",
-            "flow ipv4 monitor MONITOR-A sampler SAMPLER-1 ingress",
-            "flow ipv6 monitor MONITOR-B sampler SAMPLER-2 egress",
-        ]
-        result = self.execute_module(changed=True)
-        self.assertEqual(sorted(result["commands"]), sorted(commands))
-
-    def test_iosxr_l3_interfaces_flow_merged(self):
         self._prepare("iosxr_l3_interface_flow_config.cfg")
         set_module_args(
             dict(
@@ -375,14 +343,44 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/0",
                         flow={
-                            "ipv4": [  # ✅ Changed to list
+                            "ipv4": [
+                                {
+                                    "monitor": "MONITOR-A",
+                                    "sampler": "SAMPLER-1",
+                                    "direction": "ingress",
+                                }
+                            ],
+                            "ipv6": [
+                                {
+                                    "monitor": "MONITOR-B",
+                                    "sampler": "SAMPLER-2",
+                                    "direction": "egress",
+                                }
+                            ],
+                        },
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        self.execute_module(changed=False, commands=[])
+
+    def test_iosxr_l3_interfaces_flow_merged_idempotent(self):
+        self._prepare("iosxr_l3_interface_flow_config.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        flow={
+                            "ipv4": [
                                 {
                                     "monitor": "MONITOR-A",
                                     "sampler": "SAMPLER-1",
                                     "direction": "ingress",
                                 },
                             ],
-                            "ipv6": [  # ✅ Changed to list
+                            "ipv6": [
                                 {
                                     "monitor": "MONITOR-B",
                                     "sampler": "SAMPLER-2",
