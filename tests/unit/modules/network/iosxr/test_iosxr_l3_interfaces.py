@@ -401,15 +401,6 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         )
         self.execute_module(changed=False, commands=[])
 
-    # interface GigabitEthernet0/0/0/0
-    #  ipv4 address 198.51.100.1 255.255.255.0
-    #  flow ipv4 monitor MONITOR-A sampler SAMPLER-1 ingress
-    #  flow ipv6 monitor MONITOR-B sampler SAMPLER-2 egress
-    # !
-    # interface GigabitEthernet0/0/0/1
-    #  ipv4 address 192.0.2.1 255.255.255.0
-    # !
-
     def test_iosxr_l3_interfaces_flow_replaced(self):
         self._prepare("iosxr_l3_interface_flow_config.cfg")
         set_module_args(
@@ -418,7 +409,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/0",
                         flow={
-                            "ipv4": [  # ✅ Changed to list
+                            "ipv4": [
                                 {
                                     "monitor": "MONITOR-REPLACED",
                                     "sampler": "SAMPLER-REPLACED",
@@ -471,7 +462,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/1",
                         flow={
-                            "ipv4": [  # ✅ Changed to list
+                            "ipv4": [
                                 {
                                     "monitor": "OVERRIDE-MONITOR",
                                     "sampler": "OVERRIDE-SAMPLER",
