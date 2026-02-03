@@ -1,4 +1,3 @@
 ---
 bugfixes:
   - Fixed iosxr_user module to correctly handle MD5 hashed passwords when updating user credentials.
-  
