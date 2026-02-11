@@ -415,40 +415,63 @@ class L3_Interfaces(ConfigBase):
             have_flow = have_flow or {}
             want_flow = want_flow or {}
 
-            if self.state == "replaced" and have_flow:
-                for proto in ["ipv4", "ipv6"]:
-                    if proto in have_flow and proto not in want_flow:
-                        have_cfg = have_flow[proto]
+            for proto in ["ipv4", "ipv6"]:
+                want_entries = want_flow.get(proto, [])
+                have_entries = have_flow.get(proto, [])
+                if not isinstance(want_entries, list):
+                    want_entries = []
+                if not isinstance(have_entries, list):
+                    have_entries = []
+
+                expanded_want_entries = []
+                for entry in want_entries:
+                    if entry.get("direction") == "bidirectional":
+                        # Create two entries: one for ingress, one for egress
+                        ingress_entry = {
+                            "monitor": entry.get("monitor"),
+                            "sampler": entry.get("sampler"),
+                            "direction": "ingress",
+                        }
+                        egress_entry = {
+                            "monitor": entry.get("monitor"),
+                            "sampler": entry.get("sampler"),
+                            "direction": "egress",
+                        }
+                        expanded_want_entries.append(ingress_entry)
+                        expanded_want_entries.append(egress_entry)
+                    else:
+                        expanded_want_entries.append(entry)
+                want_set = {
+                    (e.get("monitor"), e.get("sampler"), e.get("direction"))
+                    for e in expanded_want_entries
+                    if e
+                }
+                have_set = {
+                    (e.get("monitor"), e.get("sampler"), e.get("direction"))
+                    for e in have_entries
+                    if e
+                }
+                if self.state in ("replaced", "overridden"):
+                    for entry_tuple in have_set - want_set:
+                        monitor, sampler, direction = entry_tuple
                         cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
                             proto,
-                            have_cfg["monitor"],
-                            have_cfg["sampler"],
-                            have_cfg["direction"],
+                            monitor,
+                            sampler,
+                            direction,
                         )
                         add_command_to_config_list(interface, cmd, commands)
-
-            for proto, want_cfg in want_flow.items():
-                if want_cfg is None:
-                    continue
-
-                have_cfg = have_flow.get(proto, {})
-                if want_cfg != have_cfg:
-                    if have_cfg:
-                        cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
-                            proto,
-                            have_cfg["monitor"],
-                            have_cfg["sampler"],
-                            have_cfg["direction"],
-                        )
-                        add_command_to_config_list(interface, cmd, commands)
+                for entry_tuple in want_set - have_set:
+                    monitor, sampler, direction = entry_tuple
                     cmd = "flow {0} monitor {1} sampler {2} {3}".format(
                         proto,
-                        want_cfg["monitor"],
-                        want_cfg["sampler"],
-                        want_cfg["direction"],
+                        monitor,
+                        sampler,
+                        direction,
                     )
                     add_command_to_config_list(interface, cmd, commands)
 
+        # Restore flow
         if want_flow is not None:
             want["flow"] = want_flow
         if have_flow is not None:
@@ -457,7 +480,6 @@ class L3_Interfaces(ConfigBase):
         return commands
 
     def _clear_config(self, want, have):
-        # Delete the interface config based on the want and have config
         count = 0
         commands = []
         if want.get("name"):
@@ -497,17 +519,19 @@ class L3_Interfaces(ConfigBase):
 
         if have.get("flow_control") and not want.get("flow_control"):
             remove_command_from_config_list(interface, "flow-control", commands)
-
-        if have.get("flow") and not want.get("flow"):
+        if have.get("flow") and not want.get("flow") and want:
             for proto in ["ipv4", "ipv6"]:
                 if have["flow"].get(proto):
-                    have_proto_flow = have["flow"][proto]
-                    cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
-                        proto,
-                        have_proto_flow["monitor"],
-                        have_proto_flow["sampler"],
-                        have_proto_flow["direction"],
-                    )
-                    add_command_to_config_list(interface, cmd, commands)
+                    have_entries = have["flow"][proto]
+                    if not isinstance(have_entries, list):
+                        have_entries = [have_entries] if have_entries else []
+                    for have_entry in have_entries:
+                        cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
+                            proto,
+                            have_entry["monitor"],
+                            have_entry["sampler"],
+                            have_entry["direction"],
+                        )
+                        add_command_to_config_list(interface, cmd, commands)
 
         return commands
