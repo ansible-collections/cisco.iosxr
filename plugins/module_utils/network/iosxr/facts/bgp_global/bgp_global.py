@@ -106,7 +106,7 @@ class Bgp_globalFacts(object):
         if vrfs:
             objs["vrfs"] = sorted(
                 list(objs["vrfs"].values()),
-                key=lambda k, sk="vrf": k[sk],
+                key=lambda k, sk="vrf": str(k[sk]),
             )
             for vrf in objs["vrfs"]:
                 self._post_parse(vrf)
