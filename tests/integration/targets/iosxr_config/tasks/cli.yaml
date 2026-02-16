@@ -10,7 +10,7 @@
   ansible.builtin.set_fact:
     test_items: "{{ test_cases.files | map(attribute='path') | list }}"
 
-- name: Global pre-flight cleanup - Clear any leftover config sessions
+- name: Clear any leftover config sessions
   cisco.iosxr.iosxr_command:
     commands:
       - "configure"
