@@ -1,7 +1,15 @@
 ---
-- ansible.builtin.debug: msg="START cli/commit_confirmed.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: 
+    msg: "START cli/commit_confirmed.yaml on connection={{ ansible_connection }}"
 
-- name: Test commit confirmed with guaranteed cleanup
+- name: Pre-cleanup - Abort any existing config sessions
+  cisco.iosxr.iosxr_command:
+    commands:
+      - "configure"
+      - "abort"
+  ignore_errors: true
+
+- name: Test commit confirmed with rollback protection
   block:
     - name: Test commit confirmed functionality
       vars:
@@ -22,7 +30,7 @@
       ansible.builtin.wait_for:
         timeout: 90
 
-    - name: "Get hostname after rollback period"
+    - name: "Get hostname after rollback"
       register: get_hostname2
       cisco.iosxr.iosxr_command:
         commands:
@@ -35,16 +43,21 @@
           - "'iosxr_commit_confirmed' not in get_hostname2.stdout[0]"
 
   rescue:
-    - name: Log test failure details
+    - name: Test failed - wait for automatic rollback to complete
       ansible.builtin.debug:
-        msg: "commit_confirmed test failed - {{ ansible_failed_result | default('unknown error') }}"
+        msg: "Test failed, waiting 70 seconds for rollback to complete"
+    
+    - name: Wait for rollback timer to expire
+      ansible.builtin.wait_for:
+        timeout: 70
 
   always:
-    - name: Cancel any remaining trial sessions (CRITICAL CLEANUP)
-      cisco.iosxr.iosxr_config:
-        lines:
-          - commit confirmed cancel
+    - name: Final cleanup - abort any config sessions
+      cisco.iosxr.iosxr_command:
+        commands:
+          - "configure"
+          - "abort"
       ignore_errors: true
 
-    - ansible.builtin.debug:
+    - ansible.builtin.debug: 
         msg: "END cli/commit_confirmed.yaml on connection={{ ansible_connection }}"

@@ -10,6 +10,13 @@
   ansible.builtin.set_fact:
     test_items: "{{ test_cases.files | map(attribute='path') | list }}"
 
+- name: Global pre-flight cleanup - Clear any leftover config sessions
+  cisco.iosxr.iosxr_command:
+    commands:
+      - "configure"
+      - "abort"
+  ignore_errors: true
+
 - name: Run test case (connection=ansible.netcommon.network_cli)
   ansible.builtin.include_tasks: "{{ test_case_to_run }}"
   vars:
