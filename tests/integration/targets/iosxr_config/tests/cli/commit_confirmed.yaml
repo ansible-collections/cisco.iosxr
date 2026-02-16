@@ -7,7 +7,7 @@
     commands:
       - "configure"
       - "abort"
-  ignore_errors: true
+  failed_when: false
 
 - name: Test commit confirmed with rollback protection
   block:
@@ -24,7 +24,7 @@
       cisco.iosxr.iosxr_command:
         commands:
           - "show running-config hostname"
-      ignore_errors: true
+      failed_when: false
 
     - name: Sleep for 90 secs for automatic rollback
       ansible.builtin.wait_for:
@@ -35,7 +35,7 @@
       cisco.iosxr.iosxr_command:
         commands:
           - "show running-config hostname"
-      ignore_errors: true
+      failed_when: false
 
     - ansible.builtin.assert:
         that:
@@ -57,7 +57,7 @@
         commands:
           - "configure"
           - "abort"
-      ignore_errors: true
+      failed_when: false
 
     - ansible.builtin.debug:
         msg: "END cli/commit_confirmed.yaml on connection={{ ansible_connection }}"
