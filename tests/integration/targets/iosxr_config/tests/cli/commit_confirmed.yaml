@@ -45,6 +45,6 @@
         lines:
           - commit confirmed cancel
       ignore_errors: true
-      
-    - ansible.builtin.debug: 
+
+    - ansible.builtin.debug:
         msg: "END cli/commit_confirmed.yaml on connection={{ ansible_connection }}"
