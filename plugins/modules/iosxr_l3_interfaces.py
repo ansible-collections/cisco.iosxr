@@ -141,7 +141,8 @@ options:
           ipv4:
             description:
             - Configure NetFlow monitoring for IPv4 traffic.
-            type: dict
+            type: list
+            elements: dict
             suboptions:
               monitor:
                 description:
@@ -155,11 +156,12 @@ options:
                 description:
                 - Direction of the flow monitoring.
                 type: str
-                choices: ['ingress', 'egress']
+                choices: ['ingress', 'egress','bidirectional']
           ipv6:
             description:
             - Configure NetFlow monitoring for IPv6 traffic.
-            type: dict
+            type: list
+            elements: dict
             suboptions:
               monitor:
                 description:
@@ -173,7 +175,7 @@ options:
                 description:
                 - Direction of the flow monitoring.
                 type: str
-                choices: ['ingress', 'egress']
+                choices: ['ingress', 'egress','bidirectional']
   running_config:
     description:
     - This option is used only with state I(parsed).
