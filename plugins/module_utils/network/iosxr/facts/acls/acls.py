@@ -12,7 +12,6 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 import re
@@ -29,7 +28,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     isipaddress,
 )
-
 
 PROTOCOL_OPTIONS = {
     "tcp": ("ack", "fin", "psh", "rst", "syn", "urg", "established"),

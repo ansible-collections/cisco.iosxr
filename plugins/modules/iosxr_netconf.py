@@ -6,7 +6,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 
@@ -82,7 +81,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     get_config,
     load_config,
 )
-
 
 USE_PERSISTENT_CONNECTION = True
 
