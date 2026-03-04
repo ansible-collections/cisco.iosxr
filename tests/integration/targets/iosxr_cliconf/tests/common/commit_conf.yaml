@@ -39,11 +39,6 @@
         that:
           - "'TestCommitConfirmed' in get_desc.stdout[0]"
   always:
-    # Use normal commit (not commit confirmed) so we don't leave an active trial
-    # for the next target. This target's vars set ansible_iosxr_commit_confirmed: true,
-    # so without this override the cleanup would do "commit confirmed 30" and the
-    # device would block the next target's commits until the trial expires.
-    - name: Remove interfaces from configuration before actual testing
       ignore_errors: true
       vars:
         ansible_iosxr_commit_confirmed: false
