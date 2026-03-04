@@ -1,9 +1,4 @@
 ---
-# Clear any active trial/rollback session so commits can succeed.
-# IOS-XR blocks new commits while "commit confirmed" (trial) is active; running
-# a single "commit" in config mode confirms the trial and unblocks the device.
-# Active trials can be left by: iosxr_cliconf (commit_conf) cleanup, or a failed
-# iosxr_config commit_confirmed test, or a previous CI run that did not finish.
 - name: Clear unexpired trial/rollback session if present (unblocks commit)
   cisco.iosxr.iosxr_config:
     lines:
