@@ -1,0 +1,7 @@
+---
+bugfixes:
+  - |
+    Fix integration test failure "Cannot commit because there is an unexpired trial/rollback session".
+    - iosxr_cliconf commit_conf cleanup now uses normal commit (ansible_iosxr_commit_confirmed: false)
+      so the device is not left with an active trial for the next target.
+    - prepare_iosxr_tests clears any leftover trial by running a single "commit" at start.
