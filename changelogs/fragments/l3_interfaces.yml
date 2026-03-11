@@ -1,0 +1,3 @@
+---
+minor_changes:
+  - Fixed issue where 'bidirectional' option for NetFlow monitoring was not handled correctly in iosxr_l3_interfaces module.
