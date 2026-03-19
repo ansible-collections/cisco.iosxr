@@ -1,4 +1,13 @@
 ---
+- name: Clear unexpired trial/rollback session if present (unblocks commit)
+  cisco.iosxr.iosxr_config:
+    lines:
+      - commit
+    match: none
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+  failed_when: false
+
 - name: Ensure we have loopback 888 for testing
   cisco.iosxr.iosxr_config:
     src: config.j2
