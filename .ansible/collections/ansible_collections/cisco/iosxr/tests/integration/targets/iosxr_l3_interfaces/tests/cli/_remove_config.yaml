@@ -1,0 +1,9 @@
+---
+- name: Remove interfaces from configuration before actual testing
+  loop:
+    - GigabitEthernet 0/0/0/0
+    - GigabitEthernet 0/0/0/1
+  ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no interface {{ item }}

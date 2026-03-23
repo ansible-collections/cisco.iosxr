@@ -1,0 +1,75 @@
+---
+- ansible.builtin.debug: msg="START cli/comment.yaml on connection={{ ansible_connection }}"
+
+- name: Setup
+  cisco.iosxr.iosxr_config:
+    commands:
+      - no description
+      - no shutdown
+    parents:
+      - interface Loopback999
+    match: none
+
+- name: Configure device with comment
+  register: result
+  cisco.iosxr.iosxr_config:
+    src: basic/config.j2
+    comment: this is sensible commit message
+    exclusive: true
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - result.updates is defined
+
+- name: Check device with configuration
+  register: result
+  cisco.iosxr.iosxr_config:
+    src: basic/config.j2
+    exclusive: true
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Assert accurately report configuration failure during pseudo-atomic operation
+  register: result
+  ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    lines:
+      - router bgp 65111
+      - neighbor 10.1.1.1
+      - update-source Loopback0
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+      - result.failed == true
+
+- name: Run show configuration failed
+  register: result
+  cisco.iosxr.iosxr_config:
+    lines:
+      - show configuration failed
+
+- ansible.builtin.assert:
+    that:
+      - result.failed == false
+
+- name: Configure device without default comment
+  register: result
+  cisco.iosxr.iosxr_config:
+    lines: hostname iosxr1
+    disable_default_comment: true
+
+- name: Check details of latest commit
+  iosxr_command:
+    commands:
+      - show configuration commit list 1 detail
+  register: result
+
+- ansible.builtin.assert:
+    that:
+      - "'configured by iosxr_config' not in result.stdout[0]"
+
+- ansible.builtin.debug: msg="END cli/comment.yaml on connection={{ ansible_connection }}"

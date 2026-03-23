@@ -1,0 +1,33 @@
+---
+- name: Setup - remove MOTD
+  cisco.iosxr.iosxr_banner:
+    banner: motd
+    state: absent
+
+- name: Set MOTD
+  register: result
+  cisco.iosxr.iosxr_banner:
+    banner: motd
+    text: "@this is my motd banner\nthat has a multiline\nstring\n@"
+    state: present
+
+- ansible.builtin.debug:
+    msg: "{{ result }}"
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'this is my motd banner' in result.xml"
+      - "'that has a multiline' in result.xml"
+
+- name: Set MOTD again (idempotent)
+  register: result
+  cisco.iosxr.iosxr_banner:
+    banner: motd
+    text: "@this is my motd banner\nthat has a multiline\nstring\n@"
+    state: present
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+      - result.xml | length == 0

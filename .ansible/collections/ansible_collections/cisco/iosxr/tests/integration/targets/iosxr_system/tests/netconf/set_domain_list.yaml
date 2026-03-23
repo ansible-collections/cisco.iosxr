@@ -1,0 +1,177 @@
+---
+- ansible.builtin.debug:
+    msg: START netconf/set_domain_search.yaml on connection={{ ansible_connection }}
+
+- name: Setup
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no domain list ansible.com
+      - no domain list redhat.com
+      - no domain list eng.ansible.com
+      - no domain vrf ansiblevrf list redhat.com
+      - no domain vrf ansiblevrf list ansible.com
+    match: none
+
+- name: Configure domain_search
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+      - redhat.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'ansible.com' in result.xml[0]"
+      - "'redhat.com' in result.xml[0]"
+
+- name: Configure domain_search with VRF
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system: &id001
+    vrf: ansiblevrf
+    domain_search:
+      - redhat.com
+      - ansible.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'ansiblevrf' in result.xml[0]"
+      - "'ansible.com' in result.xml[0]"
+      - "'redhat.com' in result.xml[0]"
+
+- name: Verify domain_search with VRF
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system: *id001
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Delete domain_search with VRF
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system: &id002
+    vrf: ansiblevrf
+    domain_search:
+      - redhat.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'ansiblevrf' in result.xml[0]"
+      - "'ansible.com' in result.xml[0]"
+
+- name: Verify delete domain_search with VRF
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system: *id002
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Remove one entry
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'redhat.com' in result.xml[0]"
+
+- name: Verify remove one entry
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Add one entry
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+      - redhat.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'redhat.com' in result.xml[0]"
+
+- name: Verify add one entry
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+      - redhat.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Add and remove one entry
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+      - eng.ansible.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'redhat.com' in result.xml[1]"
+      - "'eng.ansible.com' in result.xml[0]"
+      - result.xml|length == 2
+
+- name: Verify add and remove one entry
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system:
+    domain_search:
+      - ansible.com
+      - eng.ansible.com
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Teardown
+  connection: ansible.netcommon.network_cli
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no domain list ansible.com
+      - no domain list redhat.com
+      - no domain list eng.ansible.com
+      - no domain vrf ansiblevrf list redhat.com
+      - no domain vrf ansiblevrf list ansible.com
+      - no domain vrf ansiblevrf list eng.ansible.com
+    match: none
+
+- ansible.builtin.debug:
+    msg: END netconf/set_domain_search.yaml on connection={{ ansible_connection }}

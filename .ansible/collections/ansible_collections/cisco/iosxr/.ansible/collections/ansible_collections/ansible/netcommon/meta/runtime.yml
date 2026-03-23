@@ -1,0 +1,8 @@
+---
+requires_ansible: ">=2.16.0"
+plugin_routing:
+  action:
+    grpc_config:
+      redirect: ansible.netcommon.grpc
+    grpc_get:
+      redirect: ansible.netcommon.grpc

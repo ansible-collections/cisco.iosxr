@@ -1,0 +1,24 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_bgp_neighbor_address_family gathered integration tests on connection={{ ansible_connection }}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- ansible.builtin.include_tasks: _populate_base_config.yaml
+
+- ansible.builtin.include_tasks: _populate_config.yaml
+
+- block:
+    - name: Gathered the provided configuration with the existing running configuration
+      register: result
+      cisco.iosxr.iosxr_bgp_neighbor_address_family:
+        config:
+        state: gathered
+
+    - name: Assert
+      ansible.builtin.assert:
+        that:
+          - "{{ merged['after']['neighbors'] | symmetric_difference(result['gathered']['neighbors']) |length == 0 }}"
+          - merged['after']['as_number'] == result['gathered']['as_number']
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

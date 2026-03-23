@@ -1,0 +1,84 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_acls round trip integration tests on connection={{ ansible_connection }}
+
+- block:
+    - ansible.builtin.include_tasks: _remove_config.yaml
+
+    - name: Apply the provided configuration (base config)
+      register: base_config
+      cisco.iosxr.iosxr_acls:
+        config:
+          - afi: ipv4
+            acls:
+              - name: acl_2
+                aces:
+                  - sequence: 11
+                    grant: permit
+                    protocol: igmp
+                    source:
+                      host: 198.51.100.130
+                    destination:
+                      any: true
+                    ttl:
+                      eq: 100
+
+                  - sequence: 12
+                    grant: deny
+                    source:
+                      any: true
+                    destination:
+                      any: true
+                    protocol: icmp
+        state: merged
+
+    - name: Gather interfaces facts
+      cisco.iosxr.iosxr_facts:
+        gather_subset:
+          - "!all"
+          - "!min"
+        gather_network_resources:
+          - acls
+
+    - name: Apply the provided configuration (config to be reverted)
+      register: result
+      cisco.iosxr.iosxr_acls:
+        config:
+          - afi: ipv4
+            acls:
+              - name: acl_1
+                aces:
+                  - sequence: 10
+                    grant: permit
+                    source:
+                      any: true
+                    destination:
+                      any: true
+                    protocol: tcp
+
+              - name: acl_2
+                aces:
+                  - sequence: 20
+                    grant: permit
+                    source:
+                      any: true
+                    destination:
+                      any: true
+                    protocol: igmp
+        state: overridden
+
+    - name: Assert that changes were applied
+      ansible.builtin.assert:
+        that: "{{ overridden['after'] | symmetric_difference(result['after']) |length == 0  }}"
+
+    - name: Revert back to base configuration using facts round trip
+      register: revert
+      cisco.iosxr.iosxr_acls:
+        config: "{{ ansible_facts['network_resources']['acls'] }}"
+        state: overridden
+
+    - name: Assert that configuration was reverted
+      ansible.builtin.assert:
+        that: "{{ base_config['after'] | symmetric_difference(revert['after']) |length == 0 }}"
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

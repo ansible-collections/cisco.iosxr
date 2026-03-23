@@ -1,0 +1,24 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_l2_interfaces rendered integration tests on connection={{ ansible_connection }}
+
+- name: Render platform specific commands from task input using rendered state
+  register: result
+  cisco.iosxr.iosxr_l2_interfaces:
+    config:
+      - name: GigabitEthernet0/0/0/1
+        l2transport: true
+        l2protocol:
+          - cpsv: tunnel
+        propagate: true
+      - name: GigabitEthernet0/0/0/3.900
+        encapsulation:
+          dot1q: 20
+          second_dot1q: 40
+      - name: GigabitEthernet0/0/0/4
+    state: rendered
+
+- name: Assert that correct set of commands were rendered
+  ansible.builtin.assert:
+    that:
+      - "{{ merged['commands'] | symmetric_difference(result['rendered']) |length == 0 }}"

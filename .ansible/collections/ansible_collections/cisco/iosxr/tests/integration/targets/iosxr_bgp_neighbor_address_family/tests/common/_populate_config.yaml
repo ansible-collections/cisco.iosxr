@@ -1,0 +1,27 @@
+---
+- name: "Setup"
+  cisco.iosxr.iosxr_config:
+    lines:
+      - "neighbor 192.0.2.2"
+      - " address-family ipv4 unicast"
+      - "  origin-as validation disable"
+      - "  bestpath origin-as allow invalid"
+      - "  weight 5"
+      - "  send-community-ebgp"
+      - "  multipath"
+      - "  allowas-in 4"
+      - "  maximum-prefix 10 20 restart 10"
+      - "  as-override"
+      - "  capability orf prefix both"
+      - "  send-extended-community-ebgp"
+      - "  default-originate"
+      - "  next-hop-self"
+      - "  send-community-gshut-ebgp"
+      - "  soft-reconfiguration inbound always"
+      - "  send-multicast-attributes"
+      - "  route-policy test1 in"
+      - "  route-policy test1 out"
+    parents: "router bgp 65536"
+
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
