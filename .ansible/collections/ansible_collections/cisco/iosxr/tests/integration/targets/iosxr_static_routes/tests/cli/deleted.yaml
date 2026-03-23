@@ -1,0 +1,36 @@
+---
+- ansible.builtin.debug:
+    msg: Start iosxr_static_routes deleted integration tests ansible_connection={{ ansible_connection }}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- ansible.builtin.include_tasks: _populate_config.yaml
+
+- block:
+    - name: Delete all destination network entries under a single AFI
+      register: result
+      cisco.iosxr.iosxr_static_routes: &id001
+        config:
+          - vrf: DEV_SITE
+            address_families:
+              - afi: ipv4
+                safi: unicast
+        state: deleted
+
+    - ansible.builtin.assert:
+        that:
+          - '"router static" in result.commands'
+          - '"vrf DEV_SITE" in result.commands'
+          - '"no address-family ipv4 unicast" in result.commands'
+          - result.commands|length == 3
+
+    - name: Delete all destination network entries under a single AFI (idempotent)
+      register: result
+      cisco.iosxr.iosxr_static_routes: *id001
+    - name: Assert that the previous task was idempotent
+      ansible.builtin.assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

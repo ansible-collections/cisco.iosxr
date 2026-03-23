@@ -1,0 +1,23 @@
+---
+- name: Setup (populate OSPF interfaces config)
+  cisco.iosxr.iosxr_ospf_interfaces:
+    config:
+      - name: GigabitEthernet0/0/0/0
+        type: gigabitethernet
+        address_family:
+          - afi: ipv4
+            processes:
+              - process_id: "LAB3"
+                area:
+                  area_id: 0.0.0.3
+            cost: 20
+            authentication:
+              message_digest:
+                keychain: cisco
+          - afi: ipv6
+            processes:
+              - process_id: "LAB3"
+                area:
+                  area_id: 0.0.0.2
+            cost: 30
+    state: merged

@@ -1,0 +1,9 @@
+---
+- name: Setup
+  vars:
+    lines:
+      "lldp reinit 2\nlldp holdtime 100\nlldp timer 3000\nlldp subinterfaces\
+      \ enable\nlldp tlv-select system-description disable\nlldp tlv-select management-address\
+      \ disable\n"
+  ansible.netcommon.cli_config:
+    config: "{{ lines }}"

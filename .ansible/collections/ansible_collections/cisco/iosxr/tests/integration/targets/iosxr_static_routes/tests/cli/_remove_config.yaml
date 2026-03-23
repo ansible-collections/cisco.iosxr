@@ -1,0 +1,14 @@
+---
+- name: Remove static route configuration for IOS-XR
+  cisco.iosxr.iosxr_config:
+    lines:
+      - "  no address-family ipv4 multicast"
+      - "  no address-family ipv6 unicast"
+      - "no vrf DEV_SITE"
+      - "no vrf DEV_NEW"
+      - "no vrf TEST_SITE"
+      - "no vrf TEST_VRF"
+
+    parents:
+      - "router static"
+  ignore_errors: true

@@ -1,0 +1,109 @@
+---
+merged:
+  commands:
+    - router bgp 65536
+    - bgp cluster-id 5
+    - bgp router-id 192.0.2.10
+    - bgp bestpath med confed
+    - bgp confederation identifier 4
+    - default-metric 4
+    - socket receive-buffer-size 514
+    - socket send-buffer-size 4098
+    - neighbor 192.0.2.11
+    - cluster-id 3
+    - remote-as 65537
+    - neighbor 192.0.2.14
+    - bfd fast-detect strict-mode
+    - bfd minimum-interval 20
+    - bfd multiplier 6
+    - remote-as 65538
+  after:
+    as_number: "65536"
+    default_metric: 4
+    socket:
+      receive_buffer_size: 514
+      send_buffer_size: 4098
+    bgp:
+      confederation:
+        identifier: 4
+      bestpath:
+        med:
+          confed: true
+      cluster_id: "5"
+      router_id: "192.0.2.10"
+    neighbors:
+      - neighbor_address: 192.0.2.11
+        remote_as: 65537
+        cluster_id: "3"
+      - neighbor_address: "192.0.2.14"
+        remote_as: 65538
+        bfd:
+          fast_detect:
+            strict_mode: true
+          multiplier: 6
+          minimum_interval: 20
+
+deleted:
+  after:
+    as_number: "65536"
+
+replaced:
+  commands:
+    - router bgp 65536
+    - no bgp confederation identifier 4
+    - default-metric 5
+    - no neighbor 192.0.2.11
+    - no neighbor 192.0.2.14
+    - neighbor 192.0.2.13
+    - bfd fast-detect
+    - bfd minimum-interval 20
+    - bfd multiplier 6
+    - remote-as 65538
+    - use neighbor-group test_ng
+    - use session-group test_sg
+    - local-as 65539 no-prepend replace-as
+    - password inheritance-disable
+  after:
+    as_number: "65536"
+    default_metric: 5
+    socket:
+      receive_buffer_size: 514
+      send_buffer_size: 4098
+    bgp:
+      bestpath:
+        med:
+          confed: true
+      cluster_id: "5"
+      router_id: "192.0.2.10"
+    neighbors:
+      - neighbor_address: "192.0.2.13"
+        remote_as: 65538
+        use:
+          neighbor_group: test_ng
+          session_group: test_sg
+        password:
+          inheritance_disable: true
+        local_as:
+          value: 65539
+          no_prepend:
+            replace_as:
+              set: true
+        bfd:
+          fast_detect:
+            set: true
+          multiplier: 6
+          minimum_interval: 20
+
+rendered:
+  commands:
+    - router bgp 65536
+    - bgp cluster-id 5
+    - bgp router-id 192.0.2.10
+    - bgp bestpath med confed
+    - bgp confederation identifier 4
+    - default-metric 4
+    - socket receive-buffer-size 514
+    - socket send-buffer-size 4098
+    - neighbor 192.0.2.11
+    - cluster-id 3
+    - remote-as 65537

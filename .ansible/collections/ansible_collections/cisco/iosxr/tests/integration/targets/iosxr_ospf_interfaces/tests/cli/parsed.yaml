@@ -1,0 +1,15 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_ospf_interfaces parsed integration tests on connection={{ ansible_connection }}
+
+- block:
+    - name: Use parsed state to convert externally supplied device specific ospf_interfaces commands to structured format
+      register: result
+      cisco.iosxr.iosxr_ospf_interfaces:
+        running_config: "{{ lookup('file', '../../fixtures/parsed.cfg') }}"
+        state: parsed
+
+    - ansible.builtin.assert:
+        that:
+          - "{{ merged['after'] | symmetric_difference(result['parsed']) | length == 0 }}"
+          - "result.changed == false"

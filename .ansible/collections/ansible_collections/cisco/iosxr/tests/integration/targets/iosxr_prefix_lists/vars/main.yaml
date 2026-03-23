@@ -1,0 +1,87 @@
+---
+merged:
+  before: []
+  commands:
+    - ipv6 prefix-list pl_1 1 deny 2001:db8:1234::/48
+    - ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK
+    - ipv4 prefix-list pl1 4 permit 10.0.0.0/24
+  after:
+    - prefix_lists:
+        - entries:
+            - sequence: 3
+              action: remark
+              description: TEST_PL1_2_REMARK
+            - sequence: 4
+              action: permit
+              prefix: 10.0.0.0/24
+          name: pl1
+      afi: ipv4
+    - prefix_lists:
+        - entries:
+            - prefix: 2001:db8:1234::/48
+              action: deny
+              sequence: 1
+          name: pl_1
+      afi: ipv6
+
+replaced:
+  commands:
+    - no ipv4 prefix-list pl1 3 remark TEST_PL1_2_REMARK
+    - no ipv4 prefix-list pl1 4 permit 10.0.0.0/24
+    - ipv4 prefix-list pl1 3 permit 10.0.0.0/24
+
+  after:
+    - prefix_lists:
+        - entries:
+            - prefix: "2001:db8:1234::/48"
+              action: "deny"
+              sequence: 1
+          name: "pl_1"
+      afi: "ipv6"
+    - prefix_lists:
+        - entries:
+            - sequence: 3
+              action: "permit"
+              prefix: "10.0.0.0/24"
+          name: "pl1"
+      afi: "ipv4"
+overridden:
+  commands:
+    - no ipv6 prefix-list pl_1
+    - no ipv4 prefix-list pl1
+    - ipv4 prefix-list pl3 3 remark TEST_PL1_3_REMARK
+    - ipv4 prefix-list pl3 4 permit 10.0.0.0/24
+  after:
+    - afi: ipv4
+      prefix_lists:
+        - name: pl3
+          entries:
+            - sequence: 3
+              action: remark
+              description: TEST_PL1_3_REMARK
+            - sequence: 4
+              action: permit
+              prefix: 10.0.0.0/24
+deleted:
+  commands:
+    - no ipv6 prefix-list pl_1
+    - no ipv4 prefix-list pl1
+  after: []
+parsed:
+  - afi: ipv6
+    prefix_lists:
+      - name: pl1
+        entries:
+          - action: remark
+            description: test
+            sequence: 1
+  - afi: ipv4
+    prefix_lists:
+      - name: pl2
+        entries:
+          - action: deny
+            prefix: 35.0.0.0/8
+            sequence: 1
+          - action: deny
+            prefix: 10.0.0.0/24
+            sequence: 2

@@ -1,0 +1,19 @@
+---
+- name: Configure interface GigabitEthernet 0/0/0/1
+  cisco.iosxr.iosxr_config:
+    lines:
+      - l2transport l2protocol cpsv tunnel
+      - l2transport propagate remote-status
+    parents: interface GigabitEthernet 0/0/0/1
+
+- name: Configure interface GigabitEthernet 0/0/0/4
+  cisco.iosxr.iosxr_config:
+    lines:
+      - l2transport l2protocol cpsv tunnel
+    parents: interface GigabitEthernet 0/0/0/4
+
+- name: Configure interface GigabitEthernet 0/0/0/3.900
+  cisco.iosxr.iosxr_config:
+    lines:
+      - encapsulation dot1q 40 second-dot1q 60
+    parents: interface GigabitEthernet 0/0/0/3.900

@@ -1,0 +1,73 @@
+---
+merged:
+  before:
+    - name: GigabitEthernet0/0/0/0
+    - name: GigabitEthernet0/0/0/1
+  commands:
+    - interface GigabitEthernet0/0/0/0
+    - lldp transmit disable
+    - interface GigabitEthernet0/0/0/1
+    - lldp receive disable
+  after:
+    - name: GigabitEthernet0/0/0/0
+      transmit: false
+    - name: GigabitEthernet0/0/0/1
+      receive: false
+populate:
+  - name: GigabitEthernet0/0/0/0
+    transmit: false
+  - name: GigabitEthernet0/0/0/1
+    receive: false
+replaced:
+  commands:
+    - interface GigabitEthernet0/0/0/1
+    - no lldp receive disable
+    - lldp transmit disable
+  after:
+    - name: GigabitEthernet0/0/0/0
+      transmit: false
+    - name: GigabitEthernet0/0/0/1
+      transmit: false
+overridden:
+  commands:
+    - interface GigabitEthernet0/0/0/1
+    - no lldp receive disable
+  after:
+    - name: GigabitEthernet0/0/0/0
+      transmit: false
+    - name: GigabitEthernet0/0/0/1
+deleted:
+  commands:
+    - interface GigabitEthernet0/0/0/0
+    - no lldp transmit disable
+    - interface GigabitEthernet0/0/0/1
+    - no lldp receive disable
+  after:
+    - name: GigabitEthernet0/0/0/0
+    - name: GigabitEthernet0/0/0/1
+round_trip:
+  after:
+    - name: GigabitEthernet0/0/0/0
+      receive: false
+    - name: GigabitEthernet0/0/0/1
+      transmit: false
+parsed:
+  config:
+    - name: TenGigE0/0/0/0
+    - name: GigabitEthernet0/0/0/2
+      destination:
+        mac_address: ieee-nearest-non-tmpr-bridge
+      transmit: false
+
+    - name: GigabitEthernet0/0/0/1
+      destination:
+        mac_address: ieee-nearest-bridge
+      receive: false
+rendered:
+  commands:
+    - "interface GigabitEthernet0/0/0/2"
+    - "lldp destination mac-address ieee-nearest-non-tmpr-bridge"
+    - "lldp transmit disable"
+    - "interface GigabitEthernet0/0/0/1"
+    - "lldp receive disable"
+    - "lldp destination mac-address ieee-nearest-bridge"

@@ -1,0 +1,3 @@
+---
+ansible_iosxr_commit_confirmed: true
+ansible_iosxr_commit_confirmed_timeout: 30

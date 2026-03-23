@@ -1,0 +1,130 @@
+---
+- ansible.builtin.debug:
+    msg: Start iosxr_snmp_server merged integration tests connection={{ ansible_connection}}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- block:
+    - name: Merge the provided configuration with the existing running configuration
+      cisco.iosxr.iosxr_snmp_server: &merged
+        config:
+          vrfs:
+            - hosts:
+                - community: test1
+                  host: 1.1.1.1
+                  traps: true
+              vrf: vrf1
+          users:
+            - Ipv4_acl: test1
+              Ipv6_acl: test2
+              group: test2
+              user: u1
+              version: v1
+          timeouts:
+            duplicate: 0
+            inQdrop: 0
+          trap:
+            throttle_time: 12
+          targets:
+            - host: 1.1.1.2
+              name: test
+
+          ifmib:
+            internal_cache_max_duration: 4
+          inform:
+            retries: 7
+          chassis_id: test2
+          packetsize: 490
+          queue_length: 2
+          throttle_time: 60
+          trap_source: GigabitEthernet0/0/0/2
+          trap_timeout: 3
+          context:
+            - c1
+            - c2
+          contact: t1
+          correlator:
+            buffer_size: 1024
+          communities:
+            - name: test2
+              ro: true
+              sdrowner: true
+              acl_v4: test
+              acl_v6: test1
+          community_maps:
+            - name: cm1
+              context: c1
+              target_list: t1
+              security_name: s1
+          drop:
+            report_IPv4: test1
+            unknown_user: true
+          ipv6:
+            precedence: routine
+          ipv4:
+            dscp: af11
+          location: test1
+          logging_threshold_oid_processing: 1
+          logging_threshold_pdu_processing: 1
+          mib_bulkstat_max_procmem_size: 101
+          mroutemib_send_all_vrf: true
+          overload_control:
+            overload_drop_time: 4
+            overload_throttle_rate: 6
+          notification_log_mib:
+            GlobalSize: 5
+            size: 5
+          traps:
+            hsrp: true
+            ipsla: true
+            ipsec:
+              start: true
+              stop: true
+            bridgemib: true
+            bulkstat_collection: true
+            cisco_entity_ext: true
+            config: true
+            copy_complete: true
+            addrpool:
+              high: true
+              low: true
+            bfd: true
+            bgp:
+              cbgp2: true
+            l2tun:
+              sessions: true
+              tunnel_down: true
+              tunnel_up: true
+            l2vpn:
+              all: true
+              vc_down: true
+              vc_up: true
+            msdp_peer_state_change: true
+
+      register: result
+
+    - name: Assert that before dicts were correctly generated
+      ansible.builtin.assert:
+        that: "{{ result['before'] == {} }}"
+
+    - name: Assert that correct set of commands were generated
+      ansible.builtin.assert:
+        that:
+          - "{{ merged['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
+
+    - name: Assert that after dicts were correctly generated
+      ansible.builtin.assert:
+        that:
+          - merged['after'] == result['after']
+
+    - name: Merge the provided configuration with the existing running configuration (idempotent)
+      register: result
+      cisco.iosxr.iosxr_snmp_server: *merged
+    - name: Assert that the previous task was idempotent
+      ansible.builtin.assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
+
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

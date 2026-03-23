@@ -1,0 +1,7 @@
+---
+- name: Purge all ( risky )
+  cisco.iosxr.iosxr_route_maps:
+    config: []
+    state: purged
+  vars:
+    ansible_connection: ansible.netcommon.network_cli

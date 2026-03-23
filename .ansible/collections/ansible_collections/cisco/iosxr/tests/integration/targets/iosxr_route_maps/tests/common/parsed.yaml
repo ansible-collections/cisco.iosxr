@@ -1,0 +1,14 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_route_maps parsed integration tests on connection={{ ansible_connection }}
+
+- name: Parse externally provided route-policy configuration
+  register: result
+  cisco.iosxr.iosxr_route_maps:
+    running_config: "{{ lookup('file', './_parsed.cfg') }}"
+    state: parsed
+
+- name: Assert that configuration was correctly parsed
+  ansible.builtin.assert:
+    that:
+      - merged['after'] == result['parsed']
