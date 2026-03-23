@@ -1,5 +1,0 @@
----
-- name: Remove hostname configuration
-  cisco.iosxr.iosxr_hostname:
-    config:
-    state: deleted
