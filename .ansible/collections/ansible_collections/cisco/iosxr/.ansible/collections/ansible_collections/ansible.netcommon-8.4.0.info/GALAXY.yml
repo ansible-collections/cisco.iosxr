@@ -1,8 +1,0 @@
-download_url: https://galaxy.ansible.com/api/v3/plugin/ansible/content/published/collections/artifacts/ansible-netcommon-8.4.0.tar.gz
-format_version: 1.0.0
-name: netcommon
-namespace: ansible
-server: https://galaxy.ansible.com/api/
-signatures: []
-version: 8.4.0
-version_url: /api/v3/plugin/ansible/content/published/collections/index/ansible/netcommon/versions/8.4.0/

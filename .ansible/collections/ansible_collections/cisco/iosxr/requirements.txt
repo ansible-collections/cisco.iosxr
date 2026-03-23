@@ -1,5 +1,0 @@
-ncclient
-paramiko
-grpcio
-protobuf
-ansible-pylibssh
