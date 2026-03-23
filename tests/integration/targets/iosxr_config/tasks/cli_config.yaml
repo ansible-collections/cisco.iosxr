@@ -11,9 +11,19 @@
     test_items: "{{ test_cases.files | map(attribute='path') | list }}"
 
 - name: Run test case (connection=ansible.netcommon.network_cli)
-  ansible.builtin.include_tasks: "{{ test_case_to_run }}"
-  vars:
-    ansible_connection: ansible.netcommon.network_cli
+  block:
+    - name: Clear any lingering configuration sessions before test
+      cisco.iosxr.iosxr_command:
+        commands:
+          - clear configuration sessions
+      ignore_errors: true
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
+
+    - name: Execute test case
+      ansible.builtin.include_tasks: "{{ test_case_to_run }}"
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
   with_items: "{{ test_items }}"
   loop_control:
     loop_var: test_case_to_run
