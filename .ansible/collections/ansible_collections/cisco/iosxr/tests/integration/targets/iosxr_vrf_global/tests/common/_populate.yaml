@@ -1,0 +1,13 @@
+---
+- name: Merge the provided configuration with the existing running configuration
+  register: result
+  cisco.iosxr.iosxr_config:
+    lines:
+      - vrf VRF4
+      - description VRF4 Description
+      - evpn-route-sync 793
+      - fallback-vrf merged-vrf
+      - mhost ipv4 default-interface Loopback0
+      - rd 3:4
+      - remote-route-filtering disable
+      - vpn id 2:3

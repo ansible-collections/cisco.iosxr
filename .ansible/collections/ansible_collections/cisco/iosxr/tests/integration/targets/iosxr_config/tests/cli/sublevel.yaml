@@ -1,0 +1,43 @@
+---
+- ansible.builtin.debug: msg="START cli/sublevel.yaml on connection={{ ansible_connection }}"
+
+- name: Setup
+  ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    commands:
+      - no ipv4 access-list test
+    match: none
+
+- name: Configure sub level command
+  register: result
+  cisco.iosxr.iosxr_config:
+    commands:
+      - 10 permit ipv4 any any log
+    parents:
+      - ipv4 access-list test
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'ipv4 access-list test' in result.commands"
+      - "'10 permit ipv4 any any log' in result.commands"
+
+- name: Configure sub level command idempotent check
+  register: result
+  cisco.iosxr.iosxr_config:
+    commands:
+      - 10 permit ipv4 any any log
+    parents:
+      - ipv4 access-list test
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Teardown
+  cisco.iosxr.iosxr_config:
+    commands:
+      - no ipv4 access-list test
+    match: none
+
+- ansible.builtin.debug: msg="END cli/sublevel.yaml on connection={{ ansible_connection }}"

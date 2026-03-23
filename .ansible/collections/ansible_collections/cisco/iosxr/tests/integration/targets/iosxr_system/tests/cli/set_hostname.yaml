@@ -1,0 +1,32 @@
+---
+- ansible.builtin.debug: msg="START cli/set_hostname.yaml on connection={{ ansible_connection }}"
+
+- name: Setup
+  cisco.iosxr.iosxr_config:
+    lines: hostname switch
+    match: none
+
+- name: Configure hostname
+  register: result
+  cisco.iosxr.iosxr_system:
+    hostname: foo
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+
+- name: Verify hostname
+  register: result
+  cisco.iosxr.iosxr_system:
+    hostname: foo
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Teardown
+  cisco.iosxr.iosxr_config:
+    lines: hostname {{ inventory_hostname }}
+    match: none
+
+- ansible.builtin.debug: msg="END cli/set_hostname.yaml on connection={{ ansible_connection }}"

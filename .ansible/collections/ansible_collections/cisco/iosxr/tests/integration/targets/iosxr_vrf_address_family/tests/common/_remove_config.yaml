@@ -1,0 +1,17 @@
+---
+- name: Remove VRF global configurations
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no vrf VRF4
+      - no vrf VRF6
+      - no vrf VRF7
+      - no vrf test
+  register: result
+
+- name: Remove RM policy
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no route-policy rm-policy
+      - no route-policy rm-policy1
+      - no route-policy test-policy
+  register: result

@@ -1,0 +1,16 @@
+---
+- name: "Setup"
+  cisco.iosxr.iosxr_config:
+    lines:
+      - "vrf vrf1"
+      - " address-family ipv4 unicast"
+      - "  redistribute connected metric 10"
+      - "  dynamic-med interval 9"
+      - "vrf vrf2"
+      - " address-family ipv4 unicast"
+      - "  redistribute connected metric 10"
+      - "  dynamic-med interval 10"
+    parents: "router bgp 65536"
+
+  vars:
+    ansible_connection: ansible.netcommon.network_cli

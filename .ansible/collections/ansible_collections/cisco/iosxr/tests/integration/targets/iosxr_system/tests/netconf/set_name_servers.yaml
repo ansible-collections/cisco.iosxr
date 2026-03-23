@@ -1,0 +1,137 @@
+---
+- ansible.builtin.debug:
+    msg: START netconf/set_name_servers.yaml on connection={{ ansible_connection }}
+
+- name: Setup
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no domain name-server 192.0.2.1
+      - no domain name-server 192.0.2.2
+      - no domain name-server 192.0.2.3
+    match: none
+
+- name: Setup
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  ignore_errors: true
+  register: result
+  cisco.iosxr.iosxr_system:
+    vrf: ansible
+    name_servers:
+      - 192.0.2.1
+      - 192.0.2.2
+      - 192.0.2.3
+    state: absent
+
+- name: Configure name_servers
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system:
+    name_servers:
+      - 192.0.2.1
+      - 192.0.2.2
+      - 192.0.2.3
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - result.xml|length == 1
+      - "'192.0.2.1' in result.xml[0]"
+      - "'192.0.2.2' in result.xml[0]"
+      - "'192.0.2.3' in result.xml[0]"
+
+- name: Verify name_servers
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system:
+    name_servers:
+      - 192.0.2.1
+      - 192.0.2.2
+      - 192.0.2.3
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Add name servers with VRF
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system: &id001
+    vrf: ansible
+    name_servers:
+      - 192.0.2.1
+      - 192.0.2.2
+      - 192.0.2.3
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - result.xml|length == 1
+      - "'ansible' in result.xml[0]"
+      - "'192.0.2.1' in result.xml[0]"
+      - "'192.0.2.2' in result.xml[0]"
+      - "'192.0.2.3' in result.xml[0]"
+
+- name: Verify change to VRF
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system: *id001
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+
+- name: Remove one
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  register: result
+  cisco.iosxr.iosxr_system:
+    name_servers:
+      - 192.0.2.1
+      - 192.0.2.2
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - result.xml|length == 1
+      - "'192.0.2.3' in result.xml[0]"
+
+- name: Remove one with VRF
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  ignore_errors: true
+  register: result
+  cisco.iosxr.iosxr_system:
+    vrf: ansible
+    name_servers:
+      - 192.0.2.1
+      - 192.0.2.2
+
+- name: Teardown
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no domain name-server 192.0.2.1
+      - no domain name-server 192.0.2.2
+    match: none
+
+- name: Teardown
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+  ignore_errors: true
+  register: result
+  cisco.iosxr.iosxr_system:
+    vrf: ansible
+    name_servers:
+      - 192.0.2.1
+      - 192.0.2.2
+    state: absent
+
+- ansible.builtin.debug:
+    msg: END netconf/set_name_servers.yaml on connection={{ ansible_connection }}

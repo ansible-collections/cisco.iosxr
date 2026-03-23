@@ -1,0 +1,25 @@
+---
+- name: Setup
+  cisco.iosxr.iosxr_lag_interfaces:
+    config:
+      - name: Bundle-Ether10
+        mode: active
+        members:
+          - member: GigabitEthernet0/0/0/0
+            mode: inherit
+
+          - member: GigabitEthernet0/0/0/1
+            mode: passive
+        links:
+          max_active: 10
+          min_active: 2
+
+      - name: Bundle-Ether11
+        mode: active
+        members:
+          - member: GigabitEthernet0/0/0/8
+            mode: passive
+
+          - member: GigabitEthernet0/0/0/9
+            mode: passive
+    state: merged

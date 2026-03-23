@@ -1,0 +1,47 @@
+---
+- name: Gather facts for non-network to get ansible_distribution
+  ansible.builtin.gather_facts:
+  when: ansible_network_os is not defined
+
+- name: Set a short name
+  ansible.builtin.set_fact:
+    os: "{{ ansible_distribution | d or (ansible_network_os | d('')).split('.')[-1] }}"
+
+- name: Run native parser tests
+  ansible.builtin.include_tasks: "{{ os | lower }}_native.yaml"
+  vars:
+    parser: "({{ os }}/native)"
+  tags:
+    - native
+
+- name: Run pyats parser tests
+  ansible.builtin.include_tasks: "{{ os | lower }}_pyats.yaml"
+  vars:
+    parser: "({{ os }}/pyats)"
+  when: "os in ['nxos']"
+  tags:
+    - pyats
+
+- name: Run ntc_templates parser tests
+  ansible.builtin.include_tasks: "{{ os | lower }}_ntc_templates.yaml"
+  vars:
+    parser: "({{ os }}/ntc_templates)"
+  when: "os in ['nxos']"
+  tags:
+    - ntc_templates
+
+- name: Run textfsm parser tests
+  ansible.builtin.include_tasks: "{{ os | lower }}_textfsm.yaml"
+  vars:
+    parser: "({{ os }}/textfsm)"
+  when: "os in ['nxos']"
+  tags:
+    - textfsm
+
+- name: Run XML parser tests
+  ansible.builtin.include_tasks: "{{ os | lower }}_xml.yaml"
+  vars:
+    parser: "({{ os }}/xml)"
+  when: "os in ['nxos']"
+  tags:
+    - xml
