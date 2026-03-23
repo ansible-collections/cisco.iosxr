@@ -1,5 +1,0 @@
----
-- name: Delete all prefix-lists from the device
-  register: result
-  cisco.iosxr.iosxr_prefix_lists:
-    state: deleted

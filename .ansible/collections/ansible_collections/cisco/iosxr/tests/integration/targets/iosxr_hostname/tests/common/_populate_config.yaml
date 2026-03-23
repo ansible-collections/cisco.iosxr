@@ -1,6 +1,0 @@
----
-- name: Populate hostname configuration
-  cisco.iosxr.iosxr_hostname:
-    config:
-      hostname: "iosxr1"
-    state: merged

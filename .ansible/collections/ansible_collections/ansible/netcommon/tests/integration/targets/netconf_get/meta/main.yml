@@ -1,4 +1,0 @@
----
-dependencies:
-  - role: prepare_iosxr_tests
-    when: ansible_network_os == 'cisco.iosxr.iosxr'
