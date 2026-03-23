@@ -1,0 +1,17 @@
+---
+- name: Populate with simple overridden
+  cisco.iosxr.iosxr_vrf_interfaces:
+    state: overridden
+    config:
+      - name: GigabitEthernet0/0/0/0
+      - name: GigabitEthernet0/0/0/1
+      - name: GigabitEthernet0/0/0/2
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+
+- name: Remove un-neccessary interfaces
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no interface GigabitEthernet0/0/0/4.1
+  vars:
+    ansible_connection: ansible.netcommon.network_cli

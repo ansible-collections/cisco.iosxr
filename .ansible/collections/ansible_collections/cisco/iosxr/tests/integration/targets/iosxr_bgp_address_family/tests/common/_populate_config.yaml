@@ -1,0 +1,16 @@
+---
+- name: "Setup"
+  cisco.iosxr.iosxr_config:
+    lines:
+      - "address-family ipv4 unicast"
+      - " bgp attribute-download"
+      - " advertise best-external"
+      - " dynamic-med interval 10"
+      - " redistribute connected metric 10"
+      - " redistribute isis test3 metric 4"
+      - " redistribute application test1 metric 10"
+      - " allocate-label all"
+    parents: "router bgp 65536"
+
+  vars:
+    ansible_connection: ansible.netcommon.network_cli

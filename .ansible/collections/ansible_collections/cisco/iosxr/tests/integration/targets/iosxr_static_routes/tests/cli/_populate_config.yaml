@@ -1,0 +1,20 @@
+---
+- name: Populate configuration for IOS-XR static routes
+  cisco.iosxr.iosxr_config:
+    lines:
+      - "router static"
+      - "  address-family ipv4 multicast"
+      - "    192.0.2.16/28 192.0.2.10 FastEthernet0/0/0/1 description LAB metric 120 tag 10"
+      - "    192.0.2.16/28 FastEthernet0/0/0/5 track ip_sla_1"
+      - "    192.0.2.32/28 192.0.2.11 100"
+      - "  address-family ipv6 unicast"
+      - "    2001:db8:1000::/36 FastEthernet0/0/0/7 description DC"
+      - "    2001:db8:1000::/36 2001:db8:2000:2::1 FastEthernet0/0/0/8"
+      - "vrf DEV_SITE"
+      - "  address-family ipv4 unicast"
+      - "    192.0.2.48/28 vrf test_1 192.0.2.12 description DEV"
+      - "    192.0.2.48/28 192.0.3.24 GigabitEthernet0/0/0/1 vrflabel 2302"
+      - "    192.0.2.80/28 vrf test_1 192.0.2.14 FastEthernet0/0/0/2 track ip_sla_2 vrflabel 124"
+
+    parents:
+      - "router static"

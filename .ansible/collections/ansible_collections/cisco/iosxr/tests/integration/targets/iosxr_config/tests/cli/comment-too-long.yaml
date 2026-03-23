@@ -1,0 +1,25 @@
+---
+- ansible.builtin.debug: msg="START cli/comment-too-long.yaml on connection={{ ansible_connection }}"
+
+- name: Setup
+  cisco.iosxr.iosxr_config:
+    commands:
+      - no description
+      - no shutdown
+    parents:
+      - interface Loopback999
+    match: none
+
+- name: Commit message too long
+  register: result
+  ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    src: basic/config.j2
+    comment: this is a really long message  aaaaabbbbbbcdde end-of-message
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+      - "'comment argument cannot be more than 60 characters' in result.msg"
+
+- ansible.builtin.debug: msg="END cli/comment-too-long.yaml on connection={{ ansible_connection }}"

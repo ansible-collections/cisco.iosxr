@@ -1,0 +1,43 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_lag_interfaces gathered integration tests on connection={{ ansible_connection }}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- block:
+    - name: Gather the provided configuration with the existing running configuration
+      register: result
+      cisco.iosxr.iosxr_lag_interfaces:
+        config:
+          - name: Bundle-Ether10
+            mode: active
+            members:
+              - member: GigabitEthernet0/0/0/0
+                mode: inherit
+
+              - member: GigabitEthernet0/0/0/1
+                mode: passive
+            links:
+              max_active: 10
+              min_active: 2
+
+          - name: Bundle-Ether11
+            mode: active
+            members:
+              - member: GigabitEthernet0/0/0/8
+                mode: passive
+
+              - member: GigabitEthernet0/0/0/9
+                mode: passive
+        state: merged
+
+    - name: Gather lacp facts using gathered state
+      register: result
+      cisco.iosxr.iosxr_lag_interfaces:
+        state: gathered
+
+    - name: Assert that facts were correctly generated
+      ansible.builtin.assert:
+        that: "{{ merged['after'] == result['gathered'] }}"
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

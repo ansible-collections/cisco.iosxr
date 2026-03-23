@@ -1,0 +1,61 @@
+---
+name: Bug Report
+description: "🐞 Create a report to help us improve"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Bug Report issues are for **concrete, actionable bugs** only.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Bug Summary
+      description: Briefly describe the problem.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: components
+    attributes:
+      label: Select the relevant components
+      options:
+        - label: Module
+        - label: Action Plugin
+        - label: Connection Plugin (cliconf)
+        - label: Terminal Plugin
+        - label: Netconf Plugin
+        - label: Module Utils
+        - label: Documentation
+        - label: Integration Tests
+        - label: Unit Tests
+        - label: Collection Release
+        - label: CI Maintenance
+        - label: Workflow Maintenance
+
+  - type: input
+    id: iosxr_version
+    attributes:
+      label: IOS-XR Version
+      description: Version of IOS-XR running on the device (e.g., 7.3.2, 7.5.1)
+      placeholder: 7.x.x
+    validations:
+      required: false
+
+  - type: input
+    id: hardware_platform
+    attributes:
+      label: Hardware Platform
+      description: We develop and test this collection primarily with XRv platform
+      placeholder: XRv
+    validations:
+      required: false
+
+  - type: input
+    id: module_name
+    attributes:
+      label: Module/Plugin Name
+      description: If applicable, specify the module or plugin name (e.g., iosxr_config, iosxr_bgp_global)
+      placeholder: iosxr_xxx
+    validations:
+      required: false

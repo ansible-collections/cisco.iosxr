@@ -1,0 +1,66 @@
+---
+- ansible.builtin.debug:
+    msg: Start iosxr_vrf_address_family replaced integration tests connection={{ ansible_connection}}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- ansible.builtin.include_tasks: _populate.yaml
+
+- block:
+    - name: Replace given vrf configuration with provided configurations
+      cisco.iosxr.iosxr_vrf_address_family: &replaced
+        config:
+          - name: VRF6
+            address_families:
+              - afi: "ipv4"
+                safi: "unicast"
+                export:
+                  route_target: "192.0.2.0:400"
+                  route_policy: "rm-policy"
+                  to:
+                    default_vrf:
+                      route_policy: "rm-policy"
+                    vrf:
+                      allow_imported_vpn: "true"
+                import_config:
+                  route_target: "192.0.2.3:200"
+                  route_policy: "test-policy"
+                  from_config:
+                    bridge_domain:
+                      advertise_as_vpn: "true"
+                    default_vrf:
+                      route_policy: "test-policy"
+                    vrf:
+                      advertise_as_vpn: "true"
+        state: replaced
+      register: result
+
+    - name: Assert that correct set of commands were generated
+      ansible.builtin.assert:
+        that:
+          - "{{ replaced['commands'] | symmetric_difference(result['commands']) | length == 0 }}"
+
+    - name: Assert that before dict is correctly generated
+      ansible.builtin.assert:
+        that:
+          - "{{ replaced['before'] == result['before'] }}"
+
+    - name: Assert that after dict is correctly generated
+      ansible.builtin.assert:
+        that:
+          - replaced['after'] == result['after']
+
+    - name: Idempotency check
+      register: result
+      cisco.iosxr.iosxr_vrf_address_family: *replaced
+    - ansible.builtin.assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
+
+    - name: Assert that before dict is correctly generated
+      ansible.builtin.assert:
+        that:
+          - "{{ replaced['after'] | symmetric_difference(result['before']) |length == 0 }}"
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

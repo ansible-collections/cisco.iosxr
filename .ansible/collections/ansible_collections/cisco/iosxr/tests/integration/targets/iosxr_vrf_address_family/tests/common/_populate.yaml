@@ -1,0 +1,40 @@
+---
+- name: Enable RM policy rm-policy
+  register: result
+  cisco.iosxr.iosxr_config:
+    lines:
+      - route-policy rm-policy
+      - end-policy
+
+- name: Enable RM policy rm-policy1
+  register: result
+  cisco.iosxr.iosxr_config:
+    lines:
+      - route-policy rm-policy1
+      - end-policy
+
+- name: Enable RM policy test-policy
+  register: result
+  cisco.iosxr.iosxr_config:
+    lines:
+      - route-policy test-policy
+      - end-policy
+
+- name: Merge provided configuration with device configuration
+  register: result
+  when: populate_init_config | default(true)
+  cisco.iosxr.iosxr_config:
+    lines:
+      - export route-policy rm-policy
+      - export route-target 192.0.2.1:400
+      - export to default-vrf route-policy rm-policy
+      - export to vrf allow-imported-vpn
+      - import route-target 192.0.2.6:200
+      - import route-policy test-policy
+      - import from bridge-domain advertise-as-vpn
+      - import from default-vrf route-policy test-policy
+      - import from vrf advertise-as-vpn
+      - maximum prefix 100
+    parents:
+      - vrf VRF4
+      - address-family ipv4 unicast

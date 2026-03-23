@@ -1,0 +1,14 @@
+---
+- ansible.builtin.debug:
+    msg: START iosxr_static_routes parsed integration tests on connection={{ ansible_connection }}
+
+- block:
+    - name: Use parsed state to convert externally supplied device specific static routes commands to structured format
+      register: result
+      cisco.iosxr.iosxr_static_routes:
+        running_config: "{{ lookup('file', '../../fixtures/parsed.cfg') }}"
+        state: parsed
+
+    - ansible.builtin.assert:
+        that:
+          - result['changed'] == false

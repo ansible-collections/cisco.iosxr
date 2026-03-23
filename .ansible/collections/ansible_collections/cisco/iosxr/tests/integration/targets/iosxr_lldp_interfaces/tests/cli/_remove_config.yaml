@@ -1,0 +1,22 @@
+---
+- name: Remove lldp interface configuration
+  loop:
+    - 0/0/0/0
+    - 0/0/0/1
+  ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no lldp
+      - shutdown
+    parents: interface GigabitEthernet{{ item }}
+
+- name: Remove unwanted interfaces from configuration
+  loop:
+    - 0/0/0/2
+    - 0/0/0/3
+    - 0/0/0/4
+    - 0/0/0/5
+  ignore_errors: true
+  cisco.iosxr.iosxr_config:
+    lines:
+      - no interface GigabitEthernet{{ item }}
