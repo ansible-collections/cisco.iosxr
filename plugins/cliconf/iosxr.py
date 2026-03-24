@@ -271,9 +271,29 @@ class Cliconf(CliconfBase):
 
         return self._device_info
 
+    def clear_trial_sessions(self):
+        """Clear any stuck trial/rollback sessions."""
+        try:
+            # First ensure we're not in config mode
+            prompt = to_text(self._connection.get_prompt(), errors="surrogate_or_strict").strip()
+            if prompt.endswith(")#"):
+                self.send_command("abort")
+
+            # Check if there are any active trial/rollback sessions
+            output = self.send_command("show configuration sessions")
+            if "trial" in output.lower() or "rollback" in output.lower():
+                # Try to clear the stuck session by committing it
+                self.send_command("commit")
+        except Exception:
+            # If clearing fails, continue anyway
+            pass
+
     def configure(self, admin=False, exclusive=False):
         prompt = to_text(self._connection.get_prompt(), errors="surrogate_or_strict").strip()
         if not prompt.endswith(")#"):
+            # Clear any stuck trial/rollback sessions before entering config mode
+            self.clear_trial_sessions()
+
             if admin and "admin-" not in prompt:
                 self.send_command("admin")
             if exclusive or self.get_option("config_mode_exclusive"):
