@@ -279,11 +279,9 @@ class Cliconf(CliconfBase):
             if prompt.endswith(")#"):
                 self.send_command("abort")
 
-            # Check if there are any active trial/rollback sessions
-            output = self.send_command("show configuration sessions")
-            if "trial" in output.lower() or "rollback" in output.lower():
-                # Try to clear the stuck session by committing it
-                self.send_command("commit")
+            # Clear any lingering configuration sessions
+            # This removes stuck trial/rollback sessions that block commits
+            self.send_command("clear configuration sessions")
         except Exception:
             # If clearing fails, continue anyway
             pass
