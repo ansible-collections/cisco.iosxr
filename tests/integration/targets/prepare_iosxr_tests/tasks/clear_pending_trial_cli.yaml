@@ -1,0 +1,26 @@
+---
+# Confirm any active IOS-XR "commit confirmed" (trial) so further commits are allowed.
+#
+# Using cisco.iosxr.iosxr_config with lines: [commit] often does NOT run load_config at
+# all (get_diff yields no changes), so nothing is sent to the device. We must drive
+# configure + commit on the persistent CLI session instead.
+- name: Enter configuration mode (for trial clear)
+  ansible.netcommon.cli_command:
+    command: configure terminal
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+  failed_when: false
+
+- name: Confirm pending trial commit if present
+  ansible.netcommon.cli_command:
+    command: commit
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+  failed_when: false
+
+- name: Leave configuration mode after trial clear
+  ansible.netcommon.cli_command:
+    command: end
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+  failed_when: false

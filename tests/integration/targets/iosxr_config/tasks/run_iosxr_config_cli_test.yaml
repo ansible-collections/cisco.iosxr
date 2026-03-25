@@ -1,16 +1,9 @@
 ---
 # Other integration targets (or earlier test files in this loop) may leave an
-# active commit confirmed (trial) on the device. IOS-XR blocks further commits
-# until the trial is confirmed or expires—clear before each test file so every
-# case starts from a committable state.
+# active commit confirmed (trial) on the device. Clear via CLI (not iosxr_config
+# lines: [commit], which often skips load_config and never hits the device).
 - name: Clear unexpired trial/rollback session if present (unblocks commit)
-  cisco.iosxr.iosxr_config:
-    lines:
-      - commit
-    match: none
-  vars:
-    ansible_connection: ansible.netcommon.network_cli
-  failed_when: false
+  ansible.builtin.include_tasks: "{{ role_path }}/../prepare_iosxr_tests/tasks/clear_pending_trial_cli.yaml"
 
 - name: Execute test case
   ansible.builtin.include_tasks: "{{ test_case_to_run }}"
