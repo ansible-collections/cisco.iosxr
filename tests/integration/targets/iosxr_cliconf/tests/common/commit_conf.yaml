@@ -38,52 +38,34 @@
     - ansible.builtin.assert:
         that:
           - "'TestCommitConfirmed' in get_desc.stdout[0]"
+
   always:
-    # Step 1: exit any stale config submode and confirm / wait out any active trial.
-    # iosxr_command: [commit confirmed] (above) may leave the session in config mode
-    # with a trial active; a direct cleanup commit would fail with
-    # "Cannot commit because there is an unexpired trial/rollback session".
-    # Retry "commit" with a delay so the trial can expire before we proceed.
-    - name: Exit any config submode before cleanup
+    # "commit confirmed" (no timeout) uses the IOS-XR default of 10 minutes.
+    # A trial can only be confirmed from the session that created it.
+    # The persistent connection should still hold that session, so a bare
+    # "commit" here confirms the trial immediately — avoiding a 10-minute
+    # block on all subsequent targets.
+    - name: Confirm trial from current persistent session (avoids 10-min block)
+      ansible.netcommon.cli_command:
+        command: commit
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
+      failed_when: false
+
+    - name: Exit config mode
       ansible.netcommon.cli_command:
         command: "{{ item }}"
       vars:
         ansible_connection: ansible.netcommon.network_cli
       failed_when: false
-      loop:
-        - abort
-        - abort
-        - end
-        - end
+      loop: [abort, end]
 
-    - name: Enter config mode for trial-clear commit
-      ansible.netcommon.cli_command:
-        command: configure terminal
-      vars:
-        ansible_connection: ansible.netcommon.network_cli
-      failed_when: false
+    # Safety net: if the persistent session was dropped (idle timeout, error,
+    # etc.) the trial could not be confirmed above.  Detect and wait it out.
+    - name: Clear any remaining trial (safety net)
+      ansible.builtin.include_tasks: "{{ role_path }}/../prepare_iosxr_tests/tasks/clear_pending_trial_cli.yaml"
 
-    - name: Confirm active trial or wait for it to expire before cleanup
-      ansible.netcommon.cli_command:
-        command: commit
-      vars:
-        ansible_connection: ansible.netcommon.network_cli
-      register: _cliconf_trial_clear
-      failed_when: false
-      retries: 7
-      delay: 10
-      until: >-
-        _cliconf_trial_clear.stdout is not defined
-        or 'unexpired trial' not in (_cliconf_trial_clear.stdout | default(''))
-
-    - name: Exit config mode after trial clear
-      ansible.netcommon.cli_command:
-        command: end
-      vars:
-        ansible_connection: ansible.netcommon.network_cli
-      failed_when: false
-
-    # Step 2: now that no trial is active, remove the test interface normally.
+    # Now safe to clean up the test interface.
     - name: Remove interfaces from configuration after testing
       ignore_errors: true
       vars:
