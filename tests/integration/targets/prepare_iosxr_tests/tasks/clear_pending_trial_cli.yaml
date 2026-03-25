@@ -1,9 +1,28 @@
 ---
 # Confirm any active IOS-XR "commit confirmed" (trial) so further commits are allowed.
 #
-# Using cisco.iosxr.iosxr_config with lines: [commit] often does NOT run load_config at
-# all (get_diff yields no changes), so nothing is sent to the device. We must drive
-# configure + commit on the persistent CLI session instead.
+# After an iosxr_config commit failure the persistent network_cli session can be left
+# under (config-if)# while a device-side trial is still active; a bare "commit" from
+# that context may not confirm the trial. Reset the connection and unwind stale config
+# before configure + commit.
+#
+# Using cisco.iosxr.iosxr_config with only lines: [commit] often skips load_config
+# (empty diff) and never reaches the device.
+- name: Reset network_cli session (avoid stuck config submode after failed commit)
+  ansible.builtin.meta: reset_connection
+
+- name: Unwind any leftover configuration context (abort/end are no-ops at exec)
+  ansible.netcommon.cli_command:
+    command: "{{ item }}"
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+  failed_when: false
+  loop:
+    - abort
+    - abort
+    - end
+    - end
+
 - name: Enter configuration mode (for trial clear)
   ansible.netcommon.cli_command:
     command: configure terminal
