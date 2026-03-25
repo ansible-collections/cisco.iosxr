@@ -1,0 +1,16 @@
+---
+# Other integration targets (or earlier test files in this loop) may leave an
+# active commit confirmed (trial) on the device. IOS-XR blocks further commits
+# until the trial is confirmed or expires—clear before each test file so every
+# case starts from a committable state.
+- name: Clear unexpired trial/rollback session if present (unblocks commit)
+  cisco.iosxr.iosxr_config:
+    lines:
+      - commit
+    match: none
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+  failed_when: false
+
+- name: Execute test case
+  ansible.builtin.include_tasks: "{{ test_case_to_run }}"

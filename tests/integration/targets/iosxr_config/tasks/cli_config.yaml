@@ -11,7 +11,7 @@
     test_items: "{{ test_cases.files | map(attribute='path') | list }}"
 
 - name: Run test case (connection=ansible.netcommon.network_cli)
-  ansible.builtin.include_tasks: run_iosxr_config_cli_test.yaml
+  ansible.builtin.include_tasks: "{{ role_path }}/tasks/run_iosxr_config_cli_test.yaml"
   vars:
     ansible_connection: ansible.netcommon.network_cli
   with_items: "{{ test_items }}"
