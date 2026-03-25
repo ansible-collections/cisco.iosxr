@@ -1,35 +1,57 @@
 ---
 - ansible.builtin.debug: msg="START cli/commit_confirmed.yaml on connection={{ ansible_connection }}"
 
-- name: Test commit confirmed functionality
-  vars:
-    ansible_iosxr_commit_confirmed: true
-    ansible_iosxr_commit_confirmed_timeout: 60
-  cisco.iosxr.iosxr_config:
-    lines:
-      - hostname iosxr_commit_confirmed
+- block:
+    - name: Test commit confirmed functionality
+      vars:
+        ansible_iosxr_commit_confirmed: true
+        ansible_iosxr_commit_confirmed_timeout: 60
+      cisco.iosxr.iosxr_config:
+        lines:
+          - hostname iosxr_commit_confirmed
 
-- name: "Get hostname"
-  vars:
-    ansible_iosxr_commit_confirmed: true
-  register: get_hostname1
-  iosxr_command:
-    commands:
-      - "show running-config hostname"
-  ignore_errors: true
+    - name: "Get hostname (trial should be active)"
+      register: get_hostname1
+      iosxr_command:
+        commands:
+          - "show running-config hostname"
+      ignore_errors: true
 
-- name: Sleep for 90 secs as rollback to happen.
-  ansible.builtin.wait_for:
-    timeout: 90
+    - name: Sleep for 90 secs for trial to roll back (trial timeout is 60 s)
+      ansible.builtin.wait_for:
+        timeout: 90
 
-- name: "Get hostname"
-  register: get_hostname2
-  iosxr_command:
-    commands:
-      - "show running-config hostname"
-  ignore_errors: true
+    - name: "Get hostname (trial should have rolled back)"
+      register: get_hostname2
+      iosxr_command:
+        commands:
+          - "show running-config hostname"
+      ignore_errors: true
 
-- ansible.builtin.assert:
-    that:
-      - "'iosxr_commit_confirmed' in get_hostname1.stdout[0]"
-      - "'iosxr_commit_confirmed' not in get_hostname2.stdout[0]"
+    - ansible.builtin.assert:
+        that:
+          - "'iosxr_commit_confirmed' in get_hostname1.stdout[0]"
+          - "'iosxr_commit_confirmed' not in get_hostname2.stdout[0]"
+
+  always:
+    # iosxr_config with commit_confirmed=True intentionally leaves the session in
+    # config mode so the caller can still confirm the trial.  Exit cleanly here so
+    # subsequent tests are not surprised by a stale config-mode session.
+    - name: Exit config mode after commit_confirmed test
+      ansible.netcommon.cli_command:
+        command: "{{ item }}"
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
+      failed_when: false
+      loop:
+        - abort
+        - end
+
+    - name: Restore hostname in case the trial was not rolled back
+      vars:
+        ansible_iosxr_commit_confirmed: false
+      cisco.iosxr.iosxr_config:
+        lines:
+          - hostname {{ inventory_hostname_short }}
+        match: none
+      ignore_errors: true

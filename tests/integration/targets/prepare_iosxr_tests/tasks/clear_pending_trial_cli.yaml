@@ -1,14 +1,18 @@
 ---
 # Confirm any active IOS-XR "commit confirmed" (trial) so further commits are allowed.
 #
-# After an iosxr_config commit failure the persistent network_cli session can be left
-# under (config-if)# while a device-side trial is still active; a bare "commit" from
-# that context may not confirm the trial. Reset the connection and unwind stale config
-# before configure + commit.
+# When commit_confirmed=True, iosxr_config intentionally leaves the session in config
+# mode (edit_config skips abort() so the caller can still confirm the trial). If the
+# test never confirms the trial, the device blocks ALL commits until the trial expires.
 #
-# Using cisco.iosxr.iosxr_config with only lines: [commit] often skips load_config
-# (empty diff) and never reaches the device.
-- name: Reset network_cli session (avoid stuck config submode after failed commit)
+# Strategy:
+#  1. Reset the connection so the persistent manager re-syncs its prompt state.
+#  2. Send abort/end to escape any config submode (config-if, etc.) back to exec.
+#  3. Enter a fresh config session and retry "commit" until it succeeds.
+#     "commit" fails with "unexpired trial" when a trial is still running; retrying
+#     with a delay lets the trial expire naturally so the commit can proceed.
+#     failed_when: false keeps the loop alive even when commit returns an error.
+- name: Reset network_cli session (clears stuck config submode after failed commit)
   ansible.builtin.meta: reset_connection
 
 - name: Unwind any leftover configuration context (abort/end are no-ops at exec)
@@ -30,12 +34,18 @@
     ansible_connection: ansible.netcommon.network_cli
   failed_when: false
 
-- name: Confirm pending trial commit if present
+- name: Confirm pending trial commit if present (retry until trial expires or is confirmed)
   ansible.netcommon.cli_command:
     command: commit
   vars:
     ansible_connection: ansible.netcommon.network_cli
+  register: _trial_commit_result
   failed_when: false
+  retries: 7
+  delay: 10
+  until: >-
+    _trial_commit_result.stdout is not defined
+    or 'unexpired trial' not in (_trial_commit_result.stdout | default(''))
 
 - name: Leave configuration mode after trial clear
   ansible.netcommon.cli_command:
