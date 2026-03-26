@@ -38,20 +38,13 @@
     # session in config mode.  Try "commit" from the same session first — if the
     # trial is still active (e.g. test failed before the 90 s wait), this confirms
     # it immediately instead of leaving a 60 s trial for the next test.
-    - name: Try to confirm trial from current persistent session
+    # Must be combined because network_cli auto-exits config mode between tasks.
+    - name: Confirm trial and exit config mode from current session
       ansible.netcommon.cli_command:
-        command: commit
+        command: "commit\nend"
       vars:
         ansible_connection: ansible.netcommon.network_cli
       failed_when: false
-
-    - name: Exit config mode
-      ansible.netcommon.cli_command:
-        command: "{{ item }}"
-      vars:
-        ansible_connection: ansible.netcommon.network_cli
-      failed_when: false
-      loop: [abort, end]
 
     # Safety net: if the trial could not be confirmed from the current session
     # (e.g. connection was reset or dropped), detect and wait it out.

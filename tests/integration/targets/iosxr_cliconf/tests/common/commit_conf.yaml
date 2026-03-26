@@ -24,20 +24,15 @@
           - name: loopback 777
             description: TestCommitConfirmed
 
-    # Explicitly enter config mode first so "commit confirmed" runs in the
-    # correct context.  Use a 60-second timeout (not the 10-minute default)
-    # so the safety-net wait in clear_pending_trial_cli.yaml (70 s) is enough.
-    - name: Enter config mode for commit confirmed
-      ansible.netcommon.cli_command:
-        command: configure terminal
-      vars:
-        ansible_connection: ansible.netcommon.network_cli
-      failed_when: false
-      when: result["changed"] == true
-
+    # Send "configure terminal" and "commit confirmed 60" as a SINGLE command
+    # with embedded newlines.  This is required because network_cli's
+    # _update_cli_prompt_context() auto-exits config mode between tasks,
+    # which would cause "commit confirmed" to be sent from exec mode.
+    # Use a 60-second timeout (not the 10-minute default) so the safety-net
+    # wait in clear_pending_trial_cli.yaml (70 s) is sufficient.
     - name: Do commit confirmed (60 s timeout)
       ansible.netcommon.cli_command:
-        command: commit confirmed 60
+        command: "configure terminal\ncommit confirmed 60"
       vars:
         ansible_connection: ansible.netcommon.network_cli
       failed_when: false
@@ -61,22 +56,15 @@
 
   always:
     # The persistent connection may still hold the config session that created
-    # the trial.  A bare "commit" from that session confirms the trial
-    # immediately, avoiding a 60 s wait for expiry.
-    - name: Confirm trial from current persistent session (avoids wait)
+    # the trial.  A combined "commit + end" confirms the trial immediately
+    # (avoiding a 60 s wait for expiry) and exits config mode.
+    # Must be combined because network_cli auto-exits config mode between tasks.
+    - name: Confirm trial and exit config mode from current session
       ansible.netcommon.cli_command:
-        command: commit
+        command: "commit\nend"
       vars:
         ansible_connection: ansible.netcommon.network_cli
       failed_when: false
-
-    - name: Exit config mode
-      ansible.netcommon.cli_command:
-        command: "{{ item }}"
-      vars:
-        ansible_connection: ansible.netcommon.network_cli
-      failed_when: false
-      loop: [abort, end]
 
     # Safety net: if the persistent session was dropped (idle timeout, error,
     # etc.) the trial could not be confirmed above.  Detect and wait it out.
