@@ -3,24 +3,44 @@
     msg: START iosxr_cliconf integration tests on connection={{ ansible_connection }}
 
 - block:
+    # Override commit_confirmed for housekeeping tasks — the role-level vars
+    # set ansible_iosxr_commit_confirmed: true, which would make every
+    # iosxr_config/iosxr_interfaces task create an unwanted trial commit.
     - name: Remove interfaces from configuration before actual testing
       ignore_errors: true
+      vars:
+        ansible_iosxr_commit_confirmed: false
       cisco.iosxr.iosxr_config:
         lines:
           - no interface loopback 777
 
     - name: Apply interface description
       register: result
+      vars:
+        ansible_iosxr_commit_confirmed: false
       cisco.iosxr.iosxr_interfaces:
         state: merged
         config:
           - name: loopback 777
             description: TestCommitConfirmed
 
-    - name: Do commit confirmed
-      cisco.iosxr.iosxr_command:
-        commands:
-          - commit confirmed
+    # Explicitly enter config mode first so "commit confirmed" runs in the
+    # correct context.  Use a 60-second timeout (not the 10-minute default)
+    # so the safety-net wait in clear_pending_trial_cli.yaml (70 s) is enough.
+    - name: Enter config mode for commit confirmed
+      ansible.netcommon.cli_command:
+        command: configure terminal
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
+      failed_when: false
+      when: result["changed"] == true
+
+    - name: Do commit confirmed (60 s timeout)
+      ansible.netcommon.cli_command:
+        command: commit confirmed 60
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
+      failed_when: false
       when: result["changed"] == true
 
     - name: Sleep for 35 sec.
@@ -40,12 +60,10 @@
           - "'TestCommitConfirmed' in get_desc.stdout[0]"
 
   always:
-    # "commit confirmed" (no timeout) uses the IOS-XR default of 10 minutes.
-    # A trial can only be confirmed from the session that created it.
-    # The persistent connection should still hold that session, so a bare
-    # "commit" here confirms the trial immediately — avoiding a 10-minute
-    # block on all subsequent targets.
-    - name: Confirm trial from current persistent session (avoids 10-min block)
+    # The persistent connection may still hold the config session that created
+    # the trial.  A bare "commit" from that session confirms the trial
+    # immediately, avoiding a 60 s wait for expiry.
+    - name: Confirm trial from current persistent session (avoids wait)
       ansible.netcommon.cli_command:
         command: commit
       vars:
@@ -66,6 +84,7 @@
       ansible.builtin.include_tasks: "{{ role_path }}/../prepare_iosxr_tests/tasks/clear_pending_trial_cli.yaml"
 
     # Now safe to clean up the test interface.
+    # Override commit_confirmed to avoid creating a new trial during cleanup.
     - name: Remove interfaces from configuration after testing
       ignore_errors: true
       vars:

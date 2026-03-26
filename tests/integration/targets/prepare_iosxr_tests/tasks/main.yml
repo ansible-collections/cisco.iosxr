@@ -10,6 +10,9 @@
     src: config.j2
   vars:
     ansible_connection: ansible.netcommon.network_cli
+    # Guard against parent roles (e.g. iosxr_cliconf) whose vars/main.yaml
+    # sets ansible_iosxr_commit_confirmed: true — we never want a trial here.
+    ansible_iosxr_commit_confirmed: false
 
 - name: Enable netconf service
   cisco.iosxr.iosxr_netconf:
@@ -18,6 +21,7 @@
     state: present
   vars:
     ansible_connection: ansible.netcommon.network_cli
+    ansible_iosxr_commit_confirmed: false
   tags:
     - netconf
 

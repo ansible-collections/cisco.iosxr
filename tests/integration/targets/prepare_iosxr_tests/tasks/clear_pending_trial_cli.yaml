@@ -12,7 +12,8 @@
 #
 # A trial can only be confirmed from the session that created it.  From a
 # new session we must wait for the trial timer to expire (longest test trial
-# is 60 s; we wait 70 s for margin).
+# is 60 s; we wait 70 s for margin).  The retry loop handles edge cases
+# where a longer trial somehow leaks (retries × 70 s = 210 s total).
 
 - name: Reset network_cli session (drop stale config submode)
   ansible.builtin.meta: reset_connection
@@ -25,70 +26,15 @@
   failed_when: false
   loop: [abort, abort, end, end]
 
-- name: Enter configuration mode for trial probe
-  ansible.netcommon.cli_command:
-    command: configure terminal
-  vars:
-    ansible_connection: ansible.netcommon.network_cli
-  failed_when: false
-
-- name: "Probe: attempt commit to detect active trial"
-  ansible.netcommon.cli_command:
-    command: commit
-  vars:
-    ansible_connection: ansible.netcommon.network_cli
-  register: _trial_probe
-  failed_when: false
-
-- name: Exit configuration mode after probe
-  ansible.netcommon.cli_command:
-    command: end
-  vars:
-    ansible_connection: ansible.netcommon.network_cli
-  failed_when: false
-
-# Concatenate stdout and msg so the check works regardless of where the
-# device error landed (see header comment about terminal_stderr_re).
-- name: Evaluate probe result for active trial
+# ── Probe-and-wait loop (up to 3 attempts × 70 s = 210 s max) ──────────
+- name: Initialize trial retry counter
   ansible.builtin.set_fact:
-    _trial_active: >-
-      {{ 'Cannot commit' in
-         ((_trial_probe.stdout | default('')) ~ ' ' ~ (_trial_probe.msg | default(''))) }}
+    _trial_retries_left: 3
+    _trial_cleared: false
 
-- when: _trial_active | bool
-  block:
-    - name: "Active trial detected — waiting 70 s for it to expire"
-      ansible.builtin.wait_for:
-        timeout: 70
-
-    - name: Reset connection after trial expiry wait
-      ansible.builtin.meta: reset_connection
-
-    - name: Escape configuration context after reset
-      ansible.netcommon.cli_command:
-        command: "{{ item }}"
-      vars:
-        ansible_connection: ansible.netcommon.network_cli
-      failed_when: false
-      loop: [abort, end]
-
-    - name: Enter configuration mode for verification
-      ansible.netcommon.cli_command:
-        command: configure terminal
-      vars:
-        ansible_connection: ansible.netcommon.network_cli
-      failed_when: false
-
-    - name: "Verify: commit should succeed now (trial expired)"
-      ansible.netcommon.cli_command:
-        command: commit
-      vars:
-        ansible_connection: ansible.netcommon.network_cli
-      failed_when: false
-
-    - name: Exit configuration mode after verification
-      ansible.netcommon.cli_command:
-        command: end
-      vars:
-        ansible_connection: ansible.netcommon.network_cli
-      failed_when: false
+- name: "Trial-clear loop: probe, wait if needed, verify"
+  ansible.builtin.include_tasks: _trial_clear_once.yaml
+  when: not (_trial_cleared | bool)
+  loop: [1, 2, 3]
+  loop_control:
+    loop_var: _trial_attempt
