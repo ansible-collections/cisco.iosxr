@@ -10,8 +10,16 @@
         lines:
           - hostname iosxr_commit_confirmed
 
+    # IMPORTANT: ansible_iosxr_commit_confirmed must remain true on every task
+    # between the trial commit above and the rollback wait below.  When the
+    # cliconf option is false (the default), network_cli's
+    # set_cli_prompt_context() sends "abort" to exit config mode between
+    # tasks — which cancels the active trial and reverts the change before
+    # the show command can observe it.
     - name: "Get hostname (trial should be active)"
       register: get_hostname1
+      vars:
+        ansible_iosxr_commit_confirmed: true
       iosxr_command:
         commands:
           - "show running-config hostname"
@@ -44,6 +52,7 @@
         command: "commit\nend"
       vars:
         ansible_connection: ansible.netcommon.network_cli
+        ansible_iosxr_commit_confirmed: true
       failed_when: false
 
     # Safety net: if the trial could not be confirmed from the current session
