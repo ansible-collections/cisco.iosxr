@@ -1,15 +1,15 @@
 ---
 codecov:
-  require_ci_to_pass: true
+    require_ci_to_pass: true
 comment:
-  layout: " diff, flags, files"
-  behavior: default
-  require_changes: false
-  require_base: false
-  require_head: true
+    layout: " diff, flags, files"
+    behavior: default
+    require_changes: false
+    require_base: false
+    require_head: true
 coverage:
-  status:
-    patch: false
-    project:
-      default:
-        threshold: 0.3%
+    status:
+        patch: false
+        project:
+            default:
+                threshold: 0.3%
