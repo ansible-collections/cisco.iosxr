@@ -247,7 +247,8 @@ Parameters
                     <b>ipv4</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
@@ -272,6 +273,7 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>ingress</li>
                                     <li>egress</li>
+                                    <li>bidirectional</li>
                         </ul>
                 </td>
                 <td>
@@ -323,7 +325,8 @@ Parameters
                     <b>ipv6</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
@@ -348,6 +351,7 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>ingress</li>
                                     <li>egress</li>
+                                    <li>bidirectional</li>
                         </ul>
                 </td>
                 <td>

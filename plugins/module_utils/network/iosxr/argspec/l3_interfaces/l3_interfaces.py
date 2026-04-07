@@ -80,19 +80,27 @@ class L3_InterfacesArgs(object):
                     "type": "dict",
                     "options": {
                         "ipv4": {
-                            "type": "dict",
+                            "type": "list",
+                            "elements": "dict",
                             "options": {
                                 "monitor": {"type": "str"},
                                 "sampler": {"type": "str"},
-                                "direction": {"type": "str", "choices": ["ingress", "egress"]},
+                                "direction": {
+                                    "type": "str",
+                                    "choices": ["ingress", "egress", "bidirectional"],
+                                },
                             },
                         },
                         "ipv6": {
-                            "type": "dict",
+                            "type": "list",
+                            "elements": "dict",
                             "options": {
                                 "monitor": {"type": "str"},
                                 "sampler": {"type": "str"},
-                                "direction": {"type": "str", "choices": ["ingress", "egress"]},
+                                "direction": {
+                                    "type": "str",
+                                    "choices": ["ingress", "egress", "bidirectional"],
+                                },
                             },
                         },
                     },

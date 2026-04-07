@@ -39,8 +39,9 @@
         that:
           - "'TestCommitConfirmed' in get_desc.stdout[0]"
   always:
-    - name: Remove interfaces from configuration before actual testing
-      ignore_errors: true
-      cisco.iosxr.iosxr_config:
-        lines:
-          - no interface loopback 777
+    ignore_errors: true
+    vars:
+      ansible_iosxr_commit_confirmed: false
+    cisco.iosxr.iosxr_config:
+      lines:
+        - no interface loopback 777
