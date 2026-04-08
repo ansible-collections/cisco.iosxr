@@ -130,9 +130,67 @@ class L3_InterfacesFacts(object):
                 each_ipv6["address"] = each
                 ipv6.append(each_ipv6)
                 config["ipv6"] = ipv6
+
+            carrier_delay_match = re.search(r"^\s*carrier-delay (.*)$", conf, re.M)
+            if carrier_delay_match:
+                args = carrier_delay_match.group(1).strip()
+                up_match = re.search(r"up (\d+)", args)
+                if up_match:
+                    config["carrier_delay"]["up"] = int(up_match.group(1))
+
+                down_match = re.search(r"down (\d+)", args)
+                if down_match:
+                    config["carrier_delay"]["down"] = int(down_match.group(1))
+
+            dampening_line = re.search(r"^\s*dampening(.*)$", conf, re.M)
+            if dampening_line:
+                config["dampening"]["enabled"] = True
+
+                params = dampening_line.group(1).strip().split()
+
+                param_keys = [
+                    "half_life",
+                    "reuse_threshold",
+                    "suppress_threshold",
+                    "max_suppress_time",
+                    "restart_penalty",
+                ]
+                for i, value in enumerate(params):
+                    if i < len(param_keys):
+                        key_name = param_keys[i]
+                        config["dampening"][key_name] = int(value)
+
+            load_interval = re.search(r"load-interval (\d+)", conf)
+            if load_interval:
+                config["load_interval"] = int(load_interval.group(1))
+
+            flow_control = re.search(r"flow(?:-control)? (ingress|egress|bidirectional)", conf)
+            if flow_control:
+                config["flow_control"] = flow_control.group(1)
+
+            flow_monitor_lines = re.findall(
+                r"^\s*flow (ipv4|ipv6) monitor (\S+) sampler (\S+) (ingress|egress)",
+                conf,
+                re.M,
+            )
+            if flow_monitor_lines:
+                if "flow" not in config or not config["flow"]:
+                    config["flow"] = {}
+
+                for line in flow_monitor_lines:
+                    protocol, monitor, sampler, direction = line
+                    if protocol not in config["flow"]:
+                        config["flow"][protocol] = {}
+
+                    config["flow"][protocol]["monitor"] = monitor
+                    config["flow"][protocol]["sampler"] = sampler
+                    config["flow"][protocol]["direction"] = direction
+
             return utils.remove_empties(config)
 
     def format_ipv4(self, address):
-        if address.split(" ")[1]:
-            cidr_val = netmask_to_cidr(address.split(" ")[1])
-        return address.split(" ")[0] + "/" + cidr_val
+        parts = address.split(" ")
+        if len(parts) > 1 and parts[1]:
+            cidr_val = netmask_to_cidr(parts[1])
+            return "{0}/{1}".format(parts[0], cidr_val)
+        return parts[0]

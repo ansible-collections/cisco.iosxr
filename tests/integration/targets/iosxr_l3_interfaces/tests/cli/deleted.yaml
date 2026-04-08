@@ -37,7 +37,11 @@
       ansible.builtin.assert:
         that:
           - "{{ deleted['commands'] | symmetric_difference(result['commands']) | length == 0 }}"
-
+    - name: debugs
+      ansible.builtin.debug:
+        msg:
+          - "combined_before={{ combined_before }}"
+          - "result.before={{ result['before'] }}"
     - name: Assert that before dicts are correctly generated
       ansible.builtin.assert:
         that:

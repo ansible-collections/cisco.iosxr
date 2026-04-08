@@ -281,11 +281,30 @@ releases:
       release_summary:
         With this release, the minimum required version of `ansible.netcommon`
         for this collection is `>=8.1.0`. The last version known to be compatible
-        with `ansible-core<=2.18.x` is ansible.netcommon `v8.0.1` and cisco.iosxr `v11.1.0`.
+        with `ansible-core<=2.18.x` is ansible.netcommon `v8.0.1` and cisco.iosxr
+        `v11.1.0`.
     fragments:
       - fix_routemap.yaml
       - fix_sanity.yaml
     release_date: "2025-08-19"
+  12.1.0:
+    changes:
+      minor_changes:
+        - Added few parameters to iosxr_l3_interface module to support new features.
+    fragments:
+      - add_ignore_2.21.yaml
+      - fix_sanity_errors.yaml
+      - iosxr_l3_interface.yml
+    release_date: "2025-10-30"
+  12.1.1:
+    changes:
+      bugfixes:
+        - iosxr_bgp_address_family - Fixed label generation command handling under `address_family`
+          configuration.
+    fragments:
+      - ansible-core-bump.yaml
+      - bgp_address_family.yaml
+    release_date: "2025-12-11"
   2.0.0:
     changes:
       bugfixes:

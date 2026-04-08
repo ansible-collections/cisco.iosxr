@@ -53,6 +53,50 @@ class L3_InterfacesArgs(object):
                     "type": "list",
                     "options": {"address": {"type": "str"}},
                 },
+                "carrier_delay": {
+                    "type": "dict",
+                    "options": {
+                        "up": {"type": "int"},
+                        "down": {"type": "int"},
+                    },
+                },
+                "dampening": {
+                    "type": "dict",
+                    "options": {
+                        "enabled": {"type": "bool"},
+                        "half_life": {"type": "int"},
+                        "reuse_threshold": {"type": "int"},
+                        "suppress_threshold": {"type": "int"},
+                        "max_suppress_time": {"type": "int"},
+                        "restart_penalty": {"type": "int"},
+                    },
+                },
+                "load_interval": {"type": "int"},
+                "flow_control": {
+                    "type": "str",
+                    "choices": ["ingress", "egress", "bidirectional"],
+                },
+                "flow": {
+                    "type": "dict",
+                    "options": {
+                        "ipv4": {
+                            "type": "dict",
+                            "options": {
+                                "monitor": {"type": "str"},
+                                "sampler": {"type": "str"},
+                                "direction": {"type": "str", "choices": ["ingress", "egress"]},
+                            },
+                        },
+                        "ipv6": {
+                            "type": "dict",
+                            "options": {
+                                "monitor": {"type": "str"},
+                                "sampler": {"type": "str"},
+                                "direction": {"type": "str", "choices": ["ingress", "egress"]},
+                            },
+                        },
+                    },
+                },
             },
             "type": "list",
         },

@@ -333,13 +333,13 @@ class Route_mapsTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*set\scommunity
-                (\s(?P<community_name>.*))?
+                (\s(?P<community_name>(.*?)))?
                 (\s(?P<additive>additive))?
                 $""", re.VERBOSE,
             ),
             "setval": "set community"
             "{{ (' ' + set.community.community_name ) if set.community.community_name is defined else '' }}"
-            "{{ (' additive' ) if set.community.additive is defined else '' }}",
+            "{{ (' additive') if set.community.additive|d(False) else '' }}",
             "result": {
                 "policies": {
                     "set": {

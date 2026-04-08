@@ -83,6 +83,15 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                         name="GigabitEthernet0/0/0/0",
                         ipv4=[dict(address="198.51.100.1/24")],
                         ipv6=[dict(address="2001:db8::/32")],
+                        carrier_delay={"up": 100},
+                        dampening={
+                            "enabled": True,
+                            "half_life": 10,
+                            "reuse_threshold": 750,
+                            "suppress_threshold": 3000,
+                            "max_suppress_time": 60,
+                            "restart_penalty": 1000,
+                        },
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/1",
@@ -104,6 +113,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     dict(
                         name="GigabitEthernet0/0/0/0",
                         ipv4=[dict(address="198.51.100.1/24")],
+                        carrier_delay={"down": 50},
+                        dampening={
+                            "enabled": True,
+                            "half_life": 10,
+                            "reuse_threshold": 750,
+                        },
+                        load_interval=30,
+                        flow_control="ingress",
                     ),
                     dict(
                         name="GigabitEthernet0/0/0/1",
@@ -119,6 +136,10 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         )
         commands = [
             "interface GigabitEthernet0/0/0/0",
+            "carrier-delay down 50",
+            "dampening 10 750",
+            "load-interval 30",
+            "flow-control ingress",
             "ipv4 address 198.51.100.1 255.255.255.0",
             "interface GigabitEthernet0/0/0/1",
             "ipv4 address 192.0.2.2 255.255.255.0 secondary",
@@ -126,6 +147,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "ipv6 address 2001:db8:0:3::/64",
         ]
         result = self.execute_module(changed=True)
+        print(sorted(result["commands"]))
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_l3_interfaces_replaced(self):
@@ -139,6 +161,17 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                             dict(address="203.0.113.27/24"),
                             dict(address="203.0.114.1/24", secondary=True),
                         ],
+                        carrier_delay={"down": 100},
+                        dampening={
+                            "enabled": True,
+                            "half_life": 20,
+                            "reuse_threshold": 800,
+                            "suppress_threshold": 3500,
+                            "max_suppress_time": 120,
+                            "restart_penalty": 1000,
+                        },
+                        load_interval=60,
+                        flow_control="egress",
                     ),
                 ],
                 state="replaced",
@@ -147,8 +180,15 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         commands = [
             "interface GigabitEthernet0/0/0/0",
             "no ipv6 address",
+            "no ipv4 address",
+            "no carrier-delay",
+            "no dampening",
             "ipv4 address 203.0.113.27 255.255.255.0",
             "ipv4 address 203.0.114.1 255.255.255.0 secondary",
+            "carrier-delay down 100",
+            "dampening 20 800 3500 120 1000",
+            "load-interval 60",
+            "flow-control egress",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
@@ -161,10 +201,13 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/0",
             "no ipv4 address",
             "no ipv6 address",
+            "no carrier-delay",
+            "no dampening",
             "interface GigabitEthernet0/0/0/1",
             "no ipv4 address",
         ]
         result = self.execute_module(changed=True)
+        print(result["commands"])
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_l3_interfaces_rendered(self):
@@ -182,6 +225,17 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                             dict(address="192.0.2.2/24", secondary=True),
                         ],
                         ipv6=[dict(address="2001:db8:0:3::/64")],
+                        carrier_delay={"up": 100},
+                        dampening={
+                            "enabled": True,
+                            "half_life": 10,
+                            "reuse_threshold": 750,
+                            "suppress_threshold": 3000,
+                            "max_suppress_time": 60,
+                            "restart_penalty": 1000,
+                        },
+                        load_interval=30,
+                        flow_control="ingress",
                     ),
                 ],
                 state="rendered",
@@ -195,6 +249,10 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "ipv4 address 192.0.2.2 255.255.255.0 secondary",
             "ipv4 address 192.0.2.1 255.255.255.0",
             "ipv6 address 2001:db8:0:3::/64",
+            "carrier-delay up 100",
+            "dampening 10 750 3000 60 1000",
+            "load-interval 30",
+            "flow-control ingress",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
@@ -203,9 +261,9 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         self.maxDiff = None
         set_module_args(
             dict(
-                running_config="interface GigabitEthernet0/0/0/0\nipv4 address 198.51.100.1 255.255.255.0\n"
-                "ipv6 address 2001:db8::/32\ninterface GigabitEthernet0/0/0/1\nipv4 address"
-                " 192.0.2.1 255.255.255.0\nipv4 address 192.0.2.2 255.255.255.0 secondary\n",
+                running_config="interface GigabitEthernet0/0/0/0\nipv4 address 198.51.100.1 255.255.255.0\ncarrier-delay up 2 down 10\ndampening 3\n"
+                "\nload-interval 4\nipv6 address 2001:db8::/32\ninterface GigabitEthernet0/0/0/1\nipv4 address"
+                " 192.0.2.1 255.255.255.0\nipv4 address 192.0.2.2 255.255.255.0 secondary\nflow-control bidirectional\n",
                 state="parsed",
             ),
         )
@@ -215,6 +273,12 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                 "name": "GigabitEthernet0/0/0/0",
                 "ipv4": [{"address": "198.51.100.1/24"}],
                 "ipv6": [{"address": "2001:db8::/32"}],
+                "carrier_delay": {"up": 2, "down": 10},
+                "dampening": {
+                    "enabled": True,
+                    "half_life": 3,
+                },
+                "load_interval": 4,
             },
             {
                 "name": "GigabitEthernet0/0/0/1",
@@ -222,6 +286,7 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                     {"address": "192.0.2.1/24"},
                     {"address": "192.0.2.2/24", "secondary": True},
                 ],
+                "flow_control": "bidirectional",
             },
         ]
         self.assertEqual(parsed_list, result["parsed"])
@@ -236,6 +301,8 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
                         name="GigabitEthernet0/0/0/1",
                         ipv4=[dict(address="198.51.102.1/24")],
                         ipv6=[dict(address="2001:db8:1::/64")],
+                        flow_control="bidirectional",
+                        load_interval=120,
                     ),
                 ],
                 state="overridden",
@@ -245,10 +312,14 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             "interface GigabitEthernet0/0/0/0",
             "no ipv4 address",
             "no ipv6 address",
+            "no carrier-delay",
+            "no dampening",
             "interface GigabitEthernet0/0/0/1",
             "no ipv4 address",
             "ipv4 address 198.51.102.1 255.255.255.0",
             "ipv6 address 2001:db8:1::/64",
+            "flow-control bidirectional",
+            "load-interval 120",
         ]
 
         result = self.execute_module(changed=True)
@@ -263,3 +334,277 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             {"name": "GigabitEthernet0/0/0/6", "ipv4": [{"address": "10.255.2.17/30"}]},
         ]
         self.assertEqual(gathered, result["gathered"])
+
+    def test_iosxr_l3_interfaces_flow_merged(self):
+        """Test flow parameter in merged state"""
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        flow={
+                            "ipv4": {
+                                "monitor": "MONITOR-A",
+                                "sampler": "SAMPLER-1",
+                                "direction": "ingress",
+                            },
+                            "ipv6": {
+                                "monitor": "MONITOR-B",
+                                "sampler": "SAMPLER-2",
+                                "direction": "egress",
+                            },
+                        },
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "flow ipv4 monitor MONITOR-A sampler SAMPLER-1 ingress",
+            "flow ipv6 monitor MONITOR-B sampler SAMPLER-2 egress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_l3_interfaces_flow_merged_partial(self):
+        """Test flow parameter in merged state with partial config"""
+        self._prepare("iosxr_l3_interface_flow_config.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        flow={
+                            "ipv6": {
+                                "monitor": "MONITOR-NEW",
+                                "sampler": "SAMPLER-NEW",
+                                "direction": "ingress",
+                            },
+                        },
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "no flow ipv6 monitor MONITOR-B sampler SAMPLER-2 egress",
+            "flow ipv6 monitor MONITOR-NEW sampler SAMPLER-NEW ingress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_l3_interfaces_flow_replaced(self):
+        """Test flow parameter in replaced state"""
+        self._prepare("iosxr_l3_interface_flow_config.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        flow={
+                            "ipv4": {
+                                "monitor": "MONITOR-REPLACED",
+                                "sampler": "SAMPLER-REPLACED",
+                                "direction": "egress",
+                            },
+                        },
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "no ipv4 address",
+            "no flow ipv6 monitor MONITOR-B sampler SAMPLER-2 egress",
+            "no flow ipv4 monitor MONITOR-A sampler SAMPLER-1 ingress",
+            "flow ipv4 monitor MONITOR-REPLACED sampler SAMPLER-REPLACED egress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_l3_interfaces_flow_deleted(self):
+        """Test flow parameter in deleted state"""
+        self._prepare("iosxr_l3_interface_flow_config.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                    ),
+                ],
+                state="deleted",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "no ipv4 address",
+            "no flow ipv4 monitor MONITOR-A sampler SAMPLER-1 ingress",
+            "no flow ipv6 monitor MONITOR-B sampler SAMPLER-2 egress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_l3_interfaces_flow_overridden(self):
+        """Test flow parameter in overridden state"""
+        self._prepare("iosxr_l3_interface_flow_config.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/1",
+                        flow={
+                            "ipv4": {
+                                "monitor": "OVERRIDE-MONITOR",
+                                "sampler": "OVERRIDE-SAMPLER",
+                                "direction": "ingress",
+                            },
+                        },
+                    ),
+                ],
+                state="overridden",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "no ipv4 address",
+            "no flow ipv4 monitor MONITOR-A sampler SAMPLER-1 ingress",
+            "no flow ipv6 monitor MONITOR-B sampler SAMPLER-2 egress",
+            "interface GigabitEthernet0/0/0/1",
+            "no ipv4 address",
+            "flow ipv4 monitor OVERRIDE-MONITOR sampler OVERRIDE-SAMPLER ingress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_l3_interfaces_flow_rendered(self):
+        """Test flow parameter in rendered state"""
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        ipv4=[dict(address="198.51.100.1/24")],
+                        flow={
+                            "ipv4": {
+                                "monitor": "RENDER-MONITOR",
+                                "sampler": "RENDER-SAMPLER",
+                                "direction": "ingress",
+                            },
+                            "ipv6": {
+                                "monitor": "RENDER-MONITOR-V6",
+                                "sampler": "RENDER-SAMPLER-V6",
+                                "direction": "egress",
+                            },
+                        },
+                    ),
+                ],
+                state="rendered",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "ipv4 address 198.51.100.1 255.255.255.0",
+            "flow ipv4 monitor RENDER-MONITOR sampler RENDER-SAMPLER ingress",
+            "flow ipv6 monitor RENDER-MONITOR-V6 sampler RENDER-SAMPLER-V6 egress",
+        ]
+        result = self.execute_module(changed=False)
+        self.assertEqual(sorted(result["rendered"]), sorted(commands))
+
+    def test_iosxr_l3_interfaces_flow_parsed(self):
+        """Test flow parameter in parsed state"""
+        set_module_args(
+            dict(
+                running_config="interface GigabitEthernet0/0/0/0\n"
+                "ipv4 address 198.51.100.1 255.255.255.0\n"
+                "flow ipv4 monitor PARSE-MONITOR sampler PARSE-SAMPLER ingress\n"
+                "flow ipv6 monitor PARSE-MONITOR-V6 sampler PARSE-SAMPLER-V6 egress\n"
+                "interface GigabitEthernet0/0/0/1\n"
+                "ipv4 address 192.0.2.1 255.255.255.0\n",
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        parsed_list = [
+            {
+                "name": "GigabitEthernet0/0/0/0",
+                "ipv4": [{"address": "198.51.100.1/24"}],
+                "flow": {
+                    "ipv4": {
+                        "monitor": "PARSE-MONITOR",
+                        "sampler": "PARSE-SAMPLER",
+                        "direction": "ingress",
+                    },
+                    "ipv6": {
+                        "monitor": "PARSE-MONITOR-V6",
+                        "sampler": "PARSE-SAMPLER-V6",
+                        "direction": "egress",
+                    },
+                },
+            },
+            {
+                "name": "GigabitEthernet0/0/0/1",
+                "ipv4": [{"address": "192.0.2.1/24"}],
+            },
+        ]
+        self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_l3_interfaces_flow_gathered(self):
+        """Test flow parameter in gathered state"""
+        self._prepare("iosxr_l3_interface_flow_gathered.cfg")
+        set_module_args(dict(state="gathered"))
+        result = self.execute_module(changed=False)
+        gathered = [
+            {
+                "name": "GigabitEthernet0/0/0/0",
+                "ipv4": [{"address": "198.51.100.1/24"}],
+                "flow": {
+                    "ipv4": {
+                        "monitor": "GATHERED-MONITOR",
+                        "sampler": "GATHERED-SAMPLER",
+                        "direction": "ingress",
+                    },
+                },
+            },
+            {
+                "name": "GigabitEthernet0/0/0/1",
+                "ipv4": [{"address": "192.0.2.1/24"}],
+                "flow": {
+                    "ipv6": {
+                        "monitor": "GATHERED-MONITOR-V6",
+                        "sampler": "GATHERED-SAMPLER-V6",
+                        "direction": "egress",
+                    },
+                },
+            },
+        ]
+        self.assertEqual(gathered, result["gathered"])
+
+    def test_iosxr_l3_interfaces_flow_idempotent(self):
+        """Test flow parameter idempotency in merged state"""
+        self._prepare("iosxr_l3_interface_flow_config.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        flow={
+                            "ipv4": {
+                                "monitor": "MONITOR-A",
+                                "sampler": "SAMPLER-1",
+                                "direction": "ingress",
+                            },
+                            "ipv6": {
+                                "monitor": "MONITOR-B",
+                                "sampler": "SAMPLER-2",
+                                "direction": "egress",
+                            },
+                        },
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        self.execute_module(changed=False, commands=[])

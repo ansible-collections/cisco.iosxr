@@ -82,6 +82,98 @@ options:
             description:
             - Configures the IPv6 address for Interface.
             type: str
+      carrier_delay:
+        description:
+        - Delay carrier transitions.
+        type: dict
+        suboptions:
+          up:
+            description:
+            - Delay for carrier-up event in milliseconds.
+            type: int
+          down:
+            description:
+            - Delay for carrier-down event in milliseconds.
+            type: int
+      dampening:
+        description:
+        - Enable interface dampening to reduce the effects of interface flapping.
+        type: dict
+        suboptions:
+          enabled:
+            description:
+            - Enable or disable dampening.
+            type: bool
+          half_life:
+            description:
+            - The time in minutes after which a penalty is halved if the interface stays up.
+            type: int
+          reuse_threshold:
+            description:
+            - The penalty value below which a suppressed interface is unsuppressed.
+            type: int
+          suppress_threshold:
+            description:
+            - The penalty value above which an interface is suppressed.
+            type: int
+          max_suppress_time:
+            description:
+            - The maximum time in minutes that an interface can be suppressed.
+            type: int
+          restart_penalty:
+            description:
+            - The penalty assigned to an interface when it flaps.
+            type: int
+      load_interval:
+        description:
+        - Specify the length of time for which data is used to compute load statistics.
+        type: int
+      flow_control:
+        description:
+        - Configure flow control for the interface.
+        type: str
+        choices: ['ingress', 'egress', 'bidirectional']
+      flow:
+        description:
+        - Configure NetFlow monitoring on the interface.
+        type: dict
+        suboptions:
+          ipv4:
+            description:
+            - Configure NetFlow monitoring for IPv4 traffic.
+            type: dict
+            suboptions:
+              monitor:
+                description:
+                - Name of the flow monitor to apply.
+                type: str
+              sampler:
+                description:
+                - Name of the sampler to apply.
+                type: str
+              direction:
+                description:
+                - Direction of the flow monitoring.
+                type: str
+                choices: ['ingress', 'egress']
+          ipv6:
+            description:
+            - Configure NetFlow monitoring for IPv6 traffic.
+            type: dict
+            suboptions:
+              monitor:
+                description:
+                - Name of the flow monitor to apply.
+                type: str
+              sampler:
+                description:
+                - Name of the sampler to apply.
+                type: str
+              direction:
+                description:
+                - Direction of the flow monitoring.
+                type: str
+                choices: ['ingress', 'egress']
   running_config:
     description:
     - This option is used only with state I(parsed).

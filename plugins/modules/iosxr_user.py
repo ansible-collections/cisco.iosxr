@@ -281,7 +281,6 @@ xml:
 """
 
 import collections
-import os
 
 from copy import deepcopy
 from functools import partial
@@ -567,8 +566,16 @@ class NCConfiguration(ConfigBase):
         :param arg:
         :return passwd:
         """
-        cmd = "openssl passwd -salt `openssl rand -base64 3` -1 "
-        return os.popen(cmd + arg).readlines()[0].strip()
+        cmd = "openssl passwd -salt `openssl rand -base64 3` -1 " + arg
+        rc, out, err = self._module.run_command(cmd, use_unsafe_shell=True)
+        if rc != 0:
+            self._module.fail_json(
+                msg="Failed to generate MD5 hash",
+                rc=rc,
+                stdout=out,
+                stderr=err,
+            )
+        return out.strip()
 
     def map_obj_to_xml_rpc(self, os_version):
         if os_version and Version(os_version) > Version("7.0"):

@@ -1456,4 +1456,4 @@ class TestIosxrRouteMapsModule(TestIosxrModule):
             },
         ]
         result = self.execute_module(changed=False)
-        self.assertEqual(gathered, result["gathered"])
+        self.assertEqual(sorted(gathered), sorted(result["gathered"]))

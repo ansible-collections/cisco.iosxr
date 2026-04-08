@@ -250,7 +250,7 @@ def _tmpl_wt(config_data):
 
 def _tmpl_label_mode(conf):
     if "label_mode" in conf:
-        command = "vrf all label mode"
+        command = "label mode"
         if "per_ce" in conf.get("label_mode"):
             command += " per-ce"
         elif "per_vrf" in conf.get("label_mode"):

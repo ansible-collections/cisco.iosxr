@@ -1,5 +1,0 @@
----
-trivial:
-  - Fix sanity issues and remove old python 2.x imports and dependencies.
-  - Update github workflow names for better clarity.
-  - Add explicit 'no' commands for interfaces and vrfs when deleting for snmp_server module.
