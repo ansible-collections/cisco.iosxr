@@ -1,4 +1,12 @@
 ---
+- name: Clear stale IOS-XR configuration sessions (best-effort)
+  cisco.iosxr.iosxr_command:
+    commands:
+      - clear configuration sessions
+  ignore_errors: true
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+
 - name: Collect all redirection CLI test cases
   ansible.builtin.find:
     paths: "{{ role_path }}/tests/redirection"
@@ -8,7 +16,7 @@
 
 - name: Set test_items for redirection
   ansible.builtin.set_fact:
-    test_items: "{{ test_cases.files | map(attribute='path') | list }}"
+    test_items: "{{ shortname_test_cases.files | map(attribute='path') | list }}"
 
 - name: Run test case (connection=ansible.netcommon.network_cli)
   ansible.builtin.include_tasks: "{{ test_case_to_run }}"
