@@ -169,7 +169,7 @@ class L3_InterfacesFacts(object):
                 config["flow_control"] = flow_control.group(1)
 
             flow_monitor_lines = re.findall(
-                r"^\s*flow (ipv4|ipv6) monitor (\S+) sampler (\S+) (ingress|egress|bidirectional)",
+                r"^\s*flow (ipv4|ipv6) monitor (\S+) sampler (\S+) (ingress|egress)",
                 conf,
                 re.M,
             )
@@ -197,9 +197,7 @@ class L3_InterfacesFacts(object):
 
                 for protocol, proto_flow in flow_monitor_data.items():
                     directions = proto_flow["directions"]
-                    if "bidirectional" in directions or (
-                        "ingress" in directions and "egress" in directions
-                    ):
+                    if "ingress" in directions and "egress" in directions:
                         direction = "bidirectional"
                     elif "ingress" in directions:
                         direction = "ingress"

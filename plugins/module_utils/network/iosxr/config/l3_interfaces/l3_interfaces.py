@@ -301,13 +301,13 @@ class L3_Interfaces(ConfigBase):
 
         return diff
 
-    def _get_flow_directions(self, direction):
+    def _expand_flow_directions(self, direction):
         if direction == "bidirectional":
             return ["ingress", "egress"]
         return [direction]
 
     def _add_no_flow_command(self, interface, protocol, flow_cfg, commands):
-        for direction in self._get_flow_directions(flow_cfg["direction"]):
+        for direction in self._expand_flow_directions(flow_cfg["direction"]):
             cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
                 protocol,
                 flow_cfg["monitor"],
@@ -317,7 +317,7 @@ class L3_Interfaces(ConfigBase):
             add_command_to_config_list(interface, cmd, commands)
 
     def _add_flow_command(self, interface, protocol, flow_cfg, commands):
-        for direction in self._get_flow_directions(flow_cfg["direction"]):
+        for direction in self._expand_flow_directions(flow_cfg["direction"]):
             cmd = "flow {0} monitor {1} sampler {2} {3}".format(
                 protocol,
                 flow_cfg["monitor"],
