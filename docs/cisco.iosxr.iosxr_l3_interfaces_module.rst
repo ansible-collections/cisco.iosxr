@@ -277,7 +277,6 @@ Parameters
                 </td>
                 <td>
                         <div>Direction of the flow monitoring.</div>
-                        <div><code class="docutils literal notranslate"><span class="pre">bidirectional</span></code> applies both ingress and egress flow commands.</div>
                 </td>
             </tr>
             <tr>
@@ -355,7 +354,6 @@ Parameters
                 </td>
                 <td>
                         <div>Direction of the flow monitoring.</div>
-                        <div><code class="docutils literal notranslate"><span class="pre">bidirectional</span></code> applies both ingress and egress flow commands.</div>
                 </td>
             </tr>
             <tr>
@@ -1155,6 +1153,23 @@ Examples
     # - name: GigabitEthernet0/0/0/1
     # - name: GigabitEthernet0/0/0/3
     # - name: GigabitEthernet0/0/0/4
+
+    # Using bidirectional flow monitoring
+
+    - name: Configure bidirectional NetFlow on an interface
+      cisco.iosxr.iosxr_l3_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/0
+            flow:
+              ipv4:
+                monitor: FlowMap-IPv4
+                sampler: NETFLOW_1
+                direction: bidirectional
+              ipv6:
+                monitor: FlowMap-IPv6
+                sampler: NETFLOW_1
+                direction: bidirectional
+        state: merged
 
 
 
