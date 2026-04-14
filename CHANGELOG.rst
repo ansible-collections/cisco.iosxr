@@ -4,6 +4,14 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v12.1.1
+=======
+
+Bugfixes
+--------
+
+- iosxr_bgp_address_family - Fixed label generation command handling under `address_family` configuration.
+
 v12.1.0
 =======
 
