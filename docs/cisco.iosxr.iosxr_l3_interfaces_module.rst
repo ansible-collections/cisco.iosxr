@@ -272,10 +272,12 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>ingress</li>
                                     <li>egress</li>
+                                    <li>bidirectional</li>
                         </ul>
                 </td>
                 <td>
                         <div>Direction of the flow monitoring.</div>
+                        <div><code class="docutils literal notranslate"><span class="pre">bidirectional</span></code> applies both ingress and egress flow commands.</div>
                 </td>
             </tr>
             <tr>
@@ -348,10 +350,12 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>ingress</li>
                                     <li>egress</li>
+                                    <li>bidirectional</li>
                         </ul>
                 </td>
                 <td>
                         <div>Direction of the flow monitoring.</div>
+                        <div><code class="docutils literal notranslate"><span class="pre">bidirectional</span></code> applies both ingress and egress flow commands.</div>
                 </td>
             </tr>
             <tr>

@@ -155,7 +155,7 @@ options:
                 description:
                 - Direction of the flow monitoring.
                 type: str
-                choices: ['ingress', 'egress']
+                choices: ['ingress', 'egress', 'bidirectional']
           ipv6:
             description:
             - Configure NetFlow monitoring for IPv6 traffic.
@@ -173,7 +173,7 @@ options:
                 description:
                 - Direction of the flow monitoring.
                 type: str
-                choices: ['ingress', 'egress']
+                choices: ['ingress', 'egress', 'bidirectional']
   running_config:
     description:
     - This option is used only with state I(parsed).
@@ -752,6 +752,23 @@ EXAMPLES = """
 # - name: GigabitEthernet0/0/0/1
 # - name: GigabitEthernet0/0/0/3
 # - name: GigabitEthernet0/0/0/4
+
+# Using bidirectional flow monitoring
+
+- name: Configure bidirectional NetFlow on an interface
+  cisco.iosxr.iosxr_l3_interfaces:
+    config:
+      - name: GigabitEthernet0/0/0/0
+        flow:
+          ipv4:
+            monitor: FlowMap-IPv4
+            sampler: NETFLOW_1
+            direction: bidirectional
+          ipv6:
+            monitor: FlowMap-IPv6
+            sampler: NETFLOW_1
+            direction: bidirectional
+    state: merged
 """
 
 RETURN = """

@@ -301,6 +301,31 @@ class L3_Interfaces(ConfigBase):
 
         return diff
 
+    def _get_flow_directions(self, direction):
+        if direction == "bidirectional":
+            return ["ingress", "egress"]
+        return [direction]
+
+    def _add_no_flow_command(self, interface, protocol, flow_cfg, commands):
+        for direction in self._get_flow_directions(flow_cfg["direction"]):
+            cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
+                protocol,
+                flow_cfg["monitor"],
+                flow_cfg["sampler"],
+                direction,
+            )
+            add_command_to_config_list(interface, cmd, commands)
+
+    def _add_flow_command(self, interface, protocol, flow_cfg, commands):
+        for direction in self._get_flow_directions(flow_cfg["direction"]):
+            cmd = "flow {0} monitor {1} sampler {2} {3}".format(
+                protocol,
+                flow_cfg["monitor"],
+                flow_cfg["sampler"],
+                direction,
+            )
+            add_command_to_config_list(interface, cmd, commands)
+
     def _set_config(self, want, have, module):
         # Set the interface config based on the want and have config
         commands = []
@@ -419,13 +444,7 @@ class L3_Interfaces(ConfigBase):
                 for proto in ["ipv4", "ipv6"]:
                     if proto in have_flow and proto not in want_flow:
                         have_cfg = have_flow[proto]
-                        cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
-                            proto,
-                            have_cfg["monitor"],
-                            have_cfg["sampler"],
-                            have_cfg["direction"],
-                        )
-                        add_command_to_config_list(interface, cmd, commands)
+                        self._add_no_flow_command(interface, proto, have_cfg, commands)
 
             for proto, want_cfg in want_flow.items():
                 if want_cfg is None:
@@ -434,20 +453,8 @@ class L3_Interfaces(ConfigBase):
                 have_cfg = have_flow.get(proto, {})
                 if want_cfg != have_cfg:
                     if have_cfg:
-                        cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
-                            proto,
-                            have_cfg["monitor"],
-                            have_cfg["sampler"],
-                            have_cfg["direction"],
-                        )
-                        add_command_to_config_list(interface, cmd, commands)
-                    cmd = "flow {0} monitor {1} sampler {2} {3}".format(
-                        proto,
-                        want_cfg["monitor"],
-                        want_cfg["sampler"],
-                        want_cfg["direction"],
-                    )
-                    add_command_to_config_list(interface, cmd, commands)
+                        self._add_no_flow_command(interface, proto, have_cfg, commands)
+                    self._add_flow_command(interface, proto, want_cfg, commands)
 
         if want_flow is not None:
             want["flow"] = want_flow
@@ -501,13 +508,6 @@ class L3_Interfaces(ConfigBase):
         if have.get("flow") and not want.get("flow"):
             for proto in ["ipv4", "ipv6"]:
                 if have["flow"].get(proto):
-                    have_proto_flow = have["flow"][proto]
-                    cmd = "no flow {0} monitor {1} sampler {2} {3}".format(
-                        proto,
-                        have_proto_flow["monitor"],
-                        have_proto_flow["sampler"],
-                        have_proto_flow["direction"],
-                    )
-                    add_command_to_config_list(interface, cmd, commands)
+                    self._add_no_flow_command(interface, proto, have["flow"][proto], commands)
 
         return commands

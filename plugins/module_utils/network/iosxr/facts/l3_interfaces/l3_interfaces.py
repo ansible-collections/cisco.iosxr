@@ -169,7 +169,7 @@ class L3_InterfacesFacts(object):
                 config["flow_control"] = flow_control.group(1)
 
             flow_monitor_lines = re.findall(
-                r"^\s*flow (ipv4|ipv6) monitor (\S+) sampler (\S+) (ingress|egress)",
+                r"^\s*flow (ipv4|ipv6) monitor (\S+) sampler (\S+) (ingress|egress|bidirectional)",
                 conf,
                 re.M,
             )
@@ -177,14 +177,40 @@ class L3_InterfacesFacts(object):
                 if "flow" not in config or not config["flow"]:
                     config["flow"] = {}
 
+                flow_monitor_data = {}
                 for line in flow_monitor_lines:
                     protocol, monitor, sampler, direction = line
-                    if protocol not in config["flow"]:
-                        config["flow"][protocol] = {}
+                    if protocol not in flow_monitor_data:
+                        flow_monitor_data[protocol] = {
+                            "monitor": monitor,
+                            "sampler": sampler,
+                            "directions": set(),
+                        }
 
-                    config["flow"][protocol]["monitor"] = monitor
-                    config["flow"][protocol]["sampler"] = sampler
-                    config["flow"][protocol]["direction"] = direction
+                    proto_flow = flow_monitor_data[protocol]
+                    if proto_flow["monitor"] != monitor or proto_flow["sampler"] != sampler:
+                        proto_flow["monitor"] = monitor
+                        proto_flow["sampler"] = sampler
+                        proto_flow["directions"] = set()
+
+                    proto_flow["directions"].add(direction)
+
+                for protocol, proto_flow in flow_monitor_data.items():
+                    directions = proto_flow["directions"]
+                    if "bidirectional" in directions or (
+                        "ingress" in directions and "egress" in directions
+                    ):
+                        direction = "bidirectional"
+                    elif "ingress" in directions:
+                        direction = "ingress"
+                    else:
+                        direction = "egress"
+
+                    config["flow"][protocol] = {
+                        "monitor": proto_flow["monitor"],
+                        "sampler": proto_flow["sampler"],
+                        "direction": direction,
+                    }
 
             return utils.remove_empties(config)
 
