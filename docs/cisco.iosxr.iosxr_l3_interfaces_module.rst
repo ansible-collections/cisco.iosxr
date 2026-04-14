@@ -237,7 +237,6 @@ Parameters
                 </td>
                 <td>
                         <div>Configure NetFlow monitoring on the interface.</div>
-                        <div><code class="docutils literal notranslate"><span class="pre">bidirectional</span></code> for <code class="docutils literal notranslate"><span class="pre">direction</span></code> is implemented as separate ingress and egress <code class="docutils literal notranslate"><span class="pre">flow</span></code> lines; gathered/parsed report <code class="docutils literal notranslate"><span class="pre">bidirectional</span></code> when both are present.</div>
                 </td>
             </tr>
                                 <tr>
@@ -278,7 +277,6 @@ Parameters
                 </td>
                 <td>
                         <div>Direction of the flow monitoring.</div>
-                        <div><code class="docutils literal notranslate"><span class="pre">bidirectional</span></code> is implemented as separate ingress and egress <code class="docutils literal notranslate"><span class="pre">flow</span></code> lines; gathered/parsed report <code class="docutils literal notranslate"><span class="pre">bidirectional</span></code> when both are present.</div>
                 </td>
             </tr>
             <tr>
@@ -356,7 +354,6 @@ Parameters
                 </td>
                 <td>
                         <div>Direction of the flow monitoring.</div>
-                        <div><code class="docutils literal notranslate"><span class="pre">bidirectional</span></code> is implemented as separate ingress and egress <code class="docutils literal notranslate"><span class="pre">flow</span></code> lines; gathered/parsed report <code class="docutils literal notranslate"><span class="pre">bidirectional</span></code> when both are present.</div>
                 </td>
             </tr>
             <tr>
