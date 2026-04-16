@@ -305,6 +305,22 @@ releases:
       - ansible-core-bump.yaml
       - bgp_address_family.yaml
     release_date: "2025-12-11"
+  12.2.1:
+    changes:
+      bugfixes:
+        - Fixed iosxr_user module to correctly handle MD5 hashed passwords when updating
+          user credentials.
+      minor_changes:
+        - iosxr_l3_interfaces - Added support for `flow.ipv4.direction` and `flow.ipv6.direction`
+          value `bidirectional`. The module now expands bidirectional flow configuration
+          into both ingress and egress IOS-XR flow monitor commands.
+    fragments:
+      - fix_commit_confirmed_integration_tests.yaml
+      - iosxr_l3_interfaces_flow_bidirectional.yaml
+      - iosxr_user_md5_fix.yaml
+      - sanicifix.yaml
+      - sanity-fix-222.yaml
+    release_date: "2026-04-16"
   2.0.0:
     changes:
       bugfixes:
