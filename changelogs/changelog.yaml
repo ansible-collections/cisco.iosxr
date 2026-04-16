@@ -344,7 +344,7 @@ releases:
       - iosxr_user_md5_fix.yaml
       - sanicifix.yaml
       - sanity-fix-222.yaml
-    release_date: '2026-04-16'
+    release_date: "2026-04-16"
   2.0.0:
     changes:
       bugfixes:
