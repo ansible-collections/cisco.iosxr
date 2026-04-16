@@ -4,6 +4,28 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v12.2.1
+=======
+
+Minor Changes
+-------------
+
+- iosxr_l3_interfaces - Added support for `flow.ipv4.direction` and `flow.ipv6.direction` value `bidirectional`. The module now expands bidirectional flow configuration into both ingress and egress IOS-XR flow monitor commands.
+
+Bugfixes
+--------
+
+- Fix integration test failure "Cannot commit because there is an unexpired trial/rollback session".
+  iosxr_cliconf commit_conf cleanup now uses normal commit (ansible_iosxr_commit_confirmed: false)
+  so the device is not left with an active trial for the next target.
+  prepare_iosxr_tests and iosxr_config pre-test hook clear pending trials with
+  ``meta: reset_connection``, abort/end unwind, then cli_command (configure / commit / end);
+  stale (config-if) sessions after failed commits could prevent confirms; iosxr_config with
+  only ``lines: [commit]`` often skips load_config and did not reach the device.
+  iosxr_config integration: clear trial before each CLI/cli_config test file so earlier targets or
+  tests in the same target cannot leave an active trial for the next case.
+- Fixed iosxr_user module to correctly handle MD5 hashed passwords when updating user credentials.
+
 v12.1.1
 =======
 
