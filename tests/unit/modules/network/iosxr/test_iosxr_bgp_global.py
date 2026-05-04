@@ -501,14 +501,17 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         self.assertEqual(parsed_list, result["parsed"])
 
     def test_iosxr_bgp_global_parsed_remote_as_asdot(self):
-        """ASDOT remote-as (RFC 5396) must stay strings, not float-coerced ints (AAP-73646)."""
+        """ASDOT/ASPLAIN remote-as must parse as strings for global and VRF neighbors (AAP-73646)."""
         self.maxDiff = None
         set_module_args(
             dict(
                 running_config=(
                     "router bgp 65138\n bgp router-id 192.0.2.1\n neighbor 10.1.1.1\n"
                     "  remote-as 5467.8\n neighbor 10.1.1.2\n  remote-as 1.0\n"
-                    " neighbor 10.1.1.3\n  remote-as 65535.65535\n !\n!"
+                    " neighbor 10.1.1.3\n  remote-as 65535.65535\n"
+                    " neighbor 10.5.5.5\n  remote-as 65001\n"
+                    " vrf vrf1\n  neighbor 10.8.8.8\n   remote-as 65002\n"
+                    "  neighbor 10.9.9.9\n   remote-as 4394.5\n !\n!"
                 ),
                 state="parsed",
             ),
@@ -521,6 +524,16 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 {"neighbor_address": "10.1.1.1", "remote_as": "5467.8"},
                 {"neighbor_address": "10.1.1.2", "remote_as": "1.0"},
                 {"neighbor_address": "10.1.1.3", "remote_as": "65535.65535"},
+                {"neighbor_address": "10.5.5.5", "remote_as": "65001"},
+            ],
+            "vrfs": [
+                {
+                    "vrf": "vrf1",
+                    "neighbors": [
+                        {"neighbor_address": "10.8.8.8", "remote_as": "65002"},
+                        {"neighbor_address": "10.9.9.9", "remote_as": "4394.5"},
+                    ],
+                },
             ],
         }
         self.assertEqual(expected, result["parsed"])
