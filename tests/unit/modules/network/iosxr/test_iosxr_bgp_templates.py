@@ -1137,6 +1137,26 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
         }
         self.assertEqual(parsed_list, result["parsed"])
 
+    def test_iosxr_bgp_tmpl_parsed_remote_as_asdot(self):
+        """Neighbor-group remote-as ASDOT must parse as string (AAP-73646)."""
+        self.maxDiff = None
+        set_module_args(
+            dict(
+                running_config=(
+                    "router bgp 65536\n neighbor-group ng-asdot\n  remote-as 5467.8\n !\n!\n"
+                ),
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        expected = {
+            "as_number": "65536",
+            "neighbor": [
+                {"name": "ng-asdot", "remote_as": "5467.8"},
+            ],
+        }
+        self.assertEqual(expected, result["parsed"])
+
     def test_iosxr_bgp_tmpl_gathered(self):
         self.maxDiff = None
         run_cfg = dedent(

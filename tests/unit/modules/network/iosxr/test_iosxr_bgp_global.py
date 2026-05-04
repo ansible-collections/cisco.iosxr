@@ -481,7 +481,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
             "neighbors": [
                 {
                     "neighbor_address": "192.0.2.11",
-                    "remote_as": 65537,
+                    "remote_as": "65537",
                     "cluster_id": "3",
                     "password": {"encrypted": "15060E1F107B"},
                     "local_as": {
@@ -491,7 +491,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 },
                 {
                     "neighbor_address": "192.0.2.14",
-                    "remote_as": 65538,
+                    "remote_as": "65538",
                     "description": "test nbr description",
                 },
             ],
@@ -499,6 +499,31 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         }
 
         self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_bgp_global_parsed_remote_as_asdot(self):
+        """ASDOT remote-as (RFC 5396) must stay strings, not float-coerced ints (AAP-73646)."""
+        self.maxDiff = None
+        set_module_args(
+            dict(
+                running_config=(
+                    "router bgp 65138\n bgp router-id 192.0.2.1\n neighbor 10.1.1.1\n"
+                    "  remote-as 5467.8\n neighbor 10.1.1.2\n  remote-as 1.0\n"
+                    " neighbor 10.1.1.3\n  remote-as 65535.65535\n !\n!"
+                ),
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        expected = {
+            "as_number": "65138",
+            "bgp": {"router_id": "192.0.2.1"},
+            "neighbors": [
+                {"neighbor_address": "10.1.1.1", "remote_as": "5467.8"},
+                {"neighbor_address": "10.1.1.2", "remote_as": "1.0"},
+                {"neighbor_address": "10.1.1.3", "remote_as": "65535.65535"},
+            ],
+        }
+        self.assertEqual(expected, result["parsed"])
 
     def test_iosxr_bgp_global_purged(self):
         run_cfg = dedent(

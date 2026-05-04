@@ -1,0 +1,6 @@
+---
+bugfixes:
+  - >-
+    iosxr_bgp_global, iosxr_bgp_templates, iosxr_facts - treat BGP neighbor ``remote_as`` as a string so
+    ASDOT notation (e.g. ``5467.8`` per RFC 5396) is not coerced to float and rejected during facts or
+    resource validation (https://github.com/ansible-collections/cisco.iosxr/issues).
