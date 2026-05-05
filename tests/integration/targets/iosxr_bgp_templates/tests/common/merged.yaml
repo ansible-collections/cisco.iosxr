@@ -10,6 +10,7 @@
         config:
           as_number: 65536
           neighbor:
+            # First two full neighbor-groups; then remote_as only: int / str / YAML float (ng-remote + ng-rs)
             - address_family:
                 - advertise:
                     local_labeled_route:
@@ -54,6 +55,16 @@
               ttl_security:
                 set: true
               update_source: Loopback919
+            - name: ng-remote-asdot
+              remote_as: "5467.8"
+            - name: ng-remote-plain
+              remote_as: 65001
+            - name: ng-rs-float
+              remote_as: 88.5
+            - name: ng-rs-int
+              remote_as: 424242
+            - name: ng-rs-str
+              remote_as: "123.4"
       register: result
 
     - name: Assert that correct set of commands were generated

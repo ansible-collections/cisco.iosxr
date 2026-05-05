@@ -17,7 +17,22 @@ merged:
     - bfd minimum-interval 20
     - bfd multiplier 6
     - remote-as 65538
+    - neighbor 203.0.113.10
+    - remote-as 5467.8
+    - neighbor 203.0.113.11
+    - remote-as 65001
+    - neighbor 203.0.113.12
+    - remote-as 4394.6
+    - vrf vrf_asdot
+    - neighbor 198.51.100.100
+    - remote-as 65540
+    - neighbor 198.51.100.101
+    - remote-as 2.5
+    - neighbor 198.51.100.99
+    - remote-as 1.0
   after:
+    # Expected facts use quoted remote_as strings (normalized module output). Playbook task
+    # keys may still use integer ASPLAIN or quoted ASDOT strings (see merged.yaml).
     as_number: "65536"
     default_metric: 4
     socket:
@@ -46,9 +61,16 @@ merged:
         remote_as: "5467.8"
       - neighbor_address: 203.0.113.11
         remote_as: "65001"
+      - neighbor_address: 203.0.113.12
+        remote_as: "4394.6"
+    # VRF neighbor lists follow string sort of neighbor_address (e.g. .100 before .99).
     vrfs:
       - vrf: vrf_asdot
         neighbors:
+          - neighbor_address: 198.51.100.100
+            remote_as: "65540"
+          - neighbor_address: 198.51.100.101
+            remote_as: "2.5"
           - neighbor_address: 198.51.100.99
             remote_as: "1.0"
 
@@ -63,6 +85,10 @@ replaced:
     - default-metric 5
     - no neighbor 192.0.2.11
     - no neighbor 192.0.2.14
+    - no neighbor 203.0.113.10
+    - no neighbor 203.0.113.11
+    - no neighbor 203.0.113.12
+    - no vrf vrf_asdot
     - neighbor 192.0.2.13
     - bfd fast-detect
     - bfd minimum-interval 20
@@ -72,6 +98,10 @@ replaced:
     - use session-group test_sg
     - local-as 65539 no-prepend replace-as
     - password inheritance-disable
+    - neighbor 192.0.2.14
+    - remote-as 65539
+    - neighbor 192.0.2.15
+    - remote-as 5467.5
   after:
     as_number: "65536"
     default_metric: 5
@@ -102,6 +132,10 @@ replaced:
             set: true
           multiplier: 6
           minimum_interval: 20
+      - neighbor_address: "192.0.2.14"
+        remote_as: "65539"
+      - neighbor_address: "192.0.2.15"
+        remote_as: "5467.5"
 
 rendered:
   commands:

@@ -23,7 +23,7 @@
             router_id: 192.0.2.10
           neighbors:
             - neighbor: 192.0.2.13
-              remote_as: 65538
+              remote_as: "65538"
               use:
                 neighbor_group: test_ng
                 session_group: test_sg
@@ -39,6 +39,10 @@
                   set: true
                 multiplier: 6
                 minimum_interval: 20
+            - neighbor: 192.0.2.14
+              remote_as: 65539
+            - neighbor: 192.0.2.15
+              remote_as: 5467.5
         state: replaced
       register: result
 
