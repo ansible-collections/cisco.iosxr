@@ -83,25 +83,27 @@ replaced:
     - router bgp 65536
     - no bgp confederation identifier 4
     - default-metric 5
+    - neighbor 192.0.2.13
+    - use neighbor-group test_ng
+    - use session-group test_sg
+    - bfd fast-detect
+    - bfd minimum-interval 20
+    - bfd multiplier 6
+    - local-as 65539 no-prepend replace-as
+    - password inheritance-disable
+    - remote-as 65538
+    - neighbor 192.0.2.14
+    - no bfd fast-detect strict-mode
+    - no bfd minimum-interval 20
+    - no bfd multiplier 6
+    - remote-as 65539
+    - neighbor 192.0.2.15
+    - remote-as 5467.5
     - no neighbor 192.0.2.11
-    - no neighbor 192.0.2.14
     - no neighbor 203.0.113.10
     - no neighbor 203.0.113.11
     - no neighbor 203.0.113.12
     - no vrf vrf_asdot
-    - neighbor 192.0.2.13
-    - bfd fast-detect
-    - bfd minimum-interval 20
-    - bfd multiplier 6
-    - remote-as 65538
-    - use neighbor-group test_ng
-    - use session-group test_sg
-    - local-as 65539 no-prepend replace-as
-    - password inheritance-disable
-    - neighbor 192.0.2.14
-    - remote-as 65539
-    - neighbor 192.0.2.15
-    - remote-as 5467.5
   after:
     as_number: "65536"
     default_metric: 5

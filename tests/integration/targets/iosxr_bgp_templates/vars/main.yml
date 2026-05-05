@@ -105,6 +105,11 @@ overridden:
   commands:
     - router bgp 65536
     - no neighbor-group neighbor-group2
+    - no neighbor-group ng-remote-asdot
+    - no neighbor-group ng-remote-plain
+    - no neighbor-group ng-rs-float
+    - no neighbor-group ng-rs-int
+    - no neighbor-group ng-rs-str
     - neighbor-group neighbor-group1
     - no internal-vpn-client
     - advertisement-interval 12
