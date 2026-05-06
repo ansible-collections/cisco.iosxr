@@ -8,4 +8,4 @@ on:  # yamllint disable-line rule:truthy
 
 jobs:
   close_stale_items:
-    uses: ansible/ansible-content-actions/.github/workflows/close_stale_issues_pr.yaml@main
+    uses: ansible/ansible-content-actions/.github/workflows/close_stale_issues_pr.yml@main
