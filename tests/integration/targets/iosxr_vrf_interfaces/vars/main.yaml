@@ -45,6 +45,7 @@ overridden:
       vrf_name: vrf_C
     - name: GigabitEthernet0/0/0/2
     - name: GigabitEthernet0/0/0/3
+    - name: GigabitEthernet0/0/0/4.1
     - name: GigabitEthernet0/0/0/5
   before:
     - name: Loopback888
@@ -56,6 +57,7 @@ overridden:
     - name: GigabitEthernet0/0/0/2
       vrf_name: vrf_B
     - name: GigabitEthernet0/0/0/3
+    - name: GigabitEthernet0/0/0/4.1
     - name: GigabitEthernet0/0/0/5
 parsed:
   result:

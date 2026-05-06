@@ -84,7 +84,10 @@ class L3_InterfacesArgs(object):
                             "options": {
                                 "monitor": {"type": "str"},
                                 "sampler": {"type": "str"},
-                                "direction": {"type": "str", "choices": ["ingress", "egress"]},
+                                "direction": {
+                                    "type": "str",
+                                    "choices": ["ingress", "egress", "bidirectional"],
+                                },
                             },
                         },
                         "ipv6": {
@@ -92,7 +95,10 @@ class L3_InterfacesArgs(object):
                             "options": {
                                 "monitor": {"type": "str"},
                                 "sampler": {"type": "str"},
-                                "direction": {"type": "str", "choices": ["ingress", "egress"]},
+                                "direction": {
+                                    "type": "str",
+                                    "choices": ["ingress", "egress", "bidirectional"],
+                                },
                             },
                         },
                     },

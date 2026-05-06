@@ -367,6 +367,33 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
+    def test_iosxr_l3_interfaces_flow_merged_bidirectional(self):
+        """Test bidirectional flow expands to ingress and egress commands"""
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        flow={
+                            "ipv4": {
+                                "monitor": "BIDI-MONITOR",
+                                "sampler": "BIDI-SAMPLER",
+                                "direction": "bidirectional",
+                            },
+                        },
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "flow ipv4 monitor BIDI-MONITOR sampler BIDI-SAMPLER ingress",
+            "flow ipv4 monitor BIDI-MONITOR sampler BIDI-SAMPLER egress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
     def test_iosxr_l3_interfaces_flow_merged_partial(self):
         """Test flow parameter in merged state with partial config"""
         self._prepare("iosxr_l3_interface_flow_config.cfg")
@@ -447,6 +474,28 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
+    def test_iosxr_l3_interfaces_flow_deleted_bidirectional(self):
+        """Test bidirectional flow removal in deleted state"""
+        self._prepare("iosxr_l3_interface_flow_bidirectional.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                    ),
+                ],
+                state="deleted",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "no ipv4 address",
+            "no flow ipv4 monitor BIDI-MONITOR sampler BIDI-SAMPLER ingress",
+            "no flow ipv4 monitor BIDI-MONITOR sampler BIDI-SAMPLER egress",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
     def test_iosxr_l3_interfaces_flow_overridden(self):
         """Test flow parameter in overridden state"""
         self._prepare("iosxr_l3_interface_flow_config.cfg")
@@ -513,6 +562,33 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
 
+    def test_iosxr_l3_interfaces_flow_rendered_bidirectional(self):
+        """Test bidirectional flow parameter in rendered state"""
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        flow={
+                            "ipv6": {
+                                "monitor": "BIDI-V6-MONITOR",
+                                "sampler": "BIDI-V6-SAMPLER",
+                                "direction": "bidirectional",
+                            },
+                        },
+                    ),
+                ],
+                state="rendered",
+            ),
+        )
+        commands = [
+            "interface GigabitEthernet0/0/0/0",
+            "flow ipv6 monitor BIDI-V6-MONITOR sampler BIDI-V6-SAMPLER ingress",
+            "flow ipv6 monitor BIDI-V6-MONITOR sampler BIDI-V6-SAMPLER egress",
+        ]
+        result = self.execute_module(changed=False)
+        self.assertEqual(sorted(result["rendered"]), sorted(commands))
+
     def test_iosxr_l3_interfaces_flow_parsed(self):
         """Test flow parameter in parsed state"""
         set_module_args(
@@ -550,6 +626,55 @@ class TestIosxrL3InterfacesModule(TestIosxrModule):
             },
         ]
         self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_l3_interfaces_flow_parsed_bidirectional(self):
+        """Test bidirectional flow parsing from ingress and egress lines"""
+        set_module_args(
+            dict(
+                running_config="interface GigabitEthernet0/0/0/0\n"
+                "ipv4 address 198.51.100.1 255.255.255.0\n"
+                "flow ipv4 monitor PARSE-BIDI sampler PARSE-SAMPLER ingress\n"
+                "flow ipv4 monitor PARSE-BIDI sampler PARSE-SAMPLER egress\n",
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        parsed_list = [
+            {
+                "name": "GigabitEthernet0/0/0/0",
+                "ipv4": [{"address": "198.51.100.1/24"}],
+                "flow": {
+                    "ipv4": {
+                        "monitor": "PARSE-BIDI",
+                        "sampler": "PARSE-SAMPLER",
+                        "direction": "bidirectional",
+                    },
+                },
+            },
+        ]
+        self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_l3_interfaces_flow_bidirectional_idempotent(self):
+        """Test bidirectional flow idempotency in merged state"""
+        self._prepare("iosxr_l3_interface_flow_bidirectional.cfg")
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="GigabitEthernet0/0/0/0",
+                        flow={
+                            "ipv4": {
+                                "monitor": "BIDI-MONITOR",
+                                "sampler": "BIDI-SAMPLER",
+                                "direction": "bidirectional",
+                            },
+                        },
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        self.execute_module(changed=False, commands=[])
 
     def test_iosxr_l3_interfaces_flow_gathered(self):
         """Test flow parameter in gathered state"""

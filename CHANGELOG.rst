@@ -4,6 +4,19 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v12.2.1
+=======
+
+Minor Changes
+-------------
+
+- iosxr_l3_interfaces - Added support for `flow.ipv4.direction` and `flow.ipv6.direction` value `bidirectional`. The module now expands bidirectional flow configuration into both ingress and egress IOS-XR flow monitor commands.
+
+Bugfixes
+--------
+
+- Fixed iosxr_user module to correctly handle MD5 hashed passwords when updating user credentials.
+
 v12.1.1
 =======
 

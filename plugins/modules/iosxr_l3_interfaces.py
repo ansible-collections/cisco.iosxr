@@ -155,7 +155,7 @@ options:
                 description:
                 - Direction of the flow monitoring.
                 type: str
-                choices: ['ingress', 'egress']
+                choices: ['ingress', 'egress', 'bidirectional']
           ipv6:
             description:
             - Configure NetFlow monitoring for IPv6 traffic.
@@ -173,7 +173,7 @@ options:
                 description:
                 - Direction of the flow monitoring.
                 type: str
-                choices: ['ingress', 'egress']
+                choices: ['ingress', 'egress', 'bidirectional']
   running_config:
     description:
     - This option is used only with state I(parsed).
@@ -752,6 +752,125 @@ EXAMPLES = """
 # - name: GigabitEthernet0/0/0/1
 # - name: GigabitEthernet0/0/0/3
 # - name: GigabitEthernet0/0/0/4
+
+# Using bidirectional flow monitoring (merged)
+
+# Before state:
+# -------------
+#
+# viosxr#show running-config interface
+# interface GigabitEthernet0/0/0/0
+#  ipv4 address 198.51.100.1 255.255.255.0
+# !
+
+- name: Configure bidirectional NetFlow on an interface (merged)
+  cisco.iosxr.iosxr_l3_interfaces:
+    config:
+      - name: GigabitEthernet0/0/0/0
+        flow:
+          ipv4:
+            monitor: FlowMap-IPv4
+            sampler: NETFLOW_1
+            direction: bidirectional
+          ipv6:
+            monitor: FlowMap-IPv6
+            sampler: NETFLOW_1
+            direction: bidirectional
+    state: merged
+
+# Task Output
+# -----------
+#
+# before:
+# - name: GigabitEthernet0/0/0/0
+#   ipv4:
+#   - address: 198.51.100.1/24
+# commands:
+# - interface GigabitEthernet0/0/0/0
+# - flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1 ingress
+# - flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1 egress
+# - flow ipv6 monitor FlowMap-IPv6 sampler NETFLOW_1 ingress
+# - flow ipv6 monitor FlowMap-IPv6 sampler NETFLOW_1 egress
+# after:
+# - name: GigabitEthernet0/0/0/0
+#   ipv4:
+#   - address: 198.51.100.1/24
+#   flow:
+#     ipv4:
+#       monitor: FlowMap-IPv4
+#       sampler: NETFLOW_1
+#       direction: bidirectional
+#     ipv6:
+#       monitor: FlowMap-IPv6
+#       sampler: NETFLOW_1
+#       direction: bidirectional
+
+# After state:
+# ------------
+#
+# viosxr#show running-config interface
+# interface GigabitEthernet0/0/0/0
+#  ipv4 address 198.51.100.1 255.255.255.0
+#  flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1 ingress
+#  flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1 egress
+#  flow ipv6 monitor FlowMap-IPv6 sampler NETFLOW_1 ingress
+#  flow ipv6 monitor FlowMap-IPv6 sampler NETFLOW_1 egress
+# !
+
+# Using bidirectional flow monitoring (deleted)
+
+# Before state:
+# -------------
+#
+# viosxr#show running-config interface
+# interface GigabitEthernet0/0/0/0
+#  ipv4 address 198.51.100.1 255.255.255.0
+#  flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1 ingress
+#  flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1 egress
+#  flow ipv6 monitor FlowMap-IPv6 sampler NETFLOW_1 ingress
+#  flow ipv6 monitor FlowMap-IPv6 sampler NETFLOW_1 egress
+# !
+
+- name: >-
+    Remove L3 attributes for an interface including bidirectional flow
+    (does not remove the interface itself)
+  cisco.iosxr.iosxr_l3_interfaces:
+    config:
+      - name: GigabitEthernet0/0/0/0
+    state: deleted
+
+# Task Output
+# -----------
+#
+# before:
+# - name: GigabitEthernet0/0/0/0
+#   ipv4:
+#   - address: 198.51.100.1/24
+#   flow:
+#     ipv4:
+#       monitor: FlowMap-IPv4
+#       sampler: NETFLOW_1
+#       direction: bidirectional
+#     ipv6:
+#       monitor: FlowMap-IPv6
+#       sampler: NETFLOW_1
+#       direction: bidirectional
+# commands:
+# - interface GigabitEthernet0/0/0/0
+# - no ipv4 address
+# - no flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1 ingress
+# - no flow ipv4 monitor FlowMap-IPv4 sampler NETFLOW_1 egress
+# - no flow ipv6 monitor FlowMap-IPv6 sampler NETFLOW_1 ingress
+# - no flow ipv6 monitor FlowMap-IPv6 sampler NETFLOW_1 egress
+# after:
+# - name: GigabitEthernet0/0/0/0
+
+# After state:
+# ------------
+#
+# viosxr#show running-config interface
+# interface GigabitEthernet0/0/0/0
+# !
 """
 
 RETURN = """

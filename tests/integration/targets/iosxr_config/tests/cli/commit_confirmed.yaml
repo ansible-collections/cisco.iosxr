@@ -1,35 +1,70 @@
 ---
 - ansible.builtin.debug: msg="START cli/commit_confirmed.yaml on connection={{ ansible_connection }}"
 
-- name: Test commit confirmed functionality
-  vars:
-    ansible_iosxr_commit_confirmed: true
-    ansible_iosxr_commit_confirmed_timeout: 60
-  cisco.iosxr.iosxr_config:
-    lines:
-      - hostname iosxr_commit_confirmed
+- block:
+    - name: Test commit confirmed functionality
+      vars:
+        ansible_iosxr_commit_confirmed: true
+        ansible_iosxr_commit_confirmed_timeout: 60
+      cisco.iosxr.iosxr_config:
+        lines:
+          - hostname iosxr_commit_confirmed
 
-- name: "Get hostname"
-  vars:
-    ansible_iosxr_commit_confirmed: true
-  register: get_hostname1
-  iosxr_command:
-    commands:
-      - "show running-config hostname"
-  ignore_errors: true
+    # IMPORTANT: ansible_iosxr_commit_confirmed must remain true on every task
+    # between the trial commit above and the rollback wait below.  When the
+    # cliconf option is false (the default), network_cli's
+    # set_cli_prompt_context() sends "abort" to exit config mode between
+    # tasks — which cancels the active trial and reverts the change before
+    # the show command can observe it.
+    - name: "Get hostname (trial should be active)"
+      register: get_hostname1
+      vars:
+        ansible_iosxr_commit_confirmed: true
+      iosxr_command:
+        commands:
+          - "show running-config hostname"
+      ignore_errors: true
 
-- name: Sleep for 90 secs as rollback to happen.
-  ansible.builtin.wait_for:
-    timeout: 90
+    - name: Sleep for 90 secs for trial to roll back (trial timeout is 60 s)
+      ansible.builtin.wait_for:
+        timeout: 90
 
-- name: "Get hostname"
-  register: get_hostname2
-  iosxr_command:
-    commands:
-      - "show running-config hostname"
-  ignore_errors: true
+    - name: "Get hostname (trial should have rolled back)"
+      register: get_hostname2
+      iosxr_command:
+        commands:
+          - "show running-config hostname"
+      ignore_errors: true
 
-- ansible.builtin.assert:
-    that:
-      - "'iosxr_commit_confirmed' in get_hostname1.stdout[0]"
-      - "'iosxr_commit_confirmed' not in get_hostname2.stdout[0]"
+    - ansible.builtin.assert:
+        that:
+          - "'iosxr_commit_confirmed' in get_hostname1.stdout[0]"
+          - "'iosxr_commit_confirmed' not in get_hostname2.stdout[0]"
+
+  always:
+    # iosxr_config with commit_confirmed skips abort(), leaving the persistent
+    # session in config mode.  Try "commit" from the same session first — if the
+    # trial is still active (e.g. test failed before the 90 s wait), this confirms
+    # it immediately instead of leaving a 60 s trial for the next test.
+    # Must be combined because network_cli auto-exits config mode between tasks.
+    - name: Confirm trial and exit config mode from current session
+      ansible.netcommon.cli_command:
+        command: "commit\nend"
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
+        ansible_iosxr_commit_confirmed: true
+      failed_when: false
+
+    # Safety net: if the trial could not be confirmed from the current session
+    # (e.g. connection was reset or dropped), detect and wait it out.
+    - name: Clear any remaining trial (safety net)
+      ansible.builtin.include_tasks: "{{ role_path }}/../prepare_iosxr_tests/tasks/clear_pending_trial_cli.yaml"
+
+    - name: Restore hostname
+      vars:
+        ansible_iosxr_commit_confirmed: false
+      cisco.iosxr.iosxr_config:
+        lines:
+          - hostname {{ inventory_hostname_short }}
+        match: none
+      ignore_errors: true

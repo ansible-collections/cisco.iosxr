@@ -1,0 +1,77 @@
+---
+# Single probe-wait-verify iteration.  Called from clear_pending_trial_cli.yaml.
+# Sets _trial_cleared=true when the device is clean (no active trial).
+#
+# IMPORTANT: The probe sends "configure terminal", "commit" and "end" as a
+# SINGLE cli_command with embedded newlines.  This is required because
+# network_cli's _update_cli_prompt_context() auto-exits config mode between
+# tasks (it sees the config prompt and sends "exit" before the next command).
+# Combining them into one send avoids this race.
+
+# ── Probe: enter config mode, commit, exit — all in one shot ────────────
+- name: "Probe for active trial (config+commit+end) - attempt {{ _trial_attempt }}"
+  ansible.netcommon.cli_command:
+    command: "configure terminal\ncommit\nend"
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+  register: _trial_probe
+  failed_when: false
+  when: not (_trial_cleared | bool)
+
+# Concatenate stdout and msg so the check works regardless of where the
+# device error landed (terminal_stderr_re in terminal/iosxr.py matches
+# "Failed to commit" and raises AnsibleConnectionFailure, which puts the
+# error text in `msg` instead of `stdout`).
+- name: "Evaluate probe result - attempt {{ _trial_attempt }}"
+  ansible.builtin.set_fact:
+    _trial_active: >-
+      {{ 'Cannot commit' in
+         ((_trial_probe.stdout | default('')) ~ ' ' ~ (_trial_probe.msg | default(''))) }}
+  when: not (_trial_cleared | bool)
+
+- name: "Mark cleared (no trial detected) - attempt {{ _trial_attempt }}"
+  ansible.builtin.set_fact:
+    _trial_cleared: true
+  when:
+    - not (_trial_cleared | bool)
+    - not (_trial_active | bool)
+
+# ── Wait and verify when trial IS active ─────────────────────────────────
+- name: "Wait and verify trial expiration - attempt {{ _trial_attempt }}"
+  when:
+    - not (_trial_cleared | bool)
+    - _trial_active | bool
+  block:
+    - name: "Active trial detected — waiting 70 s - attempt {{ _trial_attempt }}"
+      ansible.builtin.wait_for:
+        timeout: 70
+
+    - name: "Reset connection after wait - attempt {{ _trial_attempt }}"
+      ansible.builtin.meta: reset_connection
+
+    - name: "Escape config context after reset - attempt {{ _trial_attempt }}"
+      ansible.netcommon.cli_command:
+        command: "{{ item }}"
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
+      failed_when: false
+      loop: [abort, end]
+
+    - name: "Verify trial expired (config+commit+end) - attempt {{ _trial_attempt }}"
+      ansible.netcommon.cli_command:
+        command: "configure terminal\ncommit\nend"
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
+      register: _trial_verify
+      failed_when: false
+
+    - name: "Evaluate verification result - attempt {{ _trial_attempt }}"
+      ansible.builtin.set_fact:
+        _verify_still_active: >-
+          {{ 'Cannot commit' in
+             ((_trial_verify.stdout | default('')) ~ ' ' ~ (_trial_verify.msg | default(''))) }}
+
+    - name: "Mark cleared after verification - attempt {{ _trial_attempt }}"
+      ansible.builtin.set_fact:
+        _trial_cleared: true
+      when: not (_verify_still_active | bool)
