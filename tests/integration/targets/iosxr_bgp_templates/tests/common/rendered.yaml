@@ -53,6 +53,16 @@
           ttl_security:
             set: true
           update_source: Loopback919
+        - name: ng-remote-asdot
+          remote_as: "5467.8"
+        - name: ng-remote-plain
+          remote_as: 65001
+        - name: ng-rs-float
+          remote_as: 88.5
+        - name: ng-rs-int
+          remote_as: 424242
+        - name: ng-rs-str
+          remote_as: "123.4"
     state: rendered
   register: result
 

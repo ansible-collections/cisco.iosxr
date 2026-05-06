@@ -1137,6 +1137,66 @@ class TestIosxrBgptemplatesModule(TestIosxrModule):
         }
         self.assertEqual(parsed_list, result["parsed"])
 
+    def test_iosxr_bgp_tmpl_parsed_remote_as_asdot(self):
+        """Neighbor-group remote-as ASDOT must parse as string (AAP-73646)."""
+        self.maxDiff = None
+        set_module_args(
+            dict(
+                running_config=(
+                    "router bgp 65536\n neighbor-group ng-asdot\n  remote-as 5467.8\n !\n!\n"
+                ),
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        expected = {
+            "as_number": "65536",
+            "neighbor": [
+                {"name": "ng-asdot", "remote_as": "5467.8"},
+            ],
+        }
+        self.assertEqual(expected, result["parsed"])
+
+    def test_iosxr_bgp_tmpl_parsed_remote_as_asplain(self):
+        """Neighbor-group ASPLAIN remote-as parses as string."""
+        self.maxDiff = None
+        set_module_args(
+            dict(
+                running_config=(
+                    "router bgp 65536\n neighbor-group ng-plain\n  remote-as 65001\n !\n!\n"
+                ),
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        expected = {
+            "as_number": "65536",
+            "neighbor": [{"name": "ng-plain", "remote_as": "65001"}],
+        }
+        self.assertEqual(expected, result["parsed"])
+
+    def test_iosxr_bgp_tmpl_merged_neighbor_group_remote_as_types(self):
+        """neighbor-group remote_as accepts int / str / float-like values in module params."""
+        self.maxDiff = None
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="65536",
+                    neighbor=[
+                        dict(name="ng-int", remote_as=65538),
+                        dict(name="ng-str", remote_as="5467.8"),
+                        dict(name="ng-float", remote_as=4394.5),
+                    ],
+                ),
+                state="merged",
+            ),
+        )
+        result = self.execute_module(changed=True)
+        joined = "\n".join(result["commands"])
+        self.assertIn("remote-as 65538", joined)
+        self.assertIn("remote-as 5467.8", joined)
+        self.assertIn("remote-as 4394.5", joined)
+
     def test_iosxr_bgp_tmpl_gathered(self):
         self.maxDiff = None
         run_cfg = dedent(

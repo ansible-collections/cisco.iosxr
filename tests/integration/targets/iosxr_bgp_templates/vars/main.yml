@@ -28,6 +28,16 @@ merged:
     - ttl-security
     - graceful-maintenance
     - graceful-maintenance as-prepends 0
+    - neighbor-group ng-remote-asdot
+    - remote-as 5467.8
+    - neighbor-group ng-remote-plain
+    - remote-as 65001
+    - neighbor-group ng-rs-float
+    - remote-as 88.5
+    - neighbor-group ng-rs-int
+    - remote-as 424242
+    - neighbor-group ng-rs-str
+    - remote-as 123.4
 
   after:
     as_number: "65536"
@@ -76,6 +86,16 @@ merged:
         ttl_security:
           set: true
         update_source: Loopback919
+      - name: ng-remote-asdot
+        remote_as: "5467.8"
+      - name: ng-remote-plain
+        remote_as: "65001"
+      - name: ng-rs-float
+        remote_as: "88.5"
+      - name: ng-rs-int
+        remote_as: "424242"
+      - name: ng-rs-str
+        remote_as: "123.4"
 
 deleted:
   after:
@@ -85,6 +105,11 @@ overridden:
   commands:
     - router bgp 65536
     - no neighbor-group neighbor-group2
+    - no neighbor-group ng-remote-asdot
+    - no neighbor-group ng-remote-plain
+    - no neighbor-group ng-rs-float
+    - no neighbor-group ng-rs-int
+    - no neighbor-group ng-rs-str
     - neighbor-group neighbor-group1
     - no internal-vpn-client
     - advertisement-interval 12
@@ -168,3 +193,13 @@ parsed:
       ttl_security:
         set: true
       update_source: Loopback919
+    - name: ng-remote-asdot
+      remote_as: "5467.8"
+    - name: ng-remote-plain
+      remote_as: "65001"
+    - name: ng-rs-float
+      remote_as: "88.5"
+    - name: ng-rs-int
+      remote_as: "424242"
+    - name: ng-rs-str
+      remote_as: "123.4"

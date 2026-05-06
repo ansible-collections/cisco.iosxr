@@ -665,7 +665,7 @@ options:
                 type: int
               remote_as:
                 description: Neighbor Autonomous System.
-                type: int
+                type: str
               remote_as_list:
                 description: Remote as-list configuration
                 type: str

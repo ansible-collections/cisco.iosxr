@@ -636,7 +636,7 @@ options:
               type: int
             remote_as:
               description: Neighbor Autonomous System.
-              type: int
+              type: str
             send_buffer_size:
               description: Set socket and BGP send buffer size.Example  <4096-131072>.
               type: int
