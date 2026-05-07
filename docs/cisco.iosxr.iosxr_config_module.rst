@@ -185,6 +185,24 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>content</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Configuration content to apply to the device. This should be the rendered configuration text, not a file path.</div>
+                        <div>This is the recommended way to provide templated configurations. Use <code>ansible.builtin.template</code> lookup to render your Jinja2 template and pass the output to this parameter.</div>
+                        <div>This argument is mutually exclusive with <em>src</em>, <em>lines</em>, and <em>parents</em>.</div>
+                        <div>Example: <code>content: &quot;{{ lookup(&#x27;ansible.builtin.template&#x27;, &#x27;config.j2&#x27;</code> }}&quot;)</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>disable_default_comment</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -341,7 +359,8 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Specifies the source path to the file that contains the configuration or configuration template to load. The path to the source file can either be the full path on the Ansible control host or a relative path from the playbook or role root directory.  This argument is mutually exclusive with <em>lines</em>, <em>parents</em>. The configuration lines in the source file should be similar to how it will appear if present in the running-configuration of the device to ensure idempotency and correct diff.</div>
+                        <div>Specifies the source path to the file that contains the configuration or configuration template to load. The path to the source file can either be the full path on the Ansible control host or a relative path from the playbook or role root directory.  This argument is mutually exclusive with <em>lines</em>, <em>parents</em>, and <em>content</em>. The configuration lines in the source file should be similar to how it will appear if present in the running-configuration of the device to ensure idempotency and correct diff.</div>
+                        <div>NOTE: The <em>src</em> parameter will no longer process Jinja2 templates starting in January 2028. To use templated configurations, render the template using <code>ansible.builtin.template</code> lookup and pass the result to the <em>content</em> parameter instead.</div>
                 </td>
             </tr>
     </table>
@@ -384,6 +403,32 @@ Examples
         src: config.cfg
         replace: config
         backup: 'yes'
+
+    - name: Render a Jinja2 template onto an IOS-XR device (DEPRECATED - use content parameter)
+      cisco.iosxr.iosxr_config:
+        backup: true
+        src: iosxr_template.j2
+
+    - name: Apply templated configuration using content parameter (RECOMMENDED)
+      cisco.iosxr.iosxr_config:
+        content: "{{ lookup('ansible.builtin.template', 'iosxr_template.j2') }}"
+        backup: true
+
+    - name: Apply templated configuration with backup options (RECOMMENDED)
+      cisco.iosxr.iosxr_config:
+        content: "{{ lookup('ansible.builtin.template', 'iosxr_template.j2') }}"
+        backup: true
+        backup_options:
+          filename: backup.cfg
+          dir_path: /home/user
+
+    - name: Load configuration from pre-rendered template
+      cisco.iosxr.iosxr_config:
+        content: |
+          interface GigabitEthernet0/0/0/1
+           description Uplink to Core
+           ipv4 address 10.1.1.1 255.255.255.0
+           no shutdown
 
     - name: 'for idempotency, use full-form commands'
       cisco.iosxr.iosxr_config:
