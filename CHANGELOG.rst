@@ -4,6 +4,20 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v12.3.0
+=======
+
+Minor Changes
+-------------
+
+- Bump minimum ``ansible.netcommon`` dependency from ``>=8.1.0`` to ``>=8.5.1`` in ``galaxy.yml``.
+- Updated ansible.netcommon dependency minimum required version from >=8.5.1 to >=8.5.2.
+
+Bugfixes
+--------
+
+- iosxr_bgp_global, iosxr_bgp_templates, iosxr_facts - treat BGP neighbor ``remote_as`` as a string so ASDOT notation (e.g. ``5467.8`` per RFC 5396) is not coerced to float and rejected during facts or resource validation (https://github.com/ansible-collections/cisco.iosxr/issues). This is not a deprecation of ``remote_as`` — existing playbooks passing integer ASPLAIN values (e.g. ``remote_as: 65001``) continue to work because Ansible automatically coerces integers to strings. However, the module now returns ``remote_as`` as a string in parsed/gathered facts, so any playbook assertions comparing ``remote_as`` against an integer literal (e.g. ``result.after.remote_as == 65001``) should be updated to compare against a string (``"65001"``) instead.
+
 v12.2.1
 =======
 
