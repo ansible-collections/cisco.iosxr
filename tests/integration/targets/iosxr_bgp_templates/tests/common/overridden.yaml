@@ -27,7 +27,7 @@
 
     - ansible.builtin.assert:
         that:
-          - result.commands|length == 9
+          - result.commands|length == 14
           - result.changed == true
           - "'no router bgp 65536' not in result.commands"
           - overridden['commands'] == result['commands']

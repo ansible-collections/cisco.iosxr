@@ -567,7 +567,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             },
                         },
                         "receive_buffer_size": {"type": "int"},
-                        "remote_as": {"type": "int"},
+                        "remote_as": {"type": "str"},
                         "send_buffer_size": {"type": "int"},
                         "session_open_mode": {
                             "type": "str",
@@ -1299,7 +1299,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     },
                                 },
                                 "receive_buffer_size": {"type": "int"},
-                                "remote_as": {"type": "int"},
+                                "remote_as": {"type": "str"},
                                 "send_buffer_size": {"type": "int"},
                                 "session_open_mode": {
                                     "type": "str",

@@ -28,6 +28,16 @@
       - "  ttl-security"
       - "  graceful-maintenance"
       - "  graceful-maintenance as-prepends 0"
+      - "neighbor-group ng-remote-asdot"
+      - "remote-as 5467.8"
+      - "neighbor-group ng-remote-plain"
+      - "remote-as 65001"
+      - "neighbor-group ng-rs-float"
+      - "remote-as 88.5"
+      - "neighbor-group ng-rs-int"
+      - "remote-as 424242"
+      - "neighbor-group ng-rs-str"
+      - "remote-as 123.4"
     parents: "router bgp 65536"
 
   vars:

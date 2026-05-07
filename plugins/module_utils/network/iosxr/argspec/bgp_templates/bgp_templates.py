@@ -520,7 +520,7 @@ class Bgp_templatesArgs(object):  # pylint: disable=R0903
                             ],
                         },
                         "receive_buffer_size": {"type": "int"},
-                        "remote_as": {"type": "int"},
+                        "remote_as": {"type": "str"},
                         "remote_as_list": {"type": "str"},
                         "send_buffer_size": {"type": "int"},
                         "session_open_mode": {
