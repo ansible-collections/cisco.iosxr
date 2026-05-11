@@ -39,7 +39,6 @@ class ActionModule(ActionNetworkModule):
         self._config_module = True if module_name in ["iosxr_config", "config"] else False
         force_cli = module_name in ("iosxr_netconf", "iosxr_config", "iosxr_command", "iosxr_facts")
         persistent_connection = self._play_context.connection.split(".")[-1]
-        warnings = []
 
         if (not force_cli and persistent_connection not in ("netconf", "network_cli")) or (
             force_cli and persistent_connection != "network_cli"
@@ -50,10 +49,4 @@ class ActionModule(ActionNetworkModule):
                 % self._play_context.connection,
             }
 
-        result = super(ActionModule, self).run(task_vars=task_vars)
-        if warnings:
-            if "warnings" in result:
-                result["warnings"].extend(warnings)
-            else:
-                result["warnings"] = warnings
-        return result
+        return super(ActionModule, self).run(task_vars=task_vars)
