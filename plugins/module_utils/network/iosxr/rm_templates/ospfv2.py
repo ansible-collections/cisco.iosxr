@@ -104,17 +104,25 @@ def _tmplt_ospf_max_metric(config_data):
         command = "max-metric"
         if "router_lsa" in config_data["max_metric"]:
             command += " router-lsa"
-        if "external_lsa" in config_data["max_metric"]:
-            command += " external-lsa {external_lsa}".format(**config_data["max_metric"])
-        if "include_stub" in config_data["max_metric"]:
-            command += " include-stub"
-        if "on_startup" in config_data["max_metric"]:
-            if "time" in config_data["max_metric"]["on_startup"]:
-                command += " on-startup {time}".format(**config_data["max_metric"]["on_startup"])
-            elif "wait_for_bgp" in config_data["max_metric"]["on_startup"]:
-                command += " on-startup wait-for-bgp"
-        if "summary_lsa" in config_data["max_metric"]:
-            command += " summary-lsa {summary_lsa}".format(**config_data["max_metric"])
+            router_lsa = config_data["max_metric"]["router_lsa"]
+            if "external_lsa" in router_lsa:
+                command += " external-lsa"
+                if router_lsa["external_lsa"].get("max_metric_value"):
+                    command += " {0}".format(router_lsa["external_lsa"]["max_metric_value"])
+            if router_lsa.get("include_stub"):
+                command += " include-stub"
+            if "on_startup" in router_lsa:
+                on_startup = router_lsa["on_startup"]
+                if on_startup.get("wait_period"):
+                    command += " on-startup {0}".format(on_startup["wait_period"])
+                elif on_startup.get("wait_for_bgp_asn"):
+                    command += " on-startup wait-for-bgp {0}".format(on_startup["wait_for_bgp_asn"])
+                else:
+                    command += " on-startup"
+            if "summary_lsa" in router_lsa:
+                command += " summary-lsa"
+                if router_lsa["summary_lsa"].get("max_metric_value"):
+                    command += " {0}".format(router_lsa["summary_lsa"]["max_metric_value"])
         return command
 
 

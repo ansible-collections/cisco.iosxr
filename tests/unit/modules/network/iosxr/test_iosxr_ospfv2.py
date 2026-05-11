@@ -270,3 +270,89 @@ class TestIosxrOspfV2Module(TestIosxrModule):
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(sorted(result["rendered"]), sorted(commands))
+
+    def test_iosxr_ospfv2_max_metric_router_lsa_subparams(self):
+        """AAP-73605: max_metric sub-params must be read from router_lsa level, not max_metric level."""
+        set_module_args(
+            dict(
+                config=dict(
+                    processes=[
+                        dict(
+                            process_id="21928",
+                            max_metric=dict(
+                                router_lsa=dict(
+                                    set=True,
+                                    include_stub=True,
+                                    external_lsa=dict(set=True),
+                                    summary_lsa=dict(set=True),
+                                    on_startup=dict(wait_for_bgp_asn=65535),
+                                ),
+                            ),
+                        ),
+                    ],
+                ),
+                state="rendered",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        rendered = result["rendered"]
+        # All sub-params must appear — not just bare "max-metric router-lsa"
+        self.assertEqual(len(rendered), 2)
+        max_metric_cmd = next(c for c in rendered if "max-metric" in c)
+        self.assertIn("router-lsa", max_metric_cmd)
+        self.assertIn("external-lsa", max_metric_cmd)
+        self.assertIn("include-stub", max_metric_cmd)
+        self.assertIn("on-startup wait-for-bgp 65535", max_metric_cmd)
+        self.assertIn("summary-lsa", max_metric_cmd)
+
+    def test_iosxr_ospfv2_max_metric_on_startup_wait_period(self):
+        """AAP-73605: on_startup with wait_period renders correctly."""
+        set_module_args(
+            dict(
+                config=dict(
+                    processes=[
+                        dict(
+                            process_id="100",
+                            max_metric=dict(
+                                router_lsa=dict(
+                                    set=True,
+                                    on_startup=dict(wait_period=300),
+                                ),
+                            ),
+                        ),
+                    ],
+                ),
+                state="rendered",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        rendered = result["rendered"]
+        max_metric_cmd = next(c for c in rendered if "max-metric" in c)
+        self.assertIn("on-startup 300", max_metric_cmd)
+
+    def test_iosxr_ospfv2_max_metric_with_metric_values(self):
+        """AAP-73605: external_lsa and summary_lsa max_metric_value renders correctly."""
+        set_module_args(
+            dict(
+                config=dict(
+                    processes=[
+                        dict(
+                            process_id="200",
+                            max_metric=dict(
+                                router_lsa=dict(
+                                    set=True,
+                                    external_lsa=dict(max_metric_value=16711680),
+                                    summary_lsa=dict(max_metric_value=16711680),
+                                ),
+                            ),
+                        ),
+                    ],
+                ),
+                state="rendered",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        rendered = result["rendered"]
+        max_metric_cmd = next(c for c in rendered if "max-metric" in c)
+        self.assertIn("external-lsa 16711680", max_metric_cmd)
+        self.assertIn("summary-lsa 16711680", max_metric_cmd)
