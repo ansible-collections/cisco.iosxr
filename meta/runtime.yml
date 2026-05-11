@@ -1,7 +1,7 @@
 ---
 requires_ansible: ">=2.16.0"
 plugin_routing:
-  actions:
+  action:
     acl_interfaces:
       redirect: cisco.iosxr.iosxr_acl_interfaces
     acls:
@@ -66,8 +66,6 @@ plugin_routing:
       redirect: cisco.iosxr.iosxr_vrf_address_family
     vrf_global:
       redirect: cisco.iosxr.iosxr_vrf_global
-    vrf_interfaces:
-      redirect: cisco.iosxr.iosxr_vrf_interfaces
   modules:
     acl_interfaces:
       redirect: cisco.iosxr.iosxr_acl_interfaces
