@@ -7,6 +7,13 @@ Cisco Iosxr Collection Release Notes
 v12.3.1
 =======
 
+Release Summary
+---------------
+
+- This bugfix release fixes action plugin naming and sanity issues that were blocking Automation Hub certification.
+- All 32 resource module action plugins are renamed to use the ``iosxr_`` prefix, orphaned legacy action plugins are removed, and ``plugin_routing.action`` redirects are added for backward compatibility.
+- The previous 12.3.0 release added a new ``content`` parameter for ``iosxr_config``, deprecated the ``src`` parameter's automatic Jinja2 template processing, fixed BGP ``remote_as`` ASDOT notation handling, and bumped the minimum ``ansible.netcommon`` dependency to ``>=8.5.2``.
+
 Bugfixes
 --------
 
