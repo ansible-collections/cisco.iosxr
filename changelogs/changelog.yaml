@@ -356,18 +356,6 @@ releases:
     release_date: "2026-05-08"
   12.3.1:
     changes:
-<<<<<<< HEAD
-      release_summary:
-        - This bugfix release fixes action plugin naming and sanity issues that were
-          blocking Automation Hub certification.
-        - All 32 resource module action plugins are renamed to use the ``iosxr_`` prefix,
-          orphaned legacy action plugins are removed, and ``plugin_routing.action`` redirects
-          are added for backward compatibility.
-        - The previous 12.3.0 release added a new ``content`` parameter for ``iosxr_config``,
-          deprecated the ``src`` parameter’s automatic Jinja2 template processing, fixed
-          BGP ``remote_as`` ASDOT notation handling, and bumped the minimum ``ansible.netcommon``
-          dependency to ``>=8.5.2``.
-=======
       release_summary: This bugfix release fixes action plugin naming and sanity
         issues that were blocking Automation Hub certification. All 32 resource module
         action plugins are renamed to use the ``iosxr_`` prefix, orphaned legacy action
@@ -376,7 +364,6 @@ releases:
         for ``iosxr_config``, deprecated the ``src`` parameter’s automatic Jinja2 template
         processing, fixed BGP ``remote_as`` ASDOT notation handling, and bumped the
         minimum ``ansible.netcommon`` dependency to ``>=8.5.2``.
->>>>>>> 908dde2 (updated release_summary from list to string)
       bugfixes:
         - action plugins - Remove orphaned legacy action plugins ``bgp.py``, ``interface.py``,
           and ``logging.py`` that had no corresponding module.
