@@ -4,6 +4,18 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v12.3.1
+=======
+
+Bugfixes
+--------
+
+- action plugins - Remove orphaned legacy action plugins ``bgp.py``, ``interface.py``, and ``logging.py`` that had no corresponding module.
+- action plugins - Rename all 32 resource module action plugins to use the ``iosxr_`` prefix to match their module names and fix ``action-plugin-docs`` sanity failures blocking Automation Hub certification.
+- meta/runtime.yml - Add ``plugin_routing.action`` redirects for all short-name aliases so alias-based invocations continue to resolve the renamed action plugins.
+- plugins/action/iosxr.py - Remove unused ``warnings`` list and unreachable dead code block that never executed due to ``warnings`` always being empty.
+- sanity - Remove 35 stale ``action-plugin-docs`` ignore entries and delete ``ignore-2.15.txt`` as the collection requires ``ansible>=2.16.0``.
+
 v12.3.0
 =======
 
