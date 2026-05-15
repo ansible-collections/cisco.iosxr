@@ -1,6 +1,5 @@
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 import re
 
@@ -2497,7 +2496,7 @@ class Ospfv2Template(NetworkTemplate):
                 ^router
                 \sospf\s(?P<pid>\S+)
                 \smax-metric
-                \s*(?P<router_lsa>)
+                \s*(?P<router_lsa>router-lsa)
                 (\s*external-lsa(?P<external_lsa>))?
                 (\s(?P<max_metric_value>\d+))?
                 \s*(?P<include_stub>include-stub)*
@@ -2514,10 +2513,10 @@ class Ospfv2Template(NetworkTemplate):
             "remval": "max-metric router-lsa",
             "result": {
                 "processes": {
-                    '{{ "pid"  }}': {
+                    '{{ pid  }}': {
                         "max_metric": {
                             "router_lsa": {
-                                "set": "{{ True if router_lsa is defined and external_lsa is undefined else None }}",
+                                "set": "{{ True if router_lsa is defined }}",
                                 "external_lsa": {
                                     "set": "{{ True if external_lsa is defined and max_metric_value is undefined else None }}",
                                     "max_metric_value": "{{ max_metric_value }}",
