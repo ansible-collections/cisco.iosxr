@@ -103,17 +103,35 @@ def _tmplt_ospf_max_metric(config_data):
         command = "max-metric"
         if "router_lsa" in config_data["max_metric"]:
             command += " router-lsa"
-        if "external_lsa" in config_data["max_metric"]:
-            command += " external-lsa {external_lsa}".format(**config_data["max_metric"])
-        if "include_stub" in config_data["max_metric"]:
-            command += " include-stub"
-        if "on_startup" in config_data["max_metric"]:
-            if "time" in config_data["max_metric"]["on_startup"]:
-                command += " on-startup {time}".format(**config_data["max_metric"]["on_startup"])
-            elif "wait_for_bgp" in config_data["max_metric"]["on_startup"]:
-                command += " on-startup wait-for-bgp"
-        if "summary_lsa" in config_data["max_metric"]:
-            command += " summary-lsa {summary_lsa}".format(**config_data["max_metric"])
+            if "on_startup" in config_data["max_metric"]["router_lsa"]:
+                if "wait_period" in config_data["max_metric"]["router_lsa"]["on_startup"]:
+                    command += " on-startup {wait_period}".format(
+                        **config_data["max_metric"]["router_lsa"]["on_startup"]
+                    )
+                elif "wait_for_bgp" in config_data["max_metric"]["router_lsa"]["on_startup"]:
+                    command += " on-startup wait-for-bgp"
+            if "external_lsa" in config_data["max_metric"]["router_lsa"]:
+                if (
+                    "max_metric_value" in config_data["max_metric"]["router_lsa"]["external_lsa"]
+                    and config_data["max_metric"]["router_lsa"]["external_lsa"]["max_metric_value"]
+                ):
+                    command += " external-lsa {max_metric_value}".format(
+                        **config_data["max_metric"]["router_lsa"]["external_lsa"]
+                    )
+                else:
+                    command += " external-lsa"
+            if "include_stub" in config_data["max_metric"]["router_lsa"]:
+                command += " include-stub"
+            if "summary_lsa" in config_data["max_metric"]["router_lsa"]:
+                if (
+                    "max_metric_value" in config_data["max_metric"]["router_lsa"]["summary_lsa"]
+                    and config_data["max_metric"]["router_lsa"]["summary_lsa"]["max_metric_value"]
+                ):
+                    command += " summary-lsa {max_metric_value}".format(
+                        **config_data["max_metric"]["router_lsa"]["summary_lsa"]
+                    )
+                else:
+                    command += " summary-lsa"
         return command
 
 
@@ -2497,15 +2515,12 @@ class Ospfv2Template(NetworkTemplate):
                 \sospf\s(?P<pid>\S+)
                 \smax-metric
                 \s*(?P<router_lsa>router-lsa)
-                (\s*external-lsa(?P<external_lsa>))?
-                (\s(?P<max_metric_value>\d+))?
-                \s*(?P<include_stub>include-stub)*
-                \s*(?P<on_startup>on-startup)*
-                \s*(?P<wait_period>\d+)*
-                \s*(wait-for\sbgp)*
-                \s*(?P<bgp_asn>\d+)*
-                \s*(?P<summary_lsa>summary-lsa)*
-                \s*(?P<sum_lsa_max_metric_value>\d+)*
+                \s+on-startup(?:\s+(?P<wait_for_bgp>wait-for-bgp)|\s+(?P<wait_period>\d+))?
+                (?:
+                |\s+(?P<external_lsa>external-lsa)(?:\s+(?P<max_metric_value>\d+))?
+                |\s+(?P<include_stub>include-stub)
+                |\s+(?P<summary_lsa>summary-lsa)(?:\s+(?P<sum_lsa_max_metric_value>\d+))?
+                )*
                 $""",
                 re.VERBOSE,
             ),
@@ -2523,9 +2538,8 @@ class Ospfv2Template(NetworkTemplate):
                                 },
                                 "include_stub": "{{ not not include_stub }}",
                                 "on_startup": {
-                                    "set": "{{ True if on_startup is defined and (wait_period and bgp_asn) is undefined else None }}",
                                     "wait_period": "{{ wait_period }}",
-                                    "wait_for_bgp_asn": "{{ bgp_asn }}",
+                                    "wait_for_bgp": "{{ not not wait_for_bgp }}",
                                 },
                                 "summary_lsa": {
                                     "set": "{{ True if summary_lsa is defined and sum_lsa_max_metric_value is undefined else None }}",

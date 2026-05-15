@@ -512,9 +512,8 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         "include_stub": {"type": "bool"},
                                         "on_startup": {
                                             "options": {
-                                                "set": {"type": "bool"},
-                                                "wait_for_bgp_asn": {
-                                                    "type": "int",
+                                                "wait_for_bgp": {
+                                                    "type": "bool",
                                                 },
                                                 "wait_period": {"type": "int"},
                                             },

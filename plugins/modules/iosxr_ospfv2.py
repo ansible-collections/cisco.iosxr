@@ -636,18 +636,14 @@ options:
                     - Effective only at startup
                     type: dict
                     suboptions:
-                      set:
-                        description:
-                        - Set on-startup attribute
-                        type: bool
                       wait_period:
                         description:
                         - Wait period in seconds after startup
                         type: int
-                      wait_for_bgp_asn:
+                      wait_for_bgp:
                         description:
-                        - ASN of BGP to wait for
-                        type: int
+                        - Let BGP decide when to originate router-LSA
+                        type: bool
                   summary_lsa:
                     description:
                     - Summary LSAs configuration
@@ -2277,6 +2273,10 @@ def main():
 
     :returns: the result form module invocation
     """
+    # import debugpy
+
+    # debugpy.listen(3000)
+    # debugpy.wait_for_client()
     required_if = [
         ("state", "merged", ("config",)),
         ("state", "replaced", ("config",)),
