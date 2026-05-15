@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 import re
 
@@ -106,7 +107,7 @@ def _tmplt_ospf_max_metric(config_data):
             if "on_startup" in config_data["max_metric"]["router_lsa"]:
                 if "wait_period" in config_data["max_metric"]["router_lsa"]["on_startup"]:
                     command += " on-startup {wait_period}".format(
-                        **config_data["max_metric"]["router_lsa"]["on_startup"]
+                        **config_data["max_metric"]["router_lsa"]["on_startup"],
                     )
                 elif "wait_for_bgp" in config_data["max_metric"]["router_lsa"]["on_startup"]:
                     command += " on-startup wait-for-bgp"
@@ -116,7 +117,7 @@ def _tmplt_ospf_max_metric(config_data):
                     and config_data["max_metric"]["router_lsa"]["external_lsa"]["max_metric_value"]
                 ):
                     command += " external-lsa {max_metric_value}".format(
-                        **config_data["max_metric"]["router_lsa"]["external_lsa"]
+                        **config_data["max_metric"]["router_lsa"]["external_lsa"],
                     )
                 else:
                     command += " external-lsa"
@@ -128,7 +129,7 @@ def _tmplt_ospf_max_metric(config_data):
                     and config_data["max_metric"]["router_lsa"]["summary_lsa"]["max_metric_value"]
                 ):
                     command += " summary-lsa {max_metric_value}".format(
-                        **config_data["max_metric"]["router_lsa"]["summary_lsa"]
+                        **config_data["max_metric"]["router_lsa"]["summary_lsa"],
                     )
                 else:
                     command += " summary-lsa"

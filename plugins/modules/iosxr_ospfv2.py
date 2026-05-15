@@ -22,6 +22,7 @@ The module file for iosxr_ospfv2
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
