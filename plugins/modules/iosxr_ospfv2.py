@@ -626,7 +626,7 @@ options:
                         description: Set external-lsa attribute
                         type: bool
                       max_metric_value:
-                        description: Set max metric value for external LSAs
+                        description: Set max metric value for external LSAs. Defaults to using max_metric_value, if both max_metric_value and set are defined.
                         type: int
                   include_stub:
                     description:
@@ -643,7 +643,7 @@ options:
                         type: int
                       wait_for_bgp:
                         description:
-                        - Let BGP decide when to originate router-LSA
+                        - Let BGP decide when to originate router-LSA. Defaults to using wait_for_bgp, if both wait_for_bgp and wait_period are defined.
                         type: bool
                   summary_lsa:
                     description:
@@ -656,7 +656,7 @@ options:
                         type: bool
                       max_metric_value:
                         description:
-                        - Max metric value for summary LSAs
+                        - Max metric value for summary LSAs. Defaults to using max_metric_value, if both max_metric_value and set are defined.
                         type: int
           message_digest_key:
             description: Message digest authentication password (key)

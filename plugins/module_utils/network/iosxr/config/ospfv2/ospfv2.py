@@ -10,6 +10,7 @@ is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to it's desired end-state is
 created
 """
+
 from __future__ import absolute_import, division, print_function
 
 
@@ -58,6 +59,37 @@ class Ospfv2(ResourceModule):
 
         return self.result
 
+    def _clean_max_metric(self, process_dict):
+        """Clean up mutually exclusive max_metric configuration options.
+
+        Handles two types of conflicts in max_metric configuration:
+        1. summary_lsa/external_lsa: 'set' (uses default IOS-XR value) vs
+           'max_metric_value' (explicit value) - only one can be specified.
+           When both are present, 'set' is removed in favor of the explicit value.
+        2. on_startup: 'wait_period' vs 'wait_for_bgp' - mutually exclusive options.
+           When both are present, 'wait_period' is removed.
+
+        :param process_dict: Dictionary of OSPF processes with max_metric configuration
+        """
+        for process in process_dict:
+            max_metric = process_dict[process].get("max_metric", {})
+            router_lsa = max_metric.get("router_lsa", {})
+
+            if not router_lsa:
+                continue
+
+            summary_lsa = router_lsa.get("summary_lsa", {})
+            if summary_lsa.get("set") and summary_lsa.get("max_metric_value"):
+                summary_lsa.pop("set")
+
+            external_lsa = router_lsa.get("external_lsa", {})
+            if external_lsa.get("set") and summary_lsa.get("max_metric_value"):
+                external_lsa.pop("set")
+
+            on_startup = router_lsa.get("on_startup", {})
+            if on_startup.get("wait_period") and on_startup.get("wait_for_bgp"):
+                on_startup.pop("wait_period")
+
     def gen_config(self):
         """Select the appropriate function based on the state provided
         :rtype: A list
@@ -78,6 +110,8 @@ class Ospfv2(ResourceModule):
             }
         else:
             haved = {}
+
+        self._clean_max_metric(wantd)
 
         # turn all lists of dicts into dicts prior to merge
         for thing in wantd, haved:

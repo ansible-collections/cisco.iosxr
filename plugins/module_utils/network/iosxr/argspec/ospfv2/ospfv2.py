@@ -501,6 +501,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                 "router_lsa": {
                                     "options": {
                                         "external_lsa": {
+                                            "mutually_exclusive": ["max_metric_value", "set"],
                                             "options": {
                                                 "max_metric_value": {
                                                     "type": "int",
@@ -511,6 +512,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         },
                                         "include_stub": {"type": "bool"},
                                         "on_startup": {
+                                            "mutually_exclusive": ["wait_for_bgp", "wait_period"],
                                             "options": {
                                                 "wait_for_bgp": {
                                                     "type": "bool",
@@ -521,6 +523,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         },
                                         "set": {"type": "bool"},
                                         "summary_lsa": {
+                                            "mutually_exclusive": ["max_metric_value", "set"],
                                             "options": {
                                                 "max_metric_value": {
                                                     "type": "int",

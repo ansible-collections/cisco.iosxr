@@ -3180,7 +3180,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Set max metric value for external LSAs</div>
+                        <div>Set max metric value for external LSAs. Defaults to using max_metric_value, if both max_metric_value and set are defined.</div>
                 </td>
             </tr>
             <tr>
@@ -3271,7 +3271,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Let BGP decide when to originate router-LSA</div>
+                        <div>Let BGP decide when to originate router-LSA. Defaults to using wait_for_bgp, if both wait_for_bgp and wait_period are defined.</div>
                 </td>
             </tr>
             <tr>
@@ -3354,7 +3354,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Max metric value for summary LSAs</div>
+                        <div>Max metric value for summary LSAs. Defaults to using max_metric_value, if both max_metric_value and set are defined.</div>
                 </td>
             </tr>
             <tr>

@@ -2526,7 +2526,6 @@ class Ospfv2Template(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": _tmplt_ospf_max_metric,
-            "remval": "max-metric router-lsa",
             "result": {
                 "processes": {
                     '{{ pid  }}': {
