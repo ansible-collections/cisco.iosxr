@@ -558,7 +558,6 @@ class TestIosxrOspfV2Module(TestIosxrModule):
         result = self.execute_module(changed=True)
         self.assertEqual(result["commands"], commands)
 
-
     def test_iosxr_ospfv2_max_metric_parsed(self):
         """Test parsing max-metric configuration."""
         set_module_args(
