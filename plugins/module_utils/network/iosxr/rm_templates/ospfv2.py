@@ -99,41 +99,53 @@ def _tmplt_ospf_log_max_lsa(config_data):
         return command
 
 
+def _build_on_startup_cmd(router_lsa):
+    """Build the on-startup command portion."""
+    on_startup = router_lsa.get("on_startup", {})
+
+    if "wait_period" in on_startup:
+        return " on-startup {wait_period}".format(**on_startup)
+    elif "wait_for_bgp" in on_startup:
+        return " on-startup wait-for-bgp"
+
+    return ""
+
+
+def _build_lsa_cmd(lsa_type, lsa_data):
+    """Build external-lsa or summary-lsa command portion."""
+    max_metric_value = lsa_data.get("max_metric_value")
+
+    if max_metric_value:
+        return " {0} {{max_metric_value}}".format(lsa_type).format(**lsa_data)
+
+    return " {0}".format(lsa_type)
+
+
 def _tmplt_ospf_max_metric(config_data):
-    if "max_metric" in config_data:
-        command = "max-metric"
-        if "router_lsa" in config_data["max_metric"]:
-            command += " router-lsa"
-            if "on_startup" in config_data["max_metric"]["router_lsa"]:
-                if "wait_period" in config_data["max_metric"]["router_lsa"]["on_startup"]:
-                    command += " on-startup {wait_period}".format(
-                        **config_data["max_metric"]["router_lsa"]["on_startup"],
-                    )
-                elif "wait_for_bgp" in config_data["max_metric"]["router_lsa"]["on_startup"]:
-                    command += " on-startup wait-for-bgp"
-            if "external_lsa" in config_data["max_metric"]["router_lsa"]:
-                if (
-                    "max_metric_value" in config_data["max_metric"]["router_lsa"]["external_lsa"]
-                    and config_data["max_metric"]["router_lsa"]["external_lsa"]["max_metric_value"]
-                ):
-                    command += " external-lsa {max_metric_value}".format(
-                        **config_data["max_metric"]["router_lsa"]["external_lsa"],
-                    )
-                else:
-                    command += " external-lsa"
-            if "include_stub" in config_data["max_metric"]["router_lsa"]:
-                command += " include-stub"
-            if "summary_lsa" in config_data["max_metric"]["router_lsa"]:
-                if (
-                    "max_metric_value" in config_data["max_metric"]["router_lsa"]["summary_lsa"]
-                    and config_data["max_metric"]["router_lsa"]["summary_lsa"]["max_metric_value"]
-                ):
-                    command += " summary-lsa {max_metric_value}".format(
-                        **config_data["max_metric"]["router_lsa"]["summary_lsa"],
-                    )
-                else:
-                    command += " summary-lsa"
+    if "max_metric" not in config_data:
+        return None
+
+    command = "max-metric"
+    max_metric = config_data["max_metric"]
+
+    if "router_lsa" not in max_metric:
         return command
+
+    command += " router-lsa"
+    router_lsa = max_metric["router_lsa"]
+
+    command += _build_on_startup_cmd(router_lsa)
+
+    if "external_lsa" in router_lsa:
+        command += _build_lsa_cmd("external-lsa", router_lsa["external_lsa"])
+
+    if "include_stub" in router_lsa:
+        command += " include-stub"
+
+    if "summary_lsa" in router_lsa:
+        command += _build_lsa_cmd("summary-lsa", router_lsa["summary_lsa"])
+
+    return command
 
 
 def _tmplt_ospf_distance_admin(config_data):
