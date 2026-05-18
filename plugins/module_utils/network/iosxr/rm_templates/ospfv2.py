@@ -2516,7 +2516,7 @@ class Ospfv2Template(NetworkTemplate):
                 \sospf\s(?P<pid>\S+)
                 \smax-metric
                 \s*(?P<router_lsa>router-lsa)
-                \s+on-startup(?:\s+(?P<wait_for_bgp>wait-for-bgp)|\s+(?P<wait_period>\d+))?
+                \s*(on-startup(?:\s+(?P<wait_for_bgp>wait-for-bgp)|\s+(?P<wait_period>\d+)))?
                 (?:
                 |\s+(?P<external_lsa>external-lsa)(?:\s+(?P<max_metric_value>\d+))?
                 |\s+(?P<include_stub>include-stub)

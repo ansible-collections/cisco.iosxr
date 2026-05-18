@@ -3315,7 +3315,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Set router-lsa attribute</div>
+                        <div>Set router-lsa to true when not defining any other attribute. Defaults to true when other attribute are used.</div>
                 </td>
             </tr>
             <tr>

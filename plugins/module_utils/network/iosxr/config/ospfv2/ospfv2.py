@@ -77,7 +77,7 @@ class Ospfv2(ResourceModule):
 
             if not router_lsa:
                 continue
-
+            router_lsa["set"] = True
             summary_lsa = router_lsa.get("summary_lsa", {})
             if summary_lsa.get("set") and summary_lsa.get("max_metric_value"):
                 summary_lsa.pop("set")

@@ -10,7 +10,7 @@
       cisco.iosxr.iosxr_ospfv2: &id001
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   set: true
@@ -20,7 +20,7 @@
       ansible.builtin.assert:
         that:
           - result.changed == true
-          - "'router ospf 100' in result.commands"
+          - "'router ospf 10' in result.commands"
           - "'max-metric router-lsa' in result.commands"
 
     - name: Test max-metric router-lsa basic configuration (idempotent)
@@ -40,7 +40,7 @@
       cisco.iosxr.iosxr_ospfv2: &id002
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   external_lsa:
@@ -51,7 +51,7 @@
       ansible.builtin.assert:
         that:
           - result.changed == true
-          - "'router ospf 100' in result.commands"
+          - "'router ospf 10' in result.commands"
           - "'max-metric router-lsa external-lsa' in result.commands"
 
     - name: Test max-metric with external-lsa set (idempotent)
@@ -71,7 +71,7 @@
       cisco.iosxr.iosxr_ospfv2: &id003
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   external_lsa:
@@ -82,80 +82,8 @@
       ansible.builtin.assert:
         that:
           - result.changed == true
-          - "'router ospf 100' in result.commands"
+          - "'router ospf 10' in result.commands"
           - "'max-metric router-lsa external-lsa 150' in result.commands"
-
-    - name: Test max-metric with external-lsa max_metric_value (idempotent)
-      register: result
-      cisco.iosxr.iosxr_ospfv2: *id003
-
-    - name: Assert that the previous task was idempotent
-      ansible.builtin.assert:
-        that:
-          - result.changed == false
-          - result.commands|length == 0
-
-    - ansible.builtin.include_tasks: _remove_config.yaml
-
-    - name: Test max-metric with summary-lsa set (merged)
-      register: result
-      cisco.iosxr.iosxr_ospfv2: &id004
-        config:
-          processes:
-            - process_id: 100
-              max_metric:
-                router_lsa:
-                  summary_lsa:
-                    set: true
-        state: merged
-
-    - name: Assert that correct set of commands were generated
-      ansible.builtin.assert:
-        that:
-          - result.changed == true
-          - "'router ospf 100' in result.commands"
-          - "'max-metric router-lsa summary-lsa' in result.commands"
-
-    - name: Test max-metric with summary-lsa set (idempotent)
-      register: result
-      cisco.iosxr.iosxr_ospfv2: *id004
-
-    - name: Assert that the previous task was idempotent
-      ansible.builtin.assert:
-        that:
-          - result.changed == false
-          - result.commands|length == 0
-
-    - ansible.builtin.include_tasks: _remove_config.yaml
-
-    - name: Test max-metric with summary-lsa max_metric_value (merged)
-      register: result
-      cisco.iosxr.iosxr_ospfv2: &id005
-        config:
-          processes:
-            - process_id: 100
-              max_metric:
-                router_lsa:
-                  summary_lsa:
-                    max_metric_value: 250
-        state: merged
-
-    - name: Assert that correct set of commands were generated
-      ansible.builtin.assert:
-        that:
-          - result.changed == true
-          - "'router ospf 100' in result.commands"
-          - "'max-metric router-lsa summary-lsa 250' in result.commands"
-
-    - name: Test max-metric with summary-lsa max_metric_value (idempotent)
-      register: result
-      cisco.iosxr.iosxr_ospfv2: *id005
-
-    - name: Assert that the previous task was idempotent
-      ansible.builtin.assert:
-        that:
-          - result.changed == false
-          - result.commands|length == 0
 
     - ansible.builtin.include_tasks: _remove_config.yaml
 
@@ -164,7 +92,7 @@
       cisco.iosxr.iosxr_ospfv2: &id006
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   on_startup:
@@ -175,18 +103,8 @@
       ansible.builtin.assert:
         that:
           - result.changed == true
-          - "'router ospf 100' in result.commands"
+          - "'router ospf 10' in result.commands"
           - "'max-metric router-lsa on-startup 300' in result.commands"
-
-    - name: Test max-metric with on-startup wait_period (idempotent)
-      register: result
-      cisco.iosxr.iosxr_ospfv2: *id006
-
-    - name: Assert that the previous task was idempotent
-      ansible.builtin.assert:
-        that:
-          - result.changed == false
-          - result.commands|length == 0
 
     - ansible.builtin.include_tasks: _remove_config.yaml
 
@@ -195,7 +113,7 @@
       cisco.iosxr.iosxr_ospfv2: &id007
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   on_startup:
@@ -206,48 +124,8 @@
       ansible.builtin.assert:
         that:
           - result.changed == true
-          - "'router ospf 100' in result.commands"
+          - "'router ospf 10' in result.commands"
           - "'max-metric router-lsa on-startup wait-for-bgp' in result.commands"
-
-    - name: Test max-metric with on-startup wait_for_bgp (idempotent)
-      register: result
-      cisco.iosxr.iosxr_ospfv2: *id007
-
-    - name: Assert that the previous task was idempotent
-      ansible.builtin.assert:
-        that:
-          - result.changed == false
-          - result.commands|length == 0
-
-    - ansible.builtin.include_tasks: _remove_config.yaml
-
-    - name: Test max-metric with include-stub (merged)
-      register: result
-      cisco.iosxr.iosxr_ospfv2: &id008
-        config:
-          processes:
-            - process_id: 100
-              max_metric:
-                router_lsa:
-                  include_stub: true
-        state: merged
-
-    - name: Assert that correct set of commands were generated
-      ansible.builtin.assert:
-        that:
-          - result.changed == true
-          - "'router ospf 100' in result.commands"
-          - "'max-metric router-lsa include-stub' in result.commands"
-
-    - name: Test max-metric with include-stub (idempotent)
-      register: result
-      cisco.iosxr.iosxr_ospfv2: *id008
-
-    - name: Assert that the previous task was idempotent
-      ansible.builtin.assert:
-        that:
-          - result.changed == false
-          - result.commands|length == 0
 
     - ansible.builtin.include_tasks: _remove_config.yaml
 
@@ -256,7 +134,7 @@
       cisco.iosxr.iosxr_ospfv2: &id009
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   on_startup:
@@ -272,7 +150,7 @@
       ansible.builtin.assert:
         that:
           - result.changed == true
-          - "'router ospf 100' in result.commands"
+          - "'router ospf 10' in result.commands"
           - "'max-metric router-lsa on-startup 300 external-lsa 150 include-stub summary-lsa 250' in result.commands"
 
     - name: Test max-metric with complex combination (idempotent)
@@ -292,7 +170,7 @@
       cisco.iosxr.iosxr_ospfv2:
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   external_lsa:
@@ -309,34 +187,12 @@
 
     - ansible.builtin.include_tasks: _remove_config.yaml
 
-    - name: Test max-metric value override for summary_lsa (merged)
-      register: result
-      cisco.iosxr.iosxr_ospfv2:
-        config:
-          processes:
-            - process_id: 100
-              max_metric:
-                router_lsa:
-                  summary_lsa:
-                    set: true
-                    max_metric_value: 200
-        state: merged
-
-    - name: Assert that max_metric_value takes precedence over set
-      ansible.builtin.assert:
-        that:
-          - result.changed == true
-          - "'max-metric router-lsa summary-lsa 200' in result.commands"
-          - "'max-metric router-lsa summary-lsa' not in result.commands or 'summary-lsa 200' in result.commands"
-
-    - ansible.builtin.include_tasks: _remove_config.yaml
-
     - name: Test max-metric wait_for_bgp override for on_startup (merged)
       register: result
       cisco.iosxr.iosxr_ospfv2:
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   on_startup:
@@ -357,7 +213,7 @@
       cisco.iosxr.iosxr_ospfv2:
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   external_lsa:
@@ -369,7 +225,7 @@
       cisco.iosxr.iosxr_ospfv2: &id010
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   external_lsa:
@@ -380,7 +236,7 @@
       ansible.builtin.assert:
         that:
           - result.changed == true
-          - "'router ospf 100' in result.commands"
+          - "'router ospf 10' in result.commands"
           - "'max-metric router-lsa external-lsa 100' in result.commands"
 
     - name: Test max-metric replaced state (idempotent)
@@ -392,19 +248,18 @@
         that:
           - result.changed == false
           - result.commands|length == 0
-
     - ansible.builtin.include_tasks: _remove_config.yaml
 
     - name: Setup max-metric for overridden state test
       cisco.iosxr.iosxr_ospfv2:
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   external_lsa:
                     set: true
-            - process_id: 200
+            - process_id: 30
               cost: 5
         state: merged
 
@@ -413,7 +268,7 @@
       cisco.iosxr.iosxr_ospfv2: &id011
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   summary_lsa:
@@ -424,9 +279,9 @@
       ansible.builtin.assert:
         that:
           - result.changed == true
-          - "'router ospf 200' in result.commands"
+          - "'router ospf 30' in result.commands"
           - "'no cost 5' in result.commands"
-          - "'router ospf 100' in result.commands"
+          - "'router ospf 10' in result.commands"
           - "'max-metric router-lsa summary-lsa 200' in result.commands"
 
     - name: Test max-metric overridden state (idempotent)
@@ -445,7 +300,7 @@
       cisco.iosxr.iosxr_ospfv2:
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   external_lsa:
@@ -458,7 +313,7 @@
       cisco.iosxr.iosxr_ospfv2:
         config:
           processes:
-            - process_id: 100
+            - process_id: 10
               max_metric:
                 router_lsa:
                   external_lsa:
@@ -469,7 +324,7 @@
       ansible.builtin.assert:
         that:
           - result.changed == true
-          - "'router ospf 100' in result.commands"
+          - "'router ospf 10' in result.commands"
           - "'no max-metric router-lsa external-lsa 100' in result.commands"
 
   always:

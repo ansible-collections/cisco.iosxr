@@ -616,7 +616,7 @@ options:
                 type: dict
                 suboptions:
                   set:
-                    description: Set router-lsa attribute
+                    description: Set router-lsa to true when not defining any other attribute. Defaults to true when other attribute are used.
                     type: bool
                   external_lsa:
                     description: External LSA configuration
@@ -2274,10 +2274,6 @@ def main():
 
     :returns: the result form module invocation
     """
-    # import debugpy
-
-    # debugpy.listen(3000)
-    # debugpy.wait_for_client()
     required_if = [
         ("state", "merged", ("config",)),
         ("state", "replaced", ("config",)),
