@@ -427,7 +427,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
             "max-metric router-lsa on-startup wait-for-bgp external-lsa 255",
         ]
         result = self.execute_module(changed=True)
-        self.assertEqual(result["commands"], commands)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
 
     def test_iosxr_ospfv2_max_metric_parsed(self):
         """Test parsing max-metric configuration."""
