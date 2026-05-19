@@ -3180,7 +3180,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Set max metric value for external LSAs. Defaults to using max_metric_value, if both max_metric_value and set are defined.</div>
+                        <div>Set max metric value for external LSAs. Mutually exclusive with set.</div>
                 </td>
             </tr>
             <tr>
@@ -3204,7 +3204,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Set external-lsa attribute</div>
+                        <div>Set external-lsa attribute. Mutually exclusive with max_metric_value.</div>
                 </td>
             </tr>
 
@@ -3271,7 +3271,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Let BGP decide when to originate router-LSA. Defaults to using wait_for_bgp, if both wait_for_bgp and wait_period are defined.</div>
+                        <div>Let BGP decide when to originate router-LSA. Mutually exclusive with wait_period.</div>
                 </td>
             </tr>
             <tr>
@@ -3291,7 +3291,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Wait period in seconds after startup</div>
+                        <div>Wait period in seconds after startup. Mutually exclusive with wait_for_bgp.</div>
                 </td>
             </tr>
 
@@ -3354,7 +3354,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Max metric value for summary LSAs. Defaults to using max_metric_value, if both max_metric_value and set are defined.</div>
+                        <div>Max metric value for summary LSAs. Mutually exclusive with set.</div>
                 </td>
             </tr>
             <tr>
@@ -3378,7 +3378,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Set summary-lsa attribute</div>
+                        <div>Set summary-lsa attribute. Mutually exclusive with max_metric_value.</div>
                 </td>
             </tr>
 

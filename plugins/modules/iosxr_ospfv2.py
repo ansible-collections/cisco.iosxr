@@ -623,10 +623,10 @@ options:
                     type: dict
                     suboptions:
                       set:
-                        description: Set external-lsa attribute
+                        description: Set external-lsa attribute. Mutually exclusive with max_metric_value.
                         type: bool
                       max_metric_value:
-                        description: Set max metric value for external LSAs. Defaults to using max_metric_value, if both max_metric_value and set are defined.
+                        description: Set max metric value for external LSAs. Mutually exclusive with set.
                         type: int
                   include_stub:
                     description:
@@ -639,11 +639,11 @@ options:
                     suboptions:
                       wait_period:
                         description:
-                        - Wait period in seconds after startup
+                        - Wait period in seconds after startup. Mutually exclusive with wait_for_bgp.
                         type: int
                       wait_for_bgp:
                         description:
-                        - Let BGP decide when to originate router-LSA. Defaults to using wait_for_bgp, if both wait_for_bgp and wait_period are defined.
+                        - Let BGP decide when to originate router-LSA. Mutually exclusive with wait_period.
                         type: bool
                   summary_lsa:
                     description:
@@ -652,11 +652,11 @@ options:
                     suboptions:
                       set:
                         description:
-                        - Set summary-lsa attribute
+                        - Set summary-lsa attribute. Mutually exclusive with max_metric_value.
                         type: bool
                       max_metric_value:
                         description:
-                        - Max metric value for summary LSAs. Defaults to using max_metric_value, if both max_metric_value and set are defined.
+                        - Max metric value for summary LSAs. Mutually exclusive with set.
                         type: int
           message_digest_key:
             description: Message digest authentication password (key)
