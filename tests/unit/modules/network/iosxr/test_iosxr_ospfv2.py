@@ -293,7 +293,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
         self.assertEqual(result["commands"], commands)
 
     def test_iosxr_ospfv2_max_metric_external_lsa_set(self):
-        """Test max-metric router-lsa with external-lsa set."""
+        """Test max-metric router-lsa with external-lsa set and false boolean."""
         set_module_args(
             dict(
                 config=dict(
@@ -303,6 +303,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                             max_metric=dict(
                                 router_lsa=dict(
                                     external_lsa=dict(set=True),
+                                    include_stub=False,
                                 ),
                             ),
                         ),
@@ -314,6 +315,8 @@ class TestIosxrOspfV2Module(TestIosxrModule):
         commands = ["router ospf 100", "max-metric router-lsa external-lsa"]
         result = self.execute_module(changed=True)
         self.assertEqual(result["commands"], commands)
+        # Verify include-stub is not in the command (was set to False)
+        self.assertNotIn("include-stub", " ".join(result["commands"]))
 
     def test_iosxr_ospfv2_max_metric_external_lsa_value(self):
         """Test max-metric router-lsa with external-lsa max_metric_value."""
@@ -385,7 +388,7 @@ class TestIosxrOspfV2Module(TestIosxrModule):
         self.assertEqual(result["commands"], commands)
 
     def test_iosxr_ospfv2_max_metric_complex_combination(self):
-        """Test max-metric with multiple options combined."""
+        """Test max-metric with multiple options combined and false booleans."""
         set_module_args(
             dict(
                 config=dict(
@@ -401,6 +404,17 @@ class TestIosxrOspfV2Module(TestIosxrModule):
                                 ),
                             ),
                         ),
+                        dict(
+                            process_id="200",
+                            max_metric=dict(
+                                router_lsa=dict(
+                                    on_startup=dict(wait_for_bgp=True),
+                                    external_lsa=dict(max_metric_value=255),
+                                    include_stub=False,
+                                    summary_lsa=dict(set=False),
+                                ),
+                            ),
+                        ),
                     ],
                 ),
                 state="merged",
@@ -409,6 +423,8 @@ class TestIosxrOspfV2Module(TestIosxrModule):
         commands = [
             "router ospf 100",
             "max-metric router-lsa on-startup 300 external-lsa 150 include-stub summary-lsa 250",
+            "router ospf 200",
+            "max-metric router-lsa on-startup wait-for-bgp external-lsa 255",
         ]
         result = self.execute_module(changed=True)
         self.assertEqual(result["commands"], commands)

@@ -45,6 +45,7 @@
                 router_lsa:
                   external_lsa:
                     set: true
+                  include_stub: false
         state: merged
 
     - name: Assert that correct set of commands were generated
@@ -53,6 +54,7 @@
           - result.changed == true
           - "'router ospf 10' in result.commands"
           - "'max-metric router-lsa external-lsa' in result.commands"
+          - "'include-stub' not in result.commands[1]"
 
     - name: Test max-metric with external-lsa set (idempotent)
       register: result
@@ -143,7 +145,17 @@
                     max_metric_value: 150
                   include_stub: true
                   summary_lsa:
-                    max_metric_value: 250
+                    set: false
+            - process_id: 30
+              max_metric:
+                router_lsa:
+                  on_startup:
+                    wait_for_bgp: true
+                  external_lsa:
+                    max_metric_value: 255
+                  include_stub: false
+                  summary_lsa:
+                    set: true
         state: merged
 
     - name: Assert that correct set of commands were generated
@@ -151,7 +163,11 @@
         that:
           - result.changed == true
           - "'router ospf 10' in result.commands"
-          - "'max-metric router-lsa on-startup 300 external-lsa 150 include-stub summary-lsa 250' in result.commands"
+          - "'max-metric router-lsa on-startup 300 external-lsa 150 include-stub' in result.commands"
+          - "'summary-lsa' not in result.commands[result.commands.index('router ospf 10') + 1]"
+          - "'router ospf 30' in result.commands"
+          - "'max-metric router-lsa on-startup wait-for-bgp external-lsa 255 summary-lsa' in result.commands"
+          - "'include-stub' not in result.commands[result.commands.index('router ospf 30') + 1]"
 
     - name: Test max-metric with complex combination (idempotent)
       register: result

@@ -59,9 +59,32 @@ class Ospfv2(ResourceModule):
 
         return self.result
 
+    def _remove_false_booleans(self, config_dict):
+        """Recursively remove boolean fields set to False and empty dictionaries.
+
+        IOS-XR commands only need to specify boolean options when they are True.
+        False booleans should not appear in the generated configuration.
+        After removing False values, empty dictionaries are also removed.
+
+        :param config_dict: Dictionary to clean
+        """
+        keys_to_remove = []
+        for key, value in config_dict.items():
+            if isinstance(value, bool) and value is False:
+                keys_to_remove.append(key)
+            elif isinstance(value, dict):
+                self._remove_false_booleans(value)
+                # After recursively cleaning, remove if dictionary is now empty
+                if not value:
+                    keys_to_remove.append(key)
+
+        for key in keys_to_remove:
+            config_dict.pop(key)
+
     def _clean_max_metric(self, process_dict):
         """Clean up mutually exclusive max_metric configuration options.
-
+        Recursively check every key, and if any boolean is set to False
+        as set: False, pop them since they are not required to be set.
         Handles two types of conflicts in max_metric configuration:
         1. summary_lsa/external_lsa: 'set' (uses default IOS-XR value) vs
            'max_metric_value' (explicit value) - only one can be specified.
@@ -77,13 +100,18 @@ class Ospfv2(ResourceModule):
 
             if not router_lsa:
                 continue
+
+            # Remove any False boolean values recursively and clean up empty dicts
+            self._remove_false_booleans(router_lsa)
+
             router_lsa["set"] = True
+
             summary_lsa = router_lsa.get("summary_lsa", {})
             if summary_lsa.get("set") and summary_lsa.get("max_metric_value"):
                 summary_lsa.pop("set")
 
             external_lsa = router_lsa.get("external_lsa", {})
-            if external_lsa.get("set") and summary_lsa.get("max_metric_value"):
+            if external_lsa.get("set") and external_lsa.get("max_metric_value"):
                 external_lsa.pop("set")
 
             on_startup = router_lsa.get("on_startup", {})
