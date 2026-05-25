@@ -28,7 +28,6 @@
         that:
           - overridden['after'] == result['after']
 
-    
     - name: Assert that before dicts are correctly generated
       ansible.builtin.assert:
         that:

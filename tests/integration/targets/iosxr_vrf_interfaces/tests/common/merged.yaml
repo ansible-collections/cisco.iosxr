@@ -24,7 +24,7 @@
       ansible.builtin.assert:
         that:
           - "{{ merged['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
-    
+
     - name: Assert that after dicts were correctly generated
       ansible.builtin.assert:
         that:
