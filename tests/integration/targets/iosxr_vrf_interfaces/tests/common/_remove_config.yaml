@@ -19,4 +19,3 @@
   vars:
     ansible_connection: ansible.netcommon.network_cli
   ignore_errors: true
-
