@@ -1,0 +1,2 @@
+bugfixes:
+  - iosxr_vrf_interfaces - Fix integration tests by removing references to unnecessary interfaces and cleaning up test assertions.

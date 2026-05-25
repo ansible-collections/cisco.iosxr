@@ -18,6 +18,10 @@
       cisco.iosxr.iosxr_command:
         commands: show running-config interface
 
+    - name : debug o/p
+      ansible.builtin.debug:  
+        msg: "{{ result['after'] }}"
+
     - name: Assert that correct set of commands were generated
       ansible.builtin.assert:
         that:
@@ -28,6 +32,7 @@
         that:
           - overridden['after'] == result['after']
 
+    
     - name: Assert that before dicts are correctly generated
       ansible.builtin.assert:
         that:
