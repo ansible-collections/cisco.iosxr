@@ -11,7 +11,6 @@ on:
     paths:
       - "plugins/**"
       - "tests/integration/**"
-      - "workflows/**"
   workflow_dispatch:
 jobs:
   lab-create:
