@@ -1,4 +1,3 @@
----
 annotations:
   - border_color: "#0C0606"
     border_radius: 0
@@ -76,7 +75,7 @@ annotations:
     z_index: 5
 nodes:
   - boot_disk_size: null
-    configuration: |2-
+    configuration: &conf |2-
        !! IOS XR Admin Configuration
         username ansible
           group sysadmin
@@ -109,14 +108,14 @@ nodes:
     cpus: null
     data_volume: null
     hide_links: false
-    id: n4
+    id: n0
     image_definition: null
-    label: stable-2.17
+    label: stable-2.19
     node_definition: iosxrv9000
     parameters: {}
     ram: null
     tags: []
-    x: 240
+    x: 160
     y: 120
     interfaces:
       - id: i0
@@ -148,7 +147,7 @@ nodes:
     cpus: null
     data_volume: null
     hide_links: false
-    id: n5
+    id: n1
     image_definition: null
     label: slave-switch
     node_definition: unmanaged_switch
@@ -196,7 +195,7 @@ nodes:
     cpus: null
     data_volume: null
     hide_links: false
-    id: n6
+    id: n2
     image_definition: null
     label: ci-god
     node_definition: external_connector
@@ -210,21 +209,193 @@ nodes:
         label: port
         slot: 0
         type: physical
+  - boot_disk_size: null
+    configuration: *conf
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n3
+    image_definition: null
+    label: stable-2.20
+    node_definition: iosxrv9000
+    parameters: {}
+    ram: null
+    tags: []
+    x: 40
+    y: 120
+    interfaces:
+      - id: i0
+        label: Loopback0
+        type: loopback
+      - id: i1
+        label: MgmtEth0/RP0/CPU0/0
+        slot: 0
+        type: physical
+      - id: i2
+        label: donotuse1
+        slot: 1
+        type: physical
+      - id: i3
+        label: donotuse2
+        slot: 2
+        type: physical
+      - id: i4
+        label: GigabitEthernet0/0/0/0
+        slot: 3
+        type: physical
+      - id: i5
+        label: GigabitEthernet0/0/0/1
+        slot: 4
+        type: physical
+  - boot_disk_size: null
+    configuration: *conf
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n4
+    image_definition: null
+    label: stable-2.21
+    node_definition: iosxrv9000
+    parameters: {}
+    ram: null
+    tags: []
+    x: -80
+    y: 120
+    interfaces:
+      - id: i0
+        label: Loopback0
+        type: loopback
+      - id: i1
+        label: MgmtEth0/RP0/CPU0/0
+        slot: 0
+        type: physical
+      - id: i2
+        label: donotuse1
+        slot: 1
+        type: physical
+      - id: i3
+        label: donotuse2
+        slot: 2
+        type: physical
+      - id: i4
+        label: GigabitEthernet0/0/0/0
+        slot: 3
+        type: physical
+  - boot_disk_size: null
+    configuration: *conf
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n5
+    image_definition: null
+    label: milestone
+    node_definition: iosxrv9000
+    parameters: {}
+    ram: null
+    tags: []
+    x: -200
+    y: 120
+    interfaces:
+      - id: i0
+        label: Loopback0
+        type: loopback
+      - id: i1
+        label: MgmtEth0/RP0/CPU0/0
+        slot: 0
+        type: physical
+      - id: i2
+        label: donotuse1
+        slot: 1
+        type: physical
+      - id: i3
+        label: donotuse2
+        slot: 2
+        type: physical
+      - id: i4
+        label: GigabitEthernet0/0/0/0
+        slot: 3
+        type: physical
+  - boot_disk_size: null
+    configuration: *conf
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n6
+    image_definition: null
+    label: devel
+    node_definition: iosxrv9000
+    parameters: {}
+    ram: null
+    tags: []
+    x: -320
+    y: 120
+    interfaces:
+      - id: i0
+        label: Loopback0
+        type: loopback
+      - id: i1
+        label: MgmtEth0/RP0/CPU0/0
+        slot: 0
+        type: physical
+      - id: i2
+        label: donotuse1
+        slot: 1
+        type: physical
+      - id: i3
+        label: donotuse2
+        slot: 2
+        type: physical
+      - id: i4
+        label: GigabitEthernet0/0/0/0
+        slot: 3
+        type: physical
 links:
   - id: l0
-    n1: n6
-    n2: n5
+    n1: n2
+    n2: n1
     i1: i0
     i2: i0
     conditioning: {}
     label: ci-god-port<->slave-switch-port0
-  - id: l5
-    n1: n5
-    n2: n4
+  - id: l1
+    n1: n1
+    n2: n0
     i1: i5
     i2: i1
     conditioning: {}
     label: slave-switch-port5<->stable-2.17-MgmtEth0/RP0/CPU0/0
+  - id: l2
+    n1: n1
+    n2: n3
+    i1: i1
+    i2: i1
+    conditioning: {}
+    label: slave-switch-port1<->stable-2.20-MgmtEth0/RP0/CPU0/0
+  - id: l3
+    n1: n1
+    n2: n4
+    i1: i2
+    i2: i1
+    conditioning: {}
+    label: slave-switch-port2<->stable-2.21-MgmtEth0/RP0/CPU0/0
+  - id: l4
+    n1: n1
+    n2: n5
+    i1: i3
+    i2: i1
+    conditioning: {}
+    label: slave-switch-port3<->milestone-MgmtEth0/RP0/CPU0/0
+  - id: l5
+    n1: n1
+    n2: n6
+    i1: i4
+    i2: i1
+    conditioning: {}
+    label: slave-switch-port4<->devel-MgmtEth0/RP0/CPU0/0
 lab:
   description: "Upstream test lab for cisco.iosxr"
   notes: "Upstream test lab for cisco.iosxr"
