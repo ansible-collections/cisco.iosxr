@@ -25,10 +25,6 @@
         that:
           - "{{ merged['commands'] | symmetric_difference(result['commands']) |length == 0 }}"
     
-    - name : debug o/p
-      ansible.builtin.debug:  
-        msg: "{{ result['after'] }}"
-
     - name: Assert that after dicts were correctly generated
       ansible.builtin.assert:
         that:
