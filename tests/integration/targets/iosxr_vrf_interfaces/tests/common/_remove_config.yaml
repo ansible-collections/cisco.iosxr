@@ -9,9 +9,13 @@
   vars:
     ansible_connection: ansible.netcommon.network_cli
 
-- name: Remove un-neccessary interfaces
+- name: Remove stray interfaces left by other integration tests
   cisco.iosxr.iosxr_config:
     lines:
+      - no interface GigabitEthernet0/0/0/3
+      - no interface GigabitEthernet0/0/0/4
       - no interface GigabitEthernet0/0/0/4.1
+      - no interface GigabitEthernet0/0/0/5
   vars:
     ansible_connection: ansible.netcommon.network_cli
+  ignore_errors: true

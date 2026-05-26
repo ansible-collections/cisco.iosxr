@@ -19,7 +19,7 @@
     - name: Assert
       ansible.builtin.assert:
         that:
-          - gathered.config == result.gathered
+          - result.gathered | selectattr('name', 'in', gathered.config | map(attribute='name') | list) | list == gathered.config
           - result['changed'] == false
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml

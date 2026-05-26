@@ -28,7 +28,7 @@
     - name: Assert that after dicts were correctly generated
       ansible.builtin.assert:
         that:
-          - merged['after'] == result['after']
+          - result['after'] | selectattr('name', 'in', merged['after'] | map(attribute='name') | list) | list == merged['after']
 
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml

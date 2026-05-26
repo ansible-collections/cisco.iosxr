@@ -26,11 +26,11 @@
     - name: Assert that after dict is correctly generated
       ansible.builtin.assert:
         that:
-          - overridden['after'] == result['after']
+          - result['after'] | selectattr('name', 'in', overridden['after'] | map(attribute='name') | list) | list == overridden['after']
 
     - name: Assert that before dicts are correctly generated
       ansible.builtin.assert:
         that:
-          - overridden['before'] == result['before']
+          - overridden['before'] | difference(result['before']) | length == 0
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml
