@@ -1,7 +1,6 @@
 ---
 bugfixes:
-  - iosxr_ospfv2 - The module drops max_metric.router_lsa sub-parameters during command generation.
-    Enhanced max-metric router-lsa support with comprehensive configuration
+  - iosxr_ospfv2 - Enhanced max-metric router-lsa support with comprehensive configuration
     options (external-lsa, summary-lsa, on-startup with wait_for_bgp/wait_period, include-stub),
     added mutual exclusivity validation for conflicting parameters,
     corrected on_startup.wait_for_bgp parameter type from integer to boolean, and fixed idempotency across all states.
