@@ -623,10 +623,10 @@ options:
                     type: dict
                     suboptions:
                       set:
-                        description: Set external-lsa attribute. Mutually exclusive with max_metric_value.
+                        description: Set external-lsa attribute. This uses the default IOS-XR value. Mutually exclusive with max_metric_value.
                         type: bool
                       max_metric_value:
-                        description: Set max metric value for external LSAs. Mutually exclusive with set.
+                        description: Set max metric value for external LSAs. Mutually exclusive with set which uses the default IOS-XR value.
                         type: int
                   include_stub:
                     description:
@@ -652,11 +652,11 @@ options:
                     suboptions:
                       set:
                         description:
-                        - Set summary-lsa attribute. Mutually exclusive with max_metric_value.
+                        - Set summary-lsa attribute. This uses the default IOS-XR value. Mutually exclusive with max_metric_value.
                         type: bool
                       max_metric_value:
                         description:
-                        - Max metric value for summary LSAs. Mutually exclusive with set.
+                        - Max metric value for summary LSAs. Mutually exclusive with set which uses the default IOS-XR value.
                         type: int
           message_digest_key:
             description: Message digest authentication password (key)
@@ -1083,6 +1083,15 @@ EXAMPLES = """
           adjacency_stagger:
             max_adjacency: 20
             min_adjacency: 10
+          max_metric:
+            router_lsa:
+              on_startup:
+                wait_for_bgp: true
+              external_lsa:
+                max_metric_value: 255
+              include_stub: false
+              summary_lsa:
+                set: true
         - process_id: '10'
           authentication:
             keychain: ansible_test1102
@@ -1143,6 +1152,7 @@ EXAMPLES = """
 #   - area 22 default-cost 6
 #   - router ospf 26
 #   - adjacency stagger 10 20
+#   - max-metric router-lsa on-startup wait-for-bgp external-lsa 255 summary-lsa
 #   - router ospf 10
 #   - authentication keychain ansible_test1102
 #   - area 11 default-cost 5
@@ -1166,6 +1176,15 @@ EXAMPLES = """
 #     - adjacency_stagger:
 #         max_adjacency: 20
 #         min_adjacency: 10
+#       max_metric:
+#         router_lsa:
+#           external_lsa:
+#             max_metric_value: 255
+#           on_startup:
+#             wait_for_bgp: true
+#           set: true
+#           summary_lsa:
+#             set: true
 #       process_id: '26'
 #     - areas:
 #       - area_id: '10'

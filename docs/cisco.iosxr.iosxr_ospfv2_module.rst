@@ -3180,7 +3180,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Set max metric value for external LSAs. Mutually exclusive with set.</div>
+                        <div>Set max metric value for external LSAs. Mutually exclusive with set which uses the default IOS-XR value.</div>
                 </td>
             </tr>
             <tr>
@@ -3204,7 +3204,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Set external-lsa attribute. Mutually exclusive with max_metric_value.</div>
+                        <div>Set external-lsa attribute. This uses the default IOS-XR value. Mutually exclusive with max_metric_value.</div>
                 </td>
             </tr>
 
@@ -3354,7 +3354,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Max metric value for summary LSAs. Mutually exclusive with set.</div>
+                        <div>Max metric value for summary LSAs. Mutually exclusive with set which uses the default IOS-XR value.</div>
                 </td>
             </tr>
             <tr>
@@ -3378,7 +3378,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Set summary-lsa attribute. Mutually exclusive with max_metric_value.</div>
+                        <div>Set summary-lsa attribute. This uses the default IOS-XR value. Mutually exclusive with max_metric_value.</div>
                 </td>
             </tr>
 
@@ -5573,6 +5573,15 @@ Examples
               adjacency_stagger:
                 max_adjacency: 20
                 min_adjacency: 10
+              max_metric:
+                router_lsa:
+                  on_startup:
+                    wait_for_bgp: true
+                  external_lsa:
+                    max_metric_value: 255
+                  include_stub: false
+                  summary_lsa:
+                    set: true
             - process_id: '10'
               authentication:
                 keychain: ansible_test1102
@@ -5633,6 +5642,7 @@ Examples
     #   - area 22 default-cost 6
     #   - router ospf 26
     #   - adjacency stagger 10 20
+    #   - max-metric router-lsa on-startup wait-for-bgp external-lsa 255 summary-lsa
     #   - router ospf 10
     #   - authentication keychain ansible_test1102
     #   - area 11 default-cost 5
@@ -5656,6 +5666,15 @@ Examples
     #     - adjacency_stagger:
     #         max_adjacency: 20
     #         min_adjacency: 10
+    #       max_metric:
+    #         router_lsa:
+    #           external_lsa:
+    #             max_metric_value: 255
+    #           on_startup:
+    #             wait_for_bgp: true
+    #           set: true
+    #           summary_lsa:
+    #             set: true
     #       process_id: '26'
     #     - areas:
     #       - area_id: '10'
