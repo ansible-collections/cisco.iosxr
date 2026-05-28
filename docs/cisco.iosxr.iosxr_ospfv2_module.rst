@@ -3180,7 +3180,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Set max metric value for external LSAs</div>
+                        <div>Set max metric value for external LSAs. Mutually exclusive with set which uses the default IOS-XR value.</div>
                 </td>
             </tr>
             <tr>
@@ -3204,7 +3204,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Set external-lsa attribute</div>
+                        <div>Set external-lsa attribute. This uses the default IOS-XR value. Mutually exclusive with max_metric_value.</div>
                 </td>
             </tr>
 
@@ -3258,7 +3258,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>set</b>
+                    <b>wait_for_bgp</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
@@ -3271,27 +3271,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Set on-startup attribute</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>wait_for_bgp_asn</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>ASN of BGP to wait for</div>
+                        <div>Let BGP decide when to originate router-LSA. Mutually exclusive with wait_period.</div>
                 </td>
             </tr>
             <tr>
@@ -3311,7 +3291,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Wait period in seconds after startup</div>
+                        <div>Wait period in seconds after startup. Mutually exclusive with wait_for_bgp.</div>
                 </td>
             </tr>
 
@@ -3335,7 +3315,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Set router-lsa attribute</div>
+                        <div>Set router-lsa to true when not defining any other attribute. Defaults to true when other attribute are used.</div>
                 </td>
             </tr>
             <tr>
@@ -3374,7 +3354,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Max metric value for summary LSAs</div>
+                        <div>Max metric value for summary LSAs. Mutually exclusive with set which uses the default IOS-XR value.</div>
                 </td>
             </tr>
             <tr>
@@ -3398,7 +3378,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Set summary-lsa attribute</div>
+                        <div>Set summary-lsa attribute. This uses the default IOS-XR value. Mutually exclusive with max_metric_value.</div>
                 </td>
             </tr>
 
@@ -5593,6 +5573,15 @@ Examples
               adjacency_stagger:
                 max_adjacency: 20
                 min_adjacency: 10
+              max_metric:
+                router_lsa:
+                  on_startup:
+                    wait_for_bgp: true
+                  external_lsa:
+                    max_metric_value: 255
+                  include_stub: false
+                  summary_lsa:
+                    set: true
             - process_id: '10'
               authentication:
                 keychain: ansible_test1102
@@ -5653,6 +5642,7 @@ Examples
     #   - area 22 default-cost 6
     #   - router ospf 26
     #   - adjacency stagger 10 20
+    #   - max-metric router-lsa on-startup wait-for-bgp external-lsa 255 summary-lsa
     #   - router ospf 10
     #   - authentication keychain ansible_test1102
     #   - area 11 default-cost 5
@@ -5676,6 +5666,15 @@ Examples
     #     - adjacency_stagger:
     #         max_adjacency: 20
     #         min_adjacency: 10
+    #       max_metric:
+    #         router_lsa:
+    #           external_lsa:
+    #             max_metric_value: 255
+    #           on_startup:
+    #             wait_for_bgp: true
+    #           set: true
+    #           summary_lsa:
+    #             set: true
     #       process_id: '26'
     #     - areas:
     #       - area_id: '10'

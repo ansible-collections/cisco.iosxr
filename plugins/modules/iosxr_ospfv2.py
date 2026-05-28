@@ -616,17 +616,17 @@ options:
                 type: dict
                 suboptions:
                   set:
-                    description: Set router-lsa attribute
+                    description: Set router-lsa to true when not defining any other attribute. Defaults to true when other attribute are used.
                     type: bool
                   external_lsa:
                     description: External LSA configuration
                     type: dict
                     suboptions:
                       set:
-                        description: Set external-lsa attribute
+                        description: Set external-lsa attribute. This uses the default IOS-XR value. Mutually exclusive with max_metric_value.
                         type: bool
                       max_metric_value:
-                        description: Set max metric value for external LSAs
+                        description: Set max metric value for external LSAs. Mutually exclusive with set which uses the default IOS-XR value.
                         type: int
                   include_stub:
                     description:
@@ -637,18 +637,14 @@ options:
                     - Effective only at startup
                     type: dict
                     suboptions:
-                      set:
-                        description:
-                        - Set on-startup attribute
-                        type: bool
                       wait_period:
                         description:
-                        - Wait period in seconds after startup
+                        - Wait period in seconds after startup. Mutually exclusive with wait_for_bgp.
                         type: int
-                      wait_for_bgp_asn:
+                      wait_for_bgp:
                         description:
-                        - ASN of BGP to wait for
-                        type: int
+                        - Let BGP decide when to originate router-LSA. Mutually exclusive with wait_period.
+                        type: bool
                   summary_lsa:
                     description:
                     - Summary LSAs configuration
@@ -656,11 +652,11 @@ options:
                     suboptions:
                       set:
                         description:
-                        - Set summary-lsa attribute
+                        - Set summary-lsa attribute. This uses the default IOS-XR value. Mutually exclusive with max_metric_value.
                         type: bool
                       max_metric_value:
                         description:
-                        - Max metric value for summary LSAs
+                        - Max metric value for summary LSAs. Mutually exclusive with set which uses the default IOS-XR value.
                         type: int
           message_digest_key:
             description: Message digest authentication password (key)
@@ -1087,6 +1083,15 @@ EXAMPLES = """
           adjacency_stagger:
             max_adjacency: 20
             min_adjacency: 10
+          max_metric:
+            router_lsa:
+              on_startup:
+                wait_for_bgp: true
+              external_lsa:
+                max_metric_value: 255
+              include_stub: false
+              summary_lsa:
+                set: true
         - process_id: '10'
           authentication:
             keychain: ansible_test1102
@@ -1147,6 +1152,7 @@ EXAMPLES = """
 #   - area 22 default-cost 6
 #   - router ospf 26
 #   - adjacency stagger 10 20
+#   - max-metric router-lsa on-startup wait-for-bgp external-lsa 255 summary-lsa
 #   - router ospf 10
 #   - authentication keychain ansible_test1102
 #   - area 11 default-cost 5
@@ -1170,6 +1176,15 @@ EXAMPLES = """
 #     - adjacency_stagger:
 #         max_adjacency: 20
 #         min_adjacency: 10
+#       max_metric:
+#         router_lsa:
+#           external_lsa:
+#             max_metric_value: 255
+#           on_startup:
+#             wait_for_bgp: true
+#           set: true
+#           summary_lsa:
+#             set: true
 #       process_id: '26'
 #     - areas:
 #       - area_id: '10'
