@@ -8,7 +8,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 from functools import total_ordering
 
@@ -19,7 +18,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     dict_diff,
     search_obj_in_list,
 )
-
 
 try:
     import ipaddress
