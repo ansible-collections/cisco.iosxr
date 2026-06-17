@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fixed iosxr_bgp_global module to correctly handle VRF names.
