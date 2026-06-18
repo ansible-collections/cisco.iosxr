@@ -4,15 +4,21 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v12.3.2
+=======
+
+Bugfixes
+--------
+
+- iosxr_ospfv2 - Enhanced max-metric router-lsa support with comprehensive configuration options (external-lsa, summary-lsa, on-startup with wait_for_bgp/wait_period, include-stub), added mutual exclusivity validation for conflicting parameters, corrected on_startup.wait_for_bgp parameter type from integer to boolean, and fixed idempotency across all states.
+
 v12.3.1
 =======
 
 Release Summary
 ---------------
 
-- This bugfix release fixes action plugin naming and sanity issues that were blocking Automation Hub certification.
-- All 32 resource module action plugins are renamed to use the ``iosxr_`` prefix, orphaned legacy action plugins are removed, and ``plugin_routing.action`` redirects are added for backward compatibility.
-- The previous 12.3.0 release added a new ``content`` parameter for ``iosxr_config``, deprecated the ``src`` parameter's automatic Jinja2 template processing, fixed BGP ``remote_as`` ASDOT notation handling, and bumped the minimum ``ansible.netcommon`` dependency to ``>=8.5.2``.
+This bugfix release fixes action plugin naming and sanity issues that were blocking Automation Hub certification. All 32 resource module action plugins are renamed to use the ``iosxr_`` prefix, orphaned legacy action plugins are removed, and ``plugin_routing.action`` redirects are added for backward compatibility. The previous 12.3.0 release added a new ``content`` parameter for ``iosxr_config``, deprecated the ``src`` parameter's automatic Jinja2 template processing, fixed BGP ``remote_as`` ASDOT notation handling, and bumped the minimum ``ansible.netcommon`` dependency to ``>=8.5.2``.
 
 Bugfixes
 --------

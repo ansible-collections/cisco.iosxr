@@ -356,14 +356,6 @@ releases:
     release_date: "2026-05-08"
   12.3.1:
     changes:
-      release_summary: This bugfix release fixes action plugin naming and sanity
-        issues that were blocking Automation Hub certification. All 32 resource module
-        action plugins are renamed to use the ``iosxr_`` prefix, orphaned legacy action
-        plugins are removed, and ``plugin_routing.action`` redirects are added for backward
-        compatibility. The previous 12.3.0 release added a new ``content`` parameter
-        for ``iosxr_config``, deprecated the ``src`` parameter's automatic Jinja2 template
-        processing, fixed BGP ``remote_as`` ASDOT notation handling, and bumped the
-        minimum ``ansible.netcommon`` dependency to ``>=8.5.2``.
       bugfixes:
         - action plugins - Remove orphaned legacy action plugins ``bgp.py``, ``interface.py``,
           and ``logging.py`` that had no corresponding module.
@@ -377,9 +369,31 @@ releases:
           dead code block that never executed due to ``warnings`` always being empty.
         - sanity - Remove 35 stale ``action-plugin-docs`` ignore entries and delete
           ``ignore-2.15.txt`` as the collection requires ``ansible>=2.16.0``.
+      release_summary:
+        This bugfix release fixes action plugin naming and sanity issues
+        that were blocking Automation Hub certification. All 32 resource module action
+        plugins are renamed to use the ``iosxr_`` prefix, orphaned legacy action plugins
+        are removed, and ``plugin_routing.action`` redirects are added for backward
+        compatibility. The previous 12.3.0 release added a new ``content`` parameter
+        for ``iosxr_config``, deprecated the ``src`` parameter's automatic Jinja2
+        template processing, fixed BGP ``remote_as`` ASDOT notation handling, and
+        bumped the minimum ``ansible.netcommon`` dependency to ``>=8.5.2``.
     fragments:
       - fix-action-plugin-docs-certification.yaml
     release_date: "2026-05-12"
+  12.3.2:
+    changes:
+      bugfixes:
+        - iosxr_ospfv2 - Enhanced max-metric router-lsa support with comprehensive configuration
+          options (external-lsa, summary-lsa, on-startup with wait_for_bgp/wait_period,
+          include-stub), added mutual exclusivity validation for conflicting parameters,
+          corrected on_startup.wait_for_bgp parameter type from integer to boolean,
+          and fixed idempotency across all states.
+    fragments:
+      - codecov.yaml
+      - fix_vrf_interfaces_integration_tests.yaml
+      - iosxr_ospfv2_max_metric.yaml
+    release_date: "2026-06-12"
   2.0.0:
     changes:
       bugfixes:
