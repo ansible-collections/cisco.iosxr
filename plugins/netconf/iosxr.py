@@ -45,7 +45,7 @@ import json
 import re
 
 from ansible.errors import AnsibleConnectionFailure
-from ansible.module_utils._text import to_native, to_text
+from ansible.module_utils.common.text.converters import to_native, to_text
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.netconf import (
     remove_namespaces,
 )

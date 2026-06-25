@@ -26,7 +26,7 @@ from unittest import TestCase
 from unittest.mock import MagicMock
 
 from ansible.errors import AnsibleConnectionFailure
-from ansible.module_utils._text import to_bytes, to_text
+from ansible.module_utils.common.text.converters import to_bytes, to_text
 
 from ansible_collections.cisco.iosxr.plugins.cliconf import iosxr
 
