@@ -24,6 +24,12 @@
         - neighbor: 192.0.2.11
           remote_as: 65537
           cluster_id: 3
+          shutdown:
+            set: false
+        - neighbor: 203.0.113.12
+          remote_as: 4394.6
+          shutdown:
+            set: true
     state: rendered
   register: result
 

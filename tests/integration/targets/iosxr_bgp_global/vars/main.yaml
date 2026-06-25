@@ -23,6 +23,7 @@ merged:
     - remote-as 65001
     - neighbor 203.0.113.12
     - remote-as 4394.6
+    - shutdown
     - vrf vrf_asdot
     - neighbor 198.51.100.100
     - remote-as 65540
@@ -63,6 +64,8 @@ merged:
         remote_as: "65001"
       - neighbor_address: 203.0.113.12
         remote_as: "4394.6"
+        shutdown:
+          set: true
     # VRF neighbor lists follow string sort of neighbor_address (e.g. .100 before .99).
     vrfs:
       - vrf: vrf_asdot
@@ -152,3 +155,6 @@ rendered:
     - neighbor 192.0.2.11
     - cluster-id 3
     - remote-as 65537
+    - neighbor 203.0.113.12
+    - remote-as 4394.6
+    - shutdown
