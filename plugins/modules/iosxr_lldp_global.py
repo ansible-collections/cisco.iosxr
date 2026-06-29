@@ -455,6 +455,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lldp_global.lldp_global import (
     Lldp_globalArgs,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import warn_and_exit
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.lldp_global.lldp_global import (
     Lldp_global,
 )
@@ -481,7 +482,7 @@ def main():
     )
 
     result = Lldp_global(module).execute_module()
-    module.exit_json(**result)
+    warn_and_exit(module, result)
 
 
 if __name__ == "__main__":

@@ -474,3 +474,9 @@ def _coerce(other):
 def netmask_to_cidr(netmask):
     # convert netmask to cidr and returns the cidr notation
     return str(sum([bin(int(x)).count("1") for x in netmask.split(".")]))
+
+
+def warn_and_exit(module, result):
+    for warning in result.pop('warnings', []):
+        module.warn(warning)
+    module.exit_json(**result)

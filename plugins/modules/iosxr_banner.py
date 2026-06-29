@@ -113,6 +113,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     is_netconf,
     load_config,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import warn_and_exit
 
 
 class ConfigBase(object):
@@ -278,7 +279,8 @@ def main():
     result = None
     if config_object is not None:
         result = config_object.run()
-    module.exit_json(**result)
+
+    warn_and_exit(module, result)
 
 
 if __name__ == "__main__":

@@ -143,6 +143,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.p
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_lines
 
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr import run_commands
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import warn_and_exit
 
 
 def parse_commands(module, warnings):
@@ -210,7 +211,7 @@ def main():
 
     result.update({"stdout": responses, "stdout_lines": list(to_lines(responses))})
 
-    module.exit_json(**result)
+    warn_and_exit(module, result)
 
 
 if __name__ == "__main__":

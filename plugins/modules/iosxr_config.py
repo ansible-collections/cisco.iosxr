@@ -313,6 +313,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     get_connection,
     load_config,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import warn_and_exit
 
 
 DEFAULT_COMMIT_COMMENT = "configured by iosxr_config"
@@ -529,7 +530,7 @@ def main():
         else:
             result["warnings"] = msg
 
-    module.exit_json(**result)
+    warn_and_exit(module, result)
 
 
 if __name__ == "__main__":

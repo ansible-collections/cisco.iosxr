@@ -82,6 +82,7 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     get_config,
     load_config,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import warn_and_exit
 
 
 USE_PERSISTENT_CONNECTION = True
@@ -198,7 +199,7 @@ def main():
             result["diff"] = dict(prepared=diff)
         result["changed"] = True
 
-    module.exit_json(**result)
+    warn_and_exit(module, result)
 
 
 if __name__ == "__main__":

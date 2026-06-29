@@ -817,6 +817,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lag_interfaces.lag_interfaces import (
     Lag_interfacesArgs,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import warn_and_exit
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.lag_interfaces.lag_interfaces import (
     Lag_interfaces,
 )
@@ -845,7 +846,7 @@ def main():
     )
 
     result = Lag_interfaces(module).execute_module()
-    module.exit_json(**result)
+    warn_and_exit(module, result)
 
 
 if __name__ == "__main__":
