@@ -477,6 +477,8 @@ def netmask_to_cidr(netmask):
 
 
 def warn_and_exit(module, result):
+    # Passing 'warnings' to exit_json is deprecated in ansible-core 2.23.
+    # Emit warnings via module.warn() and remove the key before exit.
     for warning in result.pop('warnings', []):
         module.warn(warning)
     module.exit_json(**result)
