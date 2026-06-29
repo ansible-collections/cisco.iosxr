@@ -116,6 +116,39 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         )
         self.execute_module(changed=False, commands=[])
 
+    def test_iosxr_bgp_global_merged_neighbor_shutdown(self):
+        run_cfg = dedent(
+            """\
+            router bgp 65536
+              neighbor 192.0.2.11
+                remote-as 65537
+                shutdown
+            """,
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="65536",
+                    neighbors=[
+                        dict(
+                            neighbor="192.0.2.11",
+                            remote_as="65537",
+                            shutdown=dict(set=False),
+                        ),
+                    ],
+                ),
+                state="merged",
+            ),
+        )
+        commands = [
+            "router bgp 65536",
+            "neighbor 192.0.2.11",
+            "no shutdown",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
     def test_iosxr_bgp_global_merged(self):
         set_module_args(
             dict(
@@ -327,6 +360,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               neighbor 192.0.2.11
                 remote-as 65537
                 cluster-id 3
+                shutdown
               neighbor 192.0.2.14
                 remote-as 65538
                 bfd fast-detect strict-mode
@@ -598,7 +632,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                 "socket receive-buffer-size 514\n neighbor 192.0.2.11\n  "
                 "local-as 4 no-prepend replace-as\n  "
                 "password encrypted 15060E1F107B\n  remote-as 65537\n  "
-                "cluster-id 3\n !\n neighbor 192.0.2.14\n  remote-as 65538\n  description test nbr description\n"
+                "cluster-id 3\n !\n neighbor 192.0.2.14\n  remote-as 65538\n  description test nbr description\n  shutdown\n"
                 " bfd fast-detect strict-mode\n "
                 " bfd multiplier 6\n  bfd minimum-interval 20\n !\n!",
                 state="parsed",
@@ -630,6 +664,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                     "neighbor_address": "192.0.2.14",
                     "remote_as": "65538",
                     "description": "test nbr description",
+                    "shutdown": {"set": True},
                 },
             ],
             "bfd": {"multiplier": 6, "minimum_interval": 20},
@@ -721,6 +756,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               neighbor 192.0.2.11
                 remote-as 65537
                 cluster-id 3
+                shutdown
               neighbor 192.0.2.14
                 remote-as 65538
                 bfd fast-detect strict-mode
@@ -807,6 +843,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               neighbor 192.0.2.11
                 remote-as 65537
                 cluster-id 3
+                shutdown
               neighbor 192.0.2.14
                 remote-as 65538
                 bfd fast-detect strict-mode
@@ -839,6 +876,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
                             neighbor="192.0.2.11",
                             cluster_id=3,
                             remote_as="65537",
+                            shutdown=dict(set=True),
                         ),
                         dict(
                             neighbor="192.0.2.14",

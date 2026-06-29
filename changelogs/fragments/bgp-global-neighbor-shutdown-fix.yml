@@ -1,0 +1,6 @@
+---
+bugfixes:
+  - bgp_global - Fixed neighbor shutdown state parsing to correctly handle
+    'no shutdown' command, ensuring proper idempotency when toggling neighbor shutdown state.
+  - bgp_global - Removed stale `_build_key` function present in `_bgp_list_to_dict`
+    within the config py file.

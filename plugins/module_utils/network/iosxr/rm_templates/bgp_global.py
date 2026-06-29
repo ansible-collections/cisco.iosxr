@@ -2294,18 +2294,20 @@ class Bgp_globalTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s+(?P<nbr_address>neighbor\s\S+)
+                (?P<negate>\sno)?
                 \s(?P<shutdown>shutdown)
                 $""", re.VERBOSE,
             ),
             "setval": "shutdown",
-            "compval": "shutdown",
+            "compval": "shutdown.set",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbors": {
                             "{{nbr_address.split(" ")[1]}}": {
                                 "shutdown": {
-                                    "set": "{{ True if shutdown is defined }}",
+                                    "set": "{{ True if shutdown is defined and negate is undefined "
+                                           "else False if negate is defined and shutdown is defined else None }}",
                                 },
                             },
                         },
