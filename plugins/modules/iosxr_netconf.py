@@ -82,7 +82,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     get_config,
     load_config,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import warn_and_exit
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    warn_and_exit,
+)
 
 
 USE_PERSISTENT_CONNECTION = True

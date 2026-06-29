@@ -693,9 +693,11 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.lldp_interfaces.lldp_interfaces import (
     Lldp_interfacesArgs,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import warn_and_exit
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.lldp_interfaces.lldp_interfaces import (
     Lldp_interfaces,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    warn_and_exit,
 )
 
 

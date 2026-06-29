@@ -157,8 +157,10 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.ping.ping import (
     PingArgs,
 )
-from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import warn_and_exit
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.ping.ping import Ping
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    warn_and_exit,
+)
 
 
 def main():
