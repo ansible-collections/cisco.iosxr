@@ -96,3 +96,58 @@
           - '"no shutdown" in result.commands'
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml
+
+# --- bmp_activate.server merged (requires BMP server pre-configured) ---
+- block:
+    - name: Setup BMP server 1 with host/port (device prerequisite for bmp-activate)
+      cisco.iosxr.iosxr_config:
+        lines:
+          - "host 1.2.3.4 port 12345"
+        parents:
+          - "bmp server 1"
+
+    - name: Merge neighbor with bmp_activate.server 1 — expect changed
+      cisco.iosxr.iosxr_bgp_global: &bmp_activate_id
+        config:
+          as_number: 65536
+          neighbors:
+            - neighbor: 192.0.2.11
+              remote_as: 65537
+              bmp_activate:
+                server: 1
+        state: merged
+      register: result
+
+    - name: Assert bmp-activate server 1 was generated
+      ansible.builtin.assert:
+        that:
+          - result.changed
+          - '"bmp-activate server 1" in result.commands'
+
+    - name: Merge same config again (idempotent)
+      cisco.iosxr.iosxr_bgp_global: *bmp_activate_id
+      register: result
+
+    - name: Assert idempotent run did not change
+      ansible.builtin.assert:
+        that:
+          - result.changed == false
+          - result.commands | length == 0
+
+  always:
+    - name: Cleanup — remove bmp-activate from neighbor
+      cisco.iosxr.iosxr_config:
+        lines:
+          - "no bmp-activate server 1"
+        parents:
+          - "router bgp 65536"
+          - "neighbor 192.0.2.11"
+      ignore_errors: true
+
+    - name: Cleanup — remove BMP server 1
+      cisco.iosxr.iosxr_config:
+        lines:
+          - "no bmp server 1"
+      ignore_errors: true
+
+    - ansible.builtin.include_tasks: _remove_config.yaml
