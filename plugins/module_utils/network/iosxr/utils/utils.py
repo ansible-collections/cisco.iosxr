@@ -12,9 +12,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 from functools import total_ordering
 
-from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import missing_required_lib
 from ansible.module_utils.common.network import is_masklen, to_netmask
+from ansible.module_utils.common.text.converters import to_text
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_diff,
     search_obj_in_list,
@@ -474,3 +474,11 @@ def _coerce(other):
 def netmask_to_cidr(netmask):
     # convert netmask to cidr and returns the cidr notation
     return str(sum([bin(int(x)).count("1") for x in netmask.split(".")]))
+
+
+def warn_and_exit(module, result):
+    # Passing 'warnings' to exit_json is deprecated in ansible-core 2.23.
+    # Emit warnings via module.warn() and remove the key before exit.
+    for warning in result.pop("warnings", []):
+        module.warn(warning)
+    module.exit_json(**result)

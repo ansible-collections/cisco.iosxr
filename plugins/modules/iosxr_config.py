@@ -299,8 +299,8 @@ import os
 import re
 import tempfile
 
-from ansible.module_utils._text import to_bytes, to_text
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.text.converters import to_bytes, to_text
 from ansible.module_utils.connection import ConnectionError
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.config import (
     NetworkConfig,
@@ -312,6 +312,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     get_config,
     get_connection,
     load_config,
+)
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    warn_and_exit,
 )
 
 
@@ -529,7 +532,7 @@ def main():
         else:
             result["warnings"] = msg
 
-    module.exit_json(**result)
+    warn_and_exit(module, result)
 
 
 if __name__ == "__main__":

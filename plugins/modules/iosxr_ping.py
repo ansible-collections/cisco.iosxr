@@ -158,6 +158,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
     PingArgs,
 )
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.ping.ping import Ping
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    warn_and_exit,
+)
 
 
 def main():
@@ -169,7 +172,7 @@ def main():
     module = AnsibleModule(argument_spec=PingArgs.argument_spec)
 
     result = Ping(module).execute_module()
-    module.exit_json(**result)
+    warn_and_exit(module, result)
 
 
 if __name__ == "__main__":

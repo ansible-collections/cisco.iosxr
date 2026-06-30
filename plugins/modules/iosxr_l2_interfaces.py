@@ -685,6 +685,9 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.argspec.
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.config.l2_interfaces.l2_interfaces import (
     L2_Interfaces,
 )
+from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
+    warn_and_exit,
+)
 
 
 def main():
@@ -708,7 +711,7 @@ def main():
     )
 
     result = L2_Interfaces(module).execute_module()
-    module.exit_json(**result)
+    warn_and_exit(module, result)
 
 
 if __name__ == "__main__":

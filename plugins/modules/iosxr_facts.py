@@ -215,7 +215,11 @@ def main():
     ansible_facts.update(additional_facts)
     warnings.extend(additional_warnings)
 
-    module.exit_json(ansible_facts=ansible_facts, warnings=warnings)
+    # Emit each warning using module.warn()
+    for warning in warnings:
+        module.warn(warning)
+
+    module.exit_json(ansible_facts=ansible_facts)
 
 
 if __name__ == "__main__":
