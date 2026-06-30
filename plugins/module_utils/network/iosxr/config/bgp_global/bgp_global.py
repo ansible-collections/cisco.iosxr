@@ -386,19 +386,6 @@ class Bgp_global(ResourceModule):
         :params entry: data dictionary
         """
 
-        def _build_key(x):
-            """Build primary key for path_attribute
-               option.
-            :params x: path_attribute dictionary
-            :returns: primary key as tuple
-            """
-            key_1 = "start_{0}".format(x.get("range", {}).get("start", ""))
-            key_2 = "end_{0}".format(x.get("range", {}).get("end", ""))
-            key_3 = "type_{0}".format(x.get("type", ""))
-            key_4 = x["action"]
-
-            return (key_1, key_2, key_3, key_4)
-
         if "servers" in entry.get("rpki", {}):
             entry["rpki"]["servers"] = {
                 x["name"]: x for x in entry.get("rpki", {}).get("servers", [])
