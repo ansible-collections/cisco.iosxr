@@ -149,6 +149,38 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         result = self.execute_module(changed=True)
         self.assertEqual(sorted(result["commands"]), sorted(commands))
 
+    def test_iosxr_bgp_global_merged_neighbor_bmp_activate(self):
+        run_cfg = dedent(
+            """\
+            router bgp 65536
+              neighbor 192.0.2.11
+                remote-as 65537
+            """,
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="65536",
+                    neighbors=[
+                        dict(
+                            neighbor_address="192.0.2.11",
+                            remote_as="65537",
+                            bmp_activate=dict(server=1),
+                        ),
+                    ],
+                ),
+                state="merged",
+            ),
+        )
+        commands = [
+            "router bgp 65536",
+            "neighbor 192.0.2.11",
+            "bmp-activate server 1",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
     def test_iosxr_bgp_global_merged(self):
         set_module_args(
             dict(

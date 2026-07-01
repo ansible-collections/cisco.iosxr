@@ -1,0 +1,6 @@
+---
+bugfixes:
+  - iosxr_bgp_global - Fixed compval typo 'bmp_activate.serevr' - 'bmp_activate.server'
+    that caused bmp-activate server configuration under neighbors to be a silent no-op.
+  - iosxr_bgp_templates - Fixed same compval typo in the neighbor-group context,
+    ensuring bmp-activate server is correctly generated for template-group neighbors.
