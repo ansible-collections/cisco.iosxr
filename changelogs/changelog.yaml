@@ -445,6 +445,13 @@ releases:
       - aap83883_default_originate.yml
       - fix_edit_config_huge_tree.yaml
     release_date: "2026-08-10"
+  12.4.2:
+    changes:
+      release_summary: |
+        This patch is a re-release of 12.4.1 containing fixes for
+        iosxr_bgp_neighbor_address_family facts gathering fix
+        and netconf connections to have huge_tree support
+    release_date: "2026-08-13"
   2.0.0:
     changes:
       bugfixes:

@@ -4,6 +4,15 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v12.4.2
+=======
+
+Release Summary
+---------------
+
+This patch is a re-release of 12.4.1 containing fixes for iosxr_bgp_neighbor_address_family facts gathering fix
+and netconf connections to have huge_tree support
+
 v12.4.1
 =======
 
