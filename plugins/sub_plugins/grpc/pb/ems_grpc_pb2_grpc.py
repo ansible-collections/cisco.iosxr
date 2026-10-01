@@ -6,26 +6,6 @@ try:
 
     from . import ems_grpc_pb2 as ems__grpc__pb2
 
-    GRPC_GENERATED_VERSION = "1.84.0"
-    GRPC_VERSION = grpc.__version__
-    _version_not_supported = False
-
-    try:
-        from grpc._utilities import first_version_is_lower
-
-        _version_not_supported = first_version_is_lower(GRPC_VERSION, GRPC_GENERATED_VERSION)
-    except ImportError:
-        _version_not_supported = True
-
-    if _version_not_supported:
-        raise RuntimeError(
-            f"The grpc package installed is at version {GRPC_VERSION},"
-            + " but the generated code in ems_grpc_pb2_grpc.py depends on"
-            + f" grpcio>={GRPC_GENERATED_VERSION}."
-            + f" Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}"
-            + f" or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.",
-        )
-
     class GrpcConfigOperStub:
         """Missing associated documentation comment in .proto file."""
 
@@ -39,61 +19,51 @@ try:
                 "/IOSXRExtensibleManagabilityService.gRPCConfigOper/GetConfig",
                 request_serializer=ems__grpc__pb2.ConfigGetArgs.SerializeToString,
                 response_deserializer=ems__grpc__pb2.ConfigGetReply.FromString,
-                _registered_method=True,
             )
             self.merge_config = channel.unary_unary(
                 "/IOSXRExtensibleManagabilityService.gRPCConfigOper/MergeConfig",
                 request_serializer=ems__grpc__pb2.ConfigArgs.SerializeToString,
                 response_deserializer=ems__grpc__pb2.ConfigReply.FromString,
-                _registered_method=True,
             )
             self.delete_config = channel.unary_unary(
                 "/IOSXRExtensibleManagabilityService.gRPCConfigOper/DeleteConfig",
                 request_serializer=ems__grpc__pb2.ConfigArgs.SerializeToString,
                 response_deserializer=ems__grpc__pb2.ConfigReply.FromString,
-                _registered_method=True,
             )
             self.replace_config = channel.unary_unary(
                 "/IOSXRExtensibleManagabilityService.gRPCConfigOper/ReplaceConfig",
                 request_serializer=ems__grpc__pb2.ConfigArgs.SerializeToString,
                 response_deserializer=ems__grpc__pb2.ConfigReply.FromString,
-                _registered_method=True,
             )
             self.cli_config = channel.unary_unary(
                 "/IOSXRExtensibleManagabilityService.gRPCConfigOper/CliConfig",
                 request_serializer=ems__grpc__pb2.CliConfigArgs.SerializeToString,
                 response_deserializer=ems__grpc__pb2.CliConfigReply.FromString,
-                _registered_method=True,
             )
             self.commit_replace = channel.unary_unary(
                 "/IOSXRExtensibleManagabilityService.gRPCConfigOper/CommitReplace",
                 request_serializer=ems__grpc__pb2.CommitReplaceArgs.SerializeToString,
                 response_deserializer=ems__grpc__pb2.CommitReplaceReply.FromString,
-                _registered_method=True,
             )
             self.commit_config = channel.unary_unary(
                 "/IOSXRExtensibleManagabilityService.gRPCConfigOper/CommitConfig",
                 request_serializer=ems__grpc__pb2.CommitArgs.SerializeToString,
                 response_deserializer=ems__grpc__pb2.CommitReply.FromString,
-                _registered_method=True,
             )
             self.config_discard_changes = channel.unary_unary(
                 "/IOSXRExtensibleManagabilityService.gRPCConfigOper/ConfigDiscardChanges",
                 request_serializer=ems__grpc__pb2.DiscardChangesArgs.SerializeToString,
                 response_deserializer=ems__grpc__pb2.DiscardChangesReply.FromString,
-                _registered_method=True,
             )
             self.get_oper = channel.unary_stream(
                 "/IOSXRExtensibleManagabilityService.gRPCConfigOper/GetOper",
                 request_serializer=ems__grpc__pb2.GetOperArgs.SerializeToString,
                 response_deserializer=ems__grpc__pb2.GetOperReply.FromString,
-                _registered_method=True,
             )
             self.create_subs = channel.unary_stream(
                 "/IOSXRExtensibleManagabilityService.gRPCConfigOper/CreateSubs",
                 request_serializer=ems__grpc__pb2.CreateSubsArgs.SerializeToString,
                 response_deserializer=ems__grpc__pb2.CreateSubsReply.FromString,
-                _registered_method=True,
             )
 
     class GrpcConfigOperServicer:
@@ -227,10 +197,6 @@ try:
             rpc_method_handlers,
         )
         server.add_generic_rpc_handlers((generic_handler,))
-        server.add_registered_method_handlers(
-            "IOSXRExtensibleManagabilityService.gRPCConfigOper",
-            rpc_method_handlers,
-        )
 
     # This class is part of an EXPERIMENTAL API.
     class GrpcConfigOper:
@@ -263,7 +229,6 @@ try:
                 wait_for_ready,
                 timeout,
                 metadata,
-                _registered_method=True,
             )
 
         @staticmethod
@@ -293,7 +258,6 @@ try:
                 wait_for_ready,
                 timeout,
                 metadata,
-                _registered_method=True,
             )
 
         @staticmethod
@@ -323,7 +287,6 @@ try:
                 wait_for_ready,
                 timeout,
                 metadata,
-                _registered_method=True,
             )
 
         @staticmethod
@@ -353,7 +316,6 @@ try:
                 wait_for_ready,
                 timeout,
                 metadata,
-                _registered_method=True,
             )
 
         @staticmethod
@@ -383,7 +345,6 @@ try:
                 wait_for_ready,
                 timeout,
                 metadata,
-                _registered_method=True,
             )
 
         @staticmethod
@@ -413,7 +374,6 @@ try:
                 wait_for_ready,
                 timeout,
                 metadata,
-                _registered_method=True,
             )
 
         @staticmethod
@@ -443,7 +403,6 @@ try:
                 wait_for_ready,
                 timeout,
                 metadata,
-                _registered_method=True,
             )
 
         @staticmethod
@@ -473,7 +432,6 @@ try:
                 wait_for_ready,
                 timeout,
                 metadata,
-                _registered_method=True,
             )
 
         @staticmethod
@@ -503,7 +461,6 @@ try:
                 wait_for_ready,
                 timeout,
                 metadata,
-                _registered_method=True,
             )
 
         @staticmethod
@@ -533,7 +490,6 @@ try:
                 wait_for_ready,
                 timeout,
                 metadata,
-                _registered_method=True,
             )
 
     class GrpcExecStub:
@@ -549,13 +505,11 @@ try:
                 "/IOSXRExtensibleManagabilityService.gRPCExec/ShowCmdTextOutput",
                 request_serializer=ems__grpc__pb2.ShowCmdArgs.SerializeToString,
                 response_deserializer=ems__grpc__pb2.ShowCmdTextReply.FromString,
-                _registered_method=True,
             )
             self.show_cmd_json_output = channel.unary_stream(
                 "/IOSXRExtensibleManagabilityService.gRPCExec/ShowCmdJSONOutput",
                 request_serializer=ems__grpc__pb2.ShowCmdArgs.SerializeToString,
                 response_deserializer=ems__grpc__pb2.ShowCmdJSONReply.FromString,
-                _registered_method=True,
             )
 
     class GrpcExecServicer:
@@ -593,10 +547,6 @@ try:
             rpc_method_handlers,
         )
         server.add_generic_rpc_handlers((generic_handler,))
-        server.add_registered_method_handlers(
-            "IOSXRExtensibleManagabilityService.gRPCExec",
-            rpc_method_handlers,
-        )
 
     # This class is part of an EXPERIMENTAL API.
     class GrpcExec:
@@ -629,7 +579,6 @@ try:
                 wait_for_ready,
                 timeout,
                 metadata,
-                _registered_method=True,
             )
 
         @staticmethod
@@ -659,7 +608,6 @@ try:
                 wait_for_ready,
                 timeout,
                 metadata,
-                _registered_method=True,
             )
 
 except ImportError:

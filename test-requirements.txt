@@ -1,6 +1,6 @@
 google-api-python-client
-grpcio
-protobuf
+grpcio>=1.48.4
+protobuf>=3.20.0
 pytest-ansible
 pytest-xdist
 pytest-cov

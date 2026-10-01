@@ -1,5 +1,8 @@
 syntax = "proto3";
 
+// Keep generated Python stubs compatible with protobuf>=3.20.0 and
+// grpcio>=1.48.4. The generation tool version is not the runtime floor.
+
 package IOSXRExtensibleManagabilityService;
 
 enum CommitResult {

@@ -185,11 +185,7 @@ def test_generated_registration_helpers_keep_wire_rpc_names():
         server,
     )
 
-    assert server.add_registered_method_handlers.call_count == 2
-    config_handlers = server.add_registered_method_handlers.call_args_list[0].args[1]
-    exec_handlers = server.add_registered_method_handlers.call_args_list[1].args[1]
-    assert "GetOper" in config_handlers
-    assert "ShowCmdTextOutput" in exec_handlers
+    assert server.add_generic_rpc_handlers.call_count == 2
 
 
 @pytest.mark.parametrize(

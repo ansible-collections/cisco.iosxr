@@ -35,11 +35,11 @@ class Grpc(GrpcBase):
         self._ems_grpc_pb2_grpc = ems_grpc_pb2_grpc
         if not hasattr(self._ems_grpc_pb2, "DESCRIPTOR"):
             raise AnsibleError(
-                "protobuf>=7.35.1 is required to use the IOS XR gRPC connection",
+                "protobuf>=3.20.0 is required to use the IOS XR gRPC connection",
             )
         if not hasattr(self._ems_grpc_pb2_grpc, "GrpcConfigOperStub"):
             raise AnsibleError(
-                "grpcio>=1.84.0 is required to use the IOS XR gRPC connection",
+                "grpcio>=1.48.4 is required to use the IOS XR gRPC connection",
             )
 
     def get_config(self, section=None):
