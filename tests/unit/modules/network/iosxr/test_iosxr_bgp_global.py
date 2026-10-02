@@ -284,7 +284,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               !
              !
             !
-            """
+            """,
         )
         set_module_args(
             dict(
@@ -335,7 +335,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               !
              !
             !
-            """
+            """,
         )
         set_module_args(
             dict(
@@ -359,7 +359,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               !
              !
             !
-            """
+            """,
         )
         set_module_args(
             dict(
@@ -392,7 +392,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               !
              !
             !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
@@ -449,7 +449,7 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
               !
              !
             !
-            """
+            """,
         )
         self.get_config.return_value = run_cfg
         set_module_args(
