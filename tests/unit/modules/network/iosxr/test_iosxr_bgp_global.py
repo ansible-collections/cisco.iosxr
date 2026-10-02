@@ -262,6 +262,226 @@ class TestIosxrBgpGlobalModule(TestIosxrModule):
         for needle in cases:
             self.assertIn(needle, joined)
 
+    def test_iosxr_bgp_global_parsed_vrf_mixed_name_types(self):
+        """Facts parsing must not fail when VRF names mix str and int types.
+
+        Regression test for issue #560: numeric VRF names are parsed as int
+        by the rm_template, which made sorted() raise
+        "'<' not supported between instances of 'str' and 'int'".
+        """
+        running_config = dedent(
+            """\
+            router bgp 65530
+             bgp router-id 10.242.0.193
+             vrf 11001
+              neighbor 10.240.120.2
+               remote-as 65531
+              !
+             !
+             vrf test_test_22
+              neighbor 10.240.121.3
+               remote-as 65532
+              !
+             !
+            !
+            """
+        )
+        set_module_args(
+            dict(
+                running_config=running_config,
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        parsed_vrfs = [
+            {
+                "vrf": "11001",
+                "neighbors": [
+                    {
+                        "neighbor_address": "10.240.120.2",
+                        "remote_as": "65531",
+                    },
+                ],
+            },
+            {
+                "vrf": "test_test_22",
+                "neighbors": [
+                    {
+                        "neighbor_address": "10.240.121.3",
+                        "remote_as": "65532",
+                    },
+                ],
+            },
+        ]
+        self.assertEqual(result["parsed"].get("vrfs"), parsed_vrfs)
+
+    def test_iosxr_bgp_global_parsed_numeric_vrf_lex_order(self):
+        """Numeric-only VRF names sort lexicographically as strings, not numerically.
+
+        Pins the observable ordering change introduced by str() key in the fix
+        for #560: 3, 20, 100 sort as "100", "20", "3". A later switch to
+        natural/numeric sort would fail here loudly, not silently.
+        """
+        running_config = dedent(
+            """\
+            router bgp 65530
+             vrf 3
+              !
+             !
+             vrf 20
+              !
+             !
+             vrf 100
+              !
+             !
+            !
+            """
+        )
+        set_module_args(
+            dict(
+                running_config=running_config,
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        vrfs = [v["vrf"] for v in result["parsed"]["vrfs"]]
+        self.assertEqual(vrfs, ["100", "20", "3"])
+
+    def test_iosxr_bgp_global_parsed_string_vrf_order_unchanged(self):
+        """Pure string VRF names keep lexicographic order (str() is identity)."""
+        running_config = dedent(
+            """\
+            router bgp 65530
+             vrf vrfB
+              !
+             !
+             vrf vrfA
+              !
+             !
+            !
+            """
+        )
+        set_module_args(
+            dict(
+                running_config=running_config,
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        vrfs = [v["vrf"] for v in result["parsed"]["vrfs"]]
+        self.assertEqual(vrfs, ["vrfA", "vrfB"])
+
+    def test_iosxr_bgp_global_merged_vrf_mixed_name_types(self):
+        """Adding a new VRF must work when existing VRF names mix str and int types.
+
+        Regression test for issue #560: adding VRF VRF_GREEN to a router that
+        already has both numeric (11001) and string (test_test_22) VRF names.
+        """
+        run_cfg = dedent(
+            """\
+            router bgp 65530
+             bgp router-id 10.242.0.193
+             vrf 11001
+              neighbor 10.240.120.2
+               remote-as 65531
+              !
+             !
+             vrf test_test_22
+              neighbor 10.240.121.3
+               remote-as 65532
+              !
+             !
+            !
+            """
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="65530",
+                    vrfs=[
+                        dict(
+                            vrf=11001,
+                            neighbors=[
+                                dict(neighbor="10.240.120.2", remote_as=65531),
+                            ],
+                        ),
+                        dict(vrf="test_test_22"),
+                        dict(
+                            vrf="VRF_GREEN",
+                            neighbors=[
+                                dict(neighbor="10.240.120.9", remote_as=65532),
+                            ],
+                        ),
+                    ],
+                ),
+                state="merged",
+            ),
+        )
+        commands = [
+            "router bgp 65530",
+            "vrf VRF_GREEN",
+            "neighbor 10.240.120.9",
+            "remote-as 65532",
+        ]
+        result = self.execute_module(changed=True)
+        self.assertEqual(sorted(result["commands"]), sorted(commands))
+
+    def test_iosxr_bgp_global_merged_vrf_mixed_name_types_idempotent(self):
+        """Idempotence with mixed str/int VRF names must be detected correctly."""
+        run_cfg = dedent(
+            """\
+            router bgp 65530
+             bgp router-id 10.242.0.193
+             vrf 11001
+              neighbor 10.240.120.2
+               remote-as 65531
+              !
+             !
+             vrf test_test_22
+              neighbor 10.240.121.3
+               remote-as 65532
+              !
+             !
+             vrf VRF_GREEN
+              neighbor 10.240.120.9
+               remote-as 65532
+              !
+             !
+            !
+            """
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="65530",
+                    vrfs=[
+                        dict(
+                            vrf=11001,
+                            neighbors=[
+                                dict(neighbor="10.240.120.2", remote_as=65531),
+                            ],
+                        ),
+                        dict(
+                            vrf="test_test_22",
+                            neighbors=[
+                                dict(neighbor="10.240.121.3", remote_as=65532),
+                            ],
+                        ),
+                        dict(
+                            vrf="VRF_GREEN",
+                            neighbors=[
+                                dict(neighbor="10.240.120.9", remote_as=65532),
+                            ],
+                        ),
+                    ],
+                ),
+                state="merged",
+            ),
+        )
+        result = self.execute_module(changed=False, commands=[])
+
     def test_iosxr_bgp_global_merged_matches_integration_fixture_commands(self):
         """Keep integration merged.commands in sync with ResourceModule output."""
         set_module_args(
