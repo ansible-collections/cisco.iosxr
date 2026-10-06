@@ -29,21 +29,21 @@
       cisco.iosxr.iosxr_ospf_interfaces:
         config:
           - address_family:
-            - afi: ipv4
-              authentication:
-                message_digest:
-                  keychain: cisco
-              cost: 20
-              processes:
-              - area:
-                  area_id: 0.0.0.3
-                process_id: LAB3
-            - afi: ipv6
-              cost: 30
-              processes:
-              - area:
-                  area_id: 0.0.0.2
-                process_id: LAB3
+              - afi: ipv4
+                authentication:
+                  message_digest:
+                    keychain: cisco
+                cost: 20
+                processes:
+                  - area:
+                      area_id: 0.0.0.3
+                    process_id: LAB3
+              - afi: ipv6
+                cost: 30
+                processes:
+                  - area:
+                      area_id: 0.0.0.2
+                    process_id: LAB3
             name: GigabitEthernet0/0/0/0
             type: gigabitethernet
         state: merged
@@ -64,21 +64,21 @@
       cisco.iosxr.iosxr_ospf_interfaces:
         config:
           - address_family:
-            - afi: ipv4
-              authentication:
-                message_digest:
-                  keychain: ciscoiosxr
-              cost: 30
-              processes:
-              - area:
-                  area_id: 0.0.0.3
-                process_id: LAB3
-            - afi: ipv6
-              cost: 30
-              processes:
-              - area:
-                  area_id: 0.0.0.2
-                process_id: LAB3
+              - afi: ipv4
+                authentication:
+                  message_digest:
+                    keychain: ciscoiosxr
+                cost: 30
+                processes:
+                  - area:
+                      area_id: 0.0.0.3
+                    process_id: LAB3
+              - afi: ipv6
+                cost: 30
+                processes:
+                  - area:
+                      area_id: 0.0.0.2
+                    process_id: LAB3
             name: GigabitEthernet0/0/0/0
             type: gigabitethernet
         state: replaced
@@ -105,15 +105,15 @@
       cisco.iosxr.iosxr_ospf_interfaces:
         config:
           - address_family:
-            - afi: ipv4
-              authentication:
-                message_digest:
-                  keychain: iosxr
-              cost: 10
-              processes:
-              - area:
-                  area_id: 0.0.0.3
-                process_id: LAB1
+              - afi: ipv4
+                authentication:
+                  message_digest:
+                    keychain: iosxr
+                cost: 10
+                processes:
+                  - area:
+                      area_id: 0.0.0.3
+                    process_id: LAB1
             name: GigabitEthernet0/0/0/1
             type: gigabitethernet
         state: overridden
@@ -159,21 +159,21 @@
       cisco.iosxr.iosxr_ospf_interfaces:
         config:
           - address_family:
-            - afi: ipv4
-              authentication:
-                message_digest:
-                  keychain: cisco
-              cost: 20
-              processes:
-              - area:
-                  area_id: 0.0.0.3
-                process_id: LAB3
-            - afi: ipv6
-              cost: 30
-              processes:
-              - area:
-                  area_id: 0.0.0.2
-                process_id: LAB3
+              - afi: ipv4
+                authentication:
+                  message_digest:
+                    keychain: cisco
+                cost: 20
+                processes:
+                  - area:
+                      area_id: 0.0.0.3
+                    process_id: LAB3
+              - afi: ipv6
+                cost: 30
+                processes:
+                  - area:
+                      area_id: 0.0.0.2
+                    process_id: LAB3
             name: GigabitEthernet0/0/0/0
             type: gigabitethernet
         state: rendered

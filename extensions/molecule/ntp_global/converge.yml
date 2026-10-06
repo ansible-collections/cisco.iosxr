@@ -50,20 +50,20 @@
               serve: ServeAcl1
               serve_only: ServeOnlyAcl1
             vrfs:
-            - ipv4:
-                peer: PeerAcl3
-                serve: ServeAcl2
-              name: siteA
+              - ipv4:
+                  peer: PeerAcl3
+                  serve: ServeAcl2
+                name: siteA
           authenticate: true
           broadcastdelay: 1
           drift:
             aging_time: 0
             file: apphost
           interfaces:
-          - broadcast_client: true
-            multicast_client: 224.0.0.8
-            multicast_destination: 224.0.0.8
-            name: GigabitEthernet0/0/0/0
+            - broadcast_client: true
+              multicast_client: 224.0.0.8
+              multicast_destination: 224.0.0.8
+              name: GigabitEthernet0/0/0/0
           ipv4:
             dscp: af11
           ipv6:
@@ -74,19 +74,19 @@
           max_associations: 10
           passive: true
           peers:
-          - iburst: true
-            peer: 192.0.2.1
-            vrf: siteC
+            - iburst: true
+              peer: 192.0.2.1
+              vrf: siteC
           servers:
-          - burst: true
-            server: 192.0.2.2
-            vrf: siteD
+            - burst: true
+              server: 192.0.2.2
+              vrf: siteD
           source_interface: GigabitEthernet0/0/0/0
           source_vrfs:
-          - name: GigabitEthernet0/0/0/0
-            vrf: siteE
+            - name: GigabitEthernet0/0/0/0
+              vrf: siteE
           trusted_keys:
-          - key_id: 1
+            - key_id: 1
           update_calendar: true
         state: merged
     - name: Assert commands
@@ -112,20 +112,20 @@
               serve: ServeAcl4
               serve_only: ServeOnlyAcl1
             vrfs:
-            - ipv4:
-                peer: PeerAcl3
-                serve: ServeAcl2
-              name: siteA
+              - ipv4:
+                  peer: PeerAcl3
+                  serve: ServeAcl2
+                name: siteA
           authenticate: true
           broadcastdelay: 1
           drift:
             aging_time: 0
             file: apphost
           interfaces:
-          - broadcast_client: true
-            multicast_client: 224.0.0.8
-            multicast_destination: 224.0.0.8
-            name: GigabitEthernet0/0/0/1
+            - broadcast_client: true
+              multicast_client: 224.0.0.8
+              multicast_destination: 224.0.0.8
+              name: GigabitEthernet0/0/0/1
           ipv4:
             dscp: af12
           ipv6:
@@ -136,19 +136,19 @@
           max_associations: 10
           passive: true
           peers:
-          - iburst: true
-            peer: 192.0.2.3
-            vrf: siteC
+            - iburst: true
+              peer: 192.0.2.3
+              vrf: siteC
           servers:
-          - burst: true
-            server: 192.0.2.2
-            vrf: siteD
+            - burst: true
+              server: 192.0.2.2
+              vrf: siteD
           source_interface: GigabitEthernet0/0/0/1
           source_vrfs:
-          - name: GigabitEthernet0/0/0/0
-            vrf: siteE
+            - name: GigabitEthernet0/0/0/0
+              vrf: siteE
           trusted_keys:
-          - key_id: 1
+            - key_id: 1
           update_calendar: true
         state: replaced
     - name: Assert commands
@@ -174,20 +174,20 @@
               serve: ServeAcl4
               serve_only: ServeOnlyAcl1
             vrfs:
-            - ipv4:
-                peer: PeerAcl3
-                serve: ServeAcl2
-              name: siteA
+              - ipv4:
+                  peer: PeerAcl3
+                  serve: ServeAcl2
+                name: siteA
           authenticate: true
           broadcastdelay: 1
           drift:
             aging_time: 0
             file: apphost
           interfaces:
-          - broadcast_client: true
-            multicast_client: 224.0.0.8
-            multicast_destination: 224.0.0.8
-            name: GigabitEthernet0/0/0/1
+            - broadcast_client: true
+              multicast_client: 224.0.0.8
+              multicast_destination: 224.0.0.8
+              name: GigabitEthernet0/0/0/1
           ipv4:
             dscp: af12
           ipv6:
@@ -198,19 +198,19 @@
           max_associations: 10
           passive: true
           peers:
-          - iburst: true
-            peer: 192.0.2.3
-            vrf: siteC
+            - iburst: true
+              peer: 192.0.2.3
+              vrf: siteC
           servers:
-          - burst: true
-            server: 192.0.2.2
-            vrf: siteD
+            - burst: true
+              server: 192.0.2.2
+              vrf: siteD
           source_interface: GigabitEthernet0/0/0/1
           source_vrfs:
-          - name: GigabitEthernet0/0/0/0
-            vrf: siteE
+            - name: GigabitEthernet0/0/0/0
+              vrf: siteE
           trusted_keys:
-          - key_id: 1
+            - key_id: 1
           update_calendar: true
         state: overridden
     - name: Assert commands

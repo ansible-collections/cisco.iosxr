@@ -1,9 +1,9 @@
 devices:
-- scenario: iosxr-route-maps-gathered
-  count: 1
-- scenario: iosxr-route-maps-merged
-  count: 1
-- scenario: iosxr-route-maps-overridden
-  count: 1
-- scenario: iosxr-route-maps-purged
-  count: 1
+  - scenario: iosxr-route-maps-gathered
+    count: 1
+  - scenario: iosxr-route-maps-merged
+    count: 1
+  - scenario: iosxr-route-maps-overridden
+    count: 1
+  - scenario: iosxr-route-maps-purged
+    count: 1

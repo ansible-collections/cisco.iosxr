@@ -79,4 +79,3 @@
       ansible.builtin.assert:
         that:
           - result.rendered is defined
-

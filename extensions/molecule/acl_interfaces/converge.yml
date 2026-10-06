@@ -28,24 +28,24 @@
       cisco.iosxr.iosxr_acl_interfaces:
         config:
           - access_groups:
-            - acls:
-              - direction: in
-                name: acl_1
-              - direction: out
-                name: acl_2
-              afi: ipv4
-            - acls:
-              - direction: in
-                name: acl6_1
-              - direction: out
-                name: acl6_2
-              afi: ipv6
+              - acls:
+                  - direction: in
+                    name: acl_1
+                  - direction: out
+                    name: acl_2
+                afi: ipv4
+              - acls:
+                  - direction: in
+                    name: acl6_1
+                  - direction: out
+                    name: acl6_2
+                afi: ipv6
             name: GigabitEthernet0/0/0/0
           - access_groups:
-            - acls:
-              - direction: out
-                name: acl_1
-              afi: ipv4
+              - acls:
+                  - direction: out
+                    name: acl_1
+                afi: ipv4
             name: GigabitEthernet0/0/0/1
         state: merged
     - name: Assert commands
@@ -65,10 +65,10 @@
       cisco.iosxr.iosxr_acl_interfaces:
         config:
           - access_groups:
-            - acls:
-              - direction: in
-                name: acl6_3
-              afi: ipv6
+              - acls:
+                  - direction: in
+                    name: acl6_3
+                afi: ipv6
             name: GigabitEthernet0/0/0/0
         state: replaced
     - name: Assert commands
@@ -88,20 +88,20 @@
       cisco.iosxr.iosxr_acl_interfaces:
         config:
           - access_groups:
-            - acls:
-              - direction: in
-                name: acl6_3
-              afi: ipv6
+              - acls:
+                  - direction: in
+                    name: acl6_3
+                afi: ipv6
             name: GigabitEthernet0/0/0/0
           - access_groups:
-            - acls:
-              - direction: in
-                name: acl_2
-              afi: ipv4
-            - acls:
-              - direction: out
-                name: acl6_3
-              afi: ipv6
+              - acls:
+                  - direction: in
+                    name: acl_2
+                afi: ipv4
+              - acls:
+                  - direction: out
+                    name: acl6_3
+                afi: ipv6
             name: GigabitEthernet0/0/0/1
         state: overridden
     - name: Assert commands
@@ -154,28 +154,27 @@
       cisco.iosxr.iosxr_acl_interfaces:
         config:
           - access_groups:
-            - acls:
-              - direction: in
-                name: acl_1
-              - direction: out
-                name: acl_2
-              afi: ipv4
-            - acls:
-              - direction: in
-                name: acl6_1
-              - direction: out
-                name: acl6_2
-              afi: ipv6
+              - acls:
+                  - direction: in
+                    name: acl_1
+                  - direction: out
+                    name: acl_2
+                afi: ipv4
+              - acls:
+                  - direction: in
+                    name: acl6_1
+                  - direction: out
+                    name: acl6_2
+                afi: ipv6
             name: GigabitEthernet0/0/0/0
           - access_groups:
-            - acls:
-              - direction: out
-                name: acl_1
-              afi: ipv4
+              - acls:
+                  - direction: out
+                    name: acl_1
+                afi: ipv4
             name: GigabitEthernet0/0/0/1
         state: rendered
     - name: Assert rendered commands
       ansible.builtin.assert:
         that:
           - result.rendered is defined
-

@@ -30,20 +30,20 @@
         config:
           chassis_id: test2
           communities:
-          - acl_v4: test
-            acl_v6: test1
-            name: test2
-            ro: true
-            sdrowner: true
+            - acl_v4: test
+              acl_v6: test1
+              name: test2
+              ro: true
+              sdrowner: true
           community_maps:
-          - context: c1
-            name: cm1
-            security_name: s1
-            target_list: t1
+            - context: c1
+              name: cm1
+              security_name: s1
+              target_list: t1
           contact: t1
           context:
-          - c1
-          - c2
+            - c1
+            - c2
           correlator:
             buffer_size: 1024
           drop:
@@ -71,8 +71,8 @@
           packetsize: 490
           queue_length: 2
           targets:
-          - host: 1.1.1.2
-            name: test
+            - host: 1.1.1.2
+              name: test
           throttle_time: 60
           timeouts:
             duplicate: 0
@@ -108,17 +108,17 @@
               vc_up: true
             msdp_peer_state_change: true
           users:
-          - Ipv4_acl: test1
-            Ipv6_acl: test2
-            group: test2
-            user: u1
-            version: v1
+            - Ipv4_acl: test1
+              Ipv6_acl: test2
+              group: test2
+              user: u1
+              version: v1
           vrfs:
-          - hosts:
-            - community: test1
-              host: 1.1.1.1
-              traps: true
-            vrf: vrf1
+            - hosts:
+                - community: test1
+                  host: 1.1.1.1
+                  traps: true
+              vrf: vrf1
         state: merged
     - name: Assert commands
       ansible.builtin.assert:
@@ -138,20 +138,20 @@
         config:
           chassis_id: test
           communities:
-          - acl_v4: test
-            acl_v6: test1
-            name: test1
-            ro: true
-            sdrowner: true
+            - acl_v4: test
+              acl_v6: test1
+              name: test1
+              ro: true
+              sdrowner: true
           community_maps:
-          - context: c1
-            name: cm2
-            security_name: s1
-            target_list: t1
+            - context: c1
+              name: cm2
+              security_name: s1
+              target_list: t1
           contact: t1
           context:
-          - c1
-          - c2
+            - c1
+            - c2
           correlator:
             buffer_size: 1025
           drop:
@@ -179,8 +179,8 @@
           packetsize: 491
           queue_length: 2
           targets:
-          - host: 1.1.1.2
-            name: test
+            - host: 1.1.1.2
+              name: test
           throttle_time: 60
           timeouts:
             duplicate: 0
@@ -224,20 +224,20 @@
         config:
           chassis_id: test
           communities:
-          - acl_v4: test
-            acl_v6: test1
-            name: test1
-            ro: true
-            sdrowner: true
+            - acl_v4: test
+              acl_v6: test1
+              name: test1
+              ro: true
+              sdrowner: true
           community_maps:
-          - context: c1
-            name: cm2
-            security_name: s1
-            target_list: t1
+            - context: c1
+              name: cm2
+              security_name: s1
+              target_list: t1
           contact: t1
           context:
-          - c1
-          - c2
+            - c1
+            - c2
           correlator:
             buffer_size: 1025
           drop:
@@ -265,8 +265,8 @@
           packetsize: 491
           queue_length: 2
           targets:
-          - host: 1.1.1.2
-            name: test
+            - host: 1.1.1.2
+              name: test
           throttle_time: 60
           timeouts:
             duplicate: 0

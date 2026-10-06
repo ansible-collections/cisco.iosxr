@@ -29,37 +29,37 @@
       cisco.iosxr.iosxr_ospfv3:
         config:
           processes:
-          - areas:
-            - area_id: 10
-              hello_interval: 2
-            process_id: 27
-          - authentication:
-              disable: true
-            process_id: 26
-          - areas:
-            - area_id: 11
-              cost: 11
-              default_cost: 5
-            - area_id: 22
-              default_cost: 6
-            process_id: 10
-          - areas:
-            - area_id: 11
-              default_cost: 5
-            - area_id: 22
-              default_cost: 6
-            cost: 2
-            dead_interval: 2
-            default_metric: 10
-            demand_circuit: true
-            hello_interval: 1
-            mtu_ignore: true
-            packet_size: 577
-            priority: 1
-            process_id: 30
-            retransmit_interval: 2
-            router_id: 2.2.2.2
-            transmit_delay: 2
+            - areas:
+                - area_id: 10
+                  hello_interval: 2
+              process_id: 27
+            - authentication:
+                disable: true
+              process_id: 26
+            - areas:
+                - area_id: 11
+                  cost: 11
+                  default_cost: 5
+                - area_id: 22
+                  default_cost: 6
+              process_id: 10
+            - areas:
+                - area_id: 11
+                  default_cost: 5
+                - area_id: 22
+                  default_cost: 6
+              cost: 2
+              dead_interval: 2
+              default_metric: 10
+              demand_circuit: true
+              hello_interval: 1
+              mtu_ignore: true
+              packet_size: 577
+              priority: 1
+              process_id: 30
+              retransmit_interval: 2
+              router_id: 2.2.2.2
+              transmit_delay: 2
         state: merged
     - name: Assert commands
       ansible.builtin.assert:
@@ -78,16 +78,16 @@
       cisco.iosxr.iosxr_ospfv3:
         config:
           processes:
-          - areas:
-            - area_id: 10
-              hello_interval: 2
-            - area_id: 20
-              cost: 2
-              default_cost: 2
-            process_id: 27
-          - authentication:
-              disable: true
-            process_id: 26
+            - areas:
+                - area_id: 10
+                  hello_interval: 2
+                - area_id: 20
+                  cost: 2
+                  default_cost: 2
+              process_id: 27
+            - authentication:
+                disable: true
+              process_id: 26
         state: replaced
     - name: Assert commands
       ansible.builtin.assert:
@@ -106,16 +106,16 @@
       cisco.iosxr.iosxr_ospfv3:
         config:
           processes:
-          - areas:
-            - area_id: 10
-              hello_interval: 2
-            - area_id: 20
-              cost: 2
-              default_cost: 2
-            process_id: 27
-          - authentication:
-              disable: true
-            process_id: 26
+            - areas:
+                - area_id: 10
+                  hello_interval: 2
+                - area_id: 20
+                  cost: 2
+                  default_cost: 2
+              process_id: 27
+            - authentication:
+                disable: true
+              process_id: 26
         state: overridden
     - name: Assert commands
       ansible.builtin.assert:
@@ -150,42 +150,41 @@
       cisco.iosxr.iosxr_ospfv3:
         config:
           processes:
-          - areas:
-            - area_id: 10
-              hello_interval: 2
-            process_id: 27
-          - authentication:
-              disable: true
-            process_id: 26
-          - areas:
-            - area_id: 11
-              cost: 11
-              default_cost: 5
-            - area_id: 22
-              default_cost: 6
-            process_id: 10
-          - areas:
-            - area_id: 11
-              default_cost: 5
-            - area_id: 22
-              default_cost: 6
-            cost: 2
-            dead_interval: 2
-            default_metric: 10
-            demand_circuit: true
-            flood_reduction: false
-            hello_interval: 1
-            mtu_ignore: true
-            packet_size: 577
-            passive: false
-            priority: 1
-            process_id: 30
-            retransmit_interval: 2
-            router_id: 2.2.2.2
-            transmit_delay: 2
+            - areas:
+                - area_id: 10
+                  hello_interval: 2
+              process_id: 27
+            - authentication:
+                disable: true
+              process_id: 26
+            - areas:
+                - area_id: 11
+                  cost: 11
+                  default_cost: 5
+                - area_id: 22
+                  default_cost: 6
+              process_id: 10
+            - areas:
+                - area_id: 11
+                  default_cost: 5
+                - area_id: 22
+                  default_cost: 6
+              cost: 2
+              dead_interval: 2
+              default_metric: 10
+              demand_circuit: true
+              flood_reduction: false
+              hello_interval: 1
+              mtu_ignore: true
+              packet_size: 577
+              passive: false
+              priority: 1
+              process_id: 30
+              retransmit_interval: 2
+              router_id: 2.2.2.2
+              transmit_delay: 2
         state: rendered
     - name: Assert rendered commands
       ansible.builtin.assert:
         that:
           - result.rendered is defined
-

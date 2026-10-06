@@ -31,17 +31,17 @@
               max_active: 10
               min_active: 2
             members:
-            - member: GigabitEthernet0/0/0/0
-              mode: inherit
-            - member: GigabitEthernet0/0/0/1
-              mode: passive
+              - member: GigabitEthernet0/0/0/0
+                mode: inherit
+              - member: GigabitEthernet0/0/0/1
+                mode: passive
             mode: active
             name: Bundle-Ether10
           - members:
-            - member: GigabitEthernet0/0/0/8
-              mode: passive
-            - member: GigabitEthernet0/0/0/9
-              mode: passive
+              - member: GigabitEthernet0/0/0/8
+                mode: passive
+              - member: GigabitEthernet0/0/0/9
+                mode: passive
             mode: active
             name: Bundle-Ether11
         state: merged
@@ -62,8 +62,8 @@
       cisco.iosxr.iosxr_lag_interfaces:
         config:
           - members:
-            - member: GigabitEthernet0/0/0/0
-              mode: passive
+              - member: GigabitEthernet0/0/0/0
+                mode: passive
             mode: passive
             name: Bundle-Ether10
           - mode: active
@@ -89,10 +89,10 @@
               max_active: 10
               min_active: 5
             members:
-            - member: GigabitEthernet0/0/0/0
-              mode: active
-            - member: GigabitEthernet0/0/0/1
-              mode: active
+              - member: GigabitEthernet0/0/0/0
+                mode: active
+              - member: GigabitEthernet0/0/0/1
+                mode: active
             mode: active
             name: Bundle-Ether11
         state: overridden
@@ -132,17 +132,17 @@
               max_active: 5
               min_active: 2
             members:
-            - member: GigabitEthernet0/0/0/1
-              mode: inherit
-            - member: GigabitEthernet0/0/0/3
-              mode: inherit
+              - member: GigabitEthernet0/0/0/1
+                mode: inherit
+              - member: GigabitEthernet0/0/0/3
+                mode: inherit
             mode: active
             name: Bundle-Ether10
           - members:
-            - member: GigabitEthernet0/0/0/2
-              mode: passive
-            - member: GigabitEthernet0/0/0/4
-              mode: passive
+              - member: GigabitEthernet0/0/0/2
+                mode: passive
+              - member: GigabitEthernet0/0/0/4
+                mode: passive
             name: Bundle-Ether12
         state: rendered
     - name: Assert rendered commands
@@ -165,4 +165,3 @@
           - bundle id 12 mode passive
           - interface GigabitEthernet0/0/0/4
           - bundle id 12 mode passive
-

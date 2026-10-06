@@ -29,28 +29,28 @@
       cisco.iosxr.iosxr_vrf_address_family:
         config:
           - address_families:
-            - afi: ipv4
-              export:
-                route_policy: rm-policy
-                route_target: 192.0.2.1:400
-                to:
-                  default_vrf:
-                    route_policy: rm-policy
-                  vrf:
-                    allow_imported_vpn: true
-              import_config:
-                from_config:
-                  bridge_domain:
-                    advertise_as_vpn: true
-                  default_vrf:
-                    route_policy: test-policy
-                  vrf:
-                    advertise_as_vpn: true
-                route_policy: test-policy
-                route_target: 192.0.2.6:200
-              maximum:
-                prefix: 100
-              safi: unicast
+              - afi: ipv4
+                export:
+                  route_policy: rm-policy
+                  route_target: 192.0.2.1:400
+                  to:
+                    default_vrf:
+                      route_policy: rm-policy
+                    vrf:
+                      allow_imported_vpn: true
+                import_config:
+                  from_config:
+                    bridge_domain:
+                      advertise_as_vpn: true
+                    default_vrf:
+                      route_policy: test-policy
+                    vrf:
+                      advertise_as_vpn: true
+                  route_policy: test-policy
+                  route_target: 192.0.2.6:200
+                maximum:
+                  prefix: 100
+                safi: unicast
             name: VRF4
         state: merged
     - name: Assert commands
@@ -70,26 +70,26 @@
       cisco.iosxr.iosxr_vrf_address_family:
         config:
           - address_families:
-            - afi: ipv4
-              export:
-                route_policy: rm-policy
-                route_target: 192.0.2.0:400
-                to:
-                  default_vrf:
-                    route_policy: rm-policy
-                  vrf:
-                    allow_imported_vpn: 'true'
-              import_config:
-                from_config:
-                  bridge_domain:
-                    advertise_as_vpn: 'true'
-                  default_vrf:
-                    route_policy: test-policy
-                  vrf:
-                    advertise_as_vpn: 'true'
-                route_policy: test-policy
-                route_target: 192.0.2.3:200
-              safi: unicast
+              - afi: ipv4
+                export:
+                  route_policy: rm-policy
+                  route_target: 192.0.2.0:400
+                  to:
+                    default_vrf:
+                      route_policy: rm-policy
+                    vrf:
+                      allow_imported_vpn: "true"
+                import_config:
+                  from_config:
+                    bridge_domain:
+                      advertise_as_vpn: "true"
+                    default_vrf:
+                      route_policy: test-policy
+                    vrf:
+                      advertise_as_vpn: "true"
+                  route_policy: test-policy
+                  route_target: 192.0.2.3:200
+                safi: unicast
             name: VRF6
         state: replaced
     - name: Assert commands
@@ -109,28 +109,28 @@
       cisco.iosxr.iosxr_vrf_address_family:
         config:
           - address_families:
-            - afi: ipv4
-              export:
-                route_policy: rm-policy1
-                route_target: 192.0.2.8:200
-                to:
-                  default_vrf:
-                    route_policy: rm-policy
-                  vrf:
-                    allow_imported_vpn: true
-              import_config:
-                from_config:
-                  bridge_domain:
-                    advertise_as_vpn: true
-                  default_vrf:
-                    route_policy: test-policy
-                  vrf:
-                    advertise_as_vpn: true
-                route_policy: test-policy
-                route_target: 192.0.2.2:200
-              maximum:
-                prefix: 500
-              safi: unicast
+              - afi: ipv4
+                export:
+                  route_policy: rm-policy1
+                  route_target: 192.0.2.8:200
+                  to:
+                    default_vrf:
+                      route_policy: rm-policy
+                    vrf:
+                      allow_imported_vpn: true
+                import_config:
+                  from_config:
+                    bridge_domain:
+                      advertise_as_vpn: true
+                    default_vrf:
+                      route_policy: test-policy
+                    vrf:
+                      advertise_as_vpn: true
+                  route_policy: test-policy
+                  route_target: 192.0.2.2:200
+                maximum:
+                  prefix: 500
+                safi: unicast
             name: VRF7
         state: overridden
     - name: Assert commands
@@ -192,28 +192,28 @@
       cisco.iosxr.iosxr_vrf_address_family:
         config:
           - address_families:
-            - afi: ipv4
-              export:
-                route_policy: rm-policy
-                route_target: 192.0.2.1:400
-                to:
-                  default_vrf:
-                    route_policy: rm-policy
-                  vrf:
-                    allow_imported_vpn: 'true'
-              import_config:
-                from_config:
-                  bridge_domain:
-                    advertise_as_vpn: 'true'
-                  default_vrf:
-                    route_policy: test-policy
-                  vrf:
-                    advertise_as_vpn: 'true'
-                route_policy: test-policy
-                route_target: 192.0.2.6:200
-              maximum:
-                prefix: 100
-              safi: unicast
+              - afi: ipv4
+                export:
+                  route_policy: rm-policy
+                  route_target: 192.0.2.1:400
+                  to:
+                    default_vrf:
+                      route_policy: rm-policy
+                    vrf:
+                      allow_imported_vpn: "true"
+                import_config:
+                  from_config:
+                    bridge_domain:
+                      advertise_as_vpn: "true"
+                    default_vrf:
+                      route_policy: test-policy
+                    vrf:
+                      advertise_as_vpn: "true"
+                  route_policy: test-policy
+                  route_target: 192.0.2.6:200
+                maximum:
+                  prefix: 100
+                safi: unicast
             name: VRF4
         state: rendered
     - name: Assert rendered commands

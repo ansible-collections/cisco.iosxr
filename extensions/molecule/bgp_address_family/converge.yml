@@ -29,28 +29,28 @@
       cisco.iosxr.iosxr_bgp_address_family:
         config:
           address_family:
-          - advertise_best_external: true
-            afi: ipv4
-            allocate_label:
-              all: true
-            bgp:
-              attribute_download: true
-              scan_time: 20
-            dynamic_med: 10
-            redistribute:
-            - id: test1
-              metric: 10
-              protocol: application
-            safi: unicast
-          - afi: ipv4
-            aggregate_address:
-            - summary_only: true
-              value: 208.54.88.0/24
-            label_mode:
-              per_vrf: true
-            safi: unicast
-            vrf: vrf1
-          as_number: '65536'
+            - advertise_best_external: true
+              afi: ipv4
+              allocate_label:
+                all: true
+              bgp:
+                attribute_download: true
+                scan_time: 20
+              dynamic_med: 10
+              redistribute:
+                - id: test1
+                  metric: 10
+                  protocol: application
+              safi: unicast
+            - afi: ipv4
+              aggregate_address:
+                - summary_only: true
+                  value: 208.54.88.0/24
+              label_mode:
+                per_vrf: true
+              safi: unicast
+              vrf: vrf1
+          as_number: "65536"
         state: merged
     - name: Assert commands
       ansible.builtin.assert:
@@ -69,19 +69,19 @@
       cisco.iosxr.iosxr_bgp_address_family:
         config:
           address_family:
-          - afi: ipv4
-            dynamic_med: 4
-            redistribute:
-            - id: test1
-              metric: 10
-              protocol: application
-            - metric: 10
-              protocol: connected
-            - id: test3
-              metric: 4
-              protocol: isis
-            safi: unicast
-          as_number: '65536'
+            - afi: ipv4
+              dynamic_med: 4
+              redistribute:
+                - id: test1
+                  metric: 10
+                  protocol: application
+                - metric: 10
+                  protocol: connected
+                - id: test3
+                  metric: 4
+                  protocol: isis
+              safi: unicast
+          as_number: "65536"
         state: replaced
     - name: Assert commands
       ansible.builtin.assert:
@@ -109,19 +109,19 @@
       cisco.iosxr.iosxr_bgp_address_family:
         config:
           address_family:
-          - afi: ipv4
-            dynamic_med: 4
-            redistribute:
-            - id: test1
-              metric: 10
-              protocol: application
-            - metric: 10
-              protocol: connected
-            - id: test3
-              metric: 4
-              protocol: isis
-            safi: unicast
-          as_number: '65536'
+            - afi: ipv4
+              dynamic_med: 4
+              redistribute:
+                - id: test1
+                  metric: 10
+                  protocol: application
+                - metric: 10
+                  protocol: connected
+                - id: test3
+                  metric: 4
+                  protocol: isis
+              safi: unicast
+          as_number: "65536"
         state: overridden
     - name: Assert commands
       ansible.builtin.assert:
@@ -179,29 +179,28 @@
       cisco.iosxr.iosxr_bgp_address_family:
         config:
           address_family:
-          - advertise_best_external: true
-            afi: ipv4
-            allocate_label:
-              all: true
-            bgp:
-              attribute_download: true
-              scan_time: 20
-            dynamic_med: 10
-            redistribute:
-            - id: test1
-              metric: 10
-              protocol: application
-            - metric: 10
-              protocol: connected
-            - id: test3
-              metric: 4
-              protocol: isis
-            safi: unicast
-          as_number: '65536'
+            - advertise_best_external: true
+              afi: ipv4
+              allocate_label:
+                all: true
+              bgp:
+                attribute_download: true
+                scan_time: 20
+              dynamic_med: 10
+              redistribute:
+                - id: test1
+                  metric: 10
+                  protocol: application
+                - metric: 10
+                  protocol: connected
+                - id: test3
+                  metric: 4
+                  protocol: isis
+              safi: unicast
+          as_number: "65536"
         state: rendered
     - name: Assert rendered commands
       ansible.builtin.assert:
         that:
           - result.rendered is defined
           - result.rendered | length > 0
-

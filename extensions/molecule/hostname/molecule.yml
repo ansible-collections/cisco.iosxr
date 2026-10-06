@@ -2,18 +2,18 @@
 driver:
   name: default
 platforms:
-- name: cisshgo-hostname-gathered
-- name: cisshgo-hostname-merged
-- name: cisshgo-hostname-deleted
+  - name: cisshgo-hostname-gathered
+  - name: cisshgo-hostname-merged
+  - name: cisshgo-hostname-deleted
 ansible:
   executor:
     args:
       ansible_playbook:
-      - --inventory=${MOLECULE_SCENARIO_DIRECTORY}/../cisshgo_fixtures/inventories/ansible/hostname.yaml
+        - --inventory=${MOLECULE_SCENARIO_DIRECTORY}/../cisshgo_fixtures/inventories/ansible/hostname.yaml
   env:
-    ANSIBLE_FORCE_COLOR: 'true'
-    ANSIBLE_HOST_KEY_CHECKING: 'false'
-    ANSIBLE_DEPRECATION_WARNINGS: 'false'
+    ANSIBLE_FORCE_COLOR: "true"
+    ANSIBLE_HOST_KEY_CHECKING: "false"
+    ANSIBLE_DEPRECATION_WARNINGS: "false"
 provisioner:
   name: ansible
   playbooks:
@@ -23,10 +23,10 @@ provisioner:
     destroy: ../_shared/destroy.yml
 scenario:
   test_sequence:
-  - create
-  - converge
-  - verify
-  - destroy
+    - create
+    - converge
+    - verify
+    - destroy
 prerun: false
 verifier:
   name: ansible
