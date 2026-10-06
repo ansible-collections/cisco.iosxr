@@ -1,11 +1,11 @@
 devices:
-- scenario: iosxr-prefix-lists-gathered
-  count: 1
-- scenario: iosxr-prefix-lists-merged
-  count: 1
-- scenario: iosxr-prefix-lists-replaced
-  count: 1
-- scenario: iosxr-prefix-lists-overridden
-  count: 1
-- scenario: iosxr-prefix-lists-deleted
-  count: 1
+  - scenario: iosxr-prefix-lists-gathered
+    count: 1
+  - scenario: iosxr-prefix-lists-merged
+    count: 1
+  - scenario: iosxr-prefix-lists-replaced
+    count: 1
+  - scenario: iosxr-prefix-lists-overridden
+    count: 1
+  - scenario: iosxr-prefix-lists-deleted
+    count: 1

@@ -1,13 +1,13 @@
 devices:
-- scenario: iosxr-vrf-global-gathered
-  count: 1
-- scenario: iosxr-vrf-global-merged
-  count: 1
-- scenario: iosxr-vrf-global-replaced
-  count: 1
-- scenario: iosxr-vrf-global-overridden
-  count: 1
-- scenario: iosxr-vrf-global-deleted
-  count: 1
-- scenario: iosxr-vrf-global-purged
-  count: 1
+  - scenario: iosxr-vrf-global-gathered
+    count: 1
+  - scenario: iosxr-vrf-global-merged
+    count: 1
+  - scenario: iosxr-vrf-global-replaced
+    count: 1
+  - scenario: iosxr-vrf-global-overridden
+    count: 1
+  - scenario: iosxr-vrf-global-deleted
+    count: 1
+  - scenario: iosxr-vrf-global-purged
+    count: 1

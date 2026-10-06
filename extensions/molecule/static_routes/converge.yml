@@ -27,65 +27,65 @@
       cisco.iosxr.iosxr_static_routes:
         config:
           - address_families:
-            - afi: ipv4
-              routes:
-              - dest: 192.0.2.16/28
-                next_hops:
-                - description: LAB
-                  forward_router_address: 192.0.2.10
-                  interface: FastEthernet0/0/0/1
-                  metric: 120
-                  tag: 10
-                - interface: FastEthernet0/0/0/5
-                  track: ip_sla_1
-              - dest: 192.0.2.32/28
-                next_hops:
-                - admin_distance: 100
-                  forward_router_address: 192.0.2.11
-              - dest: 192.0.2.48/28
-                next_hops:
-                - forward_router_address: 192.0.2.10
-                  interface: TenGigE0/0/0/23.2500
-              - dest: 192.168.17.0/24
-                next_hops:
-                - interface: Loopback0
-              safi: multicast
-            - afi: ipv6
-              routes:
-              - dest: 2001:db8:1000::/36
-                next_hops:
-                - description: DC
-                  interface: FastEthernet0/0/0/7
-                - forward_router_address: 2001:db8:2000:2::1
-                  interface: FastEthernet0/0/0/8
-              - dest: 2001:db8::/64
-                next_hops:
-                - interface: Loopback0
-              safi: unicast
+              - afi: ipv4
+                routes:
+                  - dest: 192.0.2.16/28
+                    next_hops:
+                      - description: LAB
+                        forward_router_address: 192.0.2.10
+                        interface: FastEthernet0/0/0/1
+                        metric: 120
+                        tag: 10
+                      - interface: FastEthernet0/0/0/5
+                        track: ip_sla_1
+                  - dest: 192.0.2.32/28
+                    next_hops:
+                      - admin_distance: 100
+                        forward_router_address: 192.0.2.11
+                  - dest: 192.0.2.48/28
+                    next_hops:
+                      - forward_router_address: 192.0.2.10
+                        interface: TenGigE0/0/0/23.2500
+                  - dest: 192.168.17.0/24
+                    next_hops:
+                      - interface: Loopback0
+                safi: multicast
+              - afi: ipv6
+                routes:
+                  - dest: 2001:db8:1000::/36
+                    next_hops:
+                      - description: DC
+                        interface: FastEthernet0/0/0/7
+                      - forward_router_address: 2001:db8:2000:2::1
+                        interface: FastEthernet0/0/0/8
+                  - dest: 2001:db8::/64
+                    next_hops:
+                      - interface: Loopback0
+                safi: unicast
           - address_families:
-            - afi: ipv4
-              routes:
-              - dest: 192.0.2.48/28
-                next_hops:
-                - description: DEV
-                  dest_vrf: test_1
-                  forward_router_address: 192.0.2.12
-              - dest: 192.0.2.80/28
-                next_hops:
-                - dest_vrf: test_1
-                  forward_router_address: 192.0.2.14
-                  interface: FastEthernet0/0/0/2
-                  track: ip_sla_2
-                  vrflabel: 124
-              safi: unicast
+              - afi: ipv4
+                routes:
+                  - dest: 192.0.2.48/28
+                    next_hops:
+                      - description: DEV
+                        dest_vrf: test_1
+                        forward_router_address: 192.0.2.12
+                  - dest: 192.0.2.80/28
+                    next_hops:
+                      - dest_vrf: test_1
+                        forward_router_address: 192.0.2.14
+                        interface: FastEthernet0/0/0/2
+                        track: ip_sla_2
+                        vrflabel: 124
+                safi: unicast
             vrf: DEV_SITE
           - address_families:
-            - afi: ipv4
-              routes:
-              - dest: 192.1.0.0/24
-                next_hops:
-                - interface: Loopback1
-              safi: unicast
+              - afi: ipv4
+                routes:
+                  - dest: 192.1.0.0/24
+                    next_hops:
+                      - interface: Loopback1
+                safi: unicast
             vrf: TEST_VRF
         state: merged
     - name: Assert commands
@@ -105,15 +105,15 @@
       cisco.iosxr.iosxr_static_routes:
         config:
           - address_families:
-            - afi: ipv4
-              routes:
-              - dest: 192.0.2.48/28
-                next_hops:
-                - description: DEV_NEW
-                  dest_vrf: dev_test_2
-                  forward_router_address: 192.0.2.15
-                  interface: FastEthernet0/0/0/3
-              safi: unicast
+              - afi: ipv4
+                routes:
+                  - dest: 192.0.2.48/28
+                    next_hops:
+                      - description: DEV_NEW
+                        dest_vrf: dev_test_2
+                        forward_router_address: 192.0.2.15
+                        interface: FastEthernet0/0/0/3
+                safi: unicast
             vrf: DEV_SITE
         state: replaced
     - name: Assert commands
@@ -133,23 +133,23 @@
       cisco.iosxr.iosxr_static_routes:
         config:
           - address_families:
-            - afi: ipv4
-              routes:
-              - dest: 192.0.2.48/28
-                next_hops:
-                - description: DEV1
-                  forward_router_address: 192.0.2.15
-                  interface: FastEthernet0/0/0/3
-              safi: multicast
-            - afi: ipv6
-              routes:
-              - dest: 2001:db8:3000::/36
-                next_hops:
-                - description: PROD1
-                  forward_router_address: 2001:db8:2000:2::2
-                  interface: FastEthernet0/0/0/4
-                  track: ip_sla_1
-              safi: unicast
+              - afi: ipv4
+                routes:
+                  - dest: 192.0.2.48/28
+                    next_hops:
+                      - description: DEV1
+                        forward_router_address: 192.0.2.15
+                        interface: FastEthernet0/0/0/3
+                safi: multicast
+              - afi: ipv6
+                routes:
+                  - dest: 2001:db8:3000::/36
+                    next_hops:
+                      - description: PROD1
+                        forward_router_address: 2001:db8:2000:2::2
+                        interface: FastEthernet0/0/0/4
+                        track: ip_sla_1
+                safi: unicast
             vrf: DEV_NEW
         state: overridden
     - name: Assert commands

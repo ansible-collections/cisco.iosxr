@@ -29,78 +29,78 @@
       cisco.iosxr.iosxr_acls:
         config:
           - acls:
-            - aces:
-              - authen: true
-                destination:
-                  any: true
-                grant: deny
-                log: true
-                protocol: tcp
-                protocol_options:
-                  tcp:
-                    syn: true
-                routing: true
-                sequence: 10
-                source:
-                  port_protocol:
-                    range:
-                      end: telnet
-                      start: ftp
-                  prefix: 2001:db8:1234::/48
-                ttl:
-                  range:
-                    end: 250
-                    start: 180
-              - destination:
-                  any: true
-                destopts: true
-                grant: permit
-                precedence: network
-                protocol: icmpv6
-                protocol_options:
-                  icmpv6:
-                    router_advertisement: true
-                sequence: 20
-                source:
-                  any: true
-              name: acl6_1
+              - aces:
+                  - authen: true
+                    destination:
+                      any: true
+                    grant: deny
+                    log: true
+                    protocol: tcp
+                    protocol_options:
+                      tcp:
+                        syn: true
+                    routing: true
+                    sequence: 10
+                    source:
+                      port_protocol:
+                        range:
+                          end: telnet
+                          start: ftp
+                      prefix: 2001:db8:1234::/48
+                    ttl:
+                      range:
+                        end: 250
+                        start: 180
+                  - destination:
+                      any: true
+                    destopts: true
+                    grant: permit
+                    precedence: network
+                    protocol: icmpv6
+                    protocol_options:
+                      icmpv6:
+                        router_advertisement: true
+                    sequence: 20
+                    source:
+                      any: true
+                name: acl6_1
             afi: ipv6
           - acls:
-            - aces:
-              - remark: TEST_ACL_1_REMARK
-                sequence: 16
-              - destination:
-                  address: 198.51.100.0
-                  wildcard_bits: 0.0.0.15
-                grant: permit
-                protocol: tcp
-                protocol_options:
-                  tcp:
-                    rst: true
-                sequence: 21
-                source:
-                  host: 192.0.2.10
-                  port_protocol:
-                    range:
-                      end: 121
-                      start: pop3
-              - destination:
-                  prefix: 198.51.100.0/28
-                dscp:
-                  lt: af12
-                grant: deny
-                protocol: icmp
-                protocol_options:
-                  icmp:
-                    reassembly_timeout: true
-                sequence: 23
-                source:
-                  any: true
-              name: acl_1
-            - aces:
-              - remark: TEST_ACL_2_REMARK
-                sequence: 10
-              name: acl_2
+              - aces:
+                  - remark: TEST_ACL_1_REMARK
+                    sequence: 16
+                  - destination:
+                      address: 198.51.100.0
+                      wildcard_bits: 0.0.0.15
+                    grant: permit
+                    protocol: tcp
+                    protocol_options:
+                      tcp:
+                        rst: true
+                    sequence: 21
+                    source:
+                      host: 192.0.2.10
+                      port_protocol:
+                        range:
+                          end: 121
+                          start: pop3
+                  - destination:
+                      prefix: 198.51.100.0/28
+                    dscp:
+                      lt: af12
+                    grant: deny
+                    protocol: icmp
+                    protocol_options:
+                      icmp:
+                        reassembly_timeout: true
+                    sequence: 23
+                    source:
+                      any: true
+                name: acl_1
+              - aces:
+                  - remark: TEST_ACL_2_REMARK
+                    sequence: 10
+                name: acl_2
             afi: ipv4
         state: merged
     - name: Assert commands
@@ -120,34 +120,34 @@
       cisco.iosxr.iosxr_acls:
         config:
           - acls:
-            - aces:
-              - destination:
-                  any: true
-                grant: permit
-                protocol: igmp
-                sequence: 11
-                source:
-                  host: 198.51.100.130
-                ttl:
-                  eq: 100
-              - destination:
-                  any: true
-                grant: deny
-                protocol: icmp
-                sequence: 12
-                source:
-                  any: true
-              - remark: Deny MARTIANS
-                sequence: 40
-              - destination:
-                  any: true
-                grant: deny
-                protocol: ipv4
-                sequence: 60
-                source:
-                  address: 10.0.0.0
-                  wildcard_bits: 0.255.255.255
-              name: acl_2
+              - aces:
+                  - destination:
+                      any: true
+                    grant: permit
+                    protocol: igmp
+                    sequence: 11
+                    source:
+                      host: 198.51.100.130
+                    ttl:
+                      eq: 100
+                  - destination:
+                      any: true
+                    grant: deny
+                    protocol: icmp
+                    sequence: 12
+                    source:
+                      any: true
+                  - remark: Deny MARTIANS
+                    sequence: 40
+                  - destination:
+                      any: true
+                    grant: deny
+                    protocol: ipv4
+                    sequence: 60
+                    source:
+                      address: 10.0.0.0
+                      wildcard_bits: 0.255.255.255
+                name: acl_2
             afi: ipv4
         state: replaced
     - name: Assert commands
@@ -167,24 +167,24 @@
       cisco.iosxr.iosxr_acls:
         config:
           - acls:
-            - aces:
-              - destination:
-                  any: true
-                grant: permit
-                protocol: tcp
-                sequence: 10
-                source:
-                  any: true
-              name: acl_1
-            - aces:
-              - destination:
-                  any: true
-                grant: permit
-                protocol: igmp
-                sequence: 20
-                source:
-                  any: true
-              name: acl_2
+              - aces:
+                  - destination:
+                      any: true
+                    grant: permit
+                    protocol: tcp
+                    sequence: 10
+                    source:
+                      any: true
+                name: acl_1
+              - aces:
+                  - destination:
+                      any: true
+                    grant: permit
+                    protocol: igmp
+                    sequence: 20
+                    source:
+                      any: true
+                name: acl_2
             afi: ipv4
         state: overridden
     - name: Assert commands
@@ -236,82 +236,81 @@
       cisco.iosxr.iosxr_acls:
         config:
           - acls:
-            - aces:
-              - authen: true
-                destination:
-                  any: true
-                grant: deny
-                log: true
-                protocol: tcp
-                protocol_options:
-                  tcp:
-                    syn: true
-                routing: true
-                sequence: 10
-                source:
-                  port_protocol:
-                    range:
-                      end: telnet
-                      start: ftp
-                  prefix: 2001:db8:1234::/48
-                ttl:
-                  range:
-                    end: 250
-                    start: 180
-              - destination:
-                  any: true
-                destopts: true
-                grant: permit
-                precedence: network
-                protocol: icmpv6
-                protocol_options:
-                  icmpv6:
-                    router_advertisement: true
-                sequence: 20
-                source:
-                  any: true
-              name: acl6_1
+              - aces:
+                  - authen: true
+                    destination:
+                      any: true
+                    grant: deny
+                    log: true
+                    protocol: tcp
+                    protocol_options:
+                      tcp:
+                        syn: true
+                    routing: true
+                    sequence: 10
+                    source:
+                      port_protocol:
+                        range:
+                          end: telnet
+                          start: ftp
+                      prefix: 2001:db8:1234::/48
+                    ttl:
+                      range:
+                        end: 250
+                        start: 180
+                  - destination:
+                      any: true
+                    destopts: true
+                    grant: permit
+                    precedence: network
+                    protocol: icmpv6
+                    protocol_options:
+                      icmpv6:
+                        router_advertisement: true
+                    sequence: 20
+                    source:
+                      any: true
+                name: acl6_1
             afi: ipv6
           - acls:
-            - aces:
-              - remark: TEST_ACL_1_REMARK
-                sequence: 16
-              - destination:
-                  address: 198.51.100.0
-                  wildcard_bits: 0.0.0.15
-                grant: permit
-                protocol: tcp
-                protocol_options:
-                  tcp:
-                    rst: true
-                sequence: 21
-                source:
-                  host: 192.0.2.10
-                  port_protocol:
-                    range:
-                      end: 121
-                      start: pop3
-              - destination:
-                  prefix: 198.51.100.0/28
-                dscp:
-                  lt: af12
-                grant: deny
-                protocol: icmp
-                protocol_options:
-                  icmp:
-                    reassembly_timeout: true
-                sequence: 23
-                source:
-                  any: true
-              name: acl_1
-            - aces:
-              - remark: TEST_ACL_2_REMARK
-                sequence: 10
-              name: acl_2
+              - aces:
+                  - remark: TEST_ACL_1_REMARK
+                    sequence: 16
+                  - destination:
+                      address: 198.51.100.0
+                      wildcard_bits: 0.0.0.15
+                    grant: permit
+                    protocol: tcp
+                    protocol_options:
+                      tcp:
+                        rst: true
+                    sequence: 21
+                    source:
+                      host: 192.0.2.10
+                      port_protocol:
+                        range:
+                          end: 121
+                          start: pop3
+                  - destination:
+                      prefix: 198.51.100.0/28
+                    dscp:
+                      lt: af12
+                    grant: deny
+                    protocol: icmp
+                    protocol_options:
+                      icmp:
+                        reassembly_timeout: true
+                    sequence: 23
+                    source:
+                      any: true
+                name: acl_1
+              - aces:
+                  - remark: TEST_ACL_2_REMARK
+                    sequence: 10
+                name: acl_2
             afi: ipv4
         state: rendered
     - name: Assert rendered commands
       ansible.builtin.assert:
         that:
           - result.rendered is defined
-

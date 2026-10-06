@@ -2,20 +2,20 @@
 driver:
   name: default
 platforms:
-- name: cisshgo-l2_interfaces-gathered
-- name: cisshgo-l2_interfaces-merged
-- name: cisshgo-l2_interfaces-replaced
-- name: cisshgo-l2_interfaces-overridden
-- name: cisshgo-l2_interfaces-deleted
+  - name: cisshgo-l2_interfaces-gathered
+  - name: cisshgo-l2_interfaces-merged
+  - name: cisshgo-l2_interfaces-replaced
+  - name: cisshgo-l2_interfaces-overridden
+  - name: cisshgo-l2_interfaces-deleted
 provisioner:
   name: ansible
   inventory:
     links:
       hosts: ../cisshgo_fixtures/inventories/ansible/l2_interfaces.yaml
   env:
-    ANSIBLE_FORCE_COLOR: 'true'
-    ANSIBLE_HOST_KEY_CHECKING: 'false'
-    ANSIBLE_DEPRECATION_WARNINGS: 'false'
+    ANSIBLE_FORCE_COLOR: "true"
+    ANSIBLE_HOST_KEY_CHECKING: "false"
+    ANSIBLE_DEPRECATION_WARNINGS: "false"
   playbooks:
     create: ../_shared/create.yml
     converge: converge.yml
@@ -23,10 +23,10 @@ provisioner:
     destroy: ../_shared/destroy.yml
 scenario:
   test_sequence:
-  - create
-  - converge
-  - verify
-  - destroy
+    - create
+    - converge
+    - verify
+    - destroy
 prerun: false
 verifier:
   name: ansible

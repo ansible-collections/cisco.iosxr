@@ -28,7 +28,7 @@
       cisco.iosxr.iosxr_l2_interfaces:
         config:
           - l2protocol:
-            - cpsv: tunnel
+              - cpsv: tunnel
             l2transport: true
             name: GigabitEthernet0/0/0/1
             propagate: true
@@ -54,7 +54,7 @@
       cisco.iosxr.iosxr_l2_interfaces:
         config:
           - l2protocol:
-            - cpsv: drop
+              - cpsv: drop
             l2transport: true
             name: GigabitEthernet0/0/0/4
         state: replaced
@@ -75,7 +75,7 @@
       cisco.iosxr.iosxr_l2_interfaces:
         config:
           - l2protocol:
-            - cpsv: tunnel
+              - cpsv: tunnel
             l2transport: true
             name: GigabitEthernet0/0/0/4
           - encapsulation:
@@ -132,7 +132,7 @@
       cisco.iosxr.iosxr_l2_interfaces:
         config:
           - l2protocol:
-            - cpsv: tunnel
+              - cpsv: tunnel
             l2transport: true
             name: GigabitEthernet0/0/0/1
             propagate: true
@@ -146,4 +146,3 @@
       ansible.builtin.assert:
         that:
           - result.rendered is defined
-

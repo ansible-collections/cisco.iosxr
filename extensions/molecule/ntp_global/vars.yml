@@ -1,4 +1,4 @@
 scenario_name: ntp_global
 listener_ports:
-- 10000
-- 10001
+  - 10000
+  - 10001

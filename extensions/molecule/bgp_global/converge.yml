@@ -39,38 +39,38 @@
             router_id: 192.0.2.10
           default_metric: 4
           neighbors:
-          - cluster_id: 3
-            neighbor: 192.0.2.11
-            remote_as: 65537
-            shutdown:
-              set: false
-          - bfd:
-              fast_detect:
-                strict_mode: true
-              minimum_interval: 20
-              multiplier: 6
-            neighbor: 192.0.2.14
-            remote_as: 65538
-          - neighbor: 203.0.113.10
-            remote_as: '5467.8'
-          - neighbor: 203.0.113.11
-            remote_as: 65001
-          - neighbor: 203.0.113.12
-            remote_as: 4394.6
-            shutdown:
-              set: true
+            - cluster_id: 3
+              neighbor: 192.0.2.11
+              remote_as: 65537
+              shutdown:
+                set: false
+            - bfd:
+                fast_detect:
+                  strict_mode: true
+                minimum_interval: 20
+                multiplier: 6
+              neighbor: 192.0.2.14
+              remote_as: 65538
+            - neighbor: 203.0.113.10
+              remote_as: "5467.8"
+            - neighbor: 203.0.113.11
+              remote_as: 65001
+            - neighbor: 203.0.113.12
+              remote_as: 4394.6
+              shutdown:
+                set: true
           socket:
             receive_buffer_size: 514
             send_buffer_size: 4098
           vrfs:
-          - neighbors:
-            - neighbor: 198.51.100.100
-              remote_as: 65540
-            - neighbor: 198.51.100.101
-              remote_as: 2.5
-            - neighbor: 198.51.100.99
-              remote_as: '1.0'
-            vrf: vrf_asdot
+            - neighbors:
+                - neighbor: 198.51.100.100
+                  remote_as: 65540
+                - neighbor: 198.51.100.101
+                  remote_as: 2.5
+                - neighbor: 198.51.100.99
+                  remote_as: "1.0"
+              vrf: vrf_asdot
         state: merged
     - name: Assert commands
       ansible.builtin.assert:
@@ -97,27 +97,27 @@
             router_id: 192.0.2.10
           default_metric: 5
           neighbors:
-          - bfd:
-              fast_detect:
-                set: true
-              minimum_interval: 20
-              multiplier: 6
-            local_as:
-              no_prepend:
-                replace_as:
+            - bfd:
+                fast_detect:
                   set: true
-              value: 65539
-            neighbor: 192.0.2.13
-            password:
-              inheritance_disable: true
-            remote_as: '65538'
-            use:
-              neighbor_group: test_ng
-              session_group: test_sg
-          - neighbor: 192.0.2.14
-            remote_as: 65539
-          - neighbor: 192.0.2.15
-            remote_as: 5467.5
+                minimum_interval: 20
+                multiplier: 6
+              local_as:
+                no_prepend:
+                  replace_as:
+                    set: true
+                value: 65539
+              neighbor: 192.0.2.13
+              password:
+                inheritance_disable: true
+              remote_as: "65538"
+              use:
+                neighbor_group: test_ng
+                session_group: test_sg
+            - neighbor: 192.0.2.14
+              remote_as: 65539
+            - neighbor: 192.0.2.15
+              remote_as: 5467.5
           socket:
             receive_buffer_size: 514
             send_buffer_size: 4098

@@ -1,5 +1,5 @@
 scenario_name: static_routes
 listener_ports:
-- 10000
-- 10001
-- 10002
+  - 10000
+  - 10001
+  - 10002

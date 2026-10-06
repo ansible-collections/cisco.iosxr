@@ -30,21 +30,21 @@
         config:
           - afi: ipv6
             prefix_lists:
-            - entries:
-              - action: deny
-                prefix: 2001:db8:1234::/48
-                sequence: 1
-              name: pl_1
+              - entries:
+                  - action: deny
+                    prefix: 2001:db8:1234::/48
+                    sequence: 1
+                name: pl_1
           - afi: ipv4
             prefix_lists:
-            - entries:
-              - action: remark
-                description: TEST_PL1_2_REMARK
-                sequence: 3
-              - action: permit
-                prefix: 10.0.0.0/24
-                sequence: 4
-              name: pl1
+              - entries:
+                  - action: remark
+                    description: TEST_PL1_2_REMARK
+                    sequence: 3
+                  - action: permit
+                    prefix: 10.0.0.0/24
+                    sequence: 4
+                name: pl1
         state: merged
     - name: Assert commands
       ansible.builtin.assert:
@@ -64,11 +64,11 @@
         config:
           - afi: ipv4
             prefix_lists:
-            - entries:
-              - action: permit
-                prefix: 10.0.0.0/24
-                sequence: 3
-              name: pl1
+              - entries:
+                  - action: permit
+                    prefix: 10.0.0.0/24
+                    sequence: 3
+                name: pl1
         state: replaced
     - name: Assert commands
       ansible.builtin.assert:
@@ -88,14 +88,14 @@
         config:
           - afi: ipv4
             prefix_lists:
-            - entries:
-              - action: remark
-                description: TEST_PL1_3_REMARK
-                sequence: 3
-              - action: permit
-                prefix: 10.0.0.0/24
-                sequence: 4
-              name: pl3
+              - entries:
+                  - action: remark
+                    description: TEST_PL1_3_REMARK
+                    sequence: 3
+                  - action: permit
+                    prefix: 10.0.0.0/24
+                    sequence: 4
+                name: pl3
         state: overridden
     - name: Assert commands
       ansible.builtin.assert:
@@ -147,25 +147,24 @@
         config:
           - afi: ipv6
             prefix_lists:
-            - entries:
-              - action: deny
-                prefix: 2001:db8:1234::/48
-                sequence: 1
-              name: pl_1
+              - entries:
+                  - action: deny
+                    prefix: 2001:db8:1234::/48
+                    sequence: 1
+                name: pl_1
           - afi: ipv4
             prefix_lists:
-            - entries:
-              - action: remark
-                description: TEST_PL1_2_REMARK
-                sequence: 3
-              - action: permit
-                prefix: 10.0.0.0/24
-                sequence: 4
-              name: pl1
+              - entries:
+                  - action: remark
+                    description: TEST_PL1_2_REMARK
+                    sequence: 3
+                  - action: permit
+                    prefix: 10.0.0.0/24
+                    sequence: 4
+                name: pl1
         state: rendered
     - name: Assert rendered commands
       ansible.builtin.assert:
         that:
           - result.rendered is defined
           - result.rendered | length > 0
-

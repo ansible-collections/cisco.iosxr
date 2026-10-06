@@ -35,11 +35,11 @@
               afi: ipv4
               default_interface: Loopback0
             name: VRF4
-            rd: '3:4'
+            rd: "3:4"
             remote_route_filtering:
               disable: true
             vpn:
-              id: '2:3'
+              id: "2:3"
         state: merged
     - name: Assert commands
       ansible.builtin.assert:
@@ -64,11 +64,11 @@
               afi: ipv4
               default_interface: Loopback0
             name: VRF7
-            rd: '6:9'
+            rd: "6:9"
             remote_route_filtering:
               disable: true
             vpn:
-              id: '4:5'
+              id: "4:5"
         state: replaced
     - name: Assert commands
       ansible.builtin.assert:
@@ -94,11 +94,11 @@
               afi: ipv4
               default_interface: Loopback0
             name: VRF6
-            rd: '9:8'
+            rd: "9:8"
             remote_route_filtering:
               disable: true
             vpn:
-              id: '23:3'
+              id: "23:3"
         state: overridden
     - name: Assert commands
       ansible.builtin.assert:

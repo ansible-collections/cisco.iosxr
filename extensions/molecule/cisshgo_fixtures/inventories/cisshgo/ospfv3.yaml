@@ -1,11 +1,11 @@
 devices:
-- scenario: iosxr-ospfv3-gathered
-  count: 1
-- scenario: iosxr-ospfv3-merged
-  count: 1
-- scenario: iosxr-ospfv3-replaced
-  count: 1
-- scenario: iosxr-ospfv3-overridden
-  count: 1
-- scenario: iosxr-ospfv3-deleted
-  count: 1
+  - scenario: iosxr-ospfv3-gathered
+    count: 1
+  - scenario: iosxr-ospfv3-merged
+    count: 1
+  - scenario: iosxr-ospfv3-replaced
+    count: 1
+  - scenario: iosxr-ospfv3-overridden
+    count: 1
+  - scenario: iosxr-ospfv3-deleted
+    count: 1
