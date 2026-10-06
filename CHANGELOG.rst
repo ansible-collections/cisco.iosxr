@@ -4,6 +4,14 @@ Cisco Iosxr Collection Release Notes
 
 .. contents:: Topics
 
+v13.0.0
+=======
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- The gRPC connection plugin requires ``protobuf>=3.20.0`` and ``grpcio>=1.48.4`` on the Ansible controller. Update the controller environment before using this connection plugin. Other connection plugins are unaffected.
+
 v12.5.0
 =======
 

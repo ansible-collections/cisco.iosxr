@@ -465,6 +465,15 @@ releases:
     fragments:
       - fix_route_maps_set_med_parsing.yaml
     release_date: "2026-09-15"
+  13.0.0:
+    changes:
+      breaking_changes:
+        - The gRPC connection plugin requires ``protobuf>=3.20.0`` and ``grpcio>=1.48.4``
+          on the Ansible controller. Update the controller environment before using
+          this connection plugin. Other connection plugins are unaffected.
+    fragments:
+      - grcp_version_bump.yaml
+    release_date: "2026-10-06"
   2.0.0:
     changes:
       bugfixes:
