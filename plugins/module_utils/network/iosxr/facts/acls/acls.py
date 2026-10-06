@@ -176,8 +176,12 @@ class AclsFacts(object):
         if acl_lines:
             acl, acls = {}, []
             for line in acl_lines:
-                if "matches" in line:
-                    line = re.sub(r"\([^()]*\)", "", line)
+                line = re.sub(
+                    r"\s*\(\d[\d,]*\s*[\w\s]*?(?:match|matches|bytes|hits)"
+                    r"(?:,\s*\d[\d,]*\s*[\w\s]*?(?:match|matches|bytes|hits))*\)",
+                    "",
+                    line,
+                )
                 if line.startswith("ip"):
                     if acl:
                         acls.append(acl)

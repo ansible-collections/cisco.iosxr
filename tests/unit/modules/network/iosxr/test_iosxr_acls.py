@@ -467,6 +467,108 @@ class TestIosxrAclsModule(TestIosxrModule):
         cmds = ["ipv4 access-list acl_1", "10 deny ip any any"]
         self.execute_module(changed=True, commands=cmds)
 
+    def test_iosxr_acls_parsed_counters(self):
+        # Counters appended by "show access-lists afi-all" must be stripped so
+        # that every ACE is parsed into structured keys rather than falling
+        # back to an unparsed "line" key.
+        set_module_args(
+            dict(
+                running_config=(
+                    "ipv4 access-list ACL_COUNTERS\n"
+                    " 10 permit tcp any any eq 22 (3 matches)\n"
+                    " 20 deny ipv4 any any (30430478 bytes)\n"
+                    " 30 permit ipv4 any any (12345 hw matches)\n"
+                    " 40 permit udp any any (3 matches, 240 bytes)"
+                ),
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        parsed_list = [
+            {
+                "acls": [
+                    {
+                        "name": "ACL_COUNTERS",
+                        "aces": [
+                            {
+                                "sequence": 10,
+                                "grant": "permit",
+                                "protocol": "tcp",
+                                "source": {"any": True},
+                                "destination": {
+                                    "any": True,
+                                    "port_protocol": {"eq": "22"},
+                                },
+                            },
+                            {
+                                "sequence": 20,
+                                "grant": "deny",
+                                "protocol": "ipv4",
+                                "source": {"any": True},
+                                "destination": {"any": True},
+                            },
+                            {
+                                "sequence": 30,
+                                "grant": "permit",
+                                "protocol": "ipv4",
+                                "source": {"any": True},
+                                "destination": {"any": True},
+                            },
+                            {
+                                "sequence": 40,
+                                "grant": "permit",
+                                "protocol": "udp",
+                                "source": {"any": True},
+                                "destination": {"any": True},
+                            },
+                        ],
+                    },
+                ],
+                "afi": "ipv4",
+            },
+        ]
+        self.assertEqual(parsed_list, result["parsed"])
+        for ace in result["parsed"][0]["acls"][0]["aces"]:
+            self.assertNotIn("line", ace)
+
+    def test_iosxr_acls_parsed_remark_with_parentheses(self):
+        # Parenthesised text inside a remark is not a counter and must be
+        # preserved verbatim.
+        set_module_args(
+            dict(
+                running_config=(
+                    "ipv4 access-list ACL_REMARKS\n"
+                    " 10 remark allow DMZ (prod)\n"
+                    " 20 remark (2024 migration)\n"
+                    " 30 permit ipv4 any any (5 matches)"
+                ),
+                state="parsed",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        parsed_list = [
+            {
+                "acls": [
+                    {
+                        "name": "ACL_REMARKS",
+                        "aces": [
+                            {"sequence": 10, "remark": "allow DMZ (prod)"},
+                            {"sequence": 20, "remark": "(2024 migration)"},
+                            {
+                                "sequence": 30,
+                                "grant": "permit",
+                                "protocol": "ipv4",
+                                "source": {"any": True},
+                                "destination": {"any": True},
+                            },
+                        ],
+                    },
+                ],
+                "afi": "ipv4",
+            },
+        ]
+        self.assertEqual(parsed_list, result["parsed"])
+
     def test_iosxr_acls_parsed_matches(self):
         set_module_args(
             dict(
