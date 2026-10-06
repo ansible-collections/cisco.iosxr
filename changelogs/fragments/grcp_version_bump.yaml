@@ -1,0 +1,7 @@
+---
+breaking_changes:
+  - >-
+    The gRPC connection plugin requires ``protobuf>=3.20.0`` and
+    ``grpcio>=1.48.4`` on the Ansible controller. Update the controller
+    environment before using this connection plugin. Other connection plugins
+    are unaffected.

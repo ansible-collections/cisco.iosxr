@@ -18,45 +18,36 @@ version_added: "3.3.0"
 """
 
 import json
-import os
-import sys
 
+from ansible.errors import AnsibleError
 from ansible_collections.ansible.netcommon.plugins.sub_plugins.grpc.base import (
     GrpcBase,
     ensure_connect,
 )
 
+from .pb import ems_grpc_pb2, ems_grpc_pb2_grpc
+
 
 class Grpc(GrpcBase):
     def __init__(self, connection):
         super(Grpc, self).__init__(connection)
-        module_name = "ems_grpc_pb2"
-        module_path = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)),
-            "pb/ems_grpc_pb2.py",
-        )
-        if sys.version_info[0] == 3 and sys.version_info[1] >= 5:
-            import importlib.util
-
-            spec = importlib.util.spec_from_file_location(module_name, module_path)
-            self._ems_grpc_pb2 = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(self._ems_grpc_pb2)
-        elif sys.version_info[0] == 3 and sys.version_info[1] < 5:
-            import importlib.machinery
-
-            loader = importlib.machinery.SourceFileLoader(module_name, module_path)
-            self._ems_grpc_pb2 = loader.load_module()
-        elif sys.version_info[0] == 2:
-            import imp
-
-            self._ems_grpc_pb2 = imp.load_source(module_name, module_path)
+        self._ems_grpc_pb2 = ems_grpc_pb2
+        self._ems_grpc_pb2_grpc = ems_grpc_pb2_grpc
+        if not hasattr(self._ems_grpc_pb2, "DESCRIPTOR"):
+            raise AnsibleError(
+                "protobuf>=3.20.0 is required to use the IOS XR gRPC connection",
+            )
+        if not hasattr(self._ems_grpc_pb2_grpc, "GrpcConfigOperStub"):
+            raise AnsibleError(
+                "grpcio>=1.48.4 is required to use the IOS XR gRPC connection",
+            )
 
     def get_config(self, section=None):
-        stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
+        stub = self._ems_grpc_pb2_grpc.GrpcConfigOperStub(
             self._connection._channel,
         )
         message = self._ems_grpc_pb2.ConfigGetArgs(yangpathjson=section)
-        responses = stub.GetConfig(
+        responses = stub.get_config(
             message,
             self._connection._timeout,
             metadata=self._connection._login_credentials,
@@ -68,11 +59,11 @@ class Grpc(GrpcBase):
         return output
 
     def get(self, section=None):
-        stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
+        stub = self._ems_grpc_pb2_grpc.GrpcConfigOperStub(
             self._connection._channel,
         )
         message = self._ems_grpc_pb2.GetOperArgs(yangpathjson=section)
-        responses = stub.GetOper(
+        responses = stub.get_oper(
             message,
             self._connection._timeout,
             metadata=self._connection._login_credentials,
@@ -92,11 +83,11 @@ class Grpc(GrpcBase):
         :rtype: Response object
         """
         path = json.dumps(path)
-        stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
+        stub = self._ems_grpc_pb2_grpc.GrpcConfigOperStub(
             self._connection._channel,
         )
         message = self._ems_grpc_pb2.ConfigArgs(yangjson=path)
-        response = stub.MergeConfig(
+        response = stub.merge_config(
             message,
             self._connection._timeout,
             metadata=self._connection._login_credentials,
@@ -115,11 +106,11 @@ class Grpc(GrpcBase):
         :rtype: Response object
         """
         path = json.dumps(path)
-        stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
+        stub = self._ems_grpc_pb2_grpc.GrpcConfigOperStub(
             self._connection._channel,
         )
         message = self._ems_grpc_pb2.ConfigArgs(yangjson=path)
-        response = stub.ReplaceConfig(
+        response = stub.replace_config(
             message,
             self._connection._timeout,
             metadata=self._connection._login_credentials,
@@ -138,11 +129,11 @@ class Grpc(GrpcBase):
         :rtype: Response object
         """
         path = json.dumps(path)
-        stub = self._ems_grpc_pb2.beta_create_gRPCConfigOper_stub(
+        stub = self._ems_grpc_pb2_grpc.GrpcConfigOperStub(
             self._connection._channel,
         )
         message = self._ems_grpc_pb2.ConfigArgs(yangjson=path)
-        response = stub.DeleteConfig(
+        response = stub.delete_config(
             message,
             self._connection._timeout,
             metadata=self._connection._login_credentials,
@@ -158,13 +149,13 @@ class Grpc(GrpcBase):
             raise ValueError("command value must be provided")
 
         output = {"response": "", "error": ""}
-        stub = self._ems_grpc_pb2.beta_create_gRPCExec_stub(
+        stub = self._ems_grpc_pb2_grpc.GrpcExecStub(
             self._connection._channel,
         )
 
         message = self._ems_grpc_pb2.ShowCmdArgs(cli=command)
         if display == "text":
-            responses = stub.ShowCmdTextOutput(
+            responses = stub.show_cmd_text_output(
                 message,
                 self._connection._timeout,
                 metadata=self._connection._login_credentials,
@@ -173,7 +164,7 @@ class Grpc(GrpcBase):
                 output["response"] += response.output
                 output["error"] += response.errors
         else:
-            responses = stub.ShowCmdJSONOutput(
+            responses = stub.show_cmd_json_output(
                 message,
                 self._connection._timeout,
                 metadata=self._connection._login_credentials,
