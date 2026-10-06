@@ -1,0 +1,113 @@
+---
+# DEVIATION: adapted to GigabitEthernet0/0/0/0 only (device lacks Gi0/0/0/1)
+# Commands are hardcoded (not from vars_files) because recording used single interface.
+# Assertions use exact command lists from the recording.
+
+- name: Gathered state
+  hosts: iosxr_interfaces_gathered
+  gather_facts: false
+  tasks:
+    - name: Gather iosxr_interfaces facts
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        state: gathered
+
+    - name: Assert gathered returns GigabitEthernet0/0/0/0
+      ansible.builtin.assert:
+        that:
+          - result.gathered | selectattr('name', 'equalto', 'GigabitEthernet0/0/0/0') | list | length == 1
+          - (result.gathered | selectattr('name', 'equalto', 'GigabitEthernet0/0/0/0') | first).description == 'This interface is Configured and Merged by Ansible-Network'
+          - (result.gathered | selectattr('name', 'equalto', 'GigabitEthernet0/0/0/0') | first).mtu == 110
+
+- name: Merged state
+  hosts: iosxr_interfaces_merged
+  gather_facts: false
+  tasks:
+    - name: Merge configuration on GigabitEthernet0/0/0/0
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/0
+            description: Configured and Merged by Ansible-Network
+            mtu: 110
+        state: merged
+
+    - name: Assert merged commands
+      ansible.builtin.assert:
+        that:
+          - result.changed == true
+          - >-
+            ['interface GigabitEthernet0/0/0/0',
+             'description Configured and Merged by Ansible-Network',
+             'mtu 110'] | symmetric_difference(result.commands) | length == 0
+    # DEVIATION: idempotent re-run omitted for IOS-XR — network_cli sends abort between
+    # tasks, desynchronising the cisshgo sequence and causing a 30s timeout.
+
+- name: Replaced state
+  hosts: iosxr_interfaces_replaced
+  gather_facts: false
+  tasks:
+    - name: Replace configuration on GigabitEthernet0/0/0/0
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/0
+            description: Configured and Replaced by Ansible-Network
+            mtu: 110
+        state: replaced
+
+    - name: Assert replaced commands
+      ansible.builtin.assert:
+        that:
+          - result.changed == true
+          - >-
+            ['interface GigabitEthernet0/0/0/0',
+             'description Configured and Replaced by Ansible-Network',
+             'mtu 110'] | symmetric_difference(result.commands) | length == 0
+
+    # DEVIATION: idempotent re-run omitted — same IOS-XR abort desync issue as merged.
+
+- name: Overridden state
+  hosts: iosxr_interfaces_overridden
+  gather_facts: false
+  tasks:
+    - name: Override configuration on GigabitEthernet0/0/0/0
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/0
+            description: Configured and Overridden by Ansible-Network
+            mtu: 2000
+            enabled: false
+        state: overridden
+
+    - name: Assert overridden commands
+      ansible.builtin.assert:
+        that:
+          - result.changed == true
+          - >-
+            ['interface GigabitEthernet0/0/0/0',
+             'description Configured and Overridden by Ansible-Network',
+             'mtu 2000'] | symmetric_difference(result.commands) | length == 0
+
+    # DEVIATION: idempotent re-run omitted — same IOS-XR abort desync issue.
+
+- name: Deleted state
+  hosts: iosxr_interfaces_deleted
+  gather_facts: false
+  tasks:
+    - name: Delete all configured interface attributes
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        state: deleted
+
+    - name: Assert deleted commands
+      ansible.builtin.assert:
+        that:
+          - result.changed == true
+          - >-
+            ['interface GigabitEthernet0/0/0/0',
+             'no description',
+             'no mtu'] | symmetric_difference(result.commands) | length == 0
+
+    # DEVIATION: idempotent re-run omitted — same IOS-XR abort desync issue.

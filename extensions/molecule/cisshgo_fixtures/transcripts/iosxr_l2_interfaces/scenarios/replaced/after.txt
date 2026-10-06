@@ -1,0 +1,17 @@
+interface MgmtEth0/RP0/CPU0/0
+ ipv4 address dhcp
+!
+interface preconfigure GigabitEthernet0/0/0/1
+ l2transport
+  l2protocol cpsv tunnel
+  propagate remote-status
+ !
+!
+interface preconfigure GigabitEthernet0/0/0/3.900
+ encapsulation dot1q 40 second-dot1q 60
+!
+interface preconfigure GigabitEthernet0/0/0/4
+ l2transport
+  l2protocol cpsv drop
+ !
+!

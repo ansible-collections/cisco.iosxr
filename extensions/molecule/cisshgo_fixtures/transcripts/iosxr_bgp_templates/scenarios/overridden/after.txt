@@ -1,0 +1,10 @@
+router bgp 65536
+ neighbor-group neighbor-group1
+  bfd fast-detect strict-mode
+  precedence flash
+  advertisement-interval 12
+  address-family ipv4 unicast
+   advertise local-labeled-route disable
+  !
+ !
+!

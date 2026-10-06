@@ -1,0 +1,11 @@
+devices:
+- platform: iosxr_lacp_interfaces
+  count: 1
+- scenario: iosxr-lacp-interfaces-merged
+  count: 1
+- scenario: iosxr-lacp-interfaces-replaced
+  count: 1
+- scenario: iosxr-lacp-interfaces-overridden
+  count: 1
+- scenario: iosxr-lacp-interfaces-deleted
+  count: 1

@@ -1,0 +1,22 @@
+vrf VRF4
+ mhost ipv4 default-interface Loopback0
+ evpn-route-sync 793
+ description VRF4 Description
+ vpn id 2:3
+ fallback-vrf merged-vrf
+ remote-route-filtering disable
+ rd 3:4
+!
+vrf VRF7
+ mhost ipv4 default-interface Loopback0
+ evpn-route-sync 398
+ description VRF7 description
+ vpn id 4:5
+ fallback-vrf replaced-vrf
+ remote-route-filtering disable
+ rd 6:9
+!
+vrf VRF-A
+!
+vrf VRF-B
+!

@@ -1,0 +1,7 @@
+interface MgmtEth0/RP0/CPU0/0
+ ipv4 address dhcp
+!
+interface preconfigure GigabitEthernet0/0/0/1
+ ipv4 address 198.51.102.1 255.255.255.0
+ ipv6 address 2001:db8:1::/64
+!

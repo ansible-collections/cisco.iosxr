@@ -1,0 +1,11 @@
+devices:
+- platform: iosxr_interfaces
+  count: 1
+- scenario: iosxr-interfaces-merged
+  count: 1
+- scenario: iosxr-interfaces-replaced
+  count: 1
+- scenario: iosxr-interfaces-overridden
+  count: 1
+- scenario: iosxr-interfaces-deleted
+  count: 1

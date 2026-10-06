@@ -1,0 +1,18 @@
+router ospf 10
+ area 11
+ !
+ area 22
+ !
+!
+router ospf 26
+!
+router ospf 27
+ area 10
+ !
+!
+router ospf 30
+ area 11
+ !
+ area 22
+ !
+!

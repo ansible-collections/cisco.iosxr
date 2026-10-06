@@ -1,0 +1,11 @@
+devices:
+- scenario: iosxr-acls-gathered
+  count: 1
+- scenario: iosxr-acls-merged
+  count: 1
+- scenario: iosxr-acls-replaced
+  count: 1
+- scenario: iosxr-acls-overridden
+  count: 1
+- scenario: iosxr-acls-deleted
+  count: 1

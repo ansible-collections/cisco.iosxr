@@ -1,0 +1,8 @@
+vrf VRF-A
+ address-family ipv4 unicast
+ !
+!
+vrf VRF-B
+ address-family ipv4 unicast
+ !
+!

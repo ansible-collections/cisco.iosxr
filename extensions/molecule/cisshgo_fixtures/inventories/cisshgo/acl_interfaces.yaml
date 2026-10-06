@@ -1,0 +1,13 @@
+devices:
+- platform: iosxr_acl_interfaces
+  count: 1
+- scenario: iosxr-acl-interfaces-merged
+  count: 1
+- scenario: iosxr-acl-interfaces-replaced
+  count: 1
+- scenario: iosxr-acl-interfaces-overridden
+  count: 1
+- scenario: iosxr-acl-interfaces-deleted
+  count: 1
+- scenario: iosxr-acl-interfaces-deleted_all
+  count: 1
