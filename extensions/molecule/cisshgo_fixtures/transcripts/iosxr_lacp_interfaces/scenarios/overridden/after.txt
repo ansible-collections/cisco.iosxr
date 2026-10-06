@@ -1,0 +1,19 @@
+interface Bundle-Ether10
+!
+interface Bundle-Ether11
+!
+interface Bundle-Ether12
+ lacp churn logging both
+ lacp switchover suppress-flaps 500
+ lacp collector-max-delay 100
+!
+interface MgmtEth0/RP0/CPU0/0
+ ipv4 address dhcp
+!
+interface GigabitEthernet0/0/0/0
+ shutdown
+!
+interface preconfigure GigabitEthernet0/0/0/1
+ lacp period 300
+ shutdown
+!

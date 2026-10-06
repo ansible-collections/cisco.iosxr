@@ -1,0 +1,8 @@
+route-policy COMPLEX_CONDITION_ROUTE_POLICY
+  if community matches-any (9119:1001) or community matches-any (11100:1001) then
+    drop
+  else
+    pass
+  endif
+end-policy
+!

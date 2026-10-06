@@ -1,0 +1,11 @@
+devices:
+- platform: iosxr_ospf_interfaces
+  count: 1
+- scenario: iosxr-ospf-interfaces-merged
+  count: 1
+- scenario: iosxr-ospf-interfaces-replaced
+  count: 1
+- scenario: iosxr-ospf-interfaces-overridden
+  count: 1
+- scenario: iosxr-ospf-interfaces-deleted
+  count: 1

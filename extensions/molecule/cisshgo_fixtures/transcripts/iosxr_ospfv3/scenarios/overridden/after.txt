@@ -1,0 +1,12 @@
+router ospfv3 26
+ authentication disable
+!
+router ospfv3 27
+ area 10
+  hello-interval 2
+ !
+ area 20
+  cost 2
+  default-cost 2
+ !
+!

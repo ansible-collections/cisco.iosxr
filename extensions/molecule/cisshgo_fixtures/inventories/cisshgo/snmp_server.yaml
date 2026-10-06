@@ -1,0 +1,11 @@
+devices:
+- scenario: iosxr-snmp-server-gathered
+  count: 1
+- scenario: iosxr-snmp-server-merged
+  count: 1
+- scenario: iosxr-snmp-server-replaced
+  count: 1
+- scenario: iosxr-snmp-server-overridden
+  count: 1
+- scenario: iosxr-snmp-server-deleted
+  count: 1

@@ -1,0 +1,11 @@
+interface MgmtEth0/RP0/CPU0/0
+ ipv4 address dhcp
+!
+interface GigabitEthernet0/0/0/0
+ ipv4 address 203.0.113.27 255.255.255.0
+ ipv4 address 203.0.114.1 255.255.255.0 secondary
+!
+interface preconfigure GigabitEthernet0/0/0/1
+ ipv4 address 192.0.2.1 255.255.255.0
+ ipv4 address 192.0.2.2 255.255.255.0 secondary
+!

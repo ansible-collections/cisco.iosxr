@@ -1,0 +1,11 @@
+devices:
+- scenario: iosxr-bgp-address-family-gathered
+  count: 1
+- scenario: iosxr-bgp-address-family-merged
+  count: 1
+- scenario: iosxr-bgp-address-family-replaced
+  count: 1
+- scenario: iosxr-bgp-address-family-overridden
+  count: 1
+- scenario: iosxr-bgp-address-family-deleted
+  count: 1
