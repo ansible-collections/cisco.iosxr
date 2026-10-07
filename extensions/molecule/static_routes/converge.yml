@@ -171,19 +171,4 @@
     - name: Assert commands
       ansible.builtin.assert:
         that:
-          - result.commands | symmetric_difference(expected_commands) | length == 0
-      vars:
-        expected_commands:
-          - no address-family ipv4 multicast
-          - no address-family ipv6 unicast
-          - no vrf DEV_SITE
-          - no vrf DEV_NEW
-          - no vrf TEST_SITE
-          - no vrf TEST_VRF
-          - no address-family ipv4 unicast
-          - no address-family ipv4 multicast
-          - no address-family ipv6 unicast
-          - no vrf DEV_SITE
-          - no vrf DEV_NEW
-          - no vrf TEST_SITE
-          - no vrf TEST_VRF
+          - result.commands | symmetric_difference(deleted.commands) | length == 0
