@@ -1,0 +1,17 @@
+interface Bundle-Ether10
+ lacp churn logging partner
+!
+interface Bundle-Ether11
+ lacp system mac 00c2.4c00.bd15
+!
+interface MgmtEth0/RP0/CPU0/0
+ ipv4 address dhcp
+!
+interface GigabitEthernet0/0/0/0
+ lacp period 300
+ shutdown
+!
+interface preconfigure GigabitEthernet0/0/0/1
+ lacp period 300
+ shutdown
+!

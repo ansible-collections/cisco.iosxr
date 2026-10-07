@@ -1,0 +1,10 @@
+lldp
+ timer 3000
+ reinit 2
+ subinterfaces enable
+ holdtime 100
+ tlv-select
+  management-address disable
+  system-description disable
+ !
+!

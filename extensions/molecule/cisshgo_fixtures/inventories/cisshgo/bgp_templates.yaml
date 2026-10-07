@@ -1,0 +1,11 @@
+devices:
+  - scenario: iosxr-bgp-templates-gathered
+    count: 1
+  - scenario: iosxr-bgp-templates-merged
+    count: 1
+  - scenario: iosxr-bgp-templates-replaced
+    count: 1
+  - scenario: iosxr-bgp-templates-overridden
+    count: 1
+  - scenario: iosxr-bgp-templates-deleted
+    count: 1

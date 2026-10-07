@@ -1,0 +1,11 @@
+devices:
+  - scenario: iosxr-ospfv2-gathered
+    count: 1
+  - scenario: iosxr-ospfv2-merged
+    count: 1
+  - scenario: iosxr-ospfv2-replaced
+    count: 1
+  - scenario: iosxr-ospfv2-overridden
+    count: 1
+  - scenario: iosxr-ospfv2-deleted
+    count: 1

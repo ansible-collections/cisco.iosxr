@@ -1,0 +1,28 @@
+router bgp 65536
+ address-family ipv4 unicast
+ !
+ address-family ipv6 unicast
+ !
+ neighbor 192.0.2.2
+  remote-as 65537
+  address-family ipv4 unicast
+   origin-as validation disable
+   bestpath origin-as allow invalid
+   maximum-prefix 10 20 restart 10
+   weight 5
+   send-community-ebgp
+   multipath
+   route-policy test1 in
+   allowas-in 4
+   route-policy test1 out
+   as-override
+   capability orf prefix both
+   send-extended-community-ebgp
+   default-originate
+   next-hop-self
+   send-community-gshut-ebgp
+   soft-reconfiguration inbound always
+   send-multicast-attributes
+  !
+ !
+!

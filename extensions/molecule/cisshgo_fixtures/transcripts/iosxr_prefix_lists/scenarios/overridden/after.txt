@@ -1,0 +1,6 @@
+hostname xr1
+!
+ipv4 prefix-list pl3
+ 3 remark TEST_PL1_3_REMARK
+ 4 permit 10.0.0.0/24
+!

@@ -1,0 +1,9 @@
+ipv4 access-list acl_1
+ 16 remark TEST_ACL_1_REMARK
+ 21 permit tcp 198.51.100.32 0.0.0.15 range pop3 121 198.51.100.0 0.0.0.15 syn
+ 23 deny icmp any 198.51.100.0 0.0.0.15 router-advertisement dscp eq af23
+ipv4 access-list acl_2
+ 10 remark TEST_ACL_2_REMARK
+ipv6 access-list acl6_1
+ 10 deny tcp 2001:db8:1234::/48 range ftp telnet any syn ttl range 180 250 routing authen log
+ 20 permit icmpv6 any any router-advertisement precedence network destopts

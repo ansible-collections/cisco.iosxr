@@ -1,6 +1,11 @@
 ---
-
 profile: production
 skip_list:
   # ansible-lint does not like the `import-3.11` ignore in tests/sanity/ignore-*.txt
   - sanity
+
+exclude_paths:
+  # Generated changelog (not a playbook)
+  - changelogs/changelog.yaml
+  # Offline Molecule/CISSHGO scenarios and fixtures (driver YAML + transcripts, not playbooks)
+  - extensions/molecule

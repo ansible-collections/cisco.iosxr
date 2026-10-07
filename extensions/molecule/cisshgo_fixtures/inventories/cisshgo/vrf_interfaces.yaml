@@ -1,0 +1,7 @@
+devices:
+  - platform: iosxr_vrf_interfaces
+    count: 1
+  - scenario: iosxr-vrf-interfaces-merged
+    count: 1
+  - scenario: iosxr-vrf-interfaces-overridden
+    count: 1

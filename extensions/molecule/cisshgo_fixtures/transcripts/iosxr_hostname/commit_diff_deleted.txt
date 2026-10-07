@@ -1,0 +1,5 @@
+Building configuration...
+!! IOS XR Configuration 7.7.1
+<- hostname iosxr1
++> hostname ios
+end

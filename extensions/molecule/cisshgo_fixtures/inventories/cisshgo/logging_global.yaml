@@ -1,0 +1,11 @@
+devices:
+  - scenario: iosxr-logging-global-gathered
+    count: 1
+  - scenario: iosxr-logging-global-merged
+    count: 1
+  - scenario: iosxr-logging-global-replaced
+    count: 1
+  - scenario: iosxr-logging-global-overridden
+    count: 1
+  - scenario: iosxr-logging-global-deleted
+    count: 1

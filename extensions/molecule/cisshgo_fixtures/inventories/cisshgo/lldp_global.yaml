@@ -1,0 +1,9 @@
+devices:
+  - scenario: iosxr-lldp-global-gathered
+    count: 1
+  - scenario: iosxr-lldp-global-merged
+    count: 1
+  - scenario: iosxr-lldp-global-replaced
+    count: 1
+  - scenario: iosxr-lldp-global-deleted
+    count: 1

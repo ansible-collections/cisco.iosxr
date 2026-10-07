@@ -1,0 +1,9 @@
+devices:
+  - scenario: iosxr-lacp-gathered
+    count: 1
+  - scenario: iosxr-lacp-merged
+    count: 1
+  - scenario: iosxr-lacp-replaced
+    count: 1
+  - scenario: iosxr-lacp-deleted
+    count: 1
