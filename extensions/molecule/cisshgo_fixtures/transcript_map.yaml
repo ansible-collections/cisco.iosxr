@@ -72,30 +72,6 @@ platforms:
       (config)#: "#"
       "#": ">"
     end_context: "#"
-  iosxr_config:
-    vendor: cisco
-    hostname: cisshgo-iosxr
-    username: admin
-    password: admin
-    command_transcripts:
-      terminal length 0: transcripts/common/generic_empty_return.txt
-      terminal width 512: transcripts/common/generic_empty_return.txt
-      terminal width 0: transcripts/common/generic_empty_return.txt
-      write memory: transcripts/common/generic_empty_return.txt
-      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
-      show version | utility head -n 20: transcripts/common/show_version.txt
-      show inventory: transcripts/common/generic_empty_return.txt
-      show running-config hostname: transcripts/common/generic_empty_return.txt
-      show running-config: transcripts/common/generic_empty_return.txt
-      commit comment configured by iosxr_config: transcripts/common/generic_empty_return.txt
-      abort: transcripts/common/generic_empty_return.txt
-    context_search:
-      configure terminal: (config)#
-      base: "#"
-    context_hierarchy:
-      (config)#: "#"
-      "#": ">"
-    end_context: "#"
   iosxr_static_routes:
     vendor: cisco
     hostname: cisshgo-iosxr
@@ -904,47 +880,6 @@ scenarios:
         transcript: transcripts/iosxr_ntp_global/scenarios/merged/after.txt
       - command: show running-config ntp
         transcript: transcripts/iosxr_ntp_global/scenarios/merged/after.txt
-  iosxr-config-gathered:
-    platform: iosxr_config
-    sequence:
-      - command: show running-config
-        transcript: transcripts/iosxr_config/gathered.txt
-  iosxr-config-toplevel:
-    platform: iosxr_config
-    sequence:
-      - command: show running-config
-        transcript: transcripts/iosxr_config/scenarios/toplevel/before.txt
-      - command: configure terminal
-        transcript: transcripts/common/generic_empty_return.txt
-      - command: hostname foo
-        transcript: transcripts/common/generic_empty_return.txt
-      - command: show commit changes diff
-        transcript: transcripts/common/generic_empty_return.txt
-      - command: commit comment configured by iosxr_config
-        transcript: transcripts/common/generic_empty_return.txt
-      - command: abort
-        transcript: transcripts/common/generic_empty_return.txt
-      - command: show running-config
-        transcript: transcripts/iosxr_config/scenarios/toplevel/after.txt
-  iosxr-config-sublevel:
-    platform: iosxr_config
-    sequence:
-      - command: show running-config
-        transcript: transcripts/iosxr_config/scenarios/sublevel/before.txt
-      - command: configure terminal
-        transcript: transcripts/common/generic_empty_return.txt
-      - command: ipv4 access-list test
-        transcript: transcripts/common/generic_empty_return.txt
-      - command: 10 permit ipv4 any any log
-        transcript: transcripts/common/generic_empty_return.txt
-      - command: show commit changes diff
-        transcript: transcripts/common/generic_empty_return.txt
-      - command: commit comment configured by iosxr_config
-        transcript: transcripts/common/generic_empty_return.txt
-      - command: abort
-        transcript: transcripts/common/generic_empty_return.txt
-      - command: show running-config
-        transcript: transcripts/iosxr_config/scenarios/sublevel/after.txt
   iosxr-static-routes-gathered:
     platform: iosxr_static_routes
     sequence:
