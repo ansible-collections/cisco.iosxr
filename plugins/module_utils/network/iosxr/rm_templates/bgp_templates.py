@@ -1298,7 +1298,7 @@ class Bgp_templatesTemplate(NetworkTemplate):
                 $""", re.VERBOSE,
             ),
             "setval": "bmp-activate server {{bmp_activate.server}}",
-            "compval": "bmp_activate.serevr",
+            "compval": "bmp_activate.server",
             "result": {
                 "neighbor": {
                     UNIQUE_NEIB_ADD: {
