@@ -17,3 +17,4 @@ version: "13.0.1"
 build_ignore:
   - docs
   - .github
+  - extensions/molecule
