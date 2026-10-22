@@ -1,0 +1,13 @@
+---
+bugfixes:
+  - >-
+    iosxr_bgp_neighbor_address_family - fix ``state: merged`` with ``set: false``
+    generating the enable command instead of the negation command, leaving the
+    device unchanged while reporting ``changed: true``. Affects ``aigp``,
+    ``as_override``, ``default_originate``, ``next_hop_self``,
+    ``next_hop_unchanged``, ``route_reflector_client``, ``send_community_ebgp``,
+    ``send_community_gshut_ebgp`` and ``send_extended_community_ebgp``.
+  - >-
+    iosxr_bgp_neighbor_address_family - fix facts gathering for
+    ``next_hop_unchanged``, which never reported ``set: true`` because the
+    parser template referenced the ``next_hop_self`` capture group.

@@ -22,12 +22,31 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.r
 )
 
 
+def _tmpl_set_or_inheritance_disable(key, cli):
+    """Build a setval for options shaped ``{set: bool, inheritance_disable: bool}``.
+
+    ``set: False`` renders the negated form directly so that `state: merged`
+    removes an option that is already enabled on the device, instead of
+    re-sending the enable command.
+    """
+
+    def _render(config_data):
+        conf = config_data.get(key) or {}
+        if "inheritance_disable" in conf:
+            return "{0} inheritance-disable".format(cli)
+        if conf.get("set") is False:
+            return "no {0}".format(cli)
+        return cli
+
+    return _render
+
+
 def _tmpl_aigp(config_data):
     conf = config_data.get("aigp", {})
     commands = []
     if conf:
         if "set" in conf:
-            commands.append("aigp")
+            commands.append("no aigp" if conf["set"] is False else "aigp")
         if "disable" in conf:
             commands.append("aigp disable")
         if "send_cost_community_disable" in conf:
@@ -57,7 +76,7 @@ def _tmpl_next_hop_unchanged(config_data):
     command = ""
     if conf:
         if "set" in conf:
-            command = "next-hop-unchanged"
+            command = "no next-hop-unchanged" if conf["set"] is False else "next-hop-unchanged"
         if "inheritance_disable" in conf:
             command += "next-hop-unchanged inheritance-disable"
         if "multipath" in conf:
@@ -118,6 +137,8 @@ def _tmpl_default_originate(config_data):
     conf = config_data.get("default_originate", {})
     if not conf:
         return ""
+    if conf.get("set") is False:
+        return "no default-originate"
     if conf.get("set"):
         return "default-originate"
     if conf.get("inheritance_disable"):
@@ -261,7 +282,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "as-override{{' inheritance-disable' if as_override.inheritance_disable is defined else ''}}",
+            "setval": _tmpl_set_or_inheritance_disable("as_override", "as-override"),
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -512,7 +533,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "next-hop-self{{' inheritance-disable' if next_hop_self.inheritance_disable is defined else ''}}",
+            "setval": _tmpl_set_or_inheritance_disable("next_hop_self", "next-hop-self"),
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -555,7 +576,9 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                                 "address_family": {
                                     '{{"address_family_" + afi + "_" + safi}}': {
                                         "next_hop_unchanged": {
-                                            "set": "{{True if next_hop_self is defined }}",
+                                            "set": "{{True if next_hop_unchanged is defined and "
+                                                   "inheritance_disable is not defined and "
+                                                   "multipath is not defined}}",
                                             "inheritance_disable": "{{True if inheritance_disable is defined}}",
                                             "multipath": "{{True if multipath is defined}}",
                                         },
@@ -756,8 +779,9 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "route-reflector-client{{' inheritance-disable' "
-                      "if route_reflector_client.inheritance_disable is defined }}",
+            "setval": _tmpl_set_or_inheritance_disable(
+                "route_reflector_client", "route-reflector-client",
+            ),
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -789,8 +813,9 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "send-community-ebgp{{' inheritance-disable' "
-                      "if send_community_ebgp.inheritance_disable is defined else ''}}",
+            "setval": _tmpl_set_or_inheritance_disable(
+                "send_community_ebgp", "send-community-ebgp",
+            ),
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -822,8 +847,9 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "send-community-gshut-ebgp{{' inheritance-disable' "
-                      "if send_community_gshut_ebgp.inheritance_disable is defined else ''}}",
+            "setval": _tmpl_set_or_inheritance_disable(
+                "send_community_gshut_ebgp", "send-community-gshut-ebgp",
+            ),
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -855,8 +881,9 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "send-extended-community-ebgp{{' inheritance-disable' "
-                      "if send_extended_community_ebgp.inheritance_disable is defined else ''}}",
+            "setval": _tmpl_set_or_inheritance_disable(
+                "send_extended_community_ebgp", "send-extended-community-ebgp",
+            ),
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {

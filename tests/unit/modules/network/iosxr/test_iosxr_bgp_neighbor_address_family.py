@@ -907,3 +907,186 @@ class TestIosxrBgpNeighborAddressFamilyModule(TestIosxrModule):
             ],
         }
         self.assertEqual(parsed_list, result["parsed"])
+
+    def test_iosxr_bgp_nbr_af_merged_set_false_negates(self):
+        # https://redhat.atlassian.net/browse/AAP-93017
+        # merged + set:false on an enabled option must emit the negation
+        # command, not the enable command.
+        run_cfg = dedent(
+            """\
+                router bgp 1
+                 neighbor 1.1.1.1
+                  remote-as 5
+                  address-family ipv4 unicast
+                   as-override
+                   send-community-ebgp
+                   send-extended-community-ebgp
+            """,
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="1",
+                    neighbors=[
+                        dict(
+                            neighbor_address="1.1.1.1",
+                            address_family=[
+                                dict(
+                                    afi="ipv4",
+                                    safi="unicast",
+                                    as_override=dict(set=False),
+                                    send_community_ebgp=dict(set=False),
+                                    send_extended_community_ebgp=dict(set=False),
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+                state="merged",
+            ),
+        )
+        commands = [
+            "router bgp 1",
+            "neighbor 1.1.1.1",
+            "address-family ipv4 unicast",
+            "no as-override",
+            "no send-community-ebgp",
+            "no send-extended-community-ebgp",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_iosxr_bgp_nbr_af_merged_set_false_negates_remaining_options(self):
+        # The remaining {"set": bool} options reported on AAP-93017.
+        run_cfg = dedent(
+            """\
+                router bgp 1
+                 neighbor 1.1.1.1
+                  remote-as 5
+                  address-family ipv4 unicast
+                   aigp
+                   default-originate
+                   next-hop-self
+                   next-hop-unchanged
+                   route-reflector-client
+                   send-community-gshut-ebgp
+            """,
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="1",
+                    neighbors=[
+                        dict(
+                            neighbor_address="1.1.1.1",
+                            address_family=[
+                                dict(
+                                    afi="ipv4",
+                                    safi="unicast",
+                                    aigp=dict(set=False),
+                                    default_originate=dict(set=False),
+                                    next_hop_self=dict(set=False),
+                                    next_hop_unchanged=dict(set=False),
+                                    route_reflector_client=dict(set=False),
+                                    send_community_gshut_ebgp=dict(set=False),
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+                state="merged",
+            ),
+        )
+        commands = [
+            "router bgp 1",
+            "neighbor 1.1.1.1",
+            "address-family ipv4 unicast",
+            "no aigp",
+            "no default-originate",
+            "no next-hop-self",
+            "no next-hop-unchanged",
+            "no route-reflector-client",
+            "no send-community-gshut-ebgp",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_iosxr_bgp_nbr_af_merged_set_false_when_absent_is_noop(self):
+        # set:false against an option that is not configured must not
+        # generate any command.
+        run_cfg = dedent(
+            """\
+                router bgp 1
+                 neighbor 1.1.1.1
+                  remote-as 5
+                  address-family ipv4 unicast
+            """,
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="1",
+                    neighbors=[
+                        dict(
+                            neighbor_address="1.1.1.1",
+                            address_family=[
+                                dict(
+                                    afi="ipv4",
+                                    safi="unicast",
+                                    as_override=dict(set=False),
+                                    send_community_ebgp=dict(set=False),
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+                state="merged",
+            ),
+        )
+        self.execute_module(changed=False, commands=[])
+
+    def test_iosxr_bgp_nbr_af_merged_inheritance_disable_unaffected(self):
+        # Guard: inheritance_disable must still render the enable form.
+        run_cfg = dedent(
+            """\
+                router bgp 1
+                 neighbor 1.1.1.1
+                  remote-as 5
+                  address-family ipv4 unicast
+            """,
+        )
+        self.get_config.return_value = run_cfg
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="1",
+                    neighbors=[
+                        dict(
+                            neighbor_address="1.1.1.1",
+                            address_family=[
+                                dict(
+                                    afi="ipv4",
+                                    safi="unicast",
+                                    as_override=dict(inheritance_disable=True),
+                                    next_hop_self=dict(inheritance_disable=True),
+                                    send_community_ebgp=dict(inheritance_disable=True),
+                                    route_reflector_client=dict(inheritance_disable=True),
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+                state="merged",
+            ),
+        )
+        commands = [
+            "router bgp 1",
+            "neighbor 1.1.1.1",
+            "address-family ipv4 unicast",
+            "as-override inheritance-disable",
+            "next-hop-self inheritance-disable",
+            "send-community-ebgp inheritance-disable",
+            "route-reflector-client inheritance-disable",
+        ]
+        self.execute_module(changed=True, commands=commands)
