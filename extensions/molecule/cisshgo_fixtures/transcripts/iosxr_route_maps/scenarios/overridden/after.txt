@@ -1,0 +1,3 @@
+Building configuration...
+route-policy COMPLEX_ROUTE_POLICY_overridden
+route-policy SIMPLE_GLOBAL_ROUTE_POLICY_overridden

@@ -1,0 +1,33 @@
+router bgp 65138
+ bgp router-id 10.40.81.188
+ address-family ipv4 unicast
+ !
+ address-family vpnv4 unicast
+ !
+ neighbor 10.1.1.1
+  remote-as 5467.8
+  description test-neighbor
+ !
+ vrf VRF-A
+  rd auto
+  address-family ipv4 unicast
+  !
+  neighbor 192.0.2.1
+   remote-as 65001
+   address-family ipv4 unicast
+    default-originate route-policy MY-POLICY
+   !
+  !
+ !
+ vrf VRF-B
+  rd auto
+  address-family ipv4 unicast
+  !
+  neighbor 192.0.2.2
+   remote-as 65002
+   address-family ipv4 unicast
+    default-originate
+   !
+  !
+ !
+!

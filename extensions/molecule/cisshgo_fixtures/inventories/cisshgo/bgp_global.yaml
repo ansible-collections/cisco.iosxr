@@ -1,0 +1,11 @@
+devices:
+  - scenario: iosxr-bgp-global-gathered
+    count: 1
+  - scenario: iosxr-bgp-global-merged
+    count: 1
+  - scenario: iosxr-bgp-global-replaced
+    count: 1
+  - scenario: iosxr-bgp-global-deleted
+    count: 1
+  - scenario: iosxr-bgp-global-purged
+    count: 1

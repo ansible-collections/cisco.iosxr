@@ -1,0 +1,5 @@
+route-policy POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)
+  set local-preference 150
+  set community (64496:100, 64496:$SPECIFICITY, 64496:$GEO_LOCATION, 65012:174)
+end-policy
+!

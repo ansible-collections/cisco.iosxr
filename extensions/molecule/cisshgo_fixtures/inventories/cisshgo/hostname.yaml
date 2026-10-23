@@ -1,0 +1,7 @@
+devices:
+  - scenario: iosxr-hostname-gathered
+    count: 1
+  - scenario: iosxr-hostname-merged
+    count: 1
+  - scenario: iosxr-hostname-deleted
+    count: 1

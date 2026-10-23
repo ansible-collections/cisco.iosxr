@@ -1,0 +1,43 @@
+vrf VRF4
+ address-family ipv4 unicast
+  import route-policy test-policy
+  import from vrf advertise-as-vpn
+  import from bridge-domain advertise-as-vpn
+  import from default-vrf route-policy test-policy
+  import route-target
+   192.0.2.6:200
+  !
+  export route-policy rm-policy
+  export to vrf allow-imported-vpn
+  export to default-vrf route-policy rm-policy
+  export route-target
+   192.0.2.1:400
+  !
+  maximum prefix 100
+ !
+!
+vrf VRF6
+ address-family ipv4 unicast
+  import route-policy test-policy
+  import from vrf advertise-as-vpn
+  import from bridge-domain advertise-as-vpn
+  import from default-vrf route-policy test-policy
+  import route-target
+   192.0.2.3:200
+  !
+  export route-policy rm-policy
+  export to vrf allow-imported-vpn
+  export to default-vrf route-policy rm-policy
+  export route-target
+   192.0.2.0:400
+  !
+ !
+!
+vrf VRF-A
+ address-family ipv4 unicast
+ !
+!
+vrf VRF-B
+ address-family ipv4 unicast
+ !
+!

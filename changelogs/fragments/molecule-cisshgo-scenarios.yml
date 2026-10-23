@@ -1,0 +1,3 @@
+---
+trivial:
+  - "Add CISSHGO-based Molecule scenarios for resource modules and wire them into GitHub Actions (libssh + paramiko)."

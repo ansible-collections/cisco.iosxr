@@ -1,0 +1,25 @@
+router ospf 10
+ area 11
+ !
+ area 22
+ !
+!
+router ospf 26
+ authentication message-digest keychain ansible1101pass
+ adjacency stagger 10 20
+!
+router ospf 27
+ area 10
+  hello-interval 2
+ !
+ area 20
+  cost 2
+  default-cost 2
+ !
+!
+router ospf 30
+ area 11
+ !
+ area 22
+ !
+!

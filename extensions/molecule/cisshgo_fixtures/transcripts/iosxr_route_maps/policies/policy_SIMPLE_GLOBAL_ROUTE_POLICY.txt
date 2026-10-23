@@ -1,0 +1,11 @@
+route-policy SIMPLE_GLOBAL_ROUTE_POLICY
+  apply A_NEW_ROUTE_POLICY
+  set local-preference +100
+  set local-preference -200
+  set local-preference *300
+  set community (11011:1001) additive
+  set med 100
+  set extcommunity rt 65000:100 additive
+  set weight 20000
+end-policy
+!

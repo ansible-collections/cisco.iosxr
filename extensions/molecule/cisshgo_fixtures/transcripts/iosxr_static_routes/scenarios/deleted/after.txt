@@ -1,0 +1,16 @@
+router static
+ address-family ipv4 unicast
+  0.0.0.0/0 192.168.255.1
+ !
+ address-family ipv4 multicast
+  192.0.2.16/28 FastEthernet0/0/0/1 192.0.2.10 tag 10 description LAB metric 120
+  192.0.2.16/28 FastEthernet0/0/0/5 track ip_sla_1
+  192.0.2.32/28 192.0.2.11 100
+ !
+ address-family ipv6 unicast
+  2001:db8:1000::/36 FastEthernet0/0/0/7 description DC
+  2001:db8:1000::/36 FastEthernet0/0/0/8 2001:db8:2000:2::1
+ !
+ vrf DEV_SITE
+ !
+!

@@ -1,0 +1,8 @@
+lldp
+ holdtime 100
+ tlv-select
+  port-description disable
+  management-address disable
+  system-description disable
+ !
+!

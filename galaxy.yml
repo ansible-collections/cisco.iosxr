@@ -15,4 +15,4 @@ tags: [cisco, iosxr, networking, netconf]
 # happy. We dynamically inject version info based on git information.
 version: "13.0.0"
 build_ignore:
-  - .ansible-lint
+  - extensions/molecule

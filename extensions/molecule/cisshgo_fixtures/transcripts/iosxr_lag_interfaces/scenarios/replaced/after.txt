@@ -1,0 +1,25 @@
+interface Bundle-Ether10
+ lacp mode passive
+!
+interface Bundle-Ether11
+ lacp mode active
+!
+interface Bundle-Ether12
+ lacp mode active
+!
+interface MgmtEth0/RP0/CPU0/0
+ ipv4 address dhcp
+!
+interface GigabitEthernet0/0/0/0
+ bundle id 10 mode passive
+ shutdown
+!
+interface preconfigure GigabitEthernet0/0/0/1
+ shutdown
+!
+interface preconfigure GigabitEthernet0/0/0/8
+ bundle id 11 mode passive
+!
+interface preconfigure GigabitEthernet0/0/0/9
+ bundle id 11 mode passive
+!

@@ -1,0 +1,68 @@
+---
+- name: "Iosxr_hostname -- state: gathered"
+  hosts: iosxr_hostname_gathered
+  gather_facts: false
+  vars_files:
+    - "{{ playbook_dir }}/../../../tests/integration/targets/iosxr_hostname/vars/main.yaml"
+  tasks:
+    - name: Gather iosxr_hostname facts
+      register: result
+      cisco.iosxr.iosxr_hostname:
+        state: gathered
+
+    - name: Assert gathered config matches expected
+      ansible.builtin.assert:
+        that:
+          - gathered['config'] == result['gathered']
+          - result['changed'] == false
+
+- name: "Iosxr_hostname -- state: merged"
+  hosts: iosxr_hostname_merged
+  gather_facts: false
+  vars_files:
+    - "{{ playbook_dir }}/../../../tests/integration/targets/iosxr_hostname/vars/main.yaml"
+  tasks:
+    - name: Apply merged config
+      register: result
+      cisco.iosxr.iosxr_hostname:
+        config:
+          hostname: "iosxr1"
+        state: merged
+
+    - name: Assert merged commands
+      ansible.builtin.assert:
+        that:
+          - merged['commands'] == result['commands']
+          - result['changed'] == true
+
+    - name: Assert merged after state
+      ansible.builtin.assert:
+        that:
+          - merged['after'] == result['after']
+
+    # IOS-XR idempotent omitted: network_cli sends abort between tasks on the
+    # persistent session, desyncing cisshgo scenario sequence (timeout). See
+    # molecule-skill-validation/FINDINGS-iosxr-hostname.md deviation #3.
+
+- name: "Iosxr_hostname -- state: deleted"
+  hosts: iosxr_hostname_deleted
+  gather_facts: false
+  vars_files:
+    - "{{ playbook_dir }}/../../../tests/integration/targets/iosxr_hostname/vars/main.yaml"
+  tasks:
+    - name: Apply deleted config
+      register: result
+      cisco.iosxr.iosxr_hostname:
+        config:
+        state: deleted
+
+    - name: Assert deleted commands
+      ansible.builtin.assert:
+        that:
+          - deleted['commands'] == result['commands']
+          - result['changed'] == true
+
+    - name: Assert deleted before state
+      ansible.builtin.assert:
+        that:
+          - deleted['before'] == result['before']

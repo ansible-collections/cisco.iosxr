@@ -1,0 +1,4 @@
+router ospf LAB3
+ area 0.0.0.3
+ !
+!

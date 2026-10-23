@@ -1,0 +1,33 @@
+router bgp 65536
+ neighbor-group ng-rs-int
+  remote-as 424242
+ !
+ neighbor-group ng-rs-str
+  remote-as 123.4
+ !
+ neighbor-group ng-rs-float
+  remote-as 88.5
+ !
+ neighbor-group neighbor-group1
+  precedence flash
+  advertisement-interval 12
+  address-family ipv4 unicast
+   advertise local-labeled-route
+  !
+ !
+ neighbor-group neighbor-group2
+  ebgp-multihop 254
+  graceful-maintenance
+   as-prepends 2
+  !
+  cluster-id 2
+  description replace neighbor-group2
+  update-source Loopback917
+ !
+ neighbor-group ng-remote-asdot
+  remote-as 5467.8
+ !
+ neighbor-group ng-remote-plain
+  remote-as 65001
+ !
+!
