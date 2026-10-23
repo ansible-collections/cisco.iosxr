@@ -149,7 +149,7 @@
         state: started
       loop: "{{ listener_ports }}"
       register: _port_wait
-      ignore_errors: true
+      failed_when: false
 
     - name: Fail the create play if any port failed
       ansible.builtin.fail:
