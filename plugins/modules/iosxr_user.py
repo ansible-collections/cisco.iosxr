@@ -6,7 +6,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 
@@ -305,7 +304,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.ut
     Version,
     warn_and_exit,
 )
-
 
 try:
     from base64 import b64decode

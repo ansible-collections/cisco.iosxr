@@ -10,9 +10,7 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-
 from __future__ import absolute_import, division, print_function
-
 
 __metaclass__ = type
 
@@ -24,7 +22,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
     get_capabilities,
     run_commands,
 )
-
 
 # Python 3 has zip built-in, no need to import
 

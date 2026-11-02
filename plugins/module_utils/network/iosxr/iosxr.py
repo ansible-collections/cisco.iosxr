@@ -28,7 +28,6 @@
 #
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 import json
 import re
@@ -41,7 +40,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
     NetconfConnection,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
-
 
 try:
     from ncclient.xml_ import to_xml
