@@ -5,7 +5,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 
@@ -316,7 +315,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.iosxr im
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.utils.utils import (
     warn_and_exit,
 )
-
 
 DEFAULT_COMMIT_COMMENT = "configured by iosxr_config"
 
