@@ -1,6 +1,14 @@
 ---
 
 profile: production
+exclude_paths:
+  - changelogs
+  - docs
+  - .github
+
 skip_list:
   # ansible-lint does not like the `import-3.11` ignore in tests/sanity/ignore-*.txt
   - sanity
+
+warn_list:
+  - no-log-password
