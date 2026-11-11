@@ -3,7 +3,6 @@ from unittest.mock import MagicMock
 
 import pytest
 
-
 pytest.importorskip("grpc")
 pytest.importorskip("google.protobuf")
 

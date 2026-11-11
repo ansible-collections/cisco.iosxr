@@ -4,6 +4,7 @@
 # source: ems_grpc.proto
 # Protobuf Python Version: 5.26.1
 """Generated protocol buffer code."""
+
 # Optional runtime dependency: allow Ansible sanity to import this module.
 try:
     from google.protobuf import descriptor as _descriptor
