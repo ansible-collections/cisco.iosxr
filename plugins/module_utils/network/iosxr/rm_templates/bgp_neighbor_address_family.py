@@ -65,19 +65,19 @@ def _tmpl_set_or_inheritance_disable(key, cli):
 
 
 def _tmpl_aigp(config_data):
-    conf = config_data.get("aigp", {})
+    conf = config_data.get("aigp") or {}
+    send_med = conf.get("send_med") or {}
     commands = []
-    if conf:
-        if "set" in conf:
-            commands.append("no aigp" if conf["set"] is False else "aigp")
-        if "disable" in conf:
-            commands.append("aigp disable")
-        if "send_cost_community_disable" in conf:
-            commands.append("aigp send cost-community disable")
-        if "send_med" in conf and "set" in conf.get("send_med", {}):
-            commands.append("aigp send med")
-        if "send_med" in conf and "disable" in conf.get("send_med", {}):
-            commands.append("aigp send med disable")
+    if "set" in conf:
+        commands.append("no aigp" if conf["set"] is False else "aigp")
+    if "disable" in conf:
+        commands.append("aigp disable")
+    if "send_cost_community_disable" in conf:
+        commands.append("aigp send cost-community disable")
+    if "set" in send_med:
+        commands.append("aigp send med")
+    if "disable" in send_med:
+        commands.append("aigp send med disable")
     return commands
 
 
