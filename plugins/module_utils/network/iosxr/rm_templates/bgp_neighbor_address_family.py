@@ -22,21 +22,44 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.r
 )
 
 
-def _tmpl_set_or_inheritance_disable(key, cli):
-    """Build a setval for options shaped ``{set: bool, inheritance_disable: bool}``.
+INHERITANCE_DISABLE = (("inheritance_disable", "inheritance-disable"),)
 
-    ``set: False`` renders the negated form directly so that `state: merged`
-    removes an option that is already enabled on the device, instead of
-    re-sending the enable command.
+
+def _set_with_qualifiers(conf, cli, qualifiers=INHERITANCE_DISABLE):
+    """Render the single CLI form requested by a ``{set: bool, ...}`` option.
+
+    ``<cmd>``, ``<cmd> inheritance-disable`` and, where the option supports it,
+    ``<cmd> multipath`` are different forms of the same IOS-XR command, and the
+    device reports back a single line. Exactly one command is therefore
+    rendered -- never a concatenation of two forms -- with the qualifiers
+    winning over ``set``. ``set`` and ``inheritance_disable`` are additionally
+    declared mutually exclusive in the argspec, so only ``multipath`` can
+    actually reach this ordering.
+
+    A sub-option explicitly set to ``False`` renders the matching ``no`` form,
+    so that `state: merged` removes an option that is already on the device
+    instead of re-sending the enable command.
     """
+    if not conf:
+        return ""
+    for key, suffix in qualifiers:
+        if conf.get(key) is True:
+            return "{0} {1}".format(cli, suffix)
+    if conf.get("set") is True:
+        return cli
+    if conf.get("set") is False:
+        return "no {0}".format(cli)
+    for key, suffix in qualifiers:
+        if conf.get(key) is False:
+            return "no {0} {1}".format(cli, suffix)
+    return cli
+
+
+def _tmpl_set_or_inheritance_disable(key, cli):
+    """Build a setval for options shaped ``{set: bool, inheritance_disable: bool}``."""
 
     def _render(config_data):
-        conf = config_data.get(key) or {}
-        if "inheritance_disable" in conf:
-            return "{0} inheritance-disable".format(cli)
-        if conf.get("set") is False:
-            return "no {0}".format(cli)
-        return cli
+        return _set_with_qualifiers(config_data.get(key) or {}, cli)
 
     return _render
 
@@ -72,16 +95,14 @@ def _tmpl_validation(config_data):
 
 
 def _tmpl_next_hop_unchanged(config_data):
-    conf = config_data.get("next_hop_unchanged", {})
-    command = ""
-    if conf:
-        if "set" in conf:
-            command = "no next-hop-unchanged" if conf["set"] is False else "next-hop-unchanged"
-        if "inheritance_disable" in conf:
-            command += "next-hop-unchanged inheritance-disable"
-        if "multipath" in conf:
-            command = "next-hop-unchanged multipath"
-    return command
+    return _set_with_qualifiers(
+        config_data.get("next_hop_unchanged") or {},
+        "next-hop-unchanged",
+        qualifiers=(
+            ("multipath", "multipath"),
+            ("inheritance_disable", "inheritance-disable"),
+        ),
+    )
 
 
 def _tmpl_maximum_prefix(config_data):
@@ -134,17 +155,19 @@ def _tmpl_remove_private_AS(config_data):
 
 
 def _tmpl_default_originate(config_data):
-    conf = config_data.get("default_originate", {})
+    conf = config_data.get("default_originate") or {}
     if not conf:
         return ""
+    if conf.get("inheritance_disable") is True:
+        return "default-originate inheritance-disable"
+    if conf.get("set") is True:
+        return "default-originate"
     if conf.get("set") is False:
         return "no default-originate"
-    if conf.get("set"):
-        return "default-originate"
-    if conf.get("inheritance_disable"):
-        return "default-originate inheritance-disable"
     if conf.get("route_policy"):
         return "default-originate route-policy " + conf["route_policy"]
+    if conf.get("inheritance_disable") is False:
+        return "no default-originate inheritance-disable"
     return ""
 
 
