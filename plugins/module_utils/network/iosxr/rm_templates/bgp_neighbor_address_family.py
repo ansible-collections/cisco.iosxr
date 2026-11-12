@@ -22,20 +22,62 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.r
 )
 
 
+INHERITANCE_DISABLE = (("inheritance_disable", "inheritance-disable"),)
+
+
+def _set_with_qualifiers(conf, cli, qualifiers=INHERITANCE_DISABLE):
+    """Render the single CLI form requested by a ``{set: bool, ...}`` option.
+
+    ``<cmd>``, ``<cmd> inheritance-disable`` and, where the option supports it,
+    ``<cmd> multipath`` are different forms of the same IOS-XR command, and the
+    device reports back a single line. Exactly one command is therefore
+    rendered -- never a concatenation of two forms -- with the qualifiers
+    winning over ``set``. ``set`` and ``inheritance_disable`` are additionally
+    declared mutually exclusive in the argspec, so only ``multipath`` can
+    actually reach this ordering.
+
+    A sub-option explicitly set to ``False`` renders the matching ``no`` form,
+    so that `state: merged` removes an option that is already on the device
+    instead of re-sending the enable command.
+    """
+    if not conf:
+        return ""
+    for key, suffix in qualifiers:
+        if conf.get(key) is True:
+            return "{0} {1}".format(cli, suffix)
+    if conf.get("set") is True:
+        return cli
+    if conf.get("set") is False:
+        return "no {0}".format(cli)
+    for key, suffix in qualifiers:
+        if conf.get(key) is False:
+            return "no {0} {1}".format(cli, suffix)
+    return cli
+
+
+def _tmpl_set_or_inheritance_disable(key, cli):
+    """Build a setval for options shaped ``{set: bool, inheritance_disable: bool}``."""
+
+    def _render(config_data):
+        return _set_with_qualifiers(config_data.get(key) or {}, cli)
+
+    return _render
+
+
 def _tmpl_aigp(config_data):
-    conf = config_data.get("aigp", {})
+    conf = config_data.get("aigp") or {}
+    send_med = conf.get("send_med") or {}
     commands = []
-    if conf:
-        if "set" in conf:
-            commands.append("aigp")
-        if "disable" in conf:
-            commands.append("aigp disable")
-        if "send_cost_community_disable" in conf:
-            commands.append("aigp send cost-community disable")
-        if "send_med" in conf and "set" in conf.get("send_med", {}):
-            commands.append("aigp send med")
-        if "send_med" in conf and "disable" in conf.get("send_med", {}):
-            commands.append("aigp send med disable")
+    if "set" in conf:
+        commands.append("no aigp" if conf["set"] is False else "aigp")
+    if "disable" in conf:
+        commands.append("aigp disable")
+    if "send_cost_community_disable" in conf:
+        commands.append("aigp send cost-community disable")
+    if "set" in send_med:
+        commands.append("aigp send med")
+    if "disable" in send_med:
+        commands.append("aigp send med disable")
     return commands
 
 
@@ -53,16 +95,14 @@ def _tmpl_validation(config_data):
 
 
 def _tmpl_next_hop_unchanged(config_data):
-    conf = config_data.get("next_hop_unchanged", {})
-    command = ""
-    if conf:
-        if "set" in conf:
-            command = "next-hop-unchanged"
-        if "inheritance_disable" in conf:
-            command += "next-hop-unchanged inheritance-disable"
-        if "multipath" in conf:
-            command = "next-hop-unchanged multipath"
-    return command
+    return _set_with_qualifiers(
+        config_data.get("next_hop_unchanged") or {},
+        "next-hop-unchanged",
+        qualifiers=(
+            ("multipath", "multipath"),
+            ("inheritance_disable", "inheritance-disable"),
+        ),
+    )
 
 
 def _tmpl_maximum_prefix(config_data):
@@ -115,15 +155,19 @@ def _tmpl_remove_private_AS(config_data):
 
 
 def _tmpl_default_originate(config_data):
-    conf = config_data.get("default_originate", {})
+    conf = config_data.get("default_originate") or {}
     if not conf:
         return ""
-    if conf.get("set"):
-        return "default-originate"
-    if conf.get("inheritance_disable"):
+    if conf.get("inheritance_disable") is True:
         return "default-originate inheritance-disable"
+    if conf.get("set") is True:
+        return "default-originate"
+    if conf.get("set") is False:
+        return "no default-originate"
     if conf.get("route_policy"):
         return "default-originate route-policy " + conf["route_policy"]
+    if conf.get("inheritance_disable") is False:
+        return "no default-originate inheritance-disable"
     return ""
 
 
@@ -261,7 +305,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "as-override{{' inheritance-disable' if as_override.inheritance_disable is defined else ''}}",
+            "setval": _tmpl_set_or_inheritance_disable("as_override", "as-override"),
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -512,7 +556,7 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "next-hop-self{{' inheritance-disable' if next_hop_self.inheritance_disable is defined else ''}}",
+            "setval": _tmpl_set_or_inheritance_disable("next_hop_self", "next-hop-self"),
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -555,7 +599,9 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                                 "address_family": {
                                     '{{"address_family_" + afi + "_" + safi}}': {
                                         "next_hop_unchanged": {
-                                            "set": "{{True if next_hop_self is defined }}",
+                                            "set": "{{True if next_hop_unchanged is defined and "
+                                                   "inheritance_disable is not defined and "
+                                                   "multipath is not defined}}",
                                             "inheritance_disable": "{{True if inheritance_disable is defined}}",
                                             "multipath": "{{True if multipath is defined}}",
                                         },
@@ -756,8 +802,9 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "route-reflector-client{{' inheritance-disable' "
-                      "if route_reflector_client.inheritance_disable is defined }}",
+            "setval": _tmpl_set_or_inheritance_disable(
+                "route_reflector_client", "route-reflector-client",
+            ),
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -789,8 +836,9 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "send-community-ebgp{{' inheritance-disable' "
-                      "if send_community_ebgp.inheritance_disable is defined else ''}}",
+            "setval": _tmpl_set_or_inheritance_disable(
+                "send_community_ebgp", "send-community-ebgp",
+            ),
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -822,8 +870,9 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "send-community-gshut-ebgp{{' inheritance-disable' "
-                      "if send_community_gshut_ebgp.inheritance_disable is defined else ''}}",
+            "setval": _tmpl_set_or_inheritance_disable(
+                "send_community_gshut_ebgp", "send-community-gshut-ebgp",
+            ),
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
@@ -855,8 +904,9 @@ class Bgp_neighbor_address_familyTemplate(NetworkTemplate):
                 (\sinheritance-disable(?P<inheritance_disable>))?
                 $""", re.VERBOSE,
             ),
-            "setval": "send-extended-community-ebgp{{' inheritance-disable' "
-                      "if send_extended_community_ebgp.inheritance_disable is defined else ''}}",
+            "setval": _tmpl_set_or_inheritance_disable(
+                "send_extended_community_ebgp", "send-extended-community-ebgp",
+            ),
             "result": {
                 "vrfs": {
                     "{{ 'vrf_' + vrf|d() }}": {
