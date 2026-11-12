@@ -159,6 +159,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                 },
                                 "next_hop_unchanged": {
                                     "type": "dict",
+                                    "mutually_exclusive": [
+                                        ["set", "inheritance_disable"],
+                                    ],
                                     "options": {
                                         "set": {"type": "bool"},
                                         "inheritance_disable": {"type": "bool"},
@@ -386,6 +389,9 @@ class Bgp_neighbor_address_familyArgs(object):  # pylint: disable=R0903
                                         },
                                         "next_hop_unchanged": {
                                             "type": "dict",
+                                            "mutually_exclusive": [
+                                                ["set", "inheritance_disable"],
+                                            ],
                                             "options": {
                                                 "set": {"type": "bool"},
                                                 "inheritance_disable": {"type": "bool"},
