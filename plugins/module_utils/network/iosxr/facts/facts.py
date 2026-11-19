@@ -11,7 +11,6 @@ calls the appropriate facts gathering function
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 
@@ -106,7 +105,6 @@ from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vr
 from ansible_collections.cisco.iosxr.plugins.module_utils.network.iosxr.facts.vrf_interfaces.vrf_interfaces import (
     Vrf_interfacesFacts,
 )
-
 
 FACT_LEGACY_SUBSETS = dict(
     default=Default,
