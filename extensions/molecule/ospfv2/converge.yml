@@ -251,7 +251,7 @@
   tasks:
     - name: Empty merged config should fail
       register: result
-      ignore_errors: true  # noqa: ignore-errors
+      ignore_errors: true # noqa: ignore-errors
       cisco.iosxr.iosxr_ospfv2:
         config:
         state: merged
@@ -262,7 +262,7 @@
           - result.msg == 'value of config parameter must not be empty for state merged'
     - name: Empty rendered config should fail
       register: result
-      ignore_errors: true  # noqa: ignore-errors
+      ignore_errors: true # noqa: ignore-errors
       cisco.iosxr.iosxr_ospfv2:
         config:
         state: rendered
@@ -273,7 +273,7 @@
           - result.msg == 'value of config parameter must not be empty for state rendered'
     - name: Empty parsed config should fail
       register: result
-      ignore_errors: true  # noqa: ignore-errors
+      ignore_errors: true # noqa: ignore-errors
       cisco.iosxr.iosxr_ospfv2:
         running_config:
         state: parsed

@@ -190,11 +190,11 @@
               afi: ipv4
               default_interface: Loopback0
             name: VRF4
-            rd: '3:4'
+            rd: "3:4"
             remote_route_filtering:
               disable: true
             vpn:
-              id: '2:3'
+              id: "2:3"
         state: rendered
     - name: Assert rendered commands
       ansible.builtin.assert:
@@ -210,7 +210,7 @@
   tasks:
     - name: Empty merged config should fail
       register: result
-      ignore_errors: true  # noqa: ignore-errors
+      ignore_errors: true # noqa: ignore-errors
       cisco.iosxr.iosxr_vrf_global:
         config:
         state: merged
@@ -221,7 +221,7 @@
           - result.msg == 'value of config parameter must not be empty for state merged'
     - name: Empty rendered config should fail
       register: result
-      ignore_errors: true  # noqa: ignore-errors
+      ignore_errors: true # noqa: ignore-errors
       cisco.iosxr.iosxr_vrf_global:
         config:
         state: rendered
@@ -232,7 +232,7 @@
           - result.msg == 'value of config parameter must not be empty for state rendered'
     - name: Empty parsed config should fail
       register: result
-      ignore_errors: true  # noqa: ignore-errors
+      ignore_errors: true # noqa: ignore-errors
       cisco.iosxr.iosxr_vrf_global:
         running_config:
         state: parsed

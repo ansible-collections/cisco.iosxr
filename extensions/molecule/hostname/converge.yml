@@ -109,7 +109,7 @@
   tasks:
     - name: Empty merged config should fail
       register: result
-      ignore_errors: true  # noqa: ignore-errors
+      ignore_errors: true # noqa: ignore-errors
       cisco.iosxr.iosxr_hostname:
         config:
         state: merged
@@ -120,7 +120,7 @@
           - result.msg == 'value of config parameter must not be empty for state merged'
     - name: Empty replaced config should fail
       register: result
-      ignore_errors: true  # noqa: ignore-errors
+      ignore_errors: true # noqa: ignore-errors
       cisco.iosxr.iosxr_hostname:
         config:
         state: replaced
@@ -131,7 +131,7 @@
           - result.msg == 'value of config parameter must not be empty for state replaced'
     - name: Empty overridden config should fail
       register: result
-      ignore_errors: true  # noqa: ignore-errors
+      ignore_errors: true # noqa: ignore-errors
       cisco.iosxr.iosxr_hostname:
         config:
         state: overridden
@@ -142,7 +142,7 @@
           - result.msg == 'value of config parameter must not be empty for state overridden'
     - name: Empty rendered config should fail
       register: result
-      ignore_errors: true  # noqa: ignore-errors
+      ignore_errors: true # noqa: ignore-errors
       cisco.iosxr.iosxr_hostname:
         config:
         state: rendered
@@ -153,7 +153,7 @@
           - result.msg == 'value of config parameter must not be empty for state rendered'
     - name: Empty parsed config should fail
       register: result
-      ignore_errors: true  # noqa: ignore-errors
+      ignore_errors: true # noqa: ignore-errors
       cisco.iosxr.iosxr_hostname:
         running_config:
         state: parsed
