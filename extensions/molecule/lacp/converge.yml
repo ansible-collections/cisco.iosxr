@@ -36,6 +36,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(merged.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == merged.after
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_lacp — state: replaced"
@@ -55,6 +59,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(replaced.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == replaced.after
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_lacp — state: deleted"
@@ -71,6 +79,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(deleted.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == deleted.after
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_lacp — state: rendered"
@@ -92,3 +104,60 @@
       ansible.builtin.assert:
         that:
           - result.rendered | symmetric_difference(rendered.commands) | length == 0
+
+- name: "Iosxr_lacp — state: parsed"
+  hosts: iosxr_lacp_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_lacp/vars/main.yaml
+  tasks:
+    - name: Run iosxr_lacp parsed
+      register: result
+      cisco.iosxr.iosxr_lacp:
+        running_config: "{{ lookup('file', playbook_dir + '/../../../tests/integration/targets/iosxr_lacp/tests/cli/fixtures/parsed.cfg') }}"
+        state: parsed
+    - name: Assert parsed result
+      ansible.builtin.assert:
+        that:
+          - result.parsed == parsed.after
+
+- name: "Iosxr_lacp — state: empty_config"
+  hosts: iosxr_lacp_gathered
+  connection: local
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_lacp/vars/main.yaml
+  tasks:
+    - name: Empty merged config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_lacp:
+        config:
+        state: merged
+    - name: Assert empty config error for merged
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state merged'
+    - name: Empty rendered config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_lacp:
+        config:
+        state: rendered
+    - name: Assert empty config error for rendered
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state rendered'
+    - name: Empty parsed config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_lacp:
+        running_config:
+        state: parsed
+    - name: Assert empty config error for parsed
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of running_config parameter must not be empty for state parsed'

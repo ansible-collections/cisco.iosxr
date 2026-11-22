@@ -4,6 +4,7 @@ driver:
 platforms:
   - name: cisshgo-bgp_neighbor_address_family-gathered
   - name: cisshgo-bgp_neighbor_address_family-merged
+  - name: cisshgo-bgp_neighbor_address_family-merged_set_false
   - name: cisshgo-bgp_neighbor_address_family-replaced
   - name: cisshgo-bgp_neighbor_address_family-overridden
   - name: cisshgo-bgp_neighbor_address_family-deleted

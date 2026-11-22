@@ -14,6 +14,7 @@
     - name: Assert gathered
       ansible.builtin.assert:
         that:
+          - merged.after == result.gathered
           - result.changed == false
 
 - name: "Iosxr_logging_global — state: merged"
@@ -59,6 +60,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(merged.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == merged.after
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_logging_global — state: replaced"
@@ -98,6 +103,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(replaced.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == replaced.after
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_logging_global — state: overridden"
@@ -180,3 +189,108 @@
           - no logging 1.1.1.1 vrf default severity critical port default
           - no logging source-interface GigabitEthernet0/0/0/0 vrf test
           - no logging tls-server test
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == deleted.after
+
+- name: "Iosxr_logging_global — state: rendered"
+  hosts: iosxr_logging_global_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_logging_global/vars/main.yaml
+  tasks:
+    - name: Run iosxr_logging_global rendered
+      register: result
+      cisco.iosxr.iosxr_logging_global:
+        config:
+          buffered:
+            severity: warnings
+            size: 2097152
+          correlator:
+            buffer_size: 1024
+          events:
+            display_location: true
+          hostnameprefix: test
+          hosts:
+            - host: 1.1.1.1
+              port: default
+              severity: critical
+              vrf: default
+          ipv4:
+            dscp: af11
+          localfilesize: 1024
+          monitor:
+            severity: errors
+          source_interfaces:
+            - interface: GigabitEthernet0/0/0/0
+              vrf: test
+          tls_servers:
+            - name: test
+              tls_hostname: test2
+              trustpoint: test2
+              vrf: test
+          trap:
+            severity: informational
+        state: rendered
+    - name: Assert rendered commands
+      ansible.builtin.assert:
+        that:
+          - result.rendered is defined
+
+- name: "Iosxr_logging_global — state: parsed"
+  hosts: iosxr_logging_global_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_logging_global/vars/main.yaml
+  tasks:
+    - name: Run iosxr_logging_global parsed
+      register: result
+      cisco.iosxr.iosxr_logging_global:
+        running_config: "{{ lookup('file', playbook_dir + '/../../../tests/integration/targets/iosxr_logging_global/tests/common/_parsed.cfg') }}"
+        state: parsed
+    - name: Assert parsed result
+      ansible.builtin.assert:
+        that:
+          - result.parsed == merged.after
+
+- name: "Iosxr_logging_global — state: empty_config"
+  hosts: iosxr_logging_global_gathered
+  connection: local
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_logging_global/vars/main.yaml
+  tasks:
+    - name: Empty merged config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_logging_global:
+        config:
+        state: merged
+    - name: Assert empty config error for merged
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state merged'
+    - name: Empty rendered config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_logging_global:
+        config:
+        state: rendered
+    - name: Assert empty config error for rendered
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state rendered'
+    - name: Empty parsed config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_logging_global:
+        running_config:
+        state: parsed
+    - name: Assert empty config error for parsed
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of running_config parameter must not be empty for state parsed'

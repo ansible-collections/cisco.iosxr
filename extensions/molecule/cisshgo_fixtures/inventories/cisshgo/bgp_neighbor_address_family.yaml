@@ -3,6 +3,8 @@ devices:
     count: 1
   - scenario: iosxr-bgp-neighbor-address-family-merged
     count: 1
+  - scenario: iosxr-bgp-neighbor-address-family-merged-set-false
+    count: 1
   - scenario: iosxr-bgp-neighbor-address-family-replaced
     count: 1
   - scenario: iosxr-bgp-neighbor-address-family-overridden

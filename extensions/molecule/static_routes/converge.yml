@@ -92,6 +92,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(merged.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after is defined
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_static_routes — state: replaced"
@@ -120,6 +124,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(replaced.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after is defined
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_static_routes — state: overridden"
@@ -156,6 +164,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(overridden.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after is defined
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_static_routes — state: deleted"
@@ -172,3 +184,123 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(deleted.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after is defined
+
+- name: "Iosxr_static_routes — state: rendered"
+  hosts: iosxr_static_routes_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_static_routes/vars/main.yaml
+  tasks:
+    - name: Run iosxr_static_routes rendered
+      register: result
+      cisco.iosxr.iosxr_static_routes:
+        config:
+          - address_families:
+              - afi: ipv4
+                routes:
+                  - dest: 192.0.2.48/28
+                    next_hops:
+                      - description: DEV
+                        dest_vrf: test_1
+                        forward_router_address: 192.0.2.12
+                  - dest: 192.0.2.80/28
+                    next_hops:
+                      - dest_vrf: test_1
+                        forward_router_address: 192.0.2.14
+                        interface: FastEthernet0/0/0/2
+                        track: ip_sla_2
+                        vrflabel: 124
+                safi: unicast
+            vrf: DEV_SITE
+          - address_families:
+              - afi: ipv4
+                routes:
+                  - dest: 192.0.2.16/28
+                    next_hops:
+                      - description: LAB
+                        forward_router_address: 192.0.2.10
+                        interface: FastEthernet0/0/0/1
+                        metric: 120
+                        tag: 10
+                      - interface: FastEthernet0/0/0/5
+                        track: ip_sla_1
+                  - dest: 192.0.2.32/28
+                    next_hops:
+                      - admin_distance: 100
+                        forward_router_address: 192.0.2.11
+                safi: multicast
+              - afi: ipv6
+                routes:
+                  - dest: 2001:db8:1000::/36
+                    next_hops:
+                      - description: DC
+                        interface: FastEthernet0/0/0/7
+                      - forward_router_address: 2001:db8:2000:2::1
+                        interface: FastEthernet0/0/0/8
+                safi: unicast
+        state: rendered
+    - name: Assert rendered commands
+      ansible.builtin.assert:
+        that:
+          - result.rendered is defined
+
+- name: "Iosxr_static_routes — state: parsed"
+  hosts: iosxr_static_routes_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_static_routes/vars/main.yaml
+  tasks:
+    - name: Run iosxr_static_routes parsed
+      register: result
+      cisco.iosxr.iosxr_static_routes:
+        running_config: "{{ lookup('file', playbook_dir + '/../../../tests/integration/targets/iosxr_static_routes/fixtures/parsed.cfg') }}"
+        state: parsed
+    - name: Assert parsed result
+      ansible.builtin.assert:
+        that:
+          - result.changed == false
+
+- name: "Iosxr_static_routes — state: empty_config"
+  hosts: iosxr_static_routes_gathered
+  connection: local
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_static_routes/vars/main.yaml
+  tasks:
+    - name: Empty merged config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_static_routes:
+        config:
+        state: merged
+    - name: Assert empty config error for merged
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state merged'
+    - name: Empty rendered config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_static_routes:
+        config:
+        state: rendered
+    - name: Assert empty config error for rendered
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state rendered'
+    - name: Empty parsed config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_static_routes:
+        running_config:
+        state: parsed
+    - name: Assert empty config error for parsed
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of running_config parameter must not be empty for state parsed'

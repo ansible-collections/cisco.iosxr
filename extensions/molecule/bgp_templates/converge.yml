@@ -14,9 +14,9 @@
     - name: Assert gathered
       ansible.builtin.assert:
         that:
-          # Exact structure vs vars is brittle under cisshgo; require idempotent gather only
+          - merged.after.neighbor | symmetric_difference(result.gathered.neighbor) | length == 0
+          - merged.after.as_number == result.gathered.as_number
           - result.changed == false
-          - result.gathered is defined
 
 - name: "Iosxr_bgp_templates — state: merged"
   hosts: iosxr_bgp_templates_merged
@@ -89,6 +89,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(merged.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == merged.after
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_bgp_templates — state: replaced"
@@ -184,6 +188,10 @@
           - no neighbor-group ng-rs-float
           - no neighbor-group ng-rs-int
           - no neighbor-group ng-rs-str
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == deleted.after
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_bgp_templates — state: rendered"
@@ -257,3 +265,60 @@
       ansible.builtin.assert:
         that:
           - result.rendered is defined
+
+- name: "Iosxr_bgp_templates — state: parsed"
+  hosts: iosxr_bgp_templates_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_bgp_templates/vars/main.yml
+  tasks:
+    - name: Run iosxr_bgp_templates parsed
+      register: result
+      cisco.iosxr.iosxr_bgp_templates:
+        running_config: "{{ lookup('file', playbook_dir + '/../../../tests/integration/targets/iosxr_bgp_templates/tests/common/_parsed.cfg') }}"
+        state: parsed
+    - name: Assert parsed result
+      ansible.builtin.assert:
+        that:
+          - result.parsed == parsed
+
+- name: "Iosxr_bgp_templates — state: empty_config"
+  hosts: iosxr_bgp_templates_gathered
+  connection: local
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_bgp_templates/vars/main.yml
+  tasks:
+    - name: Empty merged config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_bgp_templates:
+        config:
+        state: merged
+    - name: Assert empty config error for merged
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state merged'
+    - name: Empty rendered config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_bgp_templates:
+        config:
+        state: rendered
+    - name: Assert empty config error for rendered
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state rendered'
+    - name: Empty parsed config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_bgp_templates:
+        running_config:
+        state: parsed
+    - name: Assert empty config error for parsed
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of running_config parameter must not be empty for state parsed'

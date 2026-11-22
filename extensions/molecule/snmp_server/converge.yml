@@ -14,9 +14,8 @@
     - name: Assert gathered
       ansible.builtin.assert:
         that:
-          # Exact structure vs vars is brittle under cisshgo; require idempotent gather only
+          - merged.after == result.gathered
           - result.changed == false
-          - result.gathered is defined
 
 - name: "Iosxr_snmp_server — state: merged"
   hosts: iosxr_snmp_server_merged
@@ -124,6 +123,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(merged.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == merged.after
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_snmp_server — state: replaced"
@@ -210,6 +213,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(replaced.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == replaced.after
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_snmp_server — state: overridden"
@@ -389,3 +396,171 @@
           - no snmp-server user u1 test2 v1 IPv4 test1 IPv6 test2
           - no snmp-server target list test host 1.1.1.2
           - no snmp-server vrf vrf1
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == deleted.after
+
+- name: "Iosxr_snmp_server — state: rendered"
+  hosts: iosxr_snmp_server_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_snmp_server/vars/main.yaml
+  tasks:
+    - name: Run iosxr_snmp_server rendered
+      register: result
+      cisco.iosxr.iosxr_snmp_server:
+        config:
+          chassis_id: test2
+          communities:
+            - acl_v4: test
+              acl_v6: test1
+              name: test2
+              ro: true
+              sdrowner: true
+          community_maps:
+            - context: c1
+              name: cm1
+              security_name: s1
+              target_list: t1
+          contact: t1
+          context:
+            - c1
+            - c2
+          correlator:
+            buffer_size: 1024
+          drop:
+            report_IPv4: test1
+            unknown_user: true
+          ifmib:
+            internal_cache_max_duration: 4
+          inform:
+            retries: 7
+          ipv4:
+            dscp: af11
+          ipv6:
+            precedence: routine
+          location: test1
+          logging_threshold_oid_processing: 1
+          logging_threshold_pdu_processing: 1
+          mib_bulkstat_max_procmem_size: 101
+          mroutemib_send_all_vrf: true
+          notification_log_mib:
+            GlobalSize: 5
+            size: 5
+          overload_control:
+            overload_drop_time: 4
+            overload_throttle_rate: 6
+          packetsize: 490
+          queue_length: 2
+          targets:
+            - host: 1.1.1.2
+              name: test
+          throttle_time: 60
+          timeouts:
+            duplicate: 0
+            inQdrop: 0
+          trap:
+            throttle_time: 12
+          trap_source: GigabitEthernet0/0/0/2
+          trap_timeout: 3
+          traps:
+            addrpool:
+              high: true
+              low: true
+            bfd: true
+            bgp:
+              cbgp2: true
+            bridgemib: true
+            bulkstat_collection: true
+            cisco_entity_ext: true
+            config: true
+            copy_complete: true
+            hsrp: true
+            ipsec:
+              start: true
+              stop: true
+            ipsla: true
+            l2tun:
+              sessions: true
+              tunnel_down: true
+              tunnel_up: true
+            l2vpn:
+              all: true
+              vc_down: true
+              vc_up: true
+            msdp_peer_state_change: true
+          users:
+            - Ipv4_acl: test1
+              Ipv6_acl: test2
+              group: test2
+              user: u1
+              version: v1
+          vrfs:
+            - hosts:
+                - community: test1
+                  host: 1.1.1.1
+                  traps: true
+              vrf: vrf1
+        state: rendered
+    - name: Assert rendered commands
+      ansible.builtin.assert:
+        that:
+          - result.rendered is defined
+
+- name: "Iosxr_snmp_server — state: parsed"
+  hosts: iosxr_snmp_server_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_snmp_server/vars/main.yaml
+  tasks:
+    - name: Run iosxr_snmp_server parsed
+      register: result
+      cisco.iosxr.iosxr_snmp_server:
+        running_config: "{{ lookup('file', playbook_dir + '/../../../tests/integration/targets/iosxr_snmp_server/tests/common/_parsed.cfg') }}"
+        state: parsed
+    - name: Assert parsed result
+      ansible.builtin.assert:
+        that:
+          - result.parsed == merged.after
+
+- name: "Iosxr_snmp_server — state: empty_config"
+  hosts: iosxr_snmp_server_gathered
+  connection: local
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_snmp_server/vars/main.yaml
+  tasks:
+    - name: Empty merged config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_snmp_server:
+        config:
+        state: merged
+    - name: Assert empty config error for merged
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state merged'
+    - name: Empty rendered config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_snmp_server:
+        config:
+        state: rendered
+    - name: Assert empty config error for rendered
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state rendered'
+    - name: Empty parsed config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_snmp_server:
+        running_config:
+        state: parsed
+    - name: Assert empty config error for parsed
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of running_config parameter must not be empty for state parsed'

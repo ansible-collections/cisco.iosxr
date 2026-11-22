@@ -93,6 +93,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(merged.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == merged.after
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_ntp_global — state: replaced"
@@ -155,6 +159,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(replaced.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == replaced.after
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_ntp_global — state: overridden"
@@ -269,3 +277,125 @@
           - no ntp passive
           - no ntp update-calendar
           - no ntp source GigabitEthernet0/0/0/0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after == deleted.after
+
+- name: "Iosxr_ntp_global — state: rendered"
+  hosts: iosxr_ntp_global_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_ntp_global/vars/main.yaml
+  tasks:
+    - name: Run iosxr_ntp_global rendered
+      register: result
+      cisco.iosxr.iosxr_ntp_global:
+        config:
+          access_group:
+            ipv4:
+              peer: PeerAcl1
+              query_only: QueryOnlyAcl1
+              serve: ServeAcl1
+              serve_only: ServeOnlyAcl1
+            vrfs:
+              - ipv4:
+                  peer: PeerAcl3
+                  serve: ServeAcl2
+                name: siteA
+          authenticate: true
+          broadcastdelay: 1
+          drift:
+            aging_time: 0
+            file: apphost
+          interfaces:
+            - broadcast_client: true
+              multicast_client: 224.0.0.8
+              multicast_destination: 224.0.0.8
+              name: GigabitEthernet0/0/0/0
+          ipv4:
+            dscp: af11
+          ipv6:
+            precedence: routine
+          log_internal_sync: true
+          master:
+            stratum: 1
+          max_associations: 10
+          passive: true
+          peers:
+            - iburst: true
+              peer: 192.0.2.1
+              vrf: siteC
+          servers:
+            - burst: true
+              server: 192.0.2.2
+              vrf: siteD
+          source_interface: GigabitEthernet0/0/0/0
+          source_vrfs:
+            - name: GigabitEthernet0/0/0/0
+              vrf: siteE
+          trusted_keys:
+            - key_id: 1
+          update_calendar: true
+        state: rendered
+    - name: Assert rendered commands
+      ansible.builtin.assert:
+        that:
+          - result.rendered is defined
+
+- name: "Iosxr_ntp_global — state: parsed"
+  hosts: iosxr_ntp_global_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_ntp_global/vars/main.yaml
+  tasks:
+    - name: Run iosxr_ntp_global parsed
+      register: result
+      cisco.iosxr.iosxr_ntp_global:
+        running_config: "{{ lookup('file', playbook_dir + '/../../../tests/integration/targets/iosxr_ntp_global/tests/common/_parsed.cfg') }}"
+        state: parsed
+    - name: Assert parsed result
+      ansible.builtin.assert:
+        that:
+          - result.parsed == merged.after
+
+- name: "Iosxr_ntp_global — state: empty_config"
+  hosts: iosxr_ntp_global_gathered
+  connection: local
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_ntp_global/vars/main.yaml
+  tasks:
+    - name: Empty merged config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_ntp_global:
+        config:
+        state: merged
+    - name: Assert empty config error for merged
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state merged'
+    - name: Empty rendered config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_ntp_global:
+        config:
+        state: rendered
+    - name: Assert empty config error for rendered
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state rendered'
+    - name: Empty parsed config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_ntp_global:
+        running_config:
+        state: parsed
+    - name: Assert empty config error for parsed
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of running_config parameter must not be empty for state parsed'

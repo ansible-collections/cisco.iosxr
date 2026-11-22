@@ -66,3 +66,99 @@
       ansible.builtin.assert:
         that:
           - deleted['before'] == result['before']
+
+- name: "Iosxr_hostname -- state: parsed"
+  hosts: iosxr_hostname_gathered
+  gather_facts: false
+  vars_files:
+    - "{{ playbook_dir }}/../../../tests/integration/targets/iosxr_hostname/vars/main.yaml"
+  tasks:
+    - name: Run iosxr_hostname parsed
+      register: result
+      cisco.iosxr.iosxr_hostname:
+        running_config: "{{ lookup('file', playbook_dir + '/../../../tests/integration/targets/iosxr_hostname/tests/common/_parsed.cfg') }}"
+        state: parsed
+    - name: Assert parsed result
+      ansible.builtin.assert:
+        that:
+          - result.parsed == parsed.config
+
+- name: "Iosxr_hostname -- state: rendered"
+  hosts: iosxr_hostname_gathered
+  gather_facts: false
+  vars_files:
+    - "{{ playbook_dir }}/../../../tests/integration/targets/iosxr_hostname/vars/main.yaml"
+  tasks:
+    - name: Run iosxr_hostname rendered
+      register: result
+      cisco.iosxr.iosxr_hostname:
+        config:
+          hostname: test
+        state: rendered
+    - name: Assert rendered commands
+      ansible.builtin.assert:
+        that:
+          - result.rendered | symmetric_difference(rendered.commands) | length == 0
+
+- name: "Iosxr_hostname -- state: empty_config"
+  hosts: iosxr_hostname_gathered
+  connection: local
+  gather_facts: false
+  vars_files:
+    - "{{ playbook_dir }}/../../../tests/integration/targets/iosxr_hostname/vars/main.yaml"
+  tasks:
+    - name: Empty merged config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_hostname:
+        config:
+        state: merged
+    - name: Assert empty config error for merged
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state merged'
+    - name: Empty replaced config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_hostname:
+        config:
+        state: replaced
+    - name: Assert empty config error for replaced
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state replaced'
+    - name: Empty overridden config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_hostname:
+        config:
+        state: overridden
+    - name: Assert empty config error for overridden
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state overridden'
+    - name: Empty rendered config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_hostname:
+        config:
+        state: rendered
+    - name: Assert empty config error for rendered
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state rendered'
+    - name: Empty parsed config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_hostname:
+        running_config:
+        state: parsed
+    - name: Assert empty config error for parsed
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of running_config parameter must not be empty for state parsed'

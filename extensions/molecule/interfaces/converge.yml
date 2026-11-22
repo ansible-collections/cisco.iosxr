@@ -111,3 +111,86 @@
              'no mtu'] | symmetric_difference(result.commands) | length == 0
 
     # DEVIATION: idempotent re-run omitted — same IOS-XR abort desync issue.
+
+- name: "Iosxr_interfaces — state: parsed"
+  hosts: iosxr_interfaces_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
+  tasks:
+    - name: Run iosxr_interfaces parsed
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        running_config: "{{ lookup('file', playbook_dir + '/../../../tests/integration/targets/iosxr_interfaces/tests/cli/fixtures/parsed.cfg') }}"
+        state: parsed
+    - name: Assert parsed result
+      ansible.builtin.assert:
+        that:
+          - result.parsed == parsed.after
+
+- name: "Iosxr_interfaces — state: rendered"
+  hosts: iosxr_interfaces_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
+  tasks:
+    - name: Run iosxr_interfaces rendered
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        config:
+          - description: Configured and Merged by Ansible-Network
+            duplex: half
+            enabled: true
+            mtu: 110
+            name: GigabitEthernet0/0/0/0
+          - description: Configured and Merged by Ansible-Network
+            duplex: full
+            enabled: false
+            mtu: 2800
+            name: GigabitEthernet0/0/0/1
+        state: rendered
+    - name: Assert rendered commands
+      ansible.builtin.assert:
+        that:
+          - result.rendered | symmetric_difference(rendered.commands) | length == 0
+
+- name: "Iosxr_interfaces — state: empty_config"
+  hosts: iosxr_interfaces_gathered
+  connection: local
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
+  tasks:
+    - name: Empty merged config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_interfaces:
+        config:
+        state: merged
+    - name: Assert empty config error for merged
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state merged'
+    - name: Empty rendered config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_interfaces:
+        config:
+        state: rendered
+    - name: Assert empty config error for rendered
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state rendered'
+    - name: Empty parsed config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_interfaces:
+        running_config:
+        state: parsed
+    - name: Assert empty config error for parsed
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of running_config parameter must not be empty for state parsed'

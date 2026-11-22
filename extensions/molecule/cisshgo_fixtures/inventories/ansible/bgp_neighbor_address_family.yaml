@@ -21,15 +21,19 @@ all:
           hosts:
             cisshgo-bgp_neighbor_address_family-merged:
               ansible_port: 10001
+        iosxr_bgp_neighbor_address_family_merged_set_false:
+          hosts:
+            cisshgo-bgp_neighbor_address_family-merged_set_false:
+              ansible_port: 10002
         iosxr_bgp_neighbor_address_family_replaced:
           hosts:
             cisshgo-bgp_neighbor_address_family-replaced:
-              ansible_port: 10002
+              ansible_port: 10003
         iosxr_bgp_neighbor_address_family_overridden:
           hosts:
             cisshgo-bgp_neighbor_address_family-overridden:
-              ansible_port: 10003
+              ansible_port: 10004
         iosxr_bgp_neighbor_address_family_deleted:
           hosts:
             cisshgo-bgp_neighbor_address_family-deleted:
-              ansible_port: 10004
+              ansible_port: 10005

@@ -2909,6 +2909,39 @@ scenarios:
         transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/merged/after.txt
       - command: show running-config router bgp
         transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/merged/after.txt
+  iosxr-bgp-neighbor-address-family-merged-set-false:
+    platform: iosxr_bgp_neighbor_address_family
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/merged_set_false/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: router bgp 65536
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: neighbor 192.0.2.2
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: address-family ipv4 unicast
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: no as-override
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: no default-originate
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: no next-hop-self
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: no send-community-ebgp
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: no send-community-gshut-ebgp
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: no send-extended-community-ebgp
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/merged_set_false/after.txt
   iosxr-bgp-neighbor-address-family-replaced:
     platform: iosxr_bgp_neighbor_address_family
     sequence:

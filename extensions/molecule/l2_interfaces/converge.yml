@@ -41,6 +41,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(merged.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after is defined
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_l2_interfaces — state: replaced"
@@ -62,6 +66,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(replaced.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after is defined
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_l2_interfaces — state: overridden"
@@ -87,6 +95,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(overridden.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after is defined
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_l2_interfaces — state: deleted"
@@ -103,6 +115,10 @@
       ansible.builtin.assert:
         that:
           - result.commands | symmetric_difference(deleted.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - result.after is defined
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_l2_interfaces — state: parsed"
@@ -146,3 +162,44 @@
       ansible.builtin.assert:
         that:
           - result.rendered is defined
+
+- name: "Iosxr_l2_interfaces — state: empty_config"
+  hosts: iosxr_l2_interfaces_gathered
+  connection: local
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_l2_interfaces/vars/main.yaml
+  tasks:
+    - name: Empty merged config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_l2_interfaces:
+        config:
+        state: merged
+    - name: Assert empty config error for merged
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state merged'
+    - name: Empty rendered config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_l2_interfaces:
+        config:
+        state: rendered
+    - name: Assert empty config error for rendered
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state rendered'
+    - name: Empty parsed config should fail
+      register: result
+      ignore_errors: true  # noqa: ignore-errors
+      cisco.iosxr.iosxr_l2_interfaces:
+        running_config:
+        state: parsed
+    - name: Assert empty config error for parsed
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of running_config parameter must not be empty for state parsed'
