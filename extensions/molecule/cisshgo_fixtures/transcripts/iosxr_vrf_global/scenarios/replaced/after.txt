@@ -16,7 +16,3 @@ vrf VRF7
  remote-route-filtering disable
  rd 6:9
 !
-vrf VRF-A
-!
-vrf VRF-B
-!

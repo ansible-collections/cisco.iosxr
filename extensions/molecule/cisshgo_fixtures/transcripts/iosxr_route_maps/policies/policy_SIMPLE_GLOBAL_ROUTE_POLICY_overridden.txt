@@ -1,0 +1,9 @@
+route-policy SIMPLE_GLOBAL_ROUTE_POLICY_overridden
+  apply A_NEW_ROUTE_POLICY
+  set community test_comm_name
+  set weight 20000
+  set local-preference +100
+  set local-preference -200
+  set local-preference *300
+end-policy
+!

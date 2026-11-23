@@ -1,5 +1,5 @@
 devices:
-  - platform: iosxr_ospf_interfaces
+  - scenario: iosxr-ospf-interfaces-gathered
     count: 1
   - scenario: iosxr-ospf-interfaces-merged
     count: 1

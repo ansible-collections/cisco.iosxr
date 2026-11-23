@@ -44,7 +44,7 @@
     - name: Assert after state
       ansible.builtin.assert:
         that:
-          - result.after is defined
+          - merged.after | symmetric_difference(result.after) | length == 0
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_l2_interfaces — state: replaced"
@@ -69,7 +69,7 @@
     - name: Assert after state
       ansible.builtin.assert:
         that:
-          - result.after is defined
+          - replaced.after | symmetric_difference(result.after) | length == 0
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_l2_interfaces — state: overridden"
@@ -98,7 +98,7 @@
     - name: Assert after state
       ansible.builtin.assert:
         that:
-          - result.after is defined
+          - overridden.after | symmetric_difference(result.after) | length == 0
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_l2_interfaces — state: deleted"
@@ -118,7 +118,7 @@
     - name: Assert after state
       ansible.builtin.assert:
         that:
-          - result.after is defined
+          - deleted.after | symmetric_difference(result.after) | length == 0
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_l2_interfaces — state: parsed"

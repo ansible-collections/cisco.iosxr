@@ -95,7 +95,7 @@
     - name: Assert after state
       ansible.builtin.assert:
         that:
-          - result.after is defined
+          - merged.after | symmetric_difference(result.after) | length == 0
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_static_routes — state: replaced"
@@ -127,7 +127,7 @@
     - name: Assert after state
       ansible.builtin.assert:
         that:
-          - result.after is defined
+          - replaced.after | symmetric_difference(result.after) | length == 0
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_static_routes — state: overridden"
@@ -167,7 +167,7 @@
     - name: Assert after state
       ansible.builtin.assert:
         that:
-          - result.after is defined
+          - overridden.after | symmetric_difference(result.after) | length == 0
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_static_routes — state: deleted"
@@ -187,7 +187,7 @@
     - name: Assert after state
       ansible.builtin.assert:
         that:
-          - result.after is defined
+          - deleted.after | symmetric_difference(result.after) | length == 0
 
 - name: "Iosxr_static_routes — state: rendered"
   hosts: iosxr_static_routes_gathered

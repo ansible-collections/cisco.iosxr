@@ -1,0 +1,13 @@
+route-policy COMPLEX_ROUTE_POLICY_overridden
+  if as-path in (ios-regex '_3117_', ios-regex '_600_') then
+    drop
+  else
+    if destination in A_RANDOM_POLICY then
+      pass
+      set community test_comm_name
+    else
+      drop
+    endif
+  endif
+end-policy
+!

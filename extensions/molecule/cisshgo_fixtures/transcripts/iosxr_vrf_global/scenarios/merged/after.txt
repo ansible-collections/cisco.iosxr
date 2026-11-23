@@ -7,7 +7,3 @@ vrf VRF4
  remote-route-filtering disable
  rd 3:4
 !
-vrf VRF-A
-!
-vrf VRF-B
-!

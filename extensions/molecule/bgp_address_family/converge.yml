@@ -59,7 +59,7 @@
     - name: Assert after state
       ansible.builtin.assert:
         that:
-          - result.after is defined
+          - merged.after | symmetric_difference(result.after) | length == 0
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_bgp_address_family — state: replaced"
@@ -163,7 +163,7 @@
           - result.commands | symmetric_difference(expected_commands) | length == 0
       vars:
         expected_commands:
-          - router bgp 65138
+          - router bgp 65536
           - no address-family ipv4 unicast
           - no address-family vpnv4 unicast
           - vrf VRF-A

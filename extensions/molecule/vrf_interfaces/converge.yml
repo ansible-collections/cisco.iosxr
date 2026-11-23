@@ -102,7 +102,7 @@
     - name: Assert parsed result
       ansible.builtin.assert:
         that:
-          - result.parsed == parsed
+          - result.parsed == parsed.result
 
 - name: "Iosxr_vrf_interfaces — state: empty_config"
   hosts: iosxr_vrf_interfaces_gathered

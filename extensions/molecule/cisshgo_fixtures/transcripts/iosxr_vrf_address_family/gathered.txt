@@ -16,11 +16,3 @@ vrf VRF4
   maximum prefix 100
  !
 !
-vrf VRF-A
- address-family ipv4 unicast
- !
-!
-vrf VRF-B
- address-family ipv4 unicast
- !
-!

@@ -87,7 +87,7 @@
     - name: Assert after state
       ansible.builtin.assert:
         that:
-          - result.after is defined
+          - result.after == merged.after
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_route_maps — state: overridden"
@@ -136,7 +136,7 @@
     - name: Assert after state
       ansible.builtin.assert:
         that:
-          - result.after is defined
+          - overridden.after | symmetric_difference(result.after) | length == 0
     # Idempotent check SKIPPED: IOS-XR abort between tasks desynchronises cisshgo sequence
 
 - name: "Iosxr_route_maps — state: purged"
