@@ -341,7 +341,7 @@
     - name: Assert rendered commands
       ansible.builtin.assert:
         that:
-          - result.rendered is defined
+          - result.rendered | symmetric_difference(merged.commands) | length == 0
 
 - name: "Iosxr_ntp_global — state: parsed"
   hosts: iosxr_ntp_global_gathered

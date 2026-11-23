@@ -264,7 +264,7 @@
     - name: Assert rendered commands
       ansible.builtin.assert:
         that:
-          - result.rendered is defined
+          - result.rendered | symmetric_difference(merged.commands) | length == 0
 
 - name: "Iosxr_bgp_templates — state: parsed"
   hosts: iosxr_bgp_templates_gathered

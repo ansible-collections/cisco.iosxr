@@ -506,7 +506,7 @@
     - name: Assert rendered commands
       ansible.builtin.assert:
         that:
-          - result.rendered is defined
+          - result.rendered | symmetric_difference(merged.commands) | length == 0
 
 - name: "Iosxr_snmp_server — state: parsed"
   hosts: iosxr_snmp_server_gathered

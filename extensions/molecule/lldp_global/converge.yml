@@ -14,6 +14,7 @@
     - name: Assert gathered
       ansible.builtin.assert:
         that:
+          - merged.after == result.gathered
           - result.changed == false
 
 - name: "Iosxr_lldp_global — state: merged"
