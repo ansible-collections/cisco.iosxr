@@ -88,6 +88,18 @@ merged:
               value: 4
             bestpath_origin_as_allow_invalid: true
 
+merged_set_false:
+  commands:
+    - router bgp 65536
+    - neighbor 192.0.2.2
+    - address-family ipv4 unicast
+    - no as-override
+    - no default-originate
+    - no next-hop-self
+    - no send-community-ebgp
+    - no send-community-gshut-ebgp
+    - no send-extended-community-ebgp
+
 deleted:
   after:
     as_number: "65536"

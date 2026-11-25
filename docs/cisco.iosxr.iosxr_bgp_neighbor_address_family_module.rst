@@ -3545,6 +3545,9 @@ Notes
 
 .. note::
    - This module works with connection ``network_cli``.
+   - For the address-family options that take both ``set`` and ``inheritance_disable`` (``as_override``, ``default_originate``, ``next_hop_self``, ``next_hop_unchanged``, ``route_reflector_client``, ``send_community_ebgp``, ``send_community_gshut_ebgp`` and ``send_extended_community_ebgp``), the two sub-options select mutually exclusive forms of the same IOS-XR command. For example ``as-override`` and ``as-override inheritance-disable`` replace one another on the device, which reports back only one of them. They are declared mutually exclusive, so supplying both in the same task fails validation.
+   - ``multipath`` under ``next_hop_unchanged`` selects a third form of the command, ``next-hop-unchanged multipath``. It is not mutually exclusive with the other two, but only one command is generated per option, and ``multipath`` takes precedence.
+   - Setting any of those sub-options to ``false`` generates the matching ``no`` form of the command rather than the enable form.
 
 
 

@@ -22,6 +22,20 @@ version_added: 2.0.0
 author: Ashwini Mhatre (@amhatre)
 notes:
 - This module works with connection C(network_cli).
+- For the address-family options that take both C(set) and C(inheritance_disable)
+  (C(as_override), C(default_originate), C(next_hop_self), C(next_hop_unchanged),
+  C(route_reflector_client), C(send_community_ebgp), C(send_community_gshut_ebgp)
+  and C(send_extended_community_ebgp)), the two sub-options select mutually
+  exclusive forms of the same IOS-XR command. For example C(as-override) and
+  C(as-override inheritance-disable) replace one another on the device, which
+  reports back only one of them. They are declared mutually exclusive, so
+  supplying both in the same task fails validation.
+- C(multipath) under C(next_hop_unchanged) selects a third form of the command,
+  C(next-hop-unchanged multipath). It is not mutually exclusive with the other
+  two, but only one command is generated per option, and C(multipath) takes
+  precedence.
+- Setting any of those sub-options to C(false) generates the matching C(no) form
+  of the command rather than the enable form.
 options:
     config:
       description: BGP neighbor address family configurations.
