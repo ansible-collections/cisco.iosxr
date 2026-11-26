@@ -22,6 +22,8 @@
 - name: Merged state
   hosts: iosxr_interfaces_merged
   gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
   tasks:
     - name: Merge configuration on GigabitEthernet0/0/0/0
       register: result
@@ -40,12 +42,24 @@
             ['interface GigabitEthernet0/0/0/0',
              'description Configured and Merged by Ansible-Network',
              'mtu 110'] | symmetric_difference(result.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - >-
+            result.after
+            | selectattr('name', 'in', merged.after | map(attribute='name') | list)
+            | list
+            == merged.after
+            | selectattr('name', 'in', result.after | map(attribute='name') | list)
+            | list
     # DEVIATION: idempotent re-run omitted for IOS-XR — network_cli sends abort between
     # tasks, desynchronising the cisshgo sequence and causing a 30s timeout.
 
 - name: Replaced state
   hosts: iosxr_interfaces_replaced
   gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
   tasks:
     - name: Replace configuration on GigabitEthernet0/0/0/0
       register: result
@@ -64,12 +78,24 @@
             ['interface GigabitEthernet0/0/0/0',
              'description Configured and Replaced by Ansible-Network',
              'mtu 110'] | symmetric_difference(result.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - >-
+            result.after
+            | selectattr('name', 'in', replaced.after | map(attribute='name') | list)
+            | list
+            == replaced.after
+            | selectattr('name', 'in', result.after | map(attribute='name') | list)
+            | list
 
     # DEVIATION: idempotent re-run omitted — same IOS-XR abort desync issue as merged.
 
 - name: Overridden state
   hosts: iosxr_interfaces_overridden
   gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
   tasks:
     - name: Override configuration on GigabitEthernet0/0/0/0
       register: result
@@ -89,12 +115,24 @@
             ['interface GigabitEthernet0/0/0/0',
              'description Configured and Overridden by Ansible-Network',
              'mtu 2000'] | symmetric_difference(result.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - >-
+            result.after
+            | selectattr('name', 'in', overridden.after | map(attribute='name') | list)
+            | list
+            == overridden.after
+            | selectattr('name', 'in', result.after | map(attribute='name') | list)
+            | list
 
     # DEVIATION: idempotent re-run omitted — same IOS-XR abort desync issue.
 
 - name: Deleted state
   hosts: iosxr_interfaces_deleted
   gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
   tasks:
     - name: Delete all configured interface attributes
       register: result
@@ -109,6 +147,16 @@
             ['interface GigabitEthernet0/0/0/0',
              'no description',
              'no mtu'] | symmetric_difference(result.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - >-
+            result.after
+            | selectattr('name', 'in', deleted.after | map(attribute='name') | list)
+            | list
+            == deleted.after
+            | selectattr('name', 'in', result.after | map(attribute='name') | list)
+            | list
 
     # DEVIATION: idempotent re-run omitted — same IOS-XR abort desync issue.
 

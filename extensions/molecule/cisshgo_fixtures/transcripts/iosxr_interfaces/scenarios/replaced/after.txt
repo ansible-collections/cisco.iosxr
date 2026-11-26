@@ -1,3 +1,7 @@
+interface Loopback888
+!
+interface Loopback999
+!
 interface MgmtEth0/RP0/CPU0/0
  ipv4 address dhcp
 !
@@ -5,4 +9,7 @@ interface GigabitEthernet0/0/0/0
  description Configured and Replaced by Ansible-Network
  mtu 110
  shutdown
+!
+interface GigabitEthernet0/0/0/1
+ description Configured and Replaced by Ansible-Network
 !

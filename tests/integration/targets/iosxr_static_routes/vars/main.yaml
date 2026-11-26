@@ -381,3 +381,49 @@ round_trip:
                   interface: FastEthernet0/0/0/3
                   description: DEV_MOVED
                   dest_vrf: dev_moved
+
+parsed:
+  after:
+    - address_families:
+        - afi: ipv4
+          routes:
+            - dest: 192.0.2.16/28
+              next_hops:
+                - description: LAB
+                  forward_router_address: 192.0.2.10
+                  interface: FastEthernet0/0/0/1
+                  metric: 120
+                  tag: 10
+                - interface: FastEthernet0/0/0/5
+                  track: ip_sla_1
+            - dest: 192.0.2.32/28
+              next_hops:
+                - admin_distance: 100
+                  forward_router_address: 192.0.2.11
+          safi: multicast
+        - afi: ipv6
+          routes:
+            - dest: "2001:db8:1000::/36"
+              next_hops:
+                - description: DC
+                  interface: FastEthernet0/0/0/7
+                - forward_router_address: "2001:db8:2000:2::1"
+                  interface: FastEthernet0/0/0/8
+          safi: unicast
+    - address_families:
+        - afi: ipv4
+          routes:
+            - dest: 192.0.2.48/28
+              next_hops:
+                - description: DEV
+                  dest_vrf: test_1
+                  forward_router_address: 192.0.2.12
+            - dest: 192.0.2.80/28
+              next_hops:
+                - dest_vrf: test_1
+                  forward_router_address: 192.0.2.14
+                  interface: FastEthernet0/0/0/2
+                  track: ip_sla_2
+                  vrflabel: 124
+          safi: unicast
+      vrf: DEV_SITE
