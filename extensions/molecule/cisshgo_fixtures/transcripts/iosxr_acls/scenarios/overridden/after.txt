@@ -1,0 +1,4 @@
+ipv4 access-list acl_1
+ 10 permit tcp any any
+ipv4 access-list acl_2
+ 20 permit igmp any any

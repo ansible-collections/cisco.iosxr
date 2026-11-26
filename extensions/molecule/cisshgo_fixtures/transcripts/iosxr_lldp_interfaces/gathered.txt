@@ -1,0 +1,12 @@
+interface GigabitEthernet0/0/0/0
+ lldp
+  transmit disable
+ !
+ shutdown
+!
+interface GigabitEthernet0/0/0/1
+ lldp
+  receive disable
+ !
+ shutdown
+!

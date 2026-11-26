@@ -1,0 +1,12 @@
+route-policy COMPLEX_ROUTE_POLICY
+  if destination in A_RANDOM_POLICY_DUMMY then
+    drop
+  else
+    if destination in A_RANDOM_POLICY then
+      pass
+    else
+      drop
+    endif
+  endif
+end-policy
+!

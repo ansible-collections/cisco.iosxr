@@ -1,0 +1,11 @@
+devices:
+  - scenario: iosxr-static-routes-gathered
+    count: 1
+  - scenario: iosxr-static-routes-merged
+    count: 1
+  - scenario: iosxr-static-routes-replaced
+    count: 1
+  - scenario: iosxr-static-routes-overridden
+    count: 1
+  - scenario: iosxr-static-routes-deleted
+    count: 1

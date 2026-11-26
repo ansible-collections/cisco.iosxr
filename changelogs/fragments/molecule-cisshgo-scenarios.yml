@@ -1,0 +1,7 @@
+---
+trivial:
+  - >-
+    Add CISSHGO-based Molecule scenarios for resource modules (gathered, merged,
+    replaced, overridden, deleted, parsed, rendered, empty_config) and wire them
+    into GitHub Actions (libssh + paramiko). Include
+    iosxr_bgp_neighbor_address_family merged set:false coverage for AAP-93017.

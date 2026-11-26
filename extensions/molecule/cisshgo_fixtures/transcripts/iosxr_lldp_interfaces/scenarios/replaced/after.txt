@@ -1,0 +1,15 @@
+interface MgmtEth0/RP0/CPU0/0
+ ipv4 address dhcp
+!
+interface GigabitEthernet0/0/0/0
+ lldp
+  transmit disable
+ !
+ shutdown
+!
+interface preconfigure GigabitEthernet0/0/0/1
+ lldp
+  transmit disable
+ !
+ shutdown
+!

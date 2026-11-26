@@ -1,0 +1,28 @@
+router bgp 65536
+ bgp cluster-id 5
+ bgp router-id 192.0.2.10
+ bgp bestpath med confed
+ default-metric 5
+ socket receive-buffer-size 514
+ socket send-buffer-size 4098
+ neighbor-group test_ng
+ !
+ session-group test_sg
+ !
+ neighbor 192.0.2.13
+  use neighbor-group test_ng
+  use session-group test_sg
+  bfd fast-detect
+  bfd minimum-interval 20
+  bfd multiplier 6
+  local-as 65539 no-prepend replace-as
+  password inheritance-disable
+  remote-as 65538
+ !
+ neighbor 192.0.2.14
+  remote-as 65539
+ !
+ neighbor 192.0.2.15
+  remote-as 5467.5
+ !
+!

@@ -1,0 +1,8 @@
+route-policy SIMPLE_CONDITION_ROUTE_POLICY
+  if destination in SIMPLE_CONDITION_ROUTE_POLICY then
+    pass
+  else
+    drop
+  endif
+end-policy
+!

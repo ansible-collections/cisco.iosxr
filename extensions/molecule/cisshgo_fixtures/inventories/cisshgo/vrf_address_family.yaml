@@ -1,0 +1,11 @@
+devices:
+  - scenario: iosxr-vrf-address-family-gathered
+    count: 1
+  - scenario: iosxr-vrf-address-family-merged
+    count: 1
+  - scenario: iosxr-vrf-address-family-replaced
+    count: 1
+  - scenario: iosxr-vrf-address-family-overridden
+    count: 1
+  - scenario: iosxr-vrf-address-family-deleted
+    count: 1

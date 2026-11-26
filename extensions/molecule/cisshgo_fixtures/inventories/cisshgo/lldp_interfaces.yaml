@@ -1,0 +1,11 @@
+devices:
+  - platform: iosxr_lldp_interfaces
+    count: 1
+  - scenario: iosxr-lldp-interfaces-merged
+    count: 1
+  - scenario: iosxr-lldp-interfaces-replaced
+    count: 1
+  - scenario: iosxr-lldp-interfaces-overridden
+    count: 1
+  - scenario: iosxr-lldp-interfaces-deleted
+    count: 1

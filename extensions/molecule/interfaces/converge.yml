@@ -1,0 +1,244 @@
+---
+# DEVIATION: adapted to GigabitEthernet0/0/0/0 only (device lacks Gi0/0/0/1)
+# Commands are hardcoded (not from vars_files) because recording used single interface.
+# Assertions use exact command lists from the recording.
+
+- name: Gathered state
+  hosts: iosxr_interfaces_gathered
+  gather_facts: false
+  tasks:
+    - name: Gather iosxr_interfaces facts
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        state: gathered
+
+    - name: Assert gathered returns GigabitEthernet0/0/0/0
+      ansible.builtin.assert:
+        that:
+          - result.gathered | selectattr('name', 'equalto', 'GigabitEthernet0/0/0/0') | list | length == 1
+          - (result.gathered | selectattr('name', 'equalto', 'GigabitEthernet0/0/0/0') | first).description == 'This interface is Configured and Merged by Ansible-Network'
+          - (result.gathered | selectattr('name', 'equalto', 'GigabitEthernet0/0/0/0') | first).mtu == 110
+
+- name: Merged state
+  hosts: iosxr_interfaces_merged
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
+  tasks:
+    - name: Merge configuration on GigabitEthernet0/0/0/0
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/0
+            description: Configured and Merged by Ansible-Network
+            mtu: 110
+        state: merged
+
+    - name: Assert merged commands
+      ansible.builtin.assert:
+        that:
+          - result.changed == true
+          - >-
+            ['interface GigabitEthernet0/0/0/0',
+             'description Configured and Merged by Ansible-Network',
+             'mtu 110'] | symmetric_difference(result.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - >-
+            result.after
+            | selectattr('name', 'in', merged.after | map(attribute='name') | list)
+            | list
+            == merged.after
+            | selectattr('name', 'in', result.after | map(attribute='name') | list)
+            | list
+    # DEVIATION: idempotent re-run omitted for IOS-XR — network_cli sends abort between
+    # tasks, desynchronising the cisshgo sequence and causing a 30s timeout.
+
+- name: Replaced state
+  hosts: iosxr_interfaces_replaced
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
+  tasks:
+    - name: Replace configuration on GigabitEthernet0/0/0/0
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/0
+            description: Configured and Replaced by Ansible-Network
+            mtu: 110
+        state: replaced
+
+    - name: Assert replaced commands
+      ansible.builtin.assert:
+        that:
+          - result.changed == true
+          - >-
+            ['interface GigabitEthernet0/0/0/0',
+             'description Configured and Replaced by Ansible-Network',
+             'mtu 110'] | symmetric_difference(result.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - >-
+            result.after
+            | selectattr('name', 'in', replaced.after | map(attribute='name') | list)
+            | list
+            == replaced.after
+            | selectattr('name', 'in', result.after | map(attribute='name') | list)
+            | list
+
+    # DEVIATION: idempotent re-run omitted — same IOS-XR abort desync issue as merged.
+
+- name: Overridden state
+  hosts: iosxr_interfaces_overridden
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
+  tasks:
+    - name: Override configuration on GigabitEthernet0/0/0/0
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/0
+            description: Configured and Overridden by Ansible-Network
+            mtu: 2000
+            enabled: false
+        state: overridden
+
+    - name: Assert overridden commands
+      ansible.builtin.assert:
+        that:
+          - result.changed == true
+          - >-
+            ['interface GigabitEthernet0/0/0/0',
+             'description Configured and Overridden by Ansible-Network',
+             'mtu 2000'] | symmetric_difference(result.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - >-
+            result.after
+            | selectattr('name', 'in', overridden.after | map(attribute='name') | list)
+            | list
+            == overridden.after
+            | selectattr('name', 'in', result.after | map(attribute='name') | list)
+            | list
+
+    # DEVIATION: idempotent re-run omitted — same IOS-XR abort desync issue.
+
+- name: Deleted state
+  hosts: iosxr_interfaces_deleted
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
+  tasks:
+    - name: Delete all configured interface attributes
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        state: deleted
+
+    - name: Assert deleted commands
+      ansible.builtin.assert:
+        that:
+          - result.changed == true
+          - >-
+            ['interface GigabitEthernet0/0/0/0',
+             'no description',
+             'no mtu'] | symmetric_difference(result.commands) | length == 0
+    - name: Assert after state
+      ansible.builtin.assert:
+        that:
+          - >-
+            result.after
+            | selectattr('name', 'in', deleted.after | map(attribute='name') | list)
+            | list
+            == deleted.after
+            | selectattr('name', 'in', result.after | map(attribute='name') | list)
+            | list
+
+    # DEVIATION: idempotent re-run omitted — same IOS-XR abort desync issue.
+
+- name: "Iosxr_interfaces — state: parsed"
+  hosts: iosxr_interfaces_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
+  tasks:
+    - name: Run iosxr_interfaces parsed
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        running_config: "{{ lookup('file', playbook_dir + '/../../../tests/integration/targets/iosxr_interfaces/tests/cli/fixtures/parsed.cfg') }}"
+        state: parsed
+    - name: Assert parsed result
+      ansible.builtin.assert:
+        that:
+          - result.parsed == parsed.after
+
+- name: "Iosxr_interfaces — state: rendered"
+  hosts: iosxr_interfaces_gathered
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
+  tasks:
+    - name: Run iosxr_interfaces rendered
+      register: result
+      cisco.iosxr.iosxr_interfaces:
+        config:
+          - description: Configured and Merged by Ansible-Network
+            duplex: half
+            enabled: true
+            mtu: 110
+            name: GigabitEthernet0/0/0/0
+          - description: Configured and Merged by Ansible-Network
+            duplex: full
+            enabled: false
+            mtu: 2800
+            name: GigabitEthernet0/0/0/1
+        state: rendered
+    - name: Assert rendered commands
+      ansible.builtin.assert:
+        that:
+          - result.rendered | symmetric_difference(rendered.commands) | length == 0
+
+- name: "Iosxr_interfaces — state: empty_config"
+  hosts: iosxr_interfaces_gathered
+  connection: local
+  gather_facts: false
+  vars_files:
+    - ../../../tests/integration/targets/iosxr_interfaces/vars/main.yaml
+  tasks:
+    - name: Empty merged config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_interfaces:
+        config:
+        state: merged
+    - name: Assert empty config error for merged
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state merged'
+    - name: Empty rendered config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_interfaces:
+        config:
+        state: rendered
+    - name: Assert empty config error for rendered
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of config parameter must not be empty for state rendered'
+    - name: Empty parsed config should fail
+      register: result
+      ignore_errors: true # noqa: ignore-errors
+      cisco.iosxr.iosxr_interfaces:
+        running_config:
+        state: parsed
+    - name: Assert empty config error for parsed
+      ansible.builtin.assert:
+        that:
+          - result.failed == true
+          - result.msg == 'value of running_config parameter must not be empty for state parsed'

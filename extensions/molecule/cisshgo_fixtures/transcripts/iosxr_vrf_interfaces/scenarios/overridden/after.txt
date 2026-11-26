@@ -1,0 +1,16 @@
+interface Loopback888
+!
+interface Loopback999
+!
+interface MgmtEth0/RP0/CPU0/0
+ ipv4 address dhcp
+!
+interface GigabitEthernet0/0/0/0
+ shutdown
+!
+interface GigabitEthernet0/0/0/1
+ vrf vrf_C
+ shutdown
+!
+interface GigabitEthernet0/0/0/2
+!

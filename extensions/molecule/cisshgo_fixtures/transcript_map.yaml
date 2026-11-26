@@ -1,0 +1,2631 @@
+platforms:
+  iosxr_hostname:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_interfaces:
+    vendor: cisco
+    hostname: cisshgo-iosxr-interfaces
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/generic_empty_return.txt
+      terminal width 512: transcripts/generic_empty_return.txt
+      terminal width 0: transcripts/generic_empty_return.txt
+      write memory: transcripts/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/generic_empty_return.txt
+      show running-config hostname: transcripts/generic_empty_return.txt
+      show running-config: transcripts/generic_empty_return.txt
+      commit show-error: transcripts/generic_empty_return.txt
+      abort: transcripts/generic_empty_return.txt
+      show running-config interface: transcripts/iosxr_interfaces/gathered.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_ntp_global:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_static_routes:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_logging_global:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_lldp_interfaces:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+      show running-config interface: transcripts/iosxr_lldp_interfaces/gathered.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_l2_interfaces:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+      show running-config interface: transcripts/iosxr_l2_interfaces/gathered.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_l3_interfaces:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+      show running-config interface: transcripts/iosxr_l3_interfaces/gathered.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_lacp:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_lacp_interfaces:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+      show running-config interface: transcripts/iosxr_lacp_interfaces/gathered.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_lldp_global:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_lag_interfaces:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+      show running-config interface: transcripts/iosxr_lag_interfaces/gathered.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_vrf_interfaces:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+      show running-config interface: transcripts/iosxr_vrf_interfaces/gathered.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_acl_interfaces:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+      show running-config interface: transcripts/iosxr_acl_interfaces/gathered.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_acls:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_bgp_address_family:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_bgp_global:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_bgp_neighbor_address_family:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_bgp_templates:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_ospf_interfaces:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+      show running-config router ospf: transcripts/iosxr_ospf_interfaces/gathered.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_ospfv2:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_ospfv3:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_prefix_lists:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_route_maps:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_snmp_server:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_vrf_address_family:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+  iosxr_vrf_global:
+    vendor: cisco
+    hostname: cisshgo-iosxr
+    username: admin
+    password: admin
+    command_transcripts:
+      terminal length 0: transcripts/common/generic_empty_return.txt
+      terminal width 512: transcripts/common/generic_empty_return.txt
+      terminal width 0: transcripts/common/generic_empty_return.txt
+      write memory: transcripts/common/generic_empty_return.txt
+      terminal exec prompt no-timestamp: transcripts/common/generic_empty_return.txt
+      show version | utility head -n 20: transcripts/common/show_version.txt
+      show inventory: transcripts/common/generic_empty_return.txt
+      show running-config hostname: transcripts/common/generic_empty_return.txt
+      show running-config: transcripts/common/generic_empty_return.txt
+      commit show-error: transcripts/common/generic_empty_return.txt
+      abort: transcripts/common/generic_empty_return.txt
+    context_search:
+      configure terminal: (config)#
+      base: "#"
+    context_hierarchy:
+      (config)#: "#"
+      "#": ">"
+    end_context: "#"
+scenarios:
+  iosxr-hostname-gathered:
+    platform: iosxr_hostname
+    sequence:
+      - command: show running-config hostname
+        transcript: transcripts/iosxr_hostname/gathered.txt
+      - command: show running-config hostname
+        transcript: transcripts/iosxr_hostname/gathered.txt
+  iosxr-hostname-merged:
+    platform: iosxr_hostname
+    sequence:
+      - command: show running-config hostname
+        transcript: transcripts/iosxr_hostname/scenarios/merged/before.txt
+      - command: show running-config hostname
+        transcript: transcripts/iosxr_hostname/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config hostname
+        transcript: transcripts/iosxr_hostname/scenarios/merged/after.txt
+      - command: show running-config hostname
+        transcript: transcripts/iosxr_hostname/scenarios/merged/after.txt
+      - command: show running-config hostname
+        transcript: transcripts/iosxr_hostname/scenarios/merged/after.txt
+  iosxr-hostname-deleted:
+    platform: iosxr_hostname
+    sequence:
+      - command: show running-config hostname
+        transcript: transcripts/iosxr_hostname/scenarios/deleted/before.txt
+      - command: show running-config hostname
+        transcript: transcripts/iosxr_hostname/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config hostname
+        transcript: transcripts/iosxr_hostname/scenarios/deleted/after.txt
+      - command: show running-config hostname
+        transcript: transcripts/iosxr_hostname/scenarios/deleted/after.txt
+  iosxr-interfaces-merged:
+    platform: iosxr_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/merged/after.txt
+  iosxr-interfaces-replaced:
+    platform: iosxr_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/replaced/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/replaced/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/replaced/after.txt
+  iosxr-interfaces-overridden:
+    platform: iosxr_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/overridden/after.txt
+  iosxr-interfaces-deleted:
+    platform: iosxr_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/deleted/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/deleted/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_interfaces/scenarios/deleted/after.txt
+  iosxr-ntp-global-gathered:
+    platform: iosxr_ntp_global
+    sequence:
+      - command: show running-config ntp
+        transcript: transcripts/iosxr_ntp_global/gathered.txt
+  iosxr-ntp-global-merged:
+    platform: iosxr_ntp_global
+    sequence:
+      - command: show running-config ntp
+        transcript: transcripts/iosxr_ntp_global/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config ntp
+        transcript: transcripts/iosxr_ntp_global/scenarios/merged/after.txt
+      - command: show running-config ntp
+        transcript: transcripts/iosxr_ntp_global/scenarios/merged/after.txt
+  iosxr-static-routes-gathered:
+    platform: iosxr_static_routes
+    sequence:
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/gathered.txt
+  iosxr-static-routes-merged:
+    platform: iosxr_static_routes
+    sequence:
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/merged/after.txt
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/merged/after.txt
+  iosxr-static-routes-deleted:
+    platform: iosxr_static_routes
+    sequence:
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/deleted/after.txt
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/deleted/after.txt
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/deleted/after.txt
+  iosxr-ntp-global-replaced:
+    platform: iosxr_ntp_global
+    sequence:
+      - command: show running-config ntp
+        transcript: transcripts/iosxr_ntp_global/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config ntp
+        transcript: transcripts/iosxr_ntp_global/scenarios/replaced/after.txt
+      - command: show running-config ntp
+        transcript: transcripts/iosxr_ntp_global/scenarios/replaced/after.txt
+  iosxr-ntp-global-overridden:
+    platform: iosxr_ntp_global
+    sequence:
+      - command: show running-config ntp
+        transcript: transcripts/iosxr_ntp_global/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config ntp
+        transcript: transcripts/iosxr_ntp_global/scenarios/overridden/after.txt
+      - command: show running-config ntp
+        transcript: transcripts/iosxr_ntp_global/scenarios/overridden/after.txt
+  iosxr-ntp-global-deleted:
+    platform: iosxr_ntp_global
+    sequence:
+      - command: show running-config ntp
+        transcript: transcripts/iosxr_ntp_global/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config ntp
+        transcript: transcripts/iosxr_ntp_global/scenarios/deleted/after.txt
+  iosxr-static-routes-replaced:
+    platform: iosxr_static_routes
+    sequence:
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/replaced/after.txt
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/replaced/after.txt
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/replaced/after.txt
+  iosxr-static-routes-overridden:
+    platform: iosxr_static_routes
+    sequence:
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/overridden/after.txt
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/overridden/after.txt
+      - command: show running-config router static
+        transcript: transcripts/iosxr_static_routes/scenarios/overridden/after.txt
+  iosxr-logging-global-gathered:
+    platform: iosxr_logging_global
+    sequence:
+      - command: show running-config logging
+        transcript: transcripts/iosxr_logging_global/gathered.txt
+  iosxr-logging-global-merged:
+    platform: iosxr_logging_global
+    sequence:
+      - command: show running-config logging
+        transcript: transcripts/iosxr_logging_global/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config logging
+        transcript: transcripts/iosxr_logging_global/scenarios/merged/after.txt
+      - command: show running-config logging
+        transcript: transcripts/iosxr_logging_global/scenarios/merged/after.txt
+  iosxr-logging-global-replaced:
+    platform: iosxr_logging_global
+    sequence:
+      - command: show running-config logging
+        transcript: transcripts/iosxr_logging_global/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config logging
+        transcript: transcripts/iosxr_logging_global/scenarios/replaced/after.txt
+      - command: show running-config logging
+        transcript: transcripts/iosxr_logging_global/scenarios/replaced/after.txt
+  iosxr-logging-global-overridden:
+    platform: iosxr_logging_global
+    sequence:
+      - command: show running-config logging
+        transcript: transcripts/iosxr_logging_global/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config logging
+        transcript: transcripts/iosxr_logging_global/scenarios/overridden/after.txt
+      - command: show running-config logging
+        transcript: transcripts/iosxr_logging_global/scenarios/overridden/after.txt
+  iosxr-logging-global-deleted:
+    platform: iosxr_logging_global
+    sequence:
+      - command: show running-config logging
+        transcript: transcripts/iosxr_logging_global/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config logging
+        transcript: transcripts/iosxr_logging_global/scenarios/deleted/after.txt
+  iosxr-lldp-interfaces-merged:
+    platform: iosxr_lldp_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/merged/after.txt
+  iosxr-lldp-interfaces-replaced:
+    platform: iosxr_lldp_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/replaced/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/replaced/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/replaced/after.txt
+  iosxr-lldp-interfaces-overridden:
+    platform: iosxr_lldp_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/overridden/after.txt
+  iosxr-lldp-interfaces-deleted:
+    platform: iosxr_lldp_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/deleted/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/deleted/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lldp_interfaces/scenarios/deleted/after.txt
+  iosxr-l2-interfaces-merged:
+    platform: iosxr_l2_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/merged/after.txt
+  iosxr-l2-interfaces-replaced:
+    platform: iosxr_l2_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/replaced/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/replaced/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/replaced/after.txt
+  iosxr-l2-interfaces-overridden:
+    platform: iosxr_l2_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/overridden/after.txt
+  iosxr-l2-interfaces-deleted:
+    platform: iosxr_l2_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/deleted/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/deleted/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l2_interfaces/scenarios/deleted/after.txt
+  iosxr-l3-interfaces-merged:
+    platform: iosxr_l3_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/merged/after.txt
+  iosxr-l3-interfaces-replaced:
+    platform: iosxr_l3_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/replaced/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/replaced/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/replaced/after.txt
+  iosxr-l3-interfaces-overridden:
+    platform: iosxr_l3_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/overridden/after.txt
+  iosxr-l3-interfaces-deleted:
+    platform: iosxr_l3_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/deleted/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/deleted/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_l3_interfaces/scenarios/deleted/after.txt
+  iosxr-lacp-gathered:
+    platform: iosxr_lacp
+    sequence:
+      - command: show running-config lacp
+        transcript: transcripts/iosxr_lacp/gathered.txt
+  iosxr-lacp-merged:
+    platform: iosxr_lacp
+    sequence:
+      - command: show running-config lacp
+        transcript: transcripts/iosxr_lacp/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config lacp
+        transcript: transcripts/iosxr_lacp/scenarios/merged/after.txt
+      - command: show running-config lacp
+        transcript: transcripts/iosxr_lacp/scenarios/merged/after.txt
+      - command: show running-config lacp
+        transcript: transcripts/iosxr_lacp/scenarios/merged/after.txt
+  iosxr-lacp-replaced:
+    platform: iosxr_lacp
+    sequence:
+      - command: show running-config lacp
+        transcript: transcripts/iosxr_lacp/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config lacp
+        transcript: transcripts/iosxr_lacp/scenarios/replaced/after.txt
+      - command: show running-config lacp
+        transcript: transcripts/iosxr_lacp/scenarios/replaced/after.txt
+      - command: show running-config lacp
+        transcript: transcripts/iosxr_lacp/scenarios/replaced/after.txt
+  iosxr-lacp-deleted:
+    platform: iosxr_lacp
+    sequence:
+      - command: show running-config lacp
+        transcript: transcripts/iosxr_lacp/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config lacp
+        transcript: transcripts/iosxr_lacp/scenarios/deleted/after.txt
+      - command: show running-config lacp
+        transcript: transcripts/iosxr_lacp/scenarios/deleted/after.txt
+      - command: show running-config lacp
+        transcript: transcripts/iosxr_lacp/scenarios/deleted/after.txt
+  iosxr-lacp-interfaces-merged:
+    platform: iosxr_lacp_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/merged/after.txt
+  iosxr-lacp-interfaces-replaced:
+    platform: iosxr_lacp_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/replaced/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/replaced/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/replaced/after.txt
+  iosxr-lacp-interfaces-overridden:
+    platform: iosxr_lacp_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/overridden/after.txt
+  iosxr-lacp-interfaces-deleted:
+    platform: iosxr_lacp_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/deleted/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/deleted/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lacp_interfaces/scenarios/deleted/after.txt
+  iosxr-lldp-global-gathered:
+    platform: iosxr_lldp_global
+    sequence:
+      - command: show running-config lldp
+        transcript: transcripts/iosxr_lldp_global/gathered.txt
+  iosxr-lldp-global-merged:
+    platform: iosxr_lldp_global
+    sequence:
+      - command: show running-config lldp
+        transcript: transcripts/iosxr_lldp_global/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config lldp
+        transcript: transcripts/iosxr_lldp_global/scenarios/merged/after.txt
+      - command: show running-config lldp
+        transcript: transcripts/iosxr_lldp_global/scenarios/merged/after.txt
+      - command: show running-config lldp
+        transcript: transcripts/iosxr_lldp_global/scenarios/merged/after.txt
+  iosxr-lldp-global-replaced:
+    platform: iosxr_lldp_global
+    sequence:
+      - command: show running-config lldp
+        transcript: transcripts/iosxr_lldp_global/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config lldp
+        transcript: transcripts/iosxr_lldp_global/scenarios/replaced/after.txt
+      - command: show running-config lldp
+        transcript: transcripts/iosxr_lldp_global/scenarios/replaced/after.txt
+      - command: show running-config lldp
+        transcript: transcripts/iosxr_lldp_global/scenarios/replaced/after.txt
+  iosxr-lldp-global-deleted:
+    platform: iosxr_lldp_global
+    sequence:
+      - command: show running-config lldp
+        transcript: transcripts/iosxr_lldp_global/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config lldp
+        transcript: transcripts/iosxr_lldp_global/scenarios/deleted/after.txt
+  iosxr-lag-interfaces-merged:
+    platform: iosxr_lag_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/merged/after.txt
+  iosxr-lag-interfaces-replaced:
+    platform: iosxr_lag_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/replaced/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/replaced/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/replaced/after.txt
+  iosxr-lag-interfaces-overridden:
+    platform: iosxr_lag_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/overridden/after.txt
+  iosxr-lag-interfaces-deleted:
+    platform: iosxr_lag_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/deleted/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/deleted/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_lag_interfaces/scenarios/deleted/after.txt
+  iosxr-vrf-interfaces-merged:
+    platform: iosxr_vrf_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_vrf_interfaces/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_vrf_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_vrf_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_vrf_interfaces/scenarios/merged/after.txt
+  iosxr-vrf-interfaces-overridden:
+    platform: iosxr_vrf_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_vrf_interfaces/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_vrf_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_vrf_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_vrf_interfaces/scenarios/overridden/after.txt
+  iosxr-acl-interfaces-merged:
+    platform: iosxr_acl_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/merged/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/merged/after.txt
+  iosxr-acl-interfaces-replaced:
+    platform: iosxr_acl_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/replaced/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/replaced/after.txt
+  iosxr-acl-interfaces-overridden:
+    platform: iosxr_acl_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/overridden/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/overridden/after.txt
+  iosxr-acl-interfaces-deleted:
+    platform: iosxr_acl_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/deleted/after.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/deleted/after.txt
+  iosxr-acl-interfaces-deleted_all:
+    platform: iosxr_acl_interfaces
+    sequence:
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/deleted_all/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config interface
+        transcript: transcripts/iosxr_acl_interfaces/scenarios/deleted_all/after.txt
+  iosxr-acls-gathered:
+    platform: iosxr_acls
+    sequence:
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/gathered.txt
+  iosxr-acls-merged:
+    platform: iosxr_acls
+    sequence:
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/merged/after.txt
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/merged/after.txt
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/merged/after.txt
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/merged/after.txt
+  iosxr-acls-replaced:
+    platform: iosxr_acls
+    sequence:
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/replaced/after.txt
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/replaced/after.txt
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/replaced/after.txt
+  iosxr-acls-overridden:
+    platform: iosxr_acls
+    sequence:
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/overridden/after.txt
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/overridden/after.txt
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/overridden/after.txt
+  iosxr-acls-deleted:
+    platform: iosxr_acls
+    sequence:
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show access-lists afi-all
+        transcript: transcripts/iosxr_acls/scenarios/deleted/after.txt
+  iosxr-bgp-address-family-gathered:
+    platform: iosxr_bgp_address_family
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_address_family/gathered.txt
+  iosxr-bgp-address-family-merged:
+    platform: iosxr_bgp_address_family
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_address_family/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_address_family/scenarios/merged/after.txt
+  iosxr-bgp-address-family-replaced:
+    platform: iosxr_bgp_address_family
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_address_family/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_address_family/scenarios/replaced/after.txt
+  iosxr-bgp-address-family-overridden:
+    platform: iosxr_bgp_address_family
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_address_family/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_address_family/scenarios/overridden/after.txt
+  iosxr-bgp-address-family-deleted:
+    platform: iosxr_bgp_address_family
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_address_family/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_address_family/scenarios/deleted/after.txt
+  iosxr-bgp-global-gathered:
+    platform: iosxr_bgp_global
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_global/gathered.txt
+  iosxr-bgp-global-merged:
+    platform: iosxr_bgp_global
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_global/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_global/scenarios/merged/after.txt
+  iosxr-bgp-global-replaced:
+    platform: iosxr_bgp_global
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_global/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_global/scenarios/replaced/after.txt
+  iosxr-bgp-global-deleted:
+    platform: iosxr_bgp_global
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_global/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_global/scenarios/deleted/after.txt
+  iosxr-bgp-global-purged:
+    platform: iosxr_bgp_global
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_global/scenarios/purged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_global/scenarios/purged/after.txt
+  iosxr-bgp-neighbor-address-family-gathered:
+    platform: iosxr_bgp_neighbor_address_family
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/gathered.txt
+  iosxr-bgp-neighbor-address-family-merged:
+    platform: iosxr_bgp_neighbor_address_family
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/merged/after.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/merged/after.txt
+  iosxr-bgp-neighbor-address-family-merged-set-false:
+    platform: iosxr_bgp_neighbor_address_family
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/merged_set_false/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/merged_set_false/after.txt
+  iosxr-bgp-neighbor-address-family-replaced:
+    platform: iosxr_bgp_neighbor_address_family
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/replaced/after.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/replaced/after.txt
+  iosxr-bgp-neighbor-address-family-overridden:
+    platform: iosxr_bgp_neighbor_address_family
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/overridden/after.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/overridden/after.txt
+  iosxr-bgp-neighbor-address-family-deleted:
+    platform: iosxr_bgp_neighbor_address_family
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/deleted/after.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_neighbor_address_family/scenarios/deleted/after.txt
+  iosxr-bgp-templates-gathered:
+    platform: iosxr_bgp_templates
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_templates/gathered.txt
+  iosxr-bgp-templates-merged:
+    platform: iosxr_bgp_templates
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_templates/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_templates/scenarios/merged/after.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_templates/scenarios/merged/after.txt
+  iosxr-bgp-templates-replaced:
+    platform: iosxr_bgp_templates
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_templates/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_templates/scenarios/replaced/after.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_templates/scenarios/replaced/after.txt
+  iosxr-bgp-templates-overridden:
+    platform: iosxr_bgp_templates
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_templates/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_templates/scenarios/overridden/after.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_templates/scenarios/overridden/after.txt
+  iosxr-bgp-templates-deleted:
+    platform: iosxr_bgp_templates
+    sequence:
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_templates/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_templates/scenarios/deleted/after.txt
+      - command: show running-config router bgp
+        transcript: transcripts/iosxr_bgp_templates/scenarios/deleted/after.txt
+  iosxr-ospf-interfaces-merged:
+    platform: iosxr_ospf_interfaces
+    sequence:
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/merged/before.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/merged/after.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospf_interfaces/gathered_ospfv3.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/merged/after.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospf_interfaces/gathered_ospfv3.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/merged/after.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospf_interfaces/gathered_ospfv3.txt
+  iosxr-ospf-interfaces-replaced:
+    platform: iosxr_ospf_interfaces
+    sequence:
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/replaced/before.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/replaced/after.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospf_interfaces/gathered_ospfv3.txt
+  iosxr-ospf-interfaces-overridden:
+    platform: iosxr_ospf_interfaces
+    sequence:
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/overridden/before.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/overridden/after.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospf_interfaces/empty.txt
+  iosxr-ospf-interfaces-deleted:
+    platform: iosxr_ospf_interfaces
+    sequence:
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/deleted/before.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospf_interfaces/scenarios/deleted/after.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospf_interfaces/empty.txt
+  iosxr-ospfv2-gathered:
+    platform: iosxr_ospfv2
+    sequence:
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/gathered.txt
+  iosxr-ospfv2-merged:
+    platform: iosxr_ospfv2
+    sequence:
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/merged/after.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/merged/after.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/merged/after.txt
+  iosxr-ospfv2-replaced:
+    platform: iosxr_ospfv2
+    sequence:
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/replaced/after.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/replaced/after.txt
+  iosxr-ospfv2-overridden:
+    platform: iosxr_ospfv2
+    sequence:
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/overridden/after.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/overridden/after.txt
+  iosxr-ospfv2-deleted:
+    platform: iosxr_ospfv2
+    sequence:
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/deleted/after.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/deleted/after.txt
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospfv2/scenarios/deleted/after.txt
+  iosxr-ospfv3-gathered:
+    platform: iosxr_ospfv3
+    sequence:
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/gathered.txt
+  iosxr-ospfv3-merged:
+    platform: iosxr_ospfv3
+    sequence:
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/merged/after.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/merged/after.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/merged/after.txt
+  iosxr-ospfv3-replaced:
+    platform: iosxr_ospfv3
+    sequence:
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/replaced/after.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/replaced/after.txt
+  iosxr-ospfv3-overridden:
+    platform: iosxr_ospfv3
+    sequence:
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/overridden/after.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/overridden/after.txt
+  iosxr-ospfv3-deleted:
+    platform: iosxr_ospfv3
+    sequence:
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/deleted/after.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/deleted/after.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospfv3/scenarios/deleted/after.txt
+  iosxr-prefix-lists-gathered:
+    platform: iosxr_prefix_lists
+    sequence:
+      - command: show running-config
+        transcript: transcripts/iosxr_prefix_lists/gathered.txt
+  iosxr-prefix-lists-merged:
+    platform: iosxr_prefix_lists
+    sequence:
+      - command: show running-config
+        transcript: transcripts/iosxr_prefix_lists/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config
+        transcript: transcripts/iosxr_prefix_lists/scenarios/merged/after.txt
+      - &id001
+        command: show running-config
+        transcript: transcripts/iosxr_prefix_lists/scenarios/merged/after.txt
+      - *id001
+  iosxr-prefix-lists-replaced:
+    platform: iosxr_prefix_lists
+    sequence:
+      - command: show running-config
+        transcript: transcripts/iosxr_prefix_lists/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config
+        transcript: transcripts/iosxr_prefix_lists/scenarios/replaced/after.txt
+  iosxr-prefix-lists-overridden:
+    platform: iosxr_prefix_lists
+    sequence:
+      - command: show running-config
+        transcript: transcripts/iosxr_prefix_lists/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config
+        transcript: transcripts/iosxr_prefix_lists/scenarios/overridden/after.txt
+  iosxr-prefix-lists-deleted:
+    platform: iosxr_prefix_lists
+    sequence:
+      - command: show running-config
+        transcript: transcripts/iosxr_prefix_lists/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config
+        transcript: transcripts/iosxr_prefix_lists/scenarios/deleted/after.txt
+  iosxr-route-maps-gathered:
+    platform: iosxr_route_maps
+    sequence:
+      - command: show running-config | include route-policy
+        transcript: transcripts/iosxr_route_maps/gathered.txt
+      - command: show running-config route-policy POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)
+        transcript: transcripts/iosxr_route_maps/policies/policy_POLICY_TWO_PARAMS_SPECIFICITY_GEO_LOCATION_.txt
+      - command: show running-config route-policy COMPLEX_ROUTE_POLICY
+        transcript: transcripts/iosxr_route_maps/policies/policy_COMPLEX_ROUTE_POLICY.txt
+      - command: show running-config route-policy SIMPLE_GLOBAL_ROUTE_POLICY
+        transcript: transcripts/iosxr_route_maps/policies/policy_SIMPLE_GLOBAL_ROUTE_POLICY.txt
+      - command: show running-config route-policy SIMPLE_CONDITION_ROUTE_POLICY
+        transcript: transcripts/iosxr_route_maps/policies/policy_SIMPLE_CONDITION_ROUTE_POLICY.txt
+      - command: show running-config route-policy COMPLEX_CONDITION_ROUTE_POLICY
+        transcript: transcripts/iosxr_route_maps/policies/policy_COMPLEX_CONDITION_ROUTE_POLICY.txt
+  iosxr-route-maps-merged:
+    platform: iosxr_route_maps
+    sequence:
+      - command: show running-config | include route-policy
+        transcript: transcripts/iosxr_route_maps/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config | include route-policy
+        transcript: transcripts/iosxr_route_maps/scenarios/merged/after.txt
+      - &id002
+        command: show running-config route-policy POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)
+        transcript: transcripts/iosxr_route_maps/policies/policy_POLICY_TWO_PARAMS_SPECIFICITY_GEO_LOCATION_.txt
+      - &id003
+        command: show running-config route-policy COMPLEX_ROUTE_POLICY
+        transcript: transcripts/iosxr_route_maps/policies/policy_COMPLEX_ROUTE_POLICY.txt
+      - &id004
+        command: show running-config route-policy SIMPLE_GLOBAL_ROUTE_POLICY
+        transcript: transcripts/iosxr_route_maps/policies/policy_SIMPLE_GLOBAL_ROUTE_POLICY.txt
+      - &id005
+        command: show running-config route-policy SIMPLE_CONDITION_ROUTE_POLICY
+        transcript: transcripts/iosxr_route_maps/policies/policy_SIMPLE_CONDITION_ROUTE_POLICY.txt
+      - &id006
+        command: show running-config route-policy COMPLEX_CONDITION_ROUTE_POLICY
+        transcript: transcripts/iosxr_route_maps/policies/policy_COMPLEX_CONDITION_ROUTE_POLICY.txt
+  iosxr-route-maps-overridden:
+    platform: iosxr_route_maps
+    sequence:
+      - command: show running-config | include route-policy
+        transcript: transcripts/iosxr_route_maps/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config | include route-policy
+        transcript: transcripts/iosxr_route_maps/scenarios/overridden/after.txt
+      - command: show running-config route-policy COMPLEX_ROUTE_POLICY_overridden
+        transcript: transcripts/iosxr_route_maps/policies/policy_COMPLEX_ROUTE_POLICY_overridden.txt
+      - command: show running-config route-policy SIMPLE_GLOBAL_ROUTE_POLICY_overridden
+        transcript: transcripts/iosxr_route_maps/policies/policy_SIMPLE_GLOBAL_ROUTE_POLICY_overridden.txt
+  iosxr-route-maps-purged:
+    platform: iosxr_route_maps
+    sequence:
+      - command: show running-config | include route-policy
+        transcript: transcripts/iosxr_route_maps/scenarios/purged/before.txt
+      - command: show running-config route-policy POLICY_TWO_PARAMS($SPECIFICITY, $GEO_LOCATION)
+        transcript: transcripts/iosxr_route_maps/policies/policy_POLICY_TWO_PARAMS_SPECIFICITY_GEO_LOCATION_.txt
+      - command: show running-config route-policy COMPLEX_ROUTE_POLICY
+        transcript: transcripts/iosxr_route_maps/policies/policy_COMPLEX_ROUTE_POLICY.txt
+      - command: show running-config route-policy SIMPLE_GLOBAL_ROUTE_POLICY
+        transcript: transcripts/iosxr_route_maps/policies/policy_SIMPLE_GLOBAL_ROUTE_POLICY.txt
+      - command: show running-config route-policy SIMPLE_CONDITION_ROUTE_POLICY
+        transcript: transcripts/iosxr_route_maps/policies/policy_SIMPLE_CONDITION_ROUTE_POLICY.txt
+      - command: show running-config route-policy COMPLEX_CONDITION_ROUTE_POLICY
+        transcript: transcripts/iosxr_route_maps/policies/policy_COMPLEX_CONDITION_ROUTE_POLICY.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config | include route-policy
+        transcript: transcripts/iosxr_route_maps/scenarios/purged/after.txt
+  iosxr-snmp-server-gathered:
+    platform: iosxr_snmp_server
+    sequence:
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/gathered.txt
+  iosxr-snmp-server-merged:
+    platform: iosxr_snmp_server
+    sequence:
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/merged/after.txt
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/merged/after.txt
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/merged/after.txt
+  iosxr-snmp-server-replaced:
+    platform: iosxr_snmp_server
+    sequence:
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/replaced/after.txt
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/replaced/after.txt
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/replaced/after.txt
+  iosxr-snmp-server-overridden:
+    platform: iosxr_snmp_server
+    sequence:
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/overridden/after.txt
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/overridden/after.txt
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/overridden/after.txt
+  iosxr-snmp-server-deleted:
+    platform: iosxr_snmp_server
+    sequence:
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config snmp-server
+        transcript: transcripts/iosxr_snmp_server/scenarios/deleted/after.txt
+  iosxr-vrf-address-family-gathered:
+    platform: iosxr_vrf_address_family
+    sequence:
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_address_family/gathered.txt
+  iosxr-vrf-address-family-merged:
+    platform: iosxr_vrf_address_family
+    sequence:
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_address_family/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_address_family/scenarios/merged/after.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_address_family/scenarios/merged/after.txt
+  iosxr-vrf-address-family-replaced:
+    platform: iosxr_vrf_address_family
+    sequence:
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_address_family/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_address_family/scenarios/replaced/after.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_address_family/scenarios/replaced/after.txt
+  iosxr-vrf-address-family-overridden:
+    platform: iosxr_vrf_address_family
+    sequence:
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_address_family/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_address_family/scenarios/overridden/after.txt
+  iosxr-vrf-address-family-deleted:
+    platform: iosxr_vrf_address_family
+    sequence:
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_address_family/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_address_family/scenarios/deleted/after.txt
+  iosxr-vrf-global-gathered:
+    platform: iosxr_vrf_global
+    sequence:
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/gathered.txt
+  iosxr-vrf-global-merged:
+    platform: iosxr_vrf_global
+    sequence:
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/merged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/merged/after.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/merged/after.txt
+  iosxr-vrf-global-replaced:
+    platform: iosxr_vrf_global
+    sequence:
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/replaced/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/replaced/after.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/replaced/after.txt
+  iosxr-vrf-global-overridden:
+    platform: iosxr_vrf_global
+    sequence:
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/overridden/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/overridden/after.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/overridden/after.txt
+  iosxr-vrf-global-deleted:
+    platform: iosxr_vrf_global
+    sequence:
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/deleted/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/deleted/after.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/deleted/after.txt
+  iosxr-vrf-global-purged:
+    platform: iosxr_vrf_global
+    sequence:
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/purged/before.txt
+      - command: configure terminal
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show commit changes diff
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: commit show-error
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: abort
+        transcript: transcripts/common/generic_empty_return.txt
+      - command: show running-config vrf
+        transcript: transcripts/iosxr_vrf_global/scenarios/purged/after.txt
+  iosxr-ospf-interfaces-gathered:
+    platform: iosxr_ospf_interfaces
+    sequence:
+      - command: show running-config router ospf
+        transcript: transcripts/iosxr_ospf_interfaces/gathered.txt
+      - command: show running-config router ospfv3
+        transcript: transcripts/iosxr_ospf_interfaces/gathered_ospfv3.txt
