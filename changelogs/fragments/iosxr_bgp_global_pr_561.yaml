@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - iosxr_bgp_global - fixed facts crash when VRF names mix strings and integers ('<' not supported between 'str' and 'int'); vrfs now sort lexicographically by name.
