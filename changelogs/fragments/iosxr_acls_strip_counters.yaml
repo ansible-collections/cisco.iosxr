@@ -1,0 +1,5 @@
+---
+bugfixes:
+  - iosxr_acls - fixed facts parsing of ``show access-lists afi-all`` output so that
+    byte counters and hardware/software match counters are stripped, and so that
+    parentheses inside ACE remarks are preserved.
