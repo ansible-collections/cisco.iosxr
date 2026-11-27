@@ -17,7 +17,7 @@ Version added: 1.0.0
 
 Synopsis
 --------
-- This module will configure both exec and motd banners on remote device running Cisco IOS XR. It allows playbooks to add or remove banner text from the running configuration.
+- This module will configure login, exec and motd banners on remote device running Cisco IOS XR. It allows playbooks to add or remove banner text from the running configuration.
 
 
 
@@ -52,8 +52,11 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>exec</li>
+                                    <li>incoming</li>
                                     <li>login</li>
                                     <li>motd</li>
+                                    <li>slip-ppp</li>
                         </ul>
                 </td>
                 <td>

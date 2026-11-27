@@ -17,7 +17,7 @@ author:
 - Kedar Kekan (@kedarX)
 short_description: Module to configure multiline banners.
 description:
-- This module will configure both exec and motd banners on remote device running Cisco
+- This module will configure login, exec and motd banners on remote device running Cisco
   IOS XR. It allows playbooks to add or remove banner text from the running configuration.
 version_added: 1.0.0
 requirements:
@@ -35,8 +35,11 @@ options:
     required: true
     type: str
     choices:
+    - exec
+    - incoming
     - login
     - motd
+    - slip-ppp
   text:
     description:
     - Banner text to be configured. Accepts multi line string, without empty lines.
@@ -258,7 +261,7 @@ class NCConfiguration(ConfigBase):
 def main():
     """main entry point for module execution"""
     argument_spec = dict(
-        banner=dict(required=True, choices=["login", "motd"]),
+        banner=dict(required=True, choices=["login", "motd", "exec", "incoming", "slip-ppp"]),
         text=dict(),
         state=dict(default="present", choices=["present", "absent"]),
     )
